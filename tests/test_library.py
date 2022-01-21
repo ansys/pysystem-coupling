@@ -49,7 +49,7 @@ With coverage.
 
 import pytest
 
-from ansys.product import library
+from ansys.systemcoupling import library
 
 # this is a fixture that simplifies reuse of common components
 @pytest.fixture

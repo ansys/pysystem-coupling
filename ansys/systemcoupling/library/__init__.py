@@ -21,6 +21,6 @@ Then add the import within this module to enable:
 
 """
 
-from ansys.product.library._version import __version__
-from ansys.product.library.module import add
-from ansys.product.library.other_module import Complex
+from ansys.systemcoupling.library._version import __version__
+from ansys.systemcoupling.library.module import add
+from ansys.systemcoupling.library.other_module import Complex

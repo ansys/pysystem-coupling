@@ -13,7 +13,7 @@ from setuptools import setup
 # the module
 HERE = os.path.abspath(os.path.dirname(__file__))
 __version__ = None
-version_file = os.path.join(HERE, 'ansys', 'product', 'library', '_version.py')
+version_file = os.path.join(HERE, 'ansys', 'systemcoupling', 'core', '_version.py')
 with io_open(version_file, mode='r') as fd:
     exec(fd.read())
 
@@ -30,19 +30,19 @@ with open(os.path.join(HERE, 'README.rst'), encoding='utf-8') as f:
 
 
 setup(
-    name='ansys-product-library',
-    packages=['ansys.product.library'],
+    name='ansys-systemcoupling-core',
+    packages=['ansys.systemcoupling.core'],
     version=__version__,
-    description='Template PyAnsys library',
+    description='Python API to System Coupling',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    url='https://github.com/pyansys/template/',
+    url='https://github.com/pyansys/pysystem-coupling/',
     license='MIT',
     author='ANSYS, Inc.',  # this is required
-    maintainer='PyAnsys developers',  # you can change this
+    maintainer='Ian Boyd',  # you can change this
 
     # this email group works
-    maintainer_email='pyansys.support@ansys.com',
+    maintainer_email='ian.boyd@ansys.com',
 
     # Include all install requirements here.  If you have a longer
     # list, feel free just to create the list outside of ``setup`` and
