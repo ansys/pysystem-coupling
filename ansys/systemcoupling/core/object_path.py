@@ -1,13 +1,14 @@
 import re
 import fnmatch
 
+from ansys.systemcoupling.core.path_util import join_path_strs
+
 class ObjectPath(str):
     """
     A simple utility class for attribute-based access to children of data-model
-    objects.
+    objects and values.
     e.g.
     Root.Domain['fluid'].Boundary['wall'].BoundaryType = 'Wall'
-    This is just to simplify setting of values till a GUI is in place.
     """
 
     def __new__(cls, path, api, rules):
@@ -75,9 +76,11 @@ class ObjectPath(str):
         self.make_path(self.obj_path(name)).SetState(State=value)
 
     def __setattr(self, name, value):
+        # used during init only - not to be confused with __setattr__
         return super(ObjectPath, self).__setattr__(name, value)
 
     def __getattr__(self, name):
+        print(self, name, self.is_object_path())
         if self.is_object_path():
             if name in self.parameter_names():
                 return self._get_param_value(self, name)
@@ -86,7 +89,7 @@ class ObjectPath(str):
                 self.__setattr(name, obj)
                 return obj
         if self._rules.is_object_path_command_or_query(name):
-            return lambda *args, **kwds: self._api.execute_command(name, ObjectPath=self, *args, **kwds)
+            return lambda **kwds: self._api.execute_command(name, ObjectPath=self, **kwds)
         raise AttributeError(name)
 
     def __dir__(self):
@@ -95,11 +98,5 @@ class ObjectPath(str):
 
     def make_path(self, path_str):
         return ObjectPath(path_str, self._api, self._rules)
-
-_state = {}
     
-# ObjectPathUtils:
-def join_path_strs(*path_strs):
-    return '/'.join(path_strs)
-
 

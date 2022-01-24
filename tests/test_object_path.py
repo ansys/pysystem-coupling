@@ -1,6 +1,8 @@
 import pytest
 
-from ansys.systemcoupling.core import object_path
+from ansys.systemcoupling.core.object_path import ObjectPath
+from ansys.systemcoupling.core.path_util import to_typepath
+from state import StateForTesting
 
 @pytest.fixture
 def rules():
@@ -27,8 +29,6 @@ def api():
 def root(api, rules):
     return ObjectPath('/ROOT', api, rules)
 
-
-ObjectPath = object_path.ObjectPath
 
 def test_root(root):
     print(type(root))
@@ -65,27 +65,27 @@ class _Rules:
         self._rules = data
 
     def parameter_names(self, path):
-        path = _toTypePath(path)
+        path = to_typepath(path)
         if path not in self._rules:
             return set()
         return set(self._rules[path]['params'])
         
     def child_types(self, path):
-        path = _toTypePath(path)
+        path = to_typepath(path)
         if path not in self._rules:
             return set()
         return set(self._rules[path]['children'])
 
     def is_parameter_path(self, path):
         parent, _, last = path.rpartition('/')
-        parent = _toTypePath(parent)
+        parent = to_typepath(parent)
         return parent in self._rules and last in self._rules[parent]['params']
 
     def is_object_path(self, path):
-        return _toTypePath(path) in self._rules
+        return to_typepath(path) in self._rules
 
     def is_named_object_path(self, path):
-        objrules = self._rules.get(_toTypePath(path), {})
+        objrules = self._rules.get(to_typepath(path), {})
         return objrules and objrules['named']
 
     def get_object_path_command_and_query_names(self):
@@ -98,7 +98,7 @@ class _Rules:
 class _CommandApi:
 
     def __init__(self):
-        self.__state = {}
+        self.__state = StateForTesting()
     
     def execute_command(self, name, *args, **kwargs):
         cmd = self._get_command(name)
@@ -110,49 +110,13 @@ class _CommandApi:
             pass
 
         def SetState(ObjectPath, State):
-            comps = ObjectPath.split('/')
-            if comps and comps[0] == '':
-                comps = comps[1:]
-            if not comps:
-                raise Exception('Path is empty')
-
-            comps, last = comps[:-1], comps[-1]
-
-            s = self.__state
-            missed = False
-            for comp in comps:
-                if comp in s:
-                    s = s[comp]
-                else:
-                    s[comp] = {}
-                    s = s[comp]
-                    #missed = True
-                    #break
-            if missed:
-                raise Exception(f"Path '{ObjectPath}' does not exist in state")
-
-            s[last] = State
-            
+            self.__state.set_state(ObjectPath, State)
         
         def GetState(ObjectPath):
-            comps = ObjectPath.split('/')
-            if comps and comps[0] == '':
-                comps = comps[1:]
-
-            s = self.__state
-            found_some = False
-            for comp in comps:
-                if comp in s:
-                    found_some = True
-                    s = s[comp]
-                else:
-                    return {}
-            
-            return s if found_some else {}
+            return self.__state.get_state(ObjectPath)
 
         def GetParameter(ObjectPath, Name):
-            s = GetState(ObjectPath)
-            return s.get(Name, None)
+            return self.__state.get_parameter(ObjectPath, Name)
         
         if name == 'Fun1':
             return Fun1
@@ -167,10 +131,5 @@ class _CommandApi:
             return GetState
         
         return None
-
-def _toTypePath(path):
-    if ':' not in path:
-        return path
-    return '/'.join(c.split(':')[0] for c in path.split('/'))
 
                     

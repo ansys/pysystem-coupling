@@ -1,3 +1,5 @@
+from ansys.systemcoupling.core.path_util import to_typelist
+
 class Node:
     Singleton = 0
     Object = 1
@@ -17,6 +19,12 @@ class Container(Node):
         super().__init__(id, category, parent)
         self.children = []
 
+    def child(self, id):
+        for c in self.children:
+            if c.id == id:
+                return c
+        return None
+
 class Parameter(Node):
     def __init__(self, name, data_type, parent):
         assert parent is not None
@@ -27,7 +35,10 @@ class Parameter(Node):
 class Metadata:
     def __init__(self, root_node):
         self.__root = root_node
-        
+    
+    def root_type(self):
+        return self.__root.id
+
     def parameter_names(self, path):
         node = self._find_node(path)
         return [c.id for c in node.children if c.category == Node.Parameter]
@@ -62,27 +73,19 @@ class Metadata:
             return False
 
     def _find_node(self, path):
-        types = _to_typelist(path)
+        types = to_typelist(path)
         node = self.__root
+        if types[0] != node.id:
+            raise RuntimeError(f'Invalid root type \'{types[0]}\' in path \'{path}\' (expected \'{node.id}\').')
         last_t = None
         try:
-            for t in types:
+            for t in types[1:]:
                 last_t = t
-                node = node.children[t]
+                node = node.child(t)
             return node
         except KeyError as e:
-            extra = f' Type \'{last_t}\' unknown or at incorrect position.') if last_t else ''
+            extra = f' Type \'{last_t}\' unknown or at incorrect position.' if last_t else ''
             raise RuntimeError(f'Invalid data model path: {path}.' + extra)
-
-def _to_typelist(path):
-    if ':' not in path:
-        return path.split('/')
-    return [c.split(':')[0] for c in path.split('/')]
-       
-def _to_typepath(path):
-    if ':' not in path:
-        return path
-    return '/'.join(c.split(':')[0] for c in path.split('/'))
 
 
 def _visit_metadata(raw_data, parent_node, write_option_values):
@@ -101,6 +104,6 @@ def _visit_metadata(raw_data, parent_node, write_option_values):
 
 def build(raw_data):
     root = Container('SystemCoupling', Node.Singleton)
-    meta_tree = _visit_metadata(raw_data[root.id], root, write_option_values=True)
-    return Metadata(meta_tree)
+    _visit_metadata(raw_data[root.id], root, write_option_values=True)
+    return Metadata(root)
     
