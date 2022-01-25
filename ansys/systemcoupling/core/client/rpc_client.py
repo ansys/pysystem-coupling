@@ -195,7 +195,7 @@ class SycRpc(object):
 
     def exit(self):
         """Shut down the remote System Coupling server.
-        
+
         Reset this object ready to start and connect to a new
         server if wished.
         """
