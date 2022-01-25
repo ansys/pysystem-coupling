@@ -46,19 +46,19 @@ def test_set_and_get_state(root):
     state = {'a11': 99}
     path.SetState(State=state)
     assert path.GetState() == state
-    
+
 def test_get_param_value(root):
     path = root.A.A1['bob']
     path.SetState(State={'a11': 99})
     assert path.a11 == 99
-    
+
 def test_set_and_get_param(root):
     path = root.A.A1['bob']
     assert path.GetState() == {}
     path.a11 = 100
     assert path.a11 == 100
     assert path.GetState() == {'a11': 100}
-    
+
 class _Rules:
 
     def __init__(self, data):
@@ -69,7 +69,7 @@ class _Rules:
         if path not in self._rules:
             return set()
         return set(self._rules[path]['params'])
-        
+
     def child_types(self, path):
         path = to_typepath(path)
         if path not in self._rules:
@@ -93,17 +93,17 @@ class _Rules:
 
     def is_objpath_command_or_query(self, name):
         return name in self.get_objpath_command_and_query_names()
-            
+
 
 class _CommandApi:
 
     def __init__(self):
         self.__state = StateForTesting()
-    
+
     def execute_command(self, name, *args, **kwargs):
         cmd = self._get_command(name)
         return cmd(*args, **kwargs)
-    
+
     def _get_command(self, name):
 
         def Fun1(ObjectPath, Param1, Param2):
@@ -111,13 +111,13 @@ class _CommandApi:
 
         def SetState(ObjectPath, State):
             self.__state.set_state(ObjectPath, State)
-        
+
         def GetState(ObjectPath):
             return self.__state.get_state(ObjectPath)
 
         def GetParameter(ObjectPath, Name):
             return self.__state.get_parameter(ObjectPath, Name)
-        
+
         if name == 'Fun1':
             return Fun1
 
@@ -126,10 +126,8 @@ class _CommandApi:
 
         if name == 'GetParameter':
             return GetParameter
-        
+
         if name == 'GetState':
             return GetState
-        
-        return None
 
-                    
+        return None

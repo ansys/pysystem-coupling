@@ -120,7 +120,6 @@ class SycRpc(object):
     - synchronous calls only at moment - OK?
     """
 
-    
     def __init__(self):
         self.__startTag = "<start>"
         self._reset()
@@ -160,7 +159,7 @@ class SycRpc(object):
         self.__process = _start_system_coupling(*sockname, working_dir, redirect_std=True)
 
         self.__stdout_reader = _StreamReader(self.__process.stdout)
-        
+
         # SyC establishes connection with us and tells us about *its* server socket
         sock = connect_server.accept()[0]
         srv_host, srv_port = _read_connection_info(sock)
@@ -178,7 +177,7 @@ class SycRpc(object):
         """
         self.__stdout_reader = _NullStreamReader()
         self._connect(host, port)
-        
+
     def _connect(self, host, port):
         # Connect to SyC server - this is now our main communication socket
         self.__clientsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -232,7 +231,7 @@ class SycRpc(object):
         def f(**kwargs):
             return self.execute_command(name, **kwargs)
         return f
-    
+
     def execute_command(self, cmd_name, **kwargs):
         """Run a System Coupling 'external interface' command or query,
         specified by its name and keyword arguments.
@@ -241,14 +240,14 @@ class SycRpc(object):
 
         See also __getattr__.
         """
-        
+
         rpc = XET.Element('jsonrpc')
         cmd = {'method': cmd_name,
                'params': [kwargs]} # NB : args wrapped in list for historical reasons
         rpc.text = json.dumps(cmd)
 
         # This defaults to ascii encoding, which is consistent with server
-        serialized_cmd = XET.tostring(rpc) 
+        serialized_cmd = XET.tostring(rpc)
 
         self._write(serialized_cmd)
         serialized_response = self._wait_for_response()
@@ -303,7 +302,7 @@ class SycRpc(object):
                                f"[Remote traceback]\n{response['detail']['stackTrace']}")
         else:
             raise RuntimeError("Remote method call error. Unrecognized response.")
-            
+
     def _read(self, bufsize):
         if self.__startTag:
             startTag = self.__startTag
@@ -350,6 +349,6 @@ class _StreamReader:
 class _NullStreamReader:
     def readline(self, timeout=None):
         return None
-        
+
 class UnexpectedEndOfStream(Exception):
     pass

@@ -20,8 +20,9 @@ class ObjectPath(str):
         inst.__setattr('_parameter_names', None)
         inst.__setattr('_child_types', None)
         inst.__setattr('_is_object_path', None)
-        inst.__setattr('_get_param_value', lambda path, name: api.execute_command('GetParameter', ObjectPath=path, Name=name))
-        
+        inst.__setattr('_get_param_value', lambda path, name: api.execute_command(
+            'GetParameter', ObjectPath=path, Name=name))
+
         return inst
 
     def parameter_names(self):
@@ -56,7 +57,7 @@ class ObjectPath(str):
 
     def renamed(self, name):
         stem, sep, last_comp = self.rpartition('/')
-        type, sep, old_name= last_comp.partition(':')
+        type, sep, old_name = last_comp.partition(':')
         if not old_name:
             stem = self
         else:
@@ -97,5 +98,3 @@ class ObjectPath(str):
 
     def make_path(self, path_str):
         return ObjectPath(path_str, self._api, self._rules)
-    
-

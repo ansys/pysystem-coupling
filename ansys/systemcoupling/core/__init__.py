@@ -7,8 +7,8 @@ def launch_syc(working_dir='.'):
     rpc.start_and_connect(working_dir)
     syc = SycApi(rpc)
     return syc
-    
-    
+
+
 def connect_to_syc(host, port):
     rpc = SycRpc()
     rpc.connect(host, port)

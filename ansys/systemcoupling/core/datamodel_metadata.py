@@ -35,18 +35,18 @@ class Parameter(Node):
 class Metadata:
     def __init__(self, root_node):
         self.__root = root_node
-    
+
     def root_type(self):
         return self.__root.id
 
     def parameter_names(self, path):
         node = self._find_node(path)
         return [c.id for c in node.children if c.category == Node.Parameter]
-     
+
     def child_types(self, path):
         node = self._find_node(path)
         return [c.id for c in node.children if c.category in (Node.Singleton, Node.Object)]
-        
+
     def is_parameter_path(self, path):
         parent, _, last = path.rpartition('/')
         try:
@@ -57,14 +57,14 @@ class Metadata:
             return False
         except:
             return False
-        
+
     def is_object_path(self, path):
         try:
             node = self._find_node(path)
             return node.category in (Node.Singleton, Node.Object)
         except:
             return False
-        
+
     def is_named_object_path(self, path):
         try:
             node = self._find_node(path)
@@ -76,7 +76,8 @@ class Metadata:
         types = to_typelist(path)
         node = self.__root
         if types[0] != node.id:
-            raise RuntimeError(f'Invalid root type \'{types[0]}\' in path \'{path}\' (expected \'{node.id}\').')
+            raise RuntimeError(
+                f'Invalid root type \'{types[0]}\' in path \'{path}\' (expected \'{node.id}\').')
         last_t = None
         try:
             for t in types[1:]:
@@ -89,15 +90,15 @@ class Metadata:
 
 
 def _visit_metadata(raw_data, parent_node, write_option_values):
-    for name, p_data in sorted(raw_data['__parameters'].items(), 
+    for name, p_data in sorted(raw_data['__parameters'].items(),
                        key=lambda item: item[1]['ordinal']):
         node = Parameter(name, p_data['type'], parent_node)
         options = p_data.get('staticOptions', None)
         if write_option_values and options:
             node.options = p_data['staticOptions']
-    for obj_type, c_data in sorted(raw_data['__children'].items(), 
+    for obj_type, c_data in sorted(raw_data['__children'].items(),
                                  key=lambda item: item[1]['ordinal']):
-        node = Container(obj_type, 
+        node = Container(obj_type,
                          Node.Object if c_data['isNamed'] else Node.Singleton,
                          parent_node)
         _visit_metadata(c_data, node, write_option_values)
@@ -106,4 +107,3 @@ def build(raw_data):
     root = Container('SystemCoupling', Node.Singleton)
     _visit_metadata(raw_data[root.id], root, write_option_values=True)
     return Metadata(root)
-    

@@ -14,7 +14,7 @@ class _MetaWrapper:
             return getattr(self.__dm_meta, name)
         except AttributeError:
             return getattr(self.__cmd_meta, name)
-            
+
 class SycApi:
     def __init__(self, command_executor):
         self.__cmd_exec = command_executor
@@ -41,7 +41,7 @@ class SycApi:
         if self.__cmd_meta.is_command_or_query(name):
             # Looks like an API command/query call
             def non_objpath_cmd(**kwargs):
-                 return self.__cmd_exec.execute_command(name, **kwargs)
+                return self.__cmd_exec.execute_command(name, **kwargs)
             def objpath_cmd(**kwargs):
                 if 'ObjectPath' not in kwargs:
                     return self.__cmd_exec.execute_command(name, ObjectPath=self.__root, **kwargs)
@@ -55,7 +55,7 @@ class SycApi:
             raise AttributeError(f'Unknown attribute of System Coupling API: \'{name}\'')
 
         # Can assume accessing a datamodel path
-        return self.__root.make_path(join_path_strs(self.__root, name))         
+        return self.__root.make_path(join_path_strs(self.__root, name))
 
     def _init_datamodel(self):
         dm_meta_raw = self.__cmd_exec.GetMetadata()
@@ -64,4 +64,3 @@ class SycApi:
     def _init_cmds(self):
         cmd_meta = self.__cmd_exec.GetCommandAndQueryMetadata()
         self.__cmd_meta = CommandMetadata(cmd_meta)
-

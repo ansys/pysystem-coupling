@@ -1,5 +1,5 @@
 cmd_meta_testing_raw_data = [
-    {'args': {'ObjectPath': {'Type': "<class 'str'>"},     
+    {'args': {'ObjectPath': {'Type': "<class 'str'>"},
               'ParameterName': {'Type': "<class 'str'>"}},
      'defaults': (None,),
      'essentialArgNames': ['ObjectPath'],
@@ -7,7 +7,7 @@ cmd_meta_testing_raw_data = [
      'name': 'PrintExpressionVariables',
      'optionalArgNames': [],
      'retType': "<class 'NoneType'>"},
-    
+
     {'args': {},
      'defaults': (),
      'essentialArgNames': [],
