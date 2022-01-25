@@ -80,7 +80,6 @@ class ObjectPath(str):
         return super(ObjectPath, self).__setattr__(name, value)
 
     def __getattr__(self, name):
-        print(self, name, self.is_object_path())
         if self.is_object_path():
             if name in self.parameter_names():
                 return self._get_param_value(self, name)
