@@ -1,6 +1,3 @@
-import re
-import fnmatch
-
 from ansys.systemcoupling.core.path_util import join_path_strs
 
 class ObjectPath(str):

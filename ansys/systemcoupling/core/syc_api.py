@@ -29,7 +29,7 @@ class SycApi:
 
     def exit(self):
         """Close the remote System Coupling instance.
-    
+
         Following this, the current instance of this class will not
         be usable. Create a new instance if required.
         """

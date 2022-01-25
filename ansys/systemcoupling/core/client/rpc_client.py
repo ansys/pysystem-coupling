@@ -2,14 +2,12 @@
 # Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
 #
 
-import errno
 import json
 import os
 import platform
 from queue import Queue, Empty
 import socket
 import subprocess
-import sys
 import threading
 import time
 import xml.etree.ElementTree as XET
@@ -80,15 +78,15 @@ class SycRpc(object):
     external interface.
 
     An instance of this class controls starting System Coupling as
-    a server in cosimulation mode and handles the underlying RPC to 
+    a server in cosimulation mode and handles the underlying RPC to
     provide the Command/Query API. The 'start_and_connect' method
     should be used to start the remote SystemCoupling, and 'exit'
     to close the connection and shut down SystemCoupling. Alternatively,
     'connect' can be used to connect to an already running server
     instance.
 
-    Other than the external interface API being accessed as member 
-    methods of this class, the calls should be of the same form as 
+    Other than the external interface API being accessed as member
+    methods of this class, the calls should be of the same form as
     if invoked locally.
 
     Thus:
@@ -97,9 +95,9 @@ class SycRpc(object):
        s = sycRpc.GetState(ObjectPath='/SystemCoupling/Library')
 
     One difference between the remotely provided API and the local one
-    is that the ObjectPath-based syntax is not made available remotely. 
+    is that the ObjectPath-based syntax is not made available remotely.
     This usage would need to be converted to SetState calls, or some
-    additional code written to provide a similar syntax. In particular, 
+    additional code written to provide a similar syntax. In particular,
     although 'DatamodelRoot()' could be called remotely, the return
     value will simply be the string value of the root path.
 
@@ -107,12 +105,12 @@ class SycRpc(object):
 
     (i) The underlying SystemCoupling server being used is the 'AIM server'.
         Despite its name, this has nothing AIM-specific in its implementation
-        or interface. 
+        or interface.
     (ii) It supports a straightforward use whereby connection is
         established at startup, and is maintained until the SystemCoupling
         instance is closed. The remote client becomes the only means of
         controlling the SystemCoupling instance during its lifetime.
-    
+
     TODO:
 
     - Stdout and stderr capture
@@ -196,7 +194,9 @@ class SycRpc(object):
         self.__response_thread.start()
 
     def exit(self):
-        """Shut down the remote System Coupling server. Reset this object ready to start and connect to a new
+        """Shut down the remote System Coupling server.
+        
+        Reset this object ready to start and connect to a new
         server if wished.
         """
         self._write(XET.tostring(XET.Element('exit')))
@@ -222,7 +222,7 @@ class SycRpc(object):
         """Support command/query interface as method attributes as an
         alternative to execute_command.
 
-        Thus, rather than 
+        Thus, rather than
            client.execute_command('CommandName', Arg1='value1', Arg2='value2')
         the following is supported:
            client.CommandName(Arg1='value1', Arg2='value2')
