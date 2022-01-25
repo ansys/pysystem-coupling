@@ -83,7 +83,9 @@ class SycRpc(object):
     a server in cosimulation mode and handles the underlying RPC to 
     provide the Command/Query API. The 'start_and_connect' method
     should be used to start the remote SystemCoupling, and 'exit'
-    to close the connection and shut down SystemCoupling.
+    to close the connection and shut down SystemCoupling. Alternatively,
+    'connect' can be used to connect to an already running server
+    instance.
 
     Other than the external interface API being accessed as member 
     methods of this class, the calls should be of the same form as 
@@ -351,52 +353,3 @@ class _NullStreamReader:
         
 class UnexpectedEndOfStream(Exception):
     pass
-        
-if __name__ == "__main__":
-    import pprint
-
-    def anykey(msg=''):
-        input(f"Any key to continue... {msg}")
-
-    anykey()
-    client = SycRpc()
-    client.start_and_connect(working_dir='.')
-
-    anykey()
-    client.AddNamedExpression(ExpressionName='bob', ExpressionString='2*pi')
-    #anykey("PrintState - stdout captured")
-    client.PrintState()
-    anykey("captured stdout:")
-    output = client.take_stdout()
-    print(output)
-    
-    client.SetState(ObjectPath='/SystemCoupling/Library', State={'Expression:bob£α': {'ExpressionName': 'eric', 'ExpressionString': '2 [s]'}})
-    
-    client.PrintState()
-    #client.ExecPythonString(PythonString="import sys;sys.stdout.flush()")
-    anykey("captured stdout:")
-    output = client.take_stdout()
-    print(output)
-
-    args = {'ObjectPath': '/SystemCoupling/Library'}
-    exprState = client.execute_command('GetState', **args)
-    #pprint.pprint(exprState)
-    exprState = client.GetState(**args)
-    #pprint.pprint(exprState)
-
-    print(f'datamodel root = {client.DatamodelRoot()}')
-    
-    anykey()
-    client.ExecPythonString(PythonString='x=10', PrintResult=True)
-    client.ExecPythonString(PythonString='x', PrintResult=True)
-
-    anykey()
-    try:
-        client.ExecPythonString(PythonString='raise RuntimeError("forced error")')
-    except Exception as e:
-        print(e)
-
-    anykey("Final stdout & exit")
-    print(client.take_stdout())
-    
-    client.exit()

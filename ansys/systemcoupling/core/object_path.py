@@ -88,13 +88,13 @@ class ObjectPath(str):
                 obj = self.make_path(self.param_path(name))
                 self.__setattr(name, obj)
                 return obj
-        if self._rules.is_object_path_command_or_query(name):
+        if self._rules.is_objpath_command_or_query(name):
             return lambda **kwds: self._api.execute_command(name, ObjectPath=self, **kwds)
         raise AttributeError(name)
 
     def __dir__(self):
         return list(self.parameter_names()) + list(self.child_types()) + \
-            self._rules.get_object_path_command_and_query_names()
+            self._rules.get_objpath_command_and_query_names()
 
     def make_path(self, path_str):
         return ObjectPath(path_str, self._api, self._rules)

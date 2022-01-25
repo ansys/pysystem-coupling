@@ -88,11 +88,11 @@ class _Rules:
         objrules = self._rules.get(to_typepath(path), {})
         return objrules and objrules['named']
 
-    def get_object_path_command_and_query_names(self):
+    def get_objpath_command_and_query_names(self):
         return ['Fun1', 'SetState', 'GetState', 'GetParameter']
 
-    def is_object_path_command_or_query(self, name):
-        return name in self.get_object_path_command_and_query_names()
+    def is_objpath_command_or_query(self, name):
+        return name in self.get_objpath_command_and_query_names()
             
 
 class _CommandApi:

@@ -3,7 +3,7 @@ import codecs
 import os
 from io import open as io_open
 
-from setuptools import setup
+from setuptools import setup, find_namespace_packages
 
 # Use single source package versioning.  Follows:
 # https://packaging.python.org/guides/single-sourcing-package-version/
@@ -28,10 +28,14 @@ def read(rel_path):
 with open(os.path.join(HERE, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
+packages = []
+for package in find_namespace_packages(include="ansys*"):
+    if package.startswith("ansys.systemcoupling.core"):
+        packages.append(package)
 
 setup(
     name='ansys-systemcoupling-core',
-    packages=['ansys.systemcoupling.core'],
+    packages=packages,
     version=__version__,
     description='Python API to System Coupling',
     long_description=long_description,
