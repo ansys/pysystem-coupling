@@ -34,7 +34,7 @@ class SycApi:
 
     def execute_command(self, name, **kwargs):
         """Execute the named command or query and return the result.
-    
+
         All commands and queries take one or many keyword arguments. Some
         of these can be optional, depending on the command or query.
 
