@@ -16,6 +16,13 @@ class _MetaWrapper:
             return getattr(self.__cmd_meta, name)
 
 class SycApi:
+    """Provides access to the System Coupling command and query API and
+    data model.
+    
+    System Coupling is presumed to be running remotely and is accessed
+    via the provided "command executor" which services command and query
+    requests made via ``SycApi``.
+    """
     def __init__(self, command_executor):
         self.__cmd_exec = command_executor
         self._init_datamodel()
@@ -25,6 +32,18 @@ class SycApi:
         self.__top_level_types = set(self.__dm_meta.child_types(self.__root))
 
     def execute_command(self, name, **kwargs):
+        """Execute the named command or query and return the result.
+        
+        All commands and queries take one or many keyword arguments. Some
+        of these can be optional, depending on the command or query.
+        
+        A query will return a value of a type that is dependent on the
+        query.
+        
+        A few commands return a value (again with a type dependent on
+        the command), but most return ``None``.
+        
+        """
         return self.__cmd_exec.execute_command(name, **kwargs)
 
     def exit(self):
@@ -38,6 +57,45 @@ class SycApi:
         self.__cmd_exec = None
 
     def __getattr__(self, name):
+        """Provides access to commands, queries and data model as attributes of
+        this class's instance.
+        
+        If System Coupling exposes a command, ``Solve()`` say, then if we
+        have an instance of this class, ``syc``, the following call is enabled
+        by the present method:
+        
+        ``syc.Solve()``
+        
+        This is an alternative to
+        
+        ``syc.execute_command('Solve')``
+        
+        If System Coupling exposes a data model object, ``SolutionControl``
+        say, then the following interactions are enabled by the present
+        method.
+        
+        Query state of object: 
+        ``state = syc.SolutionControl.GetState()``
+        
+        (Note that this is an alternative to:
+        ``state = syc.execute_command('GetState', 
+            ObjectPath='/SystemCoupling/SolutionControl')``)
+        
+        Query value of object property: 
+        ``option = syc.SolutionControl.DurationOption``
+              
+        Set multiple object object properties:
+        ``syc.SolutionControl = {
+            'DurationOption': 'NumberOfSteps',
+            'NumberofSteps': 5
+          }``
+          
+        Set single property:
+        ``syc.SolutionControl.NumberOfSteps = 6``
+        
+        Full "path" syntax for the data model is supported. Thus:
+        ``syc.CouplingInterface['intf1'].DataTransfer['temp']...``
+        """
         if self.__cmd_meta.is_command_or_query(name):
             # Looks like an API command/query call
             def non_objpath_cmd(**kwargs):
