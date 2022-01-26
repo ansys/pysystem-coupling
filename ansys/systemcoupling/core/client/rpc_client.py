@@ -90,32 +90,24 @@ class SycRpc(object):
     if invoked locally.
 
     Thus:
-       s = GetState(ObjectPath='/SystemCoupling/Library')
+
+    ``s = GetState(ObjectPath='/SystemCoupling/Library')``
+
     becomes
-       s = sycRpc.GetState(ObjectPath='/SystemCoupling/Library')
 
-    One difference between the remotely provided API and the local one
-    is that the ObjectPath-based syntax is not made available remotely.
-    This usage would need to be converted to SetState calls, or some
-    additional code written to provide a similar syntax. In particular,
-    although 'DatamodelRoot()' could be called remotely, the return
-    value will simply be the string value of the root path.
+    ``s = sycRpc.GetState(ObjectPath='/SystemCoupling/Library')``
 
-    Notes:
-
-    (i) The underlying SystemCoupling server being used is the 'AIM server'.
-        Despite its name, this has nothing AIM-specific in its implementation
-        or interface.
-    (ii) It supports a straightforward use whereby connection is
-        established at startup, and is maintained until the SystemCoupling
-        instance is closed. The remote client becomes the only means of
-        controlling the SystemCoupling instance during its lifetime.
+    .. note::
+       System Coupling runs in a server mode that expects a single
+       client to connect after start up and which becomes the only
+       means of controlling the server during its lifetime.
 
     TODO:
 
-    - Stdout and stderr capture
-    -- How do we make them available?
-    - synchronous calls only at moment - OK?
+    - Stdout and stderr capture - accessible but nothing done with them
+    at the moment. What do we want to do?
+    - All calls synchronous at the moment. We might want to do something
+    different with Solve(), for example.
     """
 
     def __init__(self):

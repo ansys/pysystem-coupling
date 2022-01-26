@@ -5,8 +5,8 @@ The System Coupling API exposed as a Python package.
 
 Project Overview
 ----------------
-Although the System Coupling product itself exposes a Python-based scripting 
-and command line interface, this is embedded in the product and is based 
+Although the System Coupling product itself exposes a Python-based scripting
+and command line interface, this is embedded in the product and is based
 on a specific version of Python. This is not amenable to incorporation
 in systems that make extensive use of the Python ecosystem.
 
@@ -50,6 +50,18 @@ TODO
 Usage
 -----
 
+It is assumed that an Ansys installation is available and that it
+includes System Coupling and the participant products that are
+needed for the coupled analysis.
+
+Currently, by default, System Coupling will be found via the
+``AWP_ROOT222`` environment variable. The ``SystemCoupling``
+directory is expected to be immediately below the directory
+specified by the variable.
+
+The System Coupling installation location may be overridden by
+setting the ``SYSC_ROOT``  environment variable.
+
 The following example shows the set up and solve of the "oscillating plate"
 tutorial, using Ansys Fluent as the CFD solver.
 
@@ -67,7 +79,7 @@ tutorial, using Ansys Fluent as the CFD solver.
    >>> interface.DataTransfer['transfer-1'].TargetSide = 'One'
    >>> interface.DataTransfer['transfer-1'].TargetVariable = 'FORC'
    >>> interface.DataTransfer['transfer-1'].SourceVariable = 'force'
-   >>> interface.DataTransfer['transfer-2'] = {'TargetSide': 'Two', 
+   >>> interface.DataTransfer['transfer-2'] = {'TargetSide': 'Two',
    ...                                         'SourceVariable': 'INCD',
    ...                                         'TargetVariable': 'displacement'}
    >>> syc.SolutionControl.MaximumIterations = 3
@@ -75,9 +87,9 @@ tutorial, using Ansys Fluent as the CFD solver.
    >>> syc.exit()
 
 In this example, the System Coupling server was started by the ``launch_syc``
-function. Alternatively, the server can be started in advance with 
-command line arguments ``-m cosimtest --srvport=<host:port>`` and 
-``pysystemcoupling.connect_to_syc(host, port)`` called instead of 
+function. Alternatively, the server can be started in advance with
+command line arguments ``-m cosimtest --srvport=<host:port>`` and
+``pysystemcoupling.connect_to_syc(host, port)`` called instead of
 ``pysystemcoupling.launch_syc()`` in the above.
 
 
