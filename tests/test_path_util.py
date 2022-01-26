@@ -1,4 +1,3 @@
-from ntpath import join
 import pytest
 
 from ansys.systemcoupling.core.path_util import (to_typelist, to_typepath,
