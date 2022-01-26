@@ -23,6 +23,7 @@ class SycApi:
     via the provided "command executor" which services command and query
     requests made via ``SycApi``.
     """
+
     def __init__(self, command_executor):
         self.__cmd_exec = command_executor
         self._init_datamodel()
