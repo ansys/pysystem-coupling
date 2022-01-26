@@ -1,4 +1,3 @@
-
 import pytest
 
 from ansys.systemcoupling.core.syc_api import SycApi
