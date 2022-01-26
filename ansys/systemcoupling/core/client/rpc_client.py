@@ -212,12 +212,12 @@ class SycRpc(object):
 
     def __getattr__(self, name):
         """Support command/query interface as method attributes as an
-        alternative to execute_command.
+        alternative to ``execute_command``.
 
         Thus, rather than
-           client.execute_command('CommandName', Arg1='value1', Arg2='value2')
+           ``client.execute_command('CommandName', Arg1='value1', Arg2='value2')``
         the following is supported:
-           client.CommandName(Arg1='value1', Arg2='value2')
+           ``client.CommandName(Arg1='value1', Arg2='value2')``
         """
 
         def f(**kwargs):
@@ -230,7 +230,7 @@ class SycRpc(object):
 
         All commands and queries are currently run synchronously.
 
-        See also __getattr__.
+        See also ``__getattr__``.
         """
 
         rpc = XET.Element('jsonrpc')
