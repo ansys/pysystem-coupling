@@ -28,11 +28,9 @@ def read(rel_path):
 with open(os.path.join(HERE, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
-packages = []
-for package in find_namespace_packages(include="ansys*"):
-    if package.startswith("ansys.systemcoupling.core"):
-        packages.append(package)
-
+packages = [pkg for pkg in find_namespace_packages(include="ansys*")
+            if pkg.startswith("ansys.systemcoupling.core")
+            or pkg.startswith("ansys.api")]
 setup(
     name='ansys-systemcoupling-core',
     packages=packages,
@@ -51,7 +49,11 @@ setup(
     # Include all install requirements here.  If you have a longer
     # list, feel free just to create the list outside of ``setup`` and
     # add it here.
-    install_requires=[],
+    install_requires=[
+        "grpcio>=1.30.0",
+        "grpcio-status>=1.30.0",
+        "googleapis-common-protos>=1.50.0"
+    ],
 
     # Plan on supporting only the currently supported versions of Python
     python_requires='>=3.6',

@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package syc;
+
+import "variant.proto";
+
+service SycApi {
+  rpc Ping (PingRequest) returns (PingResponse) {}
+  rpc InvokeCommand (CommandRequest) returns (CommandResponse) {}
+  rpc Quit (QuitRequest) returns (QuitResponse) {}
+}
+
+message PingRequest {}
+message PingResponse {}
+
+message QuitRequest {}
+message QuitResponse {}
+
+message CommandRequest {
+  message Argument {
+    string name = 1;
+    utils.Variant val = 2;
+  }
+  string command = 1;
+  repeated Argument args = 2;
+}
+
+message CommandResponse {
+  utils.Variant result = 1;
+}
+
+message ErrorDetails {
+  string exception_classname = 1;
+  string stack_trace = 2;
+}
