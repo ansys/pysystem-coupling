@@ -1,7 +1,7 @@
 from ansys.api.systemcoupling.v0 import variant_pb2
 
 # See to_variant() for use of this
-_DUMMY_KEY = '__@!DUMMY%$__'
+_DUMMY_KEY = '__@!%$__'
 
 def to_variant(val, var, convert_key=None):
     """Convert Python datatype to Variant type"""
@@ -25,6 +25,7 @@ def to_variant(val, var, convert_key=None):
             to_variant(item, item_var, convert_key)
     elif isinstance(val, dict):
         if len(val) == 0:
+            # Analogous to list case - force map type to be set
             var.variant_map_state.item[_DUMMY_KEY].none_state = variant_pb2.NONE_VALUE
             del var.variant_map_state.item[_DUMMY_KEY]
         for k, v in val.items():

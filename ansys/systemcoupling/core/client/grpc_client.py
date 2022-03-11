@@ -61,27 +61,9 @@ def _start_system_coupling(host, port, working_dir, redirect_std=False):
                             # for now, merge stderr with stdout if redirectng
                             stderr=subprocess.STDOUT if redirect_std else None)
 
-class _CleanupThread(threading.Thread):
-    """ Ensures registered cleanup callbacks are called on
-    exit.
 
-    This approach is taken because atexit() cannot be relied
-    upon if the main thread is lost.
-    """
-    def __init__(self):
-        super().__init__(daemon=False)
-        self.callbacks: List[Callable]=[]
-
-    def run(self):
-        t = threading.main_thread()
-        t.join()
-        print("len(callbacks)=", len(self.callbacks))
-        for callback in self.callbacks:
-            callback()
-
-class CleanupManager:
+class _CleanupManager:
     """ Ensures registered cleanup callbacks are called on exit.
-
     """
     def __init__(self):
         self.__callbacks: List[Tuple[int, Callable]]=[]
@@ -106,6 +88,7 @@ class CleanupManager:
         for _, cb in self.__callbacks:
             if cb is not None:
                 cb()
+
 
 class CommandQueryService:
     def __init__(self, channel):
@@ -174,18 +157,14 @@ class SycGrpc(object):
     different with Solve(), for example.
     """
 
-    #_cleanupThread = None
-    _cleanupMgr = Optional[CleanupManager]
+    _cleanupMgr = None
     _id_iter = itertools.count()
 
     def __init__(self):
         self._reset()
         self.__id= next(SycGrpc._id_iter)
-        #if not SycGrpc._cleanupThread:
-        #    SycGrpc._cleanupThread = _CleanupThread()
-        #    SycGrpc._cleanupThread.start()
         if not SycGrpc._cleanupMgr:
-            SycGrpc._cleanupMgr = CleanupManager()
+            SycGrpc._cleanupMgr = _CleanupManager()
 
     def _reset(self):
         self.__process = None
