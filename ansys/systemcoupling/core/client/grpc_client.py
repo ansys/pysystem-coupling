@@ -1,21 +1,19 @@
 #
 # Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
 #
-import atexit
-import itertools
+
 import os
 import platform
 from queue import Queue, Empty
 import subprocess
 import threading
 import time
-from typing import Callable, List, Tuple, Optional
 
 import grpc
-from grpc_status.rpc_status import from_call
 
 import ansys.api.systemcoupling.v0.sycapi_pb2 as sycapi_pb2
-import ansys.api.systemcoupling.v0.sycapi_pb2_grpc as sycapi_pb2_grpc
+from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
+from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
 
 _isWindows = any(platform.win32_ver())
@@ -46,78 +44,21 @@ def _path_to_system_coupling():
 
     return script_path
 
-def _start_system_coupling(host, port, working_dir, redirect_std=False):
+def _start_system_coupling(host, port, working_dir, log_level=1):
     from copy import deepcopy
     env = deepcopy(os.environ)
     env['PYTHONUNBUFFERED'] = '1'
-    if redirect_std:
-        env['PYTHONIOENCODING'] = 'utf-8'
+    env['SYC_GUI_SILENT_SERVER'] = '1'
     args = [_path_to_system_coupling(), '-m', 'cosimtest', f'--grpcport={host}:{port}']
+    if log_level:
+        args += ['-l', str(log_level)]
     print("Starting System Coupling: ", args[0])
     return subprocess.Popen(args,
                             env=env,
                             cwd=working_dir,
-                            stdout=subprocess.PIPE if redirect_std else None,
-                            # for now, merge stderr with stdout if redirectng
-                            stderr=subprocess.STDOUT if redirect_std else None)
-
-
-class _CleanupManager:
-    """ Ensures registered cleanup callbacks are called on exit.
-    """
-    def __init__(self):
-        self.__callbacks: List[Tuple[int, Callable]]=[]
-        atexit.register(self._cleanup)
-
-    def add_callback(self, id, cb):
-        self.__callbacks.append((id, cb))
-
-    def remove_callback(self, id):
-        idx = None
-        for i, elem in enumerate(self.__callbacks):
-            if elem[0] == id:
-                idx = i
-                break
-        if idx is not None:
-            # This will be called during cleanup while
-            # iterating over the cb list, so we null the
-            # entry rather than resizing it
-            self.__callbacks[idx] = (None, None)
-
-    def _cleanup(self):
-        for _, cb in self.__callbacks:
-            if cb is not None:
-                cb()
-
-
-class CommandQueryService:
-    def __init__(self, channel):
-        self.__stub = sycapi_pb2_grpc.SycApiStub(channel)
-
-    def execute_command(self, request):
-        try:
-            response, call = self.__stub.InvokeCommand.with_call(request)
-            return response, call.trailing_metadata()
-        except grpc.RpcError as rpc_error:
-            status = from_call(rpc_error)
-            msg = f"Command execution failed: {status.message} (code={status.code})"
-            for detail in status.details:
-                if detail.Is(sycapi_pb2.ErrorDetails.DESCRIPTOR):
-                    info = sycapi_pb2.ErrorDetails()
-                    detail.Unpack(info)
-                    msg += (f"\n\nServer exception details:\n"
-                            f"{info.exception_classname}\n{info.stack_trace}")
-            raise RuntimeError(msg) from None
-
-    def ping(self):
-        request = sycapi_pb2.PingRequest()
-        response = self.__stub.Ping(request)
-        return True
-
-    def quit(self):
-        request = sycapi_pb2.QuitRequest()
-        response = self.__stub.Quit(request)
-        return True
+                            stdout=subprocess.DEVNULL,
+                            stderr=subprocess.STDOUT
+                            )
 
 
 class SycGrpc(object):
@@ -157,18 +98,13 @@ class SycGrpc(object):
     different with Solve(), for example.
     """
 
-    _cleanupMgr = None
-    _id_iter = itertools.count()
-
     def __init__(self):
         self._reset()
-        self.__id= next(SycGrpc._id_iter)
-        if not SycGrpc._cleanupMgr:
-            SycGrpc._cleanupMgr = _CleanupManager()
 
     def _reset(self):
         self.__process = None
         self.__channel = None
+        self.__output_thread = None
 
     def start_and_connect(self, host, port, working_dir):
         """Start system coupling in server mode and establish a connection.
@@ -177,10 +113,7 @@ class SycGrpc(object):
         The output is gathered asynchronously but is currently only accessible
         via take_stdout().
         """
-        self.__process = _start_system_coupling(host, port, working_dir, redirect_std=True)
-        # Since we started this process try to ensure it is shut down
-        SycGrpc._cleanupMgr.add_callback(self.__id, self.exit)
-        self.__stdout_reader = _StreamReader(self.__process.stdout)
+        self.__process = _start_system_coupling(host, port, working_dir)
         self._connect(host, port)
 
     def connect(self, host, port):
@@ -189,7 +122,6 @@ class SycGrpc(object):
 
         No standard stream output is available when connecting in this manner.
         """
-        self.__stdout_reader = _NullStreamReader()
         self._connect(host, port)
 
     def _connect(self, host, port):
@@ -203,7 +135,8 @@ class SycGrpc(object):
             raise RuntimeError("Aborting attempt to connect to gRPC channel "
                                f"after {timeout} seconds.")
 
-        self.__command_stub = CommandQueryService(self.__channel)
+        self.__command_service = CommandQueryService(self.__channel)
+        self.__ostream_service = OutputStreamService(self.__channel)
 
     def exit(self):
         """Shut down the remote System Coupling server.
@@ -211,12 +144,10 @@ class SycGrpc(object):
         Reset this object ready to start and connect to a new
         server if wished.
         """
-
-        SycGrpc._cleanupMgr.remove_callback(self.__id)
-
         if self.__channel is not None:
-            self.__command_stub.quit()
-            self.__channel.close()
+            #self.__ostream_service.end_streaming()
+            self.end_output()
+            self.__command_service.quit()
             self.__channel = None
         if self.__process and self.__process.poll() is None:
             try:
@@ -245,6 +176,43 @@ class SycGrpc(object):
                 break
             out += line
         return out.decode('utf-8')
+
+    def start_output(self):
+        """Start streaming of standard output streams from System Coupling
+        and print on the console.
+        """
+        self.__outbuf = ''
+        self.__output_thread = threading.Thread(target=self._read_stdstreams)
+        self.__output_thread.daemon = True
+        self.__output_thread.start()
+
+    def end_output(self):
+        self.__ostream_service.end_streaming()
+        print(f'buffered output:\n{self.__outbuf}\n')
+        self.__outbuf = ''
+        if not self.__output_thread:
+            return
+        alive = self.__output_thread.is_alive()
+        print("out thread alive ?", alive)
+        if alive:
+            print("checkagain...")
+            time.sleep(1)
+            print("out thread alive ?", self.__output_thread.is_alive())
+
+    def _read_stdstreams(self):
+        output_iter = self.__ostream_service.begin_streaming()
+        text = ''
+        while True:
+            try:
+                response = next(output_iter)
+                text += response.text
+                if text[-1] == '\n':
+                    self.__outbuf += text
+                    print(text[0:-1])
+                    text = ''
+            except StopIteration:
+                print("output thread stopping")
+                break
 
     def __getattr__(self, name):
         """Support command/query interface as method attributes as an
@@ -276,7 +244,7 @@ class SycGrpc(object):
 
         request = sycapi_pb2.CommandRequest(command=cmd_name)
         request.args.extend([make_arg(name, val) for name, val in kwargs.items()])
-        response, meta = self.__command_stub.execute_command(request)
+        response, meta = self.__command_service.execute_command(request)
         # Expect meta to comprise a 1-tuple containing a pair value,
         # ('nosync', 'True'|'False'). This tells us whether the command was
         # state changing. Not currently used, but potentially useful if
@@ -286,40 +254,4 @@ class SycGrpc(object):
         return from_variant(response.result)
 
     def ping(self):
-        return self.__command_stub.ping()
-
-
-class _StreamReader:
-    def __init__(self, stream):
-        self.__stream = stream
-        self.__queue = Queue()
-
-        def _enqueue(stream, queue):
-            try:
-                while True:
-                    line = stream.readline()
-                    if line:
-                        queue.put(line)
-                    else:
-                        raise UnexpectedEndOfStream
-            except:
-                pass
-
-        self.__readthrd = threading.Thread(target=_enqueue,
-                                           args=(self.__stream, self.__queue))
-        self.__readthrd.daemon = True
-        self.__readthrd.start()
-
-    def readline(self, timeout=None):
-        try:
-            return self.__queue.get(block=timeout is not None,
-                                    timeout = timeout)
-        except Empty:
-            return None
-
-class _NullStreamReader:
-    def readline(self, timeout=None):
-        return None
-
-class UnexpectedEndOfStream(Exception):
-    pass
+        return self.__command_service.ping()
