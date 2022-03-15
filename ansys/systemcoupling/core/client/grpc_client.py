@@ -4,7 +4,6 @@
 
 import os
 import platform
-from queue import Queue, Empty
 import subprocess
 import threading
 import time
