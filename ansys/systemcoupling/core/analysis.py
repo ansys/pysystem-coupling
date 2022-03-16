@@ -15,17 +15,17 @@ class _MetaWrapper:
         except AttributeError:
             return getattr(self.__cmd_meta, name)
 
-class SycApi:
-    """Provides access to the System Coupling command and query API and
-    data model.
+class SycAnalysis:
+    """Encapsulates a System Coupling analysis, providing access to the
+    System Coupling data model and its command and query API.
 
     System Coupling is presumed to be running remotely and is accessed
-    via the provided "command executor" which services command and query
-    requests made via ``SycApi``.
+    via the provided "rpc impl" which services command and query
+    requests made via ``SycAnalysis``.
     """
 
-    def __init__(self, command_executor):
-        self.__cmd_exec = command_executor
+    def __init__(self, rpc_impl):
+        self.__rpc_impl = rpc_impl
         self._init_datamodel()
         self._init_cmds()
         self.__meta_wrapper = _MetaWrapper(self.__dm_meta, self.__cmd_meta)
@@ -44,7 +44,7 @@ class SycApi:
         A few commands return a value (again with a type dependent on
         the command), but most return ``None``.
         """
-        return self.__cmd_exec.execute_command(name, **kwargs)
+        return self.__rpc_impl.execute_command(name, **kwargs)
 
     def exit(self):
         """Close the remote System Coupling instance.
@@ -53,8 +53,36 @@ class SycApi:
         be usable. Create a new instance if required.
         """
         # xx TODO - can we find a better arrangement than this?
-        self.__cmd_exec.exit()
-        self.__cmd_exec = None
+        self.__rpc_impl.exit()
+        self.__rpc_impl = None
+
+    def start_output(self, handle_output=None):
+        """Start streaming the "standard ouput" written by System Coupling.
+
+        The "stdout" and "stderr" streams are merged into a single stream.
+
+        By default, the output text is written to the console, but a custom
+        handler may be specified that deals with it in a different way (e.g.,
+        write to a file or display in a separate window). Note that if the
+        default is used, the printing is done from a separate thread. This
+        may lead to unusual behaviour in some Python console environments.
+        In such cases, a custom approach based on the handler could be
+        adopted.
+
+        Streaming can be cancelled vai the `end_output` method.
+
+        Parameters
+        ----------
+        handle_output : callable
+            Called with str argument that provides the latest text in the
+            stream. Might represent multiple lines of output (with embedded
+            newlines).
+        """
+        self.__rpc_impl.start_output(handle_output)
+
+    def end_output(self):
+        """Cancels output streaming previously started by `start_output`."""
+        self.__rpc_impl.end_output()
 
     def __getattr__(self, name):
         """Provides access to commands, queries and data model as attributes of
@@ -99,11 +127,11 @@ class SycApi:
         if self.__cmd_meta.is_command_or_query(name):
             # Looks like an API command/query call
             def non_objpath_cmd(**kwargs):
-                return self.__cmd_exec.execute_command(name, **kwargs)
+                return self.__rpc_impl.execute_command(name, **kwargs)
             def objpath_cmd(**kwargs):
                 if 'ObjectPath' not in kwargs:
-                    return self.__cmd_exec.execute_command(name, ObjectPath=self.__root, **kwargs)
-                return self.__cmd_exec.execute_command(name, **kwargs)
+                    return self.__rpc_impl.execute_command(name, ObjectPath=self.__root, **kwargs)
+                return self.__rpc_impl.execute_command(name, **kwargs)
             if not self.__cmd_meta.is_objpath_command_or_query(name):
                 return non_objpath_cmd
             else:
@@ -116,9 +144,9 @@ class SycApi:
         return self.__root.make_path(join_path_strs(self.__root, name))
 
     def _init_datamodel(self):
-        dm_meta_raw = self.__cmd_exec.GetMetadata()
+        dm_meta_raw = self.__rpc_impl.GetMetadata()
         self.__dm_meta = build_dm_meta(dm_meta_raw)
 
     def _init_cmds(self):
-        cmd_meta = self.__cmd_exec.GetCommandAndQueryMetadata()
+        cmd_meta = self.__rpc_impl.GetCommandAndQueryMetadata()
         self.__cmd_meta = CommandMetadata(cmd_meta)

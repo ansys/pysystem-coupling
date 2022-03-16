@@ -61,7 +61,7 @@ class ObjectPath(str):
             stem += '/' + type
         return self.make_path(stem)[name]
 
-    def GetName(self):
+    def get_name(self):
         left, sep, right = self.rpartition('/')
         assert ':' in right
         type, sep, name = right.partition(':')

@@ -1,6 +1,6 @@
 import pytest
 
-from ansys.systemcoupling.core.syc_api import SycApi
+from ansys.systemcoupling.core.analysis import SycAnalysis
 
 from dm_meta_rawdata import dm_meta_testing_raw_data
 from cmd_meta_rawdata import cmd_meta_testing_raw_data
@@ -39,7 +39,7 @@ class _MockCommandExecutor:
 @pytest.fixture
 def api():
     cmd_exec = _MockCommandExecutor()
-    return SycApi(cmd_exec)
+    return SycAnalysis(cmd_exec)
 
 
 def test_create_object(api):
