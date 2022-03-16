@@ -1,7 +1,5 @@
-#
-# Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
-#
-
+import atexit
+import itertools
 import threading
 
 import grpc
@@ -46,19 +44,26 @@ class SycGrpc(object):
 
     TODO:
 
-    - Stdout and stderr capture - accessible but nothing done with them
-    at the moment. What do we want to do?
     - All calls synchronous at the moment. We might want to do something
     different with Solve(), for example.
     """
 
+    _id_iter = itertools.count()
+    _instances = {-1: None}
+
     def __init__(self):
         self._reset()
+        self.__id = next(SycGrpc._id_iter)
 
     def _reset(self):
         self.__process = None
         self.__channel = None
         self.__output_thread = None
+
+    @classmethod
+    def _cleanup(cls):
+        for instance in list(cls._instances.values()):
+            instance.exit()
 
     def start_and_connect(self, host, port, working_dir):
         """Start system coupling in server mode and establish a connection.
@@ -78,7 +83,16 @@ class SycGrpc(object):
         """
         self._connect(host, port)
 
+    def _register_for_cleanup(self):
+        SycGrpc._instances[self.__id] = self
+        if -1 in SycGrpc._instances:
+            # First registration so register atexit handler
+            atexit.register(SycGrpc._cleanup)
+            # Discard the sentinel
+            del SycGrpc._instances[-1]
+
     def _connect(self, host, port):
+        self._register_for_cleanup()
         self.__channel = grpc.insecure_channel(f'{host}:{port}')
 
         # Wait for server to be ready
@@ -98,6 +112,10 @@ class SycGrpc(object):
         Reset this object ready to start and connect to a new
         server if wished.
         """
+        if self.__id in SycGrpc._instances:
+            # Remove from atexit cleanup list
+            del SycGrpc._instances[self.__id]
+
         if self.__channel is not None:
             self.__ostream_service.end_streaming()
             self.__command_service.quit()
@@ -122,14 +140,6 @@ class SycGrpc(object):
 
     def end_output(self):
         self.__ostream_service.end_streaming()
-        # if not self.__output_thread:
-        #     return
-        # alive = self.__output_thread.is_alive()
-        # print("out thread alive ?", alive)
-        # if alive:
-        #     print("checkagain...")
-        #     time.sleep(1)
-        #     print("out thread alive ?", self.__output_thread.is_alive())
 
     def _read_stdstreams(self, handle_output):
         output_iter = self.__ostream_service.begin_streaming()
@@ -138,11 +148,10 @@ class SycGrpc(object):
             try:
                 response = next(output_iter)
                 text += response.text
-                if text[-1] == '\n':
+                if text and text[-1] == '\n':
                     handle_output(text[0:-1])
                     text = ''
             except StopIteration:
-                print("output thread stopping")
                 break
 
     def __getattr__(self, name):
