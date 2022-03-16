@@ -2,67 +2,22 @@
 # Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
 #
 
-import os
-import platform
-import subprocess
 import threading
-import time
 
 import grpc
 
 import ansys.api.systemcoupling.v0.sycapi_pb2 as sycapi_pb2
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
+from ansys.systemcoupling.core.client.syc_process import SycProcess
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
 
-_isWindows = any(platform.win32_ver())
-
-_INSTALL_ROOT = "AWP_ROOT222"
-_SC_ROOT_ENV = "SYSC_ROOT"
-
-_SCRIPT_EXT = '.bat' if _isWindows else ''
-_SCRIPT_NAME = 'systemcoupling' + _SCRIPT_EXT
-
 _CHANNEL_READY_TIMEOUT_SEC = 10
-
-def _path_to_system_coupling():
-    scroot = os.environ.get(_SC_ROOT_ENV, None)
-
-    if not scroot:
-        scroot = os.environ.get(_INSTALL_ROOT, None)
-        if scroot:
-            scroot = os.path.join(scroot, 'SystemCoupling')
-
-    if scroot is None:
-        raise RuntimeError("Failed to locate SystemCoupling from environment.")
-
-    script_path = os.path.join(scroot, 'bin', _SCRIPT_NAME)
-
-    if not os.path.isfile(script_path):
-        raise RuntimeError(f"System coupling script does not exist at {script_path}")
-
-    return script_path
-
-def _start_system_coupling(host, port, working_dir, log_level=1):
-    from copy import deepcopy
-    env = deepcopy(os.environ)
-    env['PYTHONUNBUFFERED'] = '1'
-    env['SYC_GUI_SILENT_SERVER'] = '1'
-    args = [_path_to_system_coupling(), '-m', 'cosimtest', f'--grpcport={host}:{port}']
-    if log_level:
-        args += ['-l', str(log_level)]
-    print("Starting System Coupling: ", args[0])
-    return subprocess.Popen(args,
-                            env=env,
-                            cwd=working_dir,
-                            stdout=subprocess.DEVNULL,
-                            stderr=subprocess.STDOUT
-                            )
 
 
 class SycGrpc(object):
     """Provides a remote proxy API to System Coupling's Command/Query
-    external interface, built of a basic gRPC interface.
+    external interface, built on a basic gRPC interface.
 
     An instance of this class controls starting System Coupling as
     a server in cosimulation mode and handles the underlying RPC to
@@ -112,7 +67,7 @@ class SycGrpc(object):
         The output is gathered asynchronously but is currently only accessible
         via take_stdout().
         """
-        self.__process = _start_system_coupling(host, port, working_dir)
+        self.__process = SycProcess(host, port, working_dir)
         self._connect(host, port)
 
     def connect(self, host, port):
@@ -144,61 +99,39 @@ class SycGrpc(object):
         server if wished.
         """
         if self.__channel is not None:
-            #self.__ostream_service.end_streaming()
-            self.end_output()
+            self.__ostream_service.end_streaming()
             self.__command_service.quit()
             self.__channel = None
-        if self.__process and self.__process.poll() is None:
-            try:
-                print("wait for process to exit...")
-                self.__process.wait(5)
-                print("...done")
-            except subprocess.TimeoutExpired:
-                print("process still alive - killing it...")
-                self.__process.kill()
-                time.sleep(0.5)
-                ret_code = self.__process.poll()
-                print("process exit code: ",
-                      "Unknown - still alive?" if ret_code is None
-                      else ret_code)
+        if self.__process:
+            self.__process.end()
             self.__process = None
         self._reset()
 
-    def take_stdout(self):
-        """Returns any stdout(/err) output from the server that is currently buffered
-        client side and removes it from the buffer.
-        """
-        out = b''
-        while True:
-            line = self.__stdout_reader.readline()
-            if line is None:
-                break
-            out += line
-        return out.decode('utf-8')
-
-    def start_output(self):
+    def start_output(self, handle_output=None):
         """Start streaming of standard output streams from System Coupling
-        and print on the console.
+        and, by default, print to the console.
         """
-        self.__outbuf = ''
-        self.__output_thread = threading.Thread(target=self._read_stdstreams)
+        def default_handler(text):
+            print(text)
+        handle_output = handle_output or default_handler
+        self.__output_thread = threading.Thread(
+            target=self._read_stdstreams,
+            args=(handle_output,))
         self.__output_thread.daemon = True
         self.__output_thread.start()
 
     def end_output(self):
         self.__ostream_service.end_streaming()
-        print(f'buffered output:\n{self.__outbuf}\n')
-        self.__outbuf = ''
-        if not self.__output_thread:
-            return
-        alive = self.__output_thread.is_alive()
-        print("out thread alive ?", alive)
-        if alive:
-            print("checkagain...")
-            time.sleep(1)
-            print("out thread alive ?", self.__output_thread.is_alive())
+        # if not self.__output_thread:
+        #     return
+        # alive = self.__output_thread.is_alive()
+        # print("out thread alive ?", alive)
+        # if alive:
+        #     print("checkagain...")
+        #     time.sleep(1)
+        #     print("out thread alive ?", self.__output_thread.is_alive())
 
-    def _read_stdstreams(self):
+    def _read_stdstreams(self, handle_output):
         output_iter = self.__ostream_service.begin_streaming()
         text = ''
         while True:
@@ -206,8 +139,7 @@ class SycGrpc(object):
                 response = next(output_iter)
                 text += response.text
                 if text[-1] == '\n':
-                    self.__outbuf += text
-                    print(text[0:-1])
+                    handle_output(text[0:-1])
                     text = ''
             except StopIteration:
                 print("output thread stopping")
