@@ -1,6 +1,6 @@
-import grpc
 import ansys.api.systemcoupling.v0.output_stream_pb2 as output_stream_pb2
 import ansys.api.systemcoupling.v0.output_stream_pb2_grpc as output_stream_pb2_grpc
+
 
 class OutputStreamService:
     def __init__(self, channel):

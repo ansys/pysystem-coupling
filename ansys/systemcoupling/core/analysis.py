@@ -15,6 +15,7 @@ class _MetaWrapper:
         except AttributeError:
             return getattr(self.__cmd_meta, name)
 
+
 class SycAnalysis:
     """Encapsulates a System Coupling analysis, providing access to the
     System Coupling data model and its command and query API.
@@ -29,7 +30,9 @@ class SycAnalysis:
         self._init_datamodel()
         self._init_cmds()
         self.__meta_wrapper = _MetaWrapper(self.__dm_meta, self.__cmd_meta)
-        self.__root = ObjectPath('/' + self.__dm_meta.root_type(), self, self.__meta_wrapper)
+        self.__root = ObjectPath(
+            "/" + self.__dm_meta.root_type(), self, self.__meta_wrapper
+        )
         self.__top_level_types = set(self.__dm_meta.child_types(self.__root))
 
     def execute_command(self, name, **kwargs):
@@ -57,7 +60,7 @@ class SycAnalysis:
         self.__rpc_impl = None
 
     def start_output(self, handle_output=None):
-        """Start streaming the "standard ouput" written by System Coupling.
+        """Start streaming the "standard output" written by System Coupling.
 
         The "stdout" and "stderr" streams are merged into a single stream.
 
@@ -128,17 +131,21 @@ class SycAnalysis:
             # Looks like an API command/query call
             def non_objpath_cmd(**kwargs):
                 return self.__rpc_impl.execute_command(name, **kwargs)
+
             def objpath_cmd(**kwargs):
-                if 'ObjectPath' not in kwargs:
-                    return self.__rpc_impl.execute_command(name, ObjectPath=self.__root, **kwargs)
+                if "ObjectPath" not in kwargs:
+                    return self.__rpc_impl.execute_command(
+                        name, ObjectPath=self.__root, **kwargs
+                    )
                 return self.__rpc_impl.execute_command(name, **kwargs)
+
             if not self.__cmd_meta.is_objpath_command_or_query(name):
                 return non_objpath_cmd
             else:
                 return objpath_cmd
 
         if not name in self.__top_level_types:
-            raise AttributeError(f'Unknown attribute of System Coupling API: \'{name}\'')
+            raise AttributeError(f"Unknown attribute of System Coupling API: '{name}'")
 
         # Can assume accessing a datamodel path
         return self.__root.make_path(join_path_strs(self.__root, name))

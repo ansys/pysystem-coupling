@@ -93,15 +93,17 @@ class SycGrpc(object):
 
     def _connect(self, host, port):
         self._register_for_cleanup()
-        self.__channel = grpc.insecure_channel(f'{host}:{port}')
+        self.__channel = grpc.insecure_channel(f"{host}:{port}")
 
         # Wait for server to be ready
         timeout = _CHANNEL_READY_TIMEOUT_SEC
         try:
             grpc.channel_ready_future(self.__channel).result(timeout=timeout)
         except grpc.FutureTimeoutError:
-            raise RuntimeError("Aborting attempt to connect to gRPC channel "
-                               f"after {timeout} seconds.")
+            raise RuntimeError(
+                "Aborting attempt to connect to gRPC channel "
+                f"after {timeout} seconds."
+            )
 
         self.__command_service = CommandQueryService(self.__channel)
         self.__ostream_service = OutputStreamService(self.__channel)
@@ -129,12 +131,14 @@ class SycGrpc(object):
         """Start streaming of standard output streams from System Coupling
         and, by default, print to the console.
         """
+
         def default_handler(text):
             print(text)
+
         handle_output = handle_output or default_handler
         self.__output_thread = threading.Thread(
-            target=self._read_stdstreams,
-            args=(handle_output,))
+            target=self._read_stdstreams, args=(handle_output,)
+        )
         self.__output_thread.daemon = True
         self.__output_thread.start()
 
@@ -143,14 +147,14 @@ class SycGrpc(object):
 
     def _read_stdstreams(self, handle_output):
         output_iter = self.__ostream_service.begin_streaming()
-        text = ''
+        text = ""
         while True:
             try:
                 response = next(output_iter)
                 text += response.text
-                if text and text[-1] == '\n':
+                if text and text[-1] == "\n":
                     handle_output(text[0:-1])
-                    text = ''
+                    text = ""
             except StopIteration:
                 break
 
@@ -166,6 +170,7 @@ class SycGrpc(object):
 
         def f(**kwargs):
             return self.execute_command(name, **kwargs)
+
         return f
 
     def execute_command(self, cmd_name, **kwargs):
@@ -176,6 +181,7 @@ class SycGrpc(object):
 
         See also ``__getattr__``.
         """
+
         def make_arg(name, val):
             arg = sycapi_pb2.CommandRequest.Argument()
             arg.name = name
@@ -189,7 +195,7 @@ class SycGrpc(object):
         # ('nosync', 'True'|'False'). This tells us whether the command was
         # state changing. Not currently used, but potentially useful if
         # we ever implement incremental updating to optimise client side
-        # state cacheing.
+        # state caching.
         # print(f"meta = {meta[0][0]}: {meta[0][1]}")
         return from_variant(response.result)
 

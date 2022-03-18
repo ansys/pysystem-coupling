@@ -1,9 +1,8 @@
 import glob
 import os
+from pathlib import Path
 import re
 import shutil
-import sys
-from pathlib import Path
 
 from grpc_tools import protoc
 
@@ -25,11 +24,11 @@ Path.mkdir(Path(out_path), parents=True, exist_ok=True)
 proto_files = glob.glob(os.path.join(protos_path, "*.proto"), recursive=True)
 
 args = (
-    '',
-    f'-I{protos_path}',
-    f'--python_out={out_path}',
-    f'--grpc_python_out={out_path}',
-    *proto_files
+    "",
+    f"-I{protos_path}",
+    f"--python_out={out_path}",
+    f"--grpc_python_out={out_path}",
+    *proto_files,
 )
 protoc.main(args)
 
@@ -38,7 +37,7 @@ py_source = {}
 for filename in grpc_source_files:
     relative_path = filename.replace(out_path, "")
     module_name = ".".join(re.split(r"\\|/", relative_path))
-    module_name = module_name.rstrip(".py").strip('.')
+    module_name = module_name.rstrip(".py").strip(".")
     with open(filename) as f:
         py_source[module_name] = f.read()
 

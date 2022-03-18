@@ -5,7 +5,7 @@
 import json
 import os
 import platform
-from queue import Queue, Empty
+from queue import Empty, Queue
 import socket
 import subprocess
 import threading
@@ -17,8 +17,9 @@ _isWindows = any(platform.win32_ver())
 _INSTALL_ROOT = "AWP_ROOT222"
 _SC_ROOT_ENV = "SYSC_ROOT"
 
-_SCRIPT_EXT = '.bat' if _isWindows else ''
-_SCRIPT_NAME = 'systemcoupling' + _SCRIPT_EXT
+_SCRIPT_EXT = ".bat" if _isWindows else ""
+_SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
+
 
 def _path_to_system_coupling():
     scroot = os.environ.get(_SC_ROOT_ENV, None)
@@ -26,52 +27,58 @@ def _path_to_system_coupling():
     if not scroot:
         scroot = os.environ.get(_INSTALL_ROOT, None)
         if scroot:
-            scroot = os.path.join(scroot, 'SystemCoupling')
+            scroot = os.path.join(scroot, "SystemCoupling")
 
     if scroot is None:
         raise RuntimeError("Failed to locate SystemCoupling from environment.")
 
-    script_path = os.path.join(scroot, 'bin', _SCRIPT_NAME)
+    script_path = os.path.join(scroot, "bin", _SCRIPT_NAME)
 
     if not os.path.isfile(script_path):
         raise RuntimeError(f"System coupling script does not exist at {script_path}")
 
     return script_path
 
+
 def _start_system_coupling(host, port, working_dir, redirect_std=False):
     from copy import deepcopy
+
     env = deepcopy(os.environ)
-    env['PYTHONUNBUFFERED'] = '1'
+    env["PYTHONUNBUFFERED"] = "1"
     if redirect_std:
-        env['PYTHONIOENCODING'] = 'utf-8'
-    args = [_path_to_system_coupling(), '-m', 'cosimtest', f'--port={host}:{port}']
-    return subprocess.Popen(args,
-                            env=env,
-                            cwd=working_dir,
-                            stdout=subprocess.PIPE if redirect_std else None,
-                            # for now, merge stderr with stdout if redirectng
-                            stderr=subprocess.STDOUT if redirect_std else None)
+        env["PYTHONIOENCODING"] = "utf-8"
+    args = [_path_to_system_coupling(), "-m", "cosimtest", f"--port={host}:{port}"]
+    return subprocess.Popen(
+        args,
+        env=env,
+        cwd=working_dir,
+        stdout=subprocess.PIPE if redirect_std else None,
+        # for now, merge stderr with stdout if redirectng
+        stderr=subprocess.STDOUT if redirect_std else None,
+    )
+
 
 def _read_connection_info(sock):
-    buf = ''
+    buf = ""
     bufsize = 1024
     done = False
     while not done:
         ret = sock.recv(bufsize)
-        buf += ret.decode('ascii')
-        done = buf.endswith('</connectAt>')
+        buf += ret.decode("ascii")
+        done = buf.endswith("</connectAt>")
 
     xconnect = XET.fromstring(buf)
     host = port = None
     for child in xconnect:
-        if child.tag == 'host':
+        if child.tag == "host":
             host = child.text
-        elif child.tag == 'port':
+        elif child.tag == "port":
             port = int(child.text)
 
     assert None not in (host, port)
 
     return (host, port)
+
 
 class SycRpc(object):
     """Provides a remote proxy API to System Coupling's Command/Query
@@ -138,7 +145,9 @@ class SycRpc(object):
         """
 
         # Start server socket to which SyC will attach
-        connect_server = self.__serversock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        connect_server = self.__serversock = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM
+        )
         connect_server.bind((socket.gethostname(), 0))
         connect_server.listen(1)
 
@@ -146,7 +155,9 @@ class SycRpc(object):
         sockname = connect_server.getsockname()
 
         # SyC start
-        self.__process = _start_system_coupling(*sockname, working_dir, redirect_std=True)
+        self.__process = _start_system_coupling(
+            *sockname, working_dir, redirect_std=True
+        )
 
         self.__stdout_reader = _StreamReader(self.__process.stdout)
 
@@ -176,10 +187,10 @@ class SycRpc(object):
             # Sometimes server is not immediately ready to accept connection
             try:
                 self.__clientsock.connect((host, port))
-                print(f'{i+1} attempts to connect')
+                print(f"{i+1} attempts to connect")
                 break
             except:
-                if i == nattempt-1:
+                if i == nattempt - 1:
                     raise
                 time.sleep(0.1 * i)
 
@@ -191,7 +202,7 @@ class SycRpc(object):
         Reset this object ready to start and connect to a new
         server if wished.
         """
-        self._write(XET.tostring(XET.Element('exit')))
+        self._write(XET.tostring(XET.Element("exit")))
         self.__response_thread.join(timeout=5.0)
         self.__clientsock.close()
         self.__sparesock and self.__sparesock.close()
@@ -202,13 +213,13 @@ class SycRpc(object):
         """Returns any stdout(/err) output from the server that is currently buffered
         client side and removes it from the buffer.
         """
-        out = b''
+        out = b""
         while True:
             line = self.__stdout_reader.readline()
             if line is None:
                 break
             out += line
-        return out.decode('utf-8')
+        return out.decode("utf-8")
 
     def __getattr__(self, name):
         """Support command/query interface as method attributes as an
@@ -222,6 +233,7 @@ class SycRpc(object):
 
         def f(**kwargs):
             return self.execute_command(name, **kwargs)
+
         return f
 
     def execute_command(self, cmd_name, **kwargs):
@@ -233,9 +245,11 @@ class SycRpc(object):
         See also ``__getattr__``.
         """
 
-        rpc = XET.Element('jsonrpc')
-        cmd = {'method': cmd_name,
-               'params': [kwargs]} # NB : args wrapped in list for historical reasons
+        rpc = XET.Element("jsonrpc")
+        cmd = {
+            "method": cmd_name,
+            "params": [kwargs],
+        }  # NB : args wrapped in list for historical reasons
         rpc.text = json.dumps(cmd)
 
         # This defaults to ascii encoding, which is consistent with server
@@ -248,27 +262,29 @@ class SycRpc(object):
     def _listen_to_server(self):
 
         # This is just to avoid having a 'public' read() on the main class
-        class Wrapper(object): pass
+        class Wrapper(object):
+            pass
+
         wrapper = Wrapper()
         wrapper.read = self._read
 
         try:
             items = XET.iterparse(wrapper)
             for event, node in items:
-                if event != 'end':
+                if event != "end":
                     # shouldn't actually see anything else
                     continue
-                if node.tag == 'disconnect':
+                if node.tag == "disconnect":
                     print("disconnect received")
                     break
-                elif node.tag == 'methodResponse':
+                elif node.tag == "methodResponse":
                     response = node.text
                     self._read_response(response)
                 else:
                     # TODO? other node types ?
                     continue
         except Exception as e:
-            print(f'exception in listener thread, probable disconnection: {str(e)}')
+            print(f"exception in listener thread, probable disconnection: {str(e)}")
             pass
 
     def _read_response(self, response):
@@ -278,20 +294,22 @@ class SycRpc(object):
 
     def _wait_for_response(self):
         with self.__response_cv:
-            self.__response_cv.wait_for(lambda : self.__response is not None)
+            self.__response_cv.wait_for(lambda: self.__response is not None)
             response = self.__response
             self.__response = None
             return response
 
     def _process_response(self, serialized_response):
         response = json.loads(serialized_response)
-        if 'nosync' in response:
+        if "nosync" in response:
             return None
-        elif 'result' in response:
-            return response['result']
-        elif 'faultCode' in response:
-            raise RuntimeError(f"[Remote error] {response['faultString']}\n\n"
-                               f"[Remote traceback]\n{response['detail']['stackTrace']}")
+        elif "result" in response:
+            return response["result"]
+        elif "faultCode" in response:
+            raise RuntimeError(
+                f"[Remote error] {response['faultString']}\n\n"
+                f"[Remote traceback]\n{response['detail']['stackTrace']}"
+            )
         else:
             raise RuntimeError("Remote method call error. Unrecognized response.")
 
@@ -302,7 +320,7 @@ class SycRpc(object):
             return startTag
 
         ret = self.__clientsock.recv(bufsize)
-        return ret.decode('ascii')
+        return ret.decode("ascii")
 
     def _write(self, buf):
         buflen, totsent = len(buf), 0
@@ -326,21 +344,23 @@ class _StreamReader:
             except:
                 pass
 
-        self.__readthrd = threading.Thread(target=_enqueue,
-                                           args=(self.__stream, self.__queue))
+        self.__readthrd = threading.Thread(
+            target=_enqueue, args=(self.__stream, self.__queue)
+        )
         self.__readthrd.daemon = True
         self.__readthrd.start()
 
     def readline(self, timeout=None):
         try:
-            return self.__queue.get(block=timeout is not None,
-                                    timeout = timeout)
+            return self.__queue.get(block=timeout is not None, timeout=timeout)
         except Empty:
             return None
+
 
 class _NullStreamReader:
     def readline(self, timeout=None):
         return None
+
 
 class UnexpectedEndOfStream(Exception):
     pass

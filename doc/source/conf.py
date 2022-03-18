@@ -6,25 +6,25 @@ from pyansys_sphinx_theme import pyansys_logo_black
 from ansys.systemcoupling.core import __version__
 
 # Project information
-project = 'ansys-systemcoupling-core'
+project = "ansys-systemcoupling-core"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "Ansys Inc."
 release = version = __version__
 
 # use the default pyansys logo
 html_logo = pyansys_logo_black
-html_theme = 'pyansys_sphinx_theme'
+html_theme = "pyansys_sphinx_theme"
 
 # specify the location of your github repo
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pyansys-sphinx-theme",
-    "show_prev_next": False
+    "show_prev_next": False,
 }
 
 # Sphinx extensions
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx.ext.intersphinx",
     "sphinx_copybutton",
@@ -33,9 +33,7 @@ extensions = [
 # Intersphinx mapping
 intersphinx_mapping = {
     "python": ("https://docs.python.org/dev", None),
-
     # kept here as an example
-
     # "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     # "numpy": ("https://numpy.org/devdocs", None),
     # "matplotlib": ("https://matplotlib.org/stable", None),
@@ -73,7 +71,7 @@ html_static_path = ["_static"]
 templates_path = ["_templates"]
 
 # The suffix(es) of source filenames.
-source_suffix = '.rst'
+source_suffix = ".rst"
 
 # The master toctree document.
-master_doc = 'index'
+master_doc = "index"

@@ -1,7 +1,8 @@
 from ansys.api.systemcoupling.v0 import variant_pb2
 
 # See to_variant() for use of this
-_DUMMY_KEY = '__@!%$__'
+_DUMMY_KEY = "__@!%$__"
+
 
 def to_variant(val, var, convert_key=None):
     """Convert Python datatype to Variant type"""
@@ -30,9 +31,7 @@ def to_variant(val, var, convert_key=None):
             del var.variant_map_state.item[_DUMMY_KEY]
         for k, v in val.items():
             k = convert_key(k) if convert_key else k
-            to_variant(v,
-                       var.variant_map_state.item[k],
-                       convert_key)
+            to_variant(v, var.variant_map_state.item[k], convert_key)
 
 
 def from_variant(var, convert_key=None):
@@ -43,9 +42,9 @@ def from_variant(var, convert_key=None):
     if not what.startswith("variant_"):
         return getattr(var, what)
     if what == "variant_vector_state":
-        return [from_variant(val, convert_key)
-                for val in var.variant_vector_state.item]
+        return [from_variant(val, convert_key) for val in var.variant_vector_state.item]
     elif what == "variant_map_state":
-        return {convert_key(k) if convert_key else k:
-                from_variant(v, convert_key)
-                for k, v in var.variant_map_state.item.items()}
+        return {
+            convert_key(k) if convert_key else k: from_variant(v, convert_key)
+            for k, v in var.variant_map_state.item.items()
+        }
