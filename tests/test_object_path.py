@@ -42,7 +42,7 @@ def test_root(root):
 def test_named(root):
     path = root.A.A1["bob"]
     assert path == "/ROOT/A/A1:bob"
-    assert path.GetName() == "bob"
+    assert path.get_name() == "bob"
 
 
 def test_set_and_get_state(root):
