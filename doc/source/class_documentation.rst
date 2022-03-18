@@ -10,6 +10,6 @@ automatically generate class and method documentation.
 .. autosummary::
    :toctree: _autosummary/
 
-   ansys.systemcoupling.core.syc_api.SycApi
+   ansys.systemcoupling.core.analysis.SycAnalysis
 
 Note how each method or attribute has its own page.
