@@ -5,7 +5,8 @@
 import os
 import platform
 import subprocess
-import time
+
+import psutil
 
 _isWindows = any(platform.win32_ver())
 
@@ -22,19 +23,14 @@ class SycProcess:
 
     def end(self):
         if self.__process and self.__process.poll() is None:
+            pid = self.__process.pid
             try:
                 print("wait for process to exit...")
                 self.__process.wait(5)
                 print("...done")
             except subprocess.TimeoutExpired:
                 print("process still alive - killing it...")
-                self.__process.kill()
-                time.sleep(0.5)
-                ret_code = self.__process.poll()
-                print(
-                    "process exit code: ",
-                    "Unknown - still alive?" if ret_code is None else ret_code,
-                )
+                _kill_process_tree(pid, timeout=0.5)
             self.__process = None
 
 
@@ -74,3 +70,20 @@ def _path_to_system_coupling():
         raise RuntimeError(f"System coupling script does not exist at {script_path}")
 
     return script_path
+
+
+def _kill_process_tree(pid, timeout):
+    """Kill a process tree rooted at process `pid`."""
+    parent = psutil.Process(pid)
+    children = parent.children(recursive=True)
+    children.append(parent)
+    for p in children:
+        try:
+            p.terminate()
+        except psutil.NoSuchProcess:
+            pass
+    gone, alive = psutil.wait_procs(children, timeout=timeout)
+
+    # On Windows, terminate == kill so this probably won't have much effect.
+    for p in alive:
+        p.kill()

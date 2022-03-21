@@ -53,6 +53,7 @@ setup(
         "grpcio>=1.30.0",
         "grpcio-status>=1.30.0",
         "googleapis-common-protos>=1.50.0",
+        "psutil>=5.7.0",
     ],
     # Plan on supporting only the currently supported versions of Python
     python_requires=">=3.6",
