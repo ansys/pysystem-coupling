@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package syc;
+
+service Solution {
+  rpc Solve (SolveRequest) returns (SolveResponse) {}
+  rpc Interrupt (InterruptRequest) returns (InterruptResponse) {}
+  rpc Abort (AbortRequest) returns (AbortResponse) {}
+}
+
+// Note that all responses are currently empty messages
+// In particular no status info for solve is returned -
+// failure or early termination of solve will be
+// communicated by an exception as for commands
+// via the Command service.
+
+message SolveRequest {}
+message SolveResponse {}
+
+message InterruptRequest {
+  string reason = 1;
+}
+message InterruptResponse {}
+
+message AbortRequest {
+  string reason = 1;
+}
+message AbortResponse {}
+

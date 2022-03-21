@@ -4,9 +4,11 @@ import threading
 
 import grpc
 
-import ansys.api.systemcoupling.v0.sycapi_pb2 as sycapi_pb2
+import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
+from ansys.systemcoupling.core.client.services.process import SycProcessService
+from ansys.systemcoupling.core.client.services.solution import SolutionService
 from ansys.systemcoupling.core.client.syc_process import SycProcess
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
 
@@ -107,6 +109,8 @@ class SycGrpc(object):
 
         self.__command_service = CommandQueryService(self.__channel)
         self.__ostream_service = OutputStreamService(self.__channel)
+        self.__process_service = SycProcessService(self.__channel)
+        self.__solution_service = SolutionService(self.__channel)
 
     def exit(self):
         """Shut down the remote System Coupling server.
@@ -120,7 +124,7 @@ class SycGrpc(object):
 
         if self.__channel is not None:
             self.__ostream_service.end_streaming()
-            self.__command_service.quit()
+            self.__process_service.quit()
             self.__channel = None
         if self.__process:
             self.__process.end()
@@ -183,12 +187,12 @@ class SycGrpc(object):
         """
 
         def make_arg(name, val):
-            arg = sycapi_pb2.CommandRequest.Argument()
+            arg = command_pb2.CommandRequest.Argument()
             arg.name = name
             to_variant(val, arg.val)
             return arg
 
-        request = sycapi_pb2.CommandRequest(command=cmd_name)
+        request = command_pb2.CommandRequest(command=cmd_name)
         request.args.extend([make_arg(name, val) for name, val in kwargs.items()])
         response, meta = self.__command_service.execute_command(request)
         # Expect meta to comprise a 1-tuple containing a pair value,
@@ -199,5 +203,14 @@ class SycGrpc(object):
         # print(f"meta = {meta[0][0]}: {meta[0][1]}")
         return from_variant(response.result)
 
+    def solve(self):
+        self.__solution_service.solve()
+
+    def interrupt(self, reason_msg=""):
+        self.__solution_service.interrupt(reason=reason_msg)
+
+    def abort(self, reason_msg=""):
+        self.__solution_service.abort(reason=reason_msg)
+
     def ping(self):
-        return self.__command_service.ping()
+        return self.__process_service.ping()

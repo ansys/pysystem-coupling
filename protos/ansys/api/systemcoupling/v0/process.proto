@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package syc;
+
+service Process {
+  rpc Ping (PingRequest) returns (PingResponse) {}
+  rpc Quit (QuitRequest) returns (QuitResponse) {}
+}
+
+message PingRequest {}
+message PingResponse {}
+
+message QuitRequest {}
+message QuitResponse {}
