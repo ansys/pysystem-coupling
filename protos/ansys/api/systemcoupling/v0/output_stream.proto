@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package syc;
+
+service OutputStream {
+  rpc BeginStdStreaming(StdStreamRequest) returns (stream StdStreamResponse) {}
+}
+
+message StdStreamRequest {
+}
+
+message StdStreamResponse {
+  string text = 1;
+}

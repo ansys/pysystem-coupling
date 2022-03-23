@@ -60,15 +60,15 @@ directory is expected to be immediately below the directory
 specified by the variable.
 
 The System Coupling installation location may be overridden by
-setting the ``SYSC_ROOT``  environment variable.
+setting the ``SYSC_ROOT`` environment variable.
 
-The following example shows the set up and solve of the "oscillating plate"
-tutorial, using Ansys Fluent as the CFD solver.
+The following example shows the set up and solve of the "oscillating
+ plate" tutorial, using Ansys Fluent as the CFD solver.
 
 .. code:: python
 
    >>> import ansys.systemcoupling.core as pysystemcoupling
-   >>> syc = pysystemcoupling.launch_syc()
+   >>> syc = pysystemcoupling.launch()
    >>> syc.AddParticipant(InputFile = 'mapdl.scp')
    >>> syc.AddParticipant(InputFile = 'fluent.scp')
    >>> interface = syc.CouplingInterface['interface-1']

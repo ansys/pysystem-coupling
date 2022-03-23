@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package syc;
+
+message ErrorDetails {
+  string exception_classname = 1;
+  string stack_trace = 2;
+}

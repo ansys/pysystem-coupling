@@ -1,5 +1,6 @@
 from ansys.systemcoupling.core.path_util import join_path_strs
 
+
 class ObjectPath(str):
     """
     A simple utility class for attribute-based access to children of data-model
@@ -12,31 +13,35 @@ class ObjectPath(str):
 
         inst = str.__new__(cls, path)
 
-        inst.__setattr('_api', api)
-        inst.__setattr('_rules', rules)
-        inst.__setattr('_parameter_names', None)
-        inst.__setattr('_child_types', None)
-        inst.__setattr('_is_object_path', None)
-        inst.__setattr('_get_param_value', lambda path, name: api.execute_command(
-            'GetParameter', ObjectPath=path, Name=name))
+        inst.__setattr("_api", api)
+        inst.__setattr("_rules", rules)
+        inst.__setattr("_parameter_names", None)
+        inst.__setattr("_child_types", None)
+        inst.__setattr("_is_object_path", None)
+        inst.__setattr(
+            "_get_param_value",
+            lambda path, name: api.execute_command(
+                "GetParameter", ObjectPath=path, Name=name
+            ),
+        )
 
         return inst
 
     def parameter_names(self):
         if self._parameter_names is None:
-            self.__setattr('_parameter_names', self._rules.parameter_names(self))
+            self.__setattr("_parameter_names", self._rules.parameter_names(self))
         return self._parameter_names
 
     def child_types(self):
         if self._child_types is None:
-            self.__setattr('_child_types', self._rules.child_types(self))
+            self.__setattr("_child_types", self._rules.child_types(self))
         return self._child_types
 
     def param_path(self, name):
         return join_path_strs(self, name)
 
     def obj_path(self, name):
-        return self + ':' + name
+        return self + ":" + name
 
     def __getitem__(self, name):
         if isinstance(name, (int, slice)):
@@ -49,26 +54,26 @@ class ObjectPath(str):
 
     def is_object_path(self):
         if self._is_object_path is None:
-            self.__setattr('_is_object_path', self._rules.is_object_path(self))
+            self.__setattr("_is_object_path", self._rules.is_object_path(self))
         return self._is_object_path
 
     def renamed(self, name):
-        stem, sep, last_comp = self.rpartition('/')
-        type, sep, old_name = last_comp.partition(':')
+        stem, sep, last_comp = self.rpartition("/")
+        type, sep, old_name = last_comp.partition(":")
         if not old_name:
             stem = self
         else:
-            stem += '/' + type
+            stem += "/" + type
         return self.make_path(stem)[name]
 
-    def GetName(self):
-        left, sep, right = self.rpartition('/')
-        assert ':' in right
-        type, sep, name = right.partition(':')
+    def get_name(self):
+        left, sep, right = self.rpartition("/")
+        assert ":" in right
+        type, sep, name = right.partition(":")
         return name
 
     def __setattr__(self, name, value):
-        self.SetState(State={name : value})
+        self.SetState(State={name: value})
 
     def __setitem__(self, name, value):
         self.make_path(self.obj_path(name)).SetState(State=value)
@@ -86,12 +91,17 @@ class ObjectPath(str):
                 self.__setattr(name, obj)
                 return obj
         if self._rules.is_objpath_command_or_query(name):
-            return lambda **kwds: self._api.execute_command(name, ObjectPath=self, **kwds)
+            return lambda **kwds: self._api.execute_command(
+                name, ObjectPath=self, **kwds
+            )
         raise AttributeError(name)
 
     def __dir__(self):
-        return list(self.parameter_names()) + list(self.child_types()) + \
-            self._rules.get_objpath_command_and_query_names()
+        return (
+            list(self.parameter_names())
+            + list(self.child_types())
+            + self._rules.get_objpath_command_and_query_names()
+        )
 
     def make_path(self, path_str):
         return ObjectPath(path_str, self._api, self._rules)

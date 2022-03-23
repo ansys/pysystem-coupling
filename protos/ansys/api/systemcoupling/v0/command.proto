@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package syc;
+
+import "variant.proto";
+
+service Command {
+  rpc InvokeCommand (CommandRequest) returns (CommandResponse) {}
+}
+
+message CommandRequest {
+  message Argument {
+    string name = 1;
+    utils.Variant val = 2;
+  }
+  string command = 1;
+  repeated Argument args = 2;
+}
+
+message CommandResponse {
+  utils.Variant result = 1;
+}
