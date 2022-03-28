@@ -11,9 +11,18 @@ class StateForTesting:
         s = self.__state
         for comp in comps:
             s = s.setdefault(comp, {})
-        s[last] = state
+        if last in s:
+            new_state = s[last]
+            for k, v in state.items():
+                new_state[k] = v
+            s[last] = new_state
+        else:            
+            s[last] = state
+        import pprint
+        print(f'set {path} state to\n{pprint.pformat(self.__state)}')
 
     def get_state(self, path):
+        print(f'get_state(path={path})')
         comps = _split_comps(path)
 
         s = self.__state
@@ -24,7 +33,8 @@ class StateForTesting:
                 s = s[comp]
             else:
                 return {}
-
+        if found_some:
+            print(f'get_state: {s}')
         return s if found_some else {}
 
     def get_parameter(self, path, name):

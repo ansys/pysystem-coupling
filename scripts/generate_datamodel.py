@@ -30,6 +30,19 @@ def _gethash(obj_info):
 def _get_indent_str(indent):
     return f"{' '*indent*4}"
 
+def _write_property_helper(out, pname, ptype_str, doc_str, indent=0):
+    istr = _get_indent_str(indent)
+    istr1 = _get_indent_str(indent+1)
+    out.write("\n")
+    out.write(f"{istr}@property\n")
+    out.write(f"{istr}def {pname}(self) -> {ptype_str}:\n")
+    out.write(f'{istr1}"""{doc_str}"""\n')
+    out.write(f"{istr1}return self.get_property_state('{pname}')\n")
+    out.write("\n")
+    out.write(f"{istr}@{pname}.setter\n")
+    out.write(f"{istr}def {pname}(self, value: {ptype_str}):\n")
+    out.write(f"{istr1}self.set_property_state('{pname}', value)\n")
+
 def _write_cls_helper(out, cls, indent = 0):
     try:
         istr = _get_indent_str(indent)
@@ -51,10 +64,26 @@ def _write_cls_helper(out, cls, indent = 0):
             strout = io.StringIO()
             pprint.pprint(child_names, stream=strout, compact=True,
                     width=80-indent*4-10)
+            #out.write(f'{istr1}child_names_set = set({cls.__name__}.child_names)')
             mn = ('\n' + istr2).join(strout.getvalue().strip().split('\n'))
             out.write(f'{istr2}{mn}\n')
             for child in child_names:
                 _write_cls_helper(out, getattr(cls, child), indent+1)
+            
+
+        property_names_types = getattr(cls, 'property_names_types', None)
+        if property_names_types:
+            out.write(f'{istr1}property_names_types = \\\n')
+            strout = io.StringIO()
+            names_types = [(nm, sycn, typ.__name__) 
+                           for nm, sycn, typ in property_names_types]
+            pprint.pprint(names_types, stream=strout, compact=True,
+                    width=80-indent*4-10)
+            mn = ('\n' + istr2).join(strout.getvalue().strip().split('\n'))
+            out.write(f'{istr2}{mn}\n')
+            for prop_name, _, prop_type in names_types:
+                doc = getattr(cls, prop_name).__doc__
+                _write_property_helper(out, prop_name, prop_type, doc, indent+1)
 
         command_names = getattr(cls, 'command_names', None)
         if command_names:
@@ -106,7 +135,7 @@ if __name__ == '__main__':
     dirname = os.path.dirname(__file__)
     filepath = os.path.normpath(
             os.path.join(dirname, "..", "ansys", "systemcoupling", "core",
-                "settings", "datamodel222.py")
+                "settings", "datamodel222_v2.py")
             )
     #session = launch_fluent()
     #sinfo = session.get_settings_service().get_static_info()
