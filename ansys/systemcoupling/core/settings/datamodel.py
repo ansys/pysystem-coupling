@@ -27,7 +27,6 @@ import sys
 import weakref
 from typing import Union, List, Tuple, Dict, Generic, TypeVar, NewType
 
-# from ansys.fluent.core.utils.logging import LOG
 import logging as LOG
 
 from ansys.systemcoupling.core.settings import name_util
