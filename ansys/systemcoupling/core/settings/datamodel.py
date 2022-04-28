@@ -17,17 +17,13 @@ r.setup.models.energy.enabled = True
 r.boundary_conditions.velocity_inlet['inlet'].vmag.constant = 20
 """
 import collections
-import copy
 import hashlib
-import itertools
 import keyword
-import pickle
-import string
-import sys
-import weakref
-from typing import Union, List, Tuple, Dict, Generic, TypeVar, NewType
-
 import logging as LOG
+import pickle
+import sys
+from typing import Dict, Generic, List, NewType, Tuple, TypeVar, Union
+import weakref
 
 from ansys.systemcoupling.core.settings import name_util
 
@@ -72,7 +68,7 @@ class Base:
 
     Attributes
     ----------
-    flproxy
+    sycproxy
     obj_name
     syc_name
 
@@ -105,10 +101,11 @@ class Base:
 
     _name = None
     syc_name = None
+    _syc_pathsep = "/"
 
     @property
     def obj_name(self) -> str:
-        """Scheme name of this object.
+        """SystemCoupling name of this object.
 
         By default, this returns the object's static name. If the object is a
         named-object child, the object's name is returned.
@@ -129,6 +126,14 @@ class Base:
         if not ppath:
             return self.obj_name
         return ppath + "/" + self.obj_name
+
+    @property
+    def syc_path(self) -> str:
+        """Path of this object in native SystemCoupling form."""
+        if self._parent is None:
+            return "/" + self.syc_name
+        ppath = self._parent.syc_path
+        return ppath + self._parent._syc_pathsep + self.obj_name
 
     def get_attrs(self, attrs) -> DictStateType:
         return self.sycproxy.get_attrs(self.path, attrs)
@@ -454,6 +459,8 @@ class NamedObject(SettingsBase[DictStateType]):
                    Names of the commands
     """
 
+    _syc_pathsep = ":"
+
     # New objects could get inserted by other operations, so we cannot assume
     # that the local cache in self._objects is always up-to-date
     def __init__(self, name: str = None, parent=None):
@@ -588,9 +595,14 @@ class NamedObject(SettingsBase[DictStateType]):
 class Command(Base):
     """Command object."""
 
+    is_path_cmd = False
+
     def __call__(self, **kwds):
         """Call a command with the specified keyword arguments."""
         newkwds = {}
+        if self.is_path_cmd:
+            newkwds["ObjectPath"] = self._parent.syc_path
+
         for k, v in kwds.items():
             if k in self.argument_names:
                 ccls = getattr(self, k)
@@ -598,6 +610,12 @@ class Command(Base):
             else:
                 raise RuntimeError("Argument '" + str(k) + "' is invalid")
         return self.sycproxy.execute_cmd(self._parent.path, self.obj_name, **newkwds)
+
+
+class PathCommand(Command):
+    """Path-based command object."""
+
+    is_path_cmd = True
 
 
 _param_types = {
@@ -615,13 +633,18 @@ def _get_type(id, info):
     if id == "child_object_type":
         return Group
     data_type = info.get("type", None)
+
     if data_type is None:
-        # assume Object or Singleton
-        try:
-            is_named = info["isNamed"]
-        except:
-            raise RuntimeError(f"Data model metadata for '{id}' is badly formed.")
-        return NamedObject if is_named else Group
+        if "isQuery" in info:
+            # looks like a Command
+            return PathCommand if "ObjectPath" in info["args"] else Command
+        else:
+            # assume Object or Singleton
+            try:
+                is_named = info["isNamed"]
+            except:
+                raise RuntimeError(f"Data model metadata for '{id}' is badly formed.")
+            return NamedObject if is_named else Group
     else:
         try:
             return _param_types[data_type]
@@ -694,7 +717,7 @@ def get_cls(name, info, parent=None):
                 # cls.child_names.append(ccls.__name__)
                 # setattr(cls, ccls.__name__, ccls)
 
-        commands = info.get("commands")
+        commands = info.get("__commands")
         if commands:
             cls.command_names = []
             for cname, cinfo in commands.items():
@@ -703,7 +726,7 @@ def get_cls(name, info, parent=None):
                 cls.command_names.append(ccls.__name__)
                 setattr(cls, ccls.__name__, ccls)
 
-        arguments = info.get("arguments")
+        arguments = info.get("args")
         if arguments:
             doc = cls.__doc__
             doc += "\n\n"
@@ -711,6 +734,8 @@ def get_cls(name, info, parent=None):
             doc += "----------\n"
             cls.argument_names = []
             for aname, ainfo in arguments.items():
+                if aname == "ObjectPath":
+                    continue
                 ccls = get_cls(aname, ainfo, cls)
                 th = ccls._state_type
                 th = th.__name__ if hasattr(th, "__name__") else str(th)
@@ -754,16 +779,16 @@ def get_root(sycproxy) -> Group:
     """
     obj_info = sycproxy.get_static_info()
     try:
-        from ansys.systemcoupling.core.settings import datamodel222_v2
+        from ansys.systemcoupling.core.settings import datamodel222_v3
 
-        if datamodel222_v2.SHASH != _gethash(obj_info):
+        if datamodel222_v3.SHASH != _gethash(obj_info):
             LOG.warning(
                 "Mismatch between generated file and server object "
                 "info. Dynamically created settings classes will "
                 "be used."
             )
             raise RuntimeError("Mismatch in hash values")
-        cls = datamodel222_v2.root
+        cls = datamodel222_v3.root
     except Exception:
         cls = get_cls("SystemCoupling", obj_info["SystemCoupling"])
     # pylint: disable=no-member

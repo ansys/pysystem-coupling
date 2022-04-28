@@ -1173,10 +1173,75 @@ dm_meta_testing_raw_data = {
                     "NumberOfSteps": {"ordinal": 2, "type": "Integer"},
                     "TimeStepSize": {"ordinal": 3, "quant": "Time", "type": "Real"},
                 },
+                "__commands": {
+                    "GetParameterOptions": {
+                        "args": {
+                            "Name": {"type": "String"},
+                            "ObjectPath": {"type": "String"},
+                        },
+                        "defaults": (),
+                        "essentialArgNames": ["ObjectPath", "Name"],
+                        "isInternal": False,
+                        "isQuery": True,
+                        "optionalArgNames": [],
+                        "retType": "String List",  # documented as tuple ??
+                    },
+                },
                 "creatableNamedChildren": [],
                 "isEntity": True,
                 "isNamed": False,
                 "ordinal": 5,
+            },
+        },
+        "__commands": {
+            "AddParticipant": {
+                "args": {
+                    "AdditionalArguments": {"type": "String"},
+                    "Executable": {"type": "String"},  # FileName
+                    "InputFile": {"type": "String"},  # FileName
+                    "ParticipantType": {"type": "String"},
+                    "WorkingDirectory": {"type": "String"},  # FileName (dir name)
+                },
+                "essentialArgNames": [],
+                "optionalArgNames": [
+                    "ParticipantType",
+                    "InputFile",
+                    "Executable",
+                    "AdditionalArguments",
+                    "WorkingDirectory",
+                ],
+                "defaults": (None, None, None, None, None),
+                "isInternal": False,
+                "isQuery": False,
+                "retType": "String",
+            },
+            "Solve": {
+                "args": {},
+                "essentialArgNames": [],
+                "optionalArgNames": [],
+                "defaults": (),
+                "isInternal": False,
+                "isQuery": False,
+                "retType": None,
+            },
+            "Save": {
+                "args": {"FilePath": {"type": "String"}},  # FilePath
+                "essentialArgNames": [],
+                "optionalArgNames": [],
+                "defaults": (".",),
+                "isInternal": False,
+                "isQuery": False,
+                "name": "Save",
+                "retType": "Logical",
+            },
+            "GetParameterOptions": {
+                "args": {"Name": {"type": "String"}, "ObjectPath": {"type": "String"}},
+                "defaults": (),
+                "essentialArgNames": ["ObjectPath", "Name"],
+                "isInternal": False,
+                "isQuery": True,
+                "optionalArgNames": [],
+                "retType": "String List",  # documented as tuple ??
             },
         },
         "__parameters": {},
