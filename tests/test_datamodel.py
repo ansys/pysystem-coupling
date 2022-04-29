@@ -2,7 +2,7 @@ from dm_meta_rawdata import dm_meta_testing_raw_data
 import pytest
 from state import StateForTesting
 
-from ansys.systemcoupling.core.settings import datamodel222_v3 as datamodel
+from ansys.systemcoupling.core.settings import datamodel_222 as datamodel
 
 
 class SycProxy:

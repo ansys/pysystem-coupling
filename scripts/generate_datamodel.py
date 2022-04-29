@@ -158,7 +158,7 @@ if __name__ == "__main__":
             "systemcoupling",
             "core",
             "settings",
-            "datamodel222_v3.py",
+            "datamodel_222.py",
         )
     )
     cls = datamodel.get_cls(

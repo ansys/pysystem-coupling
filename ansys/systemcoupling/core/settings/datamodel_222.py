@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "6dcf89b85d9d37b8ed874803294c14bbb740ec3c55f180530e94ed73d2550793"
+SHASH = "ef7d09507b34e9dad12f3d5af150a1621390580a95bfdf965d68a80e511a412c"
 
 
 class system_coupling(Group):
@@ -2274,6 +2274,29 @@ class system_coupling(Group):
         @maximum_iterations.setter
         def maximum_iterations(self, value: Integer):
             self.set_property_state("maximum_iterations", value)
+
+        command_names = ["get_parameter_options"]
+
+        class get_parameter_options(PathCommand):
+            """
+            'get_parameter_options' child of 'solution_control' object
+
+            Parameters
+            ----------
+                name : str
+                    'name' child of 'get_parameter_options' object
+
+            """
+
+            syc_name = "GetParameterOptions"
+            argument_names = ["name"]
+
+            class name(String):
+                """
+                'name' child of 'get_parameter_options' object
+                """
+
+                syc_name = "Name"
 
     class output_control(Group):
         """

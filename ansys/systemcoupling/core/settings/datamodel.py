@@ -779,16 +779,16 @@ def get_root(sycproxy) -> Group:
     """
     obj_info = sycproxy.get_static_info()
     try:
-        from ansys.systemcoupling.core.settings import datamodel222_v3
+        from ansys.systemcoupling.core.settings import datamodel_222 as dm
 
-        if datamodel222_v3.SHASH != _gethash(obj_info):
+        if dm.SHASH != _gethash(obj_info):
             LOG.warning(
                 "Mismatch between generated file and server object "
                 "info. Dynamically created settings classes will "
                 "be used."
             )
             raise RuntimeError("Mismatch in hash values")
-        cls = datamodel222_v3.root
+        cls = dm.root
     except Exception:
         cls = get_cls("SystemCoupling", obj_info["SystemCoupling"])
     # pylint: disable=no-member
