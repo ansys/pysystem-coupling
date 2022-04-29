@@ -72,7 +72,7 @@ class SycAnalysis:
         In such cases, a custom approach based on the handler could be
         adopted.
 
-        Streaming can be cancelled vai the `end_output` method.
+        Streaming can be cancelled via the `end_output` method.
 
         Parameters
         ----------
@@ -86,6 +86,18 @@ class SycAnalysis:
     def end_output(self):
         """Cancels output streaming previously started by `start_output`."""
         self.__rpc_impl.end_output()
+
+    def solve(self):
+        self.__rpc_impl.solve()
+
+    def interrupt(self, reason_msg=""):
+        self.__rpc_impl.interrupt(reason=reason_msg)
+
+    def abort(self, reason_msg=""):
+        self.__rpc_impl.abort(reason=reason_msg)
+
+    def ping(self):
+        return self.__rpc_impl.ping()
 
     def __getattr__(self, name):
         """Provides access to commands, queries and data model as attributes of

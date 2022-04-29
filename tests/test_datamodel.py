@@ -3,9 +3,10 @@ import pytest
 from state import StateForTesting
 
 from ansys.systemcoupling.core.settings import datamodel_222 as datamodel
+from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
 
 
-class SycProxy:
+class SycProxy(SycProxyInterface):
     def __init__(self):
         self.__state = StateForTesting()
         self.clear_last_cmd()
