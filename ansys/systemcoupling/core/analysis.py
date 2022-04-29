@@ -1,7 +1,11 @@
+from pytest import param
+
 from ansys.systemcoupling.core.command_metadata import CommandMetadata
 from ansys.systemcoupling.core.datamodel_metadata import build as build_dm_meta
 from ansys.systemcoupling.core.object_path import ObjectPath
 from ansys.systemcoupling.core.path_util import join_path_strs
+from ansys.systemcoupling.core.settings.datamodel import get_root
+from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
 
 
 class _MetaWrapper:
@@ -26,6 +30,7 @@ class SycAnalysis:
     """
 
     def __init__(self, rpc_impl):
+        self.__setup_root = None
         self.__rpc_impl = rpc_impl
         self._init_datamodel()
         self._init_cmds()
@@ -58,6 +63,7 @@ class SycAnalysis:
         # xx TODO - can we find a better arrangement than this?
         self.__rpc_impl.exit()
         self.__rpc_impl = None
+        self.__setup_root = None
 
     def start_output(self, handle_output=None):
         """Start streaming the "standard output" written by System Coupling.
@@ -99,13 +105,29 @@ class SycAnalysis:
     def ping(self):
         return self.__rpc_impl.ping()
 
+    @param
+    def setup(self):
+        """Provides access to the 'Pythonic' client-side form of the System
+        Coupling API and data model.
+        """
+        if self.__setup_root is None:
+            if self.__rpc_impl is None:
+                raise RuntimeError(
+                    "This analysis instance has exited or has "
+                    "not properly initialized. Launch or "
+                    "attach to a new instance"
+                )
+            sycproxy = SycProxyAdapter(self.__rpc_impl)
+            self.__setup_root = get_root()
+        return self.__setup_root
+
     def __getattr__(self, name):
-        """Provides access to commands, queries and data model as attributes of
+        """Provides access to the native System Coupling commands and queries API
+        (and, implicitly thereby, the data model settings) as attributes of
         this class's instance.
 
-        If System Coupling exposes a command, ``Solve()`` say, then if we
-        have an instance of this class, ``syc``, the following call is enabled
-        by the present method:
+        For example, the System Coupling command ``Solve()`` may be invoked on an
+        instance of this class, ``syc`` as follows:
 
         ``syc.Solve()``
 

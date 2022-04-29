@@ -5,8 +5,8 @@ class SycProxyInterface(ABC):
     """Abstract base defining the interface for the SystemCoupling
     'proxy' object that the `datamodel` module depends on.
 
-    As this is Python, we don't strictly need this but it is a
-    significant testing seam and it is useful to document the
+    As this is Python, we don't strictly need this, but it is a
+    significant testing seam and it is useful to make explicit the
     interface depended on.
     """
 
@@ -36,8 +36,4 @@ class SycProxyInterface(ABC):
 
     @abstractmethod
     def execute_cmd(self, *args, **kwargs):
-        pass
-
-    @abstractmethod
-    def bob(self):
         pass

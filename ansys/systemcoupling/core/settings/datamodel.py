@@ -770,8 +770,8 @@ def get_root(sycproxy) -> Group:
 
     Parameters
     ----------
-    flproxy: Proxy
-             Object that interfaces with the Fluent backend
+    sycproxy: Proxy
+             Object that interfaces with the System Coupling backend
 
     Returns
     -------
