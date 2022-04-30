@@ -2,10 +2,11 @@ from copy import deepcopy
 from io import StringIO
 
 from dm_meta_rawdata import dm_meta_testing_raw_data
+import generated_testing_datamodel
 import pytest
 from state import StateForTesting
 
-from ansys.systemcoupling.core.settings import datamodel_222 as datamodel
+from ansys.systemcoupling.core.settings.datamodel import get_root
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
 
 
@@ -66,7 +67,11 @@ def _dm(request):
         nonlocal is_actually_dynamic
         is_actually_dynamic = is_dynamic
 
-    root = datamodel.get_root(proxy, report_whether_dynamic_classes_created=report)
+    root = get_root(
+        proxy,
+        dm_module=generated_testing_datamodel,
+        report_whether_dynamic_classes_created=report,
+    )
     assert is_actually_dynamic == force_dynamic
     return root
 
