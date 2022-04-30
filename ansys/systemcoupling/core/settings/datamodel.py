@@ -706,8 +706,12 @@ def get_cls(name, info, parent=None):
                     cls,
                     prname,
                     property(
-                        fget=lambda slf: slf.get_property_state(prname),
-                        fset=lambda slf, val: slf.set_property_state(prname, val),
+                        # NB: the prname defaults are needed to force capture
+                        #     StackOverflow Q 2295290 for details!
+                        fget=lambda slf, prname=prname: slf.get_property_state(prname),
+                        fset=lambda slf, val, prname=prname: slf.set_property_state(
+                            prname, val
+                        ),
                         doc=docstr,
                     ),
                 )
