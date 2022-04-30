@@ -1,9 +1,14 @@
 from ansys.systemcoupling.core._version import __version__
+
 try:
     from ansys.systemcoupling.core.analysis import SycAnalysis
     from ansys.systemcoupling.core.client.grpc_client import SycGrpc
 except:
-    print("IMPORTS FAILED")
+    pass
+    # print("IMPORTS FAILED")
+    # import traceback
+    # traceback.print_exc()
+
 
 def launch(host="127.0.0.1", port=50051, working_dir="."):
     rpc = SycGrpc()

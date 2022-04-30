@@ -6,7 +6,7 @@ class SycProxyAdapter(SycProxyInterface):
         self.__rpc = rpc
 
     def get_static_info(self):
-        metadata = self.__rpc.GetMetdata()
+        metadata = self.__rpc.GetMetadata()
         # Merge in hard coded command metadata for now
         metadata["__commands"] = _command_metadata
         return metadata
@@ -28,7 +28,7 @@ class SycProxyAdapter(SycProxyInterface):
         return self.__rpc.GetChildNamesStr(ObjectPath=path)
 
     def execute_cmd(self, *args, **kwargs):
-        cmd_name = args[0]
+        cmd_name = args[1]
         return self.__rpc.execute_command(cmd_name, **kwargs)
 
 

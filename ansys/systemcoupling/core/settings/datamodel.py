@@ -136,7 +136,7 @@ class Base:
         return ppath + self._parent._syc_pathsep + self.obj_name
 
     def get_attrs(self, attrs) -> DictStateType:
-        return self.sycproxy.get_attrs(self.path, attrs)
+        return self.sycproxy.get_attrs(self.syc_path, attrs)
 
     def get_attr(self, attr) -> StateType:
         attrs = self.get_attrs([attr])
@@ -204,22 +204,22 @@ class SettingsBase(Base, Generic[StateT]):
     def get_state(self) -> StateT:
         """Get the state of this object."""
         print(f"calling get_state...")
-        print(f"proxy state = {self.sycproxy.get_state(self.path)}")
+        print(f"proxy state = {self.sycproxy.get_state(self.syc_path)}")
         print(
-            f"python converted state = {self.to_python_keys(self.sycproxy.get_state(self.path))}"
+            "python converted state = "
+            f"{self.to_python_keys(self.sycproxy.get_state(self.syc_path))}"
         )
-        return self.to_python_keys(self.sycproxy.get_state(self.path))
+        return self.to_python_keys(self.sycproxy.get_state(self.syc_path))
 
     def set_state(self, state: StateT):
         """Set the state of this object."""
-        return self.sycproxy.set_state(self.path, self.to_syc_keys(state))
+        return self.sycproxy.set_state(self.syc_path, self.to_syc_keys(state))
 
     def set_property_state(self, prop, value):
         self.set_state({prop: value})
-        # self.sycproxy.set_state(self.path + '/' + prop, value)
 
     def get_property_state(self, prop):
-        return self.sycproxy.get_state(self.path + "/" + self.to_syc_name(prop))
+        return self.sycproxy.get_state(self.syc_path + "/" + self.to_syc_name(prop))
 
     @staticmethod
     def _print_state_helper(state, out=sys.stdout, indent=0, indent_factor=2):
@@ -521,13 +521,13 @@ class NamedObject(SettingsBase[DictStateType]):
         old: str
              Old name
         """
-        self.sycproxy.rename(self.path, new, old)
+        self.sycproxy.rename(self.syc_path, new, old)
         if old in self._objects:
             del self._objects[old]
         self._create_child_object(new)
 
     def __delitem__(self, name: str):
-        self.sycproxy.delete(self.path, name)
+        self.sycproxy.delete(self.syc_path, name)
         if name in self._objects:
             del self._objects[name]
 
@@ -568,12 +568,12 @@ class NamedObject(SettingsBase[DictStateType]):
         -------
         The object that has been created
         """
-        self.sycproxy.create(self.path, name)
+        self.sycproxy.create(self.syc_path, name)
         return self._create_child_object(name)
 
     def get_object_names(self):
         """Object names."""
-        return self.sycproxy.get_object_names(self.path)
+        return self.sycproxy.get_object_names(self.syc_path)
 
     def __getitem__(self, name: str):
         if name not in self.get_object_names():
@@ -585,7 +585,7 @@ class NamedObject(SettingsBase[DictStateType]):
 
     def __setitem__(self, name: str, value):
         if name not in self.get_object_names():
-            self.sycproxy.create(self.path, name)
+            self.sycproxy.create(self.syc_path, name)
         child = self._objects.get(name)
         if not child:
             child = self._create_child_object(name)

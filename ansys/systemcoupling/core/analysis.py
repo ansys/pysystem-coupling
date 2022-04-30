@@ -1,5 +1,3 @@
-from pytest import param
-
 from ansys.systemcoupling.core.command_metadata import CommandMetadata
 from ansys.systemcoupling.core.datamodel_metadata import build as build_dm_meta
 from ansys.systemcoupling.core.object_path import ObjectPath
@@ -105,7 +103,7 @@ class SycAnalysis:
     def ping(self):
         return self.__rpc_impl.ping()
 
-    @param
+    @property
     def setup(self):
         """Provides access to the 'Pythonic' client-side form of the System
         Coupling API and data model.
@@ -118,7 +116,7 @@ class SycAnalysis:
                     "attach to a new instance"
                 )
             sycproxy = SycProxyAdapter(self.__rpc_impl)
-            self.__setup_root = get_root()
+            self.__setup_root = get_root(sycproxy)
         return self.__setup_root
 
     def __getattr__(self, name):

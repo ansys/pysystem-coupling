@@ -16,13 +16,14 @@ class StateForTesting:
             for k, v in state.items():
                 new_state[k] = v
             s[last] = new_state
-        else:            
+        else:
             s[last] = state
         import pprint
-        print(f'set {path} state to\n{pprint.pformat(self.__state)}')
+
+        print(f"set {path} state to\n{pprint.pformat(self.__state)}")
 
     def get_state(self, path):
-        print(f'get_state(path={path})')
+        print(f"get_state(path={path})")
         comps = _split_comps(path)
 
         s = self.__state
@@ -34,7 +35,7 @@ class StateForTesting:
             else:
                 return {}
         if found_some:
-            print(f'get_state: {s}')
+            print(f"get_state: {s}")
         return s if found_some else {}
 
     def get_parameter(self, path, name):
@@ -59,11 +60,20 @@ class StateForTesting:
             del s[last]
 
     def create(self, path, name):
-        self.set_state(path + '/' + name, {})
+        self.set_state(path + "/" + name, {})
 
 
 def _split_comps(path):
     comps = path.split("/")
-    if comps and comps[0] == "":
-        comps = comps[1:]
+    if comps:
+        ret = []
+        if comps[0] == "":
+            comps = comps[1:]
+        for c in comps:
+            if ":" in c:
+                t, _, n = c.partition(":")
+                ret.extend((t, n))
+            else:
+                ret.append(c)
+        comps = ret
     return comps

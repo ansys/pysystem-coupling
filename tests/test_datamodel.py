@@ -1,3 +1,5 @@
+from io import StringIO
+
 from dm_meta_rawdata import dm_meta_testing_raw_data
 import pytest
 from state import StateForTesting
@@ -90,6 +92,24 @@ def test_modify_expression(dm):
         "expression_string": "3 * x",
     }
     assert dm.library.expression["bob"].expression_string == "3 * x"
+
+
+def test_create_expr_direct(dm):
+    # dm.library.expression["bob"].expression_name = "myExpr"
+    dm.library.expression.create("bob")
+    dm.library.expression["bob"].expression_name = "myExpr"
+    dm.library.expression["bob"].expression_string = "a + b"
+    assert dm.library.expression["bob"].expression_name == "myExpr"
+    assert dm.library.expression["bob"].expression_string == "a + b"
+
+
+def xxxtest_print_state(dm):
+    dm.library.expression.create("bob")
+    dm.library.expression["bob"].expression_name = "myExpr"
+    stream = StringIO()
+    dm.library.print_state(out=stream)
+    # assert stream.getvalue() == "expression :\n  bob :\n    expression_name : myExpr"
+    assert stream.getvalue() == "@"
 
 
 def test_set_nested_state_get_by_path(dm):
