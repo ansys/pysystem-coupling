@@ -1,3 +1,4 @@
+from copy import deepcopy
 from io import StringIO
 
 from dm_meta_rawdata import dm_meta_testing_raw_data
@@ -9,7 +10,8 @@ from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInter
 
 
 class SycProxy(SycProxyInterface):
-    def __init__(self):
+    def __init__(self, force_dynamic_datamodel=False):
+        self.__force_dynamic_datamodel = force_dynamic_datamodel
         self.__state = StateForTesting()
         self.clear_last_cmd()
 
@@ -19,7 +21,17 @@ class SycProxy(SycProxyInterface):
         self.last_cmd_args = None
 
     def get_static_info(self):
-        return dm_meta_testing_raw_data
+        if not self.__force_dynamic_datamodel:
+            return dm_meta_testing_raw_data
+
+        info = deepcopy(dm_meta_testing_raw_data)
+        # info is structured as a single (top-level) element nested dict:
+        #    {"root": {...nested data}}
+        # We add extra entry to "root"s data to force a difference from the
+        # data used to make the generated classes (which will be detected
+        # via hash) and thereby force runtime-generated classes to be used.
+        info[next(iter(info))]["__dummy__"] = None
+        return info
 
     def set_state(self, path, state):
         self.__state.set_state(path, state)
@@ -44,10 +56,19 @@ class SycProxy(SycProxyInterface):
         return None
 
 
-@pytest.fixture
-def dm():
-    proxy = SycProxy()
-    return datamodel.get_root(proxy)
+@pytest.fixture(name="dm", params=("pre-generated", "dynamically-generated"))
+def _dm(request):
+    force_dynamic = request.param == "dynamically-generated"
+    proxy = SycProxy(force_dynamic_datamodel=force_dynamic)
+    is_actually_dynamic = False
+
+    def report(is_dynamic):
+        nonlocal is_actually_dynamic
+        is_actually_dynamic = is_dynamic
+
+    root = datamodel.get_root(proxy, report_whether_dynamic_classes_created=report)
+    assert is_actually_dynamic == force_dynamic
+    return root
 
 
 def test_empty(dm):

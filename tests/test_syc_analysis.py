@@ -8,7 +8,7 @@ from ansys.systemcoupling.core.analysis import SycAnalysis
 
 class _MockCommandExecutor:
     def __init__(self):
-        self.__state = StateForTesting()
+        self.__state = StateForTesting(native_state_format=True)
 
     def GetMetadata(self):
         return dm_meta_testing_raw_data

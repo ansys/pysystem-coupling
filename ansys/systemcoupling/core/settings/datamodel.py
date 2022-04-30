@@ -764,7 +764,9 @@ def _gethash(obj_info):
     return dhash.hexdigest()
 
 
-def get_root(sycproxy) -> Group:
+def get_root(
+    sycproxy, dm_module=None, report_whether_dynamic_classes_created=lambda _: None
+) -> Group:
     """
     Get the root settings object.
 
@@ -772,25 +774,35 @@ def get_root(sycproxy) -> Group:
     ----------
     sycproxy: Proxy
              Object that interfaces with the System Coupling backend
-
+    dm_module: module
+             Provide an alternative pre-generated datamodel module to be be used
+             instead of the one that is otherwise used by default.
+    report_whether_dynamic_classes_created: callable
+            Callback that will be called with a bool parameter to report whether
+            dynamic classes were created (True) or whether the pre-existing module could
+            be used (False). The former will happen if the static info provided by the proxy
+            does not match the hash of the pre-existing module.
     Returns
     -------
     root object
     """
     obj_info = sycproxy.get_static_info()
     try:
-        from ansys.systemcoupling.core.settings import datamodel_222 as dm
+        if dm_module is None:
+            from ansys.systemcoupling.core.settings import datamodel_222 as dm_module
 
-        if dm.SHASH != _gethash(obj_info):
+        if dm_module.SHASH != _gethash(obj_info):
             LOG.warning(
                 "Mismatch between generated file and server object "
                 "info. Dynamically created settings classes will "
                 "be used."
             )
             raise RuntimeError("Mismatch in hash values")
-        cls = dm.root
+        cls = dm_module.system_coupling
+        report_whether_dynamic_classes_created(False)
     except Exception:
         cls = get_cls("SystemCoupling", obj_info["SystemCoupling"])
+        report_whether_dynamic_classes_created(True)
     # pylint: disable=no-member
     cls.set_sycproxy(sycproxy)
     return cls()

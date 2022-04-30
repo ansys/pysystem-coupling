@@ -1,9 +1,11 @@
 class StateForTesting:
-    def __init__(self):
+    def __init__(self, native_state_format=False):
         self.__state = {}
+        # keep "type:name" as dict entry rather than treating as type/name
+        self.__native_state_format = native_state_format
 
     def set_state(self, path, state):
-        comps = _split_comps(path)
+        comps = self._split_comps(path)
         if not comps:
             raise Exception("Path is empty")
 
@@ -24,7 +26,7 @@ class StateForTesting:
 
     def get_state(self, path):
         print(f"get_state(path={path})")
-        comps = _split_comps(path)
+        comps = self._split_comps(path)
 
         s = self.__state
         found_some = False
@@ -43,7 +45,7 @@ class StateForTesting:
         return s.get(name, None)
 
     def delete_object(self, path):
-        comps = _split_comps(path)
+        comps = self._split_comps(path)
         if not comps:
             raise Exception("Path is empty")
         last = comps.pop()
@@ -62,18 +64,17 @@ class StateForTesting:
     def create(self, path, name):
         self.set_state(path + "/" + name, {})
 
-
-def _split_comps(path):
-    comps = path.split("/")
-    if comps:
-        ret = []
-        if comps[0] == "":
-            comps = comps[1:]
-        for c in comps:
-            if ":" in c:
-                t, _, n = c.partition(":")
-                ret.extend((t, n))
-            else:
-                ret.append(c)
-        comps = ret
-    return comps
+    def _split_comps(self, path):
+        comps = path.split("/")
+        if comps:
+            ret = []
+            if comps[0] == "":
+                comps = comps[1:]
+            for c in comps:
+                if not self.__native_state_format and ":" in c:
+                    t, _, n = c.partition(":")
+                    ret.extend((t, n))
+                else:
+                    ret.append(c)
+            comps = ret
+        return comps

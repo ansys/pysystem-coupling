@@ -150,15 +150,23 @@ if __name__ == "__main__":
     from dm_meta_rawdata import dm_meta_testing_raw_data
 
     dirname = os.path.dirname(__file__)
+    # filepath = os.path.normpath(
+    #     os.path.join(
+    #         dirname,
+    #         "..",
+    #         "ansys",
+    #         "systemcoupling",
+    #         "core",
+    #         "settings",
+    #         "datamodel_222.py",
+    #     )
+    # )
     filepath = os.path.normpath(
         os.path.join(
             dirname,
             "..",
-            "ansys",
-            "systemcoupling",
-            "core",
-            "settings",
-            "datamodel_222.py",
+            "tests",
+            "generated_testing_datamodel.py",
         )
     )
     cls = datamodel.get_cls(
