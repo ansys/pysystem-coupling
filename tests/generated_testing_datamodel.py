@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "ef7d09507b34e9dad12f3d5af150a1621390580a95bfdf965d68a80e511a412c"
+SHASH = "dbf5e8a9e4208ae0dcfaeff8ce6ff9fbe32ea05f7364bf74c4e8a4997c90f1f6"
 
 
 class system_coupling(Group):

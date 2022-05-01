@@ -13,12 +13,8 @@ Usage
 python <path to settingsgen.py>
 """
 
-import hashlib
-
-# import imp
 import io
 import os
-import pickle
 import pprint
 from typing import IO
 
@@ -26,9 +22,7 @@ from ansys.systemcoupling.core.settings import datamodel
 
 
 def _gethash(obj_info):
-    dhash = hashlib.sha256()
-    dhash.update(pickle.dumps(obj_info))
-    return dhash.hexdigest()
+    return datamodel._gethash(obj_info)
 
 
 def _get_indent_str(indent):
@@ -42,11 +36,11 @@ def _write_property_helper(out, pname, ptype_str, doc_str, indent=0):
     out.write(f"{istr}@property\n")
     out.write(f"{istr}def {pname}(self) -> {ptype_str}:\n")
     out.write(f'{istr1}"""{doc_str}"""\n')
-    out.write(f"{istr1}return self.get_property_state('{pname}')\n")
+    out.write(f'{istr1}return self.get_property_state("{pname}")\n')
     out.write("\n")
     out.write(f"{istr}@{pname}.setter\n")
     out.write(f"{istr}def {pname}(self, value: {ptype_str}):\n")
-    out.write(f"{istr1}self.set_property_state('{pname}', value)\n")
+    out.write(f'{istr1}self.set_property_state("{pname}", value)\n')
 
 
 def _write_cls_helper(out, cls, indent=0):
@@ -63,7 +57,7 @@ def _write_cls_helper(out, cls, indent=0):
         doc = ("\n" + istr1).join(cls.__doc__.split("\n"))
         out.write(f'{istr1}"""\n')
         out.write(f"{istr1}{doc}")
-        out.write(f'\n{istr1}"""\n')
+        out.write(f'\n{istr1}"""\n\n')
         out.write(f'{istr1}syc_name = "{cls.syc_name}"\n')
 
         child_names = getattr(cls, "child_names", None)
@@ -73,8 +67,9 @@ def _write_cls_helper(out, cls, indent=0):
             pprint.pprint(
                 child_names, stream=strout, compact=True, width=80 - indent * 4 - 10
             )
-            # out.write(f'{istr1}child_names_set = set({cls.__name__}.child_names)')
-            mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
+            mn = ("\n" + istr2).join(
+                strout.getvalue().strip().replace("'", '"').split("\n")
+            )
             out.write(f"{istr2}{mn}\n")
             for child in child_names:
                 _write_cls_helper(out, getattr(cls, child), indent + 1)
@@ -89,7 +84,9 @@ def _write_cls_helper(out, cls, indent=0):
             pprint.pprint(
                 names_types, stream=strout, compact=True, width=80 - indent * 4 - 10
             )
-            mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
+            mn = ("\n" + istr2).join(
+                strout.getvalue().strip().replace("'", '"').split("\n")
+            )
             out.write(f"{istr2}{mn}\n")
             for prop_name, _, prop_type in names_types:
                 doc = getattr(cls, prop_name).__doc__
@@ -102,7 +99,9 @@ def _write_cls_helper(out, cls, indent=0):
             pprint.pprint(
                 command_names, stream=strout, compact=True, width=80 - indent * 4 - 10
             )
-            mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
+            mn = ("\n" + istr2).join(
+                strout.getvalue().strip().replace("'", '"').split("\n")
+            )
             out.write(f"{istr2}{mn}\n")
             for command in command_names:
                 _write_cls_helper(out, getattr(cls, command), indent + 1)
@@ -114,7 +113,9 @@ def _write_cls_helper(out, cls, indent=0):
             pprint.pprint(
                 arguments, stream=strout, compact=True, width=80 - indent * 4 - 10
             )
-            mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
+            mn = ("\n" + istr2).join(
+                strout.getvalue().strip().replace("'", '"').split("\n")
+            )
             out.write(f"{istr2}{mn}\n")
             for argument in arguments:
                 _write_cls_helper(out, getattr(cls, argument), indent + 1)

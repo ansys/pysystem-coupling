@@ -18,9 +18,9 @@ r.boundary_conditions.velocity_inlet['inlet'].vmag.constant = 20
 """
 import collections
 import hashlib
+import json
 import keyword
 import logging as LOG
-import pickle
 import sys
 from typing import Dict, Generic, List, NewType, Tuple, TypeVar, Union
 import weakref
@@ -764,7 +764,7 @@ def get_cls(name, info, parent=None):
 
 def _gethash(obj_info):
     dhash = hashlib.sha256()
-    dhash.update(pickle.dumps(obj_info))
+    dhash.update(json.dumps(obj_info, sort_keys=True).encode())
     return dhash.hexdigest()
 
 
@@ -795,7 +795,8 @@ def get_root(
         if dm_module is None:
             from ansys.systemcoupling.core.settings import datamodel_222 as dm_module
 
-        if dm_module.SHASH != _gethash(obj_info):
+        info_hash = _gethash(obj_info)
+        if dm_module.SHASH != info_hash:
             LOG.warning(
                 "Mismatch between generated file and server object "
                 "info. Dynamically created settings classes will "
