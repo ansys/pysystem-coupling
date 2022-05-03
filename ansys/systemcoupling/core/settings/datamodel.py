@@ -1,13 +1,15 @@
 """
-Module for accessing and modifying hierarchy of Fluent settings.
+Module for accessing and modifying hierarchy of System Coupling settings.
 
 The only useful method is 'get_root' which returns the root object for
-accessing Fluent settings.
+accessing System Coupling settings.
 
 Child objects can be generally accessed/modified using attribute access.
 Named child objects can be accessed/modified using index operator.
 
-Calling an object will return its current value.
+Primitive settings are accessed (get/set) as properties.
+
+Calling an object will return its current value as a "state" dictionary.
 
 Example
 -------

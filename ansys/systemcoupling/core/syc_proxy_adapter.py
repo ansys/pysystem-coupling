@@ -8,7 +8,7 @@ class SycProxyAdapter(SycProxyInterface):
     def get_static_info(self):
         metadata = self.__rpc.GetMetadata()
         # Merge in hard coded command metadata for now
-        metadata["__commands"] = _command_metadata
+        metadata["SystemCoupling"]["__commands"] = _command_metadata
         return metadata
 
     def set_state(self, path, state):
