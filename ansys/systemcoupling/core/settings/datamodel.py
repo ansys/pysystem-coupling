@@ -205,12 +205,6 @@ class SettingsBase(Base, Generic[StateT]):
 
     def get_state(self) -> StateT:
         """Get the state of this object."""
-        print(f"calling get_state...")
-        print(f"proxy state = {self.sycproxy.get_state(self.syc_path)}")
-        print(
-            "python converted state = "
-            f"{self.to_python_keys(self.sycproxy.get_state(self.syc_path))}"
-        )
         return self.to_python_keys(self.sycproxy.get_state(self.syc_path))
 
     def set_state(self, state: StateT):
@@ -570,7 +564,7 @@ class NamedObject(SettingsBase[DictStateType]):
         -------
         The object that has been created
         """
-        self.sycproxy.create(self.syc_path, name)
+        self.sycproxy.create_named_object(self.syc_path, name)
         return self._create_child_object(name)
 
     def get_object_names(self):
@@ -587,7 +581,7 @@ class NamedObject(SettingsBase[DictStateType]):
 
     def __setitem__(self, name: str, value):
         if name not in self.get_object_names():
-            self.sycproxy.create(self.syc_path, name)
+            self.sycproxy.create_named_object(self.syc_path, name)
         child = self._objects.get(name)
         if not child:
             child = self._create_child_object(name)

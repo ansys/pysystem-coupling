@@ -43,7 +43,7 @@ class SycProxy(SycProxyInterface):
     def delete(self, path):
         self.__state.delete_object(path)
 
-    def create(self, path, name):
+    def create_named_object(self, path, name):
         self.__state.create(path, name)
 
     def get_object_names(self, path):
@@ -196,4 +196,23 @@ def test_invoke_get_parameter_options_on_path(dm):
     assert dm.sycproxy.last_cmd_args == {
         "ObjectPath": "/SystemCoupling/SolutionControl",
         "Name": "duration_option",
+    }
+
+
+def test_get_nested_state(dm):
+    dm.set_state(
+        {
+            "library": {
+                "expression": {
+                    "bob": {"expression_name": "expr", "expression_string": "2 * x"}
+                }
+            }
+        }
+    )
+    assert dm() == {
+        "library": {
+            "expression": {
+                "bob": {"expression_name": "expr", "expression_string": "2 * x"}
+            }
+        }
     }

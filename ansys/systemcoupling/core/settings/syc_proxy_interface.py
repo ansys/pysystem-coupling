@@ -27,7 +27,7 @@ class SycProxyInterface(ABC):
         pass
 
     @abstractmethod
-    def create(self, path, name):
+    def create_named_object(self, path, name):
         pass
 
     @abstractmethod

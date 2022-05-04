@@ -1,4 +1,5 @@
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
+from ansys.systemcoupling.core.state_util import adapt_native_named_object_keys
 
 
 class SycProxyAdapter(SycProxyInterface):
@@ -15,13 +16,13 @@ class SycProxyAdapter(SycProxyInterface):
         self.__rpc.SetState(ObjectPath=path, State=state)
 
     def get_state(self, path):
-        return self.__rpc.GetState(ObjectPath=path)
+        state = self.__rpc.GetState(ObjectPath=path)
+        return adapt_native_named_object_keys(state)
 
     def delete(self, path):
         self.__rpc.DeleteObject(ObjectPath=path)
 
-    # TODO: change to create_named_object
-    def create(self, path, name):
+    def create_named_object(self, path, name):
         self.set_state(f"{path}:{name}", {})
 
     def get_object_names(self, path):
