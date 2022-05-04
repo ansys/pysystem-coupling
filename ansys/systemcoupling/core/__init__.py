@@ -11,9 +11,12 @@ except:
 
 
 def launch(host="127.0.0.1", port=50051, working_dir="."):
+    # print("launching...")
     rpc = SycGrpc()
+    # print("grpc constructed")
     rpc.start_and_connect(host, port, working_dir)
     syc = SycAnalysis(rpc)
+    # print("analysis constructed")
     return syc
 
 

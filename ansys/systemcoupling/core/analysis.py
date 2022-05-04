@@ -18,6 +18,13 @@ class _MetaWrapper:
             return getattr(self.__cmd_meta, name)
 
 
+class _DefunctRpcImpl:
+    def __getattr__(self, _):
+        raise RuntimeError(
+            "This analysis instance has exited. Launch or " "attach to a new instance."
+        )
+
+
 class SycAnalysis:
     """Encapsulates a System Coupling analysis, providing access to the
     System Coupling data model and its command and query API.
@@ -58,9 +65,8 @@ class SycAnalysis:
         Following this, the current instance of this class will not
         be usable. Create a new instance if required.
         """
-        # xx TODO - can we find a better arrangement than this?
         self.__rpc_impl.exit()
-        self.__rpc_impl = None
+        self.__rpc_impl = _DefunctRpcImpl()
         self.__setup_root = None
 
     def start_output(self, handle_output=None):
@@ -109,12 +115,9 @@ class SycAnalysis:
         Coupling API and data model.
         """
         if self.__setup_root is None:
-            if self.__rpc_impl is None:
-                raise RuntimeError(
-                    "This analysis instance has exited or has "
-                    "not properly initialized. Launch or "
-                    "attach to a new instance"
-                )
+            if isinstance(self.__rpc_impl, _DefunctRpcImpl):
+                self.__rpc_impl.trigger_error
+
             sycproxy = SycProxyAdapter(self.__rpc_impl)
             self.__setup_root = get_root(sycproxy)
         return self.__setup_root
