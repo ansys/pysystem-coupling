@@ -132,6 +132,7 @@ class SycAnalysis:
         self.__rpc_impl.abort(reason=reason_msg)
 
     def ping(self):
+        """Simple test that the server is alive and responding."""
         return self.__rpc_impl.ping()
 
     @property
