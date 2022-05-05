@@ -98,12 +98,37 @@ class SycAnalysis:
         self.__rpc_impl.end_output()
 
     def solve(self):
+        """Solves the current case."""
         self.__rpc_impl.solve()
 
     def interrupt(self, reason_msg=""):
+        """Interrupts a solve in progress.
+
+        See also `abort`. The difference between an interrupted and
+        aborted solve is that an interrupted solve may be resumed.
+
+        Parameters
+        ----------
+        reason_msg : str
+            Text to describe the reason for the interrupt. This might be
+            used for such purposes as providing additional annotation in
+            transcript output.
+        """
         self.__rpc_impl.interrupt(reason=reason_msg)
 
     def abort(self, reason_msg=""):
+        """Aborts a solve in progress.
+
+        See also `interrupt`. In contrast to an interrupted solve,
+        an aborted solve may not be resumed.
+
+        Parameters
+        ----------
+        reason_msg : str
+            Text to describe the reason for the abort. This might be
+            used for such purposes as providing additional annotation in
+            transcript output.
+        """
         self.__rpc_impl.abort(reason=reason_msg)
 
     def ping(self):
