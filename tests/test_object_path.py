@@ -1,7 +1,7 @@
 import pytest
 from state import StateForTesting
 
-from ansys.systemcoupling.core.object_path import ObjectPath
+from ansys.systemcoupling.core.native_api.object_path import ObjectPath
 from ansys.systemcoupling.core.path_util import to_typepath
 
 

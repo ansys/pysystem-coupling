@@ -13,6 +13,7 @@ class SycProxyAdapter(SycProxyInterface):
         return metadata
 
     def set_state(self, path, state):
+        # XXX TODO nested state submission probably broken if it involves named objects
         self.__rpc.SetState(ObjectPath=path, State=state)
 
     def get_state(self, path):

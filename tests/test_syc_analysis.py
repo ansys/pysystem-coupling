@@ -39,7 +39,8 @@ class _MockCommandExecutor:
 @pytest.fixture
 def api():
     cmd_exec = _MockCommandExecutor()
-    return SycAnalysis(cmd_exec)
+    analysis = SycAnalysis(cmd_exec)
+    return analysis.native_api
 
 
 def test_create_object(api):
