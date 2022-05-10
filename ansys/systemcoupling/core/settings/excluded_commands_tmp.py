@@ -23,7 +23,10 @@ _special_data_transfer_list = [
 _state_meta_list = [
     "DatamodelRoot",
     "DeleteObject",
+    "GetChildNames",
+    "GetChildNamesStr",
     "GetChildren",
+    "GetChildrenStr",
     "GetCommandAndQueryMetadata",
     "GetCommandAndQueryNames",
     "GetExplicitState",
@@ -35,6 +38,16 @@ _state_meta_list = [
     "SetState",
 ]
 
+# Related to case persistence
+_case_list = [
+    "GetSnapshots",
+    "Open",
+    "OpenSnapshot",
+    "Save",
+    "SaveSnapshot",
+]
+
+
 #
 # Solution and postprocessing related
 # Some exposed via other APIs
@@ -44,11 +57,8 @@ _solution_list = [
     "DoesEnSightExist",
     "GetRestarts",
     "IsAnalysisInitialized",
-    "Open",
-    "OpenResultsInEnsight",
-    "OpenSnapshot",
-    "Save",
-    "SaveSnapshot",
+    "OpenResultsInEnSight",
+    "PartitionParticipants",
     "Shutdown",
     "Solve",
     "StartParticipants",
@@ -74,5 +84,9 @@ _misc_list = [
 ]
 
 excluded_list = (
-    _misc_list + _solution_list + _special_data_transfer_list + _state_meta_list
+    _misc_list
+    + _solution_list
+    + _case_list
+    + _special_data_transfer_list
+    + _state_meta_list
 )

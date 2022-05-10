@@ -1,4 +1,4 @@
-cmd_meta_testing_raw_data = [
+cmd_metadata = [
     {
         "args": {
             "ObjectPath": {"Type": "<class 'str'>"},

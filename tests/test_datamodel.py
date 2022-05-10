@@ -1,7 +1,7 @@
 from copy import deepcopy
 from io import StringIO
 
-from dm_meta_rawdata import dm_meta_testing_raw_data
+from dm_raw_metadata import dm_metadata
 import generated_testing_datamodel
 import pytest
 from state import StateForTesting
@@ -23,9 +23,9 @@ class SycProxy(SycProxyInterface):
 
     def get_static_info(self):
         if not self.__force_dynamic_datamodel:
-            return dm_meta_testing_raw_data
+            return dm_metadata
 
-        info = deepcopy(dm_meta_testing_raw_data)
+        info = deepcopy(dm_metadata)
         # info is structured as a single (top-level) element nested dict:
         #    {"root": {...nested data}}
         # We add extra entry to "root"s data to force a difference from the

@@ -1,7 +1,7 @@
 """Data model metadata raw data for testing purposes.
 """
 
-dm_meta_testing_raw_data = {
+dm_metadata = {
     "SystemCoupling": {
         "__children": {
             "ActivateHidden": {

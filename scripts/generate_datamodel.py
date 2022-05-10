@@ -14,11 +14,16 @@ python <path to settingsgen.py>
 """
 
 import io
+import json
 import os
 import pprint
+import sys
 from typing import IO
 
 from ansys.systemcoupling.core.settings import datamodel
+from ansys.systemcoupling.core.settings.process_command_data import (
+    process as process_command_data,
+)
 
 
 def _gethash(obj_info):
@@ -145,12 +150,32 @@ def write_settings_classes(out: IO, cls, obj_info):
 
 
 if __name__ == "__main__":
-    # TODO: launch syc itself to obtain settings - see how Fluent does it
-    # For now, using a hard coded data set
-    # NB need to add tests dir to PYTHONPATH to find dm_meta_rawdata
-    from dm_meta_rawdata import dm_meta_testing_raw_data
+
+    use_test_data = len(sys.argv) > 1 and sys.argv[1] == "-t"
 
     dirname = os.path.dirname(__file__)
+
+    rawcmd_file = os.path.normpath(
+        os.path.join(dirname, "temp_data", "command_meta.json")
+    )
+
+    proccmd_file = os.path.normpath(
+        os.path.join(dirname, "temp_data", "command_meta_proc.json")
+    )
+
+    with open(rawcmd_file, "r") as f:
+        cmd_data = json.load(fp=f)
+
+    proccmd_data = process_command_data(cmd_data)
+
+    with open(proccmd_file, "w") as f:
+        json.dump(proccmd_data, fp=f, indent=2, sort_keys=True)
+
+    # TODO: launch syc itself to obtain settings - see how Fluent does it
+    # For now, using a hard coded data set
+    # NB need to add tests dir to PYTHONPATH to find dm_raw_metadata
+    from dm_raw_metadata import dm_metadata
+
     # filepath = os.path.normpath(
     #     os.path.join(
     #         dirname,
@@ -170,8 +195,6 @@ if __name__ == "__main__":
             "generated_testing_datamodel.py",
         )
     )
-    cls = datamodel.get_cls(
-        "SystemCoupling", dm_meta_testing_raw_data["SystemCoupling"]
-    )
+    cls = datamodel.get_cls("SystemCoupling", dm_metadata["SystemCoupling"])
     with open(filepath, "w") as f:
-        write_settings_classes(f, cls, dm_meta_testing_raw_data)
+        write_settings_classes(f, cls, dm_metadata)
