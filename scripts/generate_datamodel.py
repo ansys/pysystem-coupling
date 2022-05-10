@@ -1,24 +1,44 @@
 """
-Provide a module to generate the Fluent settings tree.
+Script to generate the System Coupling settings tree.
 
-Running this module generates a python module with the definition of the Fluent
-settings classes. The out is placed at:
+This generates a python module with the definition of the System Coupling
+data model settings classes. The module is placed at:
 
-- ansys/fluent/core/solver/settings.py
+- ansys/systemcoupling/core/solver/settings/datamodel_222.py
 
-Running this module requires Fluent to be installed.
+pysystemcoupling itself is run in a 'basic' mode to query for the input
+metadata on which the generated module is based. To make pysystemcoupling
+available in the current environment, there are two main options:
+
+(i)  install a pysystemcoupling package
+(ii) run directly from the source. In this case, the dependencies of
+     pysystemcoupling must be installed.
+
+This script may also be run in a mode that generates testing data.
+In this case run with the -t argument. Input is taken from the
+dm_raw_metadata module in tests/ and is written to
+generated_testing_datamodel.py in the same directory.
+
+
 
 Usage
 -----
-python <path to settingsgen.py>
+python <path to generate_datamodel.py> [-t]
 """
 
 import io
-import json
+
+# import json
 import os
 import pprint
 import sys
 from typing import IO
+
+# Allows us to run pysystemcoupling from source without setting PYTHONPATH
+_dirname = os.path.dirname(__file__)
+sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
+print(sys.path[-1])
+
 
 from ansys.systemcoupling.core.settings import datamodel
 from ansys.systemcoupling.core.settings.process_command_data import (
@@ -138,8 +158,6 @@ def write_settings_classes(out: IO, cls, obj_info):
     Parameters
     ----------
     out:     Stream
-    flproxy: Proxy
-             Object that interfaces with the Fluent backend
     """
     hash = _gethash(obj_info)
     out.write('"""This is an auto-generated file.  DO NOT EDIT!"""\n')
@@ -151,50 +169,54 @@ def write_settings_classes(out: IO, cls, obj_info):
 
 if __name__ == "__main__":
 
-    use_test_data = len(sys.argv) > 1 and sys.argv[1] == "-t"
-
     dirname = os.path.dirname(__file__)
 
-    rawcmd_file = os.path.normpath(
-        os.path.join(dirname, "temp_data", "command_meta.json")
-    )
+    use_test_data = len(sys.argv) > 1 and sys.argv[1] == "-t"
 
-    proccmd_file = os.path.normpath(
-        os.path.join(dirname, "temp_data", "command_meta_proc.json")
-    )
+    if use_test_data:
+        # NB need to add tests dir to sys.path to find dm_raw_metadata
+        sys.path.append(os.path.normpath(os.path.join(dirname, "..", "tests")))
 
-    with open(rawcmd_file, "r") as f:
-        cmd_data = json.load(fp=f)
+        from dm_raw_metadata import dm_metadata_with_cmds as dm_metadata
 
-    proccmd_data = process_command_data(cmd_data)
-
-    with open(proccmd_file, "w") as f:
-        json.dump(proccmd_data, fp=f, indent=2, sort_keys=True)
-
-    # TODO: launch syc itself to obtain settings - see how Fluent does it
-    # For now, using a hard coded data set
-    # NB need to add tests dir to PYTHONPATH to find dm_raw_metadata
-    from dm_raw_metadata import dm_metadata
-
-    # filepath = os.path.normpath(
-    #     os.path.join(
-    #         dirname,
-    #         "..",
-    #         "ansys",
-    #         "systemcoupling",
-    #         "core",
-    #         "settings",
-    #         "datamodel_222.py",
-    #     )
-    # )
-    filepath = os.path.normpath(
-        os.path.join(
-            dirname,
-            "..",
-            "tests",
-            "generated_testing_datamodel.py",
+        filepath = os.path.normpath(
+            os.path.join(
+                dirname,
+                "..",
+                "tests",
+                "generated_testing_datamodel.py",
+            )
         )
-    )
+    else:
+        import ansys.systemcoupling.core as pysyc
+
+        syc = pysyc.launch()
+        print("helper instance of syc successfully launched. Querying metadata...")
+        api = syc.native_api
+
+        dm_metadata = api.GetMetadata()
+        cmd_metadata = api.GetCommandAndQueryMetadata()
+        print("...raw metadata received. Processing...")
+
+        cmd_metadata = process_command_data(cmd_metadata)
+        dm_metadata["SystemCoupling"]["__commands"] = cmd_metadata
+
+        filepath = os.path.normpath(
+            os.path.join(
+                dirname,
+                "..",
+                "ansys",
+                "systemcoupling",
+                "core",
+                "settings",
+                "datamodel_222_NEW.py",
+            )
+        )
+
+    # with open("dump_meta.json", "w") as f:
+    #    json.dump(dm_metadata, fp=f, indent=2, sort_keys=True)
+
     cls = datamodel.get_cls("SystemCoupling", dm_metadata["SystemCoupling"])
     with open(filepath, "w") as f:
         write_settings_classes(f, cls, dm_metadata)
+    print(f"Finished generating {filepath}")

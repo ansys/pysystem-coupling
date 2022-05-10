@@ -1,7 +1,7 @@
 from copy import deepcopy
 from io import StringIO
 
-from dm_raw_metadata import dm_metadata
+from dm_raw_metadata import dm_metadata_with_cmds as dm_metadata
 import generated_testing_datamodel
 import pytest
 from state import StateForTesting

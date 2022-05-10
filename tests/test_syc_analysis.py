@@ -1,4 +1,4 @@
-from cmd_raw_metadata2 import cmd_metadata
+from cmd_raw_metadata import cmd_metadata
 from dm_raw_metadata import dm_metadata
 import pytest
 from state import StateForTesting

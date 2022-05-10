@@ -1,3 +1,6 @@
+from ansys.systemcoupling.core.settings.process_command_data import (
+    process as process_cmd_data,
+)
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
 from ansys.systemcoupling.core.state_util import adapt_native_named_object_keys
 
@@ -8,8 +11,8 @@ class SycProxyAdapter(SycProxyInterface):
 
     def get_static_info(self):
         metadata = self.__rpc.GetMetadata()
-        # Merge in hard coded command metadata for now
-        metadata["SystemCoupling"]["__commands"] = _command_metadata
+        cmd_metadata = process_cmd_data(self.__rpc.GetCommandAndQueryMetadata())
+        metadata["SystemCoupling"]["__commands"] = cmd_metadata
         return metadata
 
     def set_state(self, path, state):

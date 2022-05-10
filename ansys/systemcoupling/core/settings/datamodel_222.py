@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "ef7d09507b34e9dad12f3d5af150a1621390580a95bfdf965d68a80e511a412c"
+SHASH = "758f30d835bde309ad35d103a1b597f172fb3bde21054494f9f5cd9d02746bce"
 
 
 class system_coupling(Group):
@@ -672,6 +672,11 @@ class system_coupling(Group):
                         ("input_variables", "InputVariables", "StringList"),
                         ("output_variables", "OutputVariables", "StringList"),
                         ("display_name", "DisplayName", "String"),
+                        (
+                            "region_discretization_type",
+                            "RegionDiscretizationType",
+                            "String",
+                        ),
                     ]
 
                     @property
@@ -709,6 +714,15 @@ class system_coupling(Group):
                     @display_name.setter
                     def display_name(self, value: String):
                         self.set_property_state("display_name", value)
+
+                    @property
+                    def region_discretization_type(self) -> String:
+                        """'region_discretization_type' property of 'region' object"""
+                        return self.get_property_state("region_discretization_type")
+
+                    @region_discretization_type.setter
+                    def region_discretization_type(self, value: String):
+                        self.set_property_state("region_discretization_type", value)
 
             class update_control(Group):
                 """
@@ -930,6 +944,18 @@ class system_coupling(Group):
                     ("option", "Option", "String"),
                     ("working_directory", "WorkingDirectory", "String"),
                     ("executable", "Executable", "String"),
+                    (
+                        "auto_distribution_settings",
+                        "AutoDistributionSettings",
+                        "Boolean",
+                    ),
+                    (
+                        "include_hpc_distribution_types",
+                        "IncludeHPCDistributionTypes",
+                        "StringList",
+                    ),
+                    ("number_of_cores_per_task", "NumberOfCoresPerTask", "Integer"),
+                    ("batch_options", "BatchOptions", "String"),
                     ("additional_arguments", "AdditionalArguments", "String"),
                     ("parallel_fraction", "ParallelFraction", "Real"),
                     ("initial_input", "InitialInput", "String"),
@@ -939,6 +965,8 @@ class system_coupling(Group):
                         "String",
                     ),
                     ("gui_mode", "GuiMode", "Boolean"),
+                    ("base_output_file_name", "BaseOutputFileName", "String"),
+                    ("overwrite_existing_files", "OverwriteExistingFiles", "Boolean"),
                 ]
 
                 @property
@@ -967,6 +995,42 @@ class system_coupling(Group):
                 @executable.setter
                 def executable(self, value: String):
                     self.set_property_state("executable", value)
+
+                @property
+                def auto_distribution_settings(self) -> Boolean:
+                    """'auto_distribution_settings' property of 'child_object_type' object"""
+                    return self.get_property_state("auto_distribution_settings")
+
+                @auto_distribution_settings.setter
+                def auto_distribution_settings(self, value: Boolean):
+                    self.set_property_state("auto_distribution_settings", value)
+
+                @property
+                def include_hpc_distribution_types(self) -> StringList:
+                    """'include_hpc_distribution_types' property of 'child_object_type' object"""
+                    return self.get_property_state("include_hpc_distribution_types")
+
+                @include_hpc_distribution_types.setter
+                def include_hpc_distribution_types(self, value: StringList):
+                    self.set_property_state("include_hpc_distribution_types", value)
+
+                @property
+                def number_of_cores_per_task(self) -> Integer:
+                    """'number_of_cores_per_task' property of 'child_object_type' object"""
+                    return self.get_property_state("number_of_cores_per_task")
+
+                @number_of_cores_per_task.setter
+                def number_of_cores_per_task(self, value: Integer):
+                    self.set_property_state("number_of_cores_per_task", value)
+
+                @property
+                def batch_options(self) -> String:
+                    """'batch_options' property of 'child_object_type' object"""
+                    return self.get_property_state("batch_options")
+
+                @batch_options.setter
+                def batch_options(self, value: String):
+                    self.set_property_state("batch_options", value)
 
                 @property
                 def additional_arguments(self) -> String:
@@ -1013,6 +1077,24 @@ class system_coupling(Group):
                 def gui_mode(self, value: Boolean):
                     self.set_property_state("gui_mode", value)
 
+                @property
+                def base_output_file_name(self) -> String:
+                    """'base_output_file_name' property of 'child_object_type' object"""
+                    return self.get_property_state("base_output_file_name")
+
+                @base_output_file_name.setter
+                def base_output_file_name(self, value: String):
+                    self.set_property_state("base_output_file_name", value)
+
+                @property
+                def overwrite_existing_files(self) -> Boolean:
+                    """'overwrite_existing_files' property of 'child_object_type' object"""
+                    return self.get_property_state("overwrite_existing_files")
+
+                @overwrite_existing_files.setter
+                def overwrite_existing_files(self, value: Boolean):
+                    self.set_property_state("overwrite_existing_files", value)
+
             class external_data_file(Group):
                 """
                 'external_data_file' child of 'child_object_type' object
@@ -1034,6 +1116,7 @@ class system_coupling(Group):
                 ("participant_type", "ParticipantType", "String"),
                 ("participant_display_name", "ParticipantDisplayName", "String"),
                 ("display_name", "DisplayName", "String"),
+                ("dimension", "Dimension", "String"),
                 ("participant_file_loaded", "ParticipantFileLoaded", "String"),
                 ("logging_on", "LoggingOn", "Boolean"),
                 ("participant_analysis_type", "ParticipantAnalysisType", "String"),
@@ -1067,6 +1150,15 @@ class system_coupling(Group):
             @display_name.setter
             def display_name(self, value: String):
                 self.set_property_state("display_name", value)
+
+            @property
+            def dimension(self) -> String:
+                """'dimension' property of 'coupling_participant' object"""
+                return self.get_property_state("dimension")
+
+            @dimension.setter
+            def dimension(self, value: String):
+                self.set_property_state("dimension", value)
 
             @property
             def participant_file_loaded(self) -> String:
@@ -1137,6 +1229,7 @@ class system_coupling(Group):
                 ("weight_option", "WeightOption", "String"),
                 ("qr_tol_this_step", "QRTolThisStep", "Real"),
                 ("qr_tol_old_steps", "QRTolOldSteps", "Real"),
+                ("qr_solver", "QRSolver", "String"),
             ]
 
             @property
@@ -1219,6 +1312,15 @@ class system_coupling(Group):
             @qr_tol_old_steps.setter
             def qr_tol_old_steps(self, value: Real):
                 self.set_property_state("qr_tol_old_steps", value)
+
+            @property
+            def qr_solver(self) -> String:
+                """'qr_solver' property of 'analysis_control' object"""
+                return self.get_property_state("qr_solver")
+
+            @qr_solver.setter
+            def qr_solver(self, value: String):
+                self.set_property_state("qr_solver", value)
 
         class apip(Group):
             """
@@ -1427,6 +1529,7 @@ class system_coupling(Group):
                 "Boolean",
             ),
             ("write_scs_file", "WriteScsFile", "Boolean"),
+            ("check_for_input_files_changes", "CheckForInputFilesChanges", "String"),
         ]
 
         @property
@@ -1572,6 +1675,15 @@ class system_coupling(Group):
         @write_scs_file.setter
         def write_scs_file(self, value: Boolean):
             self.set_property_state("write_scs_file", value)
+
+        @property
+        def check_for_input_files_changes(self) -> String:
+            """'check_for_input_files_changes' property of 'system_coupling' object"""
+            return self.get_property_state("check_for_input_files_changes")
+
+        @check_for_input_files_changes.setter
+        def check_for_input_files_changes(self, value: String):
+            self.set_property_state("check_for_input_files_changes", value)
 
     class coupling_interface(NamedObject):
         """
@@ -2275,29 +2387,6 @@ class system_coupling(Group):
         def maximum_iterations(self, value: Integer):
             self.set_property_state("maximum_iterations", value)
 
-        command_names = ["get_parameter_options"]
-
-        class get_parameter_options(PathCommand):
-            """
-            'get_parameter_options' child of 'solution_control' object
-
-            Parameters
-            ----------
-                name : str
-                    'name' child of 'get_parameter_options' object
-
-            """
-
-            syc_name = "GetParameterOptions"
-            argument_names = ["name"]
-
-            class name(String):
-                """
-                'name' child of 'get_parameter_options' object
-                """
-
-                syc_name = "Name"
-
     class output_control(Group):
         """
         'output_control' child of 'system_coupling' object
@@ -2488,7 +2577,574 @@ class system_coupling(Group):
         def output_frequency(self, value: Integer):
             self.set_property_state("output_frequency", value)
 
-    command_names = ["add_participant", "solve", "save", "get_parameter_options"]
+    command_names = [
+        "clear_state",
+        "initialize",
+        "add_interface",
+        "add_interface_by_display_names",
+        "add_data_transfer",
+        "add_data_transfer_by_display_names",
+        "get_region_names_for_participant",
+        "add_reference_frame",
+        "add_transformation",
+        "delete_transformation",
+        "get_execution_command",
+        "generate_input_file",
+        "create_restart_point",
+        "add_participant",
+        "import_system_coupling_input_file",
+        "delete_snapshot",
+        "write_csv_chart_files",
+        "get_expression_variables",
+        "add_default_transformation",
+        "add_instancing",
+        "get_errors",
+        "add_named_expression",
+        "add_expression_function",
+        "reload_expression_function_modules",
+        "map",
+        "preview_mapping",
+        "are_all_participants_server",
+    ]
+
+    class clear_state(Command):
+        """
+        'clear_state' child of 'system_coupling' object
+        """
+
+        syc_name = "ClearState"
+
+    class initialize(Command):
+        """
+        'initialize' child of 'system_coupling' object
+        """
+
+        syc_name = "Initialize"
+
+    class add_interface(Command):
+        """
+        'add_interface' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            side_one_participant : str
+                'side_one_participant' child of 'add_interface' object
+            side_one_regions : typing.List[str]
+                'side_one_regions' child of 'add_interface' object
+            side_two_participant : str
+                'side_two_participant' child of 'add_interface' object
+            side_two_regions : typing.List[str]
+                'side_two_regions' child of 'add_interface' object
+
+        """
+
+        syc_name = "AddInterface"
+        argument_names = [
+            "side_one_participant",
+            "side_one_regions",
+            "side_two_participant",
+            "side_two_regions",
+        ]
+
+        class side_one_participant(String):
+            """
+            'side_one_participant' child of 'add_interface' object
+            """
+
+            syc_name = "SideOneParticipant"
+
+        class side_one_regions(StringList):
+            """
+            'side_one_regions' child of 'add_interface' object
+            """
+
+            syc_name = "SideOneRegions"
+
+        class side_two_participant(String):
+            """
+            'side_two_participant' child of 'add_interface' object
+            """
+
+            syc_name = "SideTwoParticipant"
+
+        class side_two_regions(StringList):
+            """
+            'side_two_regions' child of 'add_interface' object
+            """
+
+            syc_name = "SideTwoRegions"
+
+    class add_interface_by_display_names(Command):
+        """
+        'add_interface_by_display_names' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            side_two_participant : str
+                'side_two_participant' child of 'add_interface_by_display_names' object
+            side_one_participant : str
+                'side_one_participant' child of 'add_interface_by_display_names' object
+            side_two_regions : typing.List[str]
+                'side_two_regions' child of 'add_interface_by_display_names' object
+            side_one_regions : typing.List[str]
+                'side_one_regions' child of 'add_interface_by_display_names' object
+
+        """
+
+        syc_name = "AddInterfaceByDisplayNames"
+        argument_names = [
+            "side_two_participant",
+            "side_one_participant",
+            "side_two_regions",
+            "side_one_regions",
+        ]
+
+        class side_two_participant(String):
+            """
+            'side_two_participant' child of 'add_interface_by_display_names' object
+            """
+
+            syc_name = "SideTwoParticipant"
+
+        class side_one_participant(String):
+            """
+            'side_one_participant' child of 'add_interface_by_display_names' object
+            """
+
+            syc_name = "SideOneParticipant"
+
+        class side_two_regions(StringList):
+            """
+            'side_two_regions' child of 'add_interface_by_display_names' object
+            """
+
+            syc_name = "SideTwoRegions"
+
+        class side_one_regions(StringList):
+            """
+            'side_one_regions' child of 'add_interface_by_display_names' object
+            """
+
+            syc_name = "SideOneRegions"
+
+    class add_data_transfer(Command):
+        """
+        'add_data_transfer' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            value_x : str
+                'value_x' child of 'add_data_transfer' object
+            interface : str
+                'interface' child of 'add_data_transfer' object
+            target_variable : str
+                'target_variable' child of 'add_data_transfer' object
+            value : str
+                'value' child of 'add_data_transfer' object
+            target_side : str
+                'target_side' child of 'add_data_transfer' object
+            side_two_variable : str
+                'side_two_variable' child of 'add_data_transfer' object
+            value_z : str
+                'value_z' child of 'add_data_transfer' object
+            source_variable : str
+                'source_variable' child of 'add_data_transfer' object
+            value_y : str
+                'value_y' child of 'add_data_transfer' object
+            side_one_variable : str
+                'side_one_variable' child of 'add_data_transfer' object
+
+        """
+
+        syc_name = "AddDataTransfer"
+        argument_names = [
+            "value_x",
+            "interface",
+            "target_variable",
+            "value",
+            "target_side",
+            "side_two_variable",
+            "value_z",
+            "source_variable",
+            "value_y",
+            "side_one_variable",
+        ]
+
+        class value_x(String):
+            """
+            'value_x' child of 'add_data_transfer' object
+            """
+
+            syc_name = "ValueX"
+
+        class interface(String):
+            """
+            'interface' child of 'add_data_transfer' object
+            """
+
+            syc_name = "Interface"
+
+        class target_variable(String):
+            """
+            'target_variable' child of 'add_data_transfer' object
+            """
+
+            syc_name = "TargetVariable"
+
+        class value(String):
+            """
+            'value' child of 'add_data_transfer' object
+            """
+
+            syc_name = "Value"
+
+        class target_side(String):
+            """
+            'target_side' child of 'add_data_transfer' object
+            """
+
+            syc_name = "TargetSide"
+
+        class side_two_variable(String):
+            """
+            'side_two_variable' child of 'add_data_transfer' object
+            """
+
+            syc_name = "SideTwoVariable"
+
+        class value_z(String):
+            """
+            'value_z' child of 'add_data_transfer' object
+            """
+
+            syc_name = "ValueZ"
+
+        class source_variable(String):
+            """
+            'source_variable' child of 'add_data_transfer' object
+            """
+
+            syc_name = "SourceVariable"
+
+        class value_y(String):
+            """
+            'value_y' child of 'add_data_transfer' object
+            """
+
+            syc_name = "ValueY"
+
+        class side_one_variable(String):
+            """
+            'side_one_variable' child of 'add_data_transfer' object
+            """
+
+            syc_name = "SideOneVariable"
+
+    class add_data_transfer_by_display_names(Command):
+        """
+        'add_data_transfer_by_display_names' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            interface : str
+                'interface' child of 'add_data_transfer_by_display_names' object
+            value_y : str
+                'value_y' child of 'add_data_transfer_by_display_names' object
+            side_two_variable : str
+                'side_two_variable' child of 'add_data_transfer_by_display_names' object
+            target_variable : str
+                'target_variable' child of 'add_data_transfer_by_display_names' object
+            side_one_variable : str
+                'side_one_variable' child of 'add_data_transfer_by_display_names' object
+            source_variable : str
+                'source_variable' child of 'add_data_transfer_by_display_names' object
+            value : str
+                'value' child of 'add_data_transfer_by_display_names' object
+            value_z : str
+                'value_z' child of 'add_data_transfer_by_display_names' object
+            value_x : str
+                'value_x' child of 'add_data_transfer_by_display_names' object
+            target_side : str
+                'target_side' child of 'add_data_transfer_by_display_names' object
+
+        """
+
+        syc_name = "AddDataTransferByDisplayNames"
+        argument_names = [
+            "interface",
+            "value_y",
+            "side_two_variable",
+            "target_variable",
+            "side_one_variable",
+            "source_variable",
+            "value",
+            "value_z",
+            "value_x",
+            "target_side",
+        ]
+
+        class interface(String):
+            """
+            'interface' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "Interface"
+
+        class value_y(String):
+            """
+            'value_y' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "ValueY"
+
+        class side_two_variable(String):
+            """
+            'side_two_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "SideTwoVariable"
+
+        class target_variable(String):
+            """
+            'target_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "TargetVariable"
+
+        class side_one_variable(String):
+            """
+            'side_one_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "SideOneVariable"
+
+        class source_variable(String):
+            """
+            'source_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "SourceVariable"
+
+        class value(String):
+            """
+            'value' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "Value"
+
+        class value_z(String):
+            """
+            'value_z' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "ValueZ"
+
+        class value_x(String):
+            """
+            'value_x' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "ValueX"
+
+        class target_side(String):
+            """
+            'target_side' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "TargetSide"
+
+    class get_region_names_for_participant(Command):
+        """
+        'get_region_names_for_participant' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            participant_name : str
+                'participant_name' child of 'get_region_names_for_participant' object
+
+        """
+
+        syc_name = "GetRegionNamesForParticipant"
+        argument_names = ["participant_name"]
+
+        class participant_name(String):
+            """
+            'participant_name' child of 'get_region_names_for_participant' object
+            """
+
+            syc_name = "ParticipantName"
+
+    class add_reference_frame(Command):
+        """
+        'add_reference_frame' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            parent_reference_frame : str
+                'parent_reference_frame' child of 'add_reference_frame' object
+
+        """
+
+        syc_name = "AddReferenceFrame"
+        argument_names = ["parent_reference_frame"]
+
+        class parent_reference_frame(String):
+            """
+            'parent_reference_frame' child of 'add_reference_frame' object
+            """
+
+            syc_name = "ParentReferenceFrame"
+
+    class add_transformation(Command):
+        """
+        'add_transformation' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            transformation_type : str
+                'transformation_type' child of 'add_transformation' object
+            vector : typing.List[real]
+                'vector' child of 'add_transformation' object
+            angle : real
+                'angle' child of 'add_transformation' object
+            axis : str
+                'axis' child of 'add_transformation' object
+            reference_frame : str
+                'reference_frame' child of 'add_transformation' object
+
+        """
+
+        syc_name = "AddTransformation"
+        argument_names = [
+            "transformation_type",
+            "vector",
+            "angle",
+            "axis",
+            "reference_frame",
+        ]
+
+        class transformation_type(String):
+            """
+            'transformation_type' child of 'add_transformation' object
+            """
+
+            syc_name = "TransformationType"
+
+        class vector(RealList):
+            """
+            'vector' child of 'add_transformation' object
+            """
+
+            syc_name = "Vector"
+
+        class angle(Real):
+            """
+            'angle' child of 'add_transformation' object
+            """
+
+            syc_name = "Angle"
+
+        class axis(String):
+            """
+            'axis' child of 'add_transformation' object
+            """
+
+            syc_name = "Axis"
+
+        class reference_frame(String):
+            """
+            'reference_frame' child of 'add_transformation' object
+            """
+
+            syc_name = "ReferenceFrame"
+
+    class delete_transformation(Command):
+        """
+        'delete_transformation' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            reference_frame : str
+                'reference_frame' child of 'delete_transformation' object
+            transformation_name : str
+                'transformation_name' child of 'delete_transformation' object
+
+        """
+
+        syc_name = "DeleteTransformation"
+        argument_names = ["reference_frame", "transformation_name"]
+
+        class reference_frame(String):
+            """
+            'reference_frame' child of 'delete_transformation' object
+            """
+
+            syc_name = "ReferenceFrame"
+
+        class transformation_name(String):
+            """
+            'transformation_name' child of 'delete_transformation' object
+            """
+
+            syc_name = "TransformationName"
+
+    class get_execution_command(Command):
+        """
+        'get_execution_command' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            participant_name : str
+                'participant_name' child of 'get_execution_command' object
+
+        """
+
+        syc_name = "GetExecutionCommand"
+        argument_names = ["participant_name"]
+
+        class participant_name(String):
+            """
+            'participant_name' child of 'get_execution_command' object
+            """
+
+            syc_name = "ParticipantName"
+
+    class generate_input_file(Command):
+        """
+        'generate_input_file' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            file_name : str
+                'file_name' child of 'generate_input_file' object
+            participant_name : str
+                'participant_name' child of 'generate_input_file' object
+
+        """
+
+        syc_name = "GenerateInputFile"
+        argument_names = ["file_name", "participant_name"]
+
+        class file_name(String):
+            """
+            'file_name' child of 'generate_input_file' object
+            """
+
+            syc_name = "FileName"
+
+        class participant_name(String):
+            """
+            'participant_name' child of 'generate_input_file' object
+            """
+
+            syc_name = "ParticipantName"
+
+    class create_restart_point(Command):
+        """
+        'create_restart_point' child of 'system_coupling' object
+        """
+
+        syc_name = "CreateRestartPoint"
 
     class add_participant(Command):
         """
@@ -2496,14 +3152,14 @@ class system_coupling(Group):
 
         Parameters
         ----------
+            participant_type : str
+                'participant_type' child of 'add_participant' object
             additional_arguments : str
                 'additional_arguments' child of 'add_participant' object
             executable : str
                 'executable' child of 'add_participant' object
             input_file : str
                 'input_file' child of 'add_participant' object
-            participant_type : str
-                'participant_type' child of 'add_participant' object
             working_directory : str
                 'working_directory' child of 'add_participant' object
 
@@ -2511,12 +3167,19 @@ class system_coupling(Group):
 
         syc_name = "AddParticipant"
         argument_names = [
+            "participant_type",
             "additional_arguments",
             "executable",
             "input_file",
-            "participant_type",
             "working_directory",
         ]
+
+        class participant_type(String):
+            """
+            'participant_type' child of 'add_participant' object
+            """
+
+            syc_name = "ParticipantType"
 
         class additional_arguments(String):
             """
@@ -2539,13 +3202,6 @@ class system_coupling(Group):
 
             syc_name = "InputFile"
 
-        class participant_type(String):
-            """
-            'participant_type' child of 'add_participant' object
-            """
-
-            syc_name = "ParticipantType"
-
         class working_directory(String):
             """
             'working_directory' child of 'add_participant' object
@@ -2553,51 +3209,249 @@ class system_coupling(Group):
 
             syc_name = "WorkingDirectory"
 
-    class solve(Command):
+    class import_system_coupling_input_file(Command):
         """
-        'solve' child of 'system_coupling' object
-        """
-
-        syc_name = "Solve"
-
-    class save(Command):
-        """
-        'save' child of 'system_coupling' object
+        'import_system_coupling_input_file' child of 'system_coupling' object
 
         Parameters
         ----------
             file_path : str
-                'file_path' child of 'save' object
+                'file_path' child of 'import_system_coupling_input_file' object
 
         """
 
-        syc_name = "Save"
+        syc_name = "ImportSystemCouplingInputFile"
         argument_names = ["file_path"]
 
         class file_path(String):
             """
-            'file_path' child of 'save' object
+            'file_path' child of 'import_system_coupling_input_file' object
             """
 
             syc_name = "FilePath"
 
-    class get_parameter_options(PathCommand):
+    class delete_snapshot(Command):
         """
-        'get_parameter_options' child of 'system_coupling' object
+        'delete_snapshot' child of 'system_coupling' object
 
         Parameters
         ----------
-            name : str
-                'name' child of 'get_parameter_options' object
+            snapshot_name : str
+                'snapshot_name' child of 'delete_snapshot' object
 
         """
 
-        syc_name = "GetParameterOptions"
-        argument_names = ["name"]
+        syc_name = "DeleteSnapshot"
+        argument_names = ["snapshot_name"]
 
-        class name(String):
+        class snapshot_name(String):
             """
-            'name' child of 'get_parameter_options' object
+            'snapshot_name' child of 'delete_snapshot' object
             """
 
-            syc_name = "Name"
+            syc_name = "SnapshotName"
+
+    class write_csv_chart_files(Command):
+        """
+        'write_csv_chart_files' child of 'system_coupling' object
+        """
+
+        syc_name = "WriteCsvChartFiles"
+
+    class get_expression_variables(PathCommand):
+        """
+        'get_expression_variables' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            parameter_name : str
+                'parameter_name' child of 'get_expression_variables' object
+
+        """
+
+        syc_name = "GetExpressionVariables"
+        argument_names = ["parameter_name"]
+
+        class parameter_name(String):
+            """
+            'parameter_name' child of 'get_expression_variables' object
+            """
+
+            syc_name = "ParameterName"
+
+    class add_default_transformation(Command):
+        """
+        'add_default_transformation' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            transformation_type : str
+                'transformation_type' child of 'add_default_transformation' object
+            reference_frame : str
+                'reference_frame' child of 'add_default_transformation' object
+
+        """
+
+        syc_name = "AddDefaultTransformation"
+        argument_names = ["transformation_type", "reference_frame"]
+
+        class transformation_type(String):
+            """
+            'transformation_type' child of 'add_default_transformation' object
+            """
+
+            syc_name = "TransformationType"
+
+        class reference_frame(String):
+            """
+            'reference_frame' child of 'add_default_transformation' object
+            """
+
+            syc_name = "ReferenceFrame"
+
+    class add_instancing(Command):
+        """
+        'add_instancing' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            instances_for_mapping : int
+                'instances_for_mapping' child of 'add_instancing' object
+            reference_frame : str
+                'reference_frame' child of 'add_instancing' object
+            instances_in_full_circle : int
+                'instances_in_full_circle' child of 'add_instancing' object
+
+        """
+
+        syc_name = "AddInstancing"
+        argument_names = [
+            "instances_for_mapping",
+            "reference_frame",
+            "instances_in_full_circle",
+        ]
+
+        class instances_for_mapping(Integer):
+            """
+            'instances_for_mapping' child of 'add_instancing' object
+            """
+
+            syc_name = "InstancesForMapping"
+
+        class reference_frame(String):
+            """
+            'reference_frame' child of 'add_instancing' object
+            """
+
+            syc_name = "ReferenceFrame"
+
+        class instances_in_full_circle(Integer):
+            """
+            'instances_in_full_circle' child of 'add_instancing' object
+            """
+
+            syc_name = "InstancesInFullCircle"
+
+    class get_errors(Command):
+        """
+        'get_errors' child of 'system_coupling' object
+        """
+
+        syc_name = "GetErrors"
+
+    class add_named_expression(Command):
+        """
+        'add_named_expression' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            expression_name : str
+                'expression_name' child of 'add_named_expression' object
+            expression_string : str
+                'expression_string' child of 'add_named_expression' object
+
+        """
+
+        syc_name = "AddNamedExpression"
+        argument_names = ["expression_name", "expression_string"]
+
+        class expression_name(String):
+            """
+            'expression_name' child of 'add_named_expression' object
+            """
+
+            syc_name = "ExpressionName"
+
+        class expression_string(String):
+            """
+            'expression_string' child of 'add_named_expression' object
+            """
+
+            syc_name = "ExpressionString"
+
+    class add_expression_function(Command):
+        """
+        'add_expression_function' child of 'system_coupling' object
+
+        Parameters
+        ----------
+            module : str
+                'module' child of 'add_expression_function' object
+            function : str
+                'function' child of 'add_expression_function' object
+            function_name : str
+                'function_name' child of 'add_expression_function' object
+
+        """
+
+        syc_name = "AddExpressionFunction"
+        argument_names = ["module", "function", "function_name"]
+
+        class module(String):
+            """
+            'module' child of 'add_expression_function' object
+            """
+
+            syc_name = "Module"
+
+        class function(String):
+            """
+            'function' child of 'add_expression_function' object
+            """
+
+            syc_name = "Function"
+
+        class function_name(String):
+            """
+            'function_name' child of 'add_expression_function' object
+            """
+
+            syc_name = "FunctionName"
+
+    class reload_expression_function_modules(Command):
+        """
+        'reload_expression_function_modules' child of 'system_coupling' object
+        """
+
+        syc_name = "ReloadExpressionFunctionModules"
+
+    class map(Command):
+        """
+        'map' child of 'system_coupling' object
+        """
+
+        syc_name = "Map"
+
+    class preview_mapping(Command):
+        """
+        'preview_mapping' child of 'system_coupling' object
+        """
+
+        syc_name = "PreviewMapping"
+
+    class are_all_participants_server(Command):
+        """
+        'are_all_participants_server' child of 'system_coupling' object
+        """
+
+        syc_name = "AreAllParticipantsServer"

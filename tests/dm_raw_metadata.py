@@ -1,3 +1,5 @@
+import copy
+
 """Data model metadata raw data for testing purposes.
 """
 
@@ -1251,3 +1253,64 @@ dm_metadata = {
         "ordinal": 0,
     }
 }
+
+cmd_metadata = {
+    "AddParticipant": {
+        "args": {
+            "AdditionalArguments": {"type": "String"},
+            "Executable": {"type": "String"},  # FileName
+            "InputFile": {"type": "String"},  # FileName
+            "ParticipantType": {"type": "String"},
+            "WorkingDirectory": {"type": "String"},  # FileName (dir name)
+        },
+        "essentialArgNames": [],
+        "optionalArgNames": [
+            "ParticipantType",
+            "InputFile",
+            "Executable",
+            "AdditionalArguments",
+            "WorkingDirectory",
+        ],
+        "defaults": (None, None, None, None, None),
+        "isInternal": False,
+        "isQuery": False,
+        "retType": "String",
+    },
+    "Solve": {
+        "args": {},
+        "essentialArgNames": [],
+        "optionalArgNames": [],
+        "defaults": (),
+        "isInternal": False,
+        "isQuery": False,
+        "retType": None,
+    },
+    "Save": {
+        "args": {"FilePath": {"type": "String"}},  # FilePath
+        "essentialArgNames": [],
+        "optionalArgNames": [],
+        "defaults": (".",),
+        "isInternal": False,
+        "isQuery": False,
+        "name": "Save",
+        "retType": "Logical",
+    },
+    "GetParameterOptions": {
+        "args": {"Name": {"type": "String"}, "ObjectPath": {"type": "String"}},
+        "defaults": (),
+        "essentialArgNames": ["ObjectPath", "Name"],
+        "isInternal": False,
+        "isQuery": True,
+        "optionalArgNames": [],
+        "retType": "String List",  # documented as tuple ??
+    },
+}
+
+
+def _make_combined_data():
+    metadata = copy.deepcopy(dm_metadata)
+    metadata["SystemCoupling"]["__commands"] = copy.deepcopy(cmd_metadata)
+    return metadata
+
+
+dm_metadata_with_cmds = _make_combined_data()
