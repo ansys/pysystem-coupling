@@ -599,7 +599,10 @@ class Command(Base):
         if self.is_path_cmd:
             newkwds["ObjectPath"] = self._parent.syc_path
 
-        missing_args = set(self.essential_arguments)
+        try:
+            missing_args = set(self.essential_arguments)
+        except AttributeError:
+            missing_args = set()
 
         for k, v in kwds.items():
             if k in self.argument_names:
