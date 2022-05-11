@@ -599,12 +599,22 @@ class Command(Base):
         if self.is_path_cmd:
             newkwds["ObjectPath"] = self._parent.syc_path
 
+        missing_args = set(self.essential_arguments)
+
         for k, v in kwds.items():
             if k in self.argument_names:
                 ccls = getattr(self, k)
                 newkwds[ccls.syc_name] = ccls.to_syc_keys(v)
+                missing_args.discard(k)
             else:
                 raise RuntimeError("Argument '" + str(k) + "' is invalid")
+
+        if missing_args:
+            raise RuntimeError(
+                "At least one essential argument has not been provided.\n"
+                f"(Missing: {list(missing_args)})."
+            )
+
         return self.sycproxy.execute_cmd(self._parent.path, self.obj_name, **newkwds)
 
 
@@ -745,6 +755,10 @@ def get_cls(name, info, parent=None):
                 cls.argument_names.append(ccls.__name__)
                 setattr(cls, ccls.__name__, ccls)
             cls.__doc__ = doc
+            cls.essential_arguments = [
+                to_python_name(a) for a in info.get("essential_args", [])
+            ]
+
         # object_type = info.get('object-type')
         object_type = Group if base == NamedObject else None
         if object_type:

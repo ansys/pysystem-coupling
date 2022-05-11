@@ -142,6 +142,18 @@ def _write_cls_helper(out, cls, indent=0):
                 strout.getvalue().strip().replace("'", '"').split("\n")
             )
             out.write(f"{istr2}{mn}\n")
+
+            essential_args = getattr(cls, "essential_arguments", [])
+            out.write(f"{istr1}essential_arguments = \\\n")
+            strout = io.StringIO()
+            pprint.pprint(
+                essential_args, stream=strout, compact=True, width=80 - indent * 4 - 10
+            )
+            mn = ("\n" + istr2).join(
+                strout.getvalue().strip().replace("'", '"').split("\n")
+            )
+            out.write(f"{istr2}{mn}\n")
+
             for argument in arguments:
                 _write_cls_helper(out, getattr(cls, argument), indent + 1)
         child_object_type = getattr(cls, "child_object_type", None)
@@ -165,6 +177,13 @@ def write_settings_classes(out: IO, cls, obj_info):
     out.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
     out.write(f'SHASH = "{hash}"\n')
     _write_cls_helper(out, cls)
+
+
+def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
+    cls = datamodel.get_cls(root_type, obj_info[root_type])
+    with open(filepath, "w") as f:
+        write_settings_classes(f, cls, obj_info)
+    print(f"Finished generating {filepath}")
 
 
 if __name__ == "__main__":
@@ -195,10 +214,10 @@ if __name__ == "__main__":
         api = syc.native_api
 
         dm_metadata = api.GetMetadata()
-        cmd_metadata = api.GetCommandAndQueryMetadata()
+        cmd_metadata_orig = api.GetCommandAndQueryMetadata()
         print("...raw metadata received. Processing...")
 
-        cmd_metadata = process_command_data(cmd_metadata)
+        cmd_metadata = process_command_data(cmd_metadata_orig)
         dm_metadata["SystemCoupling"]["__commands"] = cmd_metadata
 
         filepath = os.path.normpath(
@@ -213,10 +232,19 @@ if __name__ == "__main__":
             )
         )
 
+        case_cmd_metadata = process_command_data(cmd_metadata_orig, category="case")
+        case_metadata = {
+            "CaseCommands": {
+                "__commands": case_cmd_metadata,
+                "isEntity": False,
+                "isNamed": False,
+                "ordinal": 0,
+            }
+        }
+        case_filepath = os.path.join(os.path.dirname(filepath), "case_commands.py")
+        write_classes_to_file(case_filepath, case_metadata, root_type="CaseCommands")
+
     # with open("dump_meta.json", "w") as f:
     #    json.dump(dm_metadata, fp=f, indent=2, sort_keys=True)
 
-    cls = datamodel.get_cls("SystemCoupling", dm_metadata["SystemCoupling"])
-    with open(filepath, "w") as f:
-        write_settings_classes(f, cls, dm_metadata)
-    print(f"Finished generating {filepath}")
+    write_classes_to_file(filepath, dm_metadata)

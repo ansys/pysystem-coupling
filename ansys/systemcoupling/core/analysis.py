@@ -20,6 +20,7 @@ class SycAnalysis:
     """
 
     def __init__(self, rpc_impl):
+        self.__case_root = None
         self.__setup_root = None
         self.__rpc_impl = rpc_impl
         self.__native_api = None
@@ -39,6 +40,7 @@ class SycAnalysis:
             self.__native_api = None
         # XXX TODO see about doing something similar for setup
         self.__setup_root = None
+        self.__case_root
 
     def start_output(self, handle_output=None):
         """Start streaming the "standard output" written by System Coupling.
@@ -107,9 +109,27 @@ class SycAnalysis:
         return self.__rpc_impl.ping()
 
     @property
+    def case(self):
+        """Provides access to the 'Pythonic' client-side form of the System
+        Coupling case persistence API.
+        """
+        if self.__case_root is None:
+            if isinstance(self.__rpc_impl, _DefunctRpcImpl):
+                self.__rpc_impl.trigger_error
+
+            sycproxy = SycProxyAdapter(self.__rpc_impl)
+
+            # XXX TODO skip dynamic building for now...
+            from ansys.systemcoupling.core.settings.case_commands import case_commands
+
+            case_commands.set_sycproxy(sycproxy)
+            self.__case_root = case_commands()
+        return self.__case_root
+
+    @property
     def setup(self):
         """Provides access to the 'Pythonic' client-side form of the System
-        Coupling API and data model.
+        Coupling setup API and data model.
         """
         if self.__setup_root is None:
             if isinstance(self.__rpc_impl, _DefunctRpcImpl):

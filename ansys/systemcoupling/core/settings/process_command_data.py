@@ -1,7 +1,7 @@
-from .excluded_commands_tmp import excluded_list
+from .excluded_commands_tmp import _case_list, excluded_list
 
 
-def process(raw_data):
+def process(raw_data, category=None):
     """Takes the raw command and query metadata provided by System Coupling
     and manipulates it into a form that can be used by the datamodel
     generation functionality.
@@ -23,12 +23,23 @@ def process(raw_data):
         a command or query.
     """
 
+    def filter(name):
+        if category is None:
+            return name not in excluded_list
+        elif category == "case":
+            return name in _case_list
+        else:
+            raise Exception(f"unhandled category {category}")
+
     cmds_out = {}
     for cmd_info in raw_data:
         name = cmd_info["name"]
-        if name in excluded_list:
+        if not filter(name):
             continue
 
+        essential_args = cmd_info["essentialArgNames"]
+        if essential_args:
+            print(essential_args)
         args_out = {}
         for arg, arg_info in cmd_info["args"].items():
             # if arg == "ObjectPath":
@@ -39,11 +50,17 @@ def process(raw_data):
             if arg_type:
                 args_out[arg]["type"] = _process_arg_type(arg_type)
 
-        cmds_out[name] = {"args": args_out, "isQuery": cmd_info["isQuery"]}
+        cmds_out[name] = {
+            "args": args_out,
+            "isQuery": cmd_info["isQuery"],
+            "essential_args": essential_args,
+        }
 
     return cmds_out
 
 
+# XXX TODO this is somewhat temporary in its current form
+# Some work may be needed to handled possible argument types
 _type_map = {
     # 1. These can all be treated as str for now:
     "<class 'kernel.util.FileUtilities.ValidDirectoryName'>": "String",

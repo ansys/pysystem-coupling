@@ -2290,6 +2290,7 @@ class system_coupling(Group):
 
             syc_name = "GetParameterOptions"
             argument_names = ["name"]
+            essential_arguments = []
 
             class name(String):
                 """
@@ -2517,6 +2518,7 @@ class system_coupling(Group):
             "participant_type",
             "working_directory",
         ]
+        essential_arguments = []
 
         class additional_arguments(String):
             """
@@ -2573,6 +2575,7 @@ class system_coupling(Group):
 
         syc_name = "Save"
         argument_names = ["file_path"]
+        essential_arguments = []
 
         class file_path(String):
             """
@@ -2594,6 +2597,7 @@ class system_coupling(Group):
 
         syc_name = "GetParameterOptions"
         argument_names = ["name"]
+        essential_arguments = []
 
         class name(String):
             """
