@@ -209,7 +209,7 @@ if __name__ == "__main__":
                 "systemcoupling",
                 "core",
                 "settings",
-                "datamodel_222_NEW.py",
+                "datamodel_222.py",
             )
         )
 
