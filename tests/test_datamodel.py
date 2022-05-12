@@ -1,19 +1,28 @@
 from copy import deepcopy
 from io import StringIO
 
-from dm_raw_metadata import dm_metadata_with_cmds as dm_metadata
+from dm_raw_metadata import cmd_metadata, dm_metadata
 import generated_testing_datamodel
 import pytest
 from state import StateForTesting
 
 from ansys.systemcoupling.core.settings.datamodel import get_root
+from ansys.systemcoupling.core.settings.process_command_data import process
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
+
+
+def _make_metadata():
+    metadata = deepcopy(dm_metadata)
+    cmd_meta = deepcopy(process(cmd_metadata, apply_exclusions=False))
+    metadata["SystemCoupling"]["__commands"] = cmd_meta
+    return metadata
 
 
 class SycProxy(SycProxyInterface):
     def __init__(self, force_dynamic_datamodel=False):
         self.__force_dynamic_datamodel = force_dynamic_datamodel
         self.__state = StateForTesting()
+        self.__metadata = None
         self.clear_last_cmd()
 
     def clear_last_cmd(self):
@@ -22,10 +31,11 @@ class SycProxy(SycProxyInterface):
         self.last_cmd_args = None
 
     def get_static_info(self):
+        info = self._get_metadata()
         if not self.__force_dynamic_datamodel:
-            return dm_metadata
+            return info
 
-        info = deepcopy(dm_metadata)
+        info = deepcopy(info)
         # info is structured as a single (top-level) element nested dict:
         #    {"root": {...nested data}}
         # We add extra entry to "root"s data to force a difference from the
@@ -55,6 +65,11 @@ class SycProxy(SycProxyInterface):
         self.last_cmd_name = args[1]
         self.last_cmd_args = dict(**kwargs)
         return None
+
+    def _get_metadata(self):
+        if self.__metadata is None:
+            self.__metadata = _make_metadata()
+        return self.__metadata
 
 
 @pytest.fixture(name="dm", params=("pre-generated", "dynamically-generated"))

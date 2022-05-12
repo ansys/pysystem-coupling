@@ -26,6 +26,7 @@ Usage
 python <path to generate_datamodel.py> [-t]
 """
 
+from copy import deepcopy
 import io
 
 # import json
@@ -186,6 +187,15 @@ def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
     print(f"Finished generating {filepath}")
 
 
+def _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=False):
+    metadata = deepcopy(dm_metadata)
+    cmd_meta = deepcopy(
+        process_command_data(cmd_metadata, apply_exclusions=not is_test_data)
+    )
+    metadata["SystemCoupling"]["__commands"] = cmd_meta
+    return metadata
+
+
 if __name__ == "__main__":
 
     dirname = os.path.dirname(__file__)
@@ -196,7 +206,11 @@ if __name__ == "__main__":
         # NB need to add tests dir to sys.path to find dm_raw_metadata
         sys.path.append(os.path.normpath(os.path.join(dirname, "..", "tests")))
 
-        from dm_raw_metadata import dm_metadata_with_cmds as dm_metadata
+        from dm_raw_metadata import cmd_metadata, dm_metadata
+
+        dm_metadata = _make_combined_metadata(
+            dm_metadata, cmd_metadata, is_test_data=True
+        )
 
         filepath = os.path.normpath(
             os.path.join(
@@ -217,8 +231,7 @@ if __name__ == "__main__":
         cmd_metadata_orig = api.GetCommandAndQueryMetadata()
         print("...raw metadata received. Processing...")
 
-        cmd_metadata = process_command_data(cmd_metadata_orig)
-        dm_metadata["SystemCoupling"]["__commands"] = cmd_metadata
+        dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata_orig)
 
         filepath = os.path.normpath(
             os.path.join(

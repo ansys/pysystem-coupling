@@ -35,38 +35,3 @@ class SycProxyAdapter(SycProxyInterface):
     def execute_cmd(self, *args, **kwargs):
         cmd_name = args[1]
         return self.__rpc.execute_command(cmd_name, **kwargs)
-
-
-_command_metadata = {
-    "AddParticipant": {
-        "args": {
-            "AdditionalArguments": {"type": "String"},
-            "Executable": {"type": "String"},  # FileName
-            "InputFile": {"type": "String"},  # FileName
-            "ParticipantType": {"type": "String"},
-            "WorkingDirectory": {"type": "String"},  # FileName (dir name)
-        },
-        "essentialArgNames": [],
-        "optionalArgNames": [
-            "ParticipantType",
-            "InputFile",
-            "Executable",
-            "AdditionalArguments",
-            "WorkingDirectory",
-        ],
-        "defaults": (None, None, None, None, None),
-        "isInternal": False,
-        "isQuery": False,
-        "retType": "String",
-    },
-    "Save": {
-        "args": {"FilePath": {"type": "String"}},  # FilePath
-        "essentialArgNames": [],
-        "optionalArgNames": [],
-        "defaults": (".",),
-        "isInternal": False,
-        "isQuery": False,
-        "name": "Save",
-        "retType": "Logical",
-    },
-}

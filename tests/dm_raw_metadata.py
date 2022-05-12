@@ -1177,13 +1177,14 @@ dm_metadata = {
                 },
                 "__commands": {
                     "GetParameterOptions": {
-                        "args": {
-                            "Name": {"type": "String"},
-                            "ObjectPath": {"type": "String"},
-                        },
+                        "args": [
+                            ("Name", {"type": "String"}),
+                            ("ObjectPath", {"type": "String"}),
+                        ],
                         "defaults": (),
                         "essentialArgNames": ["ObjectPath", "Name"],
                         "isInternal": False,
+                        "isPathCommand": True,
                         "isQuery": True,
                         "optionalArgNames": [],
                         "retType": "String List",  # documented as tuple ??
@@ -1195,57 +1196,6 @@ dm_metadata = {
                 "ordinal": 5,
             },
         },
-        "__commands": {
-            "AddParticipant": {
-                "args": {
-                    "AdditionalArguments": {"type": "String"},
-                    "Executable": {"type": "String"},  # FileName
-                    "InputFile": {"type": "String"},  # FileName
-                    "ParticipantType": {"type": "String"},
-                    "WorkingDirectory": {"type": "String"},  # FileName (dir name)
-                },
-                "essentialArgNames": [],
-                "optionalArgNames": [
-                    "ParticipantType",
-                    "InputFile",
-                    "Executable",
-                    "AdditionalArguments",
-                    "WorkingDirectory",
-                ],
-                "defaults": (None, None, None, None, None),
-                "isInternal": False,
-                "isQuery": False,
-                "retType": "String",
-            },
-            "Solve": {
-                "args": {},
-                "essentialArgNames": [],
-                "optionalArgNames": [],
-                "defaults": (),
-                "isInternal": False,
-                "isQuery": False,
-                "retType": None,
-            },
-            "Save": {
-                "args": {"FilePath": {"type": "String"}},  # FilePath
-                "essentialArgNames": [],
-                "optionalArgNames": [],
-                "defaults": (".",),
-                "isInternal": False,
-                "isQuery": False,
-                "name": "Save",
-                "retType": "Logical",
-            },
-            "GetParameterOptions": {
-                "args": {"Name": {"type": "String"}, "ObjectPath": {"type": "String"}},
-                "defaults": (),
-                "essentialArgNames": ["ObjectPath", "Name"],
-                "isInternal": False,
-                "isQuery": True,
-                "optionalArgNames": [],
-                "retType": "String List",  # documented as tuple ??
-            },
-        },
         "__parameters": {},
         "creatableNamedChildren": ["CouplingParticipant", "CouplingInterface"],
         "isEntity": False,
@@ -1254,15 +1204,16 @@ dm_metadata = {
     }
 }
 
-cmd_metadata = {
-    "AddParticipant": {
-        "args": {
-            "AdditionalArguments": {"type": "String"},
-            "Executable": {"type": "String"},  # FileName
-            "InputFile": {"type": "String"},  # FileName
-            "ParticipantType": {"type": "String"},
-            "WorkingDirectory": {"type": "String"},  # FileName (dir name)
-        },
+cmd_metadata = [
+    {
+        "name": "AddParticipant",
+        "args": [
+            ("AdditionalArguments", {"type": "String"}),
+            ("Executable", {"type": "String"}),  # FileName
+            ("InputFile", {"type": "String"}),  # FileName
+            ("ParticipantType", {"type": "String"}),
+            ("WorkingDirectory", {"type": "String"}),  # FileName (dir name)
+        ],
         "essentialArgNames": [],
         "optionalArgNames": [
             "ParticipantType",
@@ -1276,8 +1227,9 @@ cmd_metadata = {
         "isQuery": False,
         "retType": "String",
     },
-    "Solve": {
-        "args": {},
+    {
+        "name": "Solve",
+        "args": [],
         "essentialArgNames": [],
         "optionalArgNames": [],
         "defaults": (),
@@ -1285,18 +1237,19 @@ cmd_metadata = {
         "isQuery": False,
         "retType": None,
     },
-    "Save": {
-        "args": {"FilePath": {"type": "String"}},  # FilePath
+    {
+        "name": "Save",
+        "args": [("FilePath", {"type": "String"})],  # FilePath
         "essentialArgNames": [],
-        "optionalArgNames": [],
+        "optionalArgNames": ["FilePath"],
         "defaults": (".",),
         "isInternal": False,
         "isQuery": False,
-        "name": "Save",
         "retType": "Logical",
     },
-    "GetParameterOptions": {
-        "args": {"Name": {"type": "String"}, "ObjectPath": {"type": "String"}},
+    {
+        "name": "GetParameterOptions",
+        "args": [("Name", {"type": "String"}), ("ObjectPath", {"type": "String"})],
         "defaults": (),
         "essentialArgNames": ["ObjectPath", "Name"],
         "isInternal": False,
@@ -1304,7 +1257,7 @@ cmd_metadata = {
         "optionalArgNames": [],
         "retType": "String List",  # documented as tuple ??
     },
-}
+]
 
 
 def _make_combined_data():

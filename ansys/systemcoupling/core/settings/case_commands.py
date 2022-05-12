@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "fe67c5e67ce461434dcf4ceee00c23c296167687ce0efb5e8e9d445f69e510ed"
+SHASH = "d7f6737520f140622a0f9f2dd2bf3e7189955ef9503e64ce405404a20604c8e8"
 
 
 class case_commands(Group):
@@ -19,18 +19,25 @@ class case_commands(Group):
 
         Parameters
         ----------
+            file_path : str
+                'file_path' child of 'open' object
             coupling_step : int
                 'coupling_step' child of 'open' object
             coupling_iteration : int
                 'coupling_iteration' child of 'open' object
-            file_path : str
-                'file_path' child of 'open' object
 
         """
 
         syc_name = "Open"
-        argument_names = ["coupling_step", "coupling_iteration", "file_path"]
+        argument_names = ["file_path", "coupling_step", "coupling_iteration"]
         essential_arguments = []
+
+        class file_path(String):
+            """
+            'file_path' child of 'open' object
+            """
+
+            syc_name = "FilePath"
 
         class coupling_step(Integer):
             """
@@ -45,13 +52,6 @@ class case_commands(Group):
             """
 
             syc_name = "CouplingIteration"
-
-        class file_path(String):
-            """
-            'file_path' child of 'open' object
-            """
-
-            syc_name = "FilePath"
 
     class save(Command):
         """

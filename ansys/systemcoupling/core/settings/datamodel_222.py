@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "56294839cbb50fe6d507a9dde16510e97aa3f8daf90da8ee6d97cb7473af9777"
+SHASH = "63e3fdc2d0cfb287e02d6debd7a485991c6cb76573048a037f8bbb041c4b568a"
 
 
 class system_coupling(Group):
@@ -187,7 +187,7 @@ class system_coupling(Group):
                             ("option", "Option", "String"),
                             ("angle", "Angle", "Real"),
                             ("axis", "Axis", "String"),
-                            ("vector", "Vector", "RealList"),
+                            ("vector", "Vector", "RealVector"),
                         ]
 
                         @property
@@ -218,12 +218,12 @@ class system_coupling(Group):
                             self.set_property_state("axis", value)
 
                         @property
-                        def vector(self) -> RealList:
+                        def vector(self) -> RealVector:
                             """'vector' property of 'transformation' object"""
                             return self.get_property_state("vector")
 
                         @vector.setter
-                        def vector(self, value: RealList):
+                        def vector(self, value: RealVector):
                             self.set_property_state("vector", value)
 
                 property_names_types = [
@@ -2627,23 +2627,23 @@ class system_coupling(Group):
 
         Parameters
         ----------
-            side_one_regions : typing.List[str]
-                'side_one_regions' child of 'add_interface' object
-            side_two_regions : typing.List[str]
-                'side_two_regions' child of 'add_interface' object
             side_one_participant : str
                 'side_one_participant' child of 'add_interface' object
+            side_one_regions : typing.List[str]
+                'side_one_regions' child of 'add_interface' object
             side_two_participant : str
                 'side_two_participant' child of 'add_interface' object
+            side_two_regions : typing.List[str]
+                'side_two_regions' child of 'add_interface' object
 
         """
 
         syc_name = "AddInterface"
         argument_names = [
-            "side_one_regions",
-            "side_two_regions",
             "side_one_participant",
+            "side_one_regions",
             "side_two_participant",
+            "side_two_regions",
         ]
         essential_arguments = [
             "side_one_participant",
@@ -2652,20 +2652,6 @@ class system_coupling(Group):
             "side_two_regions",
         ]
 
-        class side_one_regions(StringList):
-            """
-            'side_one_regions' child of 'add_interface' object
-            """
-
-            syc_name = "SideOneRegions"
-
-        class side_two_regions(StringList):
-            """
-            'side_two_regions' child of 'add_interface' object
-            """
-
-            syc_name = "SideTwoRegions"
-
         class side_one_participant(String):
             """
             'side_one_participant' child of 'add_interface' object
@@ -2673,12 +2659,26 @@ class system_coupling(Group):
 
             syc_name = "SideOneParticipant"
 
+        class side_one_regions(StringList):
+            """
+            'side_one_regions' child of 'add_interface' object
+            """
+
+            syc_name = "SideOneRegions"
+
         class side_two_participant(String):
             """
             'side_two_participant' child of 'add_interface' object
             """
 
             syc_name = "SideTwoParticipant"
+
+        class side_two_regions(StringList):
+            """
+            'side_two_regions' child of 'add_interface' object
+            """
+
+            syc_name = "SideTwoRegions"
 
     class add_interface_by_display_names(Command):
         """
@@ -2690,10 +2690,10 @@ class system_coupling(Group):
                 'side_one_participant' child of 'add_interface_by_display_names' object
             side_one_regions : typing.List[str]
                 'side_one_regions' child of 'add_interface_by_display_names' object
-            side_two_regions : typing.List[str]
-                'side_two_regions' child of 'add_interface_by_display_names' object
             side_two_participant : str
                 'side_two_participant' child of 'add_interface_by_display_names' object
+            side_two_regions : typing.List[str]
+                'side_two_regions' child of 'add_interface_by_display_names' object
 
         """
 
@@ -2701,8 +2701,8 @@ class system_coupling(Group):
         argument_names = [
             "side_one_participant",
             "side_one_regions",
-            "side_two_regions",
             "side_two_participant",
+            "side_two_regions",
         ]
         essential_arguments = [
             "side_one_participant",
@@ -2725,13 +2725,6 @@ class system_coupling(Group):
 
             syc_name = "SideOneRegions"
 
-        class side_two_regions(StringList):
-            """
-            'side_two_regions' child of 'add_interface_by_display_names' object
-            """
-
-            syc_name = "SideTwoRegions"
-
         class side_two_participant(String):
             """
             'side_two_participant' child of 'add_interface_by_display_names' object
@@ -2739,70 +2732,63 @@ class system_coupling(Group):
 
             syc_name = "SideTwoParticipant"
 
+        class side_two_regions(StringList):
+            """
+            'side_two_regions' child of 'add_interface_by_display_names' object
+            """
+
+            syc_name = "SideTwoRegions"
+
     class add_data_transfer(Command):
         """
         'add_data_transfer' child of 'system_coupling' object
 
         Parameters
         ----------
-            value : str
-                'value' child of 'add_data_transfer' object
-            target_variable : str
-                'target_variable' child of 'add_data_transfer' object
-            value_x : str
-                'value_x' child of 'add_data_transfer' object
+            interface : str
+                'interface' child of 'add_data_transfer' object
             target_side : str
                 'target_side' child of 'add_data_transfer' object
             source_variable : str
                 'source_variable' child of 'add_data_transfer' object
+            target_variable : str
+                'target_variable' child of 'add_data_transfer' object
+            value : str
+                'value' child of 'add_data_transfer' object
+            value_x : str
+                'value_x' child of 'add_data_transfer' object
+            value_y : str
+                'value_y' child of 'add_data_transfer' object
+            value_z : str
+                'value_z' child of 'add_data_transfer' object
             side_one_variable : str
                 'side_one_variable' child of 'add_data_transfer' object
             side_two_variable : str
                 'side_two_variable' child of 'add_data_transfer' object
-            value_y : str
-                'value_y' child of 'add_data_transfer' object
-            interface : str
-                'interface' child of 'add_data_transfer' object
-            value_z : str
-                'value_z' child of 'add_data_transfer' object
 
         """
 
         syc_name = "AddDataTransfer"
         argument_names = [
-            "value",
-            "target_variable",
-            "value_x",
+            "interface",
             "target_side",
             "source_variable",
+            "target_variable",
+            "value",
+            "value_x",
+            "value_y",
+            "value_z",
             "side_one_variable",
             "side_two_variable",
-            "value_y",
-            "interface",
-            "value_z",
         ]
         essential_arguments = ["interface", "target_side"]
 
-        class value(String):
+        class interface(String):
             """
-            'value' child of 'add_data_transfer' object
-            """
-
-            syc_name = "Value"
-
-        class target_variable(String):
-            """
-            'target_variable' child of 'add_data_transfer' object
+            'interface' child of 'add_data_transfer' object
             """
 
-            syc_name = "TargetVariable"
-
-        class value_x(String):
-            """
-            'value_x' child of 'add_data_transfer' object
-            """
-
-            syc_name = "ValueX"
+            syc_name = "Interface"
 
         class target_side(String):
             """
@@ -2818,6 +2804,41 @@ class system_coupling(Group):
 
             syc_name = "SourceVariable"
 
+        class target_variable(String):
+            """
+            'target_variable' child of 'add_data_transfer' object
+            """
+
+            syc_name = "TargetVariable"
+
+        class value(String):
+            """
+            'value' child of 'add_data_transfer' object
+            """
+
+            syc_name = "Value"
+
+        class value_x(String):
+            """
+            'value_x' child of 'add_data_transfer' object
+            """
+
+            syc_name = "ValueX"
+
+        class value_y(String):
+            """
+            'value_y' child of 'add_data_transfer' object
+            """
+
+            syc_name = "ValueY"
+
+        class value_z(String):
+            """
+            'value_z' child of 'add_data_transfer' object
+            """
+
+            syc_name = "ValueZ"
+
         class side_one_variable(String):
             """
             'side_one_variable' child of 'add_data_transfer' object
@@ -2832,119 +2853,49 @@ class system_coupling(Group):
 
             syc_name = "SideTwoVariable"
 
-        class value_y(String):
-            """
-            'value_y' child of 'add_data_transfer' object
-            """
-
-            syc_name = "ValueY"
-
-        class interface(String):
-            """
-            'interface' child of 'add_data_transfer' object
-            """
-
-            syc_name = "Interface"
-
-        class value_z(String):
-            """
-            'value_z' child of 'add_data_transfer' object
-            """
-
-            syc_name = "ValueZ"
-
     class add_data_transfer_by_display_names(Command):
         """
         'add_data_transfer_by_display_names' child of 'system_coupling' object
 
         Parameters
         ----------
-            source_variable : str
-                'source_variable' child of 'add_data_transfer_by_display_names' object
-            value_y : str
-                'value_y' child of 'add_data_transfer_by_display_names' object
-            side_two_variable : str
-                'side_two_variable' child of 'add_data_transfer_by_display_names' object
-            value : str
-                'value' child of 'add_data_transfer_by_display_names' object
-            side_one_variable : str
-                'side_one_variable' child of 'add_data_transfer_by_display_names' object
-            target_side : str
-                'target_side' child of 'add_data_transfer_by_display_names' object
-            target_variable : str
-                'target_variable' child of 'add_data_transfer_by_display_names' object
             interface : str
                 'interface' child of 'add_data_transfer_by_display_names' object
-            value_z : str
-                'value_z' child of 'add_data_transfer_by_display_names' object
+            target_side : str
+                'target_side' child of 'add_data_transfer_by_display_names' object
+            source_variable : str
+                'source_variable' child of 'add_data_transfer_by_display_names' object
+            target_variable : str
+                'target_variable' child of 'add_data_transfer_by_display_names' object
+            value : str
+                'value' child of 'add_data_transfer_by_display_names' object
             value_x : str
                 'value_x' child of 'add_data_transfer_by_display_names' object
+            value_y : str
+                'value_y' child of 'add_data_transfer_by_display_names' object
+            value_z : str
+                'value_z' child of 'add_data_transfer_by_display_names' object
+            side_one_variable : str
+                'side_one_variable' child of 'add_data_transfer_by_display_names' object
+            side_two_variable : str
+                'side_two_variable' child of 'add_data_transfer_by_display_names' object
 
         """
 
         syc_name = "AddDataTransferByDisplayNames"
         argument_names = [
-            "source_variable",
-            "value_y",
-            "side_two_variable",
-            "value",
-            "side_one_variable",
-            "target_side",
-            "target_variable",
             "interface",
-            "value_z",
+            "target_side",
+            "source_variable",
+            "target_variable",
+            "value",
             "value_x",
+            "value_y",
+            "value_z",
+            "side_one_variable",
+            "side_two_variable",
         ]
         essential_arguments = ["interface", "target_side"]
-
-        class source_variable(String):
-            """
-            'source_variable' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "SourceVariable"
-
-        class value_y(String):
-            """
-            'value_y' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "ValueY"
-
-        class side_two_variable(String):
-            """
-            'side_two_variable' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "SideTwoVariable"
-
-        class value(String):
-            """
-            'value' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "Value"
-
-        class side_one_variable(String):
-            """
-            'side_one_variable' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "SideOneVariable"
-
-        class target_side(String):
-            """
-            'target_side' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "TargetSide"
-
-        class target_variable(String):
-            """
-            'target_variable' child of 'add_data_transfer_by_display_names' object
-            """
-
-            syc_name = "TargetVariable"
 
         class interface(String):
             """
@@ -2953,12 +2904,33 @@ class system_coupling(Group):
 
             syc_name = "Interface"
 
-        class value_z(String):
+        class target_side(String):
             """
-            'value_z' child of 'add_data_transfer_by_display_names' object
+            'target_side' child of 'add_data_transfer_by_display_names' object
             """
 
-            syc_name = "ValueZ"
+            syc_name = "TargetSide"
+
+        class source_variable(String):
+            """
+            'source_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "SourceVariable"
+
+        class target_variable(String):
+            """
+            'target_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "TargetVariable"
+
+        class value(String):
+            """
+            'value' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "Value"
 
         class value_x(String):
             """
@@ -2966,6 +2938,34 @@ class system_coupling(Group):
             """
 
             syc_name = "ValueX"
+
+        class value_y(String):
+            """
+            'value_y' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "ValueY"
+
+        class value_z(String):
+            """
+            'value_z' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "ValueZ"
+
+        class side_one_variable(String):
+            """
+            'side_one_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "SideOneVariable"
+
+        class side_two_variable(String):
+            """
+            'side_two_variable' child of 'add_data_transfer_by_display_names' object
+            """
+
+            syc_name = "SideTwoVariable"
 
     class get_region_names_for_participant(Command):
         """
@@ -3017,56 +3017,28 @@ class system_coupling(Group):
 
         Parameters
         ----------
-            vector : typing.List[real]
-                'vector' child of 'add_transformation' object
-            angle : real
-                'angle' child of 'add_transformation' object
-            transformation_type : str
-                'transformation_type' child of 'add_transformation' object
-            axis : str
-                'axis' child of 'add_transformation' object
             reference_frame : str
                 'reference_frame' child of 'add_transformation' object
+            transformation_type : str
+                'transformation_type' child of 'add_transformation' object
+            angle : real
+                'angle' child of 'add_transformation' object
+            axis : str
+                'axis' child of 'add_transformation' object
+            vector : typing.List[real]
+                'vector' child of 'add_transformation' object
 
         """
 
         syc_name = "AddTransformation"
         argument_names = [
-            "vector",
-            "angle",
-            "transformation_type",
-            "axis",
             "reference_frame",
+            "transformation_type",
+            "angle",
+            "axis",
+            "vector",
         ]
         essential_arguments = ["reference_frame", "transformation_type"]
-
-        class vector(RealList):
-            """
-            'vector' child of 'add_transformation' object
-            """
-
-            syc_name = "Vector"
-
-        class angle(Real):
-            """
-            'angle' child of 'add_transformation' object
-            """
-
-            syc_name = "Angle"
-
-        class transformation_type(String):
-            """
-            'transformation_type' child of 'add_transformation' object
-            """
-
-            syc_name = "TransformationType"
-
-        class axis(String):
-            """
-            'axis' child of 'add_transformation' object
-            """
-
-            syc_name = "Axis"
 
         class reference_frame(String):
             """
@@ -3075,29 +3047,50 @@ class system_coupling(Group):
 
             syc_name = "ReferenceFrame"
 
+        class transformation_type(String):
+            """
+            'transformation_type' child of 'add_transformation' object
+            """
+
+            syc_name = "TransformationType"
+
+        class angle(Real):
+            """
+            'angle' child of 'add_transformation' object
+            """
+
+            syc_name = "Angle"
+
+        class axis(String):
+            """
+            'axis' child of 'add_transformation' object
+            """
+
+            syc_name = "Axis"
+
+        class vector(RealList):
+            """
+            'vector' child of 'add_transformation' object
+            """
+
+            syc_name = "Vector"
+
     class delete_transformation(Command):
         """
         'delete_transformation' child of 'system_coupling' object
 
         Parameters
         ----------
-            transformation_name : str
-                'transformation_name' child of 'delete_transformation' object
             reference_frame : str
                 'reference_frame' child of 'delete_transformation' object
+            transformation_name : str
+                'transformation_name' child of 'delete_transformation' object
 
         """
 
         syc_name = "DeleteTransformation"
-        argument_names = ["transformation_name", "reference_frame"]
+        argument_names = ["reference_frame", "transformation_name"]
         essential_arguments = ["reference_frame", "transformation_name"]
-
-        class transformation_name(String):
-            """
-            'transformation_name' child of 'delete_transformation' object
-            """
-
-            syc_name = "TransformationName"
 
         class reference_frame(String):
             """
@@ -3105,6 +3098,13 @@ class system_coupling(Group):
             """
 
             syc_name = "ReferenceFrame"
+
+        class transformation_name(String):
+            """
+            'transformation_name' child of 'delete_transformation' object
+            """
+
+            syc_name = "TransformationName"
 
     class get_execution_command(Command):
         """
@@ -3134,23 +3134,16 @@ class system_coupling(Group):
 
         Parameters
         ----------
-            file_name : str
-                'file_name' child of 'generate_input_file' object
             participant_name : str
                 'participant_name' child of 'generate_input_file' object
+            file_name : str
+                'file_name' child of 'generate_input_file' object
 
         """
 
         syc_name = "GenerateInputFile"
-        argument_names = ["file_name", "participant_name"]
+        argument_names = ["participant_name", "file_name"]
         essential_arguments = ["participant_name", "file_name"]
-
-        class file_name(String):
-            """
-            'file_name' child of 'generate_input_file' object
-            """
-
-            syc_name = "FileName"
 
         class participant_name(String):
             """
@@ -3158,6 +3151,13 @@ class system_coupling(Group):
             """
 
             syc_name = "ParticipantName"
+
+        class file_name(String):
+            """
+            'file_name' child of 'generate_input_file' object
+            """
+
+            syc_name = "FileName"
 
     class create_restart_point(Command):
         """
@@ -3174,24 +3174,24 @@ class system_coupling(Group):
         ----------
             participant_type : str
                 'participant_type' child of 'add_participant' object
-            executable : str
-                'executable' child of 'add_participant' object
-            working_directory : str
-                'working_directory' child of 'add_participant' object
             input_file : str
                 'input_file' child of 'add_participant' object
+            executable : str
+                'executable' child of 'add_participant' object
             additional_arguments : str
                 'additional_arguments' child of 'add_participant' object
+            working_directory : str
+                'working_directory' child of 'add_participant' object
 
         """
 
         syc_name = "AddParticipant"
         argument_names = [
             "participant_type",
-            "executable",
-            "working_directory",
             "input_file",
+            "executable",
             "additional_arguments",
+            "working_directory",
         ]
         essential_arguments = []
 
@@ -3202,20 +3202,6 @@ class system_coupling(Group):
 
             syc_name = "ParticipantType"
 
-        class executable(String):
-            """
-            'executable' child of 'add_participant' object
-            """
-
-            syc_name = "Executable"
-
-        class working_directory(String):
-            """
-            'working_directory' child of 'add_participant' object
-            """
-
-            syc_name = "WorkingDirectory"
-
         class input_file(String):
             """
             'input_file' child of 'add_participant' object
@@ -3223,12 +3209,26 @@ class system_coupling(Group):
 
             syc_name = "InputFile"
 
+        class executable(String):
+            """
+            'executable' child of 'add_participant' object
+            """
+
+            syc_name = "Executable"
+
         class additional_arguments(String):
             """
             'additional_arguments' child of 'add_participant' object
             """
 
             syc_name = "AdditionalArguments"
+
+        class working_directory(String):
+            """
+            'working_directory' child of 'add_participant' object
+            """
+
+            syc_name = "WorkingDirectory"
 
     class import_system_coupling_input_file(Command):
         """
@@ -3422,25 +3422,18 @@ class system_coupling(Group):
 
         Parameters
         ----------
-            function_name : str
-                'function_name' child of 'add_expression_function' object
             module : str
                 'module' child of 'add_expression_function' object
             function : str
                 'function' child of 'add_expression_function' object
+            function_name : str
+                'function_name' child of 'add_expression_function' object
 
         """
 
         syc_name = "AddExpressionFunction"
-        argument_names = ["function_name", "module", "function"]
+        argument_names = ["module", "function", "function_name"]
         essential_arguments = ["module", "function"]
-
-        class function_name(String):
-            """
-            'function_name' child of 'add_expression_function' object
-            """
-
-            syc_name = "FunctionName"
 
         class module(String):
             """
@@ -3455,6 +3448,13 @@ class system_coupling(Group):
             """
 
             syc_name = "Function"
+
+        class function_name(String):
+            """
+            'function_name' child of 'add_expression_function' object
+            """
+
+            syc_name = "FunctionName"
 
     class reload_expression_function_modules(Command):
         """

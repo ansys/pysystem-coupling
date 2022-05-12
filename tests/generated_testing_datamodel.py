@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "dbf5e8a9e4208ae0dcfaeff8ce6ff9fbe32ea05f7364bf74c4e8a4997c90f1f6"
+SHASH = "51d4bf3139c9d5c00b969825d7a7a7295152d09d6564276c94e1484bd7b42378"
 
 
 class system_coupling(Group):
@@ -187,7 +187,7 @@ class system_coupling(Group):
                             ("option", "Option", "String"),
                             ("angle", "Angle", "Real"),
                             ("axis", "Axis", "String"),
-                            ("vector", "Vector", "RealList"),
+                            ("vector", "Vector", "RealVector"),
                         ]
 
                         @property
@@ -218,12 +218,12 @@ class system_coupling(Group):
                             self.set_property_state("axis", value)
 
                         @property
-                        def vector(self) -> RealList:
+                        def vector(self) -> RealVector:
                             """'vector' property of 'transformation' object"""
                             return self.get_property_state("vector")
 
                         @vector.setter
-                        def vector(self, value: RealList):
+                        def vector(self, value: RealVector):
                             self.set_property_state("vector", value)
 
                 property_names_types = [
@@ -2597,7 +2597,7 @@ class system_coupling(Group):
 
         syc_name = "GetParameterOptions"
         argument_names = ["name"]
-        essential_arguments = []
+        essential_arguments = ["object_path", "name"]
 
         class name(String):
             """

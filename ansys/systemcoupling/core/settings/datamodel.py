@@ -601,6 +601,8 @@ class Command(Base):
 
         try:
             missing_args = set(self.essential_arguments)
+            if self.is_path_cmd:
+                missing_args.discard("object_path")
         except AttributeError:
             missing_args = set()
 
@@ -633,7 +635,7 @@ _param_types = {
     "Real": Real,
     "String": String,
     "Real List": RealList,
-    "Real Triplet": RealList,
+    "Real Triplet": RealVector,
     "String List": StringList,
 }
 
@@ -646,7 +648,7 @@ def _get_type(id, info):
     if data_type is None:
         if "isQuery" in info:
             # looks like a Command
-            return PathCommand if "ObjectPath" in info["args"] else Command
+            return PathCommand if info["isPathCommand"] else Command
         else:
             # assume Object or Singleton
             try:
@@ -746,7 +748,7 @@ def get_cls(name, info, parent=None):
             doc += "Parameters\n"
             doc += "----------\n"
             cls.argument_names = []
-            for aname, ainfo in arguments.items():
+            for aname, ainfo in arguments:
                 if aname == "ObjectPath":
                     continue
                 ccls = get_cls(aname, ainfo, cls)
@@ -759,7 +761,7 @@ def get_cls(name, info, parent=None):
                 setattr(cls, ccls.__name__, ccls)
             cls.__doc__ = doc
             cls.essential_arguments = [
-                to_python_name(a) for a in info.get("essential_args", [])
+                to_python_name(a) for a in info.get("essentialArgs", [])
             ]
 
         # object_type = info.get('object-type')

@@ -1,7 +1,7 @@
 from .excluded_commands_tmp import _case_list, excluded_list
 
 
-def process(raw_data, category=None):
+def process(raw_data, category=None, apply_exclusions=True):
     """Takes the raw command and query metadata provided by System Coupling
     and manipulates it into a form that can be used by the datamodel
     generation functionality.
@@ -11,7 +11,7 @@ def process(raw_data, category=None):
     API are included.
 
     Note:
-    This is probably a stop-gap. In the longer term it might make more sense
+    This is a hacky stop-gap. In the longer term it might make more sense
     for the SyC process itself to do more to define the pySystemCoupling
     command exposure. This cannot necessarily be easily automated client side
     as it requires a certain amount of judgement.
@@ -21,11 +21,16 @@ def process(raw_data, category=None):
     raw_data : list
         List of dict objects, each of which contains the attributes defining
         a command or query.
+    category : str
+        If not None, used to filter the category of commands to process.
+    apply_exclusions : bool
+        If False (default is True), do not respect the exclusion list when
+        processing commands. Specify False only for test purposes.
     """
 
     def filter(name):
         if category is None:
-            return name not in excluded_list
+            return not apply_exclusions or name not in excluded_list
         elif category == "case":
             return name in _case_list
         else:
@@ -38,22 +43,27 @@ def process(raw_data, category=None):
             continue
 
         essential_args = cmd_info["essentialArgNames"]
-        if essential_args:
-            print(essential_args)
-        args_out = {}
-        for arg, arg_info in cmd_info["args"].items():
-            # if arg == "ObjectPath":
-            #    continue
+        args_out = []
+        is_path_cmd = False
+        for arg, arg_info in cmd_info["args"]:
+            if arg == "ObjectPath":
+                is_path_cmd = True
+                continue
 
-            args_out[arg] = {}
+            arg_info_out = {}
             arg_type = arg_info.get("Type")
-            if arg_type:
-                args_out[arg]["type"] = _process_arg_type(arg_type)
+            if not arg_type:
+                arg_type = arg_info.get("type")
+            if not arg_type:
+                raise Exception("Missing argument type")
+            arg_info_out["type"] = _process_arg_type(arg_type)
+            args_out.append((arg, arg_info_out))
 
         cmds_out[name] = {
             "args": args_out,
+            "isPathCommand": is_path_cmd,
             "isQuery": cmd_info["isQuery"],
-            "essential_args": essential_args,
+            "essentialArgs": essential_args,
         }
 
     return cmds_out
@@ -90,6 +100,10 @@ _type_map = {
     "<class 'int'>": "Integer",
 }
 
+_target_types = set(_type_map.values())
+
 
 def _process_arg_type(arg_type):
+    if arg_type in _target_types:
+        return arg_type
     return _type_map[arg_type]
