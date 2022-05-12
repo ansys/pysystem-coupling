@@ -1,11 +1,5 @@
 def _is_objpath_cmd(info):
-    args = info["args"]
-    if isinstance(args, dict):
-        # old format XXX TODO retire this when test data updated
-        return "ObjectPath" in info["args"]
-    else:
-        # new [(arg, info), ...] format that preserves order
-        return any(arg == "ObjectPath" for arg, _ in info["args"])
+    return any(arg == "ObjectPath" for arg, _ in info["args"])
 
 
 class CommandMetadata:
