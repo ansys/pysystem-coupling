@@ -1,5 +1,7 @@
-from ansys.systemcoupling.core.command_metadata import CommandMetadata
-from ansys.systemcoupling.core.datamodel_metadata import build as build_dm_meta
+from ansys.systemcoupling.core.native_api.command_metadata import CommandMetadata
+from ansys.systemcoupling.core.native_api.datamodel_metadata import (
+    build as build_dm_meta,
+)
 from ansys.systemcoupling.core.path_util import join_path_strs
 
 from .meta_wrapper import MetaWrapper
