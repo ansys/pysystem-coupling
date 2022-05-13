@@ -243,7 +243,8 @@ if __name__ == "__main__":
                 "systemcoupling",
                 "core",
                 "settings",
-                "setup_231.py",
+                "v231",
+                "setup.py",
             )
         )
 
@@ -256,7 +257,7 @@ if __name__ == "__main__":
                 "ordinal": 0,
             }
         }
-        case_filepath = os.path.join(os.path.dirname(filepath), "case_231.py")
+        case_filepath = os.path.join(os.path.dirname(filepath), "case.py")
         write_classes_to_file(case_filepath, case_metadata, root_type="CaseCommands")
 
     # with open("dump_meta.json", "w") as f:

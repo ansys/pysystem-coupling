@@ -45,10 +45,6 @@ ListStateType = List["StateType"]
 StateType = Union[PrimitiveStateType, DictStateType, ListStateType]
 
 
-def bob():
-    pass
-
-
 def to_python_name(syc_name: str) -> str:
     """Convert a scheme string to python variable name.
 
@@ -816,11 +812,10 @@ def get_root(
     obj_info, root_type = sycproxy.get_static_info(category)
     try:
         if dm_module is None:
-            ver = 231  # TODO parametrise
+            ver = "v231"  # TODO parametrise
             dm_module = importlib.import_module(
-                f"ansys.systemcoupling.core.settings.{category}_{ver}"
+                f"ansys.systemcoupling.core.settings.{ver}.{category}"
             )
-            # from ansys.systemcoupling.core.settings import setup_231 as dm_module
 
         info_hash = _gethash(obj_info)
         if dm_module.SHASH != info_hash:
