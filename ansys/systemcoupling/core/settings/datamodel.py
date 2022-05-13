@@ -20,6 +20,7 @@ r.boundary_conditions.velocity_inlet['inlet'].vmag.constant = 20
 """
 import collections
 import hashlib
+import importlib
 import json
 import keyword
 import logging as LOG
@@ -42,6 +43,10 @@ PrimitiveStateType = Union[
 DictStateType = Dict[str, "StateType"]
 ListStateType = List["StateType"]
 StateType = Union[PrimitiveStateType, DictStateType, ListStateType]
+
+
+def bob():
+    pass
 
 
 def to_python_name(syc_name: str) -> str:
@@ -811,7 +816,11 @@ def get_root(
     obj_info, root_type = sycproxy.get_static_info(category)
     try:
         if dm_module is None:
-            from ansys.systemcoupling.core.settings import setup_231 as dm_module
+            ver = 231  # TODO parametrise
+            dm_module = importlib.import_module(
+                f"ansys.systemcoupling.core.settings.{category}_{ver}"
+            )
+            # from ansys.systemcoupling.core.settings import setup_231 as dm_module
 
         info_hash = _gethash(obj_info)
         if dm_module.SHASH != info_hash:

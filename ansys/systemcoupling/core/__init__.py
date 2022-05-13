@@ -5,9 +5,10 @@ try:
     from ansys.systemcoupling.core.client.grpc_client import SycGrpc
 except:
     pass
-    # print("IMPORTS FAILED")
-    # import traceback
-    # traceback.print_exc()
+    print("IMPORTS FAILED")
+    import traceback
+
+    traceback.print_exc()
 
 
 def launch(host="127.0.0.1", port=50051, working_dir="."):
