@@ -784,7 +784,10 @@ def _gethash(obj_info):
 
 
 def get_root(
-    sycproxy, dm_module=None, report_whether_dynamic_classes_created=lambda _: None
+    sycproxy,
+    category="setup",
+    dm_module=None,
+    report_whether_dynamic_classes_created=lambda _: None,
 ) -> Group:
     """
     Get the root settings object.
@@ -805,7 +808,7 @@ def get_root(
     -------
     root object
     """
-    obj_info = sycproxy.get_static_info()
+    obj_info, root_type = sycproxy.get_static_info(category)
     try:
         if dm_module is None:
             from ansys.systemcoupling.core.settings import datamodel_222 as dm_module
@@ -821,7 +824,7 @@ def get_root(
         cls = dm_module.system_coupling
         report_whether_dynamic_classes_created(False)
     except Exception:
-        cls = get_cls("SystemCoupling", obj_info["SystemCoupling"])
+        cls = get_cls(root_type, obj_info[root_type])
         report_whether_dynamic_classes_created(True)
     # pylint: disable=no-member
     cls.set_sycproxy(sycproxy)

@@ -7,11 +7,20 @@ class SycProxyAdapter(SycProxyInterface):
     def __init__(self, rpc):
         self.__rpc = rpc
 
-    def get_static_info(self):
-        metadata = self.__rpc.GetMetadata()
-        cmd_metadata = process_cmd_data(self.__rpc.GetCommandAndQueryMetadata())
-        metadata["SystemCoupling"]["__commands"] = cmd_metadata
-        return metadata
+    def get_static_info(self, category):
+        cmd_metadata = self.__rpc.GetCommandAndQueryMetadata()
+        if category == "setup":
+            metadata = self.__rpc.GetMetadata()
+            setup_cmd_data = process_cmd_data(cmd_metadata)
+            category_root = "SystemCoupling"
+            metadata[category_root]["__commands"] = setup_cmd_data
+        elif category == "case":
+            case_cmd_data = process_cmd_data(cmd_metadata, category="case")
+            category_root = "CaseCommands"
+            metadata = {category_root: {"__commands": case_cmd_data}}
+        else:
+            raise RuntimeError(f"Unrecognised 'static info' category: '{category}'.")
+        return metadata, category_root
 
     def set_state(self, path, state):
         # XXX TODO nested state submission probably broken if it involves named objects

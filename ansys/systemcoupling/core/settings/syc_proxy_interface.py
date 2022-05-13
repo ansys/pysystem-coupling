@@ -11,7 +11,7 @@ class SycProxyInterface(ABC):
     """
 
     @abstractmethod
-    def get_static_info(self):
+    def get_static_info(self, category):
         pass
 
     @abstractmethod

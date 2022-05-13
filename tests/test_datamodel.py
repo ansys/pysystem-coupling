@@ -30,10 +30,10 @@ class SycProxy(SycProxyInterface):
         self.last_cmd_name = None
         self.last_cmd_args = None
 
-    def get_static_info(self):
+    def get_static_info(self, category):
         info = self._get_metadata()
         if not self.__force_dynamic_datamodel:
-            return info
+            return info, "SystemCoupling"
 
         info = deepcopy(info)
         # info is structured as a single (top-level) element nested dict:
@@ -42,7 +42,7 @@ class SycProxy(SycProxyInterface):
         # data used to make the generated classes (which will be detected
         # via hash) and thereby force runtime-generated classes to be used.
         info[next(iter(info))]["__dummy__"] = None
-        return info
+        return info, "SystemCoupling"
 
     def set_state(self, path, state):
         self.__state.set_state(path, state)
