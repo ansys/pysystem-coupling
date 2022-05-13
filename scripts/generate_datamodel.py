@@ -198,69 +198,71 @@ def _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=False):
     return metadata
 
 
+def _generate_test_classes(dirname):
+    # NB need to add tests dir to sys.path to find dm_raw_metadata
+    sys.path.append(os.path.normpath(os.path.join(dirname, "..", "tests")))
+
+    from dm_raw_metadata import cmd_metadata, dm_metadata
+
+    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=True)
+
+    filepath = os.path.normpath(
+        os.path.join(
+            dirname,
+            "..",
+            "tests",
+            "generated_testing_datamodel.py",
+        )
+    )
+    write_classes_to_file(filepath, dm_metadata)
+
+
+def _generate_real_classes(dirname):
+    import ansys.systemcoupling.core as pysyc
+
+    syc = pysyc.launch()
+    print("helper instance of syc successfully launched. Querying metadata...")
+    api = syc.native_api
+
+    dm_metadata = api.GetMetadata()
+    cmd_metadata_orig = api.GetCommandAndQueryMetadata()
+    print("...raw metadata received. Processing...")
+
+    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata_orig)
+
+    filepath = os.path.normpath(
+        os.path.join(
+            dirname,
+            "..",
+            "ansys",
+            "systemcoupling",
+            "core",
+            "settings",
+            "v231",
+            "setup.py",
+        )
+    )
+
+    case_cmd_metadata = process_command_data(cmd_metadata_orig, category="case")
+    case_metadata = {
+        "CaseCommands": {
+            "__commands": case_cmd_metadata,
+            "isEntity": False,
+            "isNamed": False,
+            "ordinal": 0,
+        }
+    }
+    case_filepath = os.path.join(os.path.dirname(filepath), "case.py")
+    write_classes_to_file(case_filepath, case_metadata, root_type="CaseCommands")
+    write_classes_to_file(filepath, dm_metadata)
+
+
 if __name__ == "__main__":
 
     dirname = os.path.dirname(__file__)
 
     use_test_data = len(sys.argv) > 1 and sys.argv[1] == "-t"
-
     if use_test_data:
-        # NB need to add tests dir to sys.path to find dm_raw_metadata
-        sys.path.append(os.path.normpath(os.path.join(dirname, "..", "tests")))
-
-        from dm_raw_metadata import cmd_metadata, dm_metadata
-
-        dm_metadata = _make_combined_metadata(
-            dm_metadata, cmd_metadata, is_test_data=True
-        )
-
-        filepath = os.path.normpath(
-            os.path.join(
-                dirname,
-                "..",
-                "tests",
-                "generated_testing_datamodel.py",
-            )
-        )
+        _generate_test_classes(dirname)
     else:
-        import ansys.systemcoupling.core as pysyc
-
-        syc = pysyc.launch()
-        print("helper instance of syc successfully launched. Querying metadata...")
-        api = syc.native_api
-
-        dm_metadata = api.GetMetadata()
-        cmd_metadata_orig = api.GetCommandAndQueryMetadata()
-        print("...raw metadata received. Processing...")
-
-        dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata_orig)
-
-        filepath = os.path.normpath(
-            os.path.join(
-                dirname,
-                "..",
-                "ansys",
-                "systemcoupling",
-                "core",
-                "settings",
-                "v231",
-                "setup.py",
-            )
-        )
-
-        case_cmd_metadata = process_command_data(cmd_metadata_orig, category="case")
-        case_metadata = {
-            "CaseCommands": {
-                "__commands": case_cmd_metadata,
-                "isEntity": False,
-                "isNamed": False,
-                "ordinal": 0,
-            }
-        }
-        case_filepath = os.path.join(os.path.dirname(filepath), "case.py")
-        write_classes_to_file(case_filepath, case_metadata, root_type="CaseCommands")
-
-    # with open("dump_meta.json", "w") as f:
-    #    json.dump(dm_metadata, fp=f, indent=2, sort_keys=True)
-
-    write_classes_to_file(filepath, dm_metadata)
+        _generate_real_classes(dirname)
