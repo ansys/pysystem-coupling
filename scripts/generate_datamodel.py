@@ -2,9 +2,11 @@
 Script to generate the System Coupling settings tree.
 
 This generates a python module with the definition of the System Coupling
-data model settings classes. The module is placed at:
+generated API classes. The modules are placed at:
 
-- ansys/systemcoupling/core/solver/settings/datamodel_222.py
+- ansys/systemcoupling/core/solver/settings/case_231.py
+- ansys/systemcoupling/core/solver/settings/setup_231.py
+- ...
 
 pysystemcoupling itself is run in a 'basic' mode to query for the input
 metadata on which the generated module is based. To make pysystemcoupling
@@ -241,7 +243,7 @@ if __name__ == "__main__":
                 "systemcoupling",
                 "core",
                 "settings",
-                "datamodel_222.py",
+                "setup_231.py",
             )
         )
 
@@ -254,7 +256,7 @@ if __name__ == "__main__":
                 "ordinal": 0,
             }
         }
-        case_filepath = os.path.join(os.path.dirname(filepath), "case_commands.py")
+        case_filepath = os.path.join(os.path.dirname(filepath), "case_231.py")
         write_classes_to_file(case_filepath, case_metadata, root_type="CaseCommands")
 
     # with open("dump_meta.json", "w") as f:

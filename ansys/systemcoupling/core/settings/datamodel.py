@@ -811,7 +811,7 @@ def get_root(
     obj_info, root_type = sycproxy.get_static_info(category)
     try:
         if dm_module is None:
-            from ansys.systemcoupling.core.settings import datamodel_222 as dm_module
+            from ansys.systemcoupling.core.settings import setup_231 as dm_module
 
         info_hash = _gethash(obj_info)
         if dm_module.SHASH != info_hash:

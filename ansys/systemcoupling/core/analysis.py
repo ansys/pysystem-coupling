@@ -120,7 +120,7 @@ class SycAnalysis:
             sycproxy = SycProxyAdapter(self.__rpc_impl)
 
             # XXX TODO skip dynamic building for now...
-            from ansys.systemcoupling.core.settings.case_commands import case_commands
+            from ansys.systemcoupling.core.settings.case_231 import case_commands
 
             case_commands.set_sycproxy(sycproxy)
             self.__case_root = case_commands()
