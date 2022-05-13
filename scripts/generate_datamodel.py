@@ -42,7 +42,7 @@ print(sys.path[-1])
 
 
 from ansys.systemcoupling.core.settings import datamodel
-from ansys.systemcoupling.core.settings.process_command_data import (
+from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
 )
 

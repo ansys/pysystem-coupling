@@ -6,8 +6,8 @@ import generated_testing_datamodel
 import pytest
 from state import StateForTesting
 
+from ansys.systemcoupling.core.settings.command_data import process
 from ansys.systemcoupling.core.settings.datamodel import get_root
-from ansys.systemcoupling.core.settings.process_command_data import process
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
 
 
