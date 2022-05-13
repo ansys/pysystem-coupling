@@ -667,7 +667,7 @@ def _get_type(id, info):
 def get_cls(name, info, parent=None):
     """Create a class for the object identified by "path"."""
     try:
-        if name == "":
+        if parent is None:
             pname = "root"
         else:
             pname = to_python_name(name)
@@ -787,7 +787,7 @@ def _gethash(obj_info):
 def get_root(
     sycproxy,
     category="setup",
-    dm_module=None,
+    generated_module=None,
     report_whether_dynamic_classes_created=lambda _: None,
 ) -> Group:
     """
@@ -796,10 +796,12 @@ def get_root(
     Parameters
     ----------
     sycproxy: Proxy
-             Object that interfaces with the System Coupling backend
-    dm_module: module
-             Provide an alternative pre-generated datamodel module to be be used
-             instead of the one that is otherwise used by default.
+            Object that interfaces with the System Coupling backend
+    category: str
+            Category of data that this 'root' refers to.
+    generated_module: module
+            Provide an alternative pre-generated module to be be used
+            instead of the one that is otherwise used by default.
     report_whether_dynamic_classes_created: callable
             Callback that will be called with a bool parameter to report whether
             dynamic classes were created (True) or whether the pre-existing module could
@@ -811,21 +813,21 @@ def get_root(
     """
     obj_info, root_type = sycproxy.get_static_info(category)
     try:
-        if dm_module is None:
+        if generated_module is None:
             ver = "v231"  # TODO parametrise
-            dm_module = importlib.import_module(
+            generated_module = importlib.import_module(
                 f"ansys.systemcoupling.core.settings.{ver}.{category}"
             )
 
         info_hash = _gethash(obj_info)
-        if dm_module.SHASH != info_hash:
+        if generated_module.SHASH != info_hash:
             LOG.warning(
                 "Mismatch between generated file and server object "
                 "info. Dynamically created settings classes will "
                 "be used."
             )
             raise RuntimeError("Mismatch in hash values")
-        cls = dm_module.system_coupling
+        cls = generated_module.root
         report_whether_dynamic_classes_created(False)
     except Exception:
         cls = get_cls(root_type, obj_info[root_type])

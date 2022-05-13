@@ -5,7 +5,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 SHASH = "51d4bf3139c9d5c00b969825d7a7a7295152d09d6564276c94e1484bd7b42378"
 
 
-class system_coupling(Group):
+class root(Group):
     """
     root object
     """
@@ -23,7 +23,7 @@ class system_coupling(Group):
 
     class activate_hidden(Group):
         """
-        'activate_hidden' child of 'system_coupling' object
+        'activate_hidden' child of 'root' object
         """
 
         syc_name = "ActivateHidden"
@@ -35,7 +35,7 @@ class system_coupling(Group):
 
         @property
         def beta_features(self) -> Boolean:
-            """'beta_features' property of 'system_coupling' object"""
+            """'beta_features' property of 'root' object"""
             return self.get_property_state("beta_features")
 
         @beta_features.setter
@@ -44,7 +44,7 @@ class system_coupling(Group):
 
         @property
         def alpha_features(self) -> Boolean:
-            """'alpha_features' property of 'system_coupling' object"""
+            """'alpha_features' property of 'root' object"""
             return self.get_property_state("alpha_features")
 
         @alpha_features.setter
@@ -53,7 +53,7 @@ class system_coupling(Group):
 
         @property
         def lenient_validation(self) -> Boolean:
-            """'lenient_validation' property of 'system_coupling' object"""
+            """'lenient_validation' property of 'root' object"""
             return self.get_property_state("lenient_validation")
 
         @lenient_validation.setter
@@ -62,7 +62,7 @@ class system_coupling(Group):
 
     class library(Group):
         """
-        'library' child of 'system_coupling' object
+        'library' child of 'root' object
         """
 
         syc_name = "Library"
@@ -317,7 +317,7 @@ class system_coupling(Group):
 
     class coupling_participant(NamedObject):
         """
-        'coupling_participant' child of 'system_coupling' object
+        'coupling_participant' child of 'root' object
         """
 
         syc_name = "CouplingParticipant"
@@ -1115,7 +1115,7 @@ class system_coupling(Group):
 
     class analysis_control(Group):
         """
-        'analysis_control' child of 'system_coupling' object
+        'analysis_control' child of 'root' object
         """
 
         syc_name = "AnalysisControl"
@@ -1431,7 +1431,7 @@ class system_coupling(Group):
 
         @property
         def analysis_type(self) -> String:
-            """'analysis_type' property of 'system_coupling' object"""
+            """'analysis_type' property of 'root' object"""
             return self.get_property_state("analysis_type")
 
         @analysis_type.setter
@@ -1440,7 +1440,7 @@ class system_coupling(Group):
 
         @property
         def optimize_if_one_way(self) -> Boolean:
-            """'optimize_if_one_way' property of 'system_coupling' object"""
+            """'optimize_if_one_way' property of 'root' object"""
             return self.get_property_state("optimize_if_one_way")
 
         @optimize_if_one_way.setter
@@ -1449,7 +1449,7 @@ class system_coupling(Group):
 
         @property
         def allow_simultaneous_update(self) -> Boolean:
-            """'allow_simultaneous_update' property of 'system_coupling' object"""
+            """'allow_simultaneous_update' property of 'root' object"""
             return self.get_property_state("allow_simultaneous_update")
 
         @allow_simultaneous_update.setter
@@ -1458,7 +1458,7 @@ class system_coupling(Group):
 
         @property
         def simultaneous_participants(self) -> String:
-            """'simultaneous_participants' property of 'system_coupling' object"""
+            """'simultaneous_participants' property of 'root' object"""
             return self.get_property_state("simultaneous_participants")
 
         @simultaneous_participants.setter
@@ -1467,7 +1467,7 @@ class system_coupling(Group):
 
         @property
         def partitioning_algorithm(self) -> String:
-            """'partitioning_algorithm' property of 'system_coupling' object"""
+            """'partitioning_algorithm' property of 'root' object"""
             return self.get_property_state("partitioning_algorithm")
 
         @partitioning_algorithm.setter
@@ -1476,7 +1476,7 @@ class system_coupling(Group):
 
         @property
         def allow_iterations_only_mode(self) -> Boolean:
-            """'allow_iterations_only_mode' property of 'system_coupling' object"""
+            """'allow_iterations_only_mode' property of 'root' object"""
             return self.get_property_state("allow_iterations_only_mode")
 
         @allow_iterations_only_mode.setter
@@ -1485,7 +1485,7 @@ class system_coupling(Group):
 
         @property
         def target_initialization_option(self) -> String:
-            """'target_initialization_option' property of 'system_coupling' object"""
+            """'target_initialization_option' property of 'root' object"""
             return self.get_property_state("target_initialization_option")
 
         @target_initialization_option.setter
@@ -1494,7 +1494,7 @@ class system_coupling(Group):
 
         @property
         def fluent_region_update_at_step(self) -> Boolean:
-            """'fluent_region_update_at_step' property of 'system_coupling' object"""
+            """'fluent_region_update_at_step' property of 'root' object"""
             return self.get_property_state("fluent_region_update_at_step")
 
         @fluent_region_update_at_step.setter
@@ -1503,7 +1503,7 @@ class system_coupling(Group):
 
         @property
         def mesh_import_on_initialization(self) -> Boolean:
-            """'mesh_import_on_initialization' property of 'system_coupling' object"""
+            """'mesh_import_on_initialization' property of 'root' object"""
             return self.get_property_state("mesh_import_on_initialization")
 
         @mesh_import_on_initialization.setter
@@ -1512,7 +1512,7 @@ class system_coupling(Group):
 
         @property
         def import_all_regions(self) -> Boolean:
-            """'import_all_regions' property of 'system_coupling' object"""
+            """'import_all_regions' property of 'root' object"""
             return self.get_property_state("import_all_regions")
 
         @import_all_regions.setter
@@ -1521,7 +1521,7 @@ class system_coupling(Group):
 
         @property
         def bypass_fluent_adapter(self) -> Boolean:
-            """'bypass_fluent_adapter' property of 'system_coupling' object"""
+            """'bypass_fluent_adapter' property of 'root' object"""
             return self.get_property_state("bypass_fluent_adapter")
 
         @bypass_fluent_adapter.setter
@@ -1530,7 +1530,7 @@ class system_coupling(Group):
 
         @property
         def variable_to_expression_transfer(self) -> Boolean:
-            """'variable_to_expression_transfer' property of 'system_coupling' object"""
+            """'variable_to_expression_transfer' property of 'root' object"""
             return self.get_property_state("variable_to_expression_transfer")
 
         @variable_to_expression_transfer.setter
@@ -1539,7 +1539,7 @@ class system_coupling(Group):
 
         @property
         def update_mapping_weights(self) -> String:
-            """'update_mapping_weights' property of 'system_coupling' object"""
+            """'update_mapping_weights' property of 'root' object"""
             return self.get_property_state("update_mapping_weights")
 
         @update_mapping_weights.setter
@@ -1548,7 +1548,7 @@ class system_coupling(Group):
 
         @property
         def rotate_follower_forces(self) -> String:
-            """'rotate_follower_forces' property of 'system_coupling' object"""
+            """'rotate_follower_forces' property of 'root' object"""
             return self.get_property_state("rotate_follower_forces")
 
         @rotate_follower_forces.setter
@@ -1557,7 +1557,7 @@ class system_coupling(Group):
 
         @property
         def solve_incremental_displacement_first(self) -> Boolean:
-            """'solve_incremental_displacement_first' property of 'system_coupling' object"""
+            """'solve_incremental_displacement_first' property of 'root' object"""
             return self.get_property_state("solve_incremental_displacement_first")
 
         @solve_incremental_displacement_first.setter
@@ -1566,7 +1566,7 @@ class system_coupling(Group):
 
         @property
         def write_scs_file(self) -> Boolean:
-            """'write_scs_file' property of 'system_coupling' object"""
+            """'write_scs_file' property of 'root' object"""
             return self.get_property_state("write_scs_file")
 
         @write_scs_file.setter
@@ -1575,7 +1575,7 @@ class system_coupling(Group):
 
     class coupling_interface(NamedObject):
         """
-        'coupling_interface' child of 'system_coupling' object
+        'coupling_interface' child of 'root' object
         """
 
         syc_name = "CouplingInterface"
@@ -2177,7 +2177,7 @@ class system_coupling(Group):
 
     class solution_control(Group):
         """
-        'solution_control' child of 'system_coupling' object
+        'solution_control' child of 'root' object
         """
 
         syc_name = "SolutionControl"
@@ -2223,7 +2223,7 @@ class system_coupling(Group):
 
         @property
         def duration_option(self) -> String:
-            """'duration_option' property of 'system_coupling' object"""
+            """'duration_option' property of 'root' object"""
             return self.get_property_state("duration_option")
 
         @duration_option.setter
@@ -2232,7 +2232,7 @@ class system_coupling(Group):
 
         @property
         def end_time(self) -> Real:
-            """'end_time' property of 'system_coupling' object"""
+            """'end_time' property of 'root' object"""
             return self.get_property_state("end_time")
 
         @end_time.setter
@@ -2241,7 +2241,7 @@ class system_coupling(Group):
 
         @property
         def number_of_steps(self) -> Integer:
-            """'number_of_steps' property of 'system_coupling' object"""
+            """'number_of_steps' property of 'root' object"""
             return self.get_property_state("number_of_steps")
 
         @number_of_steps.setter
@@ -2250,7 +2250,7 @@ class system_coupling(Group):
 
         @property
         def time_step_size(self) -> Real:
-            """'time_step_size' property of 'system_coupling' object"""
+            """'time_step_size' property of 'root' object"""
             return self.get_property_state("time_step_size")
 
         @time_step_size.setter
@@ -2259,7 +2259,7 @@ class system_coupling(Group):
 
         @property
         def minimum_iterations(self) -> Integer:
-            """'minimum_iterations' property of 'system_coupling' object"""
+            """'minimum_iterations' property of 'root' object"""
             return self.get_property_state("minimum_iterations")
 
         @minimum_iterations.setter
@@ -2268,7 +2268,7 @@ class system_coupling(Group):
 
         @property
         def maximum_iterations(self) -> Integer:
-            """'maximum_iterations' property of 'system_coupling' object"""
+            """'maximum_iterations' property of 'root' object"""
             return self.get_property_state("maximum_iterations")
 
         @maximum_iterations.setter
@@ -2301,7 +2301,7 @@ class system_coupling(Group):
 
     class output_control(Group):
         """
-        'output_control' child of 'system_coupling' object
+        'output_control' child of 'root' object
         """
 
         syc_name = "OutputControl"
@@ -2419,7 +2419,7 @@ class system_coupling(Group):
 
         @property
         def option(self) -> String:
-            """'option' property of 'system_coupling' object"""
+            """'option' property of 'root' object"""
             return self.get_property_state("option")
 
         @option.setter
@@ -2428,7 +2428,7 @@ class system_coupling(Group):
 
         @property
         def generate_csv_chart_output(self) -> Boolean:
-            """'generate_csv_chart_output' property of 'system_coupling' object"""
+            """'generate_csv_chart_output' property of 'root' object"""
             return self.get_property_state("generate_csv_chart_output")
 
         @generate_csv_chart_output.setter
@@ -2437,7 +2437,7 @@ class system_coupling(Group):
 
         @property
         def write_initial_snapshot(self) -> Boolean:
-            """'write_initial_snapshot' property of 'system_coupling' object"""
+            """'write_initial_snapshot' property of 'root' object"""
             return self.get_property_state("write_initial_snapshot")
 
         @write_initial_snapshot.setter
@@ -2446,7 +2446,7 @@ class system_coupling(Group):
 
         @property
         def transcript_precision(self) -> Integer:
-            """'transcript_precision' property of 'system_coupling' object"""
+            """'transcript_precision' property of 'root' object"""
             return self.get_property_state("transcript_precision")
 
         @transcript_precision.setter
@@ -2455,7 +2455,7 @@ class system_coupling(Group):
 
         @property
         def write_diagnostics(self) -> Boolean:
-            """'write_diagnostics' property of 'system_coupling' object"""
+            """'write_diagnostics' property of 'root' object"""
             return self.get_property_state("write_diagnostics")
 
         @write_diagnostics.setter
@@ -2464,7 +2464,7 @@ class system_coupling(Group):
 
         @property
         def write_weights_matrix(self) -> Boolean:
-            """'write_weights_matrix' property of 'system_coupling' object"""
+            """'write_weights_matrix' property of 'root' object"""
             return self.get_property_state("write_weights_matrix")
 
         @write_weights_matrix.setter
@@ -2473,7 +2473,7 @@ class system_coupling(Group):
 
         @property
         def write_residuals(self) -> Boolean:
-            """'write_residuals' property of 'system_coupling' object"""
+            """'write_residuals' property of 'root' object"""
             return self.get_property_state("write_residuals")
 
         @write_residuals.setter
@@ -2482,7 +2482,7 @@ class system_coupling(Group):
 
         @property
         def output_frequency(self) -> Integer:
-            """'output_frequency' property of 'system_coupling' object"""
+            """'output_frequency' property of 'root' object"""
             return self.get_property_state("output_frequency")
 
         @output_frequency.setter
@@ -2493,7 +2493,7 @@ class system_coupling(Group):
 
     class add_participant(Command):
         """
-        'add_participant' child of 'system_coupling' object
+        'add_participant' child of 'root' object
 
         Parameters
         ----------
@@ -2557,14 +2557,14 @@ class system_coupling(Group):
 
     class solve(Command):
         """
-        'solve' child of 'system_coupling' object
+        'solve' child of 'root' object
         """
 
         syc_name = "Solve"
 
     class save(Command):
         """
-        'save' child of 'system_coupling' object
+        'save' child of 'root' object
 
         Parameters
         ----------
@@ -2586,7 +2586,7 @@ class system_coupling(Group):
 
     class get_parameter_options(PathCommand):
         """
-        'get_parameter_options' child of 'system_coupling' object
+        'get_parameter_options' child of 'root' object
 
         Parameters
         ----------

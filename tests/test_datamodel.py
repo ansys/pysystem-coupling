@@ -84,7 +84,7 @@ def _dm(request):
 
     root = get_root(
         proxy,
-        dm_module=generated_testing_datamodel,
+        generated_module=generated_testing_datamodel,
         report_whether_dynamic_classes_created=report,
     )
     assert is_actually_dynamic == force_dynamic

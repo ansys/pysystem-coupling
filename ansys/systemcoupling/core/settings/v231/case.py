@@ -5,7 +5,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 SHASH = "d7f6737520f140622a0f9f2dd2bf3e7189955ef9503e64ce405404a20604c8e8"
 
 
-class case_commands(Group):
+class root(Group):
     """
     root object
     """
@@ -15,7 +15,7 @@ class case_commands(Group):
 
     class open(Command):
         """
-        'open' child of 'case_commands' object
+        'open' child of 'root' object
 
         Parameters
         ----------
@@ -55,7 +55,7 @@ class case_commands(Group):
 
     class save(Command):
         """
-        'save' child of 'case_commands' object
+        'save' child of 'root' object
 
         Parameters
         ----------
@@ -77,7 +77,7 @@ class case_commands(Group):
 
     class save_snapshot(Command):
         """
-        'save_snapshot' child of 'case_commands' object
+        'save_snapshot' child of 'root' object
 
         Parameters
         ----------
@@ -108,7 +108,7 @@ class case_commands(Group):
 
     class open_snapshot(Command):
         """
-        'open_snapshot' child of 'case_commands' object
+        'open_snapshot' child of 'root' object
 
         Parameters
         ----------
@@ -130,7 +130,7 @@ class case_commands(Group):
 
     class get_snapshots(Command):
         """
-        'get_snapshots' child of 'case_commands' object
+        'get_snapshots' child of 'root' object
         """
 
         syc_name = "GetSnapshots"
