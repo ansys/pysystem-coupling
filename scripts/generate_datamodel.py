@@ -230,7 +230,7 @@ def _generate_real_classes(dirname):
 
     dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata_orig)
 
-    filepath = os.path.normpath(
+    filedir = os.path.normpath(
         os.path.join(
             dirname,
             "..",
@@ -239,22 +239,25 @@ def _generate_real_classes(dirname):
             "core",
             "settings",
             "v231",
-            "setup.py",
         )
     )
 
-    case_cmd_metadata = process_command_data(cmd_metadata_orig, category="case")
-    case_metadata = {
-        "CaseCommands": {
-            "__commands": case_cmd_metadata,
-            "isEntity": False,
-            "isNamed": False,
-            "ordinal": 0,
-        }
-    }
-    case_filepath = os.path.join(os.path.dirname(filepath), "case.py")
-    write_classes_to_file(case_filepath, case_metadata, root_type="CaseCommands")
+    filepath = os.path.join(filedir, "setup.py")
     write_classes_to_file(filepath, dm_metadata)
+
+    for category in ("case", "solution"):
+        cat_cmd_metadata = process_command_data(cmd_metadata_orig, category=category)
+        root_type = category.title() + "Commands"
+        cat_metadata = {
+            root_type: {
+                "__commands": cat_cmd_metadata,
+                "isEntity": False,
+                "isNamed": False,
+                "ordinal": 0,
+            }
+        }
+        filepath = os.path.join(filedir, f"{category}.py")
+        write_classes_to_file(filepath, cat_metadata, root_type=root_type)
 
 
 if __name__ == "__main__":

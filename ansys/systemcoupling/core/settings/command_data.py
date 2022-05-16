@@ -1,3 +1,6 @@
+from .name_util import to_python_name
+
+
 def process(raw_data, category=None, apply_exclusions=True):
     """Takes the raw command and query metadata provided by System Coupling
     and manipulates it into a form that can be used by the datamodel
@@ -30,6 +33,8 @@ def process(raw_data, category=None, apply_exclusions=True):
             return not apply_exclusions or name not in excluded_list
         elif category == "case":
             return name in _case_list
+        elif category == "solution":
+            return name in _exposed_solution_list
         else:
             raise Exception(f"unhandled category {category}")
 
@@ -38,6 +43,14 @@ def process(raw_data, category=None, apply_exclusions=True):
         name = cmd_info["name"]
         if not filter(name):
             continue
+
+        pysyc_name = None
+        if "EnSight" in name:
+            # if we leave it to the default behaviour, EnSight
+            # appears as '..._en_sight...' in the Pythonic command
+            # names
+            name_ = name.replace("EnSight", "Ensight")
+            pysyc_name = to_python_name(name_)
 
         essential_args = cmd_info["essentialArgNames"]
         args_out = []
@@ -62,6 +75,8 @@ def process(raw_data, category=None, apply_exclusions=True):
             "isQuery": cmd_info["isQuery"],
             "essentialArgs": essential_args,
         }
+        if pysyc_name is not None:
+            cmds_out[name]["pysyc_name"] = pysyc_name
 
     return cmds_out
 
@@ -161,19 +176,26 @@ _case_list = [
 # Solution and postprocessing related
 # Some exposed via other APIs
 #
-_solution_list = [
-    "DoResultsExist",
-    "DoesEnSightExist",
+_exposed_solution_list = [
     "GetRestarts",
-    "IsAnalysisInitialized",
     "OpenResultsInEnSight",
-    "PartitionParticipants",
+    # "PartitionParticipants",
     "Shutdown",
     "Solve",
     "StartParticipants",
     "Step",
     "WriteEnSight",
 ]
+
+_other_solution_list = [
+    "DoResultsExist",
+    "DoesEnSightExist",
+    "IsAnalysisInitialized",
+    "OpenResultsInEnSight",
+    "PartitionParticipants",  ##NB
+]
+
+_solution_list = _exposed_solution_list + _other_solution_list
 
 # Miscellaneous other exclusions
 _misc_list = [

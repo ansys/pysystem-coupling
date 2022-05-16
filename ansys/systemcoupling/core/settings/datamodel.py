@@ -669,6 +669,10 @@ def get_cls(name, info, parent=None):
     try:
         if parent is None:
             pname = "root"
+        elif "pysyc_name" in info:
+            # Python name provided - for the case where there is a preferred
+            # alternative to the default generated name.
+            pname = info["pysyc_name"]
         else:
             pname = to_python_name(name)
         # obj_type = info['type']

@@ -14,18 +14,20 @@ class SycProxyAdapter(SycProxyInterface):
             setup_cmd_data = process_cmd_data(cmd_metadata)
             category_root = "SystemCoupling"
             metadata[category_root]["__commands"] = setup_cmd_data
-        elif category == "case":
-            case_cmd_data = process_cmd_data(cmd_metadata, category="case")
-            category_root = "CaseCommands"
-            # CaseCommands isn't a real data model object but we fake it
+        elif category in ("case", "solution"):
+            cmd_data = process_cmd_data(cmd_metadata, category=category)
+            category_root = category.title() + "Commands"
+            # category root isn't a real data model object but we fake it
             # so that we can generate the command group under a common root.
             # Note extra properties to make it work as an object - these
             # need to be consistent with pre-generation code.
             metadata = {
-                category_root: {"__commands": case_cmd_data},
-                "isEntity": False,
-                "isNamed": False,
-                "ordinal": 0,
+                category_root: {
+                    "__commands": cmd_data,
+                    "isEntity": False,
+                    "isNamed": False,
+                    "ordinal": 0,
+                }
             }
         else:
             raise RuntimeError(f"Unrecognised 'static info' category: '{category}'.")
