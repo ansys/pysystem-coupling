@@ -231,3 +231,17 @@ def test_get_nested_state(dm):
             }
         }
     }
+
+
+def test_invoke_partition_particpants(dm):
+    dm.sycproxy.clear_last_cmd()
+    dm.partition_participants(
+        machine_list=[{"machine-name": "host1", "core-count": 10}],
+        names_and_fractions=[("PART-1", 0.5), ("PART-2", 0.7)],
+    )
+    assert dm.sycproxy.last_cmd_name == "PartitionParticipants"
+    assert dm.sycproxy.last_cmd_path == "SystemCoupling"
+    assert dm.sycproxy.last_cmd_args == {
+        "MachineList": [{"machine-name": "host1", "core-count": 10}],
+        "NamesAndFractions": [("PART-1", 0.5), ("PART-2", 0.7)],
+    }

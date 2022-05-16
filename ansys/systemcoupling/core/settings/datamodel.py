@@ -44,6 +44,13 @@ DictStateType = Dict[str, "StateType"]
 ListStateType = List["StateType"]
 StateType = Union[PrimitiveStateType, DictStateType, ListStateType]
 
+# Special types for specific command arguments
+StrFloatPairType = Tuple[str, float]
+StrFloatPairListType = List[StrFloatPairType]
+StrOrIntType = Union[str, int]
+StrOrIntDictType = Dict[str, StrOrIntType]
+StrOrIntDictListType = List[StrOrIntDictType]
+
 
 def to_python_name(syc_name: str) -> str:
     """Convert a scheme string to python variable name.
@@ -307,6 +314,19 @@ class BooleanList(SettingsBase[BoolListType]):
     """A BooleanList object represents a boolean list setting."""
 
     _state_type = BoolListType
+
+
+class StrFloatPairList(SettingsBase[StrFloatPairListType]):
+    """A StrFloatPairList object represents a list of string-float pairs."""
+
+    _state_type = StrFloatPairListType
+
+
+class StrOrIntDictList(SettingsBase[StrOrIntDictListType]):
+    """A StrOrIntDictList object represents a list of simple dictionary values
+    with string keys and string or int values."""
+
+    _state_type = StrOrIntDictListType
 
 
 class Group(SettingsBase[DictStateType]):
@@ -638,6 +658,8 @@ _param_types = {
     "Real List": RealList,
     "Real Triplet": RealVector,
     "String List": StringList,
+    "StrFloatPairList": StrFloatPairList,
+    "StrOrIntDictList": StrOrIntDictList,
 }
 
 

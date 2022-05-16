@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "51d4bf3139c9d5c00b969825d7a7a7295152d09d6564276c94e1484bd7b42378"
+SHASH = "e085799336311f856e38c38ded5505a5d7cca4ca9eafa047acad1ea29d5b2f5a"
 
 
 class root(Group):
@@ -2489,7 +2489,13 @@ class root(Group):
         def output_frequency(self, value: Integer):
             self.set_property_state("output_frequency", value)
 
-    command_names = ["add_participant", "solve", "save", "get_parameter_options"]
+    command_names = [
+        "add_participant",
+        "solve",
+        "save",
+        "get_parameter_options",
+        "partition_participants",
+    ]
 
     class add_participant(Command):
         """
@@ -2605,3 +2611,43 @@ class root(Group):
             """
 
             syc_name = "Name"
+
+    class partition_participants(Command):
+        """
+        'partition_participants' child of 'root' object
+
+        Parameters
+        ----------
+            algorithm_name : str
+                'algorithm_name' child of 'partition_participants' object
+            machine_list : typing.List[typing.Dict[str, typing.Union[str, int]]]
+                'machine_list' child of 'partition_participants' object
+            names_and_fractions : typing.List[typing.Tuple[str, float]]
+                'names_and_fractions' child of 'partition_participants' object
+
+        """
+
+        syc_name = "PartitionParticipants"
+        argument_names = ["algorithm_name", "machine_list", "names_and_fractions"]
+        essential_arguments = []
+
+        class algorithm_name(String):
+            """
+            'algorithm_name' child of 'partition_participants' object
+            """
+
+            syc_name = "AlgorithmName"
+
+        class machine_list(StrOrIntDictList):
+            """
+            'machine_list' child of 'partition_participants' object
+            """
+
+            syc_name = "MachineList"
+
+        class names_and_fractions(StrFloatPairList):
+            """
+            'names_and_fractions' child of 'partition_participants' object
+            """
+
+            syc_name = "NamesAndFractions"

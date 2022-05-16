@@ -93,8 +93,8 @@ _type_map = {
     "<class 'kernel.util.FileUtilities.ValidFileName'>": "String",
     "<class 'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>": "String",
     # 2. DictList and TupleList not in exposed commands
-    # "<class 'kernel.commands.ListTypes.DictList'>": None,
-    # "<class 'kernel.commands.ListTypes.TupleList'>": None,
+    "<class 'kernel.commands.ListTypes.DictList'>": "StrOrIntDictList",
+    "<class 'kernel.commands.ListTypes.TupleList'>": "StrFloatPairList",
     # 3. ObjectPath is always 'hidden'
     "<class 'kernel.datamodel.ObjectPath.ObjectPath'>": "String",
     # 4. Only used in AddTransformation for "Angle"
@@ -179,7 +179,7 @@ _case_list = [
 _exposed_solution_list = [
     "GetRestarts",
     "OpenResultsInEnSight",
-    # "PartitionParticipants",
+    "PartitionParticipants",
     "Shutdown",
     "Solve",
     "StartParticipants",
@@ -192,7 +192,6 @@ _other_solution_list = [
     "DoesEnSightExist",
     "IsAnalysisInitialized",
     "OpenResultsInEnSight",
-    "PartitionParticipants",  ##NB
 ]
 
 _solution_list = _exposed_solution_list + _other_solution_list

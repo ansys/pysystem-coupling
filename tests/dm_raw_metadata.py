@@ -1257,6 +1257,32 @@ cmd_metadata = [
         "optionalArgNames": [],
         "retType": "String List",  # documented as tuple ??
     },
+    {
+        "args": [
+            ("AlgorithmName", {"type": "String"}),
+            (
+                "MachineList",
+                {"Type": "StrOrIntDictList"},
+            ),
+            (
+                "NamesAndFractions",
+                {"type": "StrFloatPairList"},
+            ),
+        ],
+        "defaults": (
+            None,
+            # None,
+            # None,
+        ),
+        "essentialArgNames": [],
+        "isQuery": False,
+        "name": "PartitionParticipants",
+        "optionalArgNames": [
+            "NamesAndFractions",
+            "MachineList",
+        ],
+        "retType": "<class 'NoneType'>",
+    },
 ]
 
 
