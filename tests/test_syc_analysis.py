@@ -1,5 +1,5 @@
-from cmd_meta_rawdata import cmd_meta_testing_raw_data
-from dm_meta_rawdata import dm_meta_testing_raw_data
+from cmd_raw_metadata import cmd_metadata
+from dm_raw_metadata import dm_metadata
 import pytest
 from state import StateForTesting
 
@@ -8,13 +8,13 @@ from ansys.systemcoupling.core.analysis import SycAnalysis
 
 class _MockCommandExecutor:
     def __init__(self):
-        self.__state = StateForTesting()
+        self.__state = StateForTesting(native_state_format=True)
 
     def GetMetadata(self):
-        return dm_meta_testing_raw_data
+        return dm_metadata
 
     def GetCommandAndQueryMetadata(self):
-        return cmd_meta_testing_raw_data
+        return cmd_metadata
 
     def SetState(self, ObjectPath, State):
         self.__state.set_state(ObjectPath, State)
@@ -26,7 +26,7 @@ class _MockCommandExecutor:
         return self.__state.get_parameter(ObjectPath, Name)
 
     def GetCommandAndQueryNames(self):
-        return [item["name"] for item in cmd_meta_testing_raw_data]
+        return [item["name"] for item in cmd_metadata]
 
     def execute_command(self, name, **kwargs):
         f = getattr(self, name)
@@ -39,7 +39,8 @@ class _MockCommandExecutor:
 @pytest.fixture
 def api():
     cmd_exec = _MockCommandExecutor()
-    return SycAnalysis(cmd_exec)
+    analysis = SycAnalysis(cmd_exec)
+    return analysis.native_api
 
 
 def test_create_object(api):

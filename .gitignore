@@ -43,3 +43,11 @@ test-output.xml
 .\#*
 /.ipynb_checkpoints
 
+# Virtual environment folders #
+###############################
+venv*/
+
+# VSCode #
+##########
+.vscode/
+.env

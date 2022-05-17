@@ -1,19 +1,13 @@
-from ansys.systemcoupling.core.command_metadata import CommandMetadata
-from ansys.systemcoupling.core.datamodel_metadata import build as build_dm_meta
-from ansys.systemcoupling.core.object_path import ObjectPath
-from ansys.systemcoupling.core.path_util import join_path_strs
+from ansys.systemcoupling.core.native_api import NativeApi
+from ansys.systemcoupling.core.settings.datamodel import get_root
+from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
 
 
-class _MetaWrapper:
-    def __init__(self, dm_meta, cmd_meta):
-        self.__dm_meta = dm_meta
-        self.__cmd_meta = cmd_meta
-
-    def __getattr__(self, name):
-        try:
-            return getattr(self.__dm_meta, name)
-        except AttributeError:
-            return getattr(self.__cmd_meta, name)
+class _DefunctRpcImpl:
+    def __getattr__(self, _):
+        raise RuntimeError(
+            "This analysis instance has exited. Launch or " "attach to a new instance."
+        )
 
 
 class SycAnalysis:
@@ -26,28 +20,11 @@ class SycAnalysis:
     """
 
     def __init__(self, rpc_impl):
+        self.__case_root = None
+        self.__setup_root = None
+        self.__solution_root = None
         self.__rpc_impl = rpc_impl
-        self._init_datamodel()
-        self._init_cmds()
-        self.__meta_wrapper = _MetaWrapper(self.__dm_meta, self.__cmd_meta)
-        self.__root = ObjectPath(
-            "/" + self.__dm_meta.root_type(), self, self.__meta_wrapper
-        )
-        self.__top_level_types = set(self.__dm_meta.child_types(self.__root))
-
-    def execute_command(self, name, **kwargs):
-        """Execute the named command or query and return the result.
-
-        All commands and queries take one or many keyword arguments. Some
-        of these can be optional, depending on the command or query.
-
-        A query will return a value of a type that is dependent on the
-        query.
-
-        A few commands return a value (again with a type dependent on
-        the command), but most return ``None``.
-        """
-        return self.__rpc_impl.execute_command(name, **kwargs)
+        self.__native_api = None
 
     def exit(self):
         """Close the remote System Coupling instance.
@@ -55,9 +32,17 @@ class SycAnalysis:
         Following this, the current instance of this class will not
         be usable. Create a new instance if required.
         """
-        # xx TODO - can we find a better arrangement than this?
         self.__rpc_impl.exit()
-        self.__rpc_impl = None
+        self.__rpc_impl = _DefunctRpcImpl()
+        if self.__native_api:
+            # Pass in defunct RPC for better behaviour if
+            # anyone has held on to a native API reference
+            self.__native_api._exit(self.__rpc_impl)
+            self.__native_api = None
+        # XXX TODO see about doing something similar for setup
+        self.__case_root = None
+        self.__setup_root = None
+        self.__solution_root = None
 
     def start_output(self, handle_output=None):
         """Start streaming the "standard output" written by System Coupling.
@@ -72,7 +57,7 @@ class SycAnalysis:
         In such cases, a custom approach based on the handler could be
         adopted.
 
-        Streaming can be cancelled vai the `end_output` method.
+        Streaming can be cancelled via the `end_output` method.
 
         Parameters
         ----------
@@ -87,73 +72,91 @@ class SycAnalysis:
         """Cancels output streaming previously started by `start_output`."""
         self.__rpc_impl.end_output()
 
-    def __getattr__(self, name):
-        """Provides access to commands, queries and data model as attributes of
-        this class's instance.
+    def solve(self):
+        """Solves the current case."""
+        self.__rpc_impl.solve()
 
-        If System Coupling exposes a command, ``Solve()`` say, then if we
-        have an instance of this class, ``syc``, the following call is enabled
-        by the present method:
+    def interrupt(self, reason_msg=""):
+        """Interrupts a solve in progress.
 
-        ``syc.Solve()``
+        See also `abort`. The difference between an interrupted and
+        aborted solve is that an interrupted solve may be resumed.
 
-        This is an alternative to
-
-        ``syc.execute_command('Solve')``
-
-        If System Coupling exposes a data model object, ``SolutionControl``
-        say, then the following interactions are enabled by the present
-        method.
-
-        Query state of object:
-        ``state = syc.SolutionControl.GetState()``
-
-        (Note that this is an alternative to:
-        ``state = syc.execute_command('GetState',
-            ObjectPath='/SystemCoupling/SolutionControl')``)
-
-        Query value of object property:
-        ``option = syc.SolutionControl.DurationOption``
-
-        Set multiple object object properties:
-        ``syc.SolutionControl = {
-            'DurationOption': 'NumberOfSteps',
-            'NumberofSteps': 5
-          }``
-
-        Set single property:
-        ``syc.SolutionControl.NumberOfSteps = 6``
-
-        Full "path" syntax for the data model is supported. Thus:
-        ``syc.CouplingInterface['intf1'].DataTransfer['temp']...``
+        Parameters
+        ----------
+        reason_msg : str
+            Text to describe the reason for the interrupt. This might be
+            used for such purposes as providing additional annotation in
+            transcript output.
         """
-        if self.__cmd_meta.is_command_or_query(name):
-            # Looks like an API command/query call
-            def non_objpath_cmd(**kwargs):
-                return self.__rpc_impl.execute_command(name, **kwargs)
+        self.__rpc_impl.interrupt(reason=reason_msg)
 
-            def objpath_cmd(**kwargs):
-                if "ObjectPath" not in kwargs:
-                    return self.__rpc_impl.execute_command(
-                        name, ObjectPath=self.__root, **kwargs
-                    )
-                return self.__rpc_impl.execute_command(name, **kwargs)
+    def abort(self, reason_msg=""):
+        """Aborts a solve in progress.
 
-            if not self.__cmd_meta.is_objpath_command_or_query(name):
-                return non_objpath_cmd
-            else:
-                return objpath_cmd
+        See also `interrupt`. In contrast to an interrupted solve,
+        an aborted solve may not be resumed.
 
-        if not name in self.__top_level_types:
-            raise AttributeError(f"Unknown attribute of System Coupling API: '{name}'")
+        Parameters
+        ----------
+        reason_msg : str
+            Text to describe the reason for the abort. This might be
+            used for such purposes as providing additional annotation in
+            transcript output.
+        """
+        self.__rpc_impl.abort(reason=reason_msg)
 
-        # Can assume accessing a datamodel path
-        return self.__root.make_path(join_path_strs(self.__root, name))
+    def ping(self):
+        """Simple test that the server is alive and responding."""
+        return self.__rpc_impl.ping()
 
-    def _init_datamodel(self):
-        dm_meta_raw = self.__rpc_impl.GetMetadata()
-        self.__dm_meta = build_dm_meta(dm_meta_raw)
+    @property
+    def case(self):
+        """Provides access to the 'Pythonic' client-side form of the System
+        Coupling case persistence API.
+        """
+        if self.__case_root is None:
+            self.__case_root = self._get_api_root(category="case")
+        return self.__case_root
 
-    def _init_cmds(self):
-        cmd_meta = self.__rpc_impl.GetCommandAndQueryMetadata()
-        self.__cmd_meta = CommandMetadata(cmd_meta)
+    @property
+    def setup(self):
+        """Provides access to the 'Pythonic' client-side form of the System
+        Coupling setup API and data model.
+        """
+        if self.__setup_root is None:
+            self.__setup_root = self._get_api_root(category="setup")
+        return self.__setup_root
+
+    @property
+    def solution(self):
+        """Provides access to the 'Pythonic' client-side form of the System
+        Coupling solution API.
+        """
+        if self.__solution_root is None:
+            self.__solution_root = self._get_api_root(category="solution")
+        return self.__solution_root
+
+    def _get_api_root(self, category):
+        if isinstance(self.__rpc_impl, _DefunctRpcImpl):
+            self.__rpc_impl.trigger_error
+        sycproxy = SycProxyAdapter(self.__rpc_impl)
+        return get_root(sycproxy, category=category)
+
+    @property
+    def native_api(self):
+        """Provides access to the 'native' System Coupling API and data
+        model.
+
+        This is aimed at existing users of the System Coupling CLI who are
+        more comfortable with retaining familiar syntax while transitioning
+        to use of pySystemCoupling.
+
+        This API is exposed almost completely dynamically on the client side
+        so provides little runtime assistance and documentation.
+
+        See `NativeApi` itself for more details.
+        """
+        if self.__native_api is None:
+            self.__native_api = NativeApi(self.__rpc_impl)
+        return self.__native_api

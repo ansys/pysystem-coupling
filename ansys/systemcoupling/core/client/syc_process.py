@@ -40,7 +40,7 @@ def _start_system_coupling(host, port, working_dir, log_level):
     env = deepcopy(os.environ)
     env["PYTHONUNBUFFERED"] = "1"
     env["SYC_GUI_SILENT_SERVER"] = "1"
-    args = [_path_to_system_coupling(), "-m", "cosimtest", f"--grpcport={host}:{port}"]
+    args = [_path_to_system_coupling(), "-m", "cosimgui", f"--grpcport={host}:{port}"]
     if log_level:
         args += ["-l", str(log_level)]
     print("Starting System Coupling: ", args[0])

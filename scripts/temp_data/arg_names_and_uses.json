@@ -1,0 +1,226 @@
+{
+  "AdditionalArguments": [
+    "AddParticipant"
+  ],
+  "AlgorithmName": [
+    "PartitionParticipants"
+  ],
+  "Angle": [
+    "AddTransformation"
+  ],
+  "Axis": [
+    "AddTransformation"
+  ],
+  "Binary": [
+    "WriteEnSight"
+  ],
+  "CommandString": [
+    "ExecuteCommandString"
+  ],
+  "Count": [
+    "Step"
+  ],
+  "CouplingIteration": [
+    "Open"
+  ],
+  "CouplingStep": [
+    "Open"
+  ],
+  "Executable": [
+    "AddParticipant"
+  ],
+  "ExplicitSettingsOnly": [
+    "PrintState"
+  ],
+  "ExpressionName": [
+    "AddNamedExpression",
+    "CreateNamedExpression"
+  ],
+  "ExpressionString": [
+    "AddNamedExpression",
+    "CreateNamedExpression"
+  ],
+  "FileMode": [
+    "PrintState"
+  ],
+  "FileName": [
+    "ReadScriptFile",
+    "StartJournalFile",
+    "WriteEnSight",
+    "GenerateInputFile"
+  ],
+  "FilePath": [
+    "Save",
+    "PrintState",
+    "Open",
+    "GetRestarts",
+    "ImportSystemCouplingInputFile"
+  ],
+  "Function": [
+    "AddExpressionFunction"
+  ],
+  "FunctionName": [
+    "AddExpressionFunction"
+  ],
+  "InputFile": [
+    "AddParticipant"
+  ],
+  "InstancesForMapping": [
+    "AddInstancing"
+  ],
+  "InstancesInFullCircle": [
+    "AddInstancing"
+  ],
+  "Interface": [
+    "AddFSIDataTransfers",
+    "GetModeShapeVariables",
+    "AddDataTransfer",
+    "AddDataTransferByDisplayNames",
+    "GetThermalDataTransferOptions",
+    "GetAddDataTransferGroupCommands",
+    "AddAerodampingDataTransfers",
+    "AddThermalDataTransfers"
+  ],
+  "MachineList": [
+    "PartitionParticipants"
+  ],
+  "Mode": [
+    "StartJournalFile"
+  ],
+  "ModeShapes": [
+    "AddAerodampingDataTransfers"
+  ],
+  "Module": [
+    "AddExpressionFunction"
+  ],
+  "Name": [
+    "GetParameterOptions",
+    "GetParameter"
+  ],
+  "NamesAndFractions": [
+    "PartitionParticipants"
+  ],
+  "ObjectPath": [
+    "GetExpressionVariables",
+    "DeleteObject",
+    "GetStateWithOptions",
+    "PrintState",
+    "GetParameterOptions",
+    "GetExplicitState",
+    "GetChildNames",
+    "GetChildren",
+    "GetState",
+    "GetParameter",
+    "PrintExpressionVariables",
+    "SetState"
+  ],
+  "Option": [
+    "AddThermalDataTransfers"
+  ],
+  "OverwriteExisting": [
+    "SaveSnapshot"
+  ],
+  "ParameterName": [
+    "GetExpressionVariables",
+    "PrintExpressionVariables"
+  ],
+  "ParentReferenceFrame": [
+    "AddReferenceFrame"
+  ],
+  "ParticipantName": [
+    "GenerateInputFile",
+    "GetExecutionCommand",
+    "GetRegionNamesForParticipant"
+  ],
+  "ParticipantNames": [
+    "StartParticipants"
+  ],
+  "ParticipantType": [
+    "AddParticipant"
+  ],
+  "PrintResult": [
+    "ExecPythonString"
+  ],
+  "PythonString": [
+    "ExecPythonString"
+  ],
+  "ReferenceFrame": [
+    "AddInstancing",
+    "DeleteTransformation",
+    "AddDefaultTransformation",
+    "AddTransformation"
+  ],
+  "SideOneParticipant": [
+    "AddInterface",
+    "AddInterfaceByDisplayNames"
+  ],
+  "SideOneRegions": [
+    "AddInterface",
+    "AddInterfaceByDisplayNames"
+  ],
+  "SideOneVariable": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "SideTwoParticipant": [
+    "AddInterface",
+    "AddInterfaceByDisplayNames"
+  ],
+  "SideTwoRegions": [
+    "AddInterface",
+    "AddInterfaceByDisplayNames"
+  ],
+  "SideTwoVariable": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "SnapshotName": [
+    "DeleteSnapshot",
+    "SaveSnapshot",
+    "OpenSnapshot"
+  ],
+  "SourceVariable": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "State": [
+    "SetState"
+  ],
+  "TargetSide": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "TargetVariable": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "TransformationName": [
+    "DeleteTransformation"
+  ],
+  "TransformationType": [
+    "AddDefaultTransformation",
+    "AddTransformation"
+  ],
+  "Value": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "ValueX": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "ValueY": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "ValueZ": [
+    "AddDataTransferByDisplayNames",
+    "AddDataTransfer"
+  ],
+  "Vector": [
+    "AddTransformation"
+  ],
+  "WorkingDirectory": [
+    "AddParticipant"
+  ]
+}

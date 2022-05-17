@@ -74,8 +74,11 @@ class SycGrpc(object):
         The output is gathered asynchronously but is currently only accessible
         via take_stdout().
         """
+        # print("starting process...")
         self.__process = SycProcess(host, port, working_dir)
+        # print("...started. Connecting...")
         self._connect(host, port)
+        # print("...connected")
 
     def connect(self, host, port):
         """Connect to an already running system coupling server running on a known

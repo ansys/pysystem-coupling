@@ -1,0 +1,417 @@
+Argument Types
+==============
+
+1. These can all be treated as str for now:
+
+  "<class 'kernel.util.FileUtilities.ValidDirectoryName'>",
+  "<class 'kernel.util.FileUtilities.WritableUnicodeDirectory'>",
+  "<class 'kernel.util.FileUtilities.ReadableUnicodeDirectory'>",
+  "<class 'kernel.util.FileUtilities.ReadableFileName'>",
+  "<class 'kernel.util.FileUtilities.WritableUnicodeFileName'>",
+  "<class 'kernel.util.FileUtilities.ValidFileName'>",
+  "<class 'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>",
+
+2. DictList and TupleList not in exposed commands
+  "<class 'kernel.commands.ListTypes.DictList'>",
+  "<class 'kernel.commands.ListTypes.TupleList'>",
+  
+3. ObjectPath is always 'hidden'
+  "<class 'kernel.datamodel.ObjectPath.ObjectPath'>",
+
+4. Only used in AddTransformation for "Angle" - can we get away with real?
+  "<class 'object'>",
+
+5. dict is not used in any exposed command
+
+  "<class 'dict'>",
+
+6. Only instance is a real list 
+  "<class 'list'>",
+  
+7. StrList - straightforward StringList
+  "<class 'kernel.commands.ListTypes.StrList'>",
+
+8. Straightforward:
+  "<class 'str'>",
+  "<class 'bool'>",
+  "<class 'int'>"
+
+Return Types
+============
+
+I don't think we need to worry about these for now as types are not specified.
+We know that everything resolves to some json-compatible type anyway
+
+  "<class 'kernel.commands.ListTypes.StrList'>",
+  "<class 'str'>",
+  "<class 'object'>",
+  "<class 'NoneType'>",
+  "<class 'tuple'>",
+  "<class 'dict'>",
+  "<class 'kernel.datamodel.ObjectPath.ObjectPath'>",
+  "<class 'bool'>",
+  "<class 'list'>"
+
+
+
+
+
+
+
+
+AddAerodampingDataTransfers
+---
+GUI mode 
+Data transfer command
+
+
+AddDataTransfer
+---
+Include
+Interface arg => path
+
+
+AddDataTransferByDisplayNames
+---
+Include
+Interface arg => path (but indirectly via display name)
+
+
+AddDefaultTransformation
+---
+? Include or make Internal
+GUI mode
+
+AddExpressionFunction
+---
+Include
+
+
+AddFSIDataTransfers
+---
+GUI mode
+Data transfer command
+
+
+AddInstancing
+---
+Include
+
+
+AddInterface
+---
+Include
+
+
+AddInterfaceByDisplayNames
+---
+Include
+
+
+AddNamedExpression
+---
+Include
+
+AddParticipant
+---
+Include
+
+AddReferenceFrame
+---
+Include
+
+
+AddThermalDataTransfers
+---
+GUI mode
+Data transfer command
+
+
+AddTransformation
+---
+Angle argument is 'object'?
+ReferenceFrame arg => object path
+
+
+ClearState
+---
+Include
+
+CreateNamedExpression
+---
+Deprecated - Exclude
+
+CreateRestartPoint
+---
+Include
+
+DatamodelRoot
+---
+Exclude
+
+
+DeleteObject
+---
+Need to be careful about this one.
+We have a specialised delete for named objects.
+In any case, we should restrict to paths where it makes sense
+
+Possibly: map to remove method on applicable objects
+
+
+DeleteSnapshot
+---
+Include
+
+DeleteTransformation
+---
+?Expose as delete on transformation object
+
+
+DoResultsExist
+---
+GUI mode
+? exclude
+
+
+DoesEnSightExist
+---
+GUI mode
+? Exclude
+
+
+ExecPythonString
+---
+GUI mode
+Exclude
+
+
+ExecuteCommandString
+---
+Hide despite being non-Internal and "default" mode
+
+
+
+GenerateInputFile
+---
+Include
+
+
+GetAddDataTransferGroupCommands
+---
+GUI mode
+Data transfer command
+
+GetChildNames
+---
+Exclude
+get_object_names is available
+
+
+GetChildren
+---
+Exclude
+
+GetCommandAndQueryNames
+---
+Exclude
+
+
+GetErrors
+---
+Include
+
+
+GetErrorsXML
+---
+Exclude
+
+
+GetExecutionCommand
+---
+Include
+? Associate with participant
+
+
+GetExplicitState
+---
+Exclude 
+?make internal?
+
+
+GetExpressionVariables
+---
+Include
+
+Note ObjectPath-based - do we want to restrict to certain paths?
+(OK, only returns anything for DataTransfer or SolutionControl/TimeStepSize)
+
+GetMetadata
+---
+Exclude
+
+GetModeShapeVariables
+---
+GUI mode
+Data transfer-related query
+
+GetOutOfSyncModules
+---
+GUI mode
+probably exclude
+
+
+GetParameter
+---
+Exclude 
+(even though non-Internal default mode)
+
+
+
+GetParameterOptions
+---
+Exclude for now
+
+
+GetRegionNamesForParticipant
+---
+Include
+Map ParticipantName to ObjectPath
+
+
+GetRestarts
+---
+GUI mode
+Doesn't seem to be used even in the GUI
+Exclude
+
+GetSnapshots
+---
+GUI mode
+
+
+GetState
+---
+Exclude
+
+
+GetStateWithOptions
+---
+Exclude
+
+GetThermalDataTransferOptions
+---
+GUI mode
+DataTransfer command
+
+
+ImportSystemCouplingInputFile
+---
+Include
+
+
+Initialize
+---
+Include
+
+
+
+IsAnalysisInitialized
+---
+GUI mode
+
+
+Open
+---
+Exclude - explicit exposure
+
+
+OpenResultsInEnSight
+---
+Exclude - explicit exposure
+
+
+OpenSnapshot
+---
+Exclude - explicit exposure
+
+PartitionParticipants
+---
+Exclude - -expose on solution API
+arguments need some work?
+
+
+PrintExpressionVariables
+---
+Exlcude print functions
+
+PrintSetup
+---
+Exlcude print functions
+
+PrintSnapshots
+---
+Exlcude print functions
+
+PrintState
+---
+Exlcude print functions
+
+ReadScriptFile
+---
+Exclude for now
+
+ReloadExpressionFunctionModules
+---
+Include
+
+
+Save
+---
+?Exclude - expose explicitly
+
+SaveSnapshot
+---
+Include 
+
+SetState
+---
+Exclude
+
+
+Shutdown
+---
+Exclude - exposed explicitly
+
+Solve
+---
+Exclude - exposed explicitly
+
+StartJournalFile
+---
+Exclude
+
+StartParticipants
+---
+Include
+
+Step
+---
+Exclude - exposed explicitly?
+
+StopLastJournalFile
+---
+Exclude
+
+ValidateModuleSynchronization
+---
+?Exclude
+Can we move this into the controller
+
+WriteCsvChartFiles
+---
+Include
+
+WriteEnSight
+---
+Include

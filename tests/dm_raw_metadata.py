@@ -1,7 +1,9 @@
+import copy
+
 """Data model metadata raw data for testing purposes.
 """
 
-dm_meta_testing_raw_data = {
+dm_metadata = {
     "SystemCoupling": {
         "__children": {
             "ActivateHidden": {
@@ -1173,6 +1175,21 @@ dm_meta_testing_raw_data = {
                     "NumberOfSteps": {"ordinal": 2, "type": "Integer"},
                     "TimeStepSize": {"ordinal": 3, "quant": "Time", "type": "Real"},
                 },
+                "__commands": {
+                    "GetParameterOptions": {
+                        "args": [
+                            ("Name", {"type": "String"}),
+                            ("ObjectPath", {"type": "String"}),
+                        ],
+                        "defaults": (),
+                        "essentialArgNames": ["ObjectPath", "Name"],
+                        "isInternal": False,
+                        "isPathCommand": True,
+                        "isQuery": True,
+                        "optionalArgNames": [],
+                        "retType": "String List",  # documented as tuple ??
+                    },
+                },
                 "creatableNamedChildren": [],
                 "isEntity": True,
                 "isNamed": False,
@@ -1186,3 +1203,93 @@ dm_meta_testing_raw_data = {
         "ordinal": 0,
     }
 }
+
+cmd_metadata = [
+    {
+        "name": "AddParticipant",
+        "args": [
+            ("AdditionalArguments", {"type": "String"}),
+            ("Executable", {"type": "String"}),  # FileName
+            ("InputFile", {"type": "String"}),  # FileName
+            ("ParticipantType", {"type": "String"}),
+            ("WorkingDirectory", {"type": "String"}),  # FileName (dir name)
+        ],
+        "essentialArgNames": [],
+        "optionalArgNames": [
+            "ParticipantType",
+            "InputFile",
+            "Executable",
+            "AdditionalArguments",
+            "WorkingDirectory",
+        ],
+        "defaults": (None, None, None, None, None),
+        "isInternal": False,
+        "isQuery": False,
+        "retType": "String",
+    },
+    {
+        "name": "Solve",
+        "args": [],
+        "essentialArgNames": [],
+        "optionalArgNames": [],
+        "defaults": (),
+        "isInternal": False,
+        "isQuery": False,
+        "retType": None,
+    },
+    {
+        "name": "Save",
+        "args": [("FilePath", {"type": "String"})],  # FilePath
+        "essentialArgNames": [],
+        "optionalArgNames": ["FilePath"],
+        "defaults": (".",),
+        "isInternal": False,
+        "isQuery": False,
+        "retType": "Logical",
+    },
+    {
+        "name": "GetParameterOptions",
+        "args": [("Name", {"type": "String"}), ("ObjectPath", {"type": "String"})],
+        "defaults": (),
+        "essentialArgNames": ["ObjectPath", "Name"],
+        "isInternal": False,
+        "isQuery": True,
+        "optionalArgNames": [],
+        "retType": "String List",  # documented as tuple ??
+    },
+    {
+        "args": [
+            ("AlgorithmName", {"type": "String"}),
+            (
+                "MachineList",
+                {"Type": "StrOrIntDictList"},
+            ),
+            (
+                "NamesAndFractions",
+                {"type": "StrFloatPairList"},
+            ),
+        ],
+        "defaults": (
+            None,
+            # None,
+            # None,
+        ),
+        "essentialArgNames": [],
+        "isQuery": False,
+        "name": "PartitionParticipants",
+        "optionalArgNames": [
+            "NamesAndFractions",
+            "MachineList",
+        ],
+        "retType": "<class 'NoneType'>",
+    },
+]
+
+
+def _make_combined_data():
+    metadata = copy.deepcopy(dm_metadata)
+    metadata["SystemCoupling"]["__commands"] = copy.deepcopy(cmd_metadata)
+    return metadata
+
+
+dm_metadata_with_cmds = _make_combined_data()

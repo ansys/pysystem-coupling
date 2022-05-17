@@ -1,9 +1,9 @@
-cmd_meta_testing_raw_data = [
+cmd_metadata = [
     {
-        "args": {
-            "ObjectPath": {"Type": "<class 'str'>"},
-            "ParameterName": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("ObjectPath", {"Type": "<class 'str'>"}),
+            ("ParameterName", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (None,),
         "essentialArgNames": ["ObjectPath"],
         "isQuery": False,
@@ -12,7 +12,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -21,7 +21,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -30,15 +30,18 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "CouplingIteration": {"Type": "<class 'int'>"},
-            "CouplingStep": {"Type": "<class 'int'>"},
-            "FilePath": {
-                "AllowUnicode": True,
-                "Type": "<class "
-                "'kernel.util.FileUtilities.ReadableUnicodeDirectory'>",
-            },
-        },
+        "args": [
+            ("CouplingIteration", {"Type": "<class 'int'>"}),
+            ("CouplingStep", {"Type": "<class 'int'>"}),
+            (
+                "FilePath",
+                {
+                    "AllowUnicode": True,
+                    "Type": "<class "
+                    "'kernel.util.FileUtilities.ReadableUnicodeDirectory'>",
+                },
+            ),
+        ],
         "defaults": (".", None, None),
         "essentialArgNames": [],
         "isQuery": False,
@@ -47,13 +50,16 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "FilePath": {
-                "AllowUnicode": True,
-                "Type": "<class "
-                "'kernel.util.FileUtilities.WritableUnicodeDirectory'>",
-            }
-        },
+        "args": [
+            (
+                "FilePath",
+                {
+                    "AllowUnicode": True,
+                    "Type": "<class "
+                    "'kernel.util.FileUtilities.WritableUnicodeDirectory'>",
+                },
+            ),
+        ],
         "defaults": (".",),
         "essentialArgNames": [],
         "isQuery": False,
@@ -62,11 +68,12 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'bool'>",
     },
     {
-        "args": {
-            "ParticipantNames": {
-                "Type": "<class " "'kernel.commands.ListTypes.StrList'>"
-            }
-        },
+        "args": [
+            (
+                "ParticipantNames",
+                {"Type": "<class " "'kernel.commands.ListTypes.StrList'>"},
+            )
+        ],
         "defaults": (None,),
         "essentialArgNames": [],
         "isQuery": False,
@@ -75,7 +82,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -84,7 +91,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -93,7 +100,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -102,7 +109,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {"Count": {"Type": "<class 'int'>"}},
+        "args": [("Count", {"Type": "<class 'int'>"})],
         "defaults": (1,),
         "essentialArgNames": [],
         "isQuery": False,
@@ -111,16 +118,18 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "SideOneParticipant": {"Type": "<class 'str'>"},
-            "SideOneRegions": {
-                "Type": "<class " "'kernel.commands.ListTypes.StrList'>"
-            },
-            "SideTwoParticipant": {"Type": "<class 'str'>"},
-            "SideTwoRegions": {
-                "Type": "<class " "'kernel.commands.ListTypes.StrList'>"
-            },
-        },
+        "args": [
+            ("SideOneParticipant", {"Type": "<class 'str'>"}),
+            (
+                "SideOneRegions",
+                {"Type": "<class " "'kernel.commands.ListTypes.StrList'>"},
+            ),
+            ("SideTwoParticipant", {"Type": "<class 'str'>"}),
+            (
+                "SideTwoRegions",
+                {"Type": "<class " "'kernel.commands.ListTypes.StrList'>"},
+            ),
+        ],
         "defaults": (),
         "essentialArgNames": [
             "SideOneParticipant",
@@ -134,16 +143,18 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "SideOneParticipant": {"Type": "<class 'str'>"},
-            "SideOneRegions": {
-                "Type": "<class " "'kernel.commands.ListTypes.StrList'>"
-            },
-            "SideTwoParticipant": {"Type": "<class 'str'>"},
-            "SideTwoRegions": {
-                "Type": "<class " "'kernel.commands.ListTypes.StrList'>"
-            },
-        },
+        "args": [
+            ("SideOneParticipant", {"Type": "<class 'str'>"}),
+            (
+                "SideOneRegions",
+                {"Type": "<class " "'kernel.commands.ListTypes.StrList'>"},
+            ),
+            ("SideTwoParticipant", {"Type": "<class 'str'>"}),
+            (
+                "SideTwoRegions",
+                {"Type": "<class " "'kernel.commands.ListTypes.StrList'>"},
+            ),
+        ],
         "defaults": (),
         "essentialArgNames": [
             "SideOneParticipant",
@@ -157,18 +168,18 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "Interface": {"Type": "<class 'str'>"},
-            "SideOneVariable": {"Type": "<class 'str'>"},
-            "SideTwoVariable": {"Type": "<class 'str'>"},
-            "SourceVariable": {"Type": "<class 'str'>"},
-            "TargetSide": {"Type": "<class 'str'>"},
-            "TargetVariable": {"Type": "<class 'str'>"},
-            "Value": {"Type": "<class 'str'>"},
-            "ValueX": {"Type": "<class 'str'>"},
-            "ValueY": {"Type": "<class 'str'>"},
-            "ValueZ": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("Interface", {"Type": "<class 'str'>"}),
+            ("SideOneVariable", {"Type": "<class 'str'>"}),
+            ("SideTwoVariable", {"Type": "<class 'str'>"}),
+            ("SourceVariable", {"Type": "<class 'str'>"}),
+            ("TargetSide", {"Type": "<class 'str'>"}),
+            ("TargetVariable", {"Type": "<class 'str'>"}),
+            ("Value", {"Type": "<class 'str'>"}),
+            ("ValueX", {"Type": "<class 'str'>"}),
+            ("ValueY", {"Type": "<class 'str'>"}),
+            ("ValueZ", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (None, None, None, None, None, None, None, None),
         "essentialArgNames": ["Interface", "TargetSide"],
         "isQuery": False,
@@ -185,18 +196,18 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "Interface": {"Type": "<class 'str'>"},
-            "SideOneVariable": {"Type": "<class 'str'>"},
-            "SideTwoVariable": {"Type": "<class 'str'>"},
-            "SourceVariable": {"Type": "<class 'str'>"},
-            "TargetSide": {"Type": "<class 'str'>"},
-            "TargetVariable": {"Type": "<class 'str'>"},
-            "Value": {"Type": "<class 'str'>"},
-            "ValueX": {"Type": "<class 'str'>"},
-            "ValueY": {"Type": "<class 'str'>"},
-            "ValueZ": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("Interface", {"Type": "<class 'str'>"}),
+            ("SideOneVariable", {"Type": "<class 'str'>"}),
+            ("SideTwoVariable", {"Type": "<class 'str'>"}),
+            ("SourceVariable", {"Type": "<class 'str'>"}),
+            ("TargetSide", {"Type": "<class 'str'>"}),
+            ("TargetVariable", {"Type": "<class 'str'>"}),
+            ("Value", {"Type": "<class 'str'>"}),
+            ("ValueX", {"Type": "<class 'str'>"}),
+            ("ValueY", {"Type": "<class 'str'>"}),
+            ("ValueZ", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (None, None, None, None, None, None, None, None),
         "essentialArgNames": ["Interface", "TargetSide"],
         "isQuery": False,
@@ -213,7 +224,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {"ParticipantName": {"Type": "<class 'str'>"}},
+        "args": [("ParticipantName", {"Type": "<class 'str'>"})],
         "defaults": (),
         "essentialArgNames": ["ParticipantName"],
         "isQuery": False,
@@ -222,7 +233,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'dict'>",
     },
     {
-        "args": {"ParentReferenceFrame": {"Type": "<class 'str'>"}},
+        "args": [("ParentReferenceFrame", {"Type": "<class 'str'>"})],
         "defaults": (None,),
         "essentialArgNames": [],
         "isQuery": False,
@@ -231,13 +242,13 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "Angle": {"Type": "<class 'object'>"},
-            "Axis": {"Type": "<class 'str'>"},
-            "ReferenceFrame": {"Type": "<class 'str'>"},
-            "TransformationType": {"Type": "<class 'str'>"},
-            "Vector": {"Type": "<class 'list'>"},
-        },
+        "args": [
+            ("Angle", {"Type": "<class 'object'>"}),
+            ("Axis", {"Type": "<class 'str'>"}),
+            ("ReferenceFrame", {"Type": "<class 'str'>"}),
+            ("TransformationType", {"Type": "<class 'str'>"}),
+            ("Vector", {"Type": "<class 'list'>"}),
+        ],
         "defaults": (None, None, None),
         "essentialArgNames": ["ReferenceFrame", "TransformationType"],
         "isQuery": False,
@@ -246,10 +257,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "ReferenceFrame": {"Type": "<class 'str'>"},
-            "TransformationName": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("ReferenceFrame", {"Type": "<class 'str'>"}),
+            ("TransformationName", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ReferenceFrame", "TransformationName"],
         "isQuery": False,
@@ -258,7 +269,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {"ParticipantName": {"Type": "<class 'str'>"}},
+        "args": [("ParticipantName", {"Type": "<class 'str'>"})],
         "defaults": (),
         "essentialArgNames": ["ParticipantName"],
         "isQuery": False,
@@ -267,10 +278,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "FileName": {"Type": "<class 'str'>"},
-            "ParticipantName": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("FileName", {"Type": "<class 'str'>"}),
+            ("ParticipantName", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ParticipantName", "FileName"],
         "isQuery": False,
@@ -279,13 +290,17 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "AlgorithmName": {"Type": "<class 'str'>"},
-            "MachineList": {"Type": "<class " "'kernel.commands.ListTypes.DictList'>"},
-            "NamesAndFractions": {
-                "Type": "<class " "'kernel.commands.ListTypes.TupleList'>"
-            },
-        },
+        "args": [
+            ("AlgorithmName", {"Type": "<class 'str'>"}),
+            (
+                "MachineList",
+                {"Type": "<class " "'kernel.commands.ListTypes.DictList'>"},
+            ),
+            (
+                "NamesAndFractions",
+                {"Type": "<class " "'kernel.commands.ListTypes.TupleList'>"},
+            ),
+        ],
         "defaults": (None, None, None),
         "essentialArgNames": [],
         "isQuery": False,
@@ -294,7 +309,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -303,10 +318,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "Binary": {"Type": "<class 'bool'>"},
-            "FileName": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("Binary", {"Type": "<class 'bool'>"}),
+            ("FileName", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (True,),
         "essentialArgNames": ["FileName"],
         "isQuery": False,
@@ -315,7 +330,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -324,22 +339,31 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "AdditionalArguments": {"Type": "<class 'str'>"},
-            "Executable": {
-                "AllowUnicode": False,
-                "Type": "<class " "'kernel.util.FileUtilities.ValidFileName'>",
-            },
-            "InputFile": {
-                "AllowUnicode": False,
-                "Type": "<class " "'kernel.util.FileUtilities.ReadableFileName'>",
-            },
-            "ParticipantType": {"Type": "<class 'str'>"},
-            "WorkingDirectory": {
-                "AllowUnicode": False,
-                "Type": "<class " "'kernel.util.FileUtilities.ValidDirectoryName'>",
-            },
-        },
+        "args": [
+            ("AdditionalArguments", {"Type": "<class 'str'>"}),
+            (
+                "Executable",
+                {
+                    "AllowUnicode": False,
+                    "Type": "<class " "'kernel.util.FileUtilities.ValidFileName'>",
+                },
+            ),
+            (
+                "InputFile",
+                {
+                    "AllowUnicode": False,
+                    "Type": "<class " "'kernel.util.FileUtilities.ReadableFileName'>",
+                },
+            ),
+            ("ParticipantType", {"Type": "<class 'str'>"}),
+            (
+                "WorkingDirectory",
+                {
+                    "AllowUnicode": False,
+                    "Type": "<class " "'kernel.util.FileUtilities.ValidDirectoryName'>",
+                },
+            ),
+        ],
         "defaults": (None, None, None, None, None),
         "essentialArgNames": [],
         "isQuery": False,
@@ -353,12 +377,15 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'str'>",
     },
     {
-        "args": {
-            "FilePath": {
-                "AllowUnicode": False,
-                "Type": "<class " "'kernel.util.FileUtilities.ReadableFileName'>",
-            }
-        },
+        "args": [
+            (
+                "FilePath",
+                {
+                    "AllowUnicode": False,
+                    "Type": "<class " "'kernel.util.FileUtilities.ReadableFileName'>",
+                },
+            )
+        ],
         "defaults": (),
         "essentialArgNames": ["FilePath"],
         "isQuery": False,
@@ -367,10 +394,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "OverwriteExisting": {"Type": "<class 'bool'>"},
-            "SnapshotName": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("OverwriteExisting", {"Type": "<class 'bool'>"}),
+            ("SnapshotName", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (False,),
         "essentialArgNames": ["SnapshotName"],
         "isQuery": False,
@@ -379,7 +406,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {"SnapshotName": {"Type": "<class 'str'>"}},
+        "args": [("SnapshotName", {"Type": "<class 'str'>"})],
         "defaults": (None,),
         "essentialArgNames": [],
         "isQuery": False,
@@ -388,7 +415,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {"SnapshotName": {"Type": "<class 'str'>"}},
+        "args": [("SnapshotName", {"Type": "<class 'str'>"})],
         "defaults": (),
         "essentialArgNames": ["SnapshotName"],
         "isQuery": False,
@@ -397,7 +424,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -406,7 +433,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -415,12 +442,15 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "FileName": {
-                "AllowUnicode": False,
-                "Type": "<class " "'kernel.util.FileUtilities.ReadableFileName'>",
-            }
-        },
+        "args": [
+            (
+                "FileName",
+                {
+                    "AllowUnicode": False,
+                    "Type": "<class " "'kernel.util.FileUtilities.ReadableFileName'>",
+                },
+            )
+        ],
         "defaults": (),
         "essentialArgNames": ["FileName"],
         "isQuery": False,
@@ -429,7 +459,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {"CommandString": {"Type": "<class 'str'>"}},
+        "args": [("CommandString", {"Type": "<class 'str'>"})],
         "defaults": (),
         "essentialArgNames": ["CommandString"],
         "isQuery": False,
@@ -438,7 +468,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'object'>",
     },
     {
-        "args": {"ObjectPath": {"Type": "<class 'str'>"}},
+        "args": [("ObjectPath", {"Type": "<class 'str'>"})],
         "defaults": (),
         "essentialArgNames": ["ObjectPath"],
         "isQuery": False,
@@ -447,10 +477,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "ObjectPath": {"Type": "<class 'str'>"},
-            "State": {"Type": "<class 'dict'>"},
-        },
+        "args": [
+            ("ObjectPath", {"Type": "<class 'str'>"}),
+            ("State", {"Type": "<class 'dict'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ObjectPath", "State"],
         "isQuery": False,
@@ -459,7 +489,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'bool'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -468,12 +498,16 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'list'>",
     },
     {
-        "args": {
-            "ExpressionName": {
-                "Type": "<class " "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
-            },
-            "ExpressionString": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            (
+                "ExpressionName",
+                {
+                    "Type": "<class "
+                    "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
+                },
+            ),
+            ("ExpressionString", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ExpressionName", "ExpressionString"],
         "isQuery": False,
@@ -482,12 +516,16 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "ExpressionName": {
-                "Type": "<class " "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
-            },
-            "ExpressionString": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            (
+                "ExpressionName",
+                {
+                    "Type": "<class "
+                    "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
+                },
+            ),
+            ("ExpressionString", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ExpressionName", "ExpressionString"],
         "isQuery": False,
@@ -496,15 +534,23 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "Function": {
-                "Type": "<class " "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
-            },
-            "FunctionName": {
-                "Type": "<class " "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
-            },
-            "Module": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            (
+                "Function",
+                {
+                    "Type": "<class "
+                    "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
+                },
+            ),
+            (
+                "FunctionName",
+                {
+                    "Type": "<class "
+                    "'kernel.util.ValidPythonSymbol.ValidPythonSymbol'>"
+                },
+            ),
+            ("Module", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (None,),
         "essentialArgNames": ["Module", "Function"],
         "isQuery": False,
@@ -513,7 +559,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": False,
@@ -522,11 +568,12 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "ObjectPath": {
-                "Type": "<class " "'kernel.datamodel.ObjectPath.ObjectPath'>"
-            }
-        },
+        "args": [
+            (
+                "ObjectPath",
+                {"Type": "<class " "'kernel.datamodel.ObjectPath.ObjectPath'>"},
+            )
+        ],
         "defaults": (),
         "essentialArgNames": ["ObjectPath"],
         "isQuery": True,
@@ -535,11 +582,12 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'list'>",
     },
     {
-        "args": {
-            "ObjectPath": {
-                "Type": "<class " "'kernel.datamodel.ObjectPath.ObjectPath'>"
-            }
-        },
+        "args": [
+            (
+                "ObjectPath",
+                {"Type": "<class " "'kernel.datamodel.ObjectPath.ObjectPath'>"},
+            )
+        ],
         "defaults": (),
         "essentialArgNames": ["ObjectPath"],
         "isQuery": True,
@@ -548,7 +596,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'list'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": True,
@@ -557,7 +605,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'kernel.datamodel.ObjectPath.ObjectPath'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": True,
@@ -566,12 +614,12 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'list'>",
     },
     {
-        "args": {
-            "ExplicitSettingsOnly": {"Type": "<class 'bool'>"},
-            "FileMode": {"Type": "<class 'str'>"},
-            "FilePath": {"Type": "<class 'str'>"},
-            "ObjectPath": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("ExplicitSettingsOnly", {"Type": "<class 'bool'>"}),
+            ("FileMode", {"Type": "<class 'str'>"}),
+            ("FilePath", {"Type": "<class 'str'>"}),
+            ("ObjectPath", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (None, None, "w", False),
         "essentialArgNames": [],
         "isQuery": True,
@@ -580,10 +628,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'NoneType'>",
     },
     {
-        "args": {
-            "Name": {"Type": "<class 'object'>"},
-            "ObjectPath": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("Name", {"Type": "<class 'object'>"}),
+            ("ObjectPath", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ObjectPath", "Name"],
         "isQuery": True,
@@ -592,10 +640,10 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'object'>",
     },
     {
-        "args": {
-            "Name": {"Type": "<class 'str'>"},
-            "ObjectPath": {"Type": "<class 'str'>"},
-        },
+        "args": [
+            ("Name", {"Type": "<class 'str'>"}),
+            ("ObjectPath", {"Type": "<class 'str'>"}),
+        ],
         "defaults": (),
         "essentialArgNames": ["ObjectPath", "Name"],
         "isQuery": True,
@@ -604,7 +652,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'tuple'>",
     },
     {
-        "args": {"ObjectPath": {"Type": "<class 'str'>"}},
+        "args": [("ObjectPath", {"Type": "<class 'str'>"})],
         "defaults": (),
         "essentialArgNames": ["ObjectPath"],
         "isQuery": True,
@@ -613,7 +661,7 @@ cmd_meta_testing_raw_data = [
         "retType": "<class 'dict'>",
     },
     {
-        "args": {},
+        "args": [],
         "defaults": (),
         "essentialArgNames": [],
         "isQuery": True,

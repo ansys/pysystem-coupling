@@ -1,0 +1,11 @@
+[
+  "<class 'kernel.commands.ListTypes.StrList'>",
+  "<class 'str'>",
+  "<class 'object'>",
+  "<class 'NoneType'>",
+  "<class 'tuple'>",
+  "<class 'dict'>",
+  "<class 'kernel.datamodel.ObjectPath.ObjectPath'>",
+  "<class 'bool'>",
+  "<class 'list'>"
+]
