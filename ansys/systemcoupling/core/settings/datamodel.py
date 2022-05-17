@@ -612,17 +612,17 @@ class NamedObject(SettingsBase[DictStateType]):
 class Command(Base):
     """Command object."""
 
-    is_path_cmd = False
+    _is_path_cmd = False
 
     def __call__(self, **kwds):
         """Call a command with the specified keyword arguments."""
         newkwds = {}
-        if self.is_path_cmd:
+        if self._is_path_cmd:
             newkwds["ObjectPath"] = self._parent.syc_path
 
         try:
             missing_args = set(self.essential_arguments)
-            if self.is_path_cmd:
+            if self._is_path_cmd:
                 missing_args.discard("object_path")
         except AttributeError:
             missing_args = set()
@@ -647,7 +647,7 @@ class Command(Base):
 class PathCommand(Command):
     """Path-based command object."""
 
-    is_path_cmd = True
+    _is_path_cmd = True
 
 
 _param_types = {

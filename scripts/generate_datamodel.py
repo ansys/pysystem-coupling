@@ -88,74 +88,45 @@ def _write_cls_helper(out, cls, indent=0):
         out.write(f'\n{istr1}"""\n\n')
         out.write(f'{istr1}syc_name = "{cls.syc_name}"\n')
 
-        child_names = getattr(cls, "child_names", None)
-        if child_names:
-            out.write(f"{istr1}child_names = \\\n")
+        def write_list_attr(attr_name, items):
+            out.write(f"{istr1}{attr_name} = \\\n")
             strout = io.StringIO()
             pprint.pprint(
-                child_names, stream=strout, compact=True, width=80 - indent * 4 - 10
+                items, stream=strout, compact=True, width=80 - indent * 4 - 10
             )
             mn = ("\n" + istr2).join(
                 strout.getvalue().strip().replace("'", '"').split("\n")
             )
             out.write(f"{istr2}{mn}\n")
+
+        child_names = getattr(cls, "child_names", None)
+        if child_names:
+            write_list_attr("child_names", child_names)
             for child in child_names:
                 _write_cls_helper(out, getattr(cls, child), indent + 1)
 
         property_names_types = getattr(cls, "property_names_types", None)
         if property_names_types:
-            out.write(f"{istr1}property_names_types = \\\n")
-            strout = io.StringIO()
             names_types = [
                 (nm, sycnm, typ.__name__) for nm, sycnm, typ in property_names_types
             ]
-            pprint.pprint(
-                names_types, stream=strout, compact=True, width=80 - indent * 4 - 10
-            )
-            mn = ("\n" + istr2).join(
-                strout.getvalue().strip().replace("'", '"').split("\n")
-            )
-            out.write(f"{istr2}{mn}\n")
+            write_list_attr("property_names_types", names_types)
             for prop_name, _, prop_type in names_types:
                 doc = getattr(cls, prop_name).__doc__
                 _write_property_helper(out, prop_name, prop_type, doc, indent + 1)
 
         command_names = getattr(cls, "command_names", None)
         if command_names:
-            out.write(f"{istr1}command_names = \\\n")
-            strout = io.StringIO()
-            pprint.pprint(
-                command_names, stream=strout, compact=True, width=80 - indent * 4 - 10
-            )
-            mn = ("\n" + istr2).join(
-                strout.getvalue().strip().replace("'", '"').split("\n")
-            )
-            out.write(f"{istr2}{mn}\n")
+            write_list_attr("command_names", command_names)
             for command in command_names:
                 _write_cls_helper(out, getattr(cls, command), indent + 1)
 
         arguments = getattr(cls, "argument_names", None)
         if arguments:
-            out.write(f"{istr1}argument_names = \\\n")
-            strout = io.StringIO()
-            pprint.pprint(
-                arguments, stream=strout, compact=True, width=80 - indent * 4 - 10
-            )
-            mn = ("\n" + istr2).join(
-                strout.getvalue().strip().replace("'", '"').split("\n")
-            )
-            out.write(f"{istr2}{mn}\n")
+            write_list_attr("argument_names", arguments)
 
             essential_args = getattr(cls, "essential_arguments", [])
-            out.write(f"{istr1}essential_arguments = \\\n")
-            strout = io.StringIO()
-            pprint.pprint(
-                essential_args, stream=strout, compact=True, width=80 - indent * 4 - 10
-            )
-            mn = ("\n" + istr2).join(
-                strout.getvalue().strip().replace("'", '"').split("\n")
-            )
-            out.write(f"{istr2}{mn}\n")
+            write_list_attr("essential_arguments", essential_args)
 
             for argument in arguments:
                 _write_cls_helper(out, getattr(cls, argument), indent + 1)
