@@ -20,12 +20,8 @@ class StateForTesting:
             s[last] = new_state
         else:
             s[last] = state
-        import pprint
-
-        print(f"set {path} state to\n{pprint.pformat(self.__state)}")
 
     def get_state(self, path):
-        print(f"get_state(path={path})")
         comps = self._split_comps(path)
 
         s = self.__state
@@ -36,8 +32,6 @@ class StateForTesting:
                 s = s[comp]
             else:
                 return {}
-        if found_some:
-            print(f"get_state: {s}")
         return s if found_some else {}
 
     def get_parameter(self, path, name):

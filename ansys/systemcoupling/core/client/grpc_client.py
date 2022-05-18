@@ -11,8 +11,9 @@ from ansys.systemcoupling.core.client.services.process import SycProcessService
 from ansys.systemcoupling.core.client.services.solution import SolutionService
 from ansys.systemcoupling.core.client.syc_process import SycProcess
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
+from ansys.systemcoupling.core.util.logging import LOG
 
-_CHANNEL_READY_TIMEOUT_SEC = 10
+_CHANNEL_READY_TIMEOUT_SEC = 15
 
 
 class SycGrpc(object):
@@ -46,7 +47,7 @@ class SycGrpc(object):
 
     TODO:
 
-    - All calls synchronous at the moment. We might want to do something
+    - All calls are synchronous at the moment. We might want to do something
     different with Solve(), for example.
     """
 
@@ -68,23 +69,15 @@ class SycGrpc(object):
             instance.exit()
 
     def start_and_connect(self, host, port, working_dir):
-        """Start system coupling in server mode and establish a connection.
-
-        The standard streams are redirected via a single pipe in current impl.
-        The output is gathered asynchronously but is currently only accessible
-        via take_stdout().
-        """
-        # print("starting process...")
+        """Start system coupling in server mode and establish a connection."""
+        LOG.debug("Starting process...")
         self.__process = SycProcess(host, port, working_dir)
-        # print("...started. Connecting...")
+        LOG.debug("...started")
         self._connect(host, port)
-        # print("...connected")
 
     def connect(self, host, port):
         """Connect to an already running system coupling server running on a known
         host and port.
-
-        No standard stream output is available when connecting in this manner.
         """
         self._connect(host, port)
 
@@ -97,6 +90,7 @@ class SycGrpc(object):
             del SycGrpc._instances[-1]
 
     def _connect(self, host, port):
+        LOG.debug("Connecting...")
         self._register_for_cleanup()
         self.__channel = grpc.insecure_channel(f"{host}:{port}")
 
@@ -109,6 +103,8 @@ class SycGrpc(object):
                 "Aborting attempt to connect to gRPC channel "
                 f"after {timeout} seconds."
             )
+
+        LOG.debug("...connected")
 
         self.__command_service = CommandQueryService(self.__channel)
         self.__ostream_service = OutputStreamService(self.__channel)
@@ -135,8 +131,11 @@ class SycGrpc(object):
         self._reset()
 
     def start_output(self, handle_output=None):
-        """Start streaming of standard output streams from System Coupling
+        """Start streaming of standard streams from System Coupling
         and, by default, print to the console.
+
+        Standard output and error streams are combined in the output
+        streamed to this client.
         """
 
         def default_handler(text):
@@ -150,6 +149,7 @@ class SycGrpc(object):
         self.__output_thread.start()
 
     def end_output(self):
+        """Stop streaming standard streams."""
         self.__ostream_service.end_streaming()
 
     def _read_stdstreams(self, handle_output):

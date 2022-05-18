@@ -1,4 +1,4 @@
-from .name_util import to_python_name
+from ansys.systemcoupling.core.util.name_util import to_python_name
 
 
 def process(raw_data, category=None, apply_exclusions=True):

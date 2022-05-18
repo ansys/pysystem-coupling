@@ -8,6 +8,8 @@ import subprocess
 
 import psutil
 
+from ansys.systemcoupling.core.util.logging import LOG
+
 _isWindows = any(platform.win32_ver())
 
 _INSTALL_ROOT = "AWP_ROOT222"
@@ -25,11 +27,14 @@ class SycProcess:
         if self.__process and self.__process.poll() is None:
             pid = self.__process.pid
             try:
-                print("wait for process to exit...")
+                LOG.info("Waiting for process to exit...")
                 self.__process.wait(5)
-                print("...done")
+                LOG.info("...process exited.")
             except subprocess.TimeoutExpired:
-                print("process still alive - killing it...")
+                LOG.warning(
+                    "Process still alive - forcible kill of "
+                    "process and children will be attempted."
+                )
                 _kill_process_tree(pid, timeout=0.5)
             self.__process = None
 
@@ -43,7 +48,7 @@ def _start_system_coupling(host, port, working_dir, log_level):
     args = [_path_to_system_coupling(), "-m", "cosimgui", f"--grpcport={host}:{port}"]
     if log_level:
         args += ["-l", str(log_level)]
-    print("Starting System Coupling: ", args[0])
+    LOG.info(f"Starting System Coupling: {args[0]}")
     return subprocess.Popen(
         args,
         env=env,

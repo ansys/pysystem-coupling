@@ -1,4 +1,4 @@
-from ansys.systemcoupling.core.path_util import join_path_strs
+from ansys.systemcoupling.core.util.pathstr import join_path_strs
 
 
 class ObjectPath(str):
