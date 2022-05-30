@@ -1,6 +1,10 @@
 import pytest
 
-from ansys.systemcoupling.core.path_util import join_path_strs, to_typelist, to_typepath
+from ansys.systemcoupling.core.util.pathstr import (
+    join_path_strs,
+    to_typelist,
+    to_typepath,
+)
 
 
 @pytest.mark.parametrize(

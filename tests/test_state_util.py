@@ -1,6 +1,6 @@
 import pytest
 
-from ansys.systemcoupling.core.state_util import (
+from ansys.systemcoupling.core.util.state_keys import (
     adapt_client_named_object_keys,
     adapt_native_named_object_keys,
     adapt_native_named_object_keys_in_place,

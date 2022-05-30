@@ -23,12 +23,12 @@ import hashlib
 import importlib
 import json
 import keyword
-import logging as LOG
 import sys
 from typing import Dict, Generic, List, NewType, Tuple, TypeVar, Union
 import weakref
 
-from ansys.systemcoupling.core.settings import name_util
+from ansys.systemcoupling.core.util import name_util
+from ansys.systemcoupling.core.util.logging import LOG
 
 # Type hints
 RealType = NewType("real", Union[float, str])  # constant or expression
@@ -796,7 +796,7 @@ def get_cls(name, info, parent=None):
         if object_type:
             cls.child_object_type = get_cls("child_object_type", info, cls)
     except Exception:
-        print(
+        LOG.error(
             f"Unable to construct class for '{name}' of "
             f"'{parent.syc_name if parent else None}'"
         )

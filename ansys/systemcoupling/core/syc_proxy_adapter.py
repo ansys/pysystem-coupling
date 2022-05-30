@@ -1,6 +1,6 @@
 from ansys.systemcoupling.core.settings.command_data import process as process_cmd_data
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
-from ansys.systemcoupling.core.state_util import adapt_native_named_object_keys
+from ansys.systemcoupling.core.util.state_keys import adapt_native_named_object_keys
 
 
 class SycProxyAdapter(SycProxyInterface):

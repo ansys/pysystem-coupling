@@ -2,7 +2,7 @@ import pytest
 from state import StateForTesting
 
 from ansys.systemcoupling.core.native_api.object_path import ObjectPath
-from ansys.systemcoupling.core.path_util import to_typepath
+from ansys.systemcoupling.core.util.pathstr import to_typepath
 
 
 @pytest.fixture
@@ -34,7 +34,6 @@ def root(api, rules):
 
 
 def test_root(root):
-    print(type(root))
     assert str(root) == "/ROOT"
     assert set(root.child_types()) == set(["A", "B", "C"])
 

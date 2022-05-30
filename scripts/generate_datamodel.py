@@ -40,7 +40,6 @@ from typing import IO
 # Allows us to run pysystemcoupling from source without setting PYTHONPATH
 _dirname = os.path.dirname(__file__)
 sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
-print(sys.path[-1])
 
 
 from ansys.systemcoupling.core.settings import datamodel

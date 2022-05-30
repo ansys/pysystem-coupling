@@ -1,4 +1,4 @@
-from ansys.systemcoupling.core.path_util import to_typelist
+from ansys.systemcoupling.core.util.pathstr import to_typelist
 
 
 class Node:
