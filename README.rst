@@ -86,11 +86,11 @@ The following example shows the set up and solve of the "oscillating
    >>> syc.Solve()
    >>> syc.exit()
 
-In this example, the System Coupling server was started by the ``launch_syc``
+In this example, the System Coupling server was started by the ``launch``
 function. Alternatively, the server can be started in advance with
-command line arguments ``-m cosimtest --srvport=<host:port>`` and
-``pysystemcoupling.connect_to_syc(host, port)`` called instead of
-``pysystemcoupling.launch_syc()`` in the above.
+command line arguments ``-m cosimgui --grpcport=<host:port>`` and
+``pysystemcoupling.connect(host, port)`` called instead of
+``pysystemcoupling.launch()`` in the above.
 
 
 
