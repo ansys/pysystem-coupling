@@ -13,7 +13,7 @@ from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInter
 
 def _make_metadata():
     metadata = deepcopy(dm_metadata)
-    cmd_meta = deepcopy(process(cmd_metadata, apply_exclusions=False))
+    cmd_meta = deepcopy(process(cmd_metadata, category=None))
     metadata["SystemCoupling"]["__commands"] = cmd_meta
     return metadata
 

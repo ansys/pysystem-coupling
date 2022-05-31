@@ -122,7 +122,10 @@ class SycGrpc(object):
             del SycGrpc._instances[self.__id]
 
         if self.__channel is not None:
-            self.__ostream_service.end_streaming()
+            try:
+                self.__ostream_service.end_streaming()
+            except Exception as e:
+                LOG.debug("Exception on OutputStreamService.end_straming(): " + str(e))
             self.__process_service.quit()
             self.__channel = None
         if self.__process:

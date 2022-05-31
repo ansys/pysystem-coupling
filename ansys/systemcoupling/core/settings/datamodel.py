@@ -846,7 +846,9 @@ def get_root(
             )
 
         info_hash = _gethash(obj_info)
-        if generated_module.SHASH != info_hash:
+        if generated_module.SHASH == info_hash:
+            LOG.debug("Using pre-generated datamodel classes.")
+        else:
             LOG.warning(
                 "Mismatch between generated file and server object "
                 "info. Dynamically created settings classes will "

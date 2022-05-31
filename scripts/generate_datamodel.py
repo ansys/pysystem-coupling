@@ -46,6 +46,7 @@ from ansys.systemcoupling.core.settings import datamodel
 from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
 )
+from ansys.systemcoupling.core.syc_proxy_adapter import get_cmd_metadata
 
 
 def _gethash(obj_info):
@@ -159,11 +160,9 @@ def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
     print(f"Finished generating {filepath}")
 
 
-def _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=False):
+def _make_combined_metadata(dm_metadata, cmd_metadata, category):
     metadata = deepcopy(dm_metadata)
-    cmd_meta = deepcopy(
-        process_command_data(cmd_metadata, apply_exclusions=not is_test_data)
-    )
+    cmd_meta = deepcopy(process_command_data(cmd_metadata, category=category))
     metadata["SystemCoupling"]["__commands"] = cmd_meta
     return metadata
 
@@ -174,7 +173,7 @@ def _generate_test_classes(dirname):
 
     from dm_raw_metadata import cmd_metadata, dm_metadata
 
-    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=True)
+    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, category=None)
 
     filepath = os.path.normpath(
         os.path.join(
@@ -189,16 +188,21 @@ def _generate_test_classes(dirname):
 
 def _generate_real_classes(dirname):
     import ansys.systemcoupling.core as pysyc
+    from ansys.systemcoupling.core import LOG
 
+    LOG.log_to_stdout()
+    LOG.set_level("DEBUG")
     syc = pysyc.launch()
     print("helper instance of syc successfully launched. Querying metadata...")
     api = syc.native_api
 
     dm_metadata = api.GetMetadata()
-    cmd_metadata_orig = api.GetCommandAndQueryMetadata()
+    cmd_metadata_orig = get_cmd_metadata(api)
     print("...raw metadata received. Processing...")
 
-    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata_orig)
+    dm_metadata = _make_combined_metadata(
+        dm_metadata, cmd_metadata_orig, category="setup"
+    )
 
     filedir = os.path.normpath(
         os.path.join(

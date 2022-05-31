@@ -1,7 +1,7 @@
 from ansys.systemcoupling.core.util.name_util import to_python_name
 
 
-def process(raw_data, category=None, apply_exclusions=True):
+def process(raw_data, category=None):
     """Takes the raw command and query metadata provided by System Coupling
     and manipulates it into a form that can be used by the datamodel
     generation functionality.
@@ -23,34 +23,13 @@ def process(raw_data, category=None, apply_exclusions=True):
         a command or query.
     category : str
         If not None, used to filter the category of commands to process.
-    apply_exclusions : bool
-        If False (default is True), do not respect the exclusion list when
-        processing commands. Specify False only for test purposes.
     """
-
-    def filter(name):
-        if category is None:
-            return not apply_exclusions or name not in excluded_list
-        elif category == "case":
-            return name in _case_list
-        elif category == "solution":
-            return name in _exposed_solution_list
-        else:
-            raise Exception(f"unhandled category {category}")
 
     cmds_out = {}
     for cmd_info in raw_data:
         name = cmd_info["name"]
-        if not filter(name):
+        if category and cmd_info["exposure"] != category:
             continue
-
-        pysyc_name = None
-        if "EnSight" in name:
-            # if we leave it to the default behaviour, EnSight
-            # appears as '..._en_sight...' in the Pythonic command
-            # names
-            name_ = name.replace("EnSight", "Ensight")
-            pysyc_name = to_python_name(name_)
 
         essential_args = cmd_info["essentialArgNames"]
         args_out = []
@@ -61,12 +40,21 @@ def process(raw_data, category=None, apply_exclusions=True):
                 continue
 
             arg_info_out = {}
-            arg_type = arg_info.get("Type")
-            if not arg_type:
-                arg_type = arg_info.get("type")
+
+            pysyc_arg_name = arg_info.get("pyname", None)
+            if not pysyc_arg_name:
+                pysyc_arg_name = to_python_name(arg)
+            arg_info_out["pysyc_name"] = pysyc_arg_name
+
+            arg_type = arg_info.get("type")
             if not arg_type:
                 raise Exception("Missing argument type")
-            arg_info_out["type"] = _process_arg_type(arg_type)
+            arg_info_out["type"] = arg_type
+
+            doc = arg_info.get("doc")
+            if doc:
+                arg_info_out["help"] = doc
+
             args_out.append((arg, arg_info_out))
 
         cmds_out[name] = {
@@ -75,8 +63,16 @@ def process(raw_data, category=None, apply_exclusions=True):
             "isQuery": cmd_info["isQuery"],
             "essentialArgs": essential_args,
         }
-        if pysyc_name is not None:
-            cmds_out[name]["pysyc_name"] = pysyc_name
+
+        doc = cmd_info.get("doc")
+        if doc:
+            cmds_out[name]["help"] = doc
+
+        pysyc_cmd_name = cmd_info.get("pyname", None)
+        if not pysyc_cmd_name:
+            pysyc_cmd_name = to_python_name(name)
+        if pysyc_cmd_name is not None:
+            cmds_out[name]["pysyc_name"] = pysyc_cmd_name
 
     return cmds_out
 

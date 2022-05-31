@@ -1226,6 +1226,8 @@ cmd_metadata = [
         "isInternal": False,
         "isQuery": False,
         "retType": "String",
+        # Extended data
+        "exposure": "setup",
     },
     {
         "name": "Solve",
@@ -1236,6 +1238,8 @@ cmd_metadata = [
         "isInternal": False,
         "isQuery": False,
         "retType": None,
+        # Extended data
+        "exposure": "solution",
     },
     {
         "name": "Save",
@@ -1246,6 +1250,8 @@ cmd_metadata = [
         "isInternal": False,
         "isQuery": False,
         "retType": "Logical",
+        # Extended data
+        "exposure": "case",
     },
     {
         "name": "GetParameterOptions",
@@ -1256,13 +1262,15 @@ cmd_metadata = [
         "isQuery": True,
         "optionalArgNames": [],
         "retType": "String List",  # documented as tuple ??
+        # Extended data
+        "exposure": "setup",
     },
     {
         "args": [
             ("AlgorithmName", {"type": "String"}),
             (
                 "MachineList",
-                {"Type": "StrOrIntDictList"},
+                {"type": "StrOrIntDictList"},
             ),
             (
                 "NamesAndFractions",
@@ -1282,6 +1290,8 @@ cmd_metadata = [
             "MachineList",
         ],
         "retType": "<class 'NoneType'>",
+        # Extended data
+        "exposure": "solution",
     },
 ]
 
