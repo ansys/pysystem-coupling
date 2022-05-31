@@ -58,6 +58,17 @@ class SycProxyAdapter(SycProxyInterface):
 # TODO need this in generate_datamodel
 #   - probably does not belong in here - find a better way to share
 def get_cmd_metadata(api):
+    """Adapt command metadata queried from System Coupling to the
+    form that is needed for the client implementation.
+
+    System Coupling currently splits this data across two separate
+    queries. One is the purely native System Coupling data, which
+    provides the core information. The other is information
+    specific to how the commands should be exposed into
+    pySystemCoupling. This function blends the data into a single
+    structure that is compatible with the datamodel class
+    generation code.
+    """
     cmd_metadata_in = api.GetCommandAndQueryMetadata()
     cmd_metadata_ex = api.GetPySycCommandMetadata()
     cmd_metdata_out = []
@@ -66,11 +77,14 @@ def get_cmd_metadata(api):
         info_ex = cmd_metadata_ex.get(name)
         if not info_ex:
             continue
+
         exposure = info_ex.get("exposure")
         if not exposure or exposure == "unexposed":
             continue
         info["exposure"] = exposure
+
         info["doc"] = info_ex["doc"]
+
         pyname = info_ex.get("pyname")
         if pyname:
             info["pyname"] = pyname
