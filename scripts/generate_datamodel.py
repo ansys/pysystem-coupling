@@ -193,12 +193,15 @@ def _generate_real_classes(dirname):
     LOG.log_to_stdout()
     LOG.set_level("DEBUG")
     syc = pysyc.launch()
-    print("helper instance of syc successfully launched. Querying metadata...")
+    LOG.debug("Helper instance of syc successfully launched.")
+    LOG.debug("Initialise 'native' API...")
     api = syc.native_api
 
-    dm_metadata = api.GetMetadata()
+    LOG.debug("Querying datamodel metadata...")
+    dm_metadata = api.GetMetadata(json_ret=True)
+    LOG.debug("Querying command metadata")
     cmd_metadata_orig = get_cmd_metadata(api)
-    print("...raw metadata received. Processing...")
+    LOG.debug("Command metadata received. Processing...")
 
     dm_metadata = _make_combined_metadata(
         dm_metadata, cmd_metadata_orig, category="setup"
@@ -216,10 +219,12 @@ def _generate_real_classes(dirname):
         )
     )
 
+    LOG.debug("Creating 'setup' classes.")
     filepath = os.path.join(filedir, "setup.py")
     write_classes_to_file(filepath, dm_metadata)
 
     for category in ("case", "solution"):
+        LOG.debug(f"Processing '{category}' command data...")
         cat_cmd_metadata = process_command_data(cmd_metadata_orig, category=category)
         root_type = category.title() + "Commands"
         cat_metadata = {
@@ -230,11 +235,19 @@ def _generate_real_classes(dirname):
                 "ordinal": 0,
             }
         }
+        LOG.debug(f"Creating '{category}' classes...")
         filepath = os.path.join(filedir, f"{category}.py")
         write_classes_to_file(filepath, cat_metadata, root_type=root_type)
+    LOG.debug("All done.")
 
 
 if __name__ == "__main__":
+
+    if "SYSC_ROOT" not in os.environ:
+        print(
+            "*******************\nSYSC_ROOT is not set. Continuing, but this "
+            "may not be correct.\n*******************"
+        )
 
     dirname = os.path.dirname(__file__)
 

@@ -2,11 +2,12 @@ from ansys.systemcoupling.core.util.pathstr import join_path_strs
 
 
 class ObjectPath(str):
-    """
-    A simple utility class for attribute-based access to children of data-model
+    """A simple utility class for attribute-based access to children of data-model
     objects and values.
-    e.g.
-    Root.Domain['fluid'].Boundary['wall'].BoundaryType = 'Wall'
+
+    e.g.,
+
+    ``Root.CouplingInterface["intf-1"].Side["One"].CouplingParticipant = "MAPDL-1"``
     """
 
     def __new__(cls, path, api, rules):

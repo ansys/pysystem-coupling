@@ -10,7 +10,7 @@ class SycProxyAdapter(SycProxyInterface):
     def get_static_info(self, category):
         cmd_metadata = get_cmd_metadata(self.__rpc)
         if category == "setup":
-            metadata = self.__rpc.GetMetadata()
+            metadata = self.__rpc.GetMetadata(json_ret=True)
             setup_cmd_data = process_cmd_data(cmd_metadata, category=category)
             category_root = "SystemCoupling"
             metadata[category_root]["__commands"] = setup_cmd_data
