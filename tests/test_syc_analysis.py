@@ -10,7 +10,7 @@ class _MockCommandExecutor:
     def __init__(self):
         self.__state = StateForTesting(native_state_format=True)
 
-    def GetMetadata(self):
+    def GetMetadata(self, json_ret=None):
         return dm_metadata
 
     def GetCommandAndQueryMetadata(self):
