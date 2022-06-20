@@ -62,6 +62,10 @@ class Logger:
         """
         self.logger.setLevel(level)
 
+    @property
+    def current_level(self) -> Any:
+        return self.logger.level
+
     def _get_default_log_filepath(self):
         fd, filepath = tempfile.mkstemp(
             suffix=f"-{os.getpid()}.txt",

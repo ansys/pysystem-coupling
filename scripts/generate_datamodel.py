@@ -30,18 +30,19 @@ python <path to generate_datamodel.py> [-t]
 
 from copy import deepcopy
 import io
-
-# import json
 import os
 import pprint
 import sys
 from typing import IO
 
+import black
+
 # Allows us to run pysystemcoupling from source without setting PYTHONPATH
 _dirname = os.path.dirname(__file__)
 sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 
-
+import ansys.systemcoupling.core as pysyc
+from ansys.systemcoupling.core import LOG
 from ansys.systemcoupling.core.settings import datamodel
 from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
@@ -155,8 +156,35 @@ def write_settings_classes(out: IO, cls, obj_info):
 
 def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
     cls = datamodel.get_cls(root_type, obj_info[root_type])
+
+    with io.StringIO() as out:
+        write_settings_classes(out, cls, obj_info)
+        content = out.getvalue()
+
+    # Experimental: run black on generated classes
+
+    # Prior to this change, every time the files were regenerated
+    # the previous black changes applied on commit were lost so
+    # the differences appeared greater than they were.
+    # The two options to deal with this are to disable black on
+    # the generated classes (like on the proto files) or apply
+    # black formatting as part of the generation process, as here.
+
+    # The rationale for adopting this approach is that these files
+    # are more likely to be read as part of the source than are
+    # proto files so there is some value in ensuring consistent
+    # formatting.
+
+    # we usually have log level as DEBUG here, but black generates a lot of output
+    old_level = LOG.current_level
+    LOG.set_level("WARNING")
+    content = black.format_file_contents(
+        content, fast=False, mode=black.Mode(preview=True)
+    )
+    LOG.set_level(old_level)
+
     with open(filepath, "w") as f:
-        write_settings_classes(f, cls, obj_info)
+        f.write(content)
     print(f"Finished generating {filepath}")
 
 
@@ -187,8 +215,6 @@ def _generate_test_classes(dirname):
 
 
 def _generate_real_classes(dirname):
-    import ansys.systemcoupling.core as pysyc
-    from ansys.systemcoupling.core import LOG
 
     LOG.log_to_stdout()
     LOG.set_level("DEBUG")

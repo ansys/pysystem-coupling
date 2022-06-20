@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "6c562b714fa53edd83b0636a428c015cdb3db28d928f53ccde7cc1ed93a6f1ce"
+SHASH = "77961699029a3bee05e8731302c9c225fc9a09cc960d614806cde4123a54ea61"
 
 
 class root(Group):
@@ -18,11 +18,10 @@ class root(Group):
         "solve",
         "step",
         "partition_participants",
+        "open_results_in_ensight",
         "write_ensight",
         "create_restart_point",
         "write_csv_chart_files",
-        "get_restarts",
-        "is_analysis_initialized",
     ]
 
     class start_participants(Command):
@@ -269,6 +268,28 @@ class root(Group):
 
             syc_name = "MachineList"
 
+    class open_results_in_ensight(Command):
+        """
+        Allows for System Coupling results to be postprocessed in EnSight.
+
+        When this command is issued, System Coupling looks for the ??results??.enc
+        file in the SyC/??results?? subdirectory of the current working directory.
+
+        When System Coupling finds the file, it loads the file into EnSight and
+        generates a confirmation message indicating that results are being opened.
+
+        If System Coupling is unable to find the ??results??.enc file and/or the
+        EnSight executable, then it raises an error.
+
+        The ??open_results_in_ensight?? command may be issued multiple times from the same
+        instance of System Coupling. Each time the command is issued, a new
+        instance of the EnSight application is opened. Any existing instances of
+        EnSight remain open, both when additional instances are created and when
+        System Coupling exits.
+        """
+
+        syc_name = "OpenResultsInEnSight"
+
     class write_ensight(Command):
         """
         Write a file with mesh and results which can be loaded into Ensight for
@@ -346,38 +367,3 @@ class root(Group):
         """
 
         syc_name = "WriteCsvChartFiles"
-
-    class get_restarts(Command):
-        """
-        Returns a dictionary of restart points and restart file names in
-        a directory. If no file path is given, restart points from the SyC
-        directory in the working directory will be returned. If no restart files
-        exist, an empty dictionary will be returned. Note that the dictionary keys
-        are not guaranteed to be ordered.
-
-        Parameters
-        ----------
-            file_path : str
-                Writeable directory in which the SyC directory containing the restart
-        files reside.
-
-        """
-
-        syc_name = "GetRestarts"
-        argument_names = ["file_path"]
-        essential_arguments = []
-
-        class file_path(String):
-            """
-            Writeable directory in which the SyC directory containing the restart
-            files reside.
-            """
-
-            syc_name = "FilePath"
-
-    class is_analysis_initialized(Command):
-        """
-        Returns whether the analysis is initialized.
-        """
-
-        syc_name = "IsAnalysisInitialized"

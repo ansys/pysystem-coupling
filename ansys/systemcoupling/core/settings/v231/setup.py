@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "9fe2734770a84570cee03cbb2e9745da498baca0427fe4da03d2c4ca814ca521"
+SHASH = "ab5d08551483b25a11b0ea97d7ef3843cf249e1bf8dc38c5f2dbe0c4730bcc38"
 
 
 class root(Group):
@@ -2586,11 +2586,10 @@ class root(Group):
         "add_reference_frame",
         "add_transformation",
         "delete_transformation",
+        "get_execution_command",
+        "generate_input_file",
         "add_participant",
         "import_system_coupling_input_file",
-        "get_expression_variables",
-        "add_default_transformation",
-        "add_instancing",
         "get_errors",
         "add_named_expression",
         "add_expression_function",
@@ -3302,6 +3301,65 @@ class root(Group):
 
             syc_name = "TransformationName"
 
+    class get_execution_command(Command):
+        """
+        Gets the execution command needed to start the specified participant
+
+        Parameters
+        ----------
+            participant_name : str
+                Name of the participant for which the execution command will
+        be returned.
+
+        """
+
+        syc_name = "GetExecutionCommand"
+        argument_names = ["participant_name"]
+        essential_arguments = ["participant_name"]
+
+        class participant_name(String):
+            """
+            Name of the participant for which the execution command will
+            be returned.
+            """
+
+            syc_name = "ParticipantName"
+
+    class generate_input_file(Command):
+        """
+        Generates the input journal file for a given Fluent participant.
+
+        Parameters
+        ----------
+            participant_name : str
+                Name of the participant for which the execution command will
+        be returned.
+            file_name : str
+                Name of the journal script to be written. Note that this name is relative
+        to the participant's working directory.
+
+        """
+
+        syc_name = "GenerateInputFile"
+        argument_names = ["participant_name", "file_name"]
+        essential_arguments = ["participant_name", "file_name"]
+
+        class participant_name(String):
+            """
+            Name of the participant for which the execution command will
+            be returned.
+            """
+
+            syc_name = "ParticipantName"
+
+        class file_name(String):
+            """
+            Name of the journal script to be written. Note that this name is relative
+            to the participant's working directory.
+            """
+
+            syc_name = "FileName"
+
     class add_participant(Command):
         """
         Adds a coupling participant to the data model.
@@ -3427,166 +3485,6 @@ class root(Group):
             """
 
             syc_name = "FilePath"
-
-    class get_expression_variables(PathCommand):
-        """
-        Given a path to an object return a list of variables which can be used in
-        an expression on the object. A parameter name may be provided, in which
-        case the list of variables returned is that which is available for use in
-        an expression assigned to that parameter.
-
-        The variable is a tuple of strings: the variable name, the unit string of
-        the variable (in the defined unit system), and the tensor type of the
-        variable (e.g. scalar or vector).
-
-        If an expression can not be used on the object or if there are no valid
-        variables which can be used in the expression, the no output will be
-        returned.
-
-        For the purposes of the command, "valid" means that the variable may be
-        used in the expression. Note however that "valid" does not necessarily mean
-        that a variable can be used in the expression. Other validation rules may
-        preclude the use of the variable. See the user documentation for more
-        details.
-
-        The list of variables will be ordered with the most likely variables first.
-        That is, those sharing the same quantity type and/or dimensionality as the
-        target of the expression.
-
-        Parameters
-        ----------
-            parameter_name : str
-                String indicating the name of the parameter to get expression
-        variables for.
-
-        """
-
-        syc_name = "GetExpressionVariables"
-        argument_names = ["parameter_name"]
-        essential_arguments = ["object_path"]
-
-        class parameter_name(String):
-            """
-            String indicating the name of the parameter to get expression
-            variables for.
-            """
-
-            syc_name = "ParameterName"
-
-    class add_default_transformation(Command):
-        """
-        Add a default transformation to a reference frame defined in the datamodel
-
-        Given the reference frame to add to the transform to and the type of
-        transform to be added, a minimally defined transformation will be
-        constructed. Any information required for the transformation (e.g. angle
-        and axis for a rotation) will have their default values.
-
-        The name of the transformation will be based on the type of transformation.
-        The name will be of the form "<??transformation_type??>-#" where # is the first
-        positive integer which yields a unique frame name.
-
-        The transformation will also be added to the end of the ??transformation_order??
-        list for the reference frame.
-
-        Returns the name of the transformation.
-
-        Parameters
-        ----------
-            reference_frame : str
-                Name of the reference frame to which the transformation will be added.
-            transformation_type : str
-                ??type?? of transformation to be added. Available options are Rotation,
-        Translation, or Reflection (alpha only).
-
-        """
-
-        syc_name = "AddDefaultTransformation"
-        argument_names = ["reference_frame", "transformation_type"]
-        essential_arguments = ["reference_frame", "transformation_type"]
-
-        class reference_frame(String):
-            """
-            Name of the reference frame to which the transformation will be added.
-            """
-
-            syc_name = "ReferenceFrame"
-
-        class transformation_type(String):
-            """
-            ??type?? of transformation to be added. Available options are Rotation,
-            Translation, or Reflection (alpha only).
-            """
-
-            syc_name = "TransformationType"
-
-    class add_instancing(Command):
-        """
-        Add a instancing object to the datamodel
-
-        Without optional arguments, constructs a default instancing object with the
-        next available instancing name. The name will be of the form "??instancing??-#"
-        where "#" is the first unused integer value starting from 1.
-
-        Returns the name of the instancing object.
-
-        Parameters
-        ----------
-            reference_frame : str
-                Name of the reference frame used to define the orientation of the
-        instancing.
-            instances_in_full_circle : int
-                The number of instances that would exist if the original mesh was
-        replicated about 360 degrees. This value includes the original mesh
-        instance. If the mapping should not use all instances for mapping,
-        use the optional argument ??instances_for_mapping??.
-            instances_for_mapping : int
-                The number of instances that will be included when instancing is
-        applied. Not required unless the number of instances to be used for
-        mapping does not match the number of instances in a full circle. If
-        this argument is not provided, then the value will be automatically set
-        to ??instances_in_full_circle??. This value includes the original mesh
-        instance.
-
-        """
-
-        syc_name = "AddInstancing"
-        argument_names = [
-            "reference_frame",
-            "instances_in_full_circle",
-            "instances_for_mapping",
-        ]
-        essential_arguments = []
-
-        class reference_frame(String):
-            """
-            Name of the reference frame used to define the orientation of the
-            instancing.
-            """
-
-            syc_name = "ReferenceFrame"
-
-        class instances_in_full_circle(Integer):
-            """
-            The number of instances that would exist if the original mesh was
-            replicated about 360 degrees. This value includes the original mesh
-            instance. If the mapping should not use all instances for mapping,
-            use the optional argument ??instances_for_mapping??.
-            """
-
-            syc_name = "InstancesInFullCircle"
-
-        class instances_for_mapping(Integer):
-            """
-            The number of instances that will be included when instancing is
-            applied. Not required unless the number of instances to be used for
-            mapping does not match the number of instances in a full circle. If
-            this argument is not provided, then the value will be automatically set
-            to ??instances_in_full_circle??. This value includes the original mesh
-            instance.
-            """
-
-            syc_name = "InstancesForMapping"
 
     class get_errors(Command):
         """
