@@ -2,7 +2,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "63e3fdc2d0cfb287e02d6debd7a485991c6cb76573048a037f8bbb041c4b568a"
+SHASH = "ab5d08551483b25a11b0ea97d7ef3843cf249e1bf8dc38c5f2dbe0c4730bcc38"
 
 
 class root(Group):
@@ -2578,8 +2578,6 @@ class root(Group):
             self.set_property_state("output_frequency", value)
 
     command_names = [
-        "clear_state",
-        "initialize",
         "add_interface",
         "add_interface_by_display_names",
         "add_data_transfer",
@@ -2590,51 +2588,39 @@ class root(Group):
         "delete_transformation",
         "get_execution_command",
         "generate_input_file",
-        "create_restart_point",
         "add_participant",
         "import_system_coupling_input_file",
-        "delete_snapshot",
-        "write_csv_chart_files",
-        "get_expression_variables",
-        "add_default_transformation",
-        "add_instancing",
         "get_errors",
         "add_named_expression",
         "add_expression_function",
         "reload_expression_function_modules",
-        "map",
-        "preview_mapping",
-        "are_all_participants_server",
     ]
-
-    class clear_state(Command):
-        """
-        'clear_state' child of 'root' object
-        """
-
-        syc_name = "ClearState"
-
-    class initialize(Command):
-        """
-        'initialize' child of 'root' object
-        """
-
-        syc_name = "Initialize"
 
     class add_interface(Command):
         """
-        'add_interface' child of 'root' object
+        Adds an interface based on the participant and region names specified
+        as arguments for each side of the interface. This command requires that you
+        specify participants and regions using their names as described below in
+        Essential Keyword Arguments.
+
+        Cannot be run after participants have been started.
+
+        Returns the name of the Interface created.
 
         Parameters
         ----------
             side_one_participant : str
-                'side_one_participant' child of 'add_interface' object
+                String indicating the name of the participant to be associated with
+        side One of the interface.
             side_one_regions : typing.List[str]
-                'side_one_regions' child of 'add_interface' object
+                List specifying the name(s) of region(s) to be added to side One of
+        the interface.
             side_two_participant : str
-                'side_two_participant' child of 'add_interface' object
+                String indicating the name of the participant to be associated with
+        side Two of the interface.
             side_two_regions : typing.List[str]
-                'side_two_regions' child of 'add_interface' object
+                List specifying the name(s) of region(s) to be added to side Two of
+        the interface.
 
         """
 
@@ -2654,46 +2640,61 @@ class root(Group):
 
         class side_one_participant(String):
             """
-            'side_one_participant' child of 'add_interface' object
+            String indicating the name of the participant to be associated with
+            side One of the interface.
             """
 
             syc_name = "SideOneParticipant"
 
         class side_one_regions(StringList):
             """
-            'side_one_regions' child of 'add_interface' object
+            List specifying the name(s) of region(s) to be added to side One of
+            the interface.
             """
 
             syc_name = "SideOneRegions"
 
         class side_two_participant(String):
             """
-            'side_two_participant' child of 'add_interface' object
+            String indicating the name of the participant to be associated with
+            side Two of the interface.
             """
 
             syc_name = "SideTwoParticipant"
 
         class side_two_regions(StringList):
             """
-            'side_two_regions' child of 'add_interface' object
+            List specifying the name(s) of region(s) to be added to side Two of
+            the interface.
             """
 
             syc_name = "SideTwoRegions"
 
     class add_interface_by_display_names(Command):
         """
-        'add_interface_by_display_names' child of 'root' object
+        Adds an interface based on the participant and region names specified
+        as arguments for each side of the interface. This command requires that you
+        specify participants and regions using their names, as described below in
+        Essential Keyword Arguments.
+
+        Cannot be run after participants have been started.
+
+        Returns the name of the Interface created.
 
         Parameters
         ----------
             side_one_participant : str
-                'side_one_participant' child of 'add_interface_by_display_names' object
+                String indicating the name of the participant to be associated with
+        side One of the interface.
             side_one_regions : typing.List[str]
-                'side_one_regions' child of 'add_interface_by_display_names' object
+                List specifying the name(s) of region(s) to be added to side One of
+        the interface.
             side_two_participant : str
-                'side_two_participant' child of 'add_interface_by_display_names' object
+                String indicating the name of the participant to be associated with
+        side Two of the interface.
             side_two_regions : typing.List[str]
-                'side_two_regions' child of 'add_interface_by_display_names' object
+                List specifying the name(s) of region(s) to be added to side Two
+        of the interface.
 
         """
 
@@ -2713,58 +2714,103 @@ class root(Group):
 
         class side_one_participant(String):
             """
-            'side_one_participant' child of 'add_interface_by_display_names' object
+            String indicating the name of the participant to be associated with
+            side One of the interface.
             """
 
             syc_name = "SideOneParticipant"
 
         class side_one_regions(StringList):
             """
-            'side_one_regions' child of 'add_interface_by_display_names' object
+            List specifying the name(s) of region(s) to be added to side One of
+            the interface.
             """
 
             syc_name = "SideOneRegions"
 
         class side_two_participant(String):
             """
-            'side_two_participant' child of 'add_interface_by_display_names' object
+            String indicating the name of the participant to be associated with
+            side Two of the interface.
             """
 
             syc_name = "SideTwoParticipant"
 
         class side_two_regions(StringList):
             """
-            'side_two_regions' child of 'add_interface_by_display_names' object
+            List specifying the name(s) of region(s) to be added to side Two
+            of the interface.
             """
 
             syc_name = "SideTwoRegions"
 
     class add_data_transfer(Command):
         """
-        'add_data_transfer' child of 'root' object
+        Adds data transfer based on arguments that specify the interface, target
+        side, and variables to be associated with each side of the interface.
+        The command requires that you specify variables using their names, as
+        described below in Essential Keyword Arguments. Either a variable-based or
+        expression-based data transfer may be created with this command based on
+        the Optional Keyword Arguments. If a variable-based data transfer argument
+        is given, then no expression-based data transfer arguments can be used. If
+        an expression-based data transfer argument is given, then no variable-based
+        data transfer arguments can be used.
+
+        Cannot be run after participants have been started.
+
+        Returns the name of the Data Transfer created.
 
         Parameters
         ----------
             interface : str
-                'interface' child of 'add_data_transfer' object
+                String indicating the name of the interface on which the data transfer
+        is to be created.
             target_side : str
-                'target_side' child of 'add_data_transfer' object
+                String indicating the side of the interface to receive the data
+        transfer variable. Possible values are 'One' or 'Two'.
             source_variable : str
-                'source_variable' child of 'add_data_transfer' object
+                String specifying the name of the variable on the source side of
+        the data transfer. Used when creating a variable-based data transfer.
+        Must be combined with ??target_variable??.
             target_variable : str
-                'target_variable' child of 'add_data_transfer' object
+                String specifying the name of the variable on the target side of
+        the data transfer. Must be combined with either ??source_variable?? (when
+        creating a variable-based data transfer) or with ??value??{X|Y|Z}
+        (when creating an expression-based data transfer).
             value : str
-                'value' child of 'add_data_transfer' object
+                String specifying the expression to use on the source side of the data
+        transfer. Used when creating an expression-based data transfer. If the
+        ??target_variable?? is a vector, a vector-valued expression must be provided.
+        Alternatively, ??value_x??, ??value_y??, ??value_z?? may be used to specify the
+        individual components of the vector expression.
             value_x : str
-                'value_x' child of 'add_data_transfer' object
+                String specifying the X component of the expression to use on the
+        source side of the data transfer. This may optionally be used when creating
+        an expression-based data transfer if the ??target_variable?? is a vector as an
+        alternative to specifying a vector-valued expression in ??value??. ??value_y?? and
+        ??value_z?? are also required if ??value_x?? is used.
             value_y : str
-                'value_y' child of 'add_data_transfer' object
+                String specifying the Y component of the expression to use on the
+        source side of the data transfer. This may optionally be used when creating
+        an expression-based data transfer if the ??target_variable?? is a vector as an
+        alternative to specifying a vector-valued expression in ??value??. ??value_x?? and
+        ??value_z?? are also required if ??value_y?? is used.
             value_z : str
-                'value_z' child of 'add_data_transfer' object
+                String specifying the Z component of the expression to use on the
+        source side of the data transfer. This may optionally be used when creating
+        an expression-based data transfer if the ??target_variable?? is a vector as an
+        alternative to specifying a vector-valued expression in ??value??. ??value_x?? and
+        ??value_y?? are also required if ??value_z?? is used.
             side_one_variable : str
-                'side_one_variable' child of 'add_data_transfer' object
+                String specifying the name of the variable associated with side1
+        of the interface. Must be combined with ??side_two_variable??. Used only
+        when creating variable-based data transfers. Consider using
+        ??source_variable??/??target_variable?? parameters instead.
             side_two_variable : str
-                'side_two_variable' child of 'add_data_transfer' object
+                String specifying the name of the variable associated with side2
+        of the interface. Must be combined with ??side_two_variable??. Used only
+        when creating variable-based data transfers. Consider using
+        ??source_variable??/??target_variable?? parameters instead.
 
         """
 
@@ -2785,100 +2831,169 @@ class root(Group):
 
         class interface(String):
             """
-            'interface' child of 'add_data_transfer' object
+            String indicating the name of the interface on which the data transfer
+            is to be created.
             """
 
             syc_name = "Interface"
 
         class target_side(String):
             """
-            'target_side' child of 'add_data_transfer' object
+            String indicating the side of the interface to receive the data
+            transfer variable. Possible values are 'One' or 'Two'.
             """
 
             syc_name = "TargetSide"
 
         class source_variable(String):
             """
-            'source_variable' child of 'add_data_transfer' object
+            String specifying the name of the variable on the source side of
+            the data transfer. Used when creating a variable-based data transfer.
+            Must be combined with ??target_variable??.
             """
 
             syc_name = "SourceVariable"
 
         class target_variable(String):
             """
-            'target_variable' child of 'add_data_transfer' object
+            String specifying the name of the variable on the target side of
+            the data transfer. Must be combined with either ??source_variable?? (when
+            creating a variable-based data transfer) or with ??value??{X|Y|Z}
+            (when creating an expression-based data transfer).
             """
 
             syc_name = "TargetVariable"
 
         class value(String):
             """
-            'value' child of 'add_data_transfer' object
+            String specifying the expression to use on the source side of the data
+            transfer. Used when creating an expression-based data transfer. If the
+            ??target_variable?? is a vector, a vector-valued expression must be provided.
+            Alternatively, ??value_x??, ??value_y??, ??value_z?? may be used to specify the
+            individual components of the vector expression.
             """
 
             syc_name = "Value"
 
         class value_x(String):
             """
-            'value_x' child of 'add_data_transfer' object
+            String specifying the X component of the expression to use on the
+            source side of the data transfer. This may optionally be used when creating
+            an expression-based data transfer if the ??target_variable?? is a vector as an
+            alternative to specifying a vector-valued expression in ??value??. ??value_y?? and
+            ??value_z?? are also required if ??value_x?? is used.
             """
 
             syc_name = "ValueX"
 
         class value_y(String):
             """
-            'value_y' child of 'add_data_transfer' object
+            String specifying the Y component of the expression to use on the
+            source side of the data transfer. This may optionally be used when creating
+            an expression-based data transfer if the ??target_variable?? is a vector as an
+            alternative to specifying a vector-valued expression in ??value??. ??value_x?? and
+            ??value_z?? are also required if ??value_y?? is used.
             """
 
             syc_name = "ValueY"
 
         class value_z(String):
             """
-            'value_z' child of 'add_data_transfer' object
+            String specifying the Z component of the expression to use on the
+            source side of the data transfer. This may optionally be used when creating
+            an expression-based data transfer if the ??target_variable?? is a vector as an
+            alternative to specifying a vector-valued expression in ??value??. ??value_x?? and
+            ??value_y?? are also required if ??value_z?? is used.
             """
 
             syc_name = "ValueZ"
 
         class side_one_variable(String):
             """
-            'side_one_variable' child of 'add_data_transfer' object
+            String specifying the name of the variable associated with side1
+            of the interface. Must be combined with ??side_two_variable??. Used only
+            when creating variable-based data transfers. Consider using
+            ??source_variable??/??target_variable?? parameters instead.
             """
 
             syc_name = "SideOneVariable"
 
         class side_two_variable(String):
             """
-            'side_two_variable' child of 'add_data_transfer' object
+            String specifying the name of the variable associated with side2
+            of the interface. Must be combined with ??side_two_variable??. Used only
+            when creating variable-based data transfers. Consider using
+            ??source_variable??/??target_variable?? parameters instead.
             """
 
             syc_name = "SideTwoVariable"
 
     class add_data_transfer_by_display_names(Command):
         """
-        'add_data_transfer_by_display_names' child of 'root' object
+        Adds data transfer based on arguments that specify the interface, target
+        side, and variables to be associated with each side of the interface.
+        The command requires that you specify variables using their display names,
+        as described below in Essential Keyword Arguments. Either a variable-based
+        or expression-based data transfer may be created with this command based on
+        the Optional Keyword Arguments. If a variable-based data transfer argument
+        is given, then no expression-based data transfer arguments can be used. If
+        an expression-based data transfer argument is given, then no variable-based
+        data transfer arguments can be used.
+
+        Cannot be run after participants have been started.
+
+        Returns the name of the Data Transfer created.
 
         Parameters
         ----------
             interface : str
-                'interface' child of 'add_data_transfer_by_display_names' object
+                String indicating the display name of the interface on which the
+        data transfer is to be created.
             target_side : str
-                'target_side' child of 'add_data_transfer_by_display_names' object
+                String indicating the side of the interface to receive the data
+        transfer variable. Possible values are 'One' or 'Two'.
             source_variable : str
-                'source_variable' child of 'add_data_transfer_by_display_names' object
+                String specifying the display name of the variable on the source side of
+        the data transfer. Used when creating a variable-based data transfer.
+        Must be combined with ??target_variable??.
             target_variable : str
-                'target_variable' child of 'add_data_transfer_by_display_names' object
+                String specifying the display name of the variable on the target side of
+        the data transfer. Must be combined with either ??source_variable?? (when
+        creating a variable-based data transfer) or with ??value??{X|Y|Z}
+        (when creating an expression-based data transfer).
             value : str
-                'value' child of 'add_data_transfer_by_display_names' object
+                String specifying the expression to use on the source side of the data
+        transfer. Used when creating an expression-based data transfer if the
+        ??target_variable?? is a scalar. (If the ??target_variable?? is a vector,
+        ??value_x??, ??value_y??, ??value_z?? must be used instead.)
             value_x : str
-                'value_x' child of 'add_data_transfer_by_display_names' object
+                String specifying the X component of the expression to use on the
+        source side of the data transfer. Used when crating an expression-based
+        data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+        is scalar, ??value?? must be used instead.) ??value_y?? and ??value_z?? are also
+        required if ??value_x?? is used.
             value_y : str
-                'value_y' child of 'add_data_transfer_by_display_names' object
+                String specifying the Y component of the expression to use on the
+        source side of the data transfer. Used when crating an expression-based
+        data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+        is scalar, ??value?? must be used instead.) ??value_x?? and ??value_z?? are also
+        required if ??value_y?? is used.
             value_z : str
-                'value_z' child of 'add_data_transfer_by_display_names' object
+                String specifying the Z component of the expression to use on the
+        source side of the data transfer. Used when crating an expression-based
+        data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+        is scalar, ??value?? must be used instead.) ??value_x?? and ??value_y?? are also
+        required if ??value_z?? is used.
             side_one_variable : str
-                'side_one_variable' child of 'add_data_transfer_by_display_names' object
+                String specifying the display name of the variable associated with side1
+        of the interface. Must be combined with ??side_two_variable??. Used only
+        when creating variable-based data transfers. Consider using
+        ??source_variable??/??target_variable?? parameters instead.
             side_two_variable : str
-                'side_two_variable' child of 'add_data_transfer_by_display_names' object
+                String specifying the display name of the variable associated with side2
+        of the interface. Must be combined with ??side_two_variable??. Used only
+        when creating variable-based data transfers. Consider using
+        ??source_variable??/??target_variable?? parameters instead.
 
         """
 
@@ -2899,82 +3014,113 @@ class root(Group):
 
         class interface(String):
             """
-            'interface' child of 'add_data_transfer_by_display_names' object
+            String indicating the display name of the interface on which the
+            data transfer is to be created.
             """
 
             syc_name = "Interface"
 
         class target_side(String):
             """
-            'target_side' child of 'add_data_transfer_by_display_names' object
+            String indicating the side of the interface to receive the data
+            transfer variable. Possible values are 'One' or 'Two'.
             """
 
             syc_name = "TargetSide"
 
         class source_variable(String):
             """
-            'source_variable' child of 'add_data_transfer_by_display_names' object
+            String specifying the display name of the variable on the source side of
+            the data transfer. Used when creating a variable-based data transfer.
+            Must be combined with ??target_variable??.
             """
 
             syc_name = "SourceVariable"
 
         class target_variable(String):
             """
-            'target_variable' child of 'add_data_transfer_by_display_names' object
+            String specifying the display name of the variable on the target side of
+            the data transfer. Must be combined with either ??source_variable?? (when
+            creating a variable-based data transfer) or with ??value??{X|Y|Z}
+            (when creating an expression-based data transfer).
             """
 
             syc_name = "TargetVariable"
 
         class value(String):
             """
-            'value' child of 'add_data_transfer_by_display_names' object
+            String specifying the expression to use on the source side of the data
+            transfer. Used when creating an expression-based data transfer if the
+            ??target_variable?? is a scalar. (If the ??target_variable?? is a vector,
+            ??value_x??, ??value_y??, ??value_z?? must be used instead.)
             """
 
             syc_name = "Value"
 
         class value_x(String):
             """
-            'value_x' child of 'add_data_transfer_by_display_names' object
+            String specifying the X component of the expression to use on the
+            source side of the data transfer. Used when crating an expression-based
+            data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+            is scalar, ??value?? must be used instead.) ??value_y?? and ??value_z?? are also
+            required if ??value_x?? is used.
             """
 
             syc_name = "ValueX"
 
         class value_y(String):
             """
-            'value_y' child of 'add_data_transfer_by_display_names' object
+            String specifying the Y component of the expression to use on the
+            source side of the data transfer. Used when crating an expression-based
+            data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+            is scalar, ??value?? must be used instead.) ??value_x?? and ??value_z?? are also
+            required if ??value_y?? is used.
             """
 
             syc_name = "ValueY"
 
         class value_z(String):
             """
-            'value_z' child of 'add_data_transfer_by_display_names' object
+            String specifying the Z component of the expression to use on the
+            source side of the data transfer. Used when crating an expression-based
+            data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+            is scalar, ??value?? must be used instead.) ??value_x?? and ??value_y?? are also
+            required if ??value_z?? is used.
             """
 
             syc_name = "ValueZ"
 
         class side_one_variable(String):
             """
-            'side_one_variable' child of 'add_data_transfer_by_display_names' object
+            String specifying the display name of the variable associated with side1
+            of the interface. Must be combined with ??side_two_variable??. Used only
+            when creating variable-based data transfers. Consider using
+            ??source_variable??/??target_variable?? parameters instead.
             """
 
             syc_name = "SideOneVariable"
 
         class side_two_variable(String):
             """
-            'side_two_variable' child of 'add_data_transfer_by_display_names' object
+            String specifying the display name of the variable associated with side2
+            of the interface. Must be combined with ??side_two_variable??. Used only
+            when creating variable-based data transfers. Consider using
+            ??source_variable??/??target_variable?? parameters instead.
             """
 
             syc_name = "SideTwoVariable"
 
     class get_region_names_for_participant(Command):
         """
-        'get_region_names_for_participant' child of 'root' object
+        Gets all of the specified participant's regions.
+
+        Returns a dictionary with the regions as keys and the corresponding
+        display names as values.
 
         Parameters
         ----------
             participant_name : str
-                'participant_name' child of 'get_region_names_for_participant' object
+                String indicating the participant for which regions are returned.
 
         """
 
@@ -2984,19 +3130,29 @@ class root(Group):
 
         class participant_name(String):
             """
-            'participant_name' child of 'get_region_names_for_participant' object
+            String indicating the participant for which regions are returned.
             """
 
             syc_name = "ParticipantName"
 
     class add_reference_frame(Command):
         """
-        'add_reference_frame' child of 'root' object
+        Add a reference frame to the datamodel
+
+        The function will add a blank reference frame to the datamodel. Any
+        transformations must be added separately.
+
+        Reference frame name will be "Frame-#" where # is the first positive
+        integer which yields a unique frame name.
+
+        Returns the name of the reference frame.
 
         Parameters
         ----------
             parent_reference_frame : str
-                'parent_reference_frame' child of 'add_reference_frame' object
+                Name of a reference frame that the added frame should use as the
+        parent. If the argument is not provided, the default parent reference
+        frame "GlobalReferenceFrame" will be added.
 
         """
 
@@ -3006,27 +3162,52 @@ class root(Group):
 
         class parent_reference_frame(String):
             """
-            'parent_reference_frame' child of 'add_reference_frame' object
+            Name of a reference frame that the added frame should use as the
+            parent. If the argument is not provided, the default parent reference
+            frame "GlobalReferenceFrame" will be added.
             """
 
             syc_name = "ParentReferenceFrame"
 
     class add_transformation(Command):
         """
-        'add_transformation' child of 'root' object
+        Add a transformation to a reference frame defined in the datamodel
+
+        Given the reference frame to add to the transform to, the type of transform
+        to be added, and any required information for the transformation, add the
+        transformation to the referenceFrame. Not all parameters are required for
+        every transformation.
+
+        The name of the transformation will be based on the type of transformation.
+        The name will be of the form "<??transformation_type??>-#" where # is the first
+        positive integer which yields a unique frame name.
+
+        The transformation will also be added to the end of the ??transformation_order??
+        list for the reference frame.
+
+        Returns the name of the transformation.
 
         Parameters
         ----------
             reference_frame : str
-                'reference_frame' child of 'add_transformation' object
+                Name of the reference frame to which the transformation will be added.
             transformation_type : str
-                'transformation_type' child of 'add_transformation' object
+                ??type?? of transformation to be added. Available options are Rotation or
+        Translation
+
+        Required Parameters for ??transformation?? Types:
+            Rotation: ??angle??, ??axis??, ??vector?? (if ??axis?? is "UserDefined")
+            Translation: ??vector??
             angle : real
-                'angle' child of 'add_transformation' object
+                ??angle?? to rotate a reference frame. Used with Rotation
+        ??transformation_type??. Default unit is Radians.
             axis : str
-                'axis' child of 'add_transformation' object
-            vector : typing.List[real]
-                'vector' child of 'add_transformation' object
+                ??axis?? about which a rotation is applied. Used with
+        Rotation ??transformation_type??. Available options are: "XAxis", "YAxis",
+        "ZAxis", and "UserDefined".
+            vector : typing.Tuple[real, real, real]
+                A vector for use with Translation ??transformation_type?? or Rotation
+        ??transformation_type?? if the ??axis?? is "UserDefined".
 
         """
 
@@ -3042,49 +3223,62 @@ class root(Group):
 
         class reference_frame(String):
             """
-            'reference_frame' child of 'add_transformation' object
+            Name of the reference frame to which the transformation will be added.
             """
 
             syc_name = "ReferenceFrame"
 
         class transformation_type(String):
             """
-            'transformation_type' child of 'add_transformation' object
+            ??type?? of transformation to be added. Available options are Rotation or
+            Translation
+
+            Required Parameters for ??transformation?? Types:
+                Rotation: ??angle??, ??axis??, ??vector?? (if ??axis?? is "UserDefined")
+                Translation: ??vector??
             """
 
             syc_name = "TransformationType"
 
         class angle(Real):
             """
-            'angle' child of 'add_transformation' object
+            ??angle?? to rotate a reference frame. Used with Rotation
+            ??transformation_type??. Default unit is Radians.
             """
 
             syc_name = "Angle"
 
         class axis(String):
             """
-            'axis' child of 'add_transformation' object
+            ??axis?? about which a rotation is applied. Used with
+            Rotation ??transformation_type??. Available options are: "XAxis", "YAxis",
+            "ZAxis", and "UserDefined".
             """
 
             syc_name = "Axis"
 
-        class vector(RealList):
+        class vector(RealVector):
             """
-            'vector' child of 'add_transformation' object
+            A vector for use with Translation ??transformation_type?? or Rotation
+            ??transformation_type?? if the ??axis?? is "UserDefined".
             """
 
             syc_name = "Vector"
 
     class delete_transformation(Command):
         """
-        'delete_transformation' child of 'root' object
+        Delete a transformation from a reference frame
+
+        In addition to deleting the transformation object, it will also remove the
+        transformation from ??transformation_order?? (if it exists in that list).
 
         Parameters
         ----------
             reference_frame : str
-                'reference_frame' child of 'delete_transformation' object
+                Name of the reference frame from which the transformation will be
+        deleted.
             transformation_name : str
-                'transformation_name' child of 'delete_transformation' object
+                Name of the transformation which will be deleted.
 
         """
 
@@ -3094,26 +3288,28 @@ class root(Group):
 
         class reference_frame(String):
             """
-            'reference_frame' child of 'delete_transformation' object
+            Name of the reference frame from which the transformation will be
+            deleted.
             """
 
             syc_name = "ReferenceFrame"
 
         class transformation_name(String):
             """
-            'transformation_name' child of 'delete_transformation' object
+            Name of the transformation which will be deleted.
             """
 
             syc_name = "TransformationName"
 
     class get_execution_command(Command):
         """
-        'get_execution_command' child of 'root' object
+        Gets the execution command needed to start the specified participant
 
         Parameters
         ----------
             participant_name : str
-                'participant_name' child of 'get_execution_command' object
+                Name of the participant for which the execution command will
+        be returned.
 
         """
 
@@ -3123,21 +3319,24 @@ class root(Group):
 
         class participant_name(String):
             """
-            'participant_name' child of 'get_execution_command' object
+            Name of the participant for which the execution command will
+            be returned.
             """
 
             syc_name = "ParticipantName"
 
     class generate_input_file(Command):
         """
-        'generate_input_file' child of 'root' object
+        Generates the input journal file for a given Fluent participant.
 
         Parameters
         ----------
             participant_name : str
-                'participant_name' child of 'generate_input_file' object
+                Name of the participant for which the execution command will
+        be returned.
             file_name : str
-                'file_name' child of 'generate_input_file' object
+                Name of the journal script to be written. Note that this name is relative
+        to the participant's working directory.
 
         """
 
@@ -3147,41 +3346,63 @@ class root(Group):
 
         class participant_name(String):
             """
-            'participant_name' child of 'generate_input_file' object
+            Name of the participant for which the execution command will
+            be returned.
             """
 
             syc_name = "ParticipantName"
 
         class file_name(String):
             """
-            'file_name' child of 'generate_input_file' object
+            Name of the journal script to be written. Note that this name is relative
+            to the participant's working directory.
             """
 
             syc_name = "FileName"
 
-    class create_restart_point(Command):
-        """
-        'create_restart_point' child of 'root' object
-        """
-
-        syc_name = "CreateRestartPoint"
-
     class add_participant(Command):
         """
-        'add_participant' child of 'root' object
+        Adds a coupling participant to the data model.
+
+        When executed, this command adds the new participant to the analysis
+        without removing any interfaces or data transfers created previously.
+
+        Cannot be called after participants have been started.
+
+        Returns the name of the participant.
+
+        There are two options to add the participant - via a file, or via a
+        participant executable.
+
+        ??option?? 1: Using an input file
+
+        Given an input file containing participant coupling information, reads the
+        specified file, pushes the participant's information to the data model.
+
+        ??option?? 2: Using a participant executable
+
+        Given the path to the executable for this participant (and optionally,
+        additional arguments and/or working directory), start the participant
+        executable, connect to the participant using the socket connection,
+        and get the participant's information and add it to the data model.
 
         Parameters
         ----------
             participant_type : str
-                'participant_type' child of 'add_participant' object
+                Participant type. Currently supported types are DEFAULT, CFX, FLUENT,
+        MAPDL, AEDT, FMU, FORTE, DEFAULT-SRV, MECH-SRV, CFD-SRV. If
+        unspecified, ??add_participant?? will attempt to deduce the type from
+        ??input_file??.
             input_file : str
-                'input_file' child of 'add_participant' object
+                Name of the input file for the participant to be added.
+        Currently supported formats are SCP files, Forte input (FTSIM) files,
+        and FMU (.fmu) files (Beta).
             executable : str
-                'executable' child of 'add_participant' object
+                Path to the executable file for the participant to be added.
             additional_arguments : str
-                'additional_arguments' child of 'add_participant' object
+                Any additional arguments to be passed to the participant's executable.
             working_directory : str
-                'working_directory' child of 'add_participant' object
+                Path to the working directory for this participant.
 
         """
 
@@ -3197,47 +3418,60 @@ class root(Group):
 
         class participant_type(String):
             """
-            'participant_type' child of 'add_participant' object
+            Participant type. Currently supported types are DEFAULT, CFX, FLUENT,
+            MAPDL, AEDT, FMU, FORTE, DEFAULT-SRV, MECH-SRV, CFD-SRV. If
+            unspecified, ??add_participant?? will attempt to deduce the type from
+            ??input_file??.
             """
 
             syc_name = "ParticipantType"
 
         class input_file(String):
             """
-            'input_file' child of 'add_participant' object
+            Name of the input file for the participant to be added.
+            Currently supported formats are SCP files, Forte input (FTSIM) files,
+            and FMU (.fmu) files (Beta).
             """
 
             syc_name = "InputFile"
 
         class executable(String):
             """
-            'executable' child of 'add_participant' object
+            Path to the executable file for the participant to be added.
             """
 
             syc_name = "Executable"
 
         class additional_arguments(String):
             """
-            'additional_arguments' child of 'add_participant' object
+            Any additional arguments to be passed to the participant's executable.
             """
 
             syc_name = "AdditionalArguments"
 
         class working_directory(String):
             """
-            'working_directory' child of 'add_participant' object
+            Path to the working directory for this participant.
             """
 
             syc_name = "WorkingDirectory"
 
     class import_system_coupling_input_file(Command):
         """
-        'import_system_coupling_input_file' child of 'root' object
+        Reads the specified System Coupling SCI file and pushes its information
+        into the data model. The SCI file is the required System Coupling input
+        format for the initial run of a coupled analysis set up in Workbench.
+
+        After the initial run based on an imported SCI file, a reissue
+        of the ??import_system_coupling_input_file?? command is unnecessary and is
+        not recommended unless the setup has changed.
+
+        Cannot be run after participants have been started.
 
         Parameters
         ----------
             file_path : str
-                'file_path' child of 'import_system_coupling_input_file' object
+                Path and file name for the SCI file to be read.
 
         """
 
@@ -3247,154 +3481,33 @@ class root(Group):
 
         class file_path(String):
             """
-            'file_path' child of 'import_system_coupling_input_file' object
+            Path and file name for the SCI file to be read.
             """
 
             syc_name = "FilePath"
 
-    class delete_snapshot(Command):
-        """
-        'delete_snapshot' child of 'root' object
-
-        Parameters
-        ----------
-            snapshot_name : str
-                'snapshot_name' child of 'delete_snapshot' object
-
-        """
-
-        syc_name = "DeleteSnapshot"
-        argument_names = ["snapshot_name"]
-        essential_arguments = ["snapshot_name"]
-
-        class snapshot_name(String):
-            """
-            'snapshot_name' child of 'delete_snapshot' object
-            """
-
-            syc_name = "SnapshotName"
-
-    class write_csv_chart_files(Command):
-        """
-        'write_csv_chart_files' child of 'root' object
-        """
-
-        syc_name = "WriteCsvChartFiles"
-
-    class get_expression_variables(PathCommand):
-        """
-        'get_expression_variables' child of 'root' object
-
-        Parameters
-        ----------
-            parameter_name : str
-                'parameter_name' child of 'get_expression_variables' object
-
-        """
-
-        syc_name = "GetExpressionVariables"
-        argument_names = ["parameter_name"]
-        essential_arguments = ["object_path"]
-
-        class parameter_name(String):
-            """
-            'parameter_name' child of 'get_expression_variables' object
-            """
-
-            syc_name = "ParameterName"
-
-    class add_default_transformation(Command):
-        """
-        'add_default_transformation' child of 'root' object
-
-        Parameters
-        ----------
-            reference_frame : str
-                'reference_frame' child of 'add_default_transformation' object
-            transformation_type : str
-                'transformation_type' child of 'add_default_transformation' object
-
-        """
-
-        syc_name = "AddDefaultTransformation"
-        argument_names = ["reference_frame", "transformation_type"]
-        essential_arguments = ["reference_frame", "transformation_type"]
-
-        class reference_frame(String):
-            """
-            'reference_frame' child of 'add_default_transformation' object
-            """
-
-            syc_name = "ReferenceFrame"
-
-        class transformation_type(String):
-            """
-            'transformation_type' child of 'add_default_transformation' object
-            """
-
-            syc_name = "TransformationType"
-
-    class add_instancing(Command):
-        """
-        'add_instancing' child of 'root' object
-
-        Parameters
-        ----------
-            reference_frame : str
-                'reference_frame' child of 'add_instancing' object
-            instances_in_full_circle : int
-                'instances_in_full_circle' child of 'add_instancing' object
-            instances_for_mapping : int
-                'instances_for_mapping' child of 'add_instancing' object
-
-        """
-
-        syc_name = "AddInstancing"
-        argument_names = [
-            "reference_frame",
-            "instances_in_full_circle",
-            "instances_for_mapping",
-        ]
-        essential_arguments = []
-
-        class reference_frame(String):
-            """
-            'reference_frame' child of 'add_instancing' object
-            """
-
-            syc_name = "ReferenceFrame"
-
-        class instances_in_full_circle(Integer):
-            """
-            'instances_in_full_circle' child of 'add_instancing' object
-            """
-
-            syc_name = "InstancesInFullCircle"
-
-        class instances_for_mapping(Integer):
-            """
-            'instances_for_mapping' child of 'add_instancing' object
-            """
-
-            syc_name = "InstancesForMapping"
-
     class get_errors(Command):
         """
-        'get_errors' child of 'root' object
+        If errors exist, returns them as a list of dictionaries containing error
+        details; otherwise, returns an empty list. See also: ??get_errors_xml??().
         """
 
         syc_name = "GetErrors"
 
     class add_named_expression(Command):
         """
-        'add_named_expression' child of 'root' object
+        Creates a named expression object in the data model.
+        If there is already an object in the data model whose '??expression_name??'
+        matches the provided ??expression_name??, its '??expression_string??' will be
+        overwritten with the provided ??expression_string??
 
         Parameters
         ----------
             expression_name : str
-                'expression_name' child of 'add_named_expression' object
+                The name by which this expression should be referenced when used in
+        another expression.
             expression_string : str
-                'expression_string' child of 'add_named_expression' object
+                String containing the definition of the expression.
 
         """
 
@@ -3404,30 +3517,42 @@ class root(Group):
 
         class expression_name(String):
             """
-            'expression_name' child of 'add_named_expression' object
+            The name by which this expression should be referenced when used in
+            another expression.
             """
 
             syc_name = "ExpressionName"
 
         class expression_string(String):
             """
-            'expression_string' child of 'add_named_expression' object
+            String containing the definition of the expression.
             """
 
             syc_name = "ExpressionString"
 
     class add_expression_function(Command):
         """
-        'add_expression_function' child of 'root' object
+        Creates an expression function object in the data model that makes
+        available an external Python function for use in expressions.
+
+        The parameters specified should correspond to a module and function
+        that exists and can successfully be loaded when the application
+        starts. Otherwise, the data model object will be created but there
+        will be validation errors and the function will not be available for
+        use.
 
         Parameters
         ----------
             module : str
-                'module' child of 'add_expression_function' object
+                The name of the Python module (in the 'Modules' sub-directory of
+        the working directory) from which the function is to be obtained.
             function : str
-                'function' child of 'add_expression_function' object
+                The name of the function in the module. If no ??function_name?? is
+        specified, this will also be the name by which the function should
+        be referenced when used in an expression.
             function_name : str
-                'function_name' child of 'add_expression_function' object
+                Optionally specify a different name from ??function?? which should be
+        the name used to reference the function in an expression.
 
         """
 
@@ -3437,49 +3562,33 @@ class root(Group):
 
         class module(String):
             """
-            'module' child of 'add_expression_function' object
+            The name of the Python module (in the 'Modules' sub-directory of
+            the working directory) from which the function is to be obtained.
             """
 
             syc_name = "Module"
 
         class function(String):
             """
-            'function' child of 'add_expression_function' object
+            The name of the function in the module. If no ??function_name?? is
+            specified, this will also be the name by which the function should
+            be referenced when used in an expression.
             """
 
             syc_name = "Function"
 
         class function_name(String):
             """
-            'function_name' child of 'add_expression_function' object
+            Optionally specify a different name from ??function?? which should be
+            the name used to reference the function in an expression.
             """
 
             syc_name = "FunctionName"
 
     class reload_expression_function_modules(Command):
         """
-        'reload_expression_function_modules' child of 'root' object
+        This may be called to force a reload of expression function modules
+        if they have changed since they were last loaded.
         """
 
         syc_name = "ReloadExpressionFunctionModules"
-
-    class map(Command):
-        """
-        'map' child of 'root' object
-        """
-
-        syc_name = "Map"
-
-    class preview_mapping(Command):
-        """
-        'preview_mapping' child of 'root' object
-        """
-
-        syc_name = "PreviewMapping"
-
-    class are_all_participants_server(Command):
-        """
-        'are_all_participants_server' child of 'root' object
-        """
-
-        syc_name = "AreAllParticipantsServer"

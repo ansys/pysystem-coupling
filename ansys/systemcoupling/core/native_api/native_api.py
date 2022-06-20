@@ -2,6 +2,7 @@ from ansys.systemcoupling.core.native_api.command_metadata import CommandMetadat
 from ansys.systemcoupling.core.native_api.datamodel_metadata import (
     build as build_dm_meta,
 )
+from ansys.systemcoupling.core.util.logging import LOG
 from ansys.systemcoupling.core.util.pathstr import join_path_strs
 
 from .meta_wrapper import MetaWrapper
@@ -11,8 +12,11 @@ from .object_path import ObjectPath
 class NativeApi:
     def __init__(self, rpc_impl):
         self.__rpc_impl = rpc_impl
+        LOG.debug("NativeApi: initialise datamodel...")
         self._init_datamodel()
+        LOG.debug("NativeApi: initialise commands...")
         self._init_cmds()
+        LOG.debug("...done")
         self.__meta_wrapper = MetaWrapper(self.__dm_meta, self.__cmd_meta)
         self.__root = ObjectPath(
             "/" + self.__dm_meta.root_type(), self, self.__meta_wrapper
@@ -100,8 +104,11 @@ class NativeApi:
         return self.__root.make_path(join_path_strs(self.__root, name))
 
     def _init_datamodel(self):
-        dm_meta_raw = self.__rpc_impl.GetMetadata()
+        LOG.debug("Query for metadata")
+        dm_meta_raw = self.__rpc_impl.GetMetadata(json_ret=True)
+        LOG.debug("Build local metadata")
         self.__dm_meta = build_dm_meta(dm_meta_raw)
+        LOG.debug("...datamodel metadata initialised for native API")
 
     def _init_cmds(self):
         cmd_meta = self.__rpc_impl.GetCommandAndQueryMetadata()

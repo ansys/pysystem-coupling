@@ -30,22 +30,24 @@ python <path to generate_datamodel.py> [-t]
 
 from copy import deepcopy
 import io
-
-# import json
 import os
 import pprint
 import sys
 from typing import IO
 
+import black
+
 # Allows us to run pysystemcoupling from source without setting PYTHONPATH
 _dirname = os.path.dirname(__file__)
 sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 
-
+import ansys.systemcoupling.core as pysyc
+from ansys.systemcoupling.core import LOG
 from ansys.systemcoupling.core.settings import datamodel
 from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
 )
+from ansys.systemcoupling.core.syc_proxy_adapter import get_cmd_metadata
 
 
 def _gethash(obj_info):
@@ -154,16 +156,41 @@ def write_settings_classes(out: IO, cls, obj_info):
 
 def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
     cls = datamodel.get_cls(root_type, obj_info[root_type])
+
+    with io.StringIO() as out:
+        write_settings_classes(out, cls, obj_info)
+        content = out.getvalue()
+
+    # Experimental: run black on generated classes
+
+    # Prior to this change, every time the files were regenerated
+    # the previous black changes applied on commit were lost so
+    # the differences appeared greater than they were.
+    # The two options to deal with this are to disable black on
+    # the generated classes (like on the proto files) or apply
+    # black formatting as part of the generation process, as here.
+
+    # The rationale for adopting this approach is that these files
+    # are more likely to be read as part of the source than are
+    # proto files so there is some value in ensuring consistent
+    # formatting.
+
+    # we usually have log level as DEBUG here, but black generates a lot of output
+    old_level = LOG.current_level
+    LOG.set_level("WARNING")
+    content = black.format_file_contents(
+        content, fast=False, mode=black.Mode(preview=True)
+    )
+    LOG.set_level(old_level)
+
     with open(filepath, "w") as f:
-        write_settings_classes(f, cls, obj_info)
+        f.write(content)
     print(f"Finished generating {filepath}")
 
 
-def _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=False):
+def _make_combined_metadata(dm_metadata, cmd_metadata, category):
     metadata = deepcopy(dm_metadata)
-    cmd_meta = deepcopy(
-        process_command_data(cmd_metadata, apply_exclusions=not is_test_data)
-    )
+    cmd_meta = deepcopy(process_command_data(cmd_metadata, category=category))
     metadata["SystemCoupling"]["__commands"] = cmd_meta
     return metadata
 
@@ -174,7 +201,7 @@ def _generate_test_classes(dirname):
 
     from dm_raw_metadata import cmd_metadata, dm_metadata
 
-    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, is_test_data=True)
+    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, category=None)
 
     filepath = os.path.normpath(
         os.path.join(
@@ -188,17 +215,23 @@ def _generate_test_classes(dirname):
 
 
 def _generate_real_classes(dirname):
-    import ansys.systemcoupling.core as pysyc
 
+    LOG.log_to_stdout()
+    LOG.set_level("DEBUG")
     syc = pysyc.launch()
-    print("helper instance of syc successfully launched. Querying metadata...")
+    LOG.debug("Helper instance of syc successfully launched.")
+    LOG.debug("Initialise 'native' API...")
     api = syc.native_api
 
-    dm_metadata = api.GetMetadata()
-    cmd_metadata_orig = api.GetCommandAndQueryMetadata()
-    print("...raw metadata received. Processing...")
+    LOG.debug("Querying datamodel metadata...")
+    dm_metadata = api.GetMetadata(json_ret=True)
+    LOG.debug("Querying command metadata")
+    cmd_metadata_orig = get_cmd_metadata(api)
+    LOG.debug("Command metadata received. Processing...")
 
-    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata_orig)
+    dm_metadata = _make_combined_metadata(
+        dm_metadata, cmd_metadata_orig, category="setup"
+    )
 
     filedir = os.path.normpath(
         os.path.join(
@@ -212,10 +245,12 @@ def _generate_real_classes(dirname):
         )
     )
 
+    LOG.debug("Creating 'setup' classes.")
     filepath = os.path.join(filedir, "setup.py")
     write_classes_to_file(filepath, dm_metadata)
 
     for category in ("case", "solution"):
+        LOG.debug(f"Processing '{category}' command data...")
         cat_cmd_metadata = process_command_data(cmd_metadata_orig, category=category)
         root_type = category.title() + "Commands"
         cat_metadata = {
@@ -226,11 +261,19 @@ def _generate_real_classes(dirname):
                 "ordinal": 0,
             }
         }
+        LOG.debug(f"Creating '{category}' classes...")
         filepath = os.path.join(filedir, f"{category}.py")
         write_classes_to_file(filepath, cat_metadata, root_type=root_type)
+    LOG.debug("All done.")
 
 
 if __name__ == "__main__":
+
+    if "SYSC_ROOT" not in os.environ:
+        print(
+            "*******************\nSYSC_ROOT is not set. Continuing, but this "
+            "may not be correct.\n*******************"
+        )
 
     dirname = os.path.dirname(__file__)
 

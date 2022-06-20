@@ -1,5 +1,6 @@
 import atexit
 import itertools
+import json
 import threading
 
 import grpc
@@ -122,7 +123,10 @@ class SycGrpc(object):
             del SycGrpc._instances[self.__id]
 
         if self.__channel is not None:
-            self.__ostream_service.end_streaming()
+            try:
+                self.__ostream_service.end_streaming()
+            except Exception as e:
+                LOG.debug("Exception on OutputStreamService.end_straming(): " + str(e))
             self.__process_service.quit()
             self.__channel = None
         if self.__process:
@@ -204,7 +208,11 @@ class SycGrpc(object):
         # we ever implement incremental updating to optimise client side
         # state caching.
         # print(f"meta = {meta[0][0]}: {meta[0][1]}")
-        return from_variant(response.result)
+        ret = from_variant(response.result)
+        if "json_ret" in kwargs:
+            # Expect the result to decode as a (json) string
+            return json.loads(ret)
+        return ret
 
     def solve(self):
         self.__solution_service.solve()
