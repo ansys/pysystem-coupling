@@ -53,9 +53,9 @@ StrOrIntDictListType = List[StrOrIntDictType]
 
 
 def to_python_name(syc_name: str) -> str:
-    """Convert a scheme string to python variable name.
+    """Convert a native SyC name string to python variable name.
 
-    The function does this by replacing symbols with _. `?`s are  ignored.
+    Native names are camel case - we convert to snake case.
     """
     if not syc_name:
         return syc_name
@@ -155,8 +155,8 @@ class Base:
         return attrs[attr]
 
     def is_active(self) -> bool:
+        """TODO: "active" settings are not currently identified."""
         return True
-        # return self.get_attr('active?')
 
 
 StateT = TypeVar("StateT")
@@ -448,6 +448,23 @@ class Group(SettingsBase[DictStateType]):
                 ret.append(command)
         return ret
 
+    def get_property_options(self, name: str) -> StringList:
+        """Returns the currently available options for the specified proprty name.
+
+        This should only be called for `String` and `StringList` properties; an
+        exception will be thrown otherwise.
+
+        This should only be called for properties that are known currently to be
+        active in the data model. This requirement is not yet enforced or validated
+        but, if it is violated, the content of any value returned is unspecified.
+        """
+        syc_prop_name, prop_type = self._get_property_name_type(name, self.path)
+        if prop_type not in ("String", "StringList"):
+            raise RuntimeError(
+                f"Options are not available for non-string type '{name}'."
+            )
+        return self.sycproxy.get_property_options(self.syc_path, syc_prop_name)
+
     def __getattribute__(self, name):
         if name in super().__getattribute__("child_names"):
             if not self.is_active():
@@ -462,6 +479,13 @@ class Group(SettingsBase[DictStateType]):
         else:
             attr = getattr(self, name)
             attr.set_state(value)
+
+    @classmethod
+    def _get_property_name_type(cls, name, path):
+        for pname, syc_name, prop_type in cls.property_names_types:
+            if pname == name:
+                return (syc_name, prop_type)
+        raise RuntimeError(f"'{name}' does not exist in '{path}'.")
 
 
 class NamedObject(SettingsBase[DictStateType]):
@@ -663,6 +687,14 @@ _param_types = {
 }
 
 
+def _get_param_type(id, info):
+    data_type = info.get("type", None)
+    try:
+        return _param_types[data_type].__name__
+    except KeyError:
+        raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
+
+
 def _get_type(id, info):
     if id == "child_object_type":
         return Group
@@ -697,8 +729,6 @@ def get_cls(name, info, parent=None):
             pname = info["pysyc_name"]
         else:
             pname = to_python_name(name)
-        # obj_type = info['type']
-        # base = _baseTypes.get(obj_type)
         base = _get_type(name, info)
         dct = {"syc_name": name}
         helpinfo = info.get("help")
@@ -712,7 +742,10 @@ def get_cls(name, info, parent=None):
                     dct["__doc__"] = f"'{pname}' command of '{parent.__name__}' object"
                 else:
                     dct["__doc__"] = f"'{pname}' child of '{parent.__name__}' object"
-        cls = type(pname, (base,), dct)
+        try:
+            cls = type(pname, (base,), dct)
+        except:
+            raise
 
         children = info.get("__children")
         parameters = info.get("__parameters")
@@ -738,7 +771,7 @@ def get_cls(name, info, parent=None):
                 sycname = prname
                 prname = to_python_name(prname)
                 prinfo = parameters[sycname]
-                prtype = _get_type(prname, prinfo)
+                prtype = _get_param_type(prname, prinfo)
                 docstr = f"'{prname}' property of '{parent.__name__}' object"
                 setattr(
                     cls,
@@ -753,11 +786,7 @@ def get_cls(name, info, parent=None):
                         doc=docstr,
                     ),
                 )
-                # ccls = get_cls(cname, cinfo, cls)
-                # pylint: disable=no-member
                 cls.property_names_types.append((prname, sycname, prtype))
-                # cls.child_names.append(ccls.__name__)
-                # setattr(cls, ccls.__name__, ccls)
 
         commands = info.get("__commands")
         if commands:

@@ -50,6 +50,9 @@ class SycProxyAdapter(SycProxyInterface):
     def get_object_names(self, path):
         return self.__rpc.GetChildNamesStr(ObjectPath=path)
 
+    def get_property_options(self, path, name):
+        return self.__rpc.GetParameterOptions(ObjectPath=path, Name=name)
+
     def execute_cmd(self, *args, **kwargs):
         cmd_name = args[1]
         return self.__rpc.execute_command(cmd_name, **kwargs)

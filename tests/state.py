@@ -1,6 +1,7 @@
 class StateForTesting:
     def __init__(self, native_state_format=False):
         self.__state = {}
+        self.__parameter_options = {}
         # keep "type:name" as dict entry rather than treating as type/name
         self.__native_state_format = native_state_format
 
@@ -57,6 +58,12 @@ class StateForTesting:
 
     def create(self, path, name):
         self.set_state(path + "/" + name, {})
+
+    def set_parameter_options(self, path, name, options):
+        self.__parameter_options.setdefault(path, {})[name] = options
+
+    def get_parameter_options(self, path, name):
+        return self.__parameter_options.get(path, {}).get(name, [])
 
     def _split_comps(self, path):
         comps = path.split("/")

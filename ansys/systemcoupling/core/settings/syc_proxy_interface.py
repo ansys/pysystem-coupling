@@ -35,5 +35,9 @@ class SycProxyInterface(ABC):
         pass
 
     @abstractmethod
+    def get_property_options(self, path, name):
+        pass
+
+    @abstractmethod
     def execute_cmd(self, *args, **kwargs):
         pass
