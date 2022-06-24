@@ -742,10 +742,8 @@ def get_cls(name, info, parent=None):
                     dct["__doc__"] = f"'{pname}' command of '{parent.__name__}' object"
                 else:
                     dct["__doc__"] = f"'{pname}' child of '{parent.__name__}' object"
-        try:
-            cls = type(pname, (base,), dct)
-        except:
-            raise
+
+        cls = type(pname, (base,), dct)
 
         children = info.get("__children")
         parameters = info.get("__parameters")
