@@ -449,14 +449,20 @@ class Group(SettingsBase[DictStateType]):
         return ret
 
     def get_property_options(self, name: str) -> StringList:
-        """Returns the currently available options for the specified proprty name.
+        """Returns the currently available options for the specified property name.
 
-        This should only be called for `String` and `StringList` properties; an
-        exception will be thrown otherwise.
+        This function is applicable as follows:
 
-        This should only be called for properties that are known currently to be
-        active in the data model. This requirement is not yet enforced or validated
-        but, if it is violated, the content of any value returned is unspecified.
+        - May only be called for `String` and `StringList` properties; an
+          exception will be thrown otherwise.
+
+        - Should only be called for properties that are known currently to be
+          active in the data model. This requirement is not yet enforced or validated
+          but, if it is violated, the content of any value returned is unspecified.
+
+        - Should only be called for properties that are known to be constrained
+          to a certain list of allowed values. An empty list is returned in other
+          cases.
         """
         syc_prop_name, prop_type = self._get_property_name_type(name, self.path)
         if prop_type not in ("String", "StringList"):
