@@ -60,6 +60,9 @@ class SycProxy(SycProxyInterface):
         state = self.__state.get_state(path)
         return list(state.keys())
 
+    def get_property_options(self, path, name):
+        return self.__state.get_parameter_options(path, name)
+
     def execute_cmd(self, *args, **kwargs):
         self.last_cmd_path = args[0]
         self.last_cmd_name = args[1]
@@ -71,10 +74,12 @@ class SycProxy(SycProxyInterface):
             self.__metadata = _make_metadata()
         return self.__metadata
 
+    def set_state_parameter_options(self, path, name, options):
+        # Testing support
+        self.__state.set_parameter_options(path, name, options)
 
-@pytest.fixture(name="dm", params=("pre-generated", "dynamically-generated"))
-def _dm(request):
-    force_dynamic = request.param == "dynamically-generated"
+
+def _get_dm_and_proxy(force_dynamic: bool):
     proxy = SycProxy(force_dynamic_datamodel=force_dynamic)
     is_actually_dynamic = False
 
@@ -88,7 +93,19 @@ def _dm(request):
         report_whether_dynamic_classes_created=report,
     )
     assert is_actually_dynamic == force_dynamic
-    return root
+    return (root, proxy)
+
+
+@pytest.fixture(name="dm", params=("pre-generated", "dynamically-generated"))
+def _dm(request):
+    force_dynamic = request.param == "dynamically-generated"
+    return _get_dm_and_proxy(force_dynamic)[0]
+
+
+@pytest.fixture(name="dm_and_proxy", params=("pre-generated", "dynamically-generated"))
+def _dm_and_proxy(request):
+    force_dynamic = request.param == "dynamically-generated"
+    return _get_dm_and_proxy(force_dynamic)
 
 
 def test_empty(dm):
@@ -202,6 +219,11 @@ def test_solution_control_state(dm):
 
 
 def test_invoke_get_parameter_options_on_path(dm):
+    # Note that this is really testing mechanism of
+    # path-based commands, something that we do not
+    # exploit at the moment.
+    # Actual property options querying has support in the core
+    # so we do not expose this command directly.
     dm.sycproxy.clear_last_cmd()
     dm.solution_control.duration_option = "EndTime"
     dm.solution_control.get_parameter_options(name="duration_option")
@@ -212,6 +234,18 @@ def test_invoke_get_parameter_options_on_path(dm):
         "ObjectPath": "/SystemCoupling/SolutionControl",
         "Name": "duration_option",
     }
+
+
+def test_get_property_options(dm_and_proxy):
+    dm, proxy = dm_and_proxy
+    proxy.set_state_parameter_options(
+        "/SystemCoupling/SolutionControl",
+        "DurationOption",
+        ["Time", "Step", "EndTime", "PreviousTimestepSize"],
+    )
+    dm.solution_control.duration_option = "EndTime"
+    options = dm.solution_control.get_property_options("duration_option")
+    assert options == ["Time", "Step", "EndTime", "PreviousTimestepSize"]
 
 
 def test_get_nested_state(dm):
