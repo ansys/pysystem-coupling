@@ -74,7 +74,6 @@ setup.solution_control.print_state()
 # Change `time_step_size` setting
 setup.solution_control.time_step_size = "0.1 [s]"
 # Verify setting
-# input("press key to continue")
 setup.solution_control.time_step_size
 
 # Change `end_time`

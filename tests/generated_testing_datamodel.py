@@ -2,12 +2,12 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "2338685cf9b204aa2d5ada6acdc88bd2f60b12b06ffcdfdc4e72831f3529e758"
+SHASH = "b803126781b6bacd8cd5bc4c3156f3bae17543b163c39f3f648363d1147f00e3"
 
 
-class root(Group):
+class setup_root(Group):
     """
-    root object
+    'root' object
     """
 
     syc_name = "SystemCoupling"
@@ -23,7 +23,7 @@ class root(Group):
 
     class activate_hidden(Group):
         """
-        'activate_hidden' child of 'root' object
+        'activate_hidden' child.
         """
 
         syc_name = "ActivateHidden"
@@ -35,7 +35,7 @@ class root(Group):
 
         @property
         def beta_features(self) -> Boolean:
-            """'beta_features' property of 'root' object"""
+            """'beta_features' property of 'setup_root' object"""
             return self.get_property_state("beta_features")
 
         @beta_features.setter
@@ -44,7 +44,7 @@ class root(Group):
 
         @property
         def alpha_features(self) -> Boolean:
-            """'alpha_features' property of 'root' object"""
+            """'alpha_features' property of 'setup_root' object"""
             return self.get_property_state("alpha_features")
 
         @alpha_features.setter
@@ -53,7 +53,7 @@ class root(Group):
 
         @property
         def lenient_validation(self) -> Boolean:
-            """'lenient_validation' property of 'root' object"""
+            """'lenient_validation' property of 'setup_root' object"""
             return self.get_property_state("lenient_validation")
 
         @lenient_validation.setter
@@ -62,7 +62,7 @@ class root(Group):
 
     class library(Group):
         """
-        'library' child of 'root' object
+        'library' child.
         """
 
         syc_name = "Library"
@@ -75,14 +75,14 @@ class root(Group):
 
         class expression(NamedObject):
             """
-            'expression' child of 'library' object
+            'expression' child.
             """
 
             syc_name = "Expression"
 
             class child_object_type(Group):
                 """
-                'child_object_type' child of 'expression' object
+                'child_object_type' child.
                 """
 
                 syc_name = "child_object_type"
@@ -111,14 +111,14 @@ class root(Group):
 
         class expression_function(NamedObject):
             """
-            'expression_function' child of 'library' object
+            'expression_function' child.
             """
 
             syc_name = "ExpressionFunction"
 
             class child_object_type(Group):
                 """
-                'child_object_type' child of 'expression_function' object
+                'child_object_type' child.
                 """
 
                 syc_name = "child_object_type"
@@ -157,14 +157,14 @@ class root(Group):
 
         class reference_frame(NamedObject):
             """
-            'reference_frame' child of 'library' object
+            'reference_frame' child.
             """
 
             syc_name = "ReferenceFrame"
 
             class child_object_type(Group):
                 """
-                'child_object_type' child of 'reference_frame' object
+                'child_object_type' child.
                 """
 
                 syc_name = "child_object_type"
@@ -172,14 +172,14 @@ class root(Group):
 
                 class transformation(NamedObject):
                     """
-                    'transformation' child of 'child_object_type' object
+                    'transformation' child.
                     """
 
                     syc_name = "Transformation"
 
                     class child_object_type(Group):
                         """
-                        'child_object_type' child of 'transformation' object
+                        'child_object_type' child.
                         """
 
                         syc_name = "child_object_type"
@@ -271,14 +271,14 @@ class root(Group):
 
         class instancing(NamedObject):
             """
-            'instancing' child of 'library' object
+            'instancing' child.
             """
 
             syc_name = "Instancing"
 
             class child_object_type(Group):
                 """
-                'child_object_type' child of 'instancing' object
+                'child_object_type' child.
                 """
 
                 syc_name = "child_object_type"
@@ -317,14 +317,14 @@ class root(Group):
 
     class coupling_participant(NamedObject):
         """
-        'coupling_participant' child of 'root' object
+        'coupling_participant' child.
         """
 
         syc_name = "CouplingParticipant"
 
         class child_object_type(Group):
             """
-            'child_object_type' child of 'coupling_participant' object
+            'child_object_type' child.
             """
 
             syc_name = "child_object_type"
@@ -339,14 +339,14 @@ class root(Group):
 
             class variable(NamedObject):
                 """
-                'variable' child of 'child_object_type' object
+                'variable' child.
                 """
 
                 syc_name = "Variable"
 
                 class child_object_type(Group):
                     """
-                    'child_object_type' child of 'variable' object
+                    'child_object_type' child.
                     """
 
                     syc_name = "child_object_type"
@@ -354,14 +354,14 @@ class root(Group):
 
                     class attribute(NamedObject):
                         """
-                        'attribute' child of 'child_object_type' object
+                        'attribute' child.
                         """
 
                         syc_name = "Attribute"
 
                         class child_object_type(Group):
                             """
-                            'child_object_type' child of 'attribute' object
+                            'child_object_type' child.
                             """
 
                             syc_name = "child_object_type"
@@ -369,7 +369,7 @@ class root(Group):
 
                             class dimensionality(Group):
                                 """
-                                'dimensionality' child of 'child_object_type' object
+                                'dimensionality' child.
                                 """
 
                                 syc_name = "Dimensionality"
@@ -656,14 +656,14 @@ class root(Group):
 
             class region(NamedObject):
                 """
-                'region' child of 'child_object_type' object
+                'region' child.
                 """
 
                 syc_name = "Region"
 
                 class child_object_type(Group):
                     """
-                    'child_object_type' child of 'region' object
+                    'child_object_type' child.
                     """
 
                     syc_name = "child_object_type"
@@ -712,7 +712,7 @@ class root(Group):
 
             class update_control(Group):
                 """
-                'update_control' child of 'child_object_type' object
+                'update_control' child.
                 """
 
                 syc_name = "UpdateControl"
@@ -741,14 +741,14 @@ class root(Group):
 
             class fmu_parameter(NamedObject):
                 """
-                'fmu_parameter' child of 'child_object_type' object
+                'fmu_parameter' child.
                 """
 
                 syc_name = "FMUParameter"
 
                 class child_object_type(Group):
                     """
-                    'child_object_type' child of 'fmu_parameter' object
+                    'child_object_type' child.
                     """
 
                     syc_name = "child_object_type"
@@ -871,7 +871,7 @@ class root(Group):
 
             class execution_control(Group):
                 """
-                'execution_control' child of 'child_object_type' object
+                'execution_control' child.
                 """
 
                 syc_name = "ExecutionControl"
@@ -879,7 +879,7 @@ class root(Group):
 
                 class fluent_input(Group):
                     """
-                    'fluent_input' child of 'execution_control' object
+                    'fluent_input' child.
                     """
 
                     syc_name = "FluentInput"
@@ -1015,7 +1015,7 @@ class root(Group):
 
             class external_data_file(Group):
                 """
-                'external_data_file' child of 'child_object_type' object
+                'external_data_file' child.
                 """
 
                 syc_name = "ExternalDataFile"
@@ -1115,7 +1115,7 @@ class root(Group):
 
     class analysis_control(Group):
         """
-        'analysis_control' child of 'root' object
+        'analysis_control' child.
         """
 
         syc_name = "AnalysisControl"
@@ -1123,7 +1123,7 @@ class root(Group):
 
         class global_stabilization(Group):
             """
-            'global_stabilization' child of 'analysis_control' object
+            'global_stabilization' child.
             """
 
             syc_name = "GlobalStabilization"
@@ -1222,7 +1222,7 @@ class root(Group):
 
         class apip(Group):
             """
-            'apip' child of 'analysis_control' object
+            'apip' child.
             """
 
             syc_name = "Apip"
@@ -1251,7 +1251,7 @@ class root(Group):
 
         class unmapped_value_options(Group):
             """
-            'unmapped_value_options' child of 'analysis_control' object
+            'unmapped_value_options' child.
             """
 
             syc_name = "UnmappedValueOptions"
@@ -1431,7 +1431,7 @@ class root(Group):
 
         @property
         def analysis_type(self) -> String:
-            """'analysis_type' property of 'root' object"""
+            """'analysis_type' property of 'setup_root' object"""
             return self.get_property_state("analysis_type")
 
         @analysis_type.setter
@@ -1440,7 +1440,7 @@ class root(Group):
 
         @property
         def optimize_if_one_way(self) -> Boolean:
-            """'optimize_if_one_way' property of 'root' object"""
+            """'optimize_if_one_way' property of 'setup_root' object"""
             return self.get_property_state("optimize_if_one_way")
 
         @optimize_if_one_way.setter
@@ -1449,7 +1449,7 @@ class root(Group):
 
         @property
         def allow_simultaneous_update(self) -> Boolean:
-            """'allow_simultaneous_update' property of 'root' object"""
+            """'allow_simultaneous_update' property of 'setup_root' object"""
             return self.get_property_state("allow_simultaneous_update")
 
         @allow_simultaneous_update.setter
@@ -1458,7 +1458,7 @@ class root(Group):
 
         @property
         def simultaneous_participants(self) -> String:
-            """'simultaneous_participants' property of 'root' object"""
+            """'simultaneous_participants' property of 'setup_root' object"""
             return self.get_property_state("simultaneous_participants")
 
         @simultaneous_participants.setter
@@ -1467,7 +1467,7 @@ class root(Group):
 
         @property
         def partitioning_algorithm(self) -> String:
-            """'partitioning_algorithm' property of 'root' object"""
+            """'partitioning_algorithm' property of 'setup_root' object"""
             return self.get_property_state("partitioning_algorithm")
 
         @partitioning_algorithm.setter
@@ -1476,7 +1476,7 @@ class root(Group):
 
         @property
         def allow_iterations_only_mode(self) -> Boolean:
-            """'allow_iterations_only_mode' property of 'root' object"""
+            """'allow_iterations_only_mode' property of 'setup_root' object"""
             return self.get_property_state("allow_iterations_only_mode")
 
         @allow_iterations_only_mode.setter
@@ -1485,7 +1485,7 @@ class root(Group):
 
         @property
         def target_initialization_option(self) -> String:
-            """'target_initialization_option' property of 'root' object"""
+            """'target_initialization_option' property of 'setup_root' object"""
             return self.get_property_state("target_initialization_option")
 
         @target_initialization_option.setter
@@ -1494,7 +1494,7 @@ class root(Group):
 
         @property
         def fluent_region_update_at_step(self) -> Boolean:
-            """'fluent_region_update_at_step' property of 'root' object"""
+            """'fluent_region_update_at_step' property of 'setup_root' object"""
             return self.get_property_state("fluent_region_update_at_step")
 
         @fluent_region_update_at_step.setter
@@ -1503,7 +1503,7 @@ class root(Group):
 
         @property
         def mesh_import_on_initialization(self) -> Boolean:
-            """'mesh_import_on_initialization' property of 'root' object"""
+            """'mesh_import_on_initialization' property of 'setup_root' object"""
             return self.get_property_state("mesh_import_on_initialization")
 
         @mesh_import_on_initialization.setter
@@ -1512,7 +1512,7 @@ class root(Group):
 
         @property
         def import_all_regions(self) -> Boolean:
-            """'import_all_regions' property of 'root' object"""
+            """'import_all_regions' property of 'setup_root' object"""
             return self.get_property_state("import_all_regions")
 
         @import_all_regions.setter
@@ -1521,7 +1521,7 @@ class root(Group):
 
         @property
         def bypass_fluent_adapter(self) -> Boolean:
-            """'bypass_fluent_adapter' property of 'root' object"""
+            """'bypass_fluent_adapter' property of 'setup_root' object"""
             return self.get_property_state("bypass_fluent_adapter")
 
         @bypass_fluent_adapter.setter
@@ -1530,7 +1530,7 @@ class root(Group):
 
         @property
         def variable_to_expression_transfer(self) -> Boolean:
-            """'variable_to_expression_transfer' property of 'root' object"""
+            """'variable_to_expression_transfer' property of 'setup_root' object"""
             return self.get_property_state("variable_to_expression_transfer")
 
         @variable_to_expression_transfer.setter
@@ -1539,7 +1539,7 @@ class root(Group):
 
         @property
         def update_mapping_weights(self) -> String:
-            """'update_mapping_weights' property of 'root' object"""
+            """'update_mapping_weights' property of 'setup_root' object"""
             return self.get_property_state("update_mapping_weights")
 
         @update_mapping_weights.setter
@@ -1548,7 +1548,7 @@ class root(Group):
 
         @property
         def rotate_follower_forces(self) -> String:
-            """'rotate_follower_forces' property of 'root' object"""
+            """'rotate_follower_forces' property of 'setup_root' object"""
             return self.get_property_state("rotate_follower_forces")
 
         @rotate_follower_forces.setter
@@ -1557,7 +1557,7 @@ class root(Group):
 
         @property
         def solve_incremental_displacement_first(self) -> Boolean:
-            """'solve_incremental_displacement_first' property of 'root' object"""
+            """'solve_incremental_displacement_first' property of 'setup_root' object"""
             return self.get_property_state("solve_incremental_displacement_first")
 
         @solve_incremental_displacement_first.setter
@@ -1566,7 +1566,7 @@ class root(Group):
 
         @property
         def write_scs_file(self) -> Boolean:
-            """'write_scs_file' property of 'root' object"""
+            """'write_scs_file' property of 'setup_root' object"""
             return self.get_property_state("write_scs_file")
 
         @write_scs_file.setter
@@ -1575,14 +1575,14 @@ class root(Group):
 
     class coupling_interface(NamedObject):
         """
-        'coupling_interface' child of 'root' object
+        'coupling_interface' child.
         """
 
         syc_name = "CouplingInterface"
 
         class child_object_type(Group):
             """
-            'child_object_type' child of 'coupling_interface' object
+            'child_object_type' child.
             """
 
             syc_name = "child_object_type"
@@ -1590,14 +1590,14 @@ class root(Group):
 
             class side(NamedObject):
                 """
-                'side' child of 'child_object_type' object
+                'side' child.
                 """
 
                 syc_name = "Side"
 
                 class child_object_type(Group):
                     """
-                    'child_object_type' child of 'side' object
+                    'child_object_type' child.
                     """
 
                     syc_name = "child_object_type"
@@ -1646,14 +1646,14 @@ class root(Group):
 
             class data_transfer(NamedObject):
                 """
-                'data_transfer' child of 'child_object_type' object
+                'data_transfer' child.
                 """
 
                 syc_name = "DataTransfer"
 
                 class child_object_type(Group):
                     """
-                    'child_object_type' child of 'data_transfer' object
+                    'child_object_type' child.
                     """
 
                     syc_name = "child_object_type"
@@ -1661,7 +1661,7 @@ class root(Group):
 
                     class stabilization(Group):
                         """
-                        'stabilization' child of 'child_object_type' object
+                        'stabilization' child.
                         """
 
                         syc_name = "Stabilization"
@@ -1967,7 +1967,7 @@ class root(Group):
 
             class mapping_control(Group):
                 """
-                'mapping_control' child of 'child_object_type' object
+                'mapping_control' child.
                 """
 
                 syc_name = "MappingControl"
@@ -2177,7 +2177,7 @@ class root(Group):
 
     class solution_control(Group):
         """
-        'solution_control' child of 'root' object
+        'solution_control' child.
         """
 
         syc_name = "SolutionControl"
@@ -2185,7 +2185,7 @@ class root(Group):
 
         class available_ports(Group):
             """
-            'available_ports' child of 'solution_control' object
+            'available_ports' child.
             """
 
             syc_name = "AvailablePorts"
@@ -2223,7 +2223,7 @@ class root(Group):
 
         @property
         def duration_option(self) -> String:
-            """'duration_option' property of 'root' object"""
+            """'duration_option' property of 'setup_root' object"""
             return self.get_property_state("duration_option")
 
         @duration_option.setter
@@ -2232,7 +2232,7 @@ class root(Group):
 
         @property
         def end_time(self) -> Real:
-            """'end_time' property of 'root' object"""
+            """'end_time' property of 'setup_root' object"""
             return self.get_property_state("end_time")
 
         @end_time.setter
@@ -2241,7 +2241,7 @@ class root(Group):
 
         @property
         def number_of_steps(self) -> Integer:
-            """'number_of_steps' property of 'root' object"""
+            """'number_of_steps' property of 'setup_root' object"""
             return self.get_property_state("number_of_steps")
 
         @number_of_steps.setter
@@ -2250,7 +2250,7 @@ class root(Group):
 
         @property
         def time_step_size(self) -> Real:
-            """'time_step_size' property of 'root' object"""
+            """'time_step_size' property of 'setup_root' object"""
             return self.get_property_state("time_step_size")
 
         @time_step_size.setter
@@ -2259,7 +2259,7 @@ class root(Group):
 
         @property
         def minimum_iterations(self) -> Integer:
-            """'minimum_iterations' property of 'root' object"""
+            """'minimum_iterations' property of 'setup_root' object"""
             return self.get_property_state("minimum_iterations")
 
         @minimum_iterations.setter
@@ -2268,7 +2268,7 @@ class root(Group):
 
         @property
         def maximum_iterations(self) -> Integer:
-            """'maximum_iterations' property of 'root' object"""
+            """'maximum_iterations' property of 'setup_root' object"""
             return self.get_property_state("maximum_iterations")
 
         @maximum_iterations.setter
@@ -2279,12 +2279,12 @@ class root(Group):
 
         class get_parameter_options(PathCommand):
             """
-            'get_parameter_options' child of 'solution_control' object
+            'get_parameter_options' child.
 
             Parameters
             ----------
                 name : str
-                    'name' child of 'get_parameter_options' object
+                    'name' child.
 
             """
 
@@ -2294,14 +2294,14 @@ class root(Group):
 
             class name(String):
                 """
-                'name' child of 'get_parameter_options' object
+                'name' child.
                 """
 
                 syc_name = "Name"
 
     class output_control(Group):
         """
-        'output_control' child of 'root' object
+        'output_control' child.
         """
 
         syc_name = "OutputControl"
@@ -2309,7 +2309,7 @@ class root(Group):
 
         class results(Group):
             """
-            'results' child of 'output_control' object
+            'results' child.
             """
 
             syc_name = "Results"
@@ -2317,7 +2317,7 @@ class root(Group):
 
             class type(Group):
                 """
-                'type' child of 'results' object
+                'type' child.
                 """
 
                 syc_name = "Type"
@@ -2379,7 +2379,7 @@ class root(Group):
 
         class ascii_output(Group):
             """
-            'ascii_output' child of 'output_control' object
+            'ascii_output' child.
             """
 
             syc_name = "AsciiOutput"
@@ -2419,7 +2419,7 @@ class root(Group):
 
         @property
         def option(self) -> String:
-            """'option' property of 'root' object"""
+            """'option' property of 'setup_root' object"""
             return self.get_property_state("option")
 
         @option.setter
@@ -2428,7 +2428,7 @@ class root(Group):
 
         @property
         def generate_csv_chart_output(self) -> Boolean:
-            """'generate_csv_chart_output' property of 'root' object"""
+            """'generate_csv_chart_output' property of 'setup_root' object"""
             return self.get_property_state("generate_csv_chart_output")
 
         @generate_csv_chart_output.setter
@@ -2437,7 +2437,7 @@ class root(Group):
 
         @property
         def write_initial_snapshot(self) -> Boolean:
-            """'write_initial_snapshot' property of 'root' object"""
+            """'write_initial_snapshot' property of 'setup_root' object"""
             return self.get_property_state("write_initial_snapshot")
 
         @write_initial_snapshot.setter
@@ -2446,7 +2446,7 @@ class root(Group):
 
         @property
         def transcript_precision(self) -> Integer:
-            """'transcript_precision' property of 'root' object"""
+            """'transcript_precision' property of 'setup_root' object"""
             return self.get_property_state("transcript_precision")
 
         @transcript_precision.setter
@@ -2455,7 +2455,7 @@ class root(Group):
 
         @property
         def write_diagnostics(self) -> Boolean:
-            """'write_diagnostics' property of 'root' object"""
+            """'write_diagnostics' property of 'setup_root' object"""
             return self.get_property_state("write_diagnostics")
 
         @write_diagnostics.setter
@@ -2464,7 +2464,7 @@ class root(Group):
 
         @property
         def write_weights_matrix(self) -> Boolean:
-            """'write_weights_matrix' property of 'root' object"""
+            """'write_weights_matrix' property of 'setup_root' object"""
             return self.get_property_state("write_weights_matrix")
 
         @write_weights_matrix.setter
@@ -2473,7 +2473,7 @@ class root(Group):
 
         @property
         def write_residuals(self) -> Boolean:
-            """'write_residuals' property of 'root' object"""
+            """'write_residuals' property of 'setup_root' object"""
             return self.get_property_state("write_residuals")
 
         @write_residuals.setter
@@ -2482,7 +2482,7 @@ class root(Group):
 
         @property
         def output_frequency(self) -> Integer:
-            """'output_frequency' property of 'root' object"""
+            """'output_frequency' property of 'setup_root' object"""
             return self.get_property_state("output_frequency")
 
         @output_frequency.setter
@@ -2499,20 +2499,20 @@ class root(Group):
 
     class add_participant(Command):
         """
-        'add_participant' child of 'root' object
+        'add_participant' child.
 
         Parameters
         ----------
             additional_arguments : str
-                'additional_arguments' child of 'add_participant' object
+                'additional_arguments' child.
             executable : str
-                'executable' child of 'add_participant' object
+                'executable' child.
             input_file : str
-                'input_file' child of 'add_participant' object
+                'input_file' child.
             participant_type : str
-                'participant_type' child of 'add_participant' object
+                'participant_type' child.
             working_directory : str
-                'working_directory' child of 'add_participant' object
+                'working_directory' child.
 
         """
 
@@ -2528,54 +2528,54 @@ class root(Group):
 
         class additional_arguments(String):
             """
-            'additional_arguments' child of 'add_participant' object
+            'additional_arguments' child.
             """
 
             syc_name = "AdditionalArguments"
 
         class executable(String):
             """
-            'executable' child of 'add_participant' object
+            'executable' child.
             """
 
             syc_name = "Executable"
 
         class input_file(String):
             """
-            'input_file' child of 'add_participant' object
+            'input_file' child.
             """
 
             syc_name = "InputFile"
 
         class participant_type(String):
             """
-            'participant_type' child of 'add_participant' object
+            'participant_type' child.
             """
 
             syc_name = "ParticipantType"
 
         class working_directory(String):
             """
-            'working_directory' child of 'add_participant' object
+            'working_directory' child.
             """
 
             syc_name = "WorkingDirectory"
 
     class solve(Command):
         """
-        'solve' child of 'root' object
+        'solve' child.
         """
 
         syc_name = "Solve"
 
     class save(Command):
         """
-        'save' child of 'root' object
+        'save' child.
 
         Parameters
         ----------
             file_path : str
-                'file_path' child of 'save' object
+                'file_path' child.
 
         """
 
@@ -2585,19 +2585,19 @@ class root(Group):
 
         class file_path(String):
             """
-            'file_path' child of 'save' object
+            'file_path' child.
             """
 
             syc_name = "FilePath"
 
     class get_parameter_options(PathCommand):
         """
-        'get_parameter_options' child of 'root' object
+        'get_parameter_options' child.
 
         Parameters
         ----------
             name : str
-                'name' child of 'get_parameter_options' object
+                'name' child.
 
         """
 
@@ -2607,23 +2607,23 @@ class root(Group):
 
         class name(String):
             """
-            'name' child of 'get_parameter_options' object
+            'name' child.
             """
 
             syc_name = "Name"
 
     class partition_participants(Command):
         """
-        'partition_participants' child of 'root' object
+        'partition_participants' child.
 
         Parameters
         ----------
             algorithm_name : str
-                'algorithm_name' child of 'partition_participants' object
+                'algorithm_name' child.
             machine_list : typing.List[typing.Dict[str, typing.Union[str, int]]]
-                'machine_list' child of 'partition_participants' object
+                'machine_list' child.
             names_and_fractions : typing.List[typing.Tuple[str, float]]
-                'names_and_fractions' child of 'partition_participants' object
+                'names_and_fractions' child.
 
         """
 
@@ -2633,21 +2633,21 @@ class root(Group):
 
         class algorithm_name(String):
             """
-            'algorithm_name' child of 'partition_participants' object
+            'algorithm_name' child.
             """
 
             syc_name = "AlgorithmName"
 
         class machine_list(StrOrIntDictList):
             """
-            'machine_list' child of 'partition_participants' object
+            'machine_list' child.
             """
 
             syc_name = "MachineList"
 
         class names_and_fractions(StrFloatPairList):
             """
-            'names_and_fractions' child of 'partition_participants' object
+            'names_and_fractions' child.
             """
 
             syc_name = "NamesAndFractions"

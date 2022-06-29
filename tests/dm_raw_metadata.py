@@ -1204,6 +1204,7 @@ dm_metadata = {
     }
 }
 
+# NB: for test purposes, all exposures are forced to "setup"
 cmd_metadata = [
     {
         "name": "AddParticipant",
@@ -1239,7 +1240,7 @@ cmd_metadata = [
         "isQuery": False,
         "retType": None,
         # Extended data
-        "exposure": "solution",
+        "exposure": "setup",
     },
     {
         "name": "Save",
@@ -1251,7 +1252,7 @@ cmd_metadata = [
         "isQuery": False,
         "retType": "Logical",
         # Extended data
-        "exposure": "case",
+        "exposure": "setup",
     },
     {
         "name": "GetParameterOptions",
@@ -1291,7 +1292,7 @@ cmd_metadata = [
         ],
         "retType": "<class 'NoneType'>",
         # Extended data
-        "exposure": "solution",
+        "exposure": "setup",
     },
 ]
 

@@ -459,8 +459,9 @@ def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
     hash_dict.clear()
     files_dict.clear()
 
-    _gather_hashes("", obj_info[root_type], cls)
-    _write_flat_class_files(parent_dir, cls.__name__, _gethash(obj_info[root_type]))
+    # Disable for now
+    # _gather_hashes("", obj_info[root_type], cls)
+    # _write_flat_class_files(parent_dir, cls.__name__, _gethash(obj_info[root_type]))
     # _write_init_file(parent_dir, obj_info)
 
     with io.StringIO() as out:
@@ -508,7 +509,7 @@ def _generate_test_classes(dirname):
 
     from dm_raw_metadata import cmd_metadata, dm_metadata
 
-    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, category=None)
+    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, category="setup")
 
     filepath = os.path.normpath(
         os.path.join(
@@ -577,7 +578,6 @@ def _generate_real_classes(dirname):
 
 if __name__ == "__main__":
 
-    input("press any key to start")
     if "SYSC_ROOT" not in os.environ:
         print(
             "*******************\nSYSC_ROOT is not set. Continuing, but this "
