@@ -494,7 +494,10 @@ class Group(SettingsBase[DictStateType]):
         raise RuntimeError(f"'{name}' does not exist in '{path}'.")
 
 
-class NamedObject(SettingsBase[DictStateType]):
+ChildTypeT = TypeVar("ChildTypeT")
+
+
+class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
     """A NamedObject container.
 
     A NamedObject is a container object, similar to a Python dict object.
@@ -622,7 +625,7 @@ class NamedObject(SettingsBase[DictStateType]):
         """Object names."""
         return self.sycproxy.get_object_names(self.syc_path)
 
-    def __getitem__(self, name: str):
+    def __getitem__(self, name: str) -> ChildTypeT:
         if name not in self.get_object_names():
             raise KeyError(name)
         obj = self._objects.get(name)
@@ -728,7 +731,7 @@ def get_cls(name, info, parent=None):
     """Create a class for the object identified by "path"."""
     try:
         if parent is None:
-            pname = "root"
+            pname = info.get("category_root", "root")
         elif "pysyc_name" in info:
             # Python name provided - for the case where there is a preferred
             # alternative to the default generated name.
@@ -742,12 +745,10 @@ def get_cls(name, info, parent=None):
             dct["__doc__"] = helpinfo
         else:
             if parent is None:
-                dct["__doc__"] = "root object"
+                dct["__doc__"] = "'root' object"
             else:
-                if False:  # obj_type == 'command':
-                    dct["__doc__"] = f"'{pname}' command of '{parent.__name__}' object"
-                else:
-                    dct["__doc__"] = f"'{pname}' child of '{parent.__name__}' object"
+                # Assume commands always have helpinfo, so must be an object here.
+                dct["__doc__"] = f"'{pname}' child."
 
         cls = type(pname, (base,), dct)
 
@@ -756,12 +757,24 @@ def get_cls(name, info, parent=None):
         if base == NamedObject:
             children = parameters = None
 
+        def unique_name(base_name, existing_names):
+            # TODO: this was new in Fluent; related to flattening changes, but
+            # it is not entirely clear when we would see non-unique children and
+            # whether this is really needed
+            candidate_name = base_name
+            i = 0
+            while candidate_name in existing_names:
+                i += 1
+                candidate_name = f"{base_name}_{i}"
+            return candidate_name
+
         if children:
             child_keys = sorted(children.keys(), key=lambda c: children[c]["ordinal"])
             cls.child_names = []
             for cname in child_keys:
                 cinfo = children[cname]
                 ccls = get_cls(cname, cinfo, cls)
+                ccls.__name__ = unique_name(ccls.__name__, cls.child_names)
                 # pylint: disable=no-member
                 cls.child_names.append(ccls.__name__)
                 setattr(cls, ccls.__name__, ccls)
@@ -797,6 +810,7 @@ def get_cls(name, info, parent=None):
             cls.command_names = []
             for cname, cinfo in commands.items():
                 ccls = get_cls(cname, cinfo, cls)
+                ccls.__name__ = unique_name(ccls.__name__, cls.command_names)
                 # pylint: disable=no-member
                 cls.command_names.append(ccls.__name__)
                 setattr(cls, ccls.__name__, ccls)
@@ -816,6 +830,7 @@ def get_cls(name, info, parent=None):
                 th = th.__name__ if hasattr(th, "__name__") else str(th)
                 doc += f"    {ccls.__name__} : {th}\n"
                 doc += f"        {ccls.__doc__}\n"
+                ccls.__name__ = unique_name(ccls.__name__, cls.argument_names)
                 # pylint: disable=no-member
                 cls.argument_names.append(ccls.__name__)
                 setattr(cls, ccls.__name__, ccls)
@@ -875,7 +890,7 @@ def get_root(
         if generated_module is None:
             ver = "v231"  # TODO parametrise
             generated_module = importlib.import_module(
-                f"ansys.systemcoupling.core.settings.{ver}.{category}"
+                f"ansys.systemcoupling.core.settings.{ver}.{category}_root"
             )
 
         info_hash = _gethash(obj_info)
@@ -888,7 +903,7 @@ def get_root(
                 "be used."
             )
             raise RuntimeError("Mismatch in hash values")
-        cls = generated_module.root
+        cls = getattr(generated_module, f"{category}_root")
         report_whether_dynamic_classes_created(False)
     except Exception:
         cls = get_cls(root_type, obj_info[root_type])

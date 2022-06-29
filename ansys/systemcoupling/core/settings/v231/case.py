@@ -2,12 +2,12 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "d5fbe791a44d027adab1bb566ccd3c71e0d776379f980ecb26e1174d41e6f666"
+SHASH = "50b62d4fe1d82d8d54b2b40edc7c5a86b7d288a875962168ff1aee92197aca7b"
 
 
-class root(Group):
+class case_root(Group):
     """
-    root object
+    'root' object
     """
 
     syc_name = "CaseCommands"

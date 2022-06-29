@@ -2,12 +2,12 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-SHASH = "77961699029a3bee05e8731302c9c225fc9a09cc960d614806cde4123a54ea61"
+SHASH = "dd6c122be5eb1538f9ccc910b73d702025d7e936f5b1220892fc5e25de1e26d7"
 
 
-class root(Group):
+class solution_root(Group):
     """
-    root object
+    'root' object
     """
 
     syc_name = "SolutionCommands"
