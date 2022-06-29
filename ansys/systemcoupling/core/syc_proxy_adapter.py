@@ -33,7 +33,7 @@ class SycProxyAdapter(SycProxyInterface):
             }
         else:
             raise RuntimeError(f"Unrecognised 'static info' category: '{category}'.")
-        return metadata, category_root
+        return metadata, root_type
 
     def set_state(self, path, state):
         # XXX TODO nested state submission probably broken if it involves named objects
@@ -41,7 +41,9 @@ class SycProxyAdapter(SycProxyInterface):
 
     def get_state(self, path):
         state = self.__rpc.GetState(ObjectPath=path)
-        return adapt_native_named_object_keys(state)
+        if isinstance(state, dict):
+            return adapt_native_named_object_keys(state)
+        return state
 
     def delete(self, path):
         self.__rpc.DeleteObject(ObjectPath=path)
