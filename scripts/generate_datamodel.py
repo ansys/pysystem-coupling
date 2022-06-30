@@ -61,9 +61,8 @@ def _get_indent_str(indent):
     return f"{' '*indent*4}"
 
 
-def _gather_hashes(name, info, cls, is_named_child=False):
+def _gather_hashes(name, info, cls, is_named_child=False, is_parameter=False):
 
-    # print(name)
     # For named objects we visit the info twice - once for the
     # parent container, and once for the contained child. The latter
     # is what contains the object structure
@@ -89,7 +88,9 @@ def _gather_hashes(name, info, cls, is_named_child=False):
     if parameters:
         parameters_hash = []
         for pname, pinfo in parameters.items():
-            parameters_hash.append(_gather_hashes(pname, pinfo, None))
+            parameters_hash.append(
+                _gather_hashes(pname, pinfo, None, is_parameter=True)
+            )
     else:
         parameters_hash = None
 
@@ -131,8 +132,13 @@ def _gather_hashes(name, info, cls, is_named_child=False):
     else:
         object_hash = None
 
+    # `is_parameter` is needed because most tuple entries for parameters
+    # and command arguments are None and we can otherwise clash if we
+    # rely just on name. (Note that we don't store a class for parameters
+    # so the distinction is important.)
     cls_tuple = (
         name,
+        is_parameter,
         info.get("type"),
         info.get("help"),
         children_hash,
@@ -248,7 +254,7 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             f.write("\n")
             if cls_name == root_classname:
                 print("writing hash for", file_name)
-                f.write(f"SHASH = {root_hash}\n\n")
+                f.write(f'SHASH = "{root_hash}"\n\n')
 
             # write imports to py file
             f.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
@@ -450,19 +456,20 @@ def write_settings_classes(out: IO, cls, obj_info):
     _write_cls_helper(out, cls)
 
 
-def write_classes_to_file(filepath, obj_info, root_type="SystemCoupling"):
+def write_classes_to_file(
+    filepath, obj_info, root_type="SystemCoupling", want_flat=False
+):
     cls = datamodel.get_cls(root_type, obj_info[root_type])
 
-    parent_dir = os.path.dirname(filepath)
-    parent_dir = os.path.join(parent_dir, "tmp_flat")
+    if want_flat:
+        hash_dict.clear()
+        files_dict.clear()
 
-    hash_dict.clear()
-    files_dict.clear()
-
-    # Disable for now
-    # _gather_hashes("", obj_info[root_type], cls)
-    # _write_flat_class_files(parent_dir, cls.__name__, _gethash(obj_info[root_type]))
-    # _write_init_file(parent_dir, obj_info)
+        _gather_hashes("", obj_info[root_type], cls)
+        parent_dir = os.path.dirname(filepath)
+        _write_flat_class_files(parent_dir, cls.__name__, _gethash(obj_info))
+        # _write_init_file(parent_dir, obj_info)
+        return
 
     with io.StringIO() as out:
         write_settings_classes(out, cls, obj_info)
@@ -503,7 +510,7 @@ def _make_combined_metadata(dm_metadata, cmd_metadata, category):
     return metadata
 
 
-def _generate_test_classes(dirname):
+def _generate_test_classes(dirname, generate_flat_classes):
     # NB need to add tests dir to sys.path to find dm_raw_metadata
     sys.path.append(os.path.normpath(os.path.join(dirname, "..", "tests")))
 
@@ -520,10 +527,10 @@ def _generate_test_classes(dirname):
             "testing_datamodel.py",
         )
     )
-    write_classes_to_file(filepath, dm_metadata)
+    write_classes_to_file(filepath, dm_metadata, want_flat=generate_flat_classes)
 
 
-def _generate_real_classes(dirname):
+def _generate_real_classes(dirname, generate_flat_classes):
 
     LOG.log_to_stdout()
     LOG.set_level("DEBUG")
@@ -556,7 +563,7 @@ def _generate_real_classes(dirname):
 
     LOG.debug("Creating 'setup' classes.")
     filepath = os.path.join(filedir, "setup.py")
-    write_classes_to_file(filepath, dm_metadata)
+    write_classes_to_file(filepath, dm_metadata, want_flat=generate_flat_classes)
 
     for category in ("case", "solution"):
         LOG.debug(f"Processing '{category}' command data...")
@@ -573,7 +580,9 @@ def _generate_real_classes(dirname):
         }
         LOG.debug(f"Creating '{category}' classes...")
         filepath = os.path.join(filedir, f"{category}.py")
-        write_classes_to_file(filepath, cat_metadata, root_type=root_type)
+        write_classes_to_file(
+            filepath, cat_metadata, root_type=root_type, want_flat=generate_flat_classes
+        )
     LOG.debug("All done.")
 
 
@@ -586,9 +595,13 @@ if __name__ == "__main__":
         )
 
     dirname = os.path.dirname(__file__)
+    use_test_data = False
+    generate_flat_classes = False
+    if len(sys.argv) > 1:
+        use_test_data = "-t" in sys.argv[1:]
+        generate_flat_classes = "-c" in sys.argv[1:]
 
-    use_test_data = len(sys.argv) > 1 and sys.argv[1] == "-t"
     if use_test_data:
-        _generate_test_classes(dirname)
+        _generate_test_classes(dirname, generate_flat_classes)
     else:
-        _generate_real_classes(dirname)
+        _generate_real_classes(dirname, generate_flat_classes)

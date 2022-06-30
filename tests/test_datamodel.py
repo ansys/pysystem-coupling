@@ -2,7 +2,13 @@ from copy import deepcopy
 from io import StringIO
 
 from dm_raw_metadata import cmd_metadata, dm_metadata
-import generated_data.testing_datamodel as generated_testing_datamodel
+
+IS_FLAT_CLASSES = True
+if IS_FLAT_CLASSES:
+    import generated_data.setup_root as generated_testing_datamodel
+else:
+    import generated_data.testing_datamodel as generated_testing_datamodel
+
 import pytest
 from state import StateForTesting
 
