@@ -516,7 +516,8 @@ def _generate_test_classes(dirname):
             dirname,
             "..",
             "tests",
-            "generated_testing_datamodel.py",
+            "generated_data",
+            "testing_datamodel.py",
         )
     )
     write_classes_to_file(filepath, dm_metadata)
