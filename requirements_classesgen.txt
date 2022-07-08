@@ -1,13 +1,10 @@
-# Requirements for running the "generate_datamodel" script.
-# The script runs System Coupling via the pySystemCoupling
-# API and assumes that it will be run directly from the package
-# source tree. The dependencies are therefore essentially the same
-# as those of pysystem-coupling-core itself. Consequently this can
-# also be used to define a debugging environment for pySystemCoupling
-# development.
-googleapis-common-protos>=1.50.0
-grpcio>=1.30.0
-grpcio-status>=1.30.0
-protobuf>=3.12.2,<4.0.0
-psutil>=5.7.0
-black==22.3.0 # keep this consistent with pre-commit config
+# Requirements to run the "generate_datamodel" script. The script
+# runs System Coupling via the pySystemCoupling API and assumes
+# that it will be run directly from the package source tree. Most
+# likely there will be a "-e" pip install of pySystemCoupling.
+
+# black is called programmatically to keep generated code
+# consistent with style elsewhere. We need to keep the version
+# in sync with the pre-commit config.
+black==22.3.0
+

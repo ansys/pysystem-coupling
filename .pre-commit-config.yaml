@@ -1,5 +1,5 @@
 # Exclude grpc generated files
-exclude: ^(ansys/api/systemcoupling/v0/|scripts/temp_data/)
+exclude: ^(ansys/api/systemcoupling/v0/|scripts/temp_data/|examples/)
 
 # initially copied from pymapdl
 repos:

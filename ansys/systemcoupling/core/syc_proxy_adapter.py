@@ -12,26 +12,28 @@ class SycProxyAdapter(SycProxyInterface):
         if category == "setup":
             metadata = self.__rpc.GetMetadata(json_ret=True)
             setup_cmd_data = process_cmd_data(cmd_metadata, category=category)
-            category_root = "SystemCoupling"
-            metadata[category_root]["__commands"] = setup_cmd_data
+            root_type = "SystemCoupling"
+            metadata[root_type]["__commands"] = setup_cmd_data
+            metadata[root_type]["category_root"] = f"{category}_root"
         elif category in ("case", "solution"):
             cmd_data = process_cmd_data(cmd_metadata, category=category)
-            category_root = category.title() + "Commands"
-            # category root isn't a real data model object but we fake it
+            root_type = category.title() + "Commands"
+            # root_type isn't a real SyC data model object but we fake it
             # so that we can generate the command group under a common root.
             # Note extra properties to make it work as an object - these
             # need to be consistent with pre-generation code.
             metadata = {
-                category_root: {
+                root_type: {
                     "__commands": cmd_data,
                     "isEntity": False,
                     "isNamed": False,
                     "ordinal": 0,
+                    "category_root": f"{category}_root",
                 }
             }
         else:
             raise RuntimeError(f"Unrecognised 'static info' category: '{category}'.")
-        return metadata, category_root
+        return metadata, root_type
 
     def set_state(self, path, state):
         # XXX TODO nested state submission probably broken if it involves named objects
@@ -39,7 +41,9 @@ class SycProxyAdapter(SycProxyInterface):
 
     def get_state(self, path):
         state = self.__rpc.GetState(ObjectPath=path)
-        return adapt_native_named_object_keys(state)
+        if isinstance(state, dict):
+            return adapt_native_named_object_keys(state)
+        return state
 
     def delete(self, path):
         self.__rpc.DeleteObject(ObjectPath=path)

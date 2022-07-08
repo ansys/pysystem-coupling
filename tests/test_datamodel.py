@@ -2,7 +2,13 @@ from copy import deepcopy
 from io import StringIO
 
 from dm_raw_metadata import cmd_metadata, dm_metadata
-import generated_testing_datamodel
+
+IS_FLAT_CLASSES = True
+if IS_FLAT_CLASSES:
+    import generated_data.setup_root as generated_testing_datamodel
+else:
+    import generated_data.testing_datamodel as generated_testing_datamodel
+
 import pytest
 from state import StateForTesting
 
@@ -13,8 +19,9 @@ from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInter
 
 def _make_metadata():
     metadata = deepcopy(dm_metadata)
-    cmd_meta = deepcopy(process(cmd_metadata, category=None))
+    cmd_meta = deepcopy(process(cmd_metadata, category="setup"))
     metadata["SystemCoupling"]["__commands"] = cmd_meta
+    metadata["SystemCoupling"]["category_root"] = "setup_root"
     return metadata
 
 
@@ -89,6 +96,7 @@ def _get_dm_and_proxy(force_dynamic: bool):
 
     root = get_root(
         proxy,
+        category="setup",
         generated_module=generated_testing_datamodel,
         report_whether_dynamic_classes_created=report,
     )
