@@ -226,8 +226,8 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
         file_name += ".py"
         filepath = os.path.normpath(os.path.join(parent_dir, file_name))
-        with open(filepath, "w") as f:
-            f.write(f"name: {cls_name}")
+        with open(filepath, "w") as out:
+            out.write(f"name: {cls_name}")
 
     # populate files
     for key, (
@@ -243,39 +243,40 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             continue
         file_name = files_dict.get(key)
         cls_name = cls.__name__
-        filepath = os.path.normpath(os.path.join(parent_dir, file_name + ".py"))
-        with open(filepath, "w") as f:
+        with io.StringIO() as out:
             if file_name.endswith("root"):
                 print(f"writing  {file_name}  (cls_name = {cls_name}")
             # disclaimer to py file
-            f.write("#\n")
-            f.write("# This is an auto-generated file.  DO NOT EDIT!\n")
-            f.write("#\n")
-            f.write("\n")
+            out.write("#\n")
+            out.write("# This is an auto-generated file.  DO NOT EDIT!\n")
+            out.write("#\n")
+            out.write("\n")
             if cls_name == root_classname:
                 print("writing hash for", file_name)
-                f.write(f'SHASH = "{root_hash}"\n\n')
+                out.write(f'SHASH = "{root_hash}"\n\n')
 
             # write imports to py file
-            f.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
+            out.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
             if children_hash:
                 for child in children_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
-                    f.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
+                    out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
 
             if commands_hash:
                 for child in commands_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
-                    f.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
+                    out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
 
             if arguments_hash:
                 for child in arguments_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
-                    f.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
+                    out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
 
             if object_hash:
                 pchild_name = hash_dict.get(object_hash)[0].__name__
-                f.write(f"from .{files_dict.get(object_hash)} import {pchild_name}\n\n")
+                out.write(
+                    f"from .{files_dict.get(object_hash)} import {pchild_name}\n\n"
+                )
 
             # class name
             bases_gen = (
@@ -284,7 +285,7 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 else c.__name__
                 for c in cls.__bases__
             )
-            f.write(f"{istr}class {cls_name}" f'({", ".join(bases_gen)}):\n')
+            out.write(f"{istr}class {cls_name}" f'({", ".join(bases_gen)}):\n')
 
             doc = cls.__doc__
             # Custom doc for child object type
@@ -292,73 +293,80 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 doc = f"'child_object_type' of {file_name[: file_name.find('_child')]}."
 
             doc = ("\n" + istr1).join(doc.split("\n"))
-            f.write(f'{istr1}"""\n')
-            f.write(f"{istr1}{doc}")
-            f.write(f'\n{istr1}"""\n\n')
-            f.write(f'{istr1}syc_name = "{cls.syc_name}"\n\n')
+            out.write(f'{istr1}"""\n')
+            out.write(f"{istr1}{doc}")
+            out.write(f'\n{istr1}"""\n\n')
+            out.write(f'{istr1}syc_name = "{cls.syc_name}"\n\n')
 
             # write children objects
             child_names = getattr(cls, "child_names", None)
             if child_names:
-                f.write(f"{istr1}child_names = \\\n")
+                out.write(f"{istr1}child_names = \\\n")
                 strout = io.StringIO()
                 pprint.pprint(child_names, stream=strout, compact=True, width=70)
                 mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
-                f.write(f"{istr2}{mn}\n\n")
+                out.write(f"{istr2}{mn}\n\n")
 
                 for child in child_names:
-                    f.write(f"{istr1}{child}: {child} = {child}\n")
-                    f.write(f'{istr1}"""\n')
-                    f.write(f"{istr1}{child} child of {cls_name}.")
-                    f.write(f'\n{istr1}"""\n')
+                    out.write(f"{istr1}{child}: {child} = {child}\n")
+                    out.write(f'{istr1}"""\n')
+                    out.write(f"{istr1}{child} child of {cls_name}.")
+                    out.write(f'\n{istr1}"""\n')
 
             property_names_types = getattr(cls, "property_names_types", None)
             if property_names_types:
                 names_types = [
                     (nm, sycnm, typ) for nm, sycnm, typ in property_names_types
                 ]
-                _write_list_attr(f, "property_names_types", names_types)
+                _write_list_attr(out, "property_names_types", names_types)
                 for prop_name, _, prop_type in names_types:
                     doc = getattr(cls, prop_name).__doc__
-                    _write_property_helper(f, prop_name, prop_type, doc, 1)
+                    _write_property_helper(out, prop_name, prop_type, doc, 1)
 
             # write command objects
             command_names = getattr(cls, "command_names", None)
             if command_names:
-                f.write(f"{istr1}command_names = \\\n")
+                out.write(f"{istr1}command_names = \\\n")
                 strout = io.StringIO()
                 pprint.pprint(command_names, stream=strout, compact=True, width=70)
                 mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
-                f.write(f"{istr2}{mn}\n\n")
+                out.write(f"{istr2}{mn}\n\n")
 
                 for command in command_names:
-                    f.write(f"{istr1}{command}: {command} = {command}\n")
-                    f.write(f'{istr1}"""\n')
-                    f.write(f"{istr1}{command} command of {cls_name}.")
-                    f.write(f'\n{istr1}"""\n')
+                    out.write(f"{istr1}{command}: {command} = {command}\n")
+                    out.write(f'{istr1}"""\n')
+                    out.write(f"{istr1}{command} command of {cls_name}.")
+                    out.write(f'\n{istr1}"""\n')
 
             # write arguments
             arguments = getattr(cls, "argument_names", None)
             if arguments:
-                f.write(f"{istr1}argument_names = \\\n")
+                out.write(f"{istr1}argument_names = \\\n")
                 strout = io.StringIO()
                 pprint.pprint(arguments, stream=strout, compact=True, width=70)
                 mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
-                f.write(f"{istr2}{mn}\n\n")
+                out.write(f"{istr2}{mn}\n\n")
 
                 for argument in arguments:
-                    f.write(f"{istr1}{argument}: {argument} = {argument}\n")
-                    f.write(f'{istr1}"""\n')
-                    f.write(f"{istr1}{argument} argument of {cls_name}.")
-                    f.write(f'\n{istr1}"""\n')
+                    out.write(f"{istr1}{argument}: {argument} = {argument}\n")
+                    out.write(f'{istr1}"""\n')
+                    out.write(f"{istr1}{argument} argument of {cls_name}.")
+                    out.write(f'\n{istr1}"""\n')
 
             # write object type
             child_object_type = getattr(cls, "child_object_type", None)
             if child_object_type:
-                f.write(f"{istr1}child_object_type: {pchild_name} = {pchild_name}\n")
-                f.write(f'{istr1}"""\n')
-                f.write(f"{istr1}child_object_type of {cls_name}.")
-                f.write(f'\n{istr1}"""\n')
+                out.write(f"{istr1}child_object_type: {pchild_name} = {pchild_name}\n")
+                out.write(f'{istr1}"""\n')
+                out.write(f"{istr1}child_object_type of {cls_name}.")
+                out.write(f'\n{istr1}"""\n')
+
+            content = out.getvalue()
+
+        content = _black_format_content(content)
+        filepath = os.path.normpath(os.path.join(parent_dir, file_name + ".py"))
+        with open(filepath, "w") as f:
+            f.write(content)
 
 
 def _write_init_file(parent_dir, sinfo):
@@ -489,6 +497,13 @@ def write_classes_to_file(
     # proto files so there is some value in ensuring consistent
     # formatting.
 
+    content = _black_format_content(content)
+    with open(filepath, "w") as f:
+        f.write(content)
+    print(f"Finished generating {filepath}")
+
+
+def _black_format_content(content):
     # we usually have log level as DEBUG here, but black generates a lot of output
     old_level = LOG.current_level
     LOG.set_level("WARNING")
@@ -496,10 +511,7 @@ def write_classes_to_file(
         content, fast=False, mode=black.Mode(preview=True)
     )
     LOG.set_level(old_level)
-
-    with open(filepath, "w") as f:
-        f.write(content)
-    print(f"Finished generating {filepath}")
+    return content
 
 
 def _make_combined_metadata(dm_metadata, cmd_metadata, category):
