@@ -50,6 +50,7 @@ StrFloatPairListType = List[StrFloatPairType]
 StrOrIntType = Union[str, int]
 StrOrIntDictType = Dict[str, StrOrIntType]
 StrOrIntDictListType = List[StrOrIntDictType]
+StrOrIntDictListDictType = Dict[str, StrOrIntDictListType]
 
 
 def to_python_name(syc_name: str) -> str:
@@ -327,6 +328,13 @@ class StrOrIntDictList(SettingsBase[StrOrIntDictListType]):
     with string keys and string or int values."""
 
     _state_type = StrOrIntDictListType
+
+
+class StrOrIntDictListDict(SettingsBase[StrOrIntDictListDictType]):
+    """A StrOrIntDictListDict object represents a dictionary of string keys to
+    StrOrIntDictList values."""
+
+    _state_type = StrOrIntDictListDictType
 
 
 class Group(SettingsBase[DictStateType]):
@@ -693,6 +701,7 @@ _param_types = {
     "String List": StringList,
     "StrFloatPairList": StrFloatPairList,
     "StrOrIntDictList": StrOrIntDictList,
+    "StrOrIntDictListDict": StrOrIntDictListDict,
 }
 
 

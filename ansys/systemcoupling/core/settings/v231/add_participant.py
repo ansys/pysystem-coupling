@@ -40,13 +40,14 @@ class add_participant(Command):
     Parameters
     ----------
         participant_type : str
-            Participant type. Currently supported types are DEFAULT, CFX, FLUENT,
-    MAPDL, AEDT, FMU, FORTE, DEFAULT-SRV, MECH-SRV, CFD-SRV. If
+            Participant type. Currently supported types are DEFAULT, CFX,
+    FLUENT, MAPDL, AEDT, FMU, FORTE, DEFAULT-SRV, MECH-SRV, CFD-SRV. If
     unspecified, ??add_participant?? will attempt to deduce the type from
     ??input_file??.
         input_file : str
             Name of the input file for the participant to be added.
-    Currently supported formats are SCP files, Forte input (FTSIM) files,
+    Currently supported formats are SCP files, Forte input (FTSIM)
+    files, mechanical server (*.rst) files, cfd server (*.csv) files,
     and FMU (.fmu) files (Beta).
         executable : str
             Path to the executable file for the participant to be added.
