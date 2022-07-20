@@ -25,16 +25,16 @@ class add_interface_by_display_names(Command):
     ----------
         side_one_participant : str
             String indicating the name of the participant to be associated with
-    side One of the interface.
+            side One of the interface.
         side_one_regions : typing.List[str]
             List specifying the name(s) of region(s) to be added to side One of
-    the interface.
+            the interface.
         side_two_participant : str
             String indicating the name of the participant to be associated with
-    side Two of the interface.
+            side Two of the interface.
         side_two_regions : typing.List[str]
             List specifying the name(s) of region(s) to be added to side Two
-    of the interface.
+            of the interface.
 
     """
 

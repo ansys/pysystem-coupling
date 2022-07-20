@@ -16,10 +16,10 @@ class generate_input_file(Command):
     ----------
         participant_name : str
             Name of the participant for which the execution command will
-    be returned.
+            be returned.
         file_name : str
             Name of the journal script to be written. Note that this name is relative
-    to the participant's working directory.
+            to the participant's working directory.
 
     """
 

@@ -19,7 +19,7 @@ class add_named_expression(Command):
     ----------
         expression_name : str
             The name by which this expression should be referenced when used in
-    another expression.
+            another expression.
         expression_string : str
             String containing the definition of the expression.
 

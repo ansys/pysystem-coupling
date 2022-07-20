@@ -723,125 +723,135 @@ def _get_type(id, info):
 def get_cls(name, info, parent=None):
     """Create a class for the object identified by "path"."""
     try:
-        if parent is None:
-            pname = info.get("category_root", "root")
-        elif "pysyc_name" in info:
-            # Python name provided - for the case where there is a preferred
-            # alternative to the default generated name.
-            pname = info["pysyc_name"]
-        else:
-            pname = to_python_name(name)
-        base = _get_type(name, info)
-        dct = {"syc_name": name}
-        helpinfo = info.get("help")
-        if helpinfo:
-            dct["__doc__"] = helpinfo
-        else:
-            if parent is None:
-                dct["__doc__"] = "'root' object"
-            else:
-                # Assume commands always have helpinfo, so must be an object here.
-                dct["__doc__"] = f"'{pname}' child."
-
-        cls = type(pname, (base,), dct)
-
-        children = info.get("__children")
-        parameters = info.get("__parameters")
-        if base == NamedObject:
-            children = parameters = None
-
-        def unique_name(base_name, existing_names):
-            # TODO: this was new in Fluent; related to flattening changes, but
-            # it is not entirely clear when we would see non-unique children and
-            # whether this is really needed
-            candidate_name = base_name
-            i = 0
-            while candidate_name in existing_names:
-                i += 1
-                candidate_name = f"{base_name}_{i}"
-            return candidate_name
-
-        if children:
-            child_keys = sorted(children.keys(), key=lambda c: children[c]["ordinal"])
-            cls.child_names = []
-            for cname in child_keys:
-                cinfo = children[cname]
-                ccls = get_cls(cname, cinfo, cls)
-                ccls.__name__ = unique_name(ccls.__name__, cls.child_names)
-                # pylint: disable=no-member
-                cls.child_names.append(ccls.__name__)
-                setattr(cls, ccls.__name__, ccls)
-
-        if parameters:
-            prop_keys = sorted(
-                parameters.keys(), key=lambda p: parameters[p]["ordinal"]
-            )
-            cls.property_names_types = []
-            for prname in prop_keys:
-                sycname = prname
-                prname = to_python_name(prname)
-                prinfo = parameters[sycname]
-                prtype = _get_param_type(prname, prinfo)
-                docstr = f"'{prname}' property of '{parent.__name__}' object"
-                setattr(
-                    cls,
-                    prname,
-                    property(
-                        # NB: the prname defaults are needed to force capture
-                        #     StackOverflow Q 2295290 for details!
-                        fget=lambda slf, prname=prname: slf.get_property_state(prname),
-                        fset=lambda slf, val, prname=prname: slf.set_property_state(
-                            prname, val
-                        ),
-                        doc=docstr,
-                    ),
-                )
-                cls.property_names_types.append((prname, sycname, prtype))
-
-        commands = info.get("__commands")
-        if commands:
-            cls.command_names = []
-            for cname, cinfo in commands.items():
-                ccls = get_cls(cname, cinfo, cls)
-                ccls.__name__ = unique_name(ccls.__name__, cls.command_names)
-                # pylint: disable=no-member
-                cls.command_names.append(ccls.__name__)
-                setattr(cls, ccls.__name__, ccls)
-
-        arguments = info.get("args")
-        if arguments:
-            doc = cls.__doc__
-            doc += "\n\n"
-            doc += "Parameters\n"
-            doc += "----------\n"
-            cls.argument_names = []
-            for aname, ainfo in arguments:
-                if aname == "ObjectPath":
-                    continue
-                ccls = get_cls(aname, ainfo, cls)
-                th = ccls._state_type
-                th = th.__name__ if hasattr(th, "__name__") else str(th)
-                doc += f"    {ccls.__name__} : {th}\n"
-                doc += f"        {ccls.__doc__}\n"
-                ccls.__name__ = unique_name(ccls.__name__, cls.argument_names)
-                # pylint: disable=no-member
-                cls.argument_names.append(ccls.__name__)
-                setattr(cls, ccls.__name__, ccls)
-            cls.__doc__ = doc
-            cls.essential_arguments = [
-                to_python_name(a) for a in info.get("essentialArgs", [])
-            ]
-
-        # object_type = info.get('object-type')
-        object_type = Group if base == NamedObject else None
-        if object_type:
-            cls.child_object_type = get_cls("child_object_type", info, cls)
+        return _get_cls(name, info, parent)
     except Exception:
         LOG.error(
             f"Unable to construct class for '{name}' of "
             f"'{parent.syc_name if parent else None}'"
         )
         raise
+
+
+def _indent_doc(indent, doc_str):
+    doc = doc_str.split("\n")
+    sep = f"\n{indent}"
+    return indent + sep.join(doc)
+
+
+def _get_cls(name, info, parent):
+    if parent is None:
+        pname = info.get("category_root", "root")
+    elif "pysyc_name" in info:
+        # Python name provided - for the case where there is a preferred
+        # alternative to the default generated name.
+        pname = info["pysyc_name"]
+    else:
+        pname = to_python_name(name)
+    base = _get_type(name, info)
+    dct = {"syc_name": name}
+    helpinfo = info.get("help")
+    if helpinfo:
+        dct["__doc__"] = helpinfo
+    else:
+        if parent is None:
+            dct["__doc__"] = "'root' object"
+        else:
+            # Assume commands always have helpinfo, so must be an object here.
+            dct["__doc__"] = f"'{pname}' child."
+
+    cls = type(pname, (base,), dct)
+
+    children = info.get("__children")
+    parameters = info.get("__parameters")
+    if base == NamedObject:
+        children = parameters = None
+
+    def unique_name(base_name, existing_names):
+        # TODO: this was new in Fluent; related to flattening changes, but
+        # it is not entirely clear when we would see non-unique children and
+        # whether this is really needed
+        candidate_name = base_name
+        i = 0
+        while candidate_name in existing_names:
+            i += 1
+            candidate_name = f"{base_name}_{i}"
+        return candidate_name
+
+    if children:
+        child_keys = sorted(children.keys(), key=lambda c: children[c]["ordinal"])
+        cls.child_names = []
+        for cname in child_keys:
+            cinfo = children[cname]
+            ccls = get_cls(cname, cinfo, cls)
+            ccls.__name__ = unique_name(ccls.__name__, cls.child_names)
+            # pylint: disable=no-member
+            cls.child_names.append(ccls.__name__)
+            setattr(cls, ccls.__name__, ccls)
+
+    if parameters:
+        prop_keys = sorted(parameters.keys(), key=lambda p: parameters[p]["ordinal"])
+        cls.property_names_types = []
+        for prname in prop_keys:
+            sycname = prname
+            prname = to_python_name(prname)
+            prinfo = parameters[sycname]
+            prtype = _get_param_type(prname, prinfo)
+            docstr = f"'{prname}' property of '{parent.__name__}' object"
+            setattr(
+                cls,
+                prname,
+                property(
+                    # NB: the prname defaults are needed to force capture
+                    #     StackOverflow Q 2295290 for details!
+                    fget=lambda slf, prname=prname: slf.get_property_state(prname),
+                    fset=lambda slf, val, prname=prname: slf.set_property_state(
+                        prname, val
+                    ),
+                    doc=docstr,
+                ),
+            )
+            cls.property_names_types.append((prname, sycname, prtype))
+
+    commands = info.get("__commands")
+    if commands:
+        cls.command_names = []
+        for cname, cinfo in commands.items():
+            ccls = get_cls(cname, cinfo, cls)
+            ccls.__name__ = unique_name(ccls.__name__, cls.command_names)
+            # pylint: disable=no-member
+            cls.command_names.append(ccls.__name__)
+            setattr(cls, ccls.__name__, ccls)
+
+    arguments = info.get("args")
+    if arguments:
+        doc = cls.__doc__
+        doc += "\n\n"
+        doc += "Parameters\n"
+        doc += "----------\n"
+        cls.argument_names = []
+        for aname, ainfo in arguments:
+            if aname == "ObjectPath":
+                continue
+            ccls = get_cls(aname, ainfo, cls)
+            th = ccls._state_type
+            th = th.__name__ if hasattr(th, "__name__") else str(th)
+            arg_indent = "    "
+            doc += f"{arg_indent}{ccls.__name__} : {th}\n"
+            doc += f"{_indent_doc(arg_indent * 2, ccls.__doc__)}\n"
+            ccls.__name__ = unique_name(ccls.__name__, cls.argument_names)
+            # pylint: disable=no-member
+            cls.argument_names.append(ccls.__name__)
+            setattr(cls, ccls.__name__, ccls)
+        cls.__doc__ = doc
+        cls.essential_arguments = [
+            to_python_name(a) for a in info.get("essentialArgs", [])
+        ]
+
+    # object_type = info.get('object-type')
+    object_type = Group if base == NamedObject else None
+    if object_type:
+        cls.child_object_type = get_cls("child_object_type", info, cls)
+
     return cls
 
 

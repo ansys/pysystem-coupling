@@ -35,21 +35,21 @@ class add_transformation(Command):
             Name of the reference frame to which the transformation will be added.
         transformation_type : str
             ??type?? of transformation to be added. Available options are Rotation or
-    Translation
+            Translation
 
-    Required Parameters for ??transformation?? Types:
-        Rotation: ??angle??, ??axis??, ??vector?? (if ??axis?? is "UserDefined")
-        Translation: ??vector??
+            Required Parameters for ??transformation?? Types:
+                Rotation: ??angle??, ??axis??, ??vector?? (if ??axis?? is "UserDefined")
+                Translation: ??vector??
         angle : real
             ??angle?? to rotate a reference frame. Used with Rotation
-    ??transformation_type??. Default unit is Radians.
+            ??transformation_type??. Default unit is Radians.
         axis : str
             ??axis?? about which a rotation is applied. Used with
-    Rotation ??transformation_type??. Available options are: "XAxis", "YAxis",
-    "ZAxis", and "UserDefined".
+            Rotation ??transformation_type??. Available options are: "XAxis", "YAxis",
+            "ZAxis", and "UserDefined".
         vector : typing.Tuple[real, real, real]
             A vector for use with Translation ??transformation_type?? or Rotation
-    ??transformation_type?? if the ??axis?? is "UserDefined".
+            ??transformation_type?? if the ??axis?? is "UserDefined".
 
     """
 

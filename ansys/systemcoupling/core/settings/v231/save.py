@@ -36,7 +36,7 @@ class save(Command):
     ----------
         file_path : str
             Writeable directory to which the SyC directory is added. (Settings and
-    ??results?? .h5 files will be written to the SyC directory.)
+            ??results?? .h5 files will be written to the SyC directory.)
 
     """
 

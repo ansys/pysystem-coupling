@@ -24,14 +24,14 @@ class add_expression_function(Command):
     ----------
         module : str
             The name of the Python module (in the 'Modules' sub-directory of
-    the working directory) from which the function is to be obtained.
+            the working directory) from which the function is to be obtained.
         function : str
             The name of the function in the module. If no ??function_name?? is
-    specified, this will also be the name by which the function should
-    be referenced when used in an expression.
+            specified, this will also be the name by which the function should
+            be referenced when used in an expression.
         function_name : str
             Optionally specify a different name from ??function?? which should be
-    the name used to reference the function in an expression.
+            the name used to reference the function in an expression.
 
     """
 

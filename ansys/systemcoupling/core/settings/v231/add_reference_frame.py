@@ -23,8 +23,8 @@ class add_reference_frame(Command):
     ----------
         parent_reference_frame : str
             Name of a reference frame that the added frame should use as the
-    parent. If the argument is not provided, the default parent reference
-    frame "GlobalReferenceFrame" will be added.
+            parent. If the argument is not provided, the default parent reference
+            frame "GlobalReferenceFrame" will be added.
 
     """
 

@@ -17,12 +17,12 @@ class write_ensight(Command):
     ----------
         file_name : str
             Base name for Ensight files. It will generate <base>.encas file which
-    should be loaded into Ensight. Other files are generated for geometry
-    and variables.
+            should be loaded into Ensight. Other files are generated for geometry
+            and variables.
         binary : bool
             To control if file is to be written in binary format or ASCII. ASCII
-    slows down performance, but may be useful for debugging and seeing
-    raw data.
+            slows down performance, but may be useful for debugging and seeing
+            raw data.
 
     """
 
