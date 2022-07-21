@@ -27,7 +27,7 @@ python <path to settings_rstgen.py>
 
 import os
 
-from ansys.systemcoupling.core.settings.v231 import setup_root
+from ansys.systemcoupling.core.settings.v231 import case_root, setup_root, solution_root
 
 parents_dict = {}
 rst_list = []
@@ -35,6 +35,15 @@ rst_list = []
 
 def _get_indent_str(indent):
     return f"{' '*indent*4}"
+
+
+def _generate_property_list_for_rst(r, data_dict={}):
+    indent = " " * 4
+    for prop, doc in data_dict.items():
+        r.write(f"{prop}\n")
+        doc = doc.split("\n")
+        doc = indent + (f"\n{indent}".join(doc))
+        r.write(f"{doc}\n\n")
 
 
 def _generate_table_for_rst(r, data_dict={}):
@@ -116,6 +125,9 @@ def _populate_rst_from_settings(rst_dir, cls):
     cls_name = cls.__name__
     file_name = cls.__module__.split(".")[-1]
     rstpath = os.path.normpath(os.path.join(rst_dir, file_name + ".rst"))
+    has_properties = (
+        hasattr(cls, "property_names_types") and len(cls.property_names_types) > 0
+    )
     has_children = hasattr(cls, "child_names") and len(cls.child_names) > 0
     has_commands = hasattr(cls, "command_names") and len(cls.command_names) > 0
     has_arguments = hasattr(cls, "argument_names") and len(cls.argument_names) > 0
@@ -132,6 +144,14 @@ def _populate_rst_from_settings(rst_dir, cls):
         r.write(f".. autoclass:: {cls_name}\n")
         r.write(f"{istr1}:show-inheritance:\n")
         r.write(f"{istr1}:undoc-members:\n")
+
+        if has_properties:
+            r.write(f".. rubric:: Properties\n\n")
+            data_dict = {}
+            for prop, _, __ in cls.property_names_types:
+                prop_attr = getattr(cls, prop)
+                data_dict[prop] = prop_attr.__doc__.strip("\n").split("\n")[0]
+            _generate_property_list_for_rst(r, data_dict)
 
         if has_children:
             r.write(f".. rubric:: Children\n\n")
@@ -218,5 +238,12 @@ if __name__ == "__main__":
     if not os.path.exists(rst_dir):
         os.makedirs(rst_dir)
 
-    _populate_parents_list(setup_root.setup_root)
-    _populate_rst_from_settings(rst_dir, setup_root.setup_root)
+    for root in (
+        case_root.case_root,
+        setup_root.setup_root,
+        solution_root.solution_root,
+    ):
+        _populate_parents_list(root)
+        _populate_rst_from_settings(rst_dir, root)
+        parents_dict = {}
+        rst_list = []

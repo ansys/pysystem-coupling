@@ -1,13 +1,17 @@
 .. _ref_v231:
 
-Settings Objects
-================
+Commands and Settings API
+=========================
 
 Introduction
 ------------
 
-Settings objects provide a natural way to access and modify System Coupling data model settings and
-issue commands with a hierarchy of objects.
+A System Coupling analysis is defined in terms of a hierarchical data model of settings. An API is
+exposed that provides direct access to the data model as well as to commands that assist in
+various aspects of setting up and solving an analysis.
+
+The API is defined in terms of a number of generic objects which will be described.
+
 
 **TODO** The following Fluent doc may be adaptable to System Coupling as the latter uses a
 stripped down/slightly diverged form of the Fluent infrastructure. Obviously specific examples
@@ -171,4 +175,8 @@ commands.
 
 Settings Objects Root
 ---------------------
-:ref:`Settings root<setup_root>`
+:ref:`Case and persistence commands<case_root>`
+
+:ref:`Analysis setup commands and datamodel<setup_root>`
+
+:ref:`Solution commands<solution_root>`
