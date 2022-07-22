@@ -796,7 +796,8 @@ def _get_cls(name, info, parent):
             prname = to_python_name(prname)
             prinfo = parameters[sycname]
             prtype = _get_param_type(prname, prinfo)
-            docstr = f"'{prname}' property of '{parent.__name__}' object"
+            docstr_default = f"'{prname}' property of '{parent.__name__}' object"
+            docstr = prinfo.get("help", docstr_default)
             setattr(
                 cls,
                 prname,

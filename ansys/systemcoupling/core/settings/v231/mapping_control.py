@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class mapping_control(Group):
     """
-    'mapping_control' child.
+    Control mapping settings for the coupling interface.
     """
 
     syc_name = "MappingControl"
@@ -38,7 +38,7 @@ class mapping_control(Group):
 
     @property
     def stop_if_poor_intersection(self) -> Boolean:
-        """'stop_if_poor_intersection' property of 'child_object_type' object"""
+        """Control whether System Coupling stops when the intersection between coupling interface sides is below a specified threshold, indicating a possible setup error."""
         return self.get_property_state("stop_if_poor_intersection")
 
     @stop_if_poor_intersection.setter
@@ -47,7 +47,7 @@ class mapping_control(Group):
 
     @property
     def poor_intersection_threshold(self) -> Real:
-        """'poor_intersection_threshold' property of 'child_object_type' object"""
+        """Defines the threshold at which System Coupling stops if the intersection between coupling interface sides is low."""
         return self.get_property_state("poor_intersection_threshold")
 
     @poor_intersection_threshold.setter
@@ -56,7 +56,7 @@ class mapping_control(Group):
 
     @property
     def face_alignment(self) -> String:
-        """'face_alignment' property of 'child_object_type' object"""
+        """Available for coupling interfaces between surfaces."""
         return self.get_property_state("face_alignment")
 
     @face_alignment.setter
@@ -65,7 +65,7 @@ class mapping_control(Group):
 
     @property
     def absolute_gap_tolerance(self) -> Real:
-        """'absolute_gap_tolerance' property of 'child_object_type' object"""
+        """Available only for coupling interfaces between surfaces."""
         return self.get_property_state("absolute_gap_tolerance")
 
     @absolute_gap_tolerance.setter
@@ -74,7 +74,7 @@ class mapping_control(Group):
 
     @property
     def relative_gap_tolerance(self) -> Real:
-        """'relative_gap_tolerance' property of 'child_object_type' object"""
+        """Available for coupling interfaces between surfaces."""
         return self.get_property_state("relative_gap_tolerance")
 
     @relative_gap_tolerance.setter
@@ -83,7 +83,7 @@ class mapping_control(Group):
 
     @property
     def small_weight_tolerance(self) -> Real:
-        """'small_weight_tolerance' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("small_weight_tolerance")
 
     @small_weight_tolerance.setter
@@ -92,7 +92,7 @@ class mapping_control(Group):
 
     @property
     def corner_tolerance(self) -> Real:
-        """'corner_tolerance' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("corner_tolerance")
 
     @corner_tolerance.setter
@@ -101,7 +101,7 @@ class mapping_control(Group):
 
     @property
     def halo_tolerance(self) -> Real:
-        """'halo_tolerance' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("halo_tolerance")
 
     @halo_tolerance.setter
@@ -110,7 +110,7 @@ class mapping_control(Group):
 
     @property
     def conservative_reciprocity_factor(self) -> Real:
-        """'conservative_reciprocity_factor' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("conservative_reciprocity_factor")
 
     @conservative_reciprocity_factor.setter
@@ -119,7 +119,7 @@ class mapping_control(Group):
 
     @property
     def profile_preserving_reciprocity_factor(self) -> Real:
-        """'profile_preserving_reciprocity_factor' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("profile_preserving_reciprocity_factor")
 
     @profile_preserving_reciprocity_factor.setter
@@ -128,7 +128,7 @@ class mapping_control(Group):
 
     @property
     def conservative_intensive(self) -> String:
-        """'conservative_intensive' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("conservative_intensive")
 
     @conservative_intensive.setter
@@ -137,7 +137,7 @@ class mapping_control(Group):
 
     @property
     def preserve_normal(self) -> String:
-        """'preserve_normal' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("preserve_normal")
 
     @preserve_normal.setter
@@ -146,7 +146,7 @@ class mapping_control(Group):
 
     @property
     def conservation_fix_tolerance_volume(self) -> Real:
-        """'conservation_fix_tolerance_volume' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("conservation_fix_tolerance_volume")
 
     @conservation_fix_tolerance_volume.setter
@@ -155,7 +155,7 @@ class mapping_control(Group):
 
     @property
     def rbf_option(self) -> String:
-        """'rbf_option' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_option")
 
     @rbf_option.setter
@@ -164,7 +164,7 @@ class mapping_control(Group):
 
     @property
     def rbf_shape_parameter(self) -> Real:
-        """'rbf_shape_parameter' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_shape_parameter")
 
     @rbf_shape_parameter.setter
@@ -173,7 +173,7 @@ class mapping_control(Group):
 
     @property
     def rbf_linear_correction(self) -> Boolean:
-        """'rbf_linear_correction' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_linear_correction")
 
     @rbf_linear_correction.setter
@@ -182,7 +182,7 @@ class mapping_control(Group):
 
     @property
     def rbf_clipping_scale(self) -> Real:
-        """'rbf_clipping_scale' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_clipping_scale")
 
     @rbf_clipping_scale.setter

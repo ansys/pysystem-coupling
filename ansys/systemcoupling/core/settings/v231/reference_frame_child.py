@@ -9,7 +9,7 @@ from .transformation import transformation
 
 class reference_frame_child(Group):
     """
-    'child_object_type' child.
+    Use ReferenceFrame objects to create transformations from the global (analysis-level) reference, which can then be defined for coupling interface sides.
     """
 
     syc_name = "child_object_type"
@@ -29,7 +29,7 @@ class reference_frame_child(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'reference_frame' object"""
+        """Method used to define transformations from the global reference frame."""
         return self.get_property_state("option")
 
     @option.setter
@@ -38,7 +38,7 @@ class reference_frame_child(Group):
 
     @property
     def parent_reference_frame(self) -> String:
-        """'parent_reference_frame' property of 'reference_frame' object"""
+        """Parent reference frame for the current ReferenceFrame object."""
         return self.get_property_state("parent_reference_frame")
 
     @parent_reference_frame.setter
@@ -47,7 +47,7 @@ class reference_frame_child(Group):
 
     @property
     def transformation_order(self) -> StringList:
-        """'transformation_order' property of 'reference_frame' object"""
+        """Available when ReferenceFrame.Option is set to ByTransformation. Relevant only when multiple transformations from the same parent reference frame are defined."""
         return self.get_property_state("transformation_order")
 
     @transformation_order.setter
@@ -56,7 +56,7 @@ class reference_frame_child(Group):
 
     @property
     def transformation_matrix(self) -> RealList:
-        """'transformation_matrix' property of 'reference_frame' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("transformation_matrix")
 
     @transformation_matrix.setter

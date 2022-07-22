@@ -9,7 +9,7 @@ from .stabilization import stabilization
 
 class data_transfer_child(Group):
     """
-    'child_object_type' child.
+    Set data transfer details.
     """
 
     syc_name = "child_object_type"
@@ -38,7 +38,7 @@ class data_transfer_child(Group):
 
     @property
     def display_name(self) -> String:
-        """'display_name' property of 'data_transfer' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -47,7 +47,7 @@ class data_transfer_child(Group):
 
     @property
     def suppress(self) -> Boolean:
-        """'suppress' property of 'data_transfer' object"""
+        """Whether the data transfer is suppressed."""
         return self.get_property_state("suppress")
 
     @suppress.setter
@@ -56,7 +56,7 @@ class data_transfer_child(Group):
 
     @property
     def target_side(self) -> String:
-        """'target_side' property of 'data_transfer' object"""
+        """Side of the coupling interface to receive the data transfer."""
         return self.get_property_state("target_side")
 
     @target_side.setter
@@ -65,7 +65,7 @@ class data_transfer_child(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'data_transfer' object"""
+        """Method used to set the value of the data transfer's source variable."""
         return self.get_property_state("option")
 
     @option.setter
@@ -74,7 +74,7 @@ class data_transfer_child(Group):
 
     @property
     def source_variable(self) -> String:
-        """'source_variable' property of 'data_transfer' object"""
+        """Available when DataTransfer.Option is set to UsingVariable."""
         return self.get_property_state("source_variable")
 
     @source_variable.setter
@@ -83,7 +83,7 @@ class data_transfer_child(Group):
 
     @property
     def target_variable(self) -> String:
-        """'target_variable' property of 'data_transfer' object"""
+        """Variable associated with the target side of the interface."""
         return self.get_property_state("target_variable")
 
     @target_variable.setter
@@ -92,7 +92,7 @@ class data_transfer_child(Group):
 
     @property
     def value(self) -> Real:
-        """'value' property of 'data_transfer' object"""
+        """Available when DataTransfer.Option is set to UsingExpression and DataTransfer.TargetVariable has a scalar value."""
         return self.get_property_state("value")
 
     @value.setter
@@ -101,7 +101,7 @@ class data_transfer_child(Group):
 
     @property
     def ramping_option(self) -> String:
-        """'ramping_option' property of 'data_transfer' object"""
+        """Whether the ramping algorithm is applied to specified quantity."""
         return self.get_property_state("ramping_option")
 
     @ramping_option.setter
@@ -110,7 +110,7 @@ class data_transfer_child(Group):
 
     @property
     def relaxation_factor(self) -> Real:
-        """'relaxation_factor' property of 'data_transfer' object"""
+        """Factor multiplying the current data transfer values for specified quantity when under-relaxing them against the previous values."""
         return self.get_property_state("relaxation_factor")
 
     @relaxation_factor.setter
@@ -119,7 +119,7 @@ class data_transfer_child(Group):
 
     @property
     def convergence_target(self) -> Real:
-        """'convergence_target' property of 'data_transfer' object"""
+        """RMS-based target value used when evaluating convergence of the specified quantity within a coupling iteration."""
         return self.get_property_state("convergence_target")
 
     @convergence_target.setter
@@ -128,7 +128,7 @@ class data_transfer_child(Group):
 
     @property
     def mapping_type(self) -> String:
-        """'mapping_type' property of 'data_transfer' object"""
+        """Type of mapping used for the data transfer. Read only."""
         return self.get_property_state("mapping_type")
 
     @mapping_type.setter
@@ -137,7 +137,7 @@ class data_transfer_child(Group):
 
     @property
     def unmapped_value_option(self) -> String:
-        """'unmapped_value_option' property of 'data_transfer' object"""
+        """Available when profile-preserving mapping is used to transfer data onto a target surface in one of System Coupling's user interfaces."""
         return self.get_property_state("unmapped_value_option")
 
     @unmapped_value_option.setter
@@ -146,7 +146,7 @@ class data_transfer_child(Group):
 
     @property
     def time_step_initialization_option(self) -> String:
-        """'time_step_initialization_option' property of 'data_transfer' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("time_step_initialization_option")
 
     @time_step_initialization_option.setter

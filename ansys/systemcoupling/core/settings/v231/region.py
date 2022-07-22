@@ -9,7 +9,7 @@ from .region_child import region_child
 
 class region(NamedObject[region_child]):
     """
-    'region' child.
+    Define the region's settings.
     """
 
     syc_name = "Region"

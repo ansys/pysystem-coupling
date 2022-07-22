@@ -10,7 +10,8 @@ class SycProxyAdapter(SycProxyInterface):
     def get_static_info(self, category):
         cmd_metadata = get_cmd_metadata(self.__rpc)
         if category == "setup":
-            metadata = self.__rpc.GetMetadata(json_ret=True)
+            # metadata = self.__rpc.GetMetadata(json_ret=True)
+            metadata = get_dm_metadata(self.__rpc)
             setup_cmd_data = process_cmd_data(cmd_metadata, category=category)
             root_type = "SystemCoupling"
             metadata[root_type]["__commands"] = setup_cmd_data
@@ -62,8 +63,45 @@ class SycProxyAdapter(SycProxyInterface):
         return self.__rpc.execute_command(cmd_name, **kwargs)
 
 
-# TODO need this in generate_datamodel
-#   - probably does not belong in here - find a better way to share
+# TODO need these in generate_datamodel
+#   - probably do not belong in here - find a better way to share
+
+
+def get_dm_metadata(api, root_type):
+    dm_metadata = api.GetMetadata(json_ret=True)
+    dm_metadata_ex = api.GetPySycDatamodelMetadata()
+
+    def get_update(name, data_ex):
+        # Adapt extended data to expected form
+        if name not in data_ex:
+            return None
+        item_ex = data_ex[name]
+        ret = {"help": item_ex["doc"]}
+        if "pyname" in item_ex:
+            ret["py_sycname"] = item_ex["pyname"]
+        return ret
+
+    def merge_metadata(data, data_ex):
+        for k, v in data.items():
+            if k == "__children":
+                for c, cdata in v.items():
+                    update = get_update(c, data_ex)
+                    if update is not None:
+                        cdata.update(update)
+                        # Note that we only bother recursing
+                        # as long as there is a corresponding
+                        # item in the extended data
+                        merge_metadata(cdata, data_ex[c])
+            if k == "__parameters":
+                for p, pdata in v.items():
+                    update = get_update(p, data_ex)
+                    if update is not None:
+                        pdata.update(update)
+
+    merge_metadata(dm_metadata[root_type], dm_metadata_ex[root_type])
+    return dm_metadata
+
+
 def get_cmd_metadata(api):
     """Adapt command metadata queried from System Coupling to the
     form that is needed for the client implementation.

@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class external_data_file(Group):
     """
-    'external_data_file' child.
+    Available when the ParticipantType is set to EXTERNALDATA (that is, only for workflows involving a Workbench setup using static data).
     """
 
     syc_name = "ExternalDataFile"
@@ -16,7 +16,7 @@ class external_data_file(Group):
 
     @property
     def file_path(self) -> String:
-        """'file_path' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("file_path")
 
     @file_path.setter

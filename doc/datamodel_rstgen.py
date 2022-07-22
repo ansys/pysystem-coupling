@@ -37,12 +37,29 @@ def _get_indent_str(indent):
     return f"{' '*indent*4}"
 
 
+def _find_indent(line):
+    count = 0
+    while line and line[count] == " ":
+        count += 1
+    return count
+
+
 def _generate_property_list_for_rst(r, data_dict={}):
     indent = " " * 4
     for prop, doc in data_dict.items():
         r.write(f"{prop}\n")
-        doc = doc.split("\n")
-        doc = indent + (f"\n{indent}".join(doc))
+        lines = doc.split("\n")
+        if len(lines) > 1:
+            # Assume multi-line doc string has initial text immediately after
+            # opening """. Following lines will then have a default indent bringing
+            # them in line with first '"'. It's possible that some lines might have
+            # further indent. Find the minimum indent from second line onwards
+            # and remove it. This falls down if all lines are meant to be indented
+            # relative to first. Could be addressed by splitting first line perhaps?
+            inferred_indent = min(_find_indent(line) for line in lines[1:])
+            lines = [lines[0]] + [line[inferred_indent:] for line in lines[1:]]
+
+        doc = indent + (f"\n{indent}".join(lines))
         r.write(f"{doc}\n\n")
 
 
@@ -150,7 +167,7 @@ def _populate_rst_from_settings(rst_dir, cls):
             data_dict = {}
             for prop, _, __ in cls.property_names_types:
                 prop_attr = getattr(cls, prop)
-                data_dict[prop] = prop_attr.__doc__.strip("\n").split("\n")[0]
+                data_dict[prop] = prop_attr.__doc__
             _generate_property_list_for_rst(r, data_dict)
 
         if has_children:

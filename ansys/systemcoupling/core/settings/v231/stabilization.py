@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class stabilization(Group):
     """
-    'stabilization' child.
+    Control the application of Quasi-Newton stabilization to the parent data transfer.
     """
 
     syc_name = "Stabilization"
@@ -33,7 +33,7 @@ class stabilization(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'child_object_type' object"""
+        """Whether stabilization is applied to the data transfer."""
         return self.get_property_state("option")
 
     @option.setter
@@ -42,7 +42,7 @@ class stabilization(Group):
 
     @property
     def couple_with_global_stabilization(self) -> Boolean:
-        """'couple_with_global_stabilization' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("couple_with_global_stabilization")
 
     @couple_with_global_stabilization.setter
@@ -51,7 +51,7 @@ class stabilization(Group):
 
     @property
     def initial_iterations(self) -> Integer:
-        """'initial_iterations' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("initial_iterations")
 
     @initial_iterations.setter
@@ -60,7 +60,7 @@ class stabilization(Group):
 
     @property
     def initial_relaxation_factor(self) -> Real:
-        """'initial_relaxation_factor' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("initial_relaxation_factor")
 
     @initial_relaxation_factor.setter
@@ -69,7 +69,7 @@ class stabilization(Group):
 
     @property
     def maximum_retained_time_steps(self) -> Integer:
-        """'maximum_retained_time_steps' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("maximum_retained_time_steps")
 
     @maximum_retained_time_steps.setter
@@ -78,7 +78,7 @@ class stabilization(Group):
 
     @property
     def maximum_retained_iterations(self) -> Integer:
-        """'maximum_retained_iterations' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("maximum_retained_iterations")
 
     @maximum_retained_iterations.setter
@@ -87,7 +87,7 @@ class stabilization(Group):
 
     @property
     def weight_factor(self) -> Real:
-        """'weight_factor' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("weight_factor")
 
     @weight_factor.setter
@@ -96,7 +96,7 @@ class stabilization(Group):
 
     @property
     def diagnostics_level(self) -> Integer:
-        """'diagnostics_level' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("diagnostics_level")
 
     @diagnostics_level.setter
@@ -105,7 +105,7 @@ class stabilization(Group):
 
     @property
     def weight_option(self) -> String:
-        """'weight_option' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("weight_option")
 
     @weight_option.setter
@@ -114,7 +114,7 @@ class stabilization(Group):
 
     @property
     def qr_tol_this_step(self) -> Real:
-        """'qr_tol_this_step' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("qr_tol_this_step")
 
     @qr_tol_this_step.setter
@@ -123,7 +123,7 @@ class stabilization(Group):
 
     @property
     def qr_tol_old_steps(self) -> Real:
-        """'qr_tol_old_steps' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("qr_tol_old_steps")
 
     @qr_tol_old_steps.setter
@@ -132,7 +132,7 @@ class stabilization(Group):
 
     @property
     def time_step_initialization_option(self) -> String:
-        """'time_step_initialization_option' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("time_step_initialization_option")
 
     @time_step_initialization_option.setter

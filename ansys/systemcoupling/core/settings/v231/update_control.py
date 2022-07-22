@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class update_control(Group):
     """
-    'update_control' child.
+    Available for AEDT participants running an Eddy Current solution when the coupled analysis is steady.
     """
 
     syc_name = "UpdateControl"
@@ -19,7 +19,7 @@ class update_control(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'child_object_type' object"""
+        """Specifies how often the participant will perform updates."""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +28,7 @@ class update_control(Group):
 
     @property
     def update_frequency(self) -> Integer:
-        """'update_frequency' property of 'child_object_type' object"""
+        """Available when the UpdateControl.Option is set to StepInterval."""
         return self.get_property_state("update_frequency")
 
     @update_frequency.setter

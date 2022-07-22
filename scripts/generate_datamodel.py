@@ -47,7 +47,10 @@ from ansys.systemcoupling.core.settings import datamodel
 from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
 )
-from ansys.systemcoupling.core.syc_proxy_adapter import get_cmd_metadata
+from ansys.systemcoupling.core.syc_proxy_adapter import (
+    get_cmd_metadata,
+    get_dm_metadata,
+)
 
 hash_dict = {}
 files_dict = {}
@@ -363,7 +366,7 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
             content = out.getvalue()
 
-        content = _black_format_content(content)
+        content = _black_format_content(content, file_name + ".py")
         filepath = os.path.normpath(os.path.join(parent_dir, file_name + ".py"))
         with open(filepath, "w") as f:
             f.write(content)
@@ -497,20 +500,24 @@ def write_classes_to_file(
     # proto files so there is some value in ensuring consistent
     # formatting.
 
-    content = _black_format_content(content)
+    content = _black_format_content(content, filepath)
     with open(filepath, "w") as f:
         f.write(content)
     print(f"Finished generating {filepath}")
 
 
-def _black_format_content(content):
+def _black_format_content(content, filename):
     # we usually have log level as DEBUG here, but black generates a lot of output
     old_level = LOG.current_level
     LOG.set_level("WARNING")
-    content = black.format_file_contents(
-        content, fast=False, mode=black.Mode(preview=True)
-    )
-    LOG.set_level(old_level)
+    try:
+        content = black.format_file_contents(
+            content, fast=False, mode=black.Mode(preview=True)
+        )
+    except Exception as e:
+        LOG.warning(f"black formatting failed on {filename}.\nException: {e}")
+    finally:
+        LOG.set_level(old_level)
     return content
 
 
@@ -552,7 +559,8 @@ def _generate_real_classes(dirname, generate_flat_classes):
     api = syc.native_api
 
     LOG.debug("Querying datamodel metadata...")
-    dm_metadata = api.GetMetadata(json_ret=True)
+    # dm_metadata = api.GetMetadata(json_ret=True)
+    dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
     cmd_metadata_orig = get_cmd_metadata(api)
     LOG.debug("Command metadata received. Processing...")
@@ -606,6 +614,7 @@ if __name__ == "__main__":
             "may not be correct.\n*******************"
         )
 
+    input("continue...")
     dirname = os.path.dirname(__file__)
     use_test_data = False
     generate_flat_classes = False

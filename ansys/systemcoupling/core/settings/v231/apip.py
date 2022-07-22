@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class apip(Group):
     """
-    'apip' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "Apip"
@@ -19,7 +19,7 @@ class apip(Group):
 
     @property
     def debug(self) -> Boolean:
-        """'debug' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("debug")
 
     @debug.setter
@@ -28,7 +28,7 @@ class apip(Group):
 
     @property
     def disable(self) -> Boolean:
-        """'disable' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("disable")
 
     @disable.setter

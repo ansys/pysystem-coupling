@@ -9,7 +9,7 @@ from .attribute import attribute
 
 class variable_child(Group):
     """
-    'child_object_type' child.
+    Define the variable's settings.
     """
 
     syc_name = "child_object_type"
@@ -40,7 +40,7 @@ class variable_child(Group):
 
     @property
     def quantity_type(self) -> String:
-        """'quantity_type' property of 'variable' object"""
+        """Quantity type of the variable being transferred."""
         return self.get_property_state("quantity_type")
 
     @quantity_type.setter
@@ -49,7 +49,7 @@ class variable_child(Group):
 
     @property
     def location(self) -> String:
-        """'location' property of 'variable' object"""
+        """Location of the variable being transferred."""
         return self.get_property_state("location")
 
     @location.setter
@@ -58,7 +58,7 @@ class variable_child(Group):
 
     @property
     def participant_display_name(self) -> String:
-        """'participant_display_name' property of 'variable' object"""
+        """Variable's display name as defined by the participant solver."""
         return self.get_property_state("participant_display_name")
 
     @participant_display_name.setter
@@ -67,7 +67,7 @@ class variable_child(Group):
 
     @property
     def display_name(self) -> String:
-        """'display_name' property of 'variable' object"""
+        """Variable's display name as defined in System Coupling."""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -76,7 +76,7 @@ class variable_child(Group):
 
     @property
     def data_type(self) -> String:
-        """'data_type' property of 'variable' object"""
+        """Variable's data type as reported by the participant."""
         return self.get_property_state("data_type")
 
     @data_type.setter
@@ -85,7 +85,7 @@ class variable_child(Group):
 
     @property
     def real_initial_value(self) -> Real:
-        """'real_initial_value' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("real_initial_value")
 
     @real_initial_value.setter
@@ -94,7 +94,7 @@ class variable_child(Group):
 
     @property
     def integer_initial_value(self) -> Integer:
-        """'integer_initial_value' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("integer_initial_value")
 
     @integer_initial_value.setter
@@ -103,7 +103,7 @@ class variable_child(Group):
 
     @property
     def logical_initial_value(self) -> Boolean:
-        """'logical_initial_value' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("logical_initial_value")
 
     @logical_initial_value.setter
@@ -112,7 +112,7 @@ class variable_child(Group):
 
     @property
     def string_initial_value(self) -> String:
-        """'string_initial_value' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("string_initial_value")
 
     @string_initial_value.setter
@@ -121,7 +121,7 @@ class variable_child(Group):
 
     @property
     def real_min(self) -> Real:
-        """'real_min' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("real_min")
 
     @real_min.setter
@@ -130,7 +130,7 @@ class variable_child(Group):
 
     @property
     def real_max(self) -> Real:
-        """'real_max' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("real_max")
 
     @real_max.setter
@@ -139,7 +139,7 @@ class variable_child(Group):
 
     @property
     def integer_min(self) -> Integer:
-        """'integer_min' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("integer_min")
 
     @integer_min.setter
@@ -148,7 +148,7 @@ class variable_child(Group):
 
     @property
     def integer_max(self) -> Integer:
-        """'integer_max' property of 'variable' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("integer_max")
 
     @integer_max.setter
@@ -157,7 +157,7 @@ class variable_child(Group):
 
     @property
     def tensor_type(self) -> String:
-        """'tensor_type' property of 'variable' object"""
+        """Tensor type of the variable being transferred."""
         return self.get_property_state("tensor_type")
 
     @tensor_type.setter
@@ -166,7 +166,7 @@ class variable_child(Group):
 
     @property
     def is_extensive(self) -> Boolean:
-        """'is_extensive' property of 'variable' object"""
+        """Whether the variable is extensive. (A property is extensive if its value depends on the size of the system.)"""
         return self.get_property_state("is_extensive")
 
     @is_extensive.setter

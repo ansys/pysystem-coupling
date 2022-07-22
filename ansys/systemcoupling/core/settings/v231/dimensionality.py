@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class dimensionality(Group):
     """
-    'dimensionality' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "Dimensionality"
@@ -25,7 +25,7 @@ class dimensionality(Group):
 
     @property
     def length(self) -> Real:
-        """'length' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("length")
 
     @length.setter
@@ -34,7 +34,7 @@ class dimensionality(Group):
 
     @property
     def time(self) -> Real:
-        """'time' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("time")
 
     @time.setter
@@ -43,7 +43,7 @@ class dimensionality(Group):
 
     @property
     def mass(self) -> Real:
-        """'mass' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("mass")
 
     @mass.setter
@@ -52,7 +52,7 @@ class dimensionality(Group):
 
     @property
     def temperature(self) -> Real:
-        """'temperature' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("temperature")
 
     @temperature.setter
@@ -61,7 +61,7 @@ class dimensionality(Group):
 
     @property
     def amount_of_substance(self) -> Real:
-        """'amount_of_substance' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("amount_of_substance")
 
     @amount_of_substance.setter
@@ -70,7 +70,7 @@ class dimensionality(Group):
 
     @property
     def current(self) -> Real:
-        """'current' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("current")
 
     @current.setter
@@ -79,7 +79,7 @@ class dimensionality(Group):
 
     @property
     def luminous_intensity(self) -> Real:
-        """'luminous_intensity' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("luminous_intensity")
 
     @luminous_intensity.setter
@@ -88,7 +88,7 @@ class dimensionality(Group):
 
     @property
     def angle(self) -> Real:
-        """'angle' property of 'child_object_type' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("angle")
 
     @angle.setter

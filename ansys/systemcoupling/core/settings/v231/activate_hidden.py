@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class activate_hidden(Group):
     """
-    'activate_hidden' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "ActivateHidden"
@@ -20,7 +20,7 @@ class activate_hidden(Group):
 
     @property
     def beta_features(self) -> Boolean:
-        """'beta_features' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("beta_features")
 
     @beta_features.setter
@@ -29,7 +29,7 @@ class activate_hidden(Group):
 
     @property
     def alpha_features(self) -> Boolean:
-        """'alpha_features' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("alpha_features")
 
     @alpha_features.setter
@@ -38,7 +38,7 @@ class activate_hidden(Group):
 
     @property
     def lenient_validation(self) -> Boolean:
-        """'lenient_validation' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("lenient_validation")
 
     @lenient_validation.setter

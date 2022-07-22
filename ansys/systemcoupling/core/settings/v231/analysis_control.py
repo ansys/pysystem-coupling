@@ -11,7 +11,7 @@ from .unmapped_value_options import unmapped_value_options
 
 class analysis_control(Group):
     """
-    'analysis_control' child.
+    Control the characteristics and behavior of the coupled analysis.
     """
 
     syc_name = "AnalysisControl"
@@ -57,7 +57,7 @@ class analysis_control(Group):
 
     @property
     def analysis_type(self) -> String:
-        """'analysis_type' property of 'setup_root' object"""
+        """Type of analysis to be run."""
         return self.get_property_state("analysis_type")
 
     @analysis_type.setter
@@ -66,7 +66,7 @@ class analysis_control(Group):
 
     @property
     def optimize_if_one_way(self) -> Boolean:
-        """'optimize_if_one_way' property of 'setup_root' object"""
+        """Whether settings are optimized when System Coupling detects that the data transfers are one-way."""
         return self.get_property_state("optimize_if_one_way")
 
     @optimize_if_one_way.setter
@@ -75,7 +75,7 @@ class analysis_control(Group):
 
     @property
     def warped_face_tolerance(self) -> Real:
-        """'warped_face_tolerance' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("warped_face_tolerance")
 
     @warped_face_tolerance.setter
@@ -84,7 +84,7 @@ class analysis_control(Group):
 
     @property
     def allow_simultaneous_update(self) -> Boolean:
-        """'allow_simultaneous_update' property of 'setup_root' object"""
+        """Whether independent participants run simultaneous solutions."""
         return self.get_property_state("allow_simultaneous_update")
 
     @allow_simultaneous_update.setter
@@ -93,7 +93,7 @@ class analysis_control(Group):
 
     @property
     def simultaneous_participants(self) -> String:
-        """'simultaneous_participants' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("simultaneous_participants")
 
     @simultaneous_participants.setter
@@ -102,7 +102,7 @@ class analysis_control(Group):
 
     @property
     def partitioning_algorithm(self) -> String:
-        """'partitioning_algorithm' property of 'setup_root' object"""
+        """Partitioning algorithm used when participants are running in parallel."""
         return self.get_property_state("partitioning_algorithm")
 
     @partitioning_algorithm.setter
@@ -111,7 +111,7 @@ class analysis_control(Group):
 
     @property
     def allow_iterations_only_mode(self) -> Boolean:
-        """'allow_iterations_only_mode' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("allow_iterations_only_mode")
 
     @allow_iterations_only_mode.setter
@@ -120,7 +120,7 @@ class analysis_control(Group):
 
     @property
     def avoid_data_reconstruction(self) -> Boolean:
-        """'avoid_data_reconstruction' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("avoid_data_reconstruction")
 
     @avoid_data_reconstruction.setter
@@ -129,7 +129,7 @@ class analysis_control(Group):
 
     @property
     def target_initialization_option(self) -> String:
-        """'target_initialization_option' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("target_initialization_option")
 
     @target_initialization_option.setter
@@ -138,7 +138,7 @@ class analysis_control(Group):
 
     @property
     def fluent_region_update_at_step(self) -> Boolean:
-        """'fluent_region_update_at_step' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("fluent_region_update_at_step")
 
     @fluent_region_update_at_step.setter
@@ -147,7 +147,7 @@ class analysis_control(Group):
 
     @property
     def mesh_import_on_initialization(self) -> Boolean:
-        """'mesh_import_on_initialization' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("mesh_import_on_initialization")
 
     @mesh_import_on_initialization.setter
@@ -156,7 +156,7 @@ class analysis_control(Group):
 
     @property
     def import_all_regions(self) -> Boolean:
-        """'import_all_regions' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("import_all_regions")
 
     @import_all_regions.setter
@@ -165,7 +165,7 @@ class analysis_control(Group):
 
     @property
     def bypass_fluent_adapter(self) -> Boolean:
-        """'bypass_fluent_adapter' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("bypass_fluent_adapter")
 
     @bypass_fluent_adapter.setter
@@ -174,7 +174,7 @@ class analysis_control(Group):
 
     @property
     def variable_to_expression_transfer(self) -> Boolean:
-        """'variable_to_expression_transfer' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("variable_to_expression_transfer")
 
     @variable_to_expression_transfer.setter
@@ -183,7 +183,7 @@ class analysis_control(Group):
 
     @property
     def update_mapping_weights(self) -> String:
-        """'update_mapping_weights' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("update_mapping_weights")
 
     @update_mapping_weights.setter
@@ -192,7 +192,7 @@ class analysis_control(Group):
 
     @property
     def solve_incremental_displacement_first(self) -> Boolean:
-        """'solve_incremental_displacement_first' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("solve_incremental_displacement_first")
 
     @solve_incremental_displacement_first.setter
@@ -201,7 +201,7 @@ class analysis_control(Group):
 
     @property
     def write_scs_file(self) -> Boolean:
-        """'write_scs_file' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("write_scs_file")
 
     @write_scs_file.setter
@@ -210,7 +210,7 @@ class analysis_control(Group):
 
     @property
     def check_for_input_files_changes(self) -> String:
-        """'check_for_input_files_changes' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("check_for_input_files_changes")
 
     @check_for_input_files_changes.setter

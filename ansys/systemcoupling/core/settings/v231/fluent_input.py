@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class fluent_input(Group):
     """
-    'fluent_input' child.
+    Available for Fluent participants when ExecutionControl.Option is set to ProgramControlled or UserDefined.
     """
 
     syc_name = "FluentInput"
@@ -21,7 +21,7 @@ class fluent_input(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'execution_control' object"""
+        """Type of solver input file(s) to be used for the Fluent run."""
         return self.get_property_state("option")
 
     @option.setter
@@ -30,7 +30,7 @@ class fluent_input(Group):
 
     @property
     def case_file(self) -> String:
-        """'case_file' property of 'execution_control' object"""
+        """Available when FluentInput | Option is set to InitialCaseFile.."""
         return self.get_property_state("case_file")
 
     @case_file.setter
@@ -39,7 +39,7 @@ class fluent_input(Group):
 
     @property
     def data_file(self) -> String:
-        """'data_file' property of 'execution_control' object"""
+        """Available for Fluent participants when FluentInput | Option is set to InitialCaseAndDataFile."""
         return self.get_property_state("data_file")
 
     @data_file.setter
@@ -48,7 +48,7 @@ class fluent_input(Group):
 
     @property
     def journal_file(self) -> String:
-        """'journal_file' property of 'execution_control' object"""
+        """Available for Fluent participants when FluentInput | Option is set to JournalFile."""
         return self.get_property_state("journal_file")
 
     @journal_file.setter

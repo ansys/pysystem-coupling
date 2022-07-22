@@ -9,7 +9,7 @@ from .available_ports import available_ports
 
 class solution_control(Group):
     """
-    'solution_control' child.
+    The SolutionControl singleton is available when a coupling participant object has been added to the data model. Settings defined under the SolutionControl singleton control solution settings.
     """
 
     syc_name = "SolutionControl"
@@ -31,7 +31,7 @@ class solution_control(Group):
 
     @property
     def duration_option(self) -> String:
-        """'duration_option' property of 'setup_root' object"""
+        """Available for step-based analyses. Defines the duration of the analysis."""
         return self.get_property_state("duration_option")
 
     @duration_option.setter
@@ -40,7 +40,7 @@ class solution_control(Group):
 
     @property
     def end_time(self) -> Real:
-        """'end_time' property of 'setup_root' object"""
+        """Available for step-based analyses with DurationOption set to EndTime."""
         return self.get_property_state("end_time")
 
     @end_time.setter
@@ -49,7 +49,7 @@ class solution_control(Group):
 
     @property
     def number_of_steps(self) -> Integer:
-        """'number_of_steps' property of 'setup_root' object"""
+        """Available for step-based analyses with DurationOption set to NumberOfSteps."""
         return self.get_property_state("number_of_steps")
 
     @number_of_steps.setter
@@ -58,7 +58,7 @@ class solution_control(Group):
 
     @property
     def time_step_size(self) -> Real:
-        """'time_step_size' property of 'setup_root' object"""
+        """Available when the AnalysisType is set to Transient."""
         return self.get_property_state("time_step_size")
 
     @time_step_size.setter
@@ -67,7 +67,7 @@ class solution_control(Group):
 
     @property
     def minimum_iterations(self) -> Integer:
-        """'minimum_iterations' property of 'setup_root' object"""
+        """Defines the minimum number of iterations per coupling step."""
         return self.get_property_state("minimum_iterations")
 
     @minimum_iterations.setter
@@ -76,7 +76,7 @@ class solution_control(Group):
 
     @property
     def maximum_iterations(self) -> Integer:
-        """'maximum_iterations' property of 'setup_root' object"""
+        """Defines the maximum number of iterations per coupling step."""
         return self.get_property_state("maximum_iterations")
 
     @maximum_iterations.setter

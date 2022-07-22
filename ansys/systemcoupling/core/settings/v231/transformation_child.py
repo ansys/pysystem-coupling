@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class transformation_child(Group):
     """
-    'child_object_type' child.
+    Use Transformation objects to apply transformations to coupling interfaces sides to control the positioning of the geometry.
     """
 
     syc_name = "child_object_type"
@@ -21,7 +21,7 @@ class transformation_child(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'transformation' object"""
+        """Type of transformation to be performed."""
         return self.get_property_state("option")
 
     @option.setter
@@ -30,7 +30,7 @@ class transformation_child(Group):
 
     @property
     def angle(self) -> Real:
-        """'angle' property of 'transformation' object"""
+        """Available when the Transformation.Option setting is set to Rotation."""
         return self.get_property_state("angle")
 
     @angle.setter
@@ -39,7 +39,7 @@ class transformation_child(Group):
 
     @property
     def axis(self) -> String:
-        """'axis' property of 'transformation' object"""
+        """Available when the Transformation.Option setting is set to Rotation."""
         return self.get_property_state("axis")
 
     @axis.setter
@@ -48,7 +48,7 @@ class transformation_child(Group):
 
     @property
     def vector(self) -> RealVector:
-        """'vector' property of 'transformation' object"""
+        """Available when Transformation.Option is set to Translation or when Transformation.Axis is set to UserDefined."""
         return self.get_property_state("vector")
 
     @vector.setter

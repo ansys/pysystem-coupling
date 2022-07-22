@@ -9,7 +9,7 @@ from .attribute_child import attribute_child
 
 class attribute(NamedObject[attribute_child]):
     """
-    'attribute' child.
+    Set the variable's attributes.
     """
 
     syc_name = "Attribute"
