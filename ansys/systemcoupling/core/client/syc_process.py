@@ -12,7 +12,9 @@ from ansys.systemcoupling.core.util.logging import LOG
 
 _isWindows = any(platform.win32_ver())
 
-_INSTALL_ROOT = "AWP_ROOT222"
+_CURR_VER = "231"
+_INSTALL_ROOT_ENV = "AWP_ROOT"
+_INSTALL_ROOT_VER_ENV = _INSTALL_ROOT_ENV + _CURR_VER
 _SC_ROOT_ENV = "SYSC_ROOT"
 
 _SCRIPT_EXT = ".bat" if _isWindows else ""
@@ -62,7 +64,9 @@ def _path_to_system_coupling():
     scroot = os.environ.get(_SC_ROOT_ENV, None)
 
     if not scroot:
-        scroot = os.environ.get(_INSTALL_ROOT, None)
+        scroot = os.environ.get(_INSTALL_ROOT_ENV, None)
+        if scroot is None:
+            scroot = os.environ.get(_INSTALL_ROOT_VER_ENV, None)
         if scroot:
             scroot = os.path.join(scroot, "SystemCoupling")
 
