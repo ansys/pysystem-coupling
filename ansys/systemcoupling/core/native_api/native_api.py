@@ -23,9 +23,6 @@ class NativeApi:
         )
         self.__top_level_types = set(self.__dm_meta.child_types(self.__root))
 
-    def _exit(self, rpc_impl=None):
-        self.__rpc_impl = rpc_impl
-
     def execute_command(self, name, **kwargs):
         """Execute the named command or query and return the result.
 
@@ -113,3 +110,6 @@ class NativeApi:
     def _init_cmds(self):
         cmd_meta = self.__rpc_impl.GetCommandAndQueryMetadata()
         self.__cmd_meta = CommandMetadata(cmd_meta)
+
+    def _exit(self, rpc_impl=None):
+        self.__rpc_impl = rpc_impl

@@ -6,58 +6,59 @@ from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
 class _DefunctRpcImpl:
     def __getattr__(self, _):
         raise RuntimeError(
-            "This analysis instance has exited. Launch or " "attach to a new instance."
+            "This analysis instance has exited. Launch or attach to a new instance."
         )
 
 
-class SycAnalysis:
+class Analysis:
     """Encapsulates a System Coupling analysis, providing access to the
     System Coupling data model and its command and query API.
 
-    System Coupling is presumed to be running remotely and is accessed
-    via the provided "rpc impl" which services command and query
-    requests made via ``SycAnalysis``.
+    System Coupling is presumed to be running as a server process. It
+    is accessed via the provided ``rpc`` object which services the
+    command and query requests made here.
     """
 
-    def __init__(self, rpc_impl):
+    def __init__(self, rpc):
         self.__case_root = None
         self.__setup_root = None
         self.__solution_root = None
-        self.__rpc_impl = rpc_impl
+        self.__rpc = rpc
         self.__native_api = None
 
     def exit(self):
-        """Close the remote System Coupling instance.
+        """Close the System Coupling server instance.
 
         Following this, the current instance of this class will not
         be usable. Create a new instance if required.
         """
-        self.__rpc_impl.exit()
-        self.__rpc_impl = _DefunctRpcImpl()
+        self.__rpc.exit()
+        self.__rpc = _DefunctRpcImpl()
         if self.__native_api:
             # Pass in defunct RPC for better behaviour if
             # anyone has held on to a native API reference
-            self.__native_api._exit(self.__rpc_impl)
+            self.__native_api._exit(self.__rpc)
             self.__native_api = None
-        # XXX TODO see about doing something similar for setup
+        # XXX TODO see about doing something similar for case, setup, solution
         self.__case_root = None
         self.__setup_root = None
         self.__solution_root = None
 
     def start_output(self, handle_output=None):
-        """Start streaming the "standard output" written by System Coupling.
+        """Start streaming the `standard output` written by the System Coupling server.
 
-        The "stdout" and "stderr" streams are merged into a single stream.
+        The ``stdout`` and ``stderr`` streams of the server process are
+        merged into a single stream.
 
         By default, the output text is written to the console, but a custom
-        handler may be specified that deals with it in a different way (e.g.,
-        write to a file or display in a separate window). Note that if the
-        default is used, the printing is done from a separate thread. This
-        may lead to unusual behaviour in some Python console environments.
-        In such cases, a custom approach based on the handler could be
-        adopted.
+        handler may be specified that deals with it in a different way (for
+        example, the handler might write the output to a file or display it
+        in a separate window). In the default case, printing is done from a
+        separate thread and this may lead to unusual behaviour in some
+        Python console environments. In such cases, a custom approach based
+        on the handler might be preferred.
 
-        Streaming can be cancelled via the `end_output` method.
+        Streaming can be cancelled by calling the ``end_output`` method.
 
         Parameters
         ----------
@@ -66,20 +67,20 @@ class SycAnalysis:
             stream. Might represent multiple lines of output (with embedded
             newlines).
         """
-        self.__rpc_impl.start_output(handle_output)
+        self.__rpc.start_output(handle_output)
 
     def end_output(self):
-        """Cancels output streaming previously started by `start_output`."""
-        self.__rpc_impl.end_output()
+        """Cancels output streaming previously started by ``start_output``."""
+        self.__rpc.end_output()
 
     def solve(self):
         """Solves the current case."""
-        self.__rpc_impl.solve()
+        self.__rpc.solve()
 
     def interrupt(self, reason_msg=""):
         """Interrupts a solve in progress.
 
-        See also `abort`. The difference between an interrupted and
+        See also ``abort``. The difference between an interrupted and
         aborted solve is that an interrupted solve may be resumed.
 
         Parameters
@@ -89,12 +90,12 @@ class SycAnalysis:
             used for such purposes as providing additional annotation in
             transcript output.
         """
-        self.__rpc_impl.interrupt(reason=reason_msg)
+        self.__rpc.interrupt(reason=reason_msg)
 
     def abort(self, reason_msg=""):
         """Aborts a solve in progress.
 
-        See also `interrupt`. In contrast to an interrupted solve,
+        See also ``interrupt``. In contrast to an interrupted solve,
         an aborted solve may not be resumed.
 
         Parameters
@@ -104,15 +105,15 @@ class SycAnalysis:
             used for such purposes as providing additional annotation in
             transcript output.
         """
-        self.__rpc_impl.abort(reason=reason_msg)
+        self.__rpc.abort(reason=reason_msg)
 
     def ping(self):
         """Simple test that the server is alive and responding."""
-        return self.__rpc_impl.ping()
+        return self.__rpc.ping()
 
     @property
     def case(self):
-        """Provides access to the 'Pythonic' client-side form of the System
+        """Provides access to the `Pythonic` client-side form of the System
         Coupling case persistence API.
         """
         if self.__case_root is None:
@@ -121,7 +122,7 @@ class SycAnalysis:
 
     @property
     def setup(self):
-        """Provides access to the 'Pythonic' client-side form of the System
+        """Provides access to the `Pythonic` client-side form of the System
         Coupling setup API and data model.
         """
         if self.__setup_root is None:
@@ -130,7 +131,7 @@ class SycAnalysis:
 
     @property
     def solution(self):
-        """Provides access to the 'Pythonic' client-side form of the System
+        """Provides access to the `Pythonic` client-side form of the System
         Coupling solution API.
         """
         if self.__solution_root is None:
@@ -138,27 +139,27 @@ class SycAnalysis:
         return self.__solution_root
 
     def _get_api_root(self, category):
-        if isinstance(self.__rpc_impl, _DefunctRpcImpl):
-            self.__rpc_impl.trigger_error
-        sycproxy = SycProxyAdapter(self.__rpc_impl)
+        if isinstance(self.__rpc, _DefunctRpcImpl):
+            self.__rpc.trigger_error
+        sycproxy = SycProxyAdapter(self.__rpc)
         return get_root(sycproxy, category=category)
 
     @property
-    def native_api(self):
+    def native_api(self) -> NativeApi:
         """Provides access to the 'native' System Coupling API and data
         model.
 
         This is aimed at existing users of the System Coupling CLI who are
         more comfortable with retaining familiar syntax while transitioning
-        to use of pySystemCoupling.
+        to using PySystemCoupling.
 
         This API is exposed almost completely dynamically on the client side
         so provides little runtime assistance and documentation.
 
-        See `NativeApi` itself for more details.
+        See the ``NativeApi`` class itself for more details.
         """
         if self.__native_api is None:
-            self.__native_api = NativeApi(self.__rpc_impl)
+            self.__native_api = NativeApi(self.__rpc)
         return self.__native_api
 
     def __enter__(self):

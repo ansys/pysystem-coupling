@@ -52,10 +52,11 @@ def _generate_property_list_for_rst(r, data_dict={}):
         if len(lines) > 1:
             # Assume multi-line doc string has initial text immediately after
             # opening """. Following lines will then have a default indent bringing
-            # them in line with first '"'. It's possible that some lines might have
-            # further indent. Find the minimum indent from second line onwards
+            # them in line with first '"'. It is possible that some lines might have
+            # a further indent. Find the minimum indent from second line onwards
             # and remove it. This falls down if all lines are meant to be indented
-            # relative to first. Could be addressed by splitting first line perhaps?
+            # relative to first. Could be addressed by manually splitting first doc
+            # line perhaps?
             inferred_indent = min(_find_indent(line) for line in lines[1:])
             lines = [lines[0]] + [line[inferred_indent:] for line in lines[1:]]
 

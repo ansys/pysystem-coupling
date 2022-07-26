@@ -11,4 +11,6 @@ Core
    :maxdepth: 2
    :hidden:
 
+   launching
+   analysis
    settings/index
