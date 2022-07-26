@@ -147,9 +147,11 @@ class Base:
         return ppath + self._parent._syc_pathsep + self.obj_name
 
     def get_attrs(self, attrs) -> DictStateType:
+        """Get all specified attributes ``attrs`` of this object in the form of a `state dict`."""
         return self.sycproxy.get_attrs(self.syc_path, attrs)
 
     def get_attr(self, attr) -> StateType:
+        """Get the named attribute ``attr`` of this object."""
         attrs = self.get_attrs([attr])
         if attr != "active?" and attrs.get("active?", True) is False:
             raise RuntimeError("Object is not active")
@@ -221,9 +223,11 @@ class SettingsBase(Base, Generic[StateT]):
         return self.sycproxy.set_state(self.syc_path, self.to_syc_keys(state))
 
     def set_property_state(self, prop, value):
+        """Set the state of the property ``prop`` to ``value``."""
         self.set_state({prop: value})
 
     def get_property_state(self, prop):
+        """Get the state of the property ``prop``."""
         return self.sycproxy.get_state(self.syc_path + "/" + self.to_syc_name(prop))
 
     @staticmethod
