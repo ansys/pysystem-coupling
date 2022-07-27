@@ -1,24 +1,16 @@
-import socket
 import subprocess
 
 
-def _find_port():
-    with socket.socket() as s:
-        s.bind(("", 0))
-        return s.getsockname()[1]
-
-
-def start_container() -> int:
+def start_container(port: int) -> None:
     """Start a System Coupling container.
 
-    Returns
-    -------
-    int
-        gPRC server port exposed from the container.
+    Parameters
+    ----------
+    port : int
+        gPRC server local port, mapped to same port in container.
     """
-    port = _find_port()
+    args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
 
-    args = []  # TODO !!!
     subprocess.run(
         [
             "docker",

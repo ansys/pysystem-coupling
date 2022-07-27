@@ -11,6 +11,13 @@ def launch(host="127.0.0.1", port=50051, working_dir="."):
     return syc
 
 
+def launch_container():
+    rpc = SycGrpc()
+    rpc.start_container_and_connect()
+    syc = SycAnalysis(rpc)
+    return syc
+
+
 def connect(host, port):
     rpc = SycGrpc()
     rpc.connect(host, port)

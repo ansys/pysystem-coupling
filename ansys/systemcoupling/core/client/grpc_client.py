@@ -1,6 +1,7 @@
 import atexit
 import itertools
 import json
+import socket
 import threading
 
 import grpc
@@ -10,11 +11,18 @@ from ansys.systemcoupling.core.client.services.command_query import CommandQuery
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
 from ansys.systemcoupling.core.client.services.process import SycProcessService
 from ansys.systemcoupling.core.client.services.solution import SolutionService
+from ansys.systemcoupling.core.client.syc_container import start_container
 from ansys.systemcoupling.core.client.syc_process import SycProcess
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
 from ansys.systemcoupling.core.util.logging import LOG
 
 _CHANNEL_READY_TIMEOUT_SEC = 15
+
+
+def _find_port():
+    with socket.socket() as s:
+        s.bind(("", 0))
+        return s.getsockname()[1]
 
 
 class SycGrpc(object):
@@ -71,10 +79,20 @@ class SycGrpc(object):
 
     def start_and_connect(self, host, port, working_dir):
         """Start system coupling in server mode and establish a connection."""
+        if port is None:
+            port = _find_port()
         LOG.debug("Starting process...")
         self.__process = SycProcess(host, port, working_dir)
         LOG.debug("...started")
         self._connect(host, port)
+
+    def start_container_and_connect(self):
+        """Start system coupling container and establish a connection."""
+        LOG.debug("Starting container...")
+        port = _find_port()
+        start_container(port)
+        LOG.debug("...started")
+        self._connect("127.0.0.1", port)
 
     def connect(self, host, port):
         """Connect to an already running system coupling server running on a known

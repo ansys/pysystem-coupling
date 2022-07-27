@@ -568,22 +568,6 @@ class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
             if name not in self._objects:
                 self._create_child_object(name)
 
-    def rename(self, new: str, old: str):
-        """
-        Rename a named object.
-
-        Parameters:
-        ----------
-        new: str
-             New name
-        old: str
-             Old name
-        """
-        self.sycproxy.rename(self.syc_path, new, old)
-        if old in self._objects:
-            del self._objects[old]
-        self._create_child_object(new)
-
     def __delitem__(self, name: str):
         self.sycproxy.delete(self.syc_path, name)
         if name in self._objects:
