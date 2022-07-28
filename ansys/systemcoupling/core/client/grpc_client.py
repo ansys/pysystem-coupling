@@ -86,10 +86,6 @@ class SycGrpc(object):
         # Can still switch to container locally by setting variable.
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
-            if host is not None:
-                raise RuntimeError(
-                    '"host" may not be specified when container launch requested.'
-                )
             if working_dir is not None:
                 raise RuntimeError(
                     '"working_dir" may not be specified when container launch requested.'
@@ -99,14 +95,12 @@ class SycGrpc(object):
 
         if port is None:
             port = _find_port()
-        if host is None:
-            host = _LOCALHOST_IP
         if working_dir is None:
             working_dir = "."
         LOG.debug("Starting process...")
-        self.__process = SycProcess(host, port, working_dir)
+        self.__process = SycProcess(_LOCALHOST_IP, port, working_dir)
         LOG.debug("...started")
-        self._connect(host, port)
+        self._connect(_LOCALHOST_IP, port)
 
     def start_container_and_connect(self, port: int = None):
         """Start system coupling container and establish a connection."""
