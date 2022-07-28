@@ -160,3 +160,9 @@ class SycAnalysis:
         if self.__native_api is None:
             self.__native_api = NativeApi(self.__rpc_impl)
         return self.__native_api
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.exit()
