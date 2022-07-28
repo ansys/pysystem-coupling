@@ -1,6 +1,7 @@
 import atexit
 import itertools
 import json
+import os
 import socket
 import threading
 
@@ -17,6 +18,7 @@ from ansys.systemcoupling.core.client.variant import from_variant, to_variant
 from ansys.systemcoupling.core.util.logging import LOG
 
 _CHANNEL_READY_TIMEOUT_SEC = 15
+_LOCALHOST_IP = "127.0.0.1"
 
 
 def _find_port():
@@ -39,7 +41,7 @@ class SycGrpc(object):
 
     Other than the external interface API being accessed as member
     methods of this class, the calls should be of the same form as
-    if invoked locally.
+    if invoked in the System Coupling CLI.
 
     Thus:
 
@@ -79,20 +81,42 @@ class SycGrpc(object):
 
     def start_and_connect(self, host, port, working_dir):
         """Start system coupling in server mode and establish a connection."""
+
+        # Support backdoor container launch via env var.
+        # For example we might want to default to launching installation
+        # locally but container on GitHub (e.g. for build tasks like code generation).
+        # Can still switch to container locally by setting variable.
+
+        if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
+            if host is not None:
+                raise RuntimeError(
+                    '"host" may not be specified when container launch requested.'
+                )
+            if working_dir is not None:
+                raise RuntimeError(
+                    '"working_dir" may not be specified when container launch requested.'
+                )
+            self.start_container_and_connect(port)
+            return
+
         if port is None:
             port = _find_port()
+        if host is None:
+            host = _LOCALHOST_IP
+        if working_dir is None:
+            working_dir = "."
         LOG.debug("Starting process...")
         self.__process = SycProcess(host, port, working_dir)
         LOG.debug("...started")
         self._connect(host, port)
 
-    def start_container_and_connect(self):
+    def start_container_and_connect(self, port: int = None):
         """Start system coupling container and establish a connection."""
         LOG.debug("Starting container...")
-        port = _find_port()
+        port = port if port is not None else _find_port()
         start_container(port)
         LOG.debug("...started")
-        self._connect("127.0.0.1", port)
+        self._connect(_LOCALHOST_IP, port)
 
     def connect(self, host, port):
         """Connect to an already running system coupling server running on a known
