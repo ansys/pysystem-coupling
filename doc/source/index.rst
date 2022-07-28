@@ -10,9 +10,28 @@ PySystemCoupling Documentation |version|
    api/index
    contributing
 
+NOTE
+----
+
+The PySystemCoupling documentation is under development and none of the content should be relied on.
+
+Its current state reflects work on the following aspects:
+
+* Setting out of the approximate structure intended in the final documentation.
+* Development of infrastructure for automatic API generation.
+
+The content itself is incomplete and possibly incorrect in places.
+
+
 Introduction
 ------------
-Ansys System Coupling is ...
+The Ansys portfolio of simulation software facilitates the creation of multidisciplinary physics analyses — 
+not only within the context of a single product, but also through the use of Ansys `System Coupling`. 
+
+System Coupling can integrate multiple individual analyses, enabling you to leverage different physics 
+solvers and/or static external data sources in a single multiphpysics simulation. When two or more analyses
+are coupled, an examination of their combined results can capture more complex interactions than an 
+examination of those results in isolation, producing more accurate results and yielding an optimal solution.
 
 What is PySystemCoupling?
 -------------------------
@@ -22,7 +41,7 @@ lets you use Ansys System Coupling within or alongside any other Python environm
 whether it is in conjunction with other Ansys Python libraries and packages or
 with other external Python products.
 
-...etc etc ... see PyFluent etc for guidance on content here ...
+...etc etc ... see PyFluent and others for guidance on content here ...
 
 
 License

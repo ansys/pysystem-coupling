@@ -46,8 +46,9 @@ def _find_indent(line):
 
 def _generate_property_list_for_rst(r, data_dict={}):
     indent = " " * 4
-    for prop, doc in data_dict.items():
-        r.write(f"{prop}\n")
+    for prop, info in data_dict.items():
+        doc, type = info
+        r.write(f"{prop} : :ref:`{type}<dm_{type}>`\n")
         lines = doc.split("\n")
         if len(lines) > 1:
             # Assume multi-line doc string has initial text immediately after
@@ -166,9 +167,9 @@ def _populate_rst_from_settings(rst_dir, cls):
         if has_properties:
             r.write(f".. rubric:: Properties\n\n")
             data_dict = {}
-            for prop, _, __ in cls.property_names_types:
+            for prop, _, ptype in cls.property_names_types:
                 prop_attr = getattr(cls, prop)
-                data_dict[prop] = prop_attr.__doc__
+                data_dict[prop] = (prop_attr.__doc__, ptype)
             _generate_property_list_for_rst(r, data_dict)
 
         if has_children:

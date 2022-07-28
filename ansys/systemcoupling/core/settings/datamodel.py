@@ -725,7 +725,7 @@ def _get_type(id, info):
 
 
 def get_cls(name, info, parent=None):
-    """Create a class for the object identified by "path"."""
+    """Create a class for the object identified by "name"."""
     try:
         return _get_cls(name, info, parent)
     except Exception:
