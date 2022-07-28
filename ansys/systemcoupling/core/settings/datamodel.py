@@ -70,12 +70,6 @@ class Base:
     """
     Base class for settings and command objects.
 
-    Parameters
-    ----------
-    name : str
-           name of the object if a child of named-object.
-    parent: Base
-           Object's parent.
 
     Attributes
     ----------
@@ -88,6 +82,15 @@ class Base:
     _initialized = False
 
     def __init__(self, name: str = None, parent=None):
+        """Initializes an instance of the Base class.
+
+        Parameters
+        ----------
+        name : str
+            name of the object if a child of named-object.
+        parent: Base
+            Object's parent.
+        """
         self._parent = weakref.proxy(parent) if parent is not None else None
         if name is not None:
             self._name = name
