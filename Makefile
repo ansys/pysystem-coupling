@@ -15,3 +15,7 @@ codespell:
 flake8:
 	@echo "Running flake8"
 	@flake8 .
+
+docker-pull:
+	@pip install docker
+	@bash .ci/pull_syc_image.sh
