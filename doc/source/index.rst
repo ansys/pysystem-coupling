@@ -41,8 +41,10 @@ lets you use Ansys System Coupling within or alongside any other Python environm
 whether it is in conjunction with other Ansys Python libraries and packages or
 with other external Python products.
 
-...etc etc ... see PyFluent and others for guidance on content here ...
-
+PySystemCoupling implements a client-server architecture. Internally, it uses 
+`Google remote procedure call` (`gRPC`) interfaces, to launch or connect 
+with a running System Coupling process as a server. However, you only need to interact 
+with the Python interface.
 
 License
 -------
