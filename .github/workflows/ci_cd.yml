@@ -102,7 +102,7 @@ jobs:
       - name: Build HTML
         run: |
           pip install -r requirements_docs.txt
-          make clean
+          make -C doc clean
           make -C doc html SPHINXOPTS="-W"
 
       - name: Build PDF Documentation
