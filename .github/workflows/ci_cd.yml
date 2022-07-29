@@ -72,7 +72,6 @@ jobs:
         env:
           SYC_IMAGE_TAG: latest
 
-
       - name: Unit testing
         run: |
           pip install -r requirements_test.txt
@@ -103,6 +102,7 @@ jobs:
       - name: Build HTML
         run: |
           pip install -r requirements_docs.txt
+          make clean
           make -C doc html SPHINXOPTS="-W"
 
       - name: Build PDF Documentation
