@@ -361,6 +361,15 @@ class Group(SettingsBase[DictStateType]):
     _state_type = DictStateType
 
     def __init__(self, name: str = None, parent=None):
+        """Initializes an instance of the Group class.
+
+        Parameters
+        ----------
+        name : str
+            name of the object if a child of named-object.
+        parent: Base
+            Object's parent.
+        """
         super().__init__(name, parent)
         for child in self.child_names:
             cls = getattr(self.__class__, child)
@@ -529,6 +538,15 @@ class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
     # New objects could get inserted by other operations, so we cannot assume
     # that the local cache in self._objects is always up-to-date
     def __init__(self, name: str = None, parent=None):
+        """Initializes an instance of the Group class.
+
+        Parameters
+        ----------
+        name : str
+            name of the object if a child of named-object.
+        parent: Base
+            Object's parent.
+        """
         super().__init__(name, parent)
         self._objects = {}
         for cmd in self.command_names:
@@ -537,7 +555,7 @@ class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
 
     @classmethod
     def to_syc_keys(cls, value):
-        """Convert value to have keys with scheme names."""
+        """Convert value to have keys with the native System Coupling names."""
         if isinstance(value, collections.abc.Mapping):
             ret = {}
             for k, v in value.items():
@@ -548,6 +566,7 @@ class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
 
     @classmethod
     def to_python_keys(cls, value):
+        """Convert value to have keys with PySystemCoupling names."""
         if isinstance(value, collections.abc.Mapping):
             ret = {}
             for k, v in value.items():

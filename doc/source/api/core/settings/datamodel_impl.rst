@@ -3,7 +3,7 @@
 :orphan:
 
 ``datamodel``
-============
+=============
 .. currentmodule:: ansys.systemcoupling.core.settings
 
 .. autosummary::
