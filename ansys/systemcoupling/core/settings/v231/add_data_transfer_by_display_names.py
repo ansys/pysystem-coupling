@@ -36,52 +36,52 @@ class add_data_transfer_by_display_names(Command):
     ----------
         interface : str
             String indicating the display name of the interface on which the
-    data transfer is to be created.
+            data transfer is to be created.
         target_side : str
             String indicating the side of the interface to receive the data
-    transfer variable. Possible values are 'One' or 'Two'.
+            transfer variable. Possible values are 'One' or 'Two'.
         source_variable : str
             String specifying the display name of the variable on the source side of
-    the data transfer. Used when creating a variable-based data transfer.
-    Must be combined with ??target_variable??.
+            the data transfer. Used when creating a variable-based data transfer.
+            Must be combined with ??target_variable??.
         target_variable : str
             String specifying the display name of the variable on the target side of
-    the data transfer. Must be combined with either ??source_variable?? (when
-    creating a variable-based data transfer) or with ??value??{X|Y|Z}
-    (when creating an expression-based data transfer).
+            the data transfer. Must be combined with either ??source_variable?? (when
+            creating a variable-based data transfer) or with ??value??{X|Y|Z}
+            (when creating an expression-based data transfer).
         value : str
             String specifying the expression to use on the source side of the data
-    transfer. Used when creating an expression-based data transfer if the
-    ??target_variable?? is a scalar. (If the ??target_variable?? is a vector,
-    ??value_x??, ??value_y??, ??value_z?? must be used instead.)
+            transfer. Used when creating an expression-based data transfer if the
+            ??target_variable?? is a scalar. (If the ??target_variable?? is a vector,
+            ??value_x??, ??value_y??, ??value_z?? must be used instead.)
         value_x : str
             String specifying the X component of the expression to use on the
-    source side of the data transfer. Used when crating an expression-based
-    data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
-    is scalar, ??value?? must be used instead.) ??value_y?? and ??value_z?? are also
-    required if ??value_x?? is used.
+            source side of the data transfer. Used when crating an expression-based
+            data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+            is scalar, ??value?? must be used instead.) ??value_y?? and ??value_z?? are also
+            required if ??value_x?? is used.
         value_y : str
             String specifying the Y component of the expression to use on the
-    source side of the data transfer. Used when crating an expression-based
-    data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
-    is scalar, ??value?? must be used instead.) ??value_x?? and ??value_z?? are also
-    required if ??value_y?? is used.
+            source side of the data transfer. Used when crating an expression-based
+            data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+            is scalar, ??value?? must be used instead.) ??value_x?? and ??value_z?? are also
+            required if ??value_y?? is used.
         value_z : str
             String specifying the Z component of the expression to use on the
-    source side of the data transfer. Used when crating an expression-based
-    data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
-    is scalar, ??value?? must be used instead.) ??value_x?? and ??value_y?? are also
-    required if ??value_z?? is used.
+            source side of the data transfer. Used when crating an expression-based
+            data transfer if the ??target_variable?? is a vector. (If the ??target_variable??
+            is scalar, ??value?? must be used instead.) ??value_x?? and ??value_y?? are also
+            required if ??value_z?? is used.
         side_one_variable : str
             String specifying the display name of the variable associated with side1
-    of the interface. Must be combined with ??side_two_variable??. Used only
-    when creating variable-based data transfers. Consider using
-    ??source_variable??/??target_variable?? parameters instead.
+            of the interface. Must be combined with ??side_two_variable??. Used only
+            when creating variable-based data transfers. Consider using
+            ??source_variable??/??target_variable?? parameters instead.
         side_two_variable : str
             String specifying the display name of the variable associated with side2
-    of the interface. Must be combined with ??side_two_variable??. Used only
-    when creating variable-based data transfers. Consider using
-    ??source_variable??/??target_variable?? parameters instead.
+            of the interface. Must be combined with ??side_two_variable??. Used only
+            when creating variable-based data transfers. Consider using
+            ??source_variable??/??target_variable?? parameters instead.
 
     """
 

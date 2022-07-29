@@ -12,7 +12,7 @@ from .reference_frame import reference_frame
 
 class library(Group):
     """
-    'library' child.
+    Create objects that can be referenced from elsewhere in the data model.
     """
 
     syc_name = "Library"

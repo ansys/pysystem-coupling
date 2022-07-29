@@ -14,7 +14,7 @@ from .variable import variable
 
 class coupling_participant_child(Group):
     """
-    'child_object_type' child.
+    Use CouplingParticipant objects to define coupling participant details.
     """
 
     syc_name = "child_object_type"
@@ -66,7 +66,7 @@ class coupling_participant_child(Group):
 
     @property
     def participant_type(self) -> String:
-        """'participant_type' property of 'coupling_participant' object"""
+        """Type of application participating in the coupled analysis."""
         return self.get_property_state("participant_type")
 
     @participant_type.setter
@@ -75,7 +75,7 @@ class coupling_participant_child(Group):
 
     @property
     def participant_display_name(self) -> String:
-        """'participant_display_name' property of 'coupling_participant' object"""
+        """Participant's display name as defined by the participant solver (as opposed to System Coupling's DisplayName for the participant)."""
         return self.get_property_state("participant_display_name")
 
     @participant_display_name.setter
@@ -84,7 +84,7 @@ class coupling_participant_child(Group):
 
     @property
     def display_name(self) -> String:
-        """'display_name' property of 'coupling_participant' object"""
+        """Participant's display name as defined in System Coupling."""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -93,7 +93,7 @@ class coupling_participant_child(Group):
 
     @property
     def dimension(self) -> String:
-        """'dimension' property of 'coupling_participant' object"""
+        """Dimension of the coupling participant."""
         return self.get_property_state("dimension")
 
     @dimension.setter
@@ -102,7 +102,7 @@ class coupling_participant_child(Group):
 
     @property
     def participant_file_loaded(self) -> String:
-        """'participant_file_loaded' property of 'coupling_participant' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("participant_file_loaded")
 
     @participant_file_loaded.setter
@@ -111,7 +111,7 @@ class coupling_participant_child(Group):
 
     @property
     def logging_on(self) -> Boolean:
-        """'logging_on' property of 'coupling_participant' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("logging_on")
 
     @logging_on.setter
@@ -120,7 +120,7 @@ class coupling_participant_child(Group):
 
     @property
     def participant_analysis_type(self) -> String:
-        """'participant_analysis_type' property of 'coupling_participant' object"""
+        """Type of analysis the participant is running."""
         return self.get_property_state("participant_analysis_type")
 
     @participant_analysis_type.setter
@@ -129,7 +129,7 @@ class coupling_participant_child(Group):
 
     @property
     def use_new_ap_is(self) -> Boolean:
-        """'use_new_ap_is' property of 'coupling_participant' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("use_new_ap_is")
 
     @use_new_ap_is.setter
@@ -138,7 +138,7 @@ class coupling_participant_child(Group):
 
     @property
     def restarts_supported(self) -> Boolean:
-        """'restarts_supported' property of 'coupling_participant' object"""
+        """Whether the participant supports restarts for this type of coupled analysis."""
         return self.get_property_state("restarts_supported")
 
     @restarts_supported.setter

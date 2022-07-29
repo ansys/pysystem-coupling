@@ -10,7 +10,7 @@ from .results import results
 
 class output_control(Group):
     """
-    'output_control' child.
+    The OutputControl singleton is available when a coupling participant object has been added to the data model. Settings defined under the OutputControl singleton control the generation of System Coupling's output (such as restart points and EnSight-compatible results).
     """
 
     syc_name = "OutputControl"
@@ -38,7 +38,7 @@ class output_control(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'setup_root' object"""
+        """Available when all coupling participants support restarts."""
         return self.get_property_state("option")
 
     @option.setter
@@ -47,7 +47,7 @@ class output_control(Group):
 
     @property
     def generate_csv_chart_output(self) -> Boolean:
-        """'generate_csv_chart_output' property of 'setup_root' object"""
+        """Specifies whether System Coupling writes convergence charting data to .csv files during the execution of a solution."""
         return self.get_property_state("generate_csv_chart_output")
 
     @generate_csv_chart_output.setter
@@ -56,7 +56,7 @@ class output_control(Group):
 
     @property
     def write_initial_snapshot(self) -> Boolean:
-        """'write_initial_snapshot' property of 'setup_root' object"""
+        """Controls whether System Coupling writes an initial snapshot of the coupled analysis state when the solution is started."""
         return self.get_property_state("write_initial_snapshot")
 
     @write_initial_snapshot.setter
@@ -65,7 +65,7 @@ class output_control(Group):
 
     @property
     def transcript_precision(self) -> Integer:
-        """'transcript_precision' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("transcript_precision")
 
     @transcript_precision.setter
@@ -74,7 +74,7 @@ class output_control(Group):
 
     @property
     def write_diagnostics(self) -> Boolean:
-        """'write_diagnostics' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("write_diagnostics")
 
     @write_diagnostics.setter
@@ -83,7 +83,7 @@ class output_control(Group):
 
     @property
     def write_weights_matrix(self) -> Boolean:
-        """'write_weights_matrix' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("write_weights_matrix")
 
     @write_weights_matrix.setter
@@ -92,7 +92,7 @@ class output_control(Group):
 
     @property
     def write_residuals(self) -> Boolean:
-        """'write_residuals' property of 'setup_root' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("write_residuals")
 
     @write_residuals.setter
@@ -101,7 +101,7 @@ class output_control(Group):
 
     @property
     def output_frequency(self) -> Integer:
-        """'output_frequency' property of 'setup_root' object"""
+        """Available when the OutputControl.Option is set to StepInterval or IterationInterval. Determines the frequency at which restart points are generated."""
         return self.get_property_state("output_frequency")
 
     @output_frequency.setter

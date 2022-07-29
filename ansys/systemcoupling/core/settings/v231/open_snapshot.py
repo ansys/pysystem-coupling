@@ -20,8 +20,8 @@ class open_snapshot(Command):
     ----------
         snapshot_name : str
             The name of the snapshot to be opened. This is optional if and only if
-    there is only one snapshot available to be loaded. If multiple
-    snapshots exist, then the snapshot name must be specified.
+            there is only one snapshot available to be loaded. If multiple
+            snapshots exist, then the snapshot name must be specified.
 
     """
 

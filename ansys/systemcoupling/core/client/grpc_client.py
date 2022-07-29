@@ -28,28 +28,26 @@ def _find_port():
 
 
 class SycGrpc(object):
-    """Provides a remote proxy API to System Coupling's Command/Query
-    external interface, built on a basic gRPC interface.
+    """Provides a remote proxy API to System Coupling's command and
+    query external interface, built on a basic gRPC interface.
 
     An instance of this class controls starting System Coupling as
     a server in cosimulation mode and handles the underlying RPC to
-    provide the Command/Query API. The 'start_and_connect' method
-    should be used to start the remote SystemCoupling, and 'exit'
+    provide the command and query API. The ``start_and_connect`` method
+    should be used to start the remote SystemCoupling, and ``exit``
     to close the connection and shut down SystemCoupling. Alternatively,
-    'connect' can be used to connect to an already running server
+    ``connect`` can be used to connect to an already running server
     instance.
 
-    Other than the external interface API being accessed as member
-    methods of this class, the calls should be of the same form as
-    if invoked in the System Coupling CLI.
+    This class supports two approaches to making API calls on System
+    Coupling:
 
-    Thus:
+    # Using the ``execute_command`` method, which takes the command name
+      as a string and a dictionary of keyword arguments.
+    # Using the ``__getattr__`` method that allows commands to be called
+      as if direct methods of this class.
 
-    ``s = GetState(ObjectPath='/SystemCoupling/Library')``
-
-    becomes
-
-    ``s = sycRpc.GetState(ObjectPath='/SystemCoupling/Library')``
+    Both of these are useful in different contexts.
 
     .. note::
        System Coupling runs in a server mode that expects a single
@@ -79,7 +77,7 @@ class SycGrpc(object):
         for instance in list(cls._instances.values()):
             instance.exit()
 
-    def start_and_connect(self, host, port, working_dir):
+    def start_and_connect(self, port, working_dir):
         """Start system coupling in server mode and establish a connection."""
 
         # Support backdoor container launch via env var.
@@ -88,10 +86,6 @@ class SycGrpc(object):
         # Can still switch to container locally by setting variable.
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
-            if host is not None:
-                raise RuntimeError(
-                    '"host" may not be specified when container launch requested.'
-                )
             if working_dir is not None:
                 raise RuntimeError(
                     '"working_dir" may not be specified when container launch requested.'
@@ -101,14 +95,12 @@ class SycGrpc(object):
 
         if port is None:
             port = _find_port()
-        if host is None:
-            host = _LOCALHOST_IP
         if working_dir is None:
             working_dir = "."
         LOG.debug("Starting process...")
-        self.__process = SycProcess(host, port, working_dir)
+        self.__process = SycProcess(_LOCALHOST_IP, port, working_dir)
         LOG.debug("...started")
-        self._connect(host, port)
+        self._connect(_LOCALHOST_IP, port)
 
     def start_container_and_connect(self, port: int = None):
         """Start system coupling container and establish a connection."""
@@ -244,12 +236,14 @@ class SycGrpc(object):
         request = command_pb2.CommandRequest(command=cmd_name)
         request.args.extend([make_arg(name, val) for name, val in kwargs.items()])
         response, meta = self.__command_service.execute_command(request)
-        # Expect meta to comprise a 1-tuple containing a pair value,
-        # ('nosync', 'True'|'False'). This tells us whether the command was
-        # state changing. Not currently used, but potentially useful if
-        # we ever implement incremental updating to optimise client side
-        # state caching.
-        # print(f"meta = {meta[0][0]}: {meta[0][1]}")
+
+        # "meta" is currently unused but it comprises a 1-tuple
+        # containing a pair value, ('nosync', 'True'|'False').
+        #     is_nosync = bool(meta[0][1])
+        # This tells us whether the command was state changing, which is
+        # potentially useful if we ever implement incremental updating to
+        # optimise client side state caching.
+
         ret = from_variant(response.result)
         if "json_ret" in kwargs:
             # Expect the result to decode as a (json) string

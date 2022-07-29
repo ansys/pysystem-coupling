@@ -1,35 +1,63 @@
-..
-   Just reuse the root readme to avoid duplicating the documentation.
-   Provide any documentation specific to your online documentation
-   here.
-
-.. include:: ../../README.rst
+PySystemCoupling Documentation |version|
+========================================
 
 .. toctree::
    :hidden:
-   :maxdepth: 3
+   :maxdepth: 2
 
-   class_documentation
+   getting_started/index
+   users_guide/index
+   api/index
+   contributing
+
+NOTE
+----
+
+The PySystemCoupling documentation is under development and none of the content should be relied on.
+
+Its current state reflects work on the following aspects:
+
+* Setting out of the approximate structure intended in the final documentation.
+* Development of infrastructure for automatic API generation.
+
+The content itself is incomplete and possibly incorrect in places.
 
 
-Code Examples
-~~~~~~~~~~~~~
-Here's a quick preview for how Python code looks using the
-``pyansys-product-library``.  For more examples, click the links at the
-top of the page to see function, method, and class documentation.
+Introduction
+------------
+The Ansys portfolio of simulation software facilitates the creation of multidisciplinary physics analyses — 
+not only within the context of a single product, but also through the use of Ansys `System Coupling`. 
 
+System Coupling can integrate multiple individual analyses, enabling you to leverage different physics 
+solvers and/or static external data sources in a single multiphpysics simulation. When two or more analyses
+are coupled, an examination of their combined results can capture more complex interactions than an 
+examination of those results in isolation, producing more accurate results and yielding an optimal solution.
 
-Rendered Python Code
---------------------
+What is PySystemCoupling?
+-------------------------
 
-.. code:: python
+PySystemCoupling is part of the `PyAnsys <https://docs.pyansys.com>`_ ecosystem that
+lets you use Ansys System Coupling within or alongside any other Python environment,
+whether it is in conjunction with other Ansys Python libraries and packages or
+with other external Python products.
 
-   >>> num = 10
-   >>> if num > 0:
-   ...     print("Positive number")
-   ... elif num == 0:
-   ...     print("Zero")
-   ... else:
-   ...     print("Negative number")
-   Positive number
+PySystemCoupling implements a client-server architecture. Internally, it uses 
+`Google remote procedure call` (`gRPC`) interfaces, to launch or connect 
+with a running System Coupling process as a server. However, you only need to interact 
+with the Python interface.
 
+License
+-------
+PySystemCoupling is licensed under the MIT license.
+
+This module makes no commercial claim over Ansys whatsoever. PySystemCoupling extends
+the functionality of Ansys System Coupling by adding an additional Python interface to
+Ansys System Coupling without changing the core behavior or license of the original
+software. The use of the interactive control of PySystemCoupling requires a legally
+licensed local copy of Ansys System Coupling. For more information about Ansys System Coupling,
+visit the Ansys System Coupling page on the Ansys website.
+
+Project Index
+-------------
+
+* :ref:`genindex`

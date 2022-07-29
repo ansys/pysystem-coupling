@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class ascii_output(Group):
     """
-    'ascii_output' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "AsciiOutput"
@@ -19,7 +19,7 @@ class ascii_output(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'output_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +28,7 @@ class ascii_output(Group):
 
     @property
     def format(self) -> String:
-        """'format' property of 'output_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("format")
 
     @format.setter

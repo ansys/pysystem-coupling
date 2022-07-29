@@ -9,7 +9,7 @@ from .data_transfer_child import data_transfer_child
 
 class data_transfer(NamedObject[data_transfer_child]):
     """
-    'data_transfer' child.
+    Set data transfer details.
     """
 
     syc_name = "DataTransfer"

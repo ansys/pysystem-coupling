@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class unmapped_value_options(Group):
     """
-    'unmapped_value_options' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "UnmappedValueOptions"
@@ -31,7 +31,7 @@ class unmapped_value_options(Group):
 
     @property
     def matrix_verbosity(self) -> Integer:
-        """'matrix_verbosity' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("matrix_verbosity")
 
     @matrix_verbosity.setter
@@ -40,7 +40,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_verbosity(self) -> Integer:
-        """'solver_verbosity' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("solver_verbosity")
 
     @solver_verbosity.setter
@@ -49,7 +49,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver(self) -> String:
-        """'solver' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("solver")
 
     @solver.setter
@@ -58,7 +58,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_relative_tolerance(self) -> Real:
-        """'solver_relative_tolerance' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("solver_relative_tolerance")
 
     @solver_relative_tolerance.setter
@@ -67,7 +67,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_max_iterations(self) -> Integer:
-        """'solver_max_iterations' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("solver_max_iterations")
 
     @solver_max_iterations.setter
@@ -76,7 +76,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_max_search_directions(self) -> Integer:
-        """'solver_max_search_directions' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("solver_max_search_directions")
 
     @solver_max_search_directions.setter
@@ -85,7 +85,7 @@ class unmapped_value_options(Group):
 
     @property
     def preconditioner(self) -> String:
-        """'preconditioner' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("preconditioner")
 
     @preconditioner.setter
@@ -94,7 +94,7 @@ class unmapped_value_options(Group):
 
     @property
     def ilut_tau(self) -> Real:
-        """'ilut_tau' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("ilut_tau")
 
     @ilut_tau.setter
@@ -103,7 +103,7 @@ class unmapped_value_options(Group):
 
     @property
     def ilut_max_fill(self) -> Integer:
-        """'ilut_max_fill' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("ilut_max_fill")
 
     @ilut_max_fill.setter
@@ -112,7 +112,7 @@ class unmapped_value_options(Group):
 
     @property
     def ilut_pivot_tol(self) -> Real:
-        """'ilut_pivot_tol' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("ilut_pivot_tol")
 
     @ilut_pivot_tol.setter
@@ -121,7 +121,7 @@ class unmapped_value_options(Group):
 
     @property
     def face_filter_tolerance(self) -> Real:
-        """'face_filter_tolerance' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("face_filter_tolerance")
 
     @face_filter_tolerance.setter
@@ -130,7 +130,7 @@ class unmapped_value_options(Group):
 
     @property
     def rbf_shape_parameter(self) -> Real:
-        """'rbf_shape_parameter' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_shape_parameter")
 
     @rbf_shape_parameter.setter
@@ -139,7 +139,7 @@ class unmapped_value_options(Group):
 
     @property
     def rbf_linear_correction(self) -> Boolean:
-        """'rbf_linear_correction' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_linear_correction")
 
     @rbf_linear_correction.setter
@@ -148,7 +148,7 @@ class unmapped_value_options(Group):
 
     @property
     def rbf_colinearity_tolerance(self) -> Real:
-        """'rbf_colinearity_tolerance' property of 'analysis_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("rbf_colinearity_tolerance")
 
     @rbf_colinearity_tolerance.setter

@@ -14,9 +14,6 @@ import ansys.systemcoupling.core as pysystemcoupling
 
 syc = pysystemcoupling.launch()
 
-# import time
-# time.sleep(15)
-
 # Access 'setup' API
 setup = syc.setup
 

@@ -15,7 +15,7 @@ class get_execution_command(Command):
     ----------
         participant_name : str
             Name of the participant for which the execution command will
-    be returned.
+            be returned.
 
     """
 

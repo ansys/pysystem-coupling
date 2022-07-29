@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class available_ports(Group):
     """
-    'available_ports' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "AvailablePorts"
@@ -19,7 +19,7 @@ class available_ports(Group):
 
     @property
     def option(self) -> String:
-        """'option' property of 'solution_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +28,7 @@ class available_ports(Group):
 
     @property
     def range(self) -> String:
-        """'range' property of 'solution_control' object"""
+        """**CURRENTLY NOT DOCUMENTED**"""
         return self.get_property_state("range")
 
     @range.setter

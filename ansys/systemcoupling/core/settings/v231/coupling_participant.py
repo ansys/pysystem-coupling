@@ -9,7 +9,7 @@ from .coupling_participant_child import coupling_participant_child
 
 class coupling_participant(NamedObject[coupling_participant_child]):
     """
-    'coupling_participant' child.
+    Use CouplingParticipant objects to define coupling participant details.
     """
 
     syc_name = "CouplingParticipant"

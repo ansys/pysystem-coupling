@@ -19,7 +19,7 @@ class delete_transformation(Command):
     ----------
         reference_frame : str
             Name of the reference frame from which the transformation will be
-    deleted.
+            deleted.
         transformation_name : str
             Name of the transformation which will be deleted.
 

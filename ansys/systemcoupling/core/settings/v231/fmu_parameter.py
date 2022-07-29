@@ -9,7 +9,7 @@ from .fmu_parameter_child import fmu_parameter_child
 
 class fmu_parameter(NamedObject[fmu_parameter_child]):
     """
-    'fmu_parameter' child.
+    **CURRENTLY NOT DOCUMENTED**
     """
 
     syc_name = "FMUParameter"

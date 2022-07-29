@@ -9,7 +9,7 @@ from .dimensionality import dimensionality
 
 class attribute_child(Group):
     """
-    'child_object_type' child.
+    Set the variable's attributes.
     """
 
     syc_name = "child_object_type"
@@ -28,7 +28,7 @@ class attribute_child(Group):
 
     @property
     def attribute_type(self) -> String:
-        """'attribute_type' property of 'attribute' object"""
+        """Set the attribute's type."""
         return self.get_property_state("attribute_type")
 
     @attribute_type.setter
@@ -37,7 +37,7 @@ class attribute_child(Group):
 
     @property
     def real_value(self) -> Real:
-        """'real_value' property of 'attribute' object"""
+        """Available when AttributeType is set to Real."""
         return self.get_property_state("real_value")
 
     @real_value.setter
@@ -46,7 +46,7 @@ class attribute_child(Group):
 
     @property
     def integer_value(self) -> Integer:
-        """'integer_value' property of 'attribute' object"""
+        """Available when AttributeType is set to Integer."""
         return self.get_property_state("integer_value")
 
     @integer_value.setter
