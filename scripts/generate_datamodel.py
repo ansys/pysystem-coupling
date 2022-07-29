@@ -4,28 +4,33 @@ Script to generate the System Coupling settings tree.
 This generates a python module with the definition of the System Coupling
 generated API classes. The modules are placed at:
 
-- ansys/systemcoupling/core/solver/settings/case_231.py
-- ansys/systemcoupling/core/solver/settings/setup_231.py
-- ...
+- ansys/systemcoupling/core/solver/settings/v231
 
-pysystemcoupling itself is run in a 'basic' mode to query for the input
-metadata on which the generated module is based. To make pysystemcoupling
-available in the current environment, there are two main options:
+PySystemCoupling itself is run in a 'basic' mode to query for the input
+metadata on which the generated module is based. Therefore this script
+must be run in an environment in which PySystemCoupling is installed
+and which is able to run a System Coupling server.
 
-(i)  install a pysystemcoupling package
-(ii) run directly from the source. In this case, the dependencies of
-     pysystemcoupling must be installed.
+The default mode of this script is to generate classes in the
+original nested form. The -c option can be used to generate
+the "flattened" form (where each datamodel/command object has its
+own module).
+
+TODO: The flattened form is the standard form now and the script
+      should be simplified so that it only runs in this mode.
 
 This script may also be run in a mode that generates testing data.
 In this case run with the -t argument. Input is taken from the
 dm_raw_metadata module in tests/ and is written to
-generated_testing_datamodel.py in the same directory.
+generated_testing_datamodel.py in the same directory, or as
+a number of "flat" modules in the generated_data/ directory if
+-c is used.
 
 
 
 Usage
 -----
-python <path to generate_datamodel.py> [-t]
+python <path to generate_datamodel.py> [-t] [-c]
 """
 
 from copy import deepcopy
@@ -559,7 +564,6 @@ def _generate_real_classes(dirname, generate_flat_classes):
     api = syc.native_api
 
     LOG.debug("Querying datamodel metadata...")
-    # dm_metadata = api.GetMetadata(json_ret=True)
     dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
     cmd_metadata_orig = get_cmd_metadata(api)
