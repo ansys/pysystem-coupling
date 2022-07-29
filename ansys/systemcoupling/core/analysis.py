@@ -20,6 +20,13 @@ class Analysis:
     """
 
     def __init__(self, rpc):
+        """Initializes an ``Analysis`` instance.
+
+        Parameters
+        ----------
+        rpc
+            Provider of remote command and query services.
+        """
         self.__case_root = None
         self.__setup_root = None
         self.__solution_root = None
