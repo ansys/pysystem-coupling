@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class stabilization(Group):
     """
-    Control the application of Quasi-Newton stabilization to the parent data transfer.
+    Stabilization and Acceleration method
     """
 
     syc_name = "Stabilization"
@@ -33,7 +33,7 @@ class stabilization(Group):
 
     @property
     def option(self) -> String:
-        """Whether stabilization is applied to the data transfer."""
+        """UNDOCUMENTED"""
         return self.get_property_state("option")
 
     @option.setter
@@ -42,7 +42,7 @@ class stabilization(Group):
 
     @property
     def couple_with_global_stabilization(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls whether the stabilization for this data transfer is coupled with the global stabilization"""
         return self.get_property_state("couple_with_global_stabilization")
 
     @couple_with_global_stabilization.setter
@@ -51,7 +51,7 @@ class stabilization(Group):
 
     @property
     def initial_iterations(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Number of pre-stabilization iterations to perform."""
         return self.get_property_state("initial_iterations")
 
     @initial_iterations.setter
@@ -60,7 +60,7 @@ class stabilization(Group):
 
     @property
     def initial_relaxation_factor(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Relaxation factor applied for pre-stabilization iterations."""
         return self.get_property_state("initial_relaxation_factor")
 
     @initial_relaxation_factor.setter
@@ -69,7 +69,7 @@ class stabilization(Group):
 
     @property
     def maximum_retained_time_steps(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls the maximum number of timesteps to retain."""
         return self.get_property_state("maximum_retained_time_steps")
 
     @maximum_retained_time_steps.setter
@@ -78,7 +78,7 @@ class stabilization(Group):
 
     @property
     def maximum_retained_iterations(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls the maximum number of iterations to retain."""
         return self.get_property_state("maximum_retained_iterations")
 
     @maximum_retained_iterations.setter
@@ -87,7 +87,7 @@ class stabilization(Group):
 
     @property
     def weight_factor(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Weighting factor to use for this data transfer in IQN-ILS"""
         return self.get_property_state("weight_factor")
 
     @weight_factor.setter
@@ -96,7 +96,7 @@ class stabilization(Group):
 
     @property
     def diagnostics_level(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls the maximum number of timesteps to retain (0=none, 1=basic, 2=advanced, 3=write matrix files)."""
         return self.get_property_state("diagnostics_level")
 
     @diagnostics_level.setter
@@ -105,7 +105,7 @@ class stabilization(Group):
 
     @property
     def weight_option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Weight factor when multiple transfers are stabilized"""
         return self.get_property_state("weight_option")
 
     @weight_option.setter
@@ -114,7 +114,7 @@ class stabilization(Group):
 
     @property
     def qr_tol_this_step(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """QR filter tolerance for current step."""
         return self.get_property_state("qr_tol_this_step")
 
     @qr_tol_this_step.setter
@@ -123,7 +123,7 @@ class stabilization(Group):
 
     @property
     def qr_tol_old_steps(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """QR filter tolerance for old steps."""
         return self.get_property_state("qr_tol_old_steps")
 
     @qr_tol_old_steps.setter
@@ -132,7 +132,7 @@ class stabilization(Group):
 
     @property
     def time_step_initialization_option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls how Aitken relaxation factor is initialized at start of new timestep."""
         return self.get_property_state("time_step_initialization_option")
 
     @time_step_initialization_option.setter

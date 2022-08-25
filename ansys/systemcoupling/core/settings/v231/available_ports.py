@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class available_ports(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Specify ports available for co-simulation.
     """
 
     syc_name = "AvailablePorts"
@@ -19,7 +19,7 @@ class available_ports(Group):
 
     @property
     def option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """UNDOCUMENTED"""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +28,7 @@ class available_ports(Group):
 
     @property
     def range(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Set port range."""
         return self.get_property_state("range")
 
     @range.setter

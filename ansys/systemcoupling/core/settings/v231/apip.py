@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class apip(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Apip-related expert settings
     """
 
     syc_name = "Apip"
@@ -19,7 +19,7 @@ class apip(Group):
 
     @property
     def debug(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Debug apip data (sends to debug server, saves data locally)."""
         return self.get_property_state("debug")
 
     @debug.setter
@@ -28,7 +28,7 @@ class apip(Group):
 
     @property
     def disable(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Disable apip collection (regardless of user settings)."""
         return self.get_property_state("disable")
 
     @disable.setter

@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class type(Group):
     """
-    Settings defined under the Type singleton control the type of output to be generated.
+    File type for result output.
     """
 
     syc_name = "Type"
@@ -19,7 +19,7 @@ class type(Group):
 
     @property
     def option(self) -> String:
-        """Specifies the type of output to be generated."""
+        """UNDOCUMENTED"""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +28,7 @@ class type(Group):
 
     @property
     def binary_format(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Output in Binary or ASCII format."""
         return self.get_property_state("binary_format")
 
     @binary_format.setter

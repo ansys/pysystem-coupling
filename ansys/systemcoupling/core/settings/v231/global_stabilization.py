@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class global_stabilization(Group):
     """
-    Configure global (analysis-level) stabilization settings.
+    Global stabilization settings
     """
 
     syc_name = "GlobalStabilization"
@@ -27,7 +27,7 @@ class global_stabilization(Group):
 
     @property
     def option(self) -> String:
-        """Whether solution stabilization is applied globally to the coupled analysis."""
+        """UNDOCUMENTED"""
         return self.get_property_state("option")
 
     @option.setter
@@ -36,7 +36,7 @@ class global_stabilization(Group):
 
     @property
     def initial_iterations(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Number of pre-stabilization iterations to perform."""
         return self.get_property_state("initial_iterations")
 
     @initial_iterations.setter
@@ -45,7 +45,7 @@ class global_stabilization(Group):
 
     @property
     def initial_relaxation_factor(self) -> Real:
-        """Available when the GlobalStabilization.Option is set to Quasi-Newton."""
+        """Relaxation factor applied for pre-stabilization iterations."""
         return self.get_property_state("initial_relaxation_factor")
 
     @initial_relaxation_factor.setter
@@ -54,7 +54,7 @@ class global_stabilization(Group):
 
     @property
     def maximum_retained_time_steps(self) -> Integer:
-        """Available for transient analyses when GlobalStabilization.Option is set to Quasi-Newton."""
+        """Controls the maximum number of timesteps to retain."""
         return self.get_property_state("maximum_retained_time_steps")
 
     @maximum_retained_time_steps.setter
@@ -63,7 +63,7 @@ class global_stabilization(Group):
 
     @property
     def maximum_retained_iterations(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls the maximum number of iterations to retain."""
         return self.get_property_state("maximum_retained_iterations")
 
     @maximum_retained_iterations.setter
@@ -72,7 +72,7 @@ class global_stabilization(Group):
 
     @property
     def diagnostics_level(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Controls the maximum number of timesteps to retain (0=none, 1=basic, 2=advanced, 3=write matrix files)."""
         return self.get_property_state("diagnostics_level")
 
     @diagnostics_level.setter
@@ -81,7 +81,7 @@ class global_stabilization(Group):
 
     @property
     def weight_option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Weight factor when multiple transfers are stabilized"""
         return self.get_property_state("weight_option")
 
     @weight_option.setter
@@ -90,7 +90,7 @@ class global_stabilization(Group):
 
     @property
     def qr_tol_this_step(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """QR filter tolerance for current step."""
         return self.get_property_state("qr_tol_this_step")
 
     @qr_tol_this_step.setter
@@ -99,7 +99,7 @@ class global_stabilization(Group):
 
     @property
     def qr_tol_old_steps(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """QR filter tolerance for old steps."""
         return self.get_property_state("qr_tol_old_steps")
 
     @qr_tol_old_steps.setter
@@ -108,7 +108,7 @@ class global_stabilization(Group):
 
     @property
     def qr_solver(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """QR solver options"""
         return self.get_property_state("qr_solver")
 
     @qr_solver.setter

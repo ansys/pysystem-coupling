@@ -11,7 +11,7 @@ Process
     - From the settings API classes recursively generate the list of parents for the current class.
     -- Populate a parents dictionary with current class file name (not class name) as key and list
        of parents file names (not class names) as value.
-    - Recursively Generate the rst files for classes starting with settings.root.
+    - Recursively Generate the rst files for classes starting with root class.
     -- Add target reference as the file name for the given class. This is used by other classes to
        generate hyperlinks
     -- Add properties like members, undoc-memebers, show-inheritence to the autoclass directive.
@@ -22,7 +22,7 @@ Process
     --- Use the previously generated perents dict to populate the parents table.
 Usage
 -----
-python <path to settings_rstgen.py>
+python <path to datamodel_rstgen.py>
 """
 
 import os
@@ -55,10 +55,15 @@ def _generate_property_list_for_rst(r, data_dict={}):
             # opening """. Following lines will then have a default indent bringing
             # them in line with first '"'. It is possible that some lines might have
             # a further indent. Find the minimum indent from second line onwards
-            # and remove it. This falls down if all lines are meant to be indented
+            # and remove it. Ignore any empty/whitespace only lines (paragraph
+            # separators).
+            #
+            # This falls down if all lines are meant to be indented
             # relative to first. Could be addressed by manually splitting first doc
             # line perhaps?
-            inferred_indent = min(_find_indent(line) for line in lines[1:])
+            inferred_indent = min(
+                _find_indent(line) for line in lines[1:] if line.strip() != ""
+            )
             lines = [lines[0]] + [line[inferred_indent:] for line in lines[1:]]
 
         doc = indent + (f"\n{indent}".join(lines))

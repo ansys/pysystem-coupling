@@ -9,7 +9,7 @@ from .fluent_input import fluent_input
 
 class execution_control(Group):
     """
-    Available when ParticipantType is set to a value other than EXTERNALDATA.
+    Configure execution control for a coupling participant.
     """
 
     syc_name = "ExecutionControl"
@@ -39,7 +39,18 @@ class execution_control(Group):
 
     @property
     def option(self) -> String:
-        """Method used by System Coupling to find the solver executable file to be used to start the participant."""
+        """Method used to find the solver executable file to be used to start
+        the participant.
+
+        \"ProgramControlled\"
+            Find the executable based on the participant type. Available whenever
+            the participant type is not set to \"DEFAULT\" or \"EXTERNALDATA\".
+
+            This is the default option.
+        \"UserDefined\"
+            User supplied settings are used to find the executable.
+        \"ExternallyManaged\"
+            Typically used for workflows managed by `WorkBench`."""
         return self.get_property_state("option")
 
     @option.setter
@@ -48,7 +59,7 @@ class execution_control(Group):
 
     @property
     def working_directory(self) -> String:
-        """Participant's working directory for the coupled analysis."""
+        """Participant working directory."""
         return self.get_property_state("working_directory")
 
     @working_directory.setter
@@ -57,7 +68,7 @@ class execution_control(Group):
 
     @property
     def executable(self) -> String:
-        """Available when the ExecutionControl.Option is set to UserDefined or the AddParticipant() command's Executable argument is used in the CLI."""
+        """Path to participant executable."""
         return self.get_property_state("executable")
 
     @executable.setter
@@ -66,7 +77,7 @@ class execution_control(Group):
 
     @property
     def auto_distribution_settings(self) -> Boolean:
-        """Available for AEDT participants when ExecutionControl.Option is set to UserDefined or ProgramControlled."""
+        """Specify whether to use automatic distribution settings."""
         return self.get_property_state("auto_distribution_settings")
 
     @auto_distribution_settings.setter
@@ -75,7 +86,7 @@ class execution_control(Group):
 
     @property
     def include_hpc_distribution_types(self) -> StringList:
-        """Available for AEDT participants when ExecutionControl.AutoDistributionSettings is set to False."""
+        """Include HPC distribution types for the distributed AEDT runs."""
         return self.get_property_state("include_hpc_distribution_types")
 
     @include_hpc_distribution_types.setter
@@ -84,7 +95,7 @@ class execution_control(Group):
 
     @property
     def number_of_cores_per_task(self) -> Integer:
-        """Available for AEDT participants when ExecutionControl.AutoDistributionSettings is set to False."""
+        """Specify number of parallel cores per task for parallel AEDT analysis."""
         return self.get_property_state("number_of_cores_per_task")
 
     @number_of_cores_per_task.setter
@@ -93,7 +104,7 @@ class execution_control(Group):
 
     @property
     def batch_options(self) -> String:
-        """Available for AEDT participants when ExecutionControl.AutoDistributionSettings is set to False."""
+        """Specify batch options for AEDT participant."""
         return self.get_property_state("batch_options")
 
     @batch_options.setter
@@ -102,7 +113,7 @@ class execution_control(Group):
 
     @property
     def additional_arguments(self) -> String:
-        """Arguments to be appended to the participant's executable."""
+        """Additional command line arguments."""
         return self.get_property_state("additional_arguments")
 
     @additional_arguments.setter
@@ -111,7 +122,7 @@ class execution_control(Group):
 
     @property
     def parallel_fraction(self) -> Real:
-        """Core count or fraction of compute resources to be allocated to the participant. Used to partition resources across coupling participants that are running in parallel."""
+        """Fraction of available cores to use for this participant"""
         return self.get_property_state("parallel_fraction")
 
     @parallel_fraction.setter
@@ -120,7 +131,7 @@ class execution_control(Group):
 
     @property
     def initial_input(self) -> String:
-        """Available for AEDT, CFD Server, CFX, Forte, Mechanical, and Mechanical Server participants."""
+        """Initial input."""
         return self.get_property_state("initial_input")
 
     @initial_input.setter
@@ -129,7 +140,7 @@ class execution_control(Group):
 
     @property
     def additional_restart_input_file(self) -> String:
-        """Available for Mechanical participants for restart runs."""
+        """File containing MAPDL command snippets to modify the restarted run."""
         return self.get_property_state("additional_restart_input_file")
 
     @additional_restart_input_file.setter
@@ -138,7 +149,7 @@ class execution_control(Group):
 
     @property
     def gui_mode(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Run participant in graphical mode."""
         return self.get_property_state("gui_mode")
 
     @gui_mode.setter
@@ -147,7 +158,7 @@ class execution_control(Group):
 
     @property
     def base_output_file_name(self) -> String:
-        """Available for CFD Server participants."""
+        """Base output file name for the CFD Server."""
         return self.get_property_state("base_output_file_name")
 
     @base_output_file_name.setter
@@ -156,7 +167,7 @@ class execution_control(Group):
 
     @property
     def overwrite_existing_files(self) -> Boolean:
-        """Available for CFD Server participants."""
+        """Flag indicating whether CFD Server should overwrite existing files."""
         return self.get_property_state("overwrite_existing_files")
 
     @overwrite_existing_files.setter

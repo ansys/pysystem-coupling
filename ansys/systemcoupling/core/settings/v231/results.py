@@ -9,7 +9,7 @@ from .type import type
 
 class results(Group):
     """
-    Settings defined under the Results singleton control the output of postprocessing results.
+    Output postprocessing results data.
     """
 
     syc_name = "Results"
@@ -28,7 +28,7 @@ class results(Group):
 
     @property
     def option(self) -> String:
-        """Specifies whether and when results files are generated."""
+        """UNDOCUMENTED"""
         return self.get_property_state("option")
 
     @option.setter
@@ -37,7 +37,7 @@ class results(Group):
 
     @property
     def include_instances(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Control whether instances are output"""
         return self.get_property_state("include_instances")
 
     @include_instances.setter
@@ -46,7 +46,7 @@ class results(Group):
 
     @property
     def output_frequency(self) -> Integer:
-        """Available when OutputControl.Results.Option is set to StepInterval or IterationInterval."""
+        """Specify output frequency."""
         return self.get_property_state("output_frequency")
 
     @output_frequency.setter

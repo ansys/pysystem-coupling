@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class activate_hidden(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Contains settings to control exposure of hidden features.
     """
 
     syc_name = "ActivateHidden"
@@ -20,7 +20,7 @@ class activate_hidden(Group):
 
     @property
     def beta_features(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Turn on exposure of Beta features."""
         return self.get_property_state("beta_features")
 
     @beta_features.setter
@@ -29,7 +29,7 @@ class activate_hidden(Group):
 
     @property
     def alpha_features(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Turn on exposure of Alpha features. (Beta features must be turned on first)"""
         return self.get_property_state("alpha_features")
 
     @alpha_features.setter
@@ -38,7 +38,7 @@ class activate_hidden(Group):
 
     @property
     def lenient_validation(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Allow a case with zero participants and zero coupling interfaces to be set up."""
         return self.get_property_state("lenient_validation")
 
     @lenient_validation.setter

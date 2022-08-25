@@ -9,7 +9,10 @@ from .coupling_participant_child import coupling_participant_child
 
 class coupling_participant(NamedObject[coupling_participant_child]):
     """
-    Use CouplingParticipant objects to define coupling participant details.
+    Configure a coupling participant.
+
+    These settings are typically populated by using the ``add_participant``
+    command.
     """
 
     syc_name = "CouplingParticipant"

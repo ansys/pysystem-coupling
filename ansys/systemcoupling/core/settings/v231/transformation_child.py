@@ -7,7 +7,8 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class transformation_child(Group):
     """
-    Use Transformation objects to apply transformations to coupling interfaces sides to control the positioning of the geometry.
+    Use to apply transformations to coupling interface sides to control
+    positioning of the geometry.
     """
 
     syc_name = "child_object_type"
@@ -21,7 +22,7 @@ class transformation_child(Group):
 
     @property
     def option(self) -> String:
-        """Type of transformation to be performed."""
+        """Specifies the type of transformation, ``Rotation`` or ``Translation``."""
         return self.get_property_state("option")
 
     @option.setter
@@ -30,7 +31,7 @@ class transformation_child(Group):
 
     @property
     def angle(self) -> Real:
-        """Available when the Transformation.Option setting is set to Rotation."""
+        """The angle of rotation for a rotation transformation."""
         return self.get_property_state("angle")
 
     @angle.setter
@@ -39,7 +40,19 @@ class transformation_child(Group):
 
     @property
     def axis(self) -> String:
-        """Available when the Transformation.Option setting is set to Rotation."""
+        """The axis of rotation to be used for a rotation transformation.
+
+        XAxis
+            Rotation is about the x-axis.
+
+        YAxis
+            Rotation is about the y-axis.
+
+        ZAxis
+            Rotatation is about the z-axis.
+
+        UserDefined
+            Rotation is about a user defined vector."""
         return self.get_property_state("axis")
 
     @axis.setter
@@ -48,7 +61,7 @@ class transformation_child(Group):
 
     @property
     def vector(self) -> RealVector:
-        """Available when Transformation.Option is set to Translation or when Transformation.Axis is set to UserDefined."""
+        """Define an axis of rotation vector in the ``UserDefined`` case."""
         return self.get_property_state("vector")
 
     @vector.setter

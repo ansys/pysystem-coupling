@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class dimensionality(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Configure attribute dimensionality.
     """
 
     syc_name = "Dimensionality"
@@ -25,7 +25,7 @@ class dimensionality(Group):
 
     @property
     def length(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of length dimension."""
         return self.get_property_state("length")
 
     @length.setter
@@ -34,7 +34,7 @@ class dimensionality(Group):
 
     @property
     def time(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of time dimension."""
         return self.get_property_state("time")
 
     @time.setter
@@ -43,7 +43,7 @@ class dimensionality(Group):
 
     @property
     def mass(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of mass dimension."""
         return self.get_property_state("mass")
 
     @mass.setter
@@ -52,7 +52,7 @@ class dimensionality(Group):
 
     @property
     def temperature(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of temperature dimension."""
         return self.get_property_state("temperature")
 
     @temperature.setter
@@ -61,7 +61,7 @@ class dimensionality(Group):
 
     @property
     def amount_of_substance(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of amount of substance dimension."""
         return self.get_property_state("amount_of_substance")
 
     @amount_of_substance.setter
@@ -70,7 +70,7 @@ class dimensionality(Group):
 
     @property
     def current(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of electric current dimension."""
         return self.get_property_state("current")
 
     @current.setter
@@ -79,7 +79,7 @@ class dimensionality(Group):
 
     @property
     def luminous_intensity(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of luminous intensity dimension."""
         return self.get_property_state("luminous_intensity")
 
     @luminous_intensity.setter
@@ -88,7 +88,7 @@ class dimensionality(Group):
 
     @property
     def angle(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Exponent of angle dimension."""
         return self.get_property_state("angle")
 
     @angle.setter

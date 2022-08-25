@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class region_child(Group):
     """
-    Define the region's settings.
+    Configure a region for the coupling participant.
     """
 
     syc_name = "child_object_type"
@@ -22,7 +22,13 @@ class region_child(Group):
 
     @property
     def topology(self) -> String:
-        """Type of data being transferred from/to the region."""
+        """Region topology type.
+
+        Allowed values:
+
+        - \"Undefined\" (FMU participants only)
+        - \"Surface\"
+        - \"Volume\" (3D participants only)"""
         return self.get_property_state("topology")
 
     @topology.setter
@@ -31,7 +37,7 @@ class region_child(Group):
 
     @property
     def input_variables(self) -> StringList:
-        """Variables for which the region can receive data."""
+        """Input variables for the region."""
         return self.get_property_state("input_variables")
 
     @input_variables.setter
@@ -40,7 +46,7 @@ class region_child(Group):
 
     @property
     def output_variables(self) -> StringList:
-        """Variables for which the region can send data."""
+        """Output variables for the region."""
         return self.get_property_state("output_variables")
 
     @output_variables.setter
@@ -49,7 +55,7 @@ class region_child(Group):
 
     @property
     def display_name(self) -> String:
-        """Region name to be displayed in user-facing communications."""
+        """Display name of the region."""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -58,7 +64,7 @@ class region_child(Group):
 
     @property
     def region_discretization_type(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Region discretization type (\"Mesh Region\" or \"Point Cloud Region\")."""
         return self.get_property_state("region_discretization_type")
 
     @region_discretization_type.setter

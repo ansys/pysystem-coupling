@@ -14,7 +14,10 @@ from .variable import variable
 
 class coupling_participant_child(Group):
     """
-    Use CouplingParticipant objects to define coupling participant details.
+    Configure a coupling participant.
+
+    These settings are typically populated by using the ``add_participant``
+    command.
     """
 
     syc_name = "child_object_type"
@@ -60,13 +63,16 @@ class coupling_participant_child(Group):
         ("participant_file_loaded", "ParticipantFileLoaded", "String"),
         ("logging_on", "LoggingOn", "Boolean"),
         ("participant_analysis_type", "ParticipantAnalysisType", "String"),
-        ("use_new_ap_is", "UseNewAPIs", "Boolean"),
+        ("use_new_apis", "UseNewAPIs", "Boolean"),
         ("restarts_supported", "RestartsSupported", "Boolean"),
     ]
 
     @property
     def participant_type(self) -> String:
-        """Type of application participating in the coupled analysis."""
+        """Coupling participant type.
+
+        Valid types are: \"DEFAULT\", \"CFX\", \"FLUENT\", \"MAPDL\", \"AEDT\", \"FMU\",
+        \"EXTERNALDATA\", \"FORTE\", \"DEFAULT-SRV\", \"MECH-SRV\", \"CFD-SRV\" """
         return self.get_property_state("participant_type")
 
     @participant_type.setter
@@ -75,7 +81,8 @@ class coupling_participant_child(Group):
 
     @property
     def participant_display_name(self) -> String:
-        """Participant's display name as defined by the participant solver (as opposed to System Coupling's DisplayName for the participant)."""
+        """Participant's display name as defined by the participant solver (as
+        opposed to System Coupling's ``display_name`` for the participant)."""
         return self.get_property_state("participant_display_name")
 
     @participant_display_name.setter
@@ -93,7 +100,7 @@ class coupling_participant_child(Group):
 
     @property
     def dimension(self) -> String:
-        """Dimension of the coupling participant."""
+        """Dimension of the participant (\"2D\" or \"3D\")."""
         return self.get_property_state("dimension")
 
     @dimension.setter
@@ -102,7 +109,7 @@ class coupling_participant_child(Group):
 
     @property
     def participant_file_loaded(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """File used to generate the participant."""
         return self.get_property_state("participant_file_loaded")
 
     @participant_file_loaded.setter
@@ -111,7 +118,7 @@ class coupling_participant_child(Group):
 
     @property
     def logging_on(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Specifies whether logging is activated for the participant."""
         return self.get_property_state("logging_on")
 
     @logging_on.setter
@@ -120,7 +127,7 @@ class coupling_participant_child(Group):
 
     @property
     def participant_analysis_type(self) -> String:
-        """Type of analysis the participant is running."""
+        """Coupling participant analysis type (\"Steady\" or \"Transient\")."""
         return self.get_property_state("participant_analysis_type")
 
     @participant_analysis_type.setter
@@ -128,17 +135,17 @@ class coupling_participant_child(Group):
         self.set_property_state("participant_analysis_type", value)
 
     @property
-    def use_new_ap_is(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
-        return self.get_property_state("use_new_ap_is")
+    def use_new_apis(self) -> Boolean:
+        """Controls whether a Fluent or MAPDL participant should communicate using new APIs."""
+        return self.get_property_state("use_new_apis")
 
-    @use_new_ap_is.setter
-    def use_new_ap_is(self, value: Boolean):
-        self.set_property_state("use_new_ap_is", value)
+    @use_new_apis.setter
+    def use_new_apis(self, value: Boolean):
+        self.set_property_state("use_new_apis", value)
 
     @property
     def restarts_supported(self) -> Boolean:
-        """Whether the participant supports restarts for this type of coupled analysis."""
+        """Indicates whether the participant supports restarts."""
         return self.get_property_state("restarts_supported")
 
     @restarts_supported.setter

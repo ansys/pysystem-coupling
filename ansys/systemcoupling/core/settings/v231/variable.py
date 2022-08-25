@@ -9,7 +9,7 @@ from .variable_child import variable_child
 
 class variable(NamedObject[variable_child]):
     """
-    Define the variable's settings.
+    Configure a variable for the coupling participant.
     """
 
     syc_name = "Variable"

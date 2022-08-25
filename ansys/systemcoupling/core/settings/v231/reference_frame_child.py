@@ -9,7 +9,7 @@ from .transformation import transformation
 
 class reference_frame_child(Group):
     """
-    Use ReferenceFrame objects to create transformations from the global (analysis-level) reference, which can then be defined for coupling interface sides.
+    Provide a transformation relative to a ParentReferenceFrame.
     """
 
     syc_name = "child_object_type"
@@ -29,7 +29,16 @@ class reference_frame_child(Group):
 
     @property
     def option(self) -> String:
-        """Method used to define transformations from the global reference frame."""
+        """Method used to define the transformation from the parent reference frame.
+
+        ByTransformation
+          Define the reference frame by one or more transformation operations.
+
+        Automatic
+          Only available if Alpha features are activated.
+
+        ByMatrix
+          Only available if Alpha features are activated."""
         return self.get_property_state("option")
 
     @option.setter
@@ -38,7 +47,7 @@ class reference_frame_child(Group):
 
     @property
     def parent_reference_frame(self) -> String:
-        """Parent reference frame for the current ReferenceFrame object."""
+        """Set the parent reference frame."""
         return self.get_property_state("parent_reference_frame")
 
     @parent_reference_frame.setter
@@ -47,7 +56,9 @@ class reference_frame_child(Group):
 
     @property
     def transformation_order(self) -> StringList:
-        """Available when ReferenceFrame.Option is set to ByTransformation. Relevant only when multiple transformations from the same parent reference frame are defined."""
+        """List names of transformations in the order in which they apply.
+
+        Available for the ``ByTransformation`` option."""
         return self.get_property_state("transformation_order")
 
     @transformation_order.setter
@@ -56,7 +67,7 @@ class reference_frame_child(Group):
 
     @property
     def transformation_matrix(self) -> RealList:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Define the transformation matrix when ``ByTransformation`` option is active."""
         return self.get_property_state("transformation_matrix")
 
     @transformation_matrix.setter

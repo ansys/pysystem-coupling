@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class expression_child(Group):
     """
-    Use Expression objects to define other expressions.
+    Define a named expression that can be referenced in other expressions.
     """
 
     syc_name = "child_object_type"
@@ -19,7 +19,7 @@ class expression_child(Group):
 
     @property
     def expression_name(self) -> String:
-        """Name used to reference the expression in the definition of another expression."""
+        """Name used to reference this expression from another expression"""
         return self.get_property_state("expression_name")
 
     @expression_name.setter
@@ -28,7 +28,7 @@ class expression_child(Group):
 
     @property
     def expression_string(self) -> String:
-        """String defining the expression to be associated with the named expression object."""
+        """String defining the expression."""
         return self.get_property_state("expression_string")
 
     @expression_string.setter

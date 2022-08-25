@@ -9,7 +9,7 @@ from .region_child import region_child
 
 class region(NamedObject[region_child]):
     """
-    Define the region's settings.
+    Configure a region for the coupling participant.
     """
 
     syc_name = "Region"
