@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class unmapped_value_options(Group):
     """
-    Unmapped Value Settings
+    Unmapped value settings.
     """
 
     syc_name = "UnmappedValueOptions"
@@ -31,7 +31,7 @@ class unmapped_value_options(Group):
 
     @property
     def matrix_verbosity(self) -> Integer:
-        """Matrix verbosity"""
+        """Matrix verbosity."""
         return self.get_property_state("matrix_verbosity")
 
     @matrix_verbosity.setter
@@ -40,7 +40,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_verbosity(self) -> Integer:
-        """Solver Verbosity"""
+        """Solver verbosity."""
         return self.get_property_state("solver_verbosity")
 
     @solver_verbosity.setter
@@ -49,7 +49,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver(self) -> String:
-        """Solver"""
+        """Solver (\"GMRES\" or \"FGMRES\")."""
         return self.get_property_state("solver")
 
     @solver.setter
@@ -67,7 +67,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_max_iterations(self) -> Integer:
-        """Solver max iterations"""
+        """Solver maximum iterations."""
         return self.get_property_state("solver_max_iterations")
 
     @solver_max_iterations.setter
@@ -76,7 +76,7 @@ class unmapped_value_options(Group):
 
     @property
     def solver_max_search_directions(self) -> Integer:
-        """Solver max search directions"""
+        """Solver maximum search directions."""
         return self.get_property_state("solver_max_search_directions")
 
     @solver_max_search_directions.setter
@@ -85,7 +85,7 @@ class unmapped_value_options(Group):
 
     @property
     def preconditioner(self) -> String:
-        """Preconditioner"""
+        """Preconditioner type (\"None\" or \"ILUT\")."""
         return self.get_property_state("preconditioner")
 
     @preconditioner.setter
@@ -94,7 +94,7 @@ class unmapped_value_options(Group):
 
     @property
     def ilut_tau(self) -> Real:
-        """Tolerance for ILUT"""
+        """Tolerance for ILUT."""
         return self.get_property_state("ilut_tau")
 
     @ilut_tau.setter
@@ -103,7 +103,7 @@ class unmapped_value_options(Group):
 
     @property
     def ilut_max_fill(self) -> Integer:
-        """Maximum fill level for ILUT"""
+        """Maximum fill level for ILUT."""
         return self.get_property_state("ilut_max_fill")
 
     @ilut_max_fill.setter
@@ -112,7 +112,7 @@ class unmapped_value_options(Group):
 
     @property
     def ilut_pivot_tol(self) -> Real:
-        """Pivot tolerance for ILUT"""
+        """Pivot tolerance for ILUT."""
         return self.get_property_state("ilut_pivot_tol")
 
     @ilut_pivot_tol.setter
@@ -121,7 +121,8 @@ class unmapped_value_options(Group):
 
     @property
     def face_filter_tolerance(self) -> Real:
-        """Tolerance (angle, degrees) for which to consider nearby faces to be sufficiently aligned to include in the algorithm"""
+        """Tolerance (angle, in degrees) for which to consider nearby faces to be sufficiently
+        aligned to be included in the algorithm."""
         return self.get_property_state("face_filter_tolerance")
 
     @face_filter_tolerance.setter
@@ -130,7 +131,7 @@ class unmapped_value_options(Group):
 
     @property
     def rbf_shape_parameter(self) -> Real:
-        """Radial basis function shape parameter for Gaussian shape function"""
+        """Radial basis function shape parameter for Gaussian shape function."""
         return self.get_property_state("rbf_shape_parameter")
 
     @rbf_shape_parameter.setter
@@ -139,7 +140,7 @@ class unmapped_value_options(Group):
 
     @property
     def rbf_linear_correction(self) -> Boolean:
-        """Control whether the radial basis function linear correction is active"""
+        """Control whether the radial basis function linear correction is active."""
         return self.get_property_state("rbf_linear_correction")
 
     @rbf_linear_correction.setter
@@ -148,7 +149,8 @@ class unmapped_value_options(Group):
 
     @property
     def rbf_colinearity_tolerance(self) -> Real:
-        """Tolerance to use for checking colinearity of nearby data when using the radial basis functions for non-overlap extrapolation"""
+        """Tolerance to use for checking colinearity of nearby data when using the radial
+        basis functions for non-overlap extrapolation."""
         return self.get_property_state("rbf_colinearity_tolerance")
 
     @rbf_colinearity_tolerance.setter

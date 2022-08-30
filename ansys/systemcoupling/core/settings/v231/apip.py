@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class apip(Group):
     """
-    Apip-related expert settings
+    Apip-related expert settings.
     """
 
     syc_name = "Apip"

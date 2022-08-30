@@ -4,7 +4,7 @@
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
-from .participant_name_1 import participant_name
+from .participant_name_2 import participant_name
 
 
 class get_execution_command(Command):

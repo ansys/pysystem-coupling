@@ -5,7 +5,7 @@
 from ansys.systemcoupling.core.settings.datamodel import *
 
 from .file_name import file_name
-from .participant_name_1 import participant_name
+from .participant_name_2 import participant_name
 
 
 class generate_input_file(Command):

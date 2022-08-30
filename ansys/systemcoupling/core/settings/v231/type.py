@@ -19,7 +19,9 @@ class type(Group):
 
     @property
     def option(self) -> String:
-        """UNDOCUMENTED"""
+        """Allowed values:
+
+        - \"EnsightGold\" (beta only)"""
         return self.get_property_state("option")
 
     @option.setter

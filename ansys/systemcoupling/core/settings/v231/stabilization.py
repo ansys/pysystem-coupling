@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class stabilization(Group):
     """
-    Stabilization and Acceleration method
+    Stabilization and Acceleration method.
     """
 
     syc_name = "Stabilization"
@@ -33,7 +33,12 @@ class stabilization(Group):
 
     @property
     def option(self) -> String:
-        """UNDOCUMENTED"""
+        """Allowed values:
+
+        - \"ProgramControlled\"
+        - \"None\"
+        - \"Quasi-Newton\"
+        - \"Aitken\" (Alpha only)"""
         return self.get_property_state("option")
 
     @option.setter
@@ -42,7 +47,7 @@ class stabilization(Group):
 
     @property
     def couple_with_global_stabilization(self) -> Boolean:
-        """Controls whether the stabilization for this data transfer is coupled with the global stabilization"""
+        """Controls whether the stabilization for this data transfer is coupled with the global stabilization."""
         return self.get_property_state("couple_with_global_stabilization")
 
     @couple_with_global_stabilization.setter
@@ -87,7 +92,7 @@ class stabilization(Group):
 
     @property
     def weight_factor(self) -> Real:
-        """Weighting factor to use for this data transfer in IQN-ILS"""
+        """Weighting factor to use for this data transfer in IQN-ILS."""
         return self.get_property_state("weight_factor")
 
     @weight_factor.setter
@@ -96,7 +101,14 @@ class stabilization(Group):
 
     @property
     def diagnostics_level(self) -> Integer:
-        """Controls the maximum number of timesteps to retain (0=none, 1=basic, 2=advanced, 3=write matrix files)."""
+        """Controls the maximum number of timesteps to retain.
+
+        Values are interpreted as:
+
+        - 0 : none
+        - 1 : basic
+        - 2 : advanced
+        - 3 : write matrix files"""
         return self.get_property_state("diagnostics_level")
 
     @diagnostics_level.setter
@@ -105,7 +117,16 @@ class stabilization(Group):
 
     @property
     def weight_option(self) -> String:
-        """Weight factor when multiple transfers are stabilized"""
+        """Weight factor when multiple transfers are stabilized.
+
+        Allowed values:
+
+        - \"Constant\"
+        - \"Value\"
+        - \"Residual\"
+        - \"ResidualSum\"
+        - \"InverseResidual\"
+        - \"InverseResidualSum\" """
         return self.get_property_state("weight_option")
 
     @weight_option.setter

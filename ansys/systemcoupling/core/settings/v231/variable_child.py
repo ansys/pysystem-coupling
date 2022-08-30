@@ -51,7 +51,8 @@ class variable_child(Group):
         - \"Heat Rate\"
         - \"Heat Transfer Coefficient\"
         - \"Convection Reference Temperature\"
-        - \"Mode Shape\" """
+        - \"Mode Shape\"
+        - \"Electrical Conductivity\" """
         return self.get_property_state("quantity_type")
 
     @quantity_type.setter

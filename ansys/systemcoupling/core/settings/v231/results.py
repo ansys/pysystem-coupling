@@ -9,7 +9,7 @@ from .type import type
 
 class results(Group):
     """
-    Output postprocessing results data.
+    Configures output of postprocessing results data.
     """
 
     syc_name = "Results"
@@ -28,7 +28,41 @@ class results(Group):
 
     @property
     def option(self) -> String:
-        """UNDOCUMENTED"""
+        """Specifies whether and when results files are generated.
+
+        Allowed values:
+
+        \"ProgramControlled\"
+           Generate postprocessing results at the same frequency as restart points, as
+           defined by the output control option setting. If no restart frequency is
+           defined, then results are generated at the end of the last coupling step.
+
+        \"Off\"
+           Generation of postprocessing results is disabled.
+
+        Allowed values for step-based analyses:
+
+        \"LastStep\"
+           Generate results only for the last coupling step completed.
+
+        \"EveryStep\"
+           Generate results at the end of every coupling step.
+
+        \"StepInterval\"
+           Generate results at the end of coupling steps at the interval specified by
+           the output frequency setting.
+
+        Allowed values for iteration-based analyses:
+
+        \"LastIteration\"
+           Generate results only for the last coupling iteration completed.
+
+        \"EveryIteration\"
+           Generate results at the end of every coupling iteration.
+
+        \"IterationInterval\"
+           Generate results at the end of coupling iterations at the interval specified by
+           the output frequency setting."""
         return self.get_property_state("option")
 
     @option.setter
@@ -37,7 +71,13 @@ class results(Group):
 
     @property
     def include_instances(self) -> String:
-        """Control whether instances are output"""
+        """Control whether instances are output.
+
+        Allowed values:
+
+        - \"ProgramControlled\"
+        - \"ReferenceOnly\"
+        - \"All\" """
         return self.get_property_state("include_instances")
 
     @include_instances.setter

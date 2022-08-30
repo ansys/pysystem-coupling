@@ -38,7 +38,27 @@ class output_control(Group):
 
     @property
     def option(self) -> String:
-        """UNDOCUMENTED"""
+        """Specifies when restart points are generated.
+
+        Allowed values (step-based analyses only):
+
+        \"LastStep\"
+          Generates a restart point only for the last coupling step completed.
+        \"EveryStep\"
+          Generate a restart point at the end of every coupling step.
+        \"StepInterval\"
+          Generates a restart point at the end of coupling steps at the interval
+          specified by the output frequency setting.
+
+        Allowed values (iteration-based analyses only):
+
+        \"LastIteration\"
+          Generates a restart point only for the last coupling iteration completed.
+        \"EveryIteration\"
+          Generate a restart point at the end of every coupling iteration.
+        \"IterationInterval\"
+          Generates a restart point at the end of coupling iterations at the interval
+          specified by the output frequency setting."""
         return self.get_property_state("option")
 
     @option.setter
@@ -56,7 +76,7 @@ class output_control(Group):
 
     @property
     def write_initial_snapshot(self) -> Boolean:
-        """Write initial snapshot"""
+        """Write initial snapshot."""
         return self.get_property_state("write_initial_snapshot")
 
     @write_initial_snapshot.setter
@@ -65,7 +85,7 @@ class output_control(Group):
 
     @property
     def transcript_precision(self) -> Integer:
-        """Number of digits after decimal point in transcript"""
+        """Number of digits after decimal point in transcript."""
         return self.get_property_state("transcript_precision")
 
     @transcript_precision.setter
@@ -92,7 +112,7 @@ class output_control(Group):
 
     @property
     def write_residuals(self) -> Boolean:
-        """Write residuals to results files"""
+        """Write residuals to results files."""
         return self.get_property_state("write_residuals")
 
     @write_residuals.setter

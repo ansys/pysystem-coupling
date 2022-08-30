@@ -65,7 +65,7 @@ class mapping_control(Group):
 
     @property
     def absolute_gap_tolerance(self) -> Real:
-        """Set absolute gap tolerance value."""
+        """Absolute gap tolerance value."""
         return self.get_property_state("absolute_gap_tolerance")
 
     @absolute_gap_tolerance.setter
@@ -74,7 +74,7 @@ class mapping_control(Group):
 
     @property
     def relative_gap_tolerance(self) -> Real:
-        """Set maximum gap size relative to face size."""
+        """Maximum gap size relative to face size."""
         return self.get_property_state("relative_gap_tolerance")
 
     @relative_gap_tolerance.setter
@@ -92,7 +92,8 @@ class mapping_control(Group):
 
     @property
     def corner_tolerance(self) -> Real:
-        """Angle [degrees] between adjacent source mesh faces above which the mapping algorithm will stop searching for mapping candidates."""
+        """Angle [degrees] between adjacent source mesh faces above which the
+        mapping algorithm will stop searching for mapping candidates."""
         return self.get_property_state("corner_tolerance")
 
     @corner_tolerance.setter
@@ -101,7 +102,9 @@ class mapping_control(Group):
 
     @property
     def halo_tolerance(self) -> Real:
-        """If a face intersects but a target node lies outside of the source face, then map the node if the projected distance to the face / sqrt(srcArea) is less than this tolerance, otherwise leave as unmapped."""
+        """If a face intersects but a target node lies outside of the source face, then
+        map the node if the projected distance to the face / sqrt(srcArea) is less
+        than this tolerance, otherwise leave as unmapped."""
         return self.get_property_state("halo_tolerance")
 
     @halo_tolerance.setter
@@ -128,7 +131,13 @@ class mapping_control(Group):
 
     @property
     def conservative_intensive(self) -> String:
-        """Determines when the Intensive option is used for conservative mapping."""
+        """Determines when the Intensive option is used for conservative mapping.
+
+        Allowed values:
+
+        - \"ProgramControlled\" (default)
+        - \"Off\"
+        - \"On\" """
         return self.get_property_state("conservative_intensive")
 
     @conservative_intensive.setter
@@ -137,7 +146,13 @@ class mapping_control(Group):
 
     @property
     def preserve_normal(self) -> String:
-        """Determines if the normal component of a vector is preserved."""
+        """Determines if the normal component of a vector is preserved.
+
+        Allowed values:
+
+        - \"ProgramControlled\" (default)
+        - \"Off\"
+        - \"On\" """
         return self.get_property_state("preserve_normal")
 
     @preserve_normal.setter
@@ -146,7 +161,9 @@ class mapping_control(Group):
 
     @property
     def conservation_fix_tolerance_volume(self) -> Real:
-        """Source element overlap fraction to trigger volume mapping conservation fix (0.0 is default, 1.0 effectively disables it)"""
+        """Source element overlap fraction to trigger volume mapping conservation fix.
+
+        0.0 is default. 1.0 effectively disables it."""
         return self.get_property_state("conservation_fix_tolerance_volume")
 
     @conservation_fix_tolerance_volume.setter
@@ -155,7 +172,12 @@ class mapping_control(Group):
 
     @property
     def rbf_option(self) -> String:
-        """Controls radial basis function formulation."""
+        """Controls radial basis function formulation.
+
+        Allowed values:
+
+        - \"Gaussian\" (default)
+        - \"ThinPlateSpline\" """
         return self.get_property_state("rbf_option")
 
     @rbf_option.setter
@@ -173,7 +195,8 @@ class mapping_control(Group):
 
     @property
     def rbf_linear_correction(self) -> Boolean:
-        """Controls whether linear polynomial augmentation is added to the RBF stencil for low order regular element types (tet, hex, pyramid, wedge).',"""
+        """Controls whether linear polynomial augmentation is added to the RBF stencil for
+        low order regular element types (tet, hex, pyramid, wedge)."""
         return self.get_property_state("rbf_linear_correction")
 
     @rbf_linear_correction.setter
@@ -182,7 +205,8 @@ class mapping_control(Group):
 
     @property
     def rbf_clipping_scale(self) -> Real:
-        """Length scale factor used to determine if source nodes are removed from RBF stencil when too close."""
+        """Length scale factor used to determine if source nodes are removed from RBF
+        stencil when too close."""
         return self.get_property_state("rbf_clipping_scale")
 
     @rbf_clipping_scale.setter

@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class global_stabilization(Group):
     """
-    Global stabilization settings
+    Global stabilization settings.
     """
 
     syc_name = "GlobalStabilization"
@@ -27,7 +27,12 @@ class global_stabilization(Group):
 
     @property
     def option(self) -> String:
-        """UNDOCUMENTED"""
+        """Stabilization type.
+
+        Allowed values:
+
+        - \"None\"
+        - \"Quasi-Newton\" """
         return self.get_property_state("option")
 
     @option.setter
@@ -72,7 +77,14 @@ class global_stabilization(Group):
 
     @property
     def diagnostics_level(self) -> Integer:
-        """Controls the maximum number of timesteps to retain (0=none, 1=basic, 2=advanced, 3=write matrix files)."""
+        """Controls the maximum number of timesteps to retain.
+
+        Values are interpreted as:
+
+        - 0 : none
+        - 1 : basic
+        - 2 : advanced
+        - 3 : write matrix files"""
         return self.get_property_state("diagnostics_level")
 
     @diagnostics_level.setter
@@ -81,7 +93,16 @@ class global_stabilization(Group):
 
     @property
     def weight_option(self) -> String:
-        """Weight factor when multiple transfers are stabilized"""
+        """Weight factor when multiple transfers are stabilized.
+
+        Allowed values:
+
+        - \"Constant\"
+        - \"Value\"
+        - \"Residual\"
+        - \"ResidualSum\"
+        - \"InverseResidual\"
+        - \"InverseResidualSum\" """
         return self.get_property_state("weight_option")
 
     @weight_option.setter
@@ -108,7 +129,13 @@ class global_stabilization(Group):
 
     @property
     def qr_solver(self) -> String:
-        """QR solver options"""
+        """QR solver options.
+
+        Allowed values:
+
+        - \"QR_MGS\"
+        - \"QR_augmentedMGS\" (default)
+        - \"QR_pivot\" """
         return self.get_property_state("qr_solver")
 
     @qr_solver.setter

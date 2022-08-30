@@ -21,7 +21,7 @@ class side_child(Group):
 
     @property
     def coupling_participant(self) -> String:
-        """UNDOCUMENTED"""
+        """Name of the participant on this interface side."""
         return self.get_property_state("coupling_participant")
 
     @coupling_participant.setter
@@ -30,7 +30,7 @@ class side_child(Group):
 
     @property
     def region_list(self) -> StringList:
-        """UNDOCUMENTED"""
+        """List of participant regions involved in this interface side."""
         return self.get_property_state("region_list")
 
     @region_list.setter
@@ -39,7 +39,7 @@ class side_child(Group):
 
     @property
     def reference_frame(self) -> String:
-        """UNDOCUMENTED"""
+        """Reference frame of this side."""
         return self.get_property_state("reference_frame")
 
     @reference_frame.setter
@@ -48,7 +48,7 @@ class side_child(Group):
 
     @property
     def instancing(self) -> String:
-        """UNDOCUMENTED"""
+        """Instancing name for this side (leave unset if not required)."""
         return self.get_property_state("instancing")
 
     @instancing.setter

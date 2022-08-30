@@ -31,7 +31,15 @@ class solution_control(Group):
 
     @property
     def duration_option(self) -> String:
-        """UNDOCUMENTED"""
+        """Determine how the analysis duration is specified.
+
+        Allowed values:
+
+        \"EndTime\"
+            Available for transient analyses. Execute coupling steps until the
+            analysis reaches the specified end time.
+        \"NumberOfSteps\"
+            Perform coupling steps until the specified number of steps is reached."""
         return self.get_property_state("duration_option")
 
     @duration_option.setter

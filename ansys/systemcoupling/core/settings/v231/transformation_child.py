@@ -49,7 +49,7 @@ class transformation_child(Group):
             Rotation is about the y-axis.
 
         ZAxis
-            Rotatation is about the z-axis.
+            Rotation is about the z-axis.
 
         UserDefined
             Rotation is about a user defined vector."""

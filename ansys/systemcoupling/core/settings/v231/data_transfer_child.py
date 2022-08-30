@@ -38,7 +38,7 @@ class data_transfer_child(Group):
 
     @property
     def display_name(self) -> String:
-        """Set the display name of an object."""
+        """Display name of the data transfer."""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -56,7 +56,7 @@ class data_transfer_child(Group):
 
     @property
     def target_side(self) -> String:
-        """UNDOCUMENTED"""
+        """Target side (\"One\" or \"Two\") of this data transfer."""
         return self.get_property_state("target_side")
 
     @target_side.setter
@@ -65,7 +65,16 @@ class data_transfer_child(Group):
 
     @property
     def option(self) -> String:
-        """Set behavior of this object."""
+        """How the transfer data is specified.
+
+        Allowed values:
+
+        \"UsingVariable\"
+           The data being transferred is defined as a single source-side variable.
+
+        \"UsingExpression\"
+           The data being transferred is defined as an expression in terms of
+           source-side variables."""
         return self.get_property_state("option")
 
     @option.setter
@@ -74,7 +83,9 @@ class data_transfer_child(Group):
 
     @property
     def source_variable(self) -> String:
-        """UNDOCUMENTED"""
+        """Variable associated with the source side of the interface.
+
+        Specified only for variable-based transfers (and not expression-based)."""
         return self.get_property_state("source_variable")
 
     @source_variable.setter
@@ -83,7 +94,7 @@ class data_transfer_child(Group):
 
     @property
     def target_variable(self) -> String:
-        """UNDOCUMENTED"""
+        """Variable associated with the target side of the interface."""
         return self.get_property_state("target_variable")
 
     @target_variable.setter
@@ -92,7 +103,12 @@ class data_transfer_child(Group):
 
     @property
     def value(self) -> Real:
-        """UNDOCUMENTED"""
+        """Expression string (or constant real value) defining the data being
+        transferred from the source.
+
+        Specified only for expression-based transfers.
+
+        Any variable referenced must be a source side variable."""
         return self.get_property_state("value")
 
     @value.setter
@@ -101,7 +117,18 @@ class data_transfer_child(Group):
 
     @property
     def ramping_option(self) -> String:
-        """UNDOCUMENTED"""
+        """Specify whether to apply ramping to the data transfer.
+
+        Ramping is used to slow the application of the source-side value on the
+        target side of the interface.
+
+        Allowed values:
+
+        \"None\"
+            No ramping to be applied.
+
+        \"Linear\"
+            Apply linear ramping."""
         return self.get_property_state("ramping_option")
 
     @ramping_option.setter
@@ -110,7 +137,8 @@ class data_transfer_child(Group):
 
     @property
     def relaxation_factor(self) -> Real:
-        """UNDOCUMENTED"""
+        """Factor multiplying the current data transfer values for specified quantity when
+        under-relaxing them against the previous values."""
         return self.get_property_state("relaxation_factor")
 
     @relaxation_factor.setter
@@ -119,7 +147,8 @@ class data_transfer_child(Group):
 
     @property
     def convergence_target(self) -> Real:
-        """UNDOCUMENTED"""
+        """RMS-based target value used when evaluating convergence of the specified
+        quantity within a coupling iteration."""
         return self.get_property_state("convergence_target")
 
     @convergence_target.setter
@@ -128,7 +157,16 @@ class data_transfer_child(Group):
 
     @property
     def mapping_type(self) -> String:
-        """UNDOCUMENTED"""
+        """Type of mapping used for the data transfer. (**Read only**.)
+
+        Possible values:
+
+        - \"Conservative\"
+           A conservative mapping algorithm is used for transfers of
+           `extensive` quantities.
+        - \"ProfilePreserving\"
+           A profile-preserving mapping algorithm is used for transfers
+           of `intensive` quantities."""
         return self.get_property_state("mapping_type")
 
     @mapping_type.setter

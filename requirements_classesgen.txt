@@ -3,8 +3,10 @@
 # that it will be run directly from the package source tree. Most
 # likely there will be a "-e" pip install of pySystemCoupling.
 
-# black is called programmatically to keep generated code
-# consistent with style elsewhere. We need to keep the version
+# black and isort are called programmatically to keep generated code
+# consistent with style elsewhere. We need to keep the versions
 # in sync with the pre-commit config.
 black==22.3.0
+isort==5.10.1
+
 
