@@ -16,16 +16,16 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='variant.proto',
-  package='utils',
+  package='syc',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rvariant.proto\x12\x05utils\"\x1c\n\x0cStringVector\x12\x0c\n\x04item\x18\x01 \x03(\t\"\x1c\n\x0c\x44oubleVector\x12\x0c\n\x04item\x18\x01 \x03(\x01\"\x1a\n\nBoolVector\x12\x0c\n\x04item\x18\x01 \x03(\x08\"\x1b\n\x0bInt64Vector\x12\x0c\n\x04item\x18\x01 \x03(\x12\"t\n\nVariantMap\x12)\n\x04item\x18\x01 \x03(\x0b\x32\x1b.utils.VariantMap.ItemEntry\x1a;\n\tItemEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1d\n\x05value\x18\x02 \x01(\x0b\x32\x0e.utils.Variant:\x02\x38\x01\"-\n\rVariantVector\x12\x1c\n\x04item\x18\x01 \x03(\x0b\x32\x0e.utils.Variant\"\xc4\x03\n\x07Variant\x12&\n\nnone_state\x18\x01 \x01(\x0e\x32\x10.utils.NoneValueH\x00\x12\x14\n\nbool_state\x18\x02 \x01(\x08H\x00\x12\x15\n\x0bint64_state\x18\x03 \x01(\x12H\x00\x12\x16\n\x0c\x64ouble_state\x18\x05 \x01(\x01H\x00\x12\x16\n\x0cstring_state\x18\x06 \x01(\tH\x00\x12.\n\x11\x62ool_vector_state\x18\x07 \x01(\x0b\x32\x11.utils.BoolVectorH\x00\x12\x30\n\x12int64_vector_state\x18\x08 \x01(\x0b\x32\x12.utils.Int64VectorH\x00\x12\x32\n\x13\x64ouble_vector_state\x18\t \x01(\x0b\x32\x13.utils.DoubleVectorH\x00\x12\x32\n\x13string_vector_state\x18\n \x01(\x0b\x32\x13.utils.StringVectorH\x00\x12\x34\n\x14variant_vector_state\x18\x0b \x01(\x0b\x32\x14.utils.VariantVectorH\x00\x12.\n\x11variant_map_state\x18\x0c \x01(\x0b\x32\x11.utils.VariantMapH\x00\x42\x04\n\x02\x61s*\x1b\n\tNoneValue\x12\x0e\n\nNONE_VALUE\x10\x00\x62\x06proto3'
+  serialized_pb=b'\n\rvariant.proto\x12\x03syc\"\x1c\n\x0cStringVector\x12\x0c\n\x04item\x18\x01 \x03(\t\"\x1c\n\x0c\x44oubleVector\x12\x0c\n\x04item\x18\x01 \x03(\x01\"\x1a\n\nBoolVector\x12\x0c\n\x04item\x18\x01 \x03(\x08\"\x1b\n\x0bInt64Vector\x12\x0c\n\x04item\x18\x01 \x03(\x12\"p\n\nVariantMap\x12\'\n\x04item\x18\x01 \x03(\x0b\x32\x19.syc.VariantMap.ItemEntry\x1a\x39\n\tItemEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x1b\n\x05value\x18\x02 \x01(\x0b\x32\x0c.syc.Variant:\x02\x38\x01\"+\n\rVariantVector\x12\x1a\n\x04item\x18\x01 \x03(\x0b\x32\x0c.syc.Variant\"\xb6\x03\n\x07Variant\x12$\n\nnone_state\x18\x01 \x01(\x0e\x32\x0e.syc.NoneValueH\x00\x12\x14\n\nbool_state\x18\x02 \x01(\x08H\x00\x12\x15\n\x0bint64_state\x18\x03 \x01(\x12H\x00\x12\x16\n\x0c\x64ouble_state\x18\x05 \x01(\x01H\x00\x12\x16\n\x0cstring_state\x18\x06 \x01(\tH\x00\x12,\n\x11\x62ool_vector_state\x18\x07 \x01(\x0b\x32\x0f.syc.BoolVectorH\x00\x12.\n\x12int64_vector_state\x18\x08 \x01(\x0b\x32\x10.syc.Int64VectorH\x00\x12\x30\n\x13\x64ouble_vector_state\x18\t \x01(\x0b\x32\x11.syc.DoubleVectorH\x00\x12\x30\n\x13string_vector_state\x18\n \x01(\x0b\x32\x11.syc.StringVectorH\x00\x12\x32\n\x14variant_vector_state\x18\x0b \x01(\x0b\x32\x12.syc.VariantVectorH\x00\x12,\n\x11variant_map_state\x18\x0c \x01(\x0b\x32\x0f.syc.VariantMapH\x00\x42\x04\n\x02\x61s*\x1b\n\tNoneValue\x12\x0e\n\nNONE_VALUE\x10\x00\x62\x06proto3'
 )
 
 _NONEVALUE = _descriptor.EnumDescriptor(
   name='NoneValue',
-  full_name='utils.NoneValue',
+  full_name='syc.NoneValue',
   filename=None,
   file=DESCRIPTOR,
   create_key=_descriptor._internal_create_key,
@@ -38,8 +38,8 @@ _NONEVALUE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=761,
-  serialized_end=788,
+  serialized_start=739,
+  serialized_end=766,
 )
 _sym_db.RegisterEnumDescriptor(_NONEVALUE)
 
@@ -50,14 +50,14 @@ NONE_VALUE = 0
 
 _STRINGVECTOR = _descriptor.Descriptor(
   name='StringVector',
-  full_name='utils.StringVector',
+  full_name='syc.StringVector',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='item', full_name='utils.StringVector.item', index=0,
+      name='item', full_name='syc.StringVector.item', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -75,21 +75,21 @@ _STRINGVECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=24,
-  serialized_end=52,
+  serialized_start=22,
+  serialized_end=50,
 )
 
 
 _DOUBLEVECTOR = _descriptor.Descriptor(
   name='DoubleVector',
-  full_name='utils.DoubleVector',
+  full_name='syc.DoubleVector',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='item', full_name='utils.DoubleVector.item', index=0,
+      name='item', full_name='syc.DoubleVector.item', index=0,
       number=1, type=1, cpp_type=5, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -107,21 +107,21 @@ _DOUBLEVECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=54,
-  serialized_end=82,
+  serialized_start=52,
+  serialized_end=80,
 )
 
 
 _BOOLVECTOR = _descriptor.Descriptor(
   name='BoolVector',
-  full_name='utils.BoolVector',
+  full_name='syc.BoolVector',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='item', full_name='utils.BoolVector.item', index=0,
+      name='item', full_name='syc.BoolVector.item', index=0,
       number=1, type=8, cpp_type=7, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -139,21 +139,21 @@ _BOOLVECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=84,
-  serialized_end=110,
+  serialized_start=82,
+  serialized_end=108,
 )
 
 
 _INT64VECTOR = _descriptor.Descriptor(
   name='Int64Vector',
-  full_name='utils.Int64Vector',
+  full_name='syc.Int64Vector',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='item', full_name='utils.Int64Vector.item', index=0,
+      name='item', full_name='syc.Int64Vector.item', index=0,
       number=1, type=18, cpp_type=2, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -171,28 +171,28 @@ _INT64VECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=112,
-  serialized_end=139,
+  serialized_start=110,
+  serialized_end=137,
 )
 
 
 _VARIANTMAP_ITEMENTRY = _descriptor.Descriptor(
   name='ItemEntry',
-  full_name='utils.VariantMap.ItemEntry',
+  full_name='syc.VariantMap.ItemEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='key', full_name='utils.VariantMap.ItemEntry.key', index=0,
+      name='key', full_name='syc.VariantMap.ItemEntry.key', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='value', full_name='utils.VariantMap.ItemEntry.value', index=1,
+      name='value', full_name='syc.VariantMap.ItemEntry.value', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -210,20 +210,20 @@ _VARIANTMAP_ITEMENTRY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=198,
-  serialized_end=257,
+  serialized_start=194,
+  serialized_end=251,
 )
 
 _VARIANTMAP = _descriptor.Descriptor(
   name='VariantMap',
-  full_name='utils.VariantMap',
+  full_name='syc.VariantMap',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='item', full_name='utils.VariantMap.item', index=0,
+      name='item', full_name='syc.VariantMap.item', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -241,21 +241,21 @@ _VARIANTMAP = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=141,
-  serialized_end=257,
+  serialized_start=139,
+  serialized_end=251,
 )
 
 
 _VARIANTVECTOR = _descriptor.Descriptor(
   name='VariantVector',
-  full_name='utils.VariantVector',
+  full_name='syc.VariantVector',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='item', full_name='utils.VariantVector.item', index=0,
+      name='item', full_name='syc.VariantVector.item', index=0,
       number=1, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -273,91 +273,91 @@ _VARIANTVECTOR = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=259,
-  serialized_end=304,
+  serialized_start=253,
+  serialized_end=296,
 )
 
 
 _VARIANT = _descriptor.Descriptor(
   name='Variant',
-  full_name='utils.Variant',
+  full_name='syc.Variant',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='none_state', full_name='utils.Variant.none_state', index=0,
+      name='none_state', full_name='syc.Variant.none_state', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bool_state', full_name='utils.Variant.bool_state', index=1,
+      name='bool_state', full_name='syc.Variant.bool_state', index=1,
       number=2, type=8, cpp_type=7, label=1,
       has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='int64_state', full_name='utils.Variant.int64_state', index=2,
+      name='int64_state', full_name='syc.Variant.int64_state', index=2,
       number=3, type=18, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='double_state', full_name='utils.Variant.double_state', index=3,
+      name='double_state', full_name='syc.Variant.double_state', index=3,
       number=5, type=1, cpp_type=5, label=1,
       has_default_value=False, default_value=float(0),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='string_state', full_name='utils.Variant.string_state', index=4,
+      name='string_state', full_name='syc.Variant.string_state', index=4,
       number=6, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='bool_vector_state', full_name='utils.Variant.bool_vector_state', index=5,
+      name='bool_vector_state', full_name='syc.Variant.bool_vector_state', index=5,
       number=7, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='int64_vector_state', full_name='utils.Variant.int64_vector_state', index=6,
+      name='int64_vector_state', full_name='syc.Variant.int64_vector_state', index=6,
       number=8, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='double_vector_state', full_name='utils.Variant.double_vector_state', index=7,
+      name='double_vector_state', full_name='syc.Variant.double_vector_state', index=7,
       number=9, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='string_vector_state', full_name='utils.Variant.string_vector_state', index=8,
+      name='string_vector_state', full_name='syc.Variant.string_vector_state', index=8,
       number=10, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='variant_vector_state', full_name='utils.Variant.variant_vector_state', index=9,
+      name='variant_vector_state', full_name='syc.Variant.variant_vector_state', index=9,
       number=11, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='variant_map_state', full_name='utils.Variant.variant_map_state', index=10,
+      name='variant_map_state', full_name='syc.Variant.variant_map_state', index=10,
       number=12, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -375,13 +375,13 @@ _VARIANT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
     _descriptor.OneofDescriptor(
-      name='as', full_name='utils.Variant.as',
+      name='as', full_name='syc.Variant.as',
       index=0, containing_type=None,
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=307,
-  serialized_end=759,
+  serialized_start=299,
+  serialized_end=737,
 )
 
 _VARIANTMAP_ITEMENTRY.fields_by_name['value'].message_type = _VARIANT
@@ -441,28 +441,28 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 StringVector = _reflection.GeneratedProtocolMessageType('StringVector', (_message.Message,), {
   'DESCRIPTOR' : _STRINGVECTOR,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.StringVector)
+  # @@protoc_insertion_point(class_scope:syc.StringVector)
   })
 _sym_db.RegisterMessage(StringVector)
 
 DoubleVector = _reflection.GeneratedProtocolMessageType('DoubleVector', (_message.Message,), {
   'DESCRIPTOR' : _DOUBLEVECTOR,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.DoubleVector)
+  # @@protoc_insertion_point(class_scope:syc.DoubleVector)
   })
 _sym_db.RegisterMessage(DoubleVector)
 
 BoolVector = _reflection.GeneratedProtocolMessageType('BoolVector', (_message.Message,), {
   'DESCRIPTOR' : _BOOLVECTOR,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.BoolVector)
+  # @@protoc_insertion_point(class_scope:syc.BoolVector)
   })
 _sym_db.RegisterMessage(BoolVector)
 
 Int64Vector = _reflection.GeneratedProtocolMessageType('Int64Vector', (_message.Message,), {
   'DESCRIPTOR' : _INT64VECTOR,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.Int64Vector)
+  # @@protoc_insertion_point(class_scope:syc.Int64Vector)
   })
 _sym_db.RegisterMessage(Int64Vector)
 
@@ -471,12 +471,12 @@ VariantMap = _reflection.GeneratedProtocolMessageType('VariantMap', (_message.Me
   'ItemEntry' : _reflection.GeneratedProtocolMessageType('ItemEntry', (_message.Message,), {
     'DESCRIPTOR' : _VARIANTMAP_ITEMENTRY,
     '__module__' : 'variant_pb2'
-    # @@protoc_insertion_point(class_scope:utils.VariantMap.ItemEntry)
+    # @@protoc_insertion_point(class_scope:syc.VariantMap.ItemEntry)
     })
   ,
   'DESCRIPTOR' : _VARIANTMAP,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.VariantMap)
+  # @@protoc_insertion_point(class_scope:syc.VariantMap)
   })
 _sym_db.RegisterMessage(VariantMap)
 _sym_db.RegisterMessage(VariantMap.ItemEntry)
@@ -484,14 +484,14 @@ _sym_db.RegisterMessage(VariantMap.ItemEntry)
 VariantVector = _reflection.GeneratedProtocolMessageType('VariantVector', (_message.Message,), {
   'DESCRIPTOR' : _VARIANTVECTOR,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.VariantVector)
+  # @@protoc_insertion_point(class_scope:syc.VariantVector)
   })
 _sym_db.RegisterMessage(VariantVector)
 
 Variant = _reflection.GeneratedProtocolMessageType('Variant', (_message.Message,), {
   'DESCRIPTOR' : _VARIANT,
   '__module__' : 'variant_pb2'
-  # @@protoc_insertion_point(class_scope:utils.Variant)
+  # @@protoc_insertion_point(class_scope:syc.Variant)
   })
 _sym_db.RegisterMessage(Variant)
 

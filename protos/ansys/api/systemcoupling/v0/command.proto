@@ -11,12 +11,12 @@ service Command {
 message CommandRequest {
   message Argument {
     string name = 1;
-    utils.Variant val = 2;
+    syc.Variant val = 2;
   }
   string command = 1;
   repeated Argument args = 2;
 }
 
 message CommandResponse {
-  utils.Variant result = 1;
+  syc.Variant result = 1;
 }

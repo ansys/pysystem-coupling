@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package utils;
+package syc;
 
 enum NoneValue {
   NONE_VALUE=0;

@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rcommand.proto\x12\x03syc\x1a\rvariant.proto\"\x84\x01\n\x0e\x43ommandRequest\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12*\n\x04\x61rgs\x18\x02 \x03(\x0b\x32\x1c.syc.CommandRequest.Argument\x1a\x35\n\x08\x41rgument\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x1b\n\x03val\x18\x02 \x01(\x0b\x32\x0e.utils.Variant\"1\n\x0f\x43ommandResponse\x12\x1e\n\x06result\x18\x01 \x01(\x0b\x32\x0e.utils.Variant2G\n\x07\x43ommand\x12<\n\rInvokeCommand\x12\x13.syc.CommandRequest\x1a\x14.syc.CommandResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\rcommand.proto\x12\x03syc\x1a\rvariant.proto\"\x82\x01\n\x0e\x43ommandRequest\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12*\n\x04\x61rgs\x18\x02 \x03(\x0b\x32\x1c.syc.CommandRequest.Argument\x1a\x33\n\x08\x41rgument\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x19\n\x03val\x18\x02 \x01(\x0b\x32\x0c.syc.Variant\"/\n\x0f\x43ommandResponse\x12\x1c\n\x06result\x18\x01 \x01(\x0b\x32\x0c.syc.Variant2G\n\x07\x43ommand\x12<\n\rInvokeCommand\x12\x13.syc.CommandRequest\x1a\x14.syc.CommandResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[variant__pb2.DESCRIPTOR,])
 
@@ -62,7 +62,7 @@ _COMMANDREQUEST_ARGUMENT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=117,
-  serialized_end=170,
+  serialized_end=168,
 )
 
 _COMMANDREQUEST = _descriptor.Descriptor(
@@ -100,7 +100,7 @@ _COMMANDREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=38,
-  serialized_end=170,
+  serialized_end=168,
 )
 
 
@@ -131,8 +131,8 @@ _COMMANDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=172,
-  serialized_end=221,
+  serialized_start=170,
+  serialized_end=217,
 )
 
 _COMMANDREQUEST_ARGUMENT.fields_by_name['val'].message_type = variant__pb2._VARIANT
@@ -174,8 +174,8 @@ _COMMAND = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=223,
-  serialized_end=294,
+  serialized_start=219,
+  serialized_end=290,
   methods=[
   _descriptor.MethodDescriptor(
     name='InvokeCommand',
