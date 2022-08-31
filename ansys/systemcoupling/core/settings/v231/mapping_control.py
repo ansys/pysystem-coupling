@@ -56,7 +56,14 @@ class mapping_control(Group):
 
     @property
     def face_alignment(self) -> String:
-        """Controls how face alignment is used during mapping."""
+        """Controls how face alignment is used during mapping.
+
+        Allowed values:
+
+        - \"ProgramControlled\" (default)
+        - \"OppositeOrientation\"
+        - \"SameOrientation\"
+        - \"AnyOrientation\" """
         return self.get_property_state("face_alignment")
 
     @face_alignment.setter

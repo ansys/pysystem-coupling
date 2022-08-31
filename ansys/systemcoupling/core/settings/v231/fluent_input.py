@@ -23,19 +23,16 @@ class fluent_input(Group):
     def option(self) -> String:
         """Type of solver input file(s) to be used for the Fluent run.
 
-        Possible options:
+        Allowed values:
 
-        InitialCaseFile
-            The default. A case file will be defined as a solver input for the
-            coupled analysis run.
+        - \"InitialCaseFile\" - (Default) A case file will be defined as a
+          solver input for the coupled analysis run.
 
-        InitialCaseAndDataFile
-            A Fluent case file and data file will be defined as solver inputs
-            for the coupled analysis run.
+        - \"InitialCaseAndDataFile\" - A Fluent case file and data file
+          will be defined as solver inputs for the coupled analysis run.
 
-        JournalFile
-            A journal file will be defined as the solver input for the coupled
-            analysis run."""
+        - \"JournalFile\" - A journal file will be defined as the solver
+          input for the coupled analysis run."""
         return self.get_property_state("option")
 
     @option.setter

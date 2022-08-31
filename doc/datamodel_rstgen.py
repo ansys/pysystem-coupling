@@ -160,8 +160,12 @@ def _populate_rst_from_settings(rst_dir, cls):
         # Populate initial rst
         r.write(":orphan:\n\n")
         r.write(f".. _{file_name}:\n\n")
-        r.write(f"{cls_name}\n")
-        r.write(f'{"="*(len(cls_name))}\n\n')
+        title = cls_name
+        # Possibly need something like this, but generalised?
+        # if title == "case_root":
+        #    title = "Case and Persistence Commands"
+        r.write(f"{title}\n")
+        r.write(f'{"="*(len(title))}\n\n')
         r.write(
             f".. currentmodule:: ansys.systemcoupling.core.settings.v231.{file_name}\n\n"
         )

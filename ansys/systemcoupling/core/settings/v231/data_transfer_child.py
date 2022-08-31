@@ -69,12 +69,11 @@ class data_transfer_child(Group):
 
         Allowed values:
 
-        \"UsingVariable\"
-           The data being transferred is defined as a single source-side variable.
+        - \"UsingVariable\" - The data being transferred is defined as a
+          single source-side variable.
 
-        \"UsingExpression\"
-           The data being transferred is defined as an expression in terms of
-           source-side variables."""
+        - \"UsingExpression\" - The data being transferred is defined as
+          an expression in terms of source-side variables."""
         return self.get_property_state("option")
 
     @option.setter
@@ -124,11 +123,9 @@ class data_transfer_child(Group):
 
         Allowed values:
 
-        \"None\"
-            No ramping to be applied.
+        - \"None\" - No ramping to be applied.
 
-        \"Linear\"
-            Apply linear ramping."""
+        - \"Linear\" - Apply linear ramping."""
         return self.get_property_state("ramping_option")
 
     @ramping_option.setter
@@ -161,12 +158,10 @@ class data_transfer_child(Group):
 
         Possible values:
 
-        - \"Conservative\"
-           A conservative mapping algorithm is used for transfers of
-           `extensive` quantities.
-        - \"ProfilePreserving\"
-           A profile-preserving mapping algorithm is used for transfers
-           of `intensive` quantities."""
+        - \"Conservative\" - A conservative mapping algorithm is used
+          for transfers of `extensive` quantities.
+        - \"ProfilePreserving\" - A profile-preserving mapping algorithm
+          is used for transfers of `intensive` quantities."""
         return self.get_property_state("mapping_type")
 
     @mapping_type.setter

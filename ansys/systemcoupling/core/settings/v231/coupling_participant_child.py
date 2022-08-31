@@ -71,8 +71,18 @@ class coupling_participant_child(Group):
     def participant_type(self) -> String:
         """Coupling participant type.
 
-        Valid types are: \"DEFAULT\", \"CFX\", \"FLUENT\", \"MAPDL\", \"AEDT\", \"FMU\",
-        \"EXTERNALDATA\", \"FORTE\", \"DEFAULT-SRV\", \"MECH-SRV\", \"CFD-SRV\" """
+        Allowed values:
+        - \"DEFAULT\"
+        - \"CFX\"
+        - \"FLUENT\"
+        - \"MAPDL\"
+        - \"AEDT\"
+        - \"FMU\"
+        - \"EXTERNALDATA\"
+        - \"FORTE\"
+        - \"DEFAULT-SRV\"
+        - \"MECH-SRV\"
+        - \"CFD-SRV\" """
         return self.get_property_state("participant_type")
 
     @participant_type.setter

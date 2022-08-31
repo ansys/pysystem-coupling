@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-SHASH = "6fc37bad0727b0dd6c160e7e00fc5cc1b8270a8b19a2de206b6f894e9575aef7"
+SHASH = "d79689da1e81c63ff27cb59eebd2ec8b674b293167da91edd78fba1eb8ef2824"
 
 from ansys.systemcoupling.core.settings.datamodel import *
 

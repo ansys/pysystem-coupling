@@ -32,37 +32,32 @@ class results(Group):
 
         Allowed values:
 
-        \"ProgramControlled\"
-           Generate postprocessing results at the same frequency as restart points, as
-           defined by the output control option setting. If no restart frequency is
-           defined, then results are generated at the end of the last coupling step.
+        - \"ProgramControlled\" - Generate postprocessing results at the same
+          frequency as restart points, as defined by the output control option
+          setting. If no restart frequency is defined, then results are
+          generated at the end of the last coupling step.
 
-        \"Off\"
-           Generation of postprocessing results is disabled.
+        -  \"Off\" - Generation of postprocessing results is disabled.
 
         Allowed values for step-based analyses:
 
-        \"LastStep\"
-           Generate results only for the last coupling step completed.
+        - \"LastStep\" - Generate results only for the last coupling step completed.
 
-        \"EveryStep\"
-           Generate results at the end of every coupling step.
+        - \"EveryStep\" - Generate results at the end of every coupling step.
 
-        \"StepInterval\"
-           Generate results at the end of coupling steps at the interval specified by
-           the output frequency setting.
+        - \"StepInterval\" - Generate results at the end of coupling steps at
+          the interval specified by the output frequency setting.
 
         Allowed values for iteration-based analyses:
 
-        \"LastIteration\"
-           Generate results only for the last coupling iteration completed.
+        - \"LastIteration\" - Generate results only for the last coupling
+          iteration completed.
 
-        \"EveryIteration\"
-           Generate results at the end of every coupling iteration.
+        - \"EveryIteration\" - Generate results at the end of every coupling
+          iteration.
 
-        \"IterationInterval\"
-           Generate results at the end of coupling iterations at the interval specified by
-           the output frequency setting."""
+        - \"IterationInterval\" - Generate results at the end of coupling
+          iterations at the interval specified by the output frequency setting."""
         return self.get_property_state("option")
 
     @option.setter

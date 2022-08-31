@@ -21,10 +21,10 @@ class available_ports(Group):
     def option(self) -> String:
         """Specify how available ports are determined.
 
-        \"ProgramControlled\"
-           System Coupling will find an available port.
-        \"UserDefined\"
-           An available port will be chosen, if possible, from a specified range."""
+        - \"ProgramControlled\" - System Coupling will find an
+          available port.
+        - \"UserDefined\" - An available port will be chosen,
+          if possible, from a specified range."""
         return self.get_property_state("option")
 
     @option.setter

@@ -42,17 +42,10 @@ class transformation_child(Group):
     def axis(self) -> String:
         """The axis of rotation to be used for a rotation transformation.
 
-        XAxis
-            Rotation is about the x-axis.
-
-        YAxis
-            Rotation is about the y-axis.
-
-        ZAxis
-            Rotation is about the z-axis.
-
-        UserDefined
-            Rotation is about a user defined vector."""
+        - \"XAxis\" - Rotation is about the x-axis.
+        - \"YAxis\" - Rotation is about the y-axis.
+        - \"ZAxis\" - Rotation is about the z-axis.
+        - \"UserDefined\" - Rotation is about a user defined vector."""
         return self.get_property_state("axis")
 
     @axis.setter

@@ -42,15 +42,12 @@ class execution_control(Group):
         """Method used to find the solver executable file to be used to start
         the participant.
 
-        \"ProgramControlled\"
-            Find the executable based on the participant type. Available whenever
-            the participant type is not set to \"DEFAULT\" or \"EXTERNALDATA\".
-
-            This is the default option.
-        \"UserDefined\"
-            User supplied settings are used to find the executable.
-        \"ExternallyManaged\"
-            Typically used for workflows managed by `WorkBench`."""
+        - \"ProgramControlled\" - (Default) Find the executable based on the
+          participant type. Available whenever the participant type is not
+          set to \"DEFAULT\" or \"EXTERNALDATA\".
+        - \"UserDefined\" - User supplied settings are used to find the executable.
+        - \"ExternallyManaged\" - Typically used for workflows managed by
+          `WorkBench`."""
         return self.get_property_state("option")
 
     @option.setter

@@ -42,23 +42,23 @@ class output_control(Group):
 
         Allowed values (step-based analyses only):
 
-        \"LastStep\"
-          Generates a restart point only for the last coupling step completed.
-        \"EveryStep\"
+        - \"LastStep\" - Generates a restart point only for the last
+          coupling step completed.
+        - \"EveryStep\" -
           Generate a restart point at the end of every coupling step.
-        \"StepInterval\"
-          Generates a restart point at the end of coupling steps at the interval
-          specified by the output frequency setting.
+        - \"StepInterval\" - Generates a restart point at the end of
+          coupling steps at the interval specified by the output
+          frequency setting.
 
         Allowed values (iteration-based analyses only):
 
-        \"LastIteration\"
-          Generates a restart point only for the last coupling iteration completed.
-        \"EveryIteration\"
-          Generate a restart point at the end of every coupling iteration.
-        \"IterationInterval\"
-          Generates a restart point at the end of coupling iterations at the interval
-          specified by the output frequency setting."""
+        - \"LastIteration\" - Generates a restart point only for the
+          last coupling iteration completed.
+        - \"EveryIteration\" - Generate a restart point at the end
+          of every coupling iteration.
+        - \"IterationInterval\" - Generates a restart point at the
+          end of coupling iterations at the interval specified by
+          the output frequency setting."""
         return self.get_property_state("option")
 
     @option.setter

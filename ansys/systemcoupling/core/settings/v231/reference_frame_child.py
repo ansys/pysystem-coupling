@@ -31,14 +31,10 @@ class reference_frame_child(Group):
     def option(self) -> String:
         """Method used to define the transformation from the parent reference frame.
 
-        ByTransformation
-          Define the reference frame by one or more transformation operations.
-
-        Automatic
-          Only available if Alpha features are activated.
-
-        ByMatrix
-          Only available if Alpha features are activated."""
+        - \"ByTransformation\" - Define the reference frame by one or more
+          transformation operations.
+        - \"Automatic\" - Only available if Alpha features are activated.
+        - \"ByMatrix\" - Only available if Alpha features are activated."""
         return self.get_property_state("option")
 
     @option.setter

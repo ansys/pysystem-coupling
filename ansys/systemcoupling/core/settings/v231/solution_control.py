@@ -35,11 +35,10 @@ class solution_control(Group):
 
         Allowed values:
 
-        \"EndTime\"
-            Available for transient analyses. Execute coupling steps until the
-            analysis reaches the specified end time.
-        \"NumberOfSteps\"
-            Perform coupling steps until the specified number of steps is reached."""
+        - \"EndTime\" - Available for transient analyses. Execute coupling
+          steps until the analysis reaches the specified end time.
+        - \"NumberOfSteps\" - Perform coupling steps until the specified
+          number of steps is reached."""
         return self.get_property_state("duration_option")
 
     @duration_option.setter

@@ -111,20 +111,15 @@ class analysis_control(Group):
 
         Allowed values:
 
-        \"SharedAllocateMachines\"
-            Participants share both machines and cores.
+        - \"SharedAllocateMachines\" - Participants share both machines and cores.
 
-        \"SharedAllocateCores\"
-            Participants share machines but not cores.
+        - \"SharedAllocateCores\" - Participants share machines but not cores.
 
-        \"DistributedAllocateCores\"
-            Participants minimally share cores and machines. (Linux only)
+        - \"DistributedAllocateCores\" - Participants minimally share cores and machines. (Linux only)
 
-        \"DistributedAllocateMachines\"
-            Participants never share cores or machines. (Linux only)
+        - \"DistributedAllocateMachines\" - Participants never share cores or machines. (Linux only)
 
-        \"Custom\"
-            Custom algorithm."""
+        - \"Custom\" - Custom algorithm."""
         return self.get_property_state("partitioning_algorithm")
 
     @partitioning_algorithm.setter
