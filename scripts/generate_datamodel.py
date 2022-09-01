@@ -500,12 +500,12 @@ def write_classes_to_file(
 
 def _format_content(content, filename):
     # If we did not do this, every time the files are regenerated
-    # the previous black changes applied on commit would be lost so
+    # the previous pre-commit changes would be lost so
     # the differences would appear greater than they are.
 
-    # The two options to deal with this are to disable black on
+    # The two options to deal with this are to disable precommit on
     # the generated classes (like with grpc proto files) or apply
-    # black formatting as part of the generation process, as here.
+    # formatting as part of the generation process, as here.
 
     # The rationale for adopting this approach is that these files
     # are more likely to be read as part of the source than are
