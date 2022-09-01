@@ -25,9 +25,12 @@ dm_raw_metadata module in tests/ and is written as a number of
 "flat" modules in the generated_data/ directory, or to a single
 generated_testing_datamodel.py in the same directory if -n is used.
 
+The -d argument pauses the script at an `input()` statement, to
+allow a debugger to be attached.
+
 Usage
 -----
-python <path to generate_datamodel.py> [-t] [-n]
+python <path to generate_datamodel.py> [-t] [-n] [-d]
 """
 
 from copy import deepcopy
@@ -637,15 +640,19 @@ if __name__ == "__main__":
             "may not be correct.\n*******************"
         )
 
-    input("continue...")
     dirname = os.path.dirname(__file__)
     use_test_data = False
     generate_flat_classes = True
+    wait_for_debug = False
     if len(sys.argv) > 1:
-        use_test_data = "-t" in sys.argv[1:]
-        if "-n" in sys.argv[1:]:
-            # nested classes required
-            generate_flat_classes = False
+        args = sys.argv[1:]
+        use_test_data = "-t" in args
+        # nested classes required?
+        generate_flat_classes = "-n" not in args
+        wait_for_debug = "-d" in args
+
+    if wait_for_debug:
+        input("continue...")
 
     if use_test_data:
         _generate_test_classes(dirname, generate_flat_classes)
