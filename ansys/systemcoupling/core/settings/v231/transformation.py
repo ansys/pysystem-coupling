@@ -9,7 +9,8 @@ from .transformation_child import transformation_child
 
 class transformation(NamedObject[transformation_child]):
     """
-    Use Transformation objects to apply transformations to coupling interfaces sides to control the positioning of the geometry.
+    Use to apply transformations to coupling interface sides to control
+    positioning of the geometry.
     """
 
     syc_name = "Transformation"

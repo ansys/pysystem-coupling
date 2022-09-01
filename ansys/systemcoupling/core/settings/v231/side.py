@@ -9,7 +9,7 @@ from .side_child import side_child
 
 class side(NamedObject[side_child]):
     """
-    Side of the coupling interface.
+    Configure one side of a coupling interface.
     """
 
     syc_name = "Side"

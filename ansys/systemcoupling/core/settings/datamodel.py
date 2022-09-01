@@ -819,8 +819,8 @@ def _get_cls(name, info, parent):
         cls.property_names_types = []
         for prname in prop_keys:
             sycname = prname
-            prname = to_python_name(prname)
             prinfo = parameters[sycname]
+            prname = prinfo.get("py_sycname") or to_python_name(prname)
             prtype = _get_param_type(prname, prinfo)
             docstr_default = f"'{prname}' property of '{parent.__name__}' object"
             docstr = prinfo.get("help", docstr_default)

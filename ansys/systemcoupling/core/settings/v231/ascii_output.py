@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class ascii_output(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Output interface data as ASCII.
     """
 
     syc_name = "AsciiOutput"
@@ -19,7 +19,13 @@ class ascii_output(Group):
 
     @property
     def option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Control ASCII interface data output.
+
+        Allowed values:
+
+        - \"Off\"
+        - \"EveryStep\" (for step-based analyses)
+        - \"EveryIteration\" (for iteration-based analyses)"""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +34,12 @@ class ascii_output(Group):
 
     @property
     def format(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """ASCII output format type.
+
+        Allowed values:
+
+        - \"Axdt\"
+        - \"Csv\" """
         return self.get_property_state("format")
 
     @format.setter

@@ -9,10 +9,7 @@ from .expression_function_child import expression_function_child
 
 class expression_function(NamedObject[expression_function_child]):
     """
-    Use ExpressionFunction objects to make the return value(s) from external
-    Python functions available for use in expressions. For example, an
-    external Python function that parses simulation output and returns
-    a real value could be used to adaptively set the time step size.
+    Makes an external Python function accessible from expressions.
     """
 
     syc_name = "ExpressionFunction"

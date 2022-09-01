@@ -9,7 +9,7 @@ from .data_transfer_child import data_transfer_child
 
 class data_transfer(NamedObject[data_transfer_child]):
     """
-    Set data transfer details.
+    Configure data transfers for a coupling interface.
     """
 
     syc_name = "DataTransfer"

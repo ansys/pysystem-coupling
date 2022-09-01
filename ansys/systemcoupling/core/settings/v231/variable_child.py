@@ -9,7 +9,7 @@ from .attribute import attribute
 
 class variable_child(Group):
     """
-    Define the variable's settings.
+    Configure a variable for the coupling participant.
     """
 
     syc_name = "child_object_type"
@@ -40,7 +40,19 @@ class variable_child(Group):
 
     @property
     def quantity_type(self) -> String:
-        """Quantity type of the variable being transferred."""
+        """Quantity type of the variable.
+
+        Allowed values:
+
+        - \"Unspecified\"
+        - \"Force\"
+        - \"Incrementatal Displacement\"
+        - \"Temperature\"
+        - \"Heat Rate\"
+        - \"Heat Transfer Coefficient\"
+        - \"Convection Reference Temperature\"
+        - \"Mode Shape\"
+        - \"Electrical Conductivity\" """
         return self.get_property_state("quantity_type")
 
     @quantity_type.setter
@@ -49,7 +61,7 @@ class variable_child(Group):
 
     @property
     def location(self) -> String:
-        """Location of the variable being transferred."""
+        """Data location of the variable (\"Node\" or \"Element\")."""
         return self.get_property_state("location")
 
     @location.setter
@@ -76,7 +88,20 @@ class variable_child(Group):
 
     @property
     def data_type(self) -> String:
-        """Variable's data type as reported by the participant."""
+        """Variable's data type as reported by the participant.
+
+        Allowed values (non-FMU case):
+
+        - Real
+        - Complex
+
+        Allowed values (FMU):
+
+        - Real
+        - Integer
+        - Logical
+        - String
+        - None"""
         return self.get_property_state("data_type")
 
     @data_type.setter
@@ -85,7 +110,7 @@ class variable_child(Group):
 
     @property
     def real_initial_value(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Real data start value."""
         return self.get_property_state("real_initial_value")
 
     @real_initial_value.setter
@@ -94,7 +119,7 @@ class variable_child(Group):
 
     @property
     def integer_initial_value(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Integer data start value."""
         return self.get_property_state("integer_initial_value")
 
     @integer_initial_value.setter
@@ -103,7 +128,7 @@ class variable_child(Group):
 
     @property
     def logical_initial_value(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Logical data start value."""
         return self.get_property_state("logical_initial_value")
 
     @logical_initial_value.setter
@@ -112,7 +137,7 @@ class variable_child(Group):
 
     @property
     def string_initial_value(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """String data start value."""
         return self.get_property_state("string_initial_value")
 
     @string_initial_value.setter
@@ -121,7 +146,7 @@ class variable_child(Group):
 
     @property
     def real_min(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Real data minimum value."""
         return self.get_property_state("real_min")
 
     @real_min.setter
@@ -130,7 +155,7 @@ class variable_child(Group):
 
     @property
     def real_max(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Real data maximum value."""
         return self.get_property_state("real_max")
 
     @real_max.setter
@@ -139,7 +164,7 @@ class variable_child(Group):
 
     @property
     def integer_min(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Integer data minimum value."""
         return self.get_property_state("integer_min")
 
     @integer_min.setter
@@ -148,7 +173,7 @@ class variable_child(Group):
 
     @property
     def integer_max(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Integer data maximum value."""
         return self.get_property_state("integer_max")
 
     @integer_max.setter
@@ -157,7 +182,9 @@ class variable_child(Group):
 
     @property
     def tensor_type(self) -> String:
-        """Tensor type of the variable being transferred."""
+        """Indicates the variable tensor type (\"Scalar\" or \"Vector\").
+
+        \"Vector\" is not supported for the FMU case."""
         return self.get_property_state("tensor_type")
 
     @tensor_type.setter
@@ -166,7 +193,7 @@ class variable_child(Group):
 
     @property
     def is_extensive(self) -> Boolean:
-        """Whether the variable is extensive. (A property is extensive if its value depends on the size of the system.)"""
+        """Indicates whether this is an extensive property."""
         return self.get_property_state("is_extensive")
 
     @is_extensive.setter

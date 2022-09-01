@@ -9,7 +9,7 @@ from .stabilization import stabilization
 
 class data_transfer_child(Group):
     """
-    Set data transfer details.
+    Configure data transfers for a coupling interface.
     """
 
     syc_name = "child_object_type"
@@ -38,7 +38,7 @@ class data_transfer_child(Group):
 
     @property
     def display_name(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Display name of the data transfer."""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -47,7 +47,7 @@ class data_transfer_child(Group):
 
     @property
     def suppress(self) -> Boolean:
-        """Whether the data transfer is suppressed."""
+        """Controls whether this data transfer is suppressed"""
         return self.get_property_state("suppress")
 
     @suppress.setter
@@ -56,7 +56,7 @@ class data_transfer_child(Group):
 
     @property
     def target_side(self) -> String:
-        """Side of the coupling interface to receive the data transfer."""
+        """Target side (\"One\" or \"Two\") of this data transfer."""
         return self.get_property_state("target_side")
 
     @target_side.setter
@@ -65,7 +65,15 @@ class data_transfer_child(Group):
 
     @property
     def option(self) -> String:
-        """Method used to set the value of the data transfer's source variable."""
+        """How the transfer data is specified.
+
+        Allowed values:
+
+        - \"UsingVariable\" - The data being transferred is defined as a
+          single source-side variable.
+
+        - \"UsingExpression\" - The data being transferred is defined as
+          an expression in terms of source-side variables."""
         return self.get_property_state("option")
 
     @option.setter
@@ -74,7 +82,9 @@ class data_transfer_child(Group):
 
     @property
     def source_variable(self) -> String:
-        """Available when DataTransfer.Option is set to UsingVariable."""
+        """Variable associated with the source side of the interface.
+
+        Specified only for variable-based transfers (and not expression-based)."""
         return self.get_property_state("source_variable")
 
     @source_variable.setter
@@ -92,7 +102,12 @@ class data_transfer_child(Group):
 
     @property
     def value(self) -> Real:
-        """Available when DataTransfer.Option is set to UsingExpression and DataTransfer.TargetVariable has a scalar value."""
+        """Expression string (or constant real value) defining the data being
+        transferred from the source.
+
+        Specified only for expression-based transfers.
+
+        Any variable referenced must be a source side variable."""
         return self.get_property_state("value")
 
     @value.setter
@@ -101,7 +116,16 @@ class data_transfer_child(Group):
 
     @property
     def ramping_option(self) -> String:
-        """Whether the ramping algorithm is applied to specified quantity."""
+        """Specify whether to apply ramping to the data transfer.
+
+        Ramping is used to slow the application of the source-side value on the
+        target side of the interface.
+
+        Allowed values:
+
+        - \"None\" - No ramping to be applied.
+
+        - \"Linear\" - Apply linear ramping."""
         return self.get_property_state("ramping_option")
 
     @ramping_option.setter
@@ -110,7 +134,8 @@ class data_transfer_child(Group):
 
     @property
     def relaxation_factor(self) -> Real:
-        """Factor multiplying the current data transfer values for specified quantity when under-relaxing them against the previous values."""
+        """Factor multiplying the current data transfer values for specified quantity when
+        under-relaxing them against the previous values."""
         return self.get_property_state("relaxation_factor")
 
     @relaxation_factor.setter
@@ -119,7 +144,8 @@ class data_transfer_child(Group):
 
     @property
     def convergence_target(self) -> Real:
-        """RMS-based target value used when evaluating convergence of the specified quantity within a coupling iteration."""
+        """RMS-based target value used when evaluating convergence of the specified
+        quantity within a coupling iteration."""
         return self.get_property_state("convergence_target")
 
     @convergence_target.setter
@@ -128,7 +154,14 @@ class data_transfer_child(Group):
 
     @property
     def mapping_type(self) -> String:
-        """Type of mapping used for the data transfer. Read only."""
+        """Type of mapping used for the data transfer. (**Read only**.)
+
+        Possible values:
+
+        - \"Conservative\" - A conservative mapping algorithm is used
+          for transfers of `extensive` quantities.
+        - \"ProfilePreserving\" - A profile-preserving mapping algorithm
+          is used for transfers of `intensive` quantities."""
         return self.get_property_state("mapping_type")
 
     @mapping_type.setter
@@ -137,7 +170,7 @@ class data_transfer_child(Group):
 
     @property
     def unmapped_value_option(self) -> String:
-        """Available when profile-preserving mapping is used to transfer data onto a target surface in one of System Coupling's user interfaces."""
+        """Option to fill target values not mapped by the regular mapping algorithm"""
         return self.get_property_state("unmapped_value_option")
 
     @unmapped_value_option.setter
@@ -146,7 +179,7 @@ class data_transfer_child(Group):
 
     @property
     def time_step_initialization_option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Method to initialize first transfer in new coupling step."""
         return self.get_property_state("time_step_initialization_option")
 
     @time_step_initialization_option.setter

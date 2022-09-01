@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class available_ports(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Specify ports available for co-simulation.
     """
 
     syc_name = "AvailablePorts"
@@ -19,7 +19,12 @@ class available_ports(Group):
 
     @property
     def option(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Specify how available ports are determined.
+
+        - \"ProgramControlled\" - System Coupling will find an
+          available port.
+        - \"UserDefined\" - An available port will be chosen,
+          if possible, from a specified range."""
         return self.get_property_state("option")
 
     @option.setter
@@ -28,7 +33,9 @@ class available_ports(Group):
 
     @property
     def range(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Port range expressed as a comma-separated list of integers and/or
+        integer ranges. An integer range is a pair of integers separated
+        with a "-" character, specify an inclusive range of port numbers."""
         return self.get_property_state("range")
 
     @range.setter

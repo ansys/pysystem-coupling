@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class fmu_parameter_child(Group):
     """
-    **CURRENTLY NOT DOCUMENTED**
+    Configure a parameter for an FMU coupling participant.
     """
 
     syc_name = "child_object_type"
@@ -28,7 +28,7 @@ class fmu_parameter_child(Group):
 
     @property
     def data_type(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """UNDOCUMENTED"""
         return self.get_property_state("data_type")
 
     @data_type.setter
@@ -37,7 +37,7 @@ class fmu_parameter_child(Group):
 
     @property
     def participant_display_name(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Parameter's display name as defined by the participant solver."""
         return self.get_property_state("participant_display_name")
 
     @participant_display_name.setter
@@ -46,7 +46,7 @@ class fmu_parameter_child(Group):
 
     @property
     def display_name(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Parameter's display name as defined in System Coupling."""
         return self.get_property_state("display_name")
 
     @display_name.setter
@@ -55,7 +55,7 @@ class fmu_parameter_child(Group):
 
     @property
     def real_value(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Real data start value."""
         return self.get_property_state("real_value")
 
     @real_value.setter
@@ -64,7 +64,7 @@ class fmu_parameter_child(Group):
 
     @property
     def real_min(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Real data minimum value."""
         return self.get_property_state("real_min")
 
     @real_min.setter
@@ -73,7 +73,7 @@ class fmu_parameter_child(Group):
 
     @property
     def real_max(self) -> Real:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Real data maximum value."""
         return self.get_property_state("real_max")
 
     @real_max.setter
@@ -82,7 +82,7 @@ class fmu_parameter_child(Group):
 
     @property
     def integer_value(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Integer data start value."""
         return self.get_property_state("integer_value")
 
     @integer_value.setter
@@ -91,7 +91,7 @@ class fmu_parameter_child(Group):
 
     @property
     def integer_min(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Integer data minimum value."""
         return self.get_property_state("integer_min")
 
     @integer_min.setter
@@ -100,7 +100,7 @@ class fmu_parameter_child(Group):
 
     @property
     def integer_max(self) -> Integer:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Integer data maximum value."""
         return self.get_property_state("integer_max")
 
     @integer_max.setter
@@ -109,7 +109,7 @@ class fmu_parameter_child(Group):
 
     @property
     def logical_value(self) -> Boolean:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """Logical data start value."""
         return self.get_property_state("logical_value")
 
     @logical_value.setter
@@ -118,7 +118,7 @@ class fmu_parameter_child(Group):
 
     @property
     def string_value(self) -> String:
-        """**CURRENTLY NOT DOCUMENTED**"""
+        """String data start value."""
         return self.get_property_state("string_value")
 
     @string_value.setter

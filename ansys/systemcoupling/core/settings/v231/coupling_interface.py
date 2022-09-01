@@ -9,7 +9,7 @@ from .coupling_interface_child import coupling_interface_child
 
 class coupling_interface(NamedObject[coupling_interface_child]):
     """
-    Configure details for the coupling interface and its data transfers.
+    Configure a coupling interface.
     """
 
     syc_name = "CouplingInterface"

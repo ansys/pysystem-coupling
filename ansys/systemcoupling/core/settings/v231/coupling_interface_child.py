@@ -11,7 +11,7 @@ from .side import side
 
 class coupling_interface_child(Group):
     """
-    Configure details for the coupling interface and its data transfers.
+    Configure a coupling interface.
     """
 
     syc_name = "child_object_type"
@@ -34,7 +34,7 @@ class coupling_interface_child(Group):
 
     @property
     def display_name(self) -> String:
-        """Coupling interface name to be displayed in user-facing communications."""
+        """Set the display name of an object."""
         return self.get_property_state("display_name")
 
     @display_name.setter

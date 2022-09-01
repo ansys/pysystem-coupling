@@ -11,26 +11,26 @@ metadata on which the generated module is based. Therefore this script
 must be run in an environment in which PySystemCoupling is installed
 and which is able to run a System Coupling server.
 
-The default mode of this script is to generate classes in the
-original nested form. The -c option can be used to generate
-the "flattened" form (where each datamodel/command object has its
-own module).
+The default mode of this script is to generate classes in flattened
+form but the original nested form is still available as an option.
+In the flattened form, each datamodel/command object has its own
+module. The -n option can be used to generate the nested form.
 
-TODO: The flattened form is the standard form now and the script
-      should be simplified so that it only runs in this mode.
+TODO: Once we are confident about sticking with flattened form,
+simplify the script so that this all we support.
 
 This script may also be run in a mode that generates testing data.
 In this case run with the -t argument. Input is taken from the
-dm_raw_metadata module in tests/ and is written to
-generated_testing_datamodel.py in the same directory, or as
-a number of "flat" modules in the generated_data/ directory if
--c is used.
+dm_raw_metadata module in tests/ and is written as a number of
+"flat" modules in the generated_data/ directory, or to a single
+generated_testing_datamodel.py in the same directory if -n is used.
 
-
+The -d argument pauses the script at an `input()` statement, to
+allow a debugger to be attached.
 
 Usage
 -----
-python <path to generate_datamodel.py> [-t] [-c]
+python <path to generate_datamodel.py> [-t] [-n] [-d]
 """
 
 from copy import deepcopy
@@ -41,6 +41,7 @@ import sys
 from typing import IO
 
 import black
+import isort
 
 # Allows us to run pysystemcoupling from source without setting PYTHONPATH
 _dirname = os.path.dirname(__file__)
@@ -371,7 +372,7 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
             content = out.getvalue()
 
-        content = _black_format_content(content, file_name + ".py")
+        content = _format_content(content, file_name + ".py")
         filepath = os.path.normpath(os.path.join(parent_dir, file_name + ".py"))
         with open(filepath, "w") as f:
             f.write(content)
@@ -491,24 +492,29 @@ def write_classes_to_file(
         write_settings_classes(out, cls, obj_info)
         content = out.getvalue()
 
-    # Experimental: run black on generated classes
+    content = _format_content(content, filepath)
+    with open(filepath, "w") as f:
+        f.write(content)
+    print(f"Finished generating {filepath}")
 
-    # Prior to this change, every time the files were regenerated
-    # the previous black changes applied on commit were lost so
-    # the differences appeared greater than they were.
-    # The two options to deal with this are to disable black on
-    # the generated classes (like on the proto files) or apply
-    # black formatting as part of the generation process, as here.
+
+def _format_content(content, filename):
+    # If we did not do this, every time the files are regenerated
+    # the previous pre-commit changes would be lost so
+    # the differences would appear greater than they are.
+
+    # The two options to deal with this are to disable precommit on
+    # the generated classes (like with grpc proto files) or apply
+    # formatting as part of the generation process, as here.
 
     # The rationale for adopting this approach is that these files
     # are more likely to be read as part of the source than are
     # proto files so there is some value in ensuring consistent
     # formatting.
 
-    content = _black_format_content(content, filepath)
-    with open(filepath, "w") as f:
-        f.write(content)
-    print(f"Finished generating {filepath}")
+    content = _black_format_content(content, filename)
+    content = _isort_content(content, filename)
+    return content
 
 
 def _black_format_content(content, filename):
@@ -521,6 +527,22 @@ def _black_format_content(content, filename):
         )
     except Exception as e:
         LOG.warning(f"black formatting failed on {filename}.\nException: {e}")
+    finally:
+        LOG.set_level(old_level)
+    return content
+
+
+def _isort_content(content, filename):
+    # skip __init__.py to be consistent with precommit
+    if filename == "__init__.py":
+        return
+
+    old_level = LOG.current_level
+    LOG.set_level("WARNING")
+    try:
+        content = isort.code(content, profile="black", force_sort_within_sections=True)
+    except Exception as e:
+        LOG.warning(f"isort formatting failed on {filename}.\nException: {e}")
     finally:
         LOG.set_level(old_level)
     return content
@@ -618,13 +640,19 @@ if __name__ == "__main__":
             "may not be correct.\n*******************"
         )
 
-    input("continue...")
     dirname = os.path.dirname(__file__)
     use_test_data = False
-    generate_flat_classes = False
+    generate_flat_classes = True
+    wait_for_debug = False
     if len(sys.argv) > 1:
-        use_test_data = "-t" in sys.argv[1:]
-        generate_flat_classes = "-c" in sys.argv[1:]
+        args = sys.argv[1:]
+        use_test_data = "-t" in args
+        # nested classes required?
+        generate_flat_classes = "-n" not in args
+        wait_for_debug = "-d" in args
+
+    if wait_for_debug:
+        input("continue...")
 
     if use_test_data:
         _generate_test_classes(dirname, generate_flat_classes)

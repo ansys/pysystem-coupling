@@ -9,7 +9,7 @@ from .reference_frame_child import reference_frame_child
 
 class reference_frame(NamedObject[reference_frame_child]):
     """
-    Use ReferenceFrame objects to create transformations from the global (analysis-level) reference, which can then be defined for coupling interface sides.
+    Provide a transformation relative to a ParentReferenceFrame.
     """
 
     syc_name = "ReferenceFrame"

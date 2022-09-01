@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class side_child(Group):
     """
-    Side of the coupling interface.
+    Configure one side of a coupling interface.
     """
 
     syc_name = "child_object_type"
@@ -21,7 +21,7 @@ class side_child(Group):
 
     @property
     def coupling_participant(self) -> String:
-        """Object name assigned and used by System Coupling to identify the participant associated with the interface side."""
+        """Name of the participant on this interface side."""
         return self.get_property_state("coupling_participant")
 
     @coupling_participant.setter
@@ -30,7 +30,7 @@ class side_child(Group):
 
     @property
     def region_list(self) -> StringList:
-        """Collection of regions on the interface side that can send or receive data. Required for the creation of data transfers."""
+        """List of participant regions involved in this interface side."""
         return self.get_property_state("region_list")
 
     @region_list.setter
@@ -39,7 +39,7 @@ class side_child(Group):
 
     @property
     def reference_frame(self) -> String:
-        """Global reference frame to be used for transformations of the interface side."""
+        """Reference frame of this side."""
         return self.get_property_state("reference_frame")
 
     @reference_frame.setter
@@ -48,7 +48,7 @@ class side_child(Group):
 
     @property
     def instancing(self) -> String:
-        """Instancing object defined for the interface side."""
+        """Instancing name for this side (leave unset if not required)."""
         return self.get_property_state("instancing")
 
     @instancing.setter

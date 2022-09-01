@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-SHASH = "f9c25a75759f590bb260107761b994e2a4c7c7ff2fe1d9044ef795424e7f7227"
+SHASH = "d79689da1e81c63ff27cb59eebd2ec8b674b293167da91edd78fba1eb8ef2824"
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
@@ -24,11 +24,13 @@ from .generate_input_file import generate_input_file
 from .get_errors import get_errors
 from .get_execution_command import get_execution_command
 from .get_region_names_for_participant import get_region_names_for_participant
+from .has_input_file_changed import has_input_file_changed
 from .import_system_coupling_input_file import import_system_coupling_input_file
 from .library import library
 from .output_control import output_control
 from .reload_expression_function_modules import reload_expression_function_modules
 from .solution_control import solution_control
+from .update_participant import update_participant
 
 
 class setup_root(Group):
@@ -85,14 +87,16 @@ class setup_root(Group):
         "add_reference_frame",
         "add_transformation",
         "delete_transformation",
+        "add_participant",
+        "update_participant",
         "get_execution_command",
         "generate_input_file",
-        "add_participant",
         "import_system_coupling_input_file",
         "get_errors",
         "add_named_expression",
         "add_expression_function",
         "reload_expression_function_modules",
+        "has_input_file_changed",
     ]
 
     add_interface: add_interface = add_interface
@@ -133,6 +137,14 @@ class setup_root(Group):
     """
     delete_transformation command of setup_root.
     """
+    add_participant: add_participant = add_participant
+    """
+    add_participant command of setup_root.
+    """
+    update_participant: update_participant = update_participant
+    """
+    update_participant command of setup_root.
+    """
     get_execution_command: get_execution_command = get_execution_command
     """
     get_execution_command command of setup_root.
@@ -140,10 +152,6 @@ class setup_root(Group):
     generate_input_file: generate_input_file = generate_input_file
     """
     generate_input_file command of setup_root.
-    """
-    add_participant: add_participant = add_participant
-    """
-    add_participant command of setup_root.
     """
     import_system_coupling_input_file: import_system_coupling_input_file = (
         import_system_coupling_input_file
@@ -168,4 +176,8 @@ class setup_root(Group):
     )
     """
     reload_expression_function_modules command of setup_root.
+    """
+    has_input_file_changed: has_input_file_changed = has_input_file_changed
+    """
+    has_input_file_changed command of setup_root.
     """

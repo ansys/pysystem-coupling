@@ -7,10 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class expression_function_child(Group):
     """
-    Use ExpressionFunction objects to make the return value(s) from external
-    Python functions available for use in expressions. For example, an
-    external Python function that parses simulation output and returns
-    a real value could be used to adaptively set the time step size.
+    Makes an external Python function accessible from expressions.
     """
 
     syc_name = "child_object_type"
@@ -23,7 +20,7 @@ class expression_function_child(Group):
 
     @property
     def module(self) -> String:
-        """Python module containing the definition of the Function to be added to the coupled analysis."""
+        """Name of the Python module that exports the function."""
         return self.get_property_state("module")
 
     @module.setter
@@ -32,7 +29,7 @@ class expression_function_child(Group):
 
     @property
     def function(self) -> String:
-        """Python name of the function to be added to the coupled analysis."""
+        """Name of the function in the module."""
         return self.get_property_state("function")
 
     @function.setter
@@ -41,7 +38,7 @@ class expression_function_child(Group):
 
     @property
     def function_name(self) -> String:
-        """Name to be referenced when using the function in an expression."""
+        """Name to use when referencing the function in an expression."""
         return self.get_property_state("function_name")
 
     @function_name.setter

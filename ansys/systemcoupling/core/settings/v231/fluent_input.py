@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class fluent_input(Group):
     """
-    Available for Fluent participants when ExecutionControl.Option is set to ProgramControlled or UserDefined.
+    Fluent input.
     """
 
     syc_name = "FluentInput"
@@ -21,7 +21,18 @@ class fluent_input(Group):
 
     @property
     def option(self) -> String:
-        """Type of solver input file(s) to be used for the Fluent run."""
+        """Type of solver input file(s) to be used for the Fluent run.
+
+        Allowed values:
+
+        - \"InitialCaseFile\" - (Default) A case file will be defined as a
+          solver input for the coupled analysis run.
+
+        - \"InitialCaseAndDataFile\" - A Fluent case file and data file
+          will be defined as solver inputs for the coupled analysis run.
+
+        - \"JournalFile\" - A journal file will be defined as the solver
+          input for the coupled analysis run."""
         return self.get_property_state("option")
 
     @option.setter
@@ -30,7 +41,7 @@ class fluent_input(Group):
 
     @property
     def case_file(self) -> String:
-        """Available when FluentInput | Option is set to InitialCaseFile.."""
+        """Set Fluent initial case file."""
         return self.get_property_state("case_file")
 
     @case_file.setter
@@ -39,7 +50,7 @@ class fluent_input(Group):
 
     @property
     def data_file(self) -> String:
-        """Available for Fluent participants when FluentInput | Option is set to InitialCaseAndDataFile."""
+        """Set Fluent initial data file."""
         return self.get_property_state("data_file")
 
     @data_file.setter
@@ -48,7 +59,7 @@ class fluent_input(Group):
 
     @property
     def journal_file(self) -> String:
-        """Available for Fluent participants when FluentInput | Option is set to JournalFile."""
+        """Set Fluent journal file."""
         return self.get_property_state("journal_file")
 
     @journal_file.setter

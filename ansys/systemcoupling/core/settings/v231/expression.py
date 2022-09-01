@@ -9,7 +9,7 @@ from .expression_child import expression_child
 
 class expression(NamedObject[expression_child]):
     """
-    Use Expression objects to define other expressions.
+    Define a named expression that can be referenced in other expressions.
     """
 
     syc_name = "Expression"
