@@ -15,17 +15,17 @@ class SolutionStub(object):
             channel: A grpc.Channel.
         """
         self.Solve = channel.unary_unary(
-                '/syc.Solution/Solve',
+                '/ansys.api.systemcoupling.v0.Solution/Solve',
                 request_serializer=solution__pb2.SolveRequest.SerializeToString,
                 response_deserializer=solution__pb2.SolveResponse.FromString,
                 )
         self.Interrupt = channel.unary_unary(
-                '/syc.Solution/Interrupt',
+                '/ansys.api.systemcoupling.v0.Solution/Interrupt',
                 request_serializer=solution__pb2.InterruptRequest.SerializeToString,
                 response_deserializer=solution__pb2.InterruptResponse.FromString,
                 )
         self.Abort = channel.unary_unary(
-                '/syc.Solution/Abort',
+                '/ansys.api.systemcoupling.v0.Solution/Abort',
                 request_serializer=solution__pb2.AbortRequest.SerializeToString,
                 response_deserializer=solution__pb2.AbortResponse.FromString,
                 )
@@ -72,7 +72,7 @@ def add_SolutionServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'syc.Solution', rpc_method_handlers)
+            'ansys.api.systemcoupling.v0.Solution', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -90,7 +90,7 @@ class Solution(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/syc.Solution/Solve',
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Solution/Solve',
             solution__pb2.SolveRequest.SerializeToString,
             solution__pb2.SolveResponse.FromString,
             options, channel_credentials,
@@ -106,7 +106,7 @@ class Solution(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/syc.Solution/Interrupt',
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Solution/Interrupt',
             solution__pb2.InterruptRequest.SerializeToString,
             solution__pb2.InterruptResponse.FromString,
             options, channel_credentials,
@@ -122,7 +122,7 @@ class Solution(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/syc.Solution/Abort',
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Solution/Abort',
             solution__pb2.AbortRequest.SerializeToString,
             solution__pb2.AbortResponse.FromString,
             options, channel_credentials,

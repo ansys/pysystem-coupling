@@ -15,7 +15,7 @@ class CommandStub(object):
             channel: A grpc.Channel.
         """
         self.InvokeCommand = channel.unary_unary(
-                '/syc.Command/InvokeCommand',
+                '/ansys.api.systemcoupling.v0.Command/InvokeCommand',
                 request_serializer=command__pb2.CommandRequest.SerializeToString,
                 response_deserializer=command__pb2.CommandResponse.FromString,
                 )
@@ -40,7 +40,7 @@ def add_CommandServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'syc.Command', rpc_method_handlers)
+            'ansys.api.systemcoupling.v0.Command', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -58,7 +58,7 @@ class Command(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/syc.Command/InvokeCommand',
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Command/InvokeCommand',
             command__pb2.CommandRequest.SerializeToString,
             command__pb2.CommandResponse.FromString,
             options, channel_credentials,

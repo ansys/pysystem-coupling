@@ -15,7 +15,7 @@ class OutputStreamStub(object):
             channel: A grpc.Channel.
         """
         self.BeginStdStreaming = channel.unary_stream(
-                '/syc.OutputStream/BeginStdStreaming',
+                '/ansys.api.systemcoupling.v0.OutputStream/BeginStdStreaming',
                 request_serializer=output__stream__pb2.StdStreamRequest.SerializeToString,
                 response_deserializer=output__stream__pb2.StdStreamResponse.FromString,
                 )
@@ -40,7 +40,7 @@ def add_OutputStreamServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'syc.OutputStream', rpc_method_handlers)
+            'ansys.api.systemcoupling.v0.OutputStream', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -58,7 +58,7 @@ class OutputStream(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_stream(request, target, '/syc.OutputStream/BeginStdStreaming',
+        return grpc.experimental.unary_stream(request, target, '/ansys.api.systemcoupling.v0.OutputStream/BeginStdStreaming',
             output__stream__pb2.StdStreamRequest.SerializeToString,
             output__stream__pb2.StdStreamResponse.FromString,
             options, channel_credentials,

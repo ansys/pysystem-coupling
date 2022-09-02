@@ -15,11 +15,11 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='process.proto',
-  package='syc',
+  package='ansys.api.systemcoupling.v0',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rprocess.proto\x12\x03syc\"\r\n\x0bPingRequest\"\x0e\n\x0cPingResponse\"\r\n\x0bQuitRequest\"\x0e\n\x0cQuitResponse2g\n\x07Process\x12-\n\x04Ping\x12\x10.syc.PingRequest\x1a\x11.syc.PingResponse\"\x00\x12-\n\x04Quit\x12\x10.syc.QuitRequest\x1a\x11.syc.QuitResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\rprocess.proto\x12\x1b\x61nsys.api.systemcoupling.v0\"\r\n\x0bPingRequest\"\x0e\n\x0cPingResponse\"\r\n\x0bQuitRequest\"\x0e\n\x0cQuitResponse2\xc7\x01\n\x07Process\x12]\n\x04Ping\x12(.ansys.api.systemcoupling.v0.PingRequest\x1a).ansys.api.systemcoupling.v0.PingResponse\"\x00\x12]\n\x04Quit\x12(.ansys.api.systemcoupling.v0.QuitRequest\x1a).ansys.api.systemcoupling.v0.QuitResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -27,7 +27,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _PINGREQUEST = _descriptor.Descriptor(
   name='PingRequest',
-  full_name='syc.PingRequest',
+  full_name='ansys.api.systemcoupling.v0.PingRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -45,14 +45,14 @@ _PINGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=22,
-  serialized_end=35,
+  serialized_start=46,
+  serialized_end=59,
 )
 
 
 _PINGRESPONSE = _descriptor.Descriptor(
   name='PingResponse',
-  full_name='syc.PingResponse',
+  full_name='ansys.api.systemcoupling.v0.PingResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -70,14 +70,14 @@ _PINGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=37,
-  serialized_end=51,
+  serialized_start=61,
+  serialized_end=75,
 )
 
 
 _QUITREQUEST = _descriptor.Descriptor(
   name='QuitRequest',
-  full_name='syc.QuitRequest',
+  full_name='ansys.api.systemcoupling.v0.QuitRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -95,14 +95,14 @@ _QUITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=53,
-  serialized_end=66,
+  serialized_start=77,
+  serialized_end=90,
 )
 
 
 _QUITRESPONSE = _descriptor.Descriptor(
   name='QuitResponse',
-  full_name='syc.QuitResponse',
+  full_name='ansys.api.systemcoupling.v0.QuitResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -120,8 +120,8 @@ _QUITRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=68,
-  serialized_end=82,
+  serialized_start=92,
+  serialized_end=106,
 )
 
 DESCRIPTOR.message_types_by_name['PingRequest'] = _PINGREQUEST
@@ -133,28 +133,28 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 PingRequest = _reflection.GeneratedProtocolMessageType('PingRequest', (_message.Message,), {
   'DESCRIPTOR' : _PINGREQUEST,
   '__module__' : 'process_pb2'
-  # @@protoc_insertion_point(class_scope:syc.PingRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.PingRequest)
   })
 _sym_db.RegisterMessage(PingRequest)
 
 PingResponse = _reflection.GeneratedProtocolMessageType('PingResponse', (_message.Message,), {
   'DESCRIPTOR' : _PINGRESPONSE,
   '__module__' : 'process_pb2'
-  # @@protoc_insertion_point(class_scope:syc.PingResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.PingResponse)
   })
 _sym_db.RegisterMessage(PingResponse)
 
 QuitRequest = _reflection.GeneratedProtocolMessageType('QuitRequest', (_message.Message,), {
   'DESCRIPTOR' : _QUITREQUEST,
   '__module__' : 'process_pb2'
-  # @@protoc_insertion_point(class_scope:syc.QuitRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.QuitRequest)
   })
 _sym_db.RegisterMessage(QuitRequest)
 
 QuitResponse = _reflection.GeneratedProtocolMessageType('QuitResponse', (_message.Message,), {
   'DESCRIPTOR' : _QUITRESPONSE,
   '__module__' : 'process_pb2'
-  # @@protoc_insertion_point(class_scope:syc.QuitResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.QuitResponse)
   })
 _sym_db.RegisterMessage(QuitResponse)
 
@@ -162,17 +162,17 @@ _sym_db.RegisterMessage(QuitResponse)
 
 _PROCESS = _descriptor.ServiceDescriptor(
   name='Process',
-  full_name='syc.Process',
+  full_name='ansys.api.systemcoupling.v0.Process',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=84,
-  serialized_end=187,
+  serialized_start=109,
+  serialized_end=308,
   methods=[
   _descriptor.MethodDescriptor(
     name='Ping',
-    full_name='syc.Process.Ping',
+    full_name='ansys.api.systemcoupling.v0.Process.Ping',
     index=0,
     containing_service=None,
     input_type=_PINGREQUEST,
@@ -182,7 +182,7 @@ _PROCESS = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='Quit',
-    full_name='syc.Process.Quit',
+    full_name='ansys.api.systemcoupling.v0.Process.Quit',
     index=1,
     containing_service=None,
     input_type=_QUITREQUEST,

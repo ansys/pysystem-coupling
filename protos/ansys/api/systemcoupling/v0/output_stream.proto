@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package syc;
+package ansys.api.systemcoupling.v0;
 
 service OutputStream {
   rpc BeginStdStreaming(StdStreamRequest) returns (stream StdStreamResponse) {}

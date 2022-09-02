@@ -15,11 +15,11 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='solution.proto',
-  package='syc',
+  package='ansys.api.systemcoupling.v0',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0esolution.proto\x12\x03syc\"\x0e\n\x0cSolveRequest\"\x0f\n\rSolveResponse\"\"\n\x10InterruptRequest\x12\x0e\n\x06reason\x18\x01 \x01(\t\"\x13\n\x11InterruptResponse\"\x1e\n\x0c\x41\x62ortRequest\x12\x0e\n\x06reason\x18\x01 \x01(\t\"\x0f\n\rAbortResponse2\xac\x01\n\x08Solution\x12\x30\n\x05Solve\x12\x11.syc.SolveRequest\x1a\x12.syc.SolveResponse\"\x00\x12<\n\tInterrupt\x12\x15.syc.InterruptRequest\x1a\x16.syc.InterruptResponse\"\x00\x12\x30\n\x05\x41\x62ort\x12\x11.syc.AbortRequest\x1a\x12.syc.AbortResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x0esolution.proto\x12\x1b\x61nsys.api.systemcoupling.v0\"\x0e\n\x0cSolveRequest\"\x0f\n\rSolveResponse\"\"\n\x10InterruptRequest\x12\x0e\n\x06reason\x18\x01 \x01(\t\"\x13\n\x11InterruptResponse\"\x1e\n\x0c\x41\x62ortRequest\x12\x0e\n\x06reason\x18\x01 \x01(\t\"\x0f\n\rAbortResponse2\xbc\x02\n\x08Solution\x12`\n\x05Solve\x12).ansys.api.systemcoupling.v0.SolveRequest\x1a*.ansys.api.systemcoupling.v0.SolveResponse\"\x00\x12l\n\tInterrupt\x12-.ansys.api.systemcoupling.v0.InterruptRequest\x1a..ansys.api.systemcoupling.v0.InterruptResponse\"\x00\x12`\n\x05\x41\x62ort\x12).ansys.api.systemcoupling.v0.AbortRequest\x1a*.ansys.api.systemcoupling.v0.AbortResponse\"\x00\x62\x06proto3'
 )
 
 
@@ -27,7 +27,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _SOLVEREQUEST = _descriptor.Descriptor(
   name='SolveRequest',
-  full_name='syc.SolveRequest',
+  full_name='ansys.api.systemcoupling.v0.SolveRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -45,14 +45,14 @@ _SOLVEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=23,
-  serialized_end=37,
+  serialized_start=47,
+  serialized_end=61,
 )
 
 
 _SOLVERESPONSE = _descriptor.Descriptor(
   name='SolveResponse',
-  full_name='syc.SolveResponse',
+  full_name='ansys.api.systemcoupling.v0.SolveResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -70,21 +70,21 @@ _SOLVERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=39,
-  serialized_end=54,
+  serialized_start=63,
+  serialized_end=78,
 )
 
 
 _INTERRUPTREQUEST = _descriptor.Descriptor(
   name='InterruptRequest',
-  full_name='syc.InterruptRequest',
+  full_name='ansys.api.systemcoupling.v0.InterruptRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='reason', full_name='syc.InterruptRequest.reason', index=0,
+      name='reason', full_name='ansys.api.systemcoupling.v0.InterruptRequest.reason', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -102,14 +102,14 @@ _INTERRUPTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=56,
-  serialized_end=90,
+  serialized_start=80,
+  serialized_end=114,
 )
 
 
 _INTERRUPTRESPONSE = _descriptor.Descriptor(
   name='InterruptResponse',
-  full_name='syc.InterruptResponse',
+  full_name='ansys.api.systemcoupling.v0.InterruptResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -127,21 +127,21 @@ _INTERRUPTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=92,
-  serialized_end=111,
+  serialized_start=116,
+  serialized_end=135,
 )
 
 
 _ABORTREQUEST = _descriptor.Descriptor(
   name='AbortRequest',
-  full_name='syc.AbortRequest',
+  full_name='ansys.api.systemcoupling.v0.AbortRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='reason', full_name='syc.AbortRequest.reason', index=0,
+      name='reason', full_name='ansys.api.systemcoupling.v0.AbortRequest.reason', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -159,14 +159,14 @@ _ABORTREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=113,
-  serialized_end=143,
+  serialized_start=137,
+  serialized_end=167,
 )
 
 
 _ABORTRESPONSE = _descriptor.Descriptor(
   name='AbortResponse',
-  full_name='syc.AbortResponse',
+  full_name='ansys.api.systemcoupling.v0.AbortResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -184,8 +184,8 @@ _ABORTRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=145,
-  serialized_end=160,
+  serialized_start=169,
+  serialized_end=184,
 )
 
 DESCRIPTOR.message_types_by_name['SolveRequest'] = _SOLVEREQUEST
@@ -199,42 +199,42 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 SolveRequest = _reflection.GeneratedProtocolMessageType('SolveRequest', (_message.Message,), {
   'DESCRIPTOR' : _SOLVEREQUEST,
   '__module__' : 'solution_pb2'
-  # @@protoc_insertion_point(class_scope:syc.SolveRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.SolveRequest)
   })
 _sym_db.RegisterMessage(SolveRequest)
 
 SolveResponse = _reflection.GeneratedProtocolMessageType('SolveResponse', (_message.Message,), {
   'DESCRIPTOR' : _SOLVERESPONSE,
   '__module__' : 'solution_pb2'
-  # @@protoc_insertion_point(class_scope:syc.SolveResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.SolveResponse)
   })
 _sym_db.RegisterMessage(SolveResponse)
 
 InterruptRequest = _reflection.GeneratedProtocolMessageType('InterruptRequest', (_message.Message,), {
   'DESCRIPTOR' : _INTERRUPTREQUEST,
   '__module__' : 'solution_pb2'
-  # @@protoc_insertion_point(class_scope:syc.InterruptRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.InterruptRequest)
   })
 _sym_db.RegisterMessage(InterruptRequest)
 
 InterruptResponse = _reflection.GeneratedProtocolMessageType('InterruptResponse', (_message.Message,), {
   'DESCRIPTOR' : _INTERRUPTRESPONSE,
   '__module__' : 'solution_pb2'
-  # @@protoc_insertion_point(class_scope:syc.InterruptResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.InterruptResponse)
   })
 _sym_db.RegisterMessage(InterruptResponse)
 
 AbortRequest = _reflection.GeneratedProtocolMessageType('AbortRequest', (_message.Message,), {
   'DESCRIPTOR' : _ABORTREQUEST,
   '__module__' : 'solution_pb2'
-  # @@protoc_insertion_point(class_scope:syc.AbortRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.AbortRequest)
   })
 _sym_db.RegisterMessage(AbortRequest)
 
 AbortResponse = _reflection.GeneratedProtocolMessageType('AbortResponse', (_message.Message,), {
   'DESCRIPTOR' : _ABORTRESPONSE,
   '__module__' : 'solution_pb2'
-  # @@protoc_insertion_point(class_scope:syc.AbortResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.AbortResponse)
   })
 _sym_db.RegisterMessage(AbortResponse)
 
@@ -242,17 +242,17 @@ _sym_db.RegisterMessage(AbortResponse)
 
 _SOLUTION = _descriptor.ServiceDescriptor(
   name='Solution',
-  full_name='syc.Solution',
+  full_name='ansys.api.systemcoupling.v0.Solution',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=163,
-  serialized_end=335,
+  serialized_start=187,
+  serialized_end=503,
   methods=[
   _descriptor.MethodDescriptor(
     name='Solve',
-    full_name='syc.Solution.Solve',
+    full_name='ansys.api.systemcoupling.v0.Solution.Solve',
     index=0,
     containing_service=None,
     input_type=_SOLVEREQUEST,
@@ -262,7 +262,7 @@ _SOLUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='Interrupt',
-    full_name='syc.Solution.Interrupt',
+    full_name='ansys.api.systemcoupling.v0.Solution.Interrupt',
     index=1,
     containing_service=None,
     input_type=_INTERRUPTREQUEST,
@@ -272,7 +272,7 @@ _SOLUTION = _descriptor.ServiceDescriptor(
   ),
   _descriptor.MethodDescriptor(
     name='Abort',
-    full_name='syc.Solution.Abort',
+    full_name='ansys.api.systemcoupling.v0.Solution.Abort',
     index=2,
     containing_service=None,
     input_type=_ABORTREQUEST,
