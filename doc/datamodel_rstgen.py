@@ -201,7 +201,7 @@ def _populate_rst_from_settings(rst_dir, cls):
                 data_dict[ref_string] = child_cls.__doc__.strip("\n").split("\n")[0]
             _generate_table_for_rst(r, data_dict)
 
-        if has_arguments:
+        if False and has_arguments:
             r.write(f".. rubric:: Arguments\n\n")
             data_dict = {}
             data_dict["Argument"] = "Summary"
