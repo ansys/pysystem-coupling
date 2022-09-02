@@ -8,7 +8,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 class target_side(String):
     """
     String indicating the side of the interface to receive the data
-    transfer variable. Possible values are 'One' or 'Two'.
+    transfer variable. Possible values are \"One\" or \"Two\".
     """
 
     syc_name = "TargetSide"

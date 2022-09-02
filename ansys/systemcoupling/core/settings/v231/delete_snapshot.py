@@ -13,8 +13,8 @@ class delete_snapshot(Command):
 
     Parameters
     ----------
-        snapshot_name : str
-            Name of the snapshot to be deleted.
+    snapshot_name : str
+        Name of the snapshot to be deleted.
 
     """
 

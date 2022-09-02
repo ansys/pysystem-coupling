@@ -7,12 +7,12 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class transformation_type(String):
     """
-    ??type?? of transformation to be added. Available options are Rotation or
-    Translation
+    Type of transformation to be added. Available options are \"Rotation\" or
+    \"Translation\".
 
-    Required Parameters for ??transformation?? Types:
-        Rotation: ??angle??, ??axis??, ??vector?? (if ??axis?? is "UserDefined")
-        Translation: ??vector??
+    Required Parameters for Transformation Types:
+        Rotation: ``angle``, ``axis``, ``vector`` (if ``axis`` is \"UserDefined\")
+        Translation: ``vector``
     """
 
     syc_name = "TransformationType"

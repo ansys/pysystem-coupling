@@ -16,8 +16,8 @@ class get_region_names_for_participant(Command):
 
     Parameters
     ----------
-        participant_name : str
-            String indicating the participant for which regions are returned.
+    participant_name : str
+        String indicating the participant for which regions are returned.
 
     """
 

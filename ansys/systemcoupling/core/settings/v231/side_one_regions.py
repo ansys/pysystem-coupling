@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class side_one_regions(StringList):
     """
-    List specifying the name(s) of region(s) to be added to side One of
+    List specifying the name(s) of region(s) to be added to side \"One\" of
     the interface.
     """
 

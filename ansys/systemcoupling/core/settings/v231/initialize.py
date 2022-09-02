@@ -14,8 +14,8 @@ class initialize(Command):
     necessary), and writing participant build information to the Transcript
     and Log.
 
-    Note that if the ??execution_control?? ??option?? for a participant is set to
-    ExternallyManaged, then System Coupling will not start the participant
+    Note that if the ``execution_control`` ``option`` for a participant is set to
+    \"ExternallyManaged\", then System Coupling will not start the participant
     using either this command or any of the other commands that automatically
     start participants. The user is expected to manually start the participant.
     This function will not return until all participants have been connected.

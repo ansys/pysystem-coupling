@@ -8,7 +8,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 class side_one_participant(String):
     """
     String indicating the name of the participant to be associated with
-    side One of the interface.
+    side \"One\" of the interface.
     """
 
     syc_name = "SideOneParticipant"

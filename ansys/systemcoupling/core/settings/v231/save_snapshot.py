@@ -23,14 +23,14 @@ class save_snapshot(Command):
 
     Parameters
     ----------
-        snapshot_name : str
-            Name of the snapshot to be saved.
-        overwrite_existing : bool
-            Boolean argument controlling whether an existing snapshot should be
-            overwritten. If True, then an existing snapshot named ??snapshot_name?? will
-            be overwritten if it exists. If False (default), then if ??snapshot_name?? is
-            shared with an existing snapshot, a warning will be written and the
-            command will return without saving the snapshot.
+    snapshot_name : str
+        Name of the snapshot to be saved.
+    overwrite_existing : bool, optional
+        Boolean argument controlling whether an existing snapshot should be
+        overwritten. If ``True``, then an existing snapshot named ``snapshot_name`` will
+        be overwritten if it exists. If ``False`` (default), then if ``snapshot_name`` is
+        shared with an existing snapshot, a warning will be written and the
+        command will return without saving the snapshot.
 
     """
 

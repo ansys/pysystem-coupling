@@ -13,15 +13,15 @@ class delete_transformation(Command):
     Delete a transformation from a reference frame
 
     In addition to deleting the transformation object, it will also remove the
-    transformation from ??transformation_order?? (if it exists in that list).
+    transformation from ``transformation_order`` (if it exists in that list).
 
     Parameters
     ----------
-        reference_frame : str
-            Name of the reference frame from which the transformation will be
-            deleted.
-        transformation_name : str
-            Name of the transformation which will be deleted.
+    reference_frame : str
+        Name of the reference frame from which the transformation will be
+        deleted.
+    transformation_name : str
+        Name of the transformation which will be deleted.
 
     """
 

@@ -16,13 +16,13 @@ class has_input_file_changed(Command):
     System Coupling.
 
     If a participant's input files are not tracked by System Coupling, this
-    command will return False in all cases, even if changes have been made
+    command will return ``False`` in all cases, even if changes have been made
     to the participant input file.
 
     Parameters
     ----------
-        participant_name : str
-            Name of the participant
+    participant_name : str
+        Name of the participant
 
     """
 

@@ -12,8 +12,8 @@ class update_participant(Command):
     """
     Given the name of a server participant, updates the state of the participant.
 
-    Available for server participants. Currently, only DEFAULT-SRV,
-    CFD-SRV, and MECH-SRV participants may be updated.
+    Available for server participants. Currently, only ``DEFAULT-SRV``,
+    ``CFD-SRV``, and ``MECH-SRV`` participants may be updated.
 
     As part of the update, System Coupling updates all regions and
     variables defined in the participant, including all variable
@@ -30,14 +30,14 @@ class update_participant(Command):
 
     Parameters
     ----------
-        participant_name : str
-            Participant name. Must be the name of an existing participant.
-            Participant type can be either DEFAULT-SRV, MECH-SRV, or CFD-SRV.
-        input_file : str
-            Name of the input file for the participant to be added.
-            Currently supported formats are SCP files, Forte input (FTSIM)
-            files, mechanical server (*.rst) files, cfd server (*.csv) files,
-            and FMU (.fmu) files (Beta).
+    participant_name : str
+        Participant name. Must be the name of an existing participant.
+        Participant type can be either DEFAULT-SRV, MECH-SRV, or CFD-SRV.
+    input_file : str, optional
+        Name of the input file for the participant to be added.
+        Currently supported formats are SCP files, Forte input (FTSIM)
+        files, mechanical server (*.rst) files, cfd server (*.csv) files,
+        and FMU (.fmu) files (Beta).
 
     """
 

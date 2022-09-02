@@ -10,18 +10,18 @@ from .participant_names import participant_names
 class start_participants(Command):
     """
     Important: This command will be deprecated. Consider adopting workflows
-    where participants are started by another method, such as the ??initialize??,
-    ??step??, or ??solve?? commands.
+    where participants are started by another method, such as the ``initialize``,
+    ``step``, or ``solve`` commands.
 
     Interactive command that reads the participants' System Coupling
     Participant setup files (SCP) and starts participants on separate
     sub-processes. By default, automatically starts all participants and blocks
     solution progress until all participants are connected.
 
-    If omitted and the ??solve??, ??initialize??, or ??step?? command is issued, then
+    If omitted and the ``solve``, ``initialize``, or ``step`` command is issued, then
     participants are started automatically during the execution of the command.
 
-    Note that if the ??execution_control?? ??option?? for a participant is set to
+    Note that if the ``execution_control`` option for a participant is set to
     ExternallyManaged, then System Coupling will not start the participant
     using either this command or any of the other commands that automatically
     start participants. The user is expected to manually start the participant.
@@ -32,8 +32,8 @@ class start_participants(Command):
 
     Parameters
     ----------
-        participant_names : typing.List[str]
-            This argument has been deprecated and will be removed in future releases.
+    participant_names : typing.List[str], optional
+        This argument has been deprecated and will be removed in future releases.
 
     """
 
