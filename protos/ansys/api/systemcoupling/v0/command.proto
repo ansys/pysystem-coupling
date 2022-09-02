@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package syc;
+package ansys.api.systemcoupling.v0;
 
 import "variant.proto";
 
@@ -11,12 +11,12 @@ service Command {
 message CommandRequest {
   message Argument {
     string name = 1;
-    syc.Variant val = 2;
+    Variant val = 2;
   }
   string command = 1;
   repeated Argument args = 2;
 }
 
 message CommandResponse {
-  syc.Variant result = 1;
+  Variant result = 1;
 }

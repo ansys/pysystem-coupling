@@ -15,11 +15,11 @@ _sym_db = _symbol_database.Default()
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='output_stream.proto',
-  package='syc',
+  package='ansys.api.systemcoupling.v0',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x13output_stream.proto\x12\x03syc\"\x12\n\x10StdStreamRequest\"!\n\x11StdStreamResponse\x12\x0c\n\x04text\x18\x01 \x01(\t2V\n\x0cOutputStream\x12\x46\n\x11\x42\x65ginStdStreaming\x12\x15.syc.StdStreamRequest\x1a\x16.syc.StdStreamResponse\"\x00\x30\x01\x62\x06proto3'
+  serialized_pb=b'\n\x13output_stream.proto\x12\x1b\x61nsys.api.systemcoupling.v0\"\x12\n\x10StdStreamRequest\"!\n\x11StdStreamResponse\x12\x0c\n\x04text\x18\x01 \x01(\t2\x86\x01\n\x0cOutputStream\x12v\n\x11\x42\x65ginStdStreaming\x12-.ansys.api.systemcoupling.v0.StdStreamRequest\x1a..ansys.api.systemcoupling.v0.StdStreamResponse\"\x00\x30\x01\x62\x06proto3'
 )
 
 
@@ -27,7 +27,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _STDSTREAMREQUEST = _descriptor.Descriptor(
   name='StdStreamRequest',
-  full_name='syc.StdStreamRequest',
+  full_name='ansys.api.systemcoupling.v0.StdStreamRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -45,21 +45,21 @@ _STDSTREAMREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=28,
-  serialized_end=46,
+  serialized_start=52,
+  serialized_end=70,
 )
 
 
 _STDSTREAMRESPONSE = _descriptor.Descriptor(
   name='StdStreamResponse',
-  full_name='syc.StdStreamResponse',
+  full_name='ansys.api.systemcoupling.v0.StdStreamResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='text', full_name='syc.StdStreamResponse.text', index=0,
+      name='text', full_name='ansys.api.systemcoupling.v0.StdStreamResponse.text', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -77,8 +77,8 @@ _STDSTREAMRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=48,
-  serialized_end=81,
+  serialized_start=72,
+  serialized_end=105,
 )
 
 DESCRIPTOR.message_types_by_name['StdStreamRequest'] = _STDSTREAMREQUEST
@@ -88,14 +88,14 @@ _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 StdStreamRequest = _reflection.GeneratedProtocolMessageType('StdStreamRequest', (_message.Message,), {
   'DESCRIPTOR' : _STDSTREAMREQUEST,
   '__module__' : 'output_stream_pb2'
-  # @@protoc_insertion_point(class_scope:syc.StdStreamRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.StdStreamRequest)
   })
 _sym_db.RegisterMessage(StdStreamRequest)
 
 StdStreamResponse = _reflection.GeneratedProtocolMessageType('StdStreamResponse', (_message.Message,), {
   'DESCRIPTOR' : _STDSTREAMRESPONSE,
   '__module__' : 'output_stream_pb2'
-  # @@protoc_insertion_point(class_scope:syc.StdStreamResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.StdStreamResponse)
   })
 _sym_db.RegisterMessage(StdStreamResponse)
 
@@ -103,17 +103,17 @@ _sym_db.RegisterMessage(StdStreamResponse)
 
 _OUTPUTSTREAM = _descriptor.ServiceDescriptor(
   name='OutputStream',
-  full_name='syc.OutputStream',
+  full_name='ansys.api.systemcoupling.v0.OutputStream',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=83,
-  serialized_end=169,
+  serialized_start=108,
+  serialized_end=242,
   methods=[
   _descriptor.MethodDescriptor(
     name='BeginStdStreaming',
-    full_name='syc.OutputStream.BeginStdStreaming',
+    full_name='ansys.api.systemcoupling.v0.OutputStream.BeginStdStreaming',
     index=0,
     containing_service=None,
     input_type=_STDSTREAMREQUEST,

@@ -16,11 +16,11 @@ import ansys.api.systemcoupling.v0.variant_pb2 as variant__pb2
 
 DESCRIPTOR = _descriptor.FileDescriptor(
   name='command.proto',
-  package='syc',
+  package='ansys.api.systemcoupling.v0',
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\rcommand.proto\x12\x03syc\x1a\rvariant.proto\"\x82\x01\n\x0e\x43ommandRequest\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12*\n\x04\x61rgs\x18\x02 \x03(\x0b\x32\x1c.syc.CommandRequest.Argument\x1a\x33\n\x08\x41rgument\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x19\n\x03val\x18\x02 \x01(\x0b\x32\x0c.syc.Variant\"/\n\x0f\x43ommandResponse\x12\x1c\n\x06result\x18\x01 \x01(\x0b\x32\x0c.syc.Variant2G\n\x07\x43ommand\x12<\n\rInvokeCommand\x12\x13.syc.CommandRequest\x1a\x14.syc.CommandResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\rcommand.proto\x12\x1b\x61nsys.api.systemcoupling.v0\x1a\rvariant.proto\"\xb2\x01\n\x0e\x43ommandRequest\x12\x0f\n\x07\x63ommand\x18\x01 \x01(\t\x12\x42\n\x04\x61rgs\x18\x02 \x03(\x0b\x32\x34.ansys.api.systemcoupling.v0.CommandRequest.Argument\x1aK\n\x08\x41rgument\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x31\n\x03val\x18\x02 \x01(\x0b\x32$.ansys.api.systemcoupling.v0.Variant\"G\n\x0f\x43ommandResponse\x12\x34\n\x06result\x18\x01 \x01(\x0b\x32$.ansys.api.systemcoupling.v0.Variant2w\n\x07\x43ommand\x12l\n\rInvokeCommand\x12+.ansys.api.systemcoupling.v0.CommandRequest\x1a,.ansys.api.systemcoupling.v0.CommandResponse\"\x00\x62\x06proto3'
   ,
   dependencies=[variant__pb2.DESCRIPTOR,])
 
@@ -29,21 +29,21 @@ DESCRIPTOR = _descriptor.FileDescriptor(
 
 _COMMANDREQUEST_ARGUMENT = _descriptor.Descriptor(
   name='Argument',
-  full_name='syc.CommandRequest.Argument',
+  full_name='ansys.api.systemcoupling.v0.CommandRequest.Argument',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='name', full_name='syc.CommandRequest.Argument.name', index=0,
+      name='name', full_name='ansys.api.systemcoupling.v0.CommandRequest.Argument.name', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='val', full_name='syc.CommandRequest.Argument.val', index=1,
+      name='val', full_name='ansys.api.systemcoupling.v0.CommandRequest.Argument.val', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -61,27 +61,27 @@ _COMMANDREQUEST_ARGUMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=117,
-  serialized_end=168,
+  serialized_start=165,
+  serialized_end=240,
 )
 
 _COMMANDREQUEST = _descriptor.Descriptor(
   name='CommandRequest',
-  full_name='syc.CommandRequest',
+  full_name='ansys.api.systemcoupling.v0.CommandRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='command', full_name='syc.CommandRequest.command', index=0,
+      name='command', full_name='ansys.api.systemcoupling.v0.CommandRequest.command', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
     _descriptor.FieldDescriptor(
-      name='args', full_name='syc.CommandRequest.args', index=1,
+      name='args', full_name='ansys.api.systemcoupling.v0.CommandRequest.args', index=1,
       number=2, type=11, cpp_type=10, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -99,21 +99,21 @@ _COMMANDREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=38,
-  serialized_end=168,
+  serialized_start=62,
+  serialized_end=240,
 )
 
 
 _COMMANDRESPONSE = _descriptor.Descriptor(
   name='CommandResponse',
-  full_name='syc.CommandResponse',
+  full_name='ansys.api.systemcoupling.v0.CommandResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='result', full_name='syc.CommandResponse.result', index=0,
+      name='result', full_name='ansys.api.systemcoupling.v0.CommandResponse.result', index=0,
       number=1, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -131,8 +131,8 @@ _COMMANDRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=170,
-  serialized_end=217,
+  serialized_start=242,
+  serialized_end=313,
 )
 
 _COMMANDREQUEST_ARGUMENT.fields_by_name['val'].message_type = variant__pb2._VARIANT
@@ -148,12 +148,12 @@ CommandRequest = _reflection.GeneratedProtocolMessageType('CommandRequest', (_me
   'Argument' : _reflection.GeneratedProtocolMessageType('Argument', (_message.Message,), {
     'DESCRIPTOR' : _COMMANDREQUEST_ARGUMENT,
     '__module__' : 'command_pb2'
-    # @@protoc_insertion_point(class_scope:syc.CommandRequest.Argument)
+    # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.CommandRequest.Argument)
     })
   ,
   'DESCRIPTOR' : _COMMANDREQUEST,
   '__module__' : 'command_pb2'
-  # @@protoc_insertion_point(class_scope:syc.CommandRequest)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.CommandRequest)
   })
 _sym_db.RegisterMessage(CommandRequest)
 _sym_db.RegisterMessage(CommandRequest.Argument)
@@ -161,7 +161,7 @@ _sym_db.RegisterMessage(CommandRequest.Argument)
 CommandResponse = _reflection.GeneratedProtocolMessageType('CommandResponse', (_message.Message,), {
   'DESCRIPTOR' : _COMMANDRESPONSE,
   '__module__' : 'command_pb2'
-  # @@protoc_insertion_point(class_scope:syc.CommandResponse)
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.CommandResponse)
   })
 _sym_db.RegisterMessage(CommandResponse)
 
@@ -169,17 +169,17 @@ _sym_db.RegisterMessage(CommandResponse)
 
 _COMMAND = _descriptor.ServiceDescriptor(
   name='Command',
-  full_name='syc.Command',
+  full_name='ansys.api.systemcoupling.v0.Command',
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=219,
-  serialized_end=290,
+  serialized_start=315,
+  serialized_end=434,
   methods=[
   _descriptor.MethodDescriptor(
     name='InvokeCommand',
-    full_name='syc.Command.InvokeCommand',
+    full_name='ansys.api.systemcoupling.v0.Command.InvokeCommand',
     index=0,
     containing_service=None,
     input_type=_COMMANDREQUEST,

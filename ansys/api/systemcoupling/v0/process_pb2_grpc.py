@@ -15,12 +15,12 @@ class ProcessStub(object):
             channel: A grpc.Channel.
         """
         self.Ping = channel.unary_unary(
-                '/syc.Process/Ping',
+                '/ansys.api.systemcoupling.v0.Process/Ping',
                 request_serializer=process__pb2.PingRequest.SerializeToString,
                 response_deserializer=process__pb2.PingResponse.FromString,
                 )
         self.Quit = channel.unary_unary(
-                '/syc.Process/Quit',
+                '/ansys.api.systemcoupling.v0.Process/Quit',
                 request_serializer=process__pb2.QuitRequest.SerializeToString,
                 response_deserializer=process__pb2.QuitResponse.FromString,
                 )
@@ -56,7 +56,7 @@ def add_ProcessServicer_to_server(servicer, server):
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'syc.Process', rpc_method_handlers)
+            'ansys.api.systemcoupling.v0.Process', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
@@ -74,7 +74,7 @@ class Process(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/syc.Process/Ping',
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Process/Ping',
             process__pb2.PingRequest.SerializeToString,
             process__pb2.PingResponse.FromString,
             options, channel_credentials,
@@ -90,7 +90,7 @@ class Process(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/syc.Process/Quit',
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Process/Quit',
             process__pb2.QuitRequest.SerializeToString,
             process__pb2.QuitResponse.FromString,
             options, channel_credentials,
