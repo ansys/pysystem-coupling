@@ -65,6 +65,7 @@ class coupling_participant_child(Group):
         ("participant_analysis_type", "ParticipantAnalysisType", "String"),
         ("use_new_apis", "UseNewAPIs", "Boolean"),
         ("restarts_supported", "RestartsSupported", "Boolean"),
+        ("instancing", "Instancing", "String"),
     ]
 
     @property
@@ -161,3 +162,12 @@ class coupling_participant_child(Group):
     @restarts_supported.setter
     def restarts_supported(self, value: Boolean):
         self.set_property_state("restarts_supported", value)
+
+    @property
+    def instancing(self) -> String:
+        """Set instancing on the participant."""
+        return self.get_property_state("instancing")
+
+    @instancing.setter
+    def instancing(self, value: String):
+        self.set_property_state("instancing", value)
