@@ -1,6 +1,6 @@
 from ansys.systemcoupling.core._version import __version__
 from ansys.systemcoupling.core.client.grpc_client import SycGrpc
-from ansys.systemcoupling.core.session import Analysis
+from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
 
 
@@ -19,17 +19,17 @@ def launch(port: int = None, working_dir: str = None):
 
     Returns
     -------
-    ansys.systemcoupling.core.session.Analysis
+    ansys.systemcoupling.core.session.Session
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
     """
     rpc = SycGrpc()
     rpc.start_and_connect(port, working_dir)
-    syc = Analysis(rpc)
+    syc = Session(rpc)
     return syc
 
 
-def launch_container() -> Analysis:
+def launch_container() -> Session:
     """Start a System Coupling container instance and connect to it.
 
     `Note`: the container is currently only intended to be used for
@@ -37,17 +37,17 @@ def launch_container() -> Analysis:
 
     Returns
     -------
-    ansys.systemcoupling.core.session.Analysis
+    ansys.systemcoupling.core.session.Session
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
     """
     rpc = SycGrpc()
     rpc.start_container_and_connect()
-    syc = Analysis(rpc)
+    syc = Session(rpc)
     return syc
 
 
-def connect(host: str, port: int) -> Analysis:
+def connect(host: str, port: int) -> Session:
     """Connect to instance of System Coupling already running in server mode.
 
     Parameters
@@ -60,11 +60,11 @@ def connect(host: str, port: int) -> Analysis:
 
     Returns
     -------
-    ansys.systemcoupling.core.session.Analysis
+    ansys.systemcoupling.core.session.Session
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
     """
     rpc = SycGrpc()
     rpc.connect(host, port)
-    syc = Analysis(rpc)
+    syc = Session(rpc)
     return syc

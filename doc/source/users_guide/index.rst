@@ -21,11 +21,11 @@ constituent modules and components.
 
 PySystemCoupling Basic Overview
 ===============================
-Analysis objects are the main entry point when using the PySystemCoupling library. Each such object
+Session objects are the main entry point when using the PySystemCoupling library. Each such object
 is associated with a System Coupling server session and provides access to an API that allows a
 System Coupling analysis to be set up and solved. One or more such analyses/System Coupling server
 sessions may be launched simultaneously from the client. For example:
 
 .. code:: python
 
-   syc_analysis = pysystemcoupling.launch()
+   syc_session = pysystemcoupling.launch()

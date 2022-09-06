@@ -10,7 +10,7 @@ class _DefunctRpcImpl:
         )
 
 
-class Analysis:
+class Session:
     """Encapsulates a System Coupling analysis, providing access to the
     System Coupling data model and its command and query API.
 
@@ -20,7 +20,7 @@ class Analysis:
     """
 
     def __init__(self, rpc):
-        """Initializes an ``Analysis`` instance.
+        """Initializes a ``Session`` instance.
 
         Parameters
         ----------
