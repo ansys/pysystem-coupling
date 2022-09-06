@@ -6,7 +6,7 @@ from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
 class _DefunctRpcImpl:
     def __getattr__(self, _):
         raise RuntimeError(
-            "This analysis instance has exited. Launch or attach to a new instance."
+            "This session instance has exited. Launch or attach to a new instance."
         )
 
 
@@ -152,16 +152,20 @@ class Analysis:
         return get_root(sycproxy, category=category)
 
     @property
-    def native_api(self) -> NativeApi:
+    def _native_api(self) -> NativeApi:
         """Provides access to the 'native' System Coupling API and data
         model.
 
-        This is aimed at existing users of the System Coupling CLI who are
-        more comfortable with retaining familiar syntax while transitioning
+        Use of this API is not particularly encouraged but there may be
+        situations where it is useful to access functionality that has
+        not directly been exposed in PySystemCoupling.
+
+        Furthermore, existing users of the System Coupling CLI may initially
+        find it comfortable to work with the familiar API while transitioning
         to using PySystemCoupling.
 
-        This API is exposed almost completely dynamically on the client side
-        so provides little runtime assistance and documentation.
+        This API is exposed dynamically on the client side and provides
+        little runtime assistance and documentation.
 
         See the ``NativeApi`` class itself for more details.
         """

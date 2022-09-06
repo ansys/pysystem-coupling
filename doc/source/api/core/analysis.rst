@@ -8,4 +8,4 @@ Analysis
 .. autosummary::
     :toctree: _autosummary
 
-    analysis.Analysis
+    session.Analysis

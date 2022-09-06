@@ -3,7 +3,7 @@ from dm_raw_metadata import dm_metadata
 import pytest
 from state import StateForTesting
 
-from ansys.systemcoupling.core.analysis import Analysis
+from ansys.systemcoupling.core.session import Analysis
 
 
 class _MockCommandExecutor:
@@ -40,7 +40,7 @@ class _MockCommandExecutor:
 def api():
     cmd_exec = _MockCommandExecutor()
     analysis = Analysis(cmd_exec)
-    return analysis.native_api
+    return analysis._native_api
 
 
 def test_create_object(api):
