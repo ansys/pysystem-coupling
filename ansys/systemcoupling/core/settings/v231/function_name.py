@@ -7,7 +7,7 @@ from ansys.systemcoupling.core.settings.datamodel import *
 
 class function_name(String):
     """
-    Optionally specify a different name from ??function?? which should be
+    Optionally specify a different name from ``function`` which should be
     the name used to reference the function in an expression.
     """
 

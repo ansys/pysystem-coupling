@@ -14,15 +14,15 @@ class import_system_coupling_input_file(Command):
     format for the initial run of a coupled analysis set up in Workbench.
 
     After the initial run based on an imported SCI file, a reissue
-    of the ??import_system_coupling_input_file?? command is unnecessary and is
+    of the ``import_system_coupling_input_file`` command is unnecessary and is
     not recommended unless the setup has changed.
 
     Cannot be run after participants have been started.
 
     Parameters
     ----------
-        file_path : str
-            Path and file name for the SCI file to be read.
+    file_path : str
+        Path and file name for the SCI file to be read.
 
     """
 

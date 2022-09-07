@@ -8,10 +8,12 @@ from ansys.systemcoupling.core.settings.datamodel import *
 class algorithm_name(String):
     """
     Name of the partitioning algorithm. Available algorithms are:
-    'SharedAllocateMachines'(default), 'SharedAllocateCores',
-    'DistributedAllocateMachines', 'DistributedAllocateCores',
-    and 'Custom' (please see ??partitioning_info?? section below for more details
-    for this algorithm)
+
+    - \"SharedAllocateMachines\" (default)
+    - \"SharedAllocateCores\"
+    - \"DistributedAllocateMachines\"
+    - \"DistributedAllocateCores\"
+    - \"Custom\" (see ``partitioning_info`` for more details)
 
     The algorithms allow for both shared and distributed execution and for
     the allocation of machines or cores. The default value is generally the

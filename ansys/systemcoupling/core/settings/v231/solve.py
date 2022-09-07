@@ -13,10 +13,10 @@ class solve(Command):
 
     Disabled when a solution is already in progress.
 
-    For restarts, the ??open?? command must be run before the ??solve?? command.
+    For restarts, the ``open`` command must be run before the ``solve`` command.
 
-    Note that if the ??execution_control?? ??option?? for a participant is set to
-    ExternallyManaged, then System Coupling will not start the participant
+    Note that if the ``execution_control`` option for a participant is set to
+    \"ExternallyManaged\", then System Coupling will not start the participant
     using either this command or any of the other commands that automatically
     start participants. The user is expected to manually start the participant.
     This function will not return until all participants have been connected.

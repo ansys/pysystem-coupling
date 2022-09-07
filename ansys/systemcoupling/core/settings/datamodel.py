@@ -856,15 +856,18 @@ def _get_cls(name, info, parent):
         doc += "Parameters\n"
         doc += "----------\n"
         cls.argument_names = []
+        # essential arg names are native SyC names
+        essential_args = info.get("essentialArgs", [])
         for aname, ainfo in arguments:
             if aname == "ObjectPath":
                 continue
             ccls = get_cls(aname, ainfo, cls)
             th = ccls._state_type
             th = th.__name__ if hasattr(th, "__name__") else str(th)
+            optional_sfx = "" if aname in essential_args else ", optional"
             arg_indent = "    "
-            doc += f"{arg_indent}{ccls.__name__} : {th}\n"
-            doc += f"{_indent_doc(arg_indent * 2, ccls.__doc__)}\n"
+            doc += f"{ccls.__name__} : {th}{optional_sfx}\n"
+            doc += f"{_indent_doc(arg_indent, ccls.__doc__)}\n"
             ccls.__name__ = unique_name(ccls.__name__, cls.argument_names)
             # pylint: disable=no-member
             cls.argument_names.append(ccls.__name__)
