@@ -1,6 +1,6 @@
 .. ref_analysis
 
-Analysis
+Session
 ========
 
 .. currentmodule:: ansys.systemcoupling.core
@@ -8,4 +8,4 @@ Analysis
 .. autosummary::
     :toctree: _autosummary
 
-    analysis.Analysis
+    session.Session

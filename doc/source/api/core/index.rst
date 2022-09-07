@@ -12,5 +12,5 @@ Core
    :hidden:
 
    launching
-   analysis
+   session
    settings/index

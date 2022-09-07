@@ -6,21 +6,24 @@ from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
 class _DefunctRpcImpl:
     def __getattr__(self, _):
         raise RuntimeError(
-            "This analysis instance has exited. Launch or attach to a new instance."
+            "This session instance has exited. Launch or attach to a new instance."
         )
 
 
-class Analysis:
-    """Encapsulates a System Coupling analysis, providing access to the
-    System Coupling data model and its command and query API.
+class Session:
+    """Client interface to a System Coupling server instance, providing
+    an API to set up and solve coupled analyses.
 
-    System Coupling is presumed to be running as a server process. It
-    is accessed via the provided ``rpc`` object which services the
-    command and query requests made here.
+    The API that is provided is a fairly thin adaptation of the existing
+    System Coupling data model access and command and query API.
+
+    System Coupling runs as a server process, which is accessed via the
+    provided ``rpc`` object. This services the command and query requests
+    made here.
     """
 
     def __init__(self, rpc):
-        """Initializes an ``Analysis`` instance.
+        """Initializes a ``Session`` instance.
 
         Parameters
         ----------
@@ -152,16 +155,20 @@ class Analysis:
         return get_root(sycproxy, category=category)
 
     @property
-    def native_api(self) -> NativeApi:
+    def _native_api(self) -> NativeApi:
         """Provides access to the 'native' System Coupling API and data
         model.
 
-        This is aimed at existing users of the System Coupling CLI who are
-        more comfortable with retaining familiar syntax while transitioning
+        Use of this API is not particularly encouraged but there may be
+        situations where it is useful to access functionality that has
+        not directly been exposed in PySystemCoupling.
+
+        Furthermore, existing users of the System Coupling CLI may initially
+        find it comfortable to work with the familiar API while transitioning
         to using PySystemCoupling.
 
-        This API is exposed almost completely dynamically on the client side
-        so provides little runtime assistance and documentation.
+        This API is exposed dynamically on the client side and provides
+        little runtime assistance and documentation.
 
         See the ``NativeApi`` class itself for more details.
         """

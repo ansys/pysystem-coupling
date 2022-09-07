@@ -147,7 +147,7 @@ should be sufficient to illustrate the differences and connections between the A
 
    import ansys.systemcoupling.core as pysystemcoupling
    syc = pysystemcoupling.launch()
-   native_api = syc.native_api
+   native_api = syc._native_api
 
    native_api.AddParticipant(InputFile = 'mapdl.scp')
    native_api.AddParticipant(InputFile = 'fluent.scp')

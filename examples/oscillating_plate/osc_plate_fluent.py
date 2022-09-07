@@ -95,7 +95,7 @@ setup.output_control.output_frequency = 2
 
 # Note that print_setup is not currently exposed in the official
 # pysystemcoupling API, but we can access the 'native' API.
-native_api = syc.native_api
+native_api = syc._native_api
 
 # Also note that we do not get any output from the remote SyC
 # process by default - need to turn output streaming on and off.

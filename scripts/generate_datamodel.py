@@ -583,7 +583,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
     syc = pysyc.launch()
     LOG.debug("Helper instance of syc successfully launched.")
     LOG.debug("Initialise 'native' API...")
-    api = syc.native_api
+    api = syc._native_api
 
     LOG.debug("Querying datamodel metadata...")
     dm_metadata = get_dm_metadata(api, "SystemCoupling")

@@ -7,6 +7,6 @@ This starts System Coupling in the background and sends commands to that service
 .. code:: python
 
     import ansys.systemcoupling.core as pysystemcoupling
-    syc_analysis = pysystemcoupling.launch()
+    syc_session = pysystemcoupling.launch()
 
 System Coupling is now active and you can send commands to it as a Python class.
