@@ -11,12 +11,15 @@ class _DefunctRpcImpl:
 
 
 class Session:
-    """Encapsulates a System Coupling analysis, providing access to the
-    System Coupling data model and its command and query API.
+    """Client interface to a System Coupling server instance, providing
+    an API to set up and solve coupled analyses.
 
-    System Coupling is presumed to be running as a server process. It
-    is accessed via the provided ``rpc`` object which services the
-    command and query requests made here.
+    The API that is provided is a fairly thin adaptation of the existing
+    System Coupling data model access and command and query API.
+
+    System Coupling runs as a server process, which is accessed via the
+    provided ``rpc`` object. This services the command and query requests
+    made here.
     """
 
     def __init__(self, rpc):
