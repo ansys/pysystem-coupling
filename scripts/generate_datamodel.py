@@ -622,6 +622,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
     dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
     cmd_metadata_orig = get_cmd_metadata(api)
+    _dump_yaml(cmd_metadata_orig, "command_metadata.yml")
     LOG.debug("Command metadata received. Processing...")
 
     dm_metadata = _make_combined_metadata(
