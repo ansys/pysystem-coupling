@@ -5,7 +5,7 @@
 from ansys.systemcoupling.core.settings.datamodel import *
 
 
-class solve(Command):
+class solve(InjectedCommand):
     """
     Starts the participants (if necessary) and solves the coupled analysis. By
     default, the solution runs straight through without pause unless stopped by
@@ -26,3 +26,5 @@ class solve(Command):
     """
 
     syc_name = "Solve"
+
+    cmd_name = "solve"

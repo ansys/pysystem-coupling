@@ -76,6 +76,9 @@ class SycProxy(SycProxyInterface):
         self.last_cmd_args = dict(**kwargs)
         return None
 
+    def execute_injected_cmd(self, *args, **kwargs):
+        return None
+
     def _get_metadata(self):
         if self.__metadata is None:
             self.__metadata = _make_metadata()

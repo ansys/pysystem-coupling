@@ -237,12 +237,13 @@ class SycGrpc(object):
         request.args.extend([make_arg(name, val) for name, val in kwargs.items()])
         response, meta = self.__command_service.execute_command(request)
 
-        # "meta" is currently unused but it comprises a 1-tuple
+        # The second element of the above tuple (which is actually gRPC
+        # trailing metadata) is currently unused but it comprises a 1-tuple
         # containing a pair value, ('nosync', 'True'|'False').
         #     is_nosync = bool(meta[0][1])
-        # This tells us whether the command was state changing, which is
-        # potentially useful if we ever implement incremental updating to
-        # optimise client side state caching.
+        # This tells us whether the command was state changing. This will
+        # be if, as is likely, we implement incremental updating to optimise
+        # client side state caching.
 
         ret = from_variant(response.result)
         if "json_ret" in kwargs:

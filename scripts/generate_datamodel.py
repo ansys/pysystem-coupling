@@ -46,7 +46,6 @@ from typing import IO
 
 import black
 import isort
-import yaml
 
 # Allows us to run pysystemcoupling from source without setting PYTHONPATH
 _dirname = os.path.dirname(__file__)
@@ -59,35 +58,19 @@ from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
 )
 from ansys.systemcoupling.core.syc_proxy_adapter import (
-    get_cmd_metadata,
     get_dm_metadata,
+    get_extended_cmd_metadata,
 )
+from ansys.systemcoupling.core.util.yaml_helper import yaml_dump_to_file
 
 # Only dump YAML if requested
 dump_yaml_on = False
 
-# TODO: Make this a common utility?
+
 def _dump_yaml(data, file):
-    if not dump_yaml_on:
-        return
-    if not _dump_yaml.initialized:
-        # Setup string output format
-        def str_presenter(dumper, data_):
-            # If multiline string set block format
-            if len(data_.splitlines()) > 1:
-                return dumper.represent_scalar(
-                    "tag:yaml.org,2002:str", data_, style="|"
-                )
-            return dumper.represent_scalar("tag:yaml.org,2002:str", data_)
+    if dump_yaml_on:
+        yaml_dump_to_file(data=data, filepath=file)
 
-        yaml.add_representer(str, str_presenter)
-        _dump_yaml.initialized = True
-
-    with open(file, "w") as f:
-        yaml.dump(data, stream=f, indent=4, sort_keys=False)
-
-
-_dump_yaml.initialized = False
 
 hash_dict = {}
 files_dict = {}
@@ -337,6 +320,10 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             out.write(f"{istr1}{doc}")
             out.write(f'\n{istr1}"""\n\n')
             out.write(f'{istr1}syc_name = "{cls.syc_name}"\n\n')
+
+            cmd_name = getattr(cls, "cmd_name", None)
+            if cmd_name:
+                out.write(f'{istr1}cmd_name = "{cmd_name}"\n\n')
 
             # write children objects
             child_names = getattr(cls, "child_names", None)
@@ -621,7 +608,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
     LOG.debug("Querying datamodel metadata...")
     dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
-    cmd_metadata_orig = get_cmd_metadata(api)
+    cmd_metadata_orig = get_extended_cmd_metadata(api)
     _dump_yaml(cmd_metadata_orig, "command_metadata.yml")
     LOG.debug("Command metadata received. Processing...")
 

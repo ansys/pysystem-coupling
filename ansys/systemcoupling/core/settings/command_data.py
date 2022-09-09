@@ -1,7 +1,7 @@
 from ansys.systemcoupling.core.util.name_util import to_python_name
 
 
-def process(raw_data, category=None):
+def process(raw_data: list, category: str = None) -> dict:
     """Takes the raw command and query metadata provided by System Coupling
     and manipulates it into a form that can be used by the datamodel
     generation functionality.
@@ -15,7 +15,7 @@ def process(raw_data, category=None):
     raw_data : list
         List of dict objects, each of which contains the attributes defining
         a command or query.
-    category : str
+    category : str, optional
         If not None, used to filter the category of commands to process,
         otherwise all commands are processed.
     """
@@ -56,6 +56,7 @@ def process(raw_data, category=None):
             "args": args_out,
             "isPathCommand": is_path_cmd,
             "isQuery": cmd_info["isQuery"],
+            "isInjected": cmd_info.get("isInjected", False),
             "essentialArgs": essential_args,
         }
 

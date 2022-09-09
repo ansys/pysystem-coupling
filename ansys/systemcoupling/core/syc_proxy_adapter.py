@@ -1,4 +1,7 @@
 from ansys.systemcoupling.core.settings.command_data import process as process_cmd_data
+from ansys.systemcoupling.core.settings.injected_commands import (
+    get_data as get_injected_cmd_data,
+)
 from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
 from ansys.systemcoupling.core.util.state_keys import adapt_native_named_object_keys
 
@@ -8,7 +11,7 @@ class SycProxyAdapter(SycProxyInterface):
         self.__rpc = rpc
 
     def get_static_info(self, category):
-        cmd_metadata = get_cmd_metadata(self.__rpc)
+        cmd_metadata = get_extended_cmd_metadata(self.__rpc)
         if category == "setup":
             root_type = "SystemCoupling"
             metadata = get_dm_metadata(self.__rpc, root_type)
@@ -61,6 +64,11 @@ class SycProxyAdapter(SycProxyInterface):
         cmd_name = args[1]
         return self.__rpc.execute_command(cmd_name, **kwargs)
 
+    def execute_injected_cmd(self, *args, **kwargs):
+        cmd_name = args[1]
+        cmd = getattr(self.__rpc, cmd_name)
+        return cmd(**kwargs)
+
 
 # TODO need these in generate_datamodel
 #   - probably do not belong in here - find a better way to share
@@ -101,7 +109,7 @@ def get_dm_metadata(api, root_type):
     return dm_metadata
 
 
-def get_cmd_metadata(api):
+def get_cmd_metadata(api) -> list:
     """Adapt command metadata queried from System Coupling to the
     form that is needed for the client implementation.
 
@@ -150,3 +158,36 @@ def get_cmd_metadata(api):
         info["args"] = args_out
         cmd_metdata_out.append(info)
     return cmd_metdata_out
+
+
+def _merge_data(target: list, source: list) -> None:
+    target_names = set(d["name"] for d in target)
+    source_names = set(d["name"] for d in source)
+    new_names = source_names - target_names
+    common_names = source_names & target_names
+
+    for src_item in source:
+        name = src_item["name"]
+        if name in new_names:
+            target.append(src_item)
+        elif name in common_names:
+            tgt_item = None
+            for titem in target:
+                if titem["name"] == name:
+                    tgt_item = titem
+                    break
+
+            # Single level merge of source item dict into
+            # target item dict. In particular if any
+            # aspect of args is different then they need
+            # to be fully redefined (this should suffice
+            # for now)
+            for k, v in src_item.items():
+                tgt_item[k] = v
+
+
+def get_extended_cmd_metadata(api):
+    cmd_metadata = get_cmd_metadata(api)
+    injected_data = get_injected_cmd_data()
+    _merge_data(cmd_metadata, injected_data)
+    return cmd_metadata

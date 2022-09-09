@@ -41,3 +41,7 @@ class SycProxyInterface(ABC):
     @abstractmethod
     def execute_cmd(self, *args, **kwargs):
         pass
+
+    @abstractmethod
+    def execute_injected_cmd(self, *args, **kwargs):
+        pass

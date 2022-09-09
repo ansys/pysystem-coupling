@@ -2,13 +2,15 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-SHASH = "a4dc93bb7710762fa4cdea11ee0c014d133a8b959857c05afdb3be524930c5f4"
+SHASH = "27c8965e90341cbb34e5988228cec247cbb77badd07a8d3141434a9c39a95416"
 
 from ansys.systemcoupling.core.settings.datamodel import *
 
+from .abort import abort
 from .create_restart_point import create_restart_point
 from .get_machines import get_machines
 from .initialize import initialize
+from .interrupt import interrupt
 from .open_results_in_ensight import open_results_in_ensight
 from .partition_participants import partition_participants
 from .shutdown import shutdown
@@ -38,6 +40,8 @@ class solution_root(Group):
         "create_restart_point",
         "write_csv_chart_files",
         "get_machines",
+        "interrupt",
+        "abort",
     ]
 
     start_participants: start_participants = start_participants
@@ -83,4 +87,12 @@ class solution_root(Group):
     get_machines: get_machines = get_machines
     """
     get_machines command of solution_root.
+    """
+    interrupt: interrupt = interrupt
+    """
+    interrupt command of solution_root.
+    """
+    abort: abort = abort
+    """
+    abort command of solution_root.
     """
