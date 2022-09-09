@@ -201,6 +201,9 @@ class SycGrpc(object):
                     handle_output(text[0:-1])
                     text = ""
             except StopIteration:
+                # Flush any trailing text
+                if text:
+                    handle_output(text)
                 break
 
     def __getattr__(self, name):

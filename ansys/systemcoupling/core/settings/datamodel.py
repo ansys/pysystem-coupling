@@ -720,10 +720,10 @@ class InjectedCommand(Base):
 
         Note that this is a straight "pass-through" call to execute the command
         on the proxy. No argument processing is done as in the ``Command`` case
-        because we can make no assumptions about how the local functionm
+        because we can make no assumptions about the local function.
         """
         return self.sycproxy.execute_injected_cmd(
-            self._parent_path, self.cmd_name, **kwds
+            self._parent.path, self.cmd_name, **kwds
         )
 
 

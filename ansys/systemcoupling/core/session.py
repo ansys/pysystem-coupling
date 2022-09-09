@@ -1,3 +1,5 @@
+from typing import Callable, Optional
+
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.settings.datamodel import get_root
 from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
@@ -54,7 +56,7 @@ class Session:
         self.__setup_root = None
         self.__solution_root = None
 
-    def start_output(self, handle_output=None):
+    def start_output(self, handle_output: Optional[Callable[[str], None]] = None):
         """Start streaming the `standard output` written by the System Coupling server.
 
         The ``stdout`` and ``stderr`` streams of the server process are
@@ -72,10 +74,11 @@ class Session:
 
         Parameters
         ----------
-        handle_output : callable
-            Called with str argument that provides the latest text in the
-            stream. Might represent multiple lines of output (with embedded
-            newlines).
+        handle_output : callable, optional
+            Called with string argument that provides the latest text in the
+            stream. The text may be assumed to comprise one or more complete
+            lines of text, with no final newline character. The callback
+            should therefore be consistent with a simple call to ``print(text)``.
         """
         self.__rpc.start_output(handle_output)
 
