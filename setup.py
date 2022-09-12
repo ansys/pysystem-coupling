@@ -13,7 +13,9 @@ from setuptools import find_namespace_packages, setup
 # the module
 HERE = os.path.abspath(os.path.dirname(__file__))
 __version__ = None
-version_file = os.path.join(HERE, "ansys", "systemcoupling", "core", "_version.py")
+version_file = os.path.join(
+    HERE, "src", "ansys", "systemcoupling", "core", "_version.py"
+)
 with io_open(version_file, mode="r") as fd:
     exec(fd.read())
 
@@ -30,12 +32,13 @@ with open(os.path.join(HERE, "README.rst"), encoding="utf-8") as f:
 
 packages = [
     pkg
-    for pkg in find_namespace_packages(include="ansys*")
+    for pkg in find_namespace_packages(where="src", include="ansys*")
     if pkg.startswith("ansys.systemcoupling.core") or pkg.startswith("ansys.api")
 ]
 setup(
     name="ansys-systemcoupling-core",
     packages=packages,
+    package_dir={"": "src"},
     version=__version__,
     description="Python API to System Coupling",
     long_description=long_description,

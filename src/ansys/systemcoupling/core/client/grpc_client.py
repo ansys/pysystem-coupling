@@ -245,8 +245,8 @@ class SycGrpc(object):
         # containing a pair value, ('nosync', 'True'|'False').
         #     is_nosync = bool(meta[0][1])
         # This tells us whether the command was state changing. This will
-        # be if, as is likely, we implement incremental updating to optimise
-        # client side state caching.
+        # be useful if, as is likely, we implement incremental updating to
+        # optimise client side state caching.
 
         ret = from_variant(response.result)
         if "json_ret" in kwargs:
