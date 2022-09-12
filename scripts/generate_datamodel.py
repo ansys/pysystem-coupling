@@ -28,9 +28,13 @@ generated_testing_datamodel.py in the same directory if -n is used.
 The -d argument pauses the script at an `input()` statement, to
 allow a debugger to be attached.
 
+The -y argument will result in various YAML files being output
+containing pre-processed metadata (both datamodel and commands)
+that is passed as input to the class generation code.
+
 Usage
 -----
-python <path to generate_datamodel.py> [-t] [-n] [-d]
+python <path to generate_datamodel.py> [-t] [-n] [-d] [-y]
 """
 
 from copy import deepcopy
@@ -54,9 +58,19 @@ from ansys.systemcoupling.core.settings.command_data import (
     process as process_command_data,
 )
 from ansys.systemcoupling.core.syc_proxy_adapter import (
-    get_cmd_metadata,
     get_dm_metadata,
+    get_extended_cmd_metadata,
 )
+from ansys.systemcoupling.core.util.yaml_helper import yaml_dump_to_file
+
+# Only dump YAML if requested
+dump_yaml_on = False
+
+
+def _dump_yaml(data, file):
+    if dump_yaml_on:
+        yaml_dump_to_file(data=data, filepath=file)
+
 
 hash_dict = {}
 files_dict = {}
@@ -307,6 +321,10 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             out.write(f'\n{istr1}"""\n\n')
             out.write(f'{istr1}syc_name = "{cls.syc_name}"\n\n')
 
+            cmd_name = getattr(cls, "cmd_name", None)
+            if cmd_name:
+                out.write(f'{istr1}cmd_name = "{cmd_name}"\n\n')
+
             # write children objects
             child_names = getattr(cls, "child_names", None)
             if child_names:
@@ -553,6 +571,7 @@ def _make_combined_metadata(dm_metadata, cmd_metadata, category):
     cmd_meta = deepcopy(process_command_data(cmd_metadata, category=category))
     metadata["SystemCoupling"]["__commands"] = cmd_meta
     metadata["SystemCoupling"]["category_root"] = f"{category}_root"
+
     return metadata
 
 
@@ -563,6 +582,7 @@ def _generate_test_classes(dirname, generate_flat_classes):
     from dm_raw_metadata import cmd_metadata, dm_metadata
 
     dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, category="setup")
+    _dump_yaml(dm_metadata, "combined_metadata_test.yml")
 
     filepath = os.path.normpath(
         os.path.join(
@@ -588,12 +608,14 @@ def _generate_real_classes(dirname, generate_flat_classes):
     LOG.debug("Querying datamodel metadata...")
     dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
-    cmd_metadata_orig = get_cmd_metadata(api)
+    cmd_metadata_orig = get_extended_cmd_metadata(api)
+    _dump_yaml(cmd_metadata_orig, "command_metadata.yml")
     LOG.debug("Command metadata received. Processing...")
 
     dm_metadata = _make_combined_metadata(
         dm_metadata, cmd_metadata_orig, category="setup"
     )
+    _dump_yaml(dm_metadata, "combined_metadata.yml")
 
     filedir = os.path.normpath(
         os.path.join(
@@ -624,12 +646,18 @@ def _generate_real_classes(dirname, generate_flat_classes):
                 "category_root": f"{category}_root",
             }
         }
+        _dump_yaml(cat_metadata, f"cat_metadata_{category}.yml")
         LOG.debug(f"Creating '{category}' classes...")
         filepath = os.path.join(filedir, f"{category}.py")
         write_classes_to_file(
             filepath, cat_metadata, root_type=root_type, want_flat=generate_flat_classes
         )
     LOG.debug("All done.")
+
+
+def _set_yaml_dump(is_on):
+    global dump_yaml_on
+    dump_yaml_on = is_on
 
 
 if __name__ == "__main__":
@@ -650,6 +678,8 @@ if __name__ == "__main__":
         # nested classes required?
         generate_flat_classes = "-n" not in args
         wait_for_debug = "-d" in args
+
+        _set_yaml_dump("-y" in args)
 
     if wait_for_debug:
         input("continue...")

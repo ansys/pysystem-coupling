@@ -695,6 +695,38 @@ class Command(Base):
         return self.sycproxy.execute_cmd(self._parent.path, self.obj_name, **newkwds)
 
 
+class InjectedCommand(Base):
+    """Call a locally defined function that has been injected into the
+    generated API hierarchy to appear alongside the generic commands.
+
+    This can also be used to override an existing API command with a local
+    version. In this case the ``syc_name`` will refer to the remote
+    System Coupling command name. If the command is not an override the
+    ``syc_name`` will be the same as the local function name.
+
+    In all cases, the ``cmd_name`` attribute, that is specific to this class
+    will be set and this will be the definitive name to call on the
+    proxy interface.
+
+    Attributes
+    ----------
+    cmd_name
+    """
+
+    cmd_name = None
+
+    def __call__(self, **kwds):
+        """Call a command with the specified keyword arguments.
+
+        Note that this is a straight "pass-through" call to execute the command
+        on the proxy. No argument processing is done as in the ``Command`` case
+        because we can make no assumptions about the local function.
+        """
+        return self.sycproxy.execute_injected_cmd(
+            self._parent.path, self.cmd_name, **kwds
+        )
+
+
 class PathCommand(Command):
     """Path-based command object."""
 
@@ -730,8 +762,13 @@ def _get_type(id, info):
 
     if data_type is None:
         if "isQuery" in info:
-            # looks like a Command
-            return PathCommand if info["isPathCommand"] else Command
+            # looks like a *Command
+            if info["isPathCommand"]:
+                return PathCommand
+            elif info["isInjected"]:
+                return InjectedCommand
+            else:
+                return Command
         else:
             # assume Object or Singleton
             try:
@@ -775,6 +812,8 @@ def _get_cls(name, info, parent):
         pname = to_python_name(name)
     base = _get_type(name, info)
     dct = {"syc_name": name}
+    if base == InjectedCommand:
+        dct["cmd_name"] = pname
     helpinfo = info.get("help")
     if helpinfo:
         dct["__doc__"] = helpinfo

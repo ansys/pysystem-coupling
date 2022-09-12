@@ -55,6 +55,7 @@ setup(
         "googleapis-common-protos>=1.50.0",
         "protobuf>=3.12.2,<4.0.0",
         "psutil>=5.7.0",
+        "pyyaml",
     ],
     # Plan on supporting only the currently supported versions of Python
     python_requires=">=3.6",

@@ -15,12 +15,12 @@ class partition_participants(Command):
 
     Parameters
     ----------
-        algorithm_name : str
-            'algorithm_name' child.
-        machine_list : typing.List[typing.Dict[str, typing.Union[str, int]]]
-            'machine_list' child.
-        names_and_fractions : typing.List[typing.Tuple[str, float]]
-            'names_and_fractions' child.
+    algorithm_name : str, optional
+        'algorithm_name' child.
+    machine_list : typing.List[typing.Dict[str, typing.Union[str, int]]], optional
+        'machine_list' child.
+    names_and_fractions : typing.List[typing.Tuple[str, float]], optional
+        'names_and_fractions' child.
 
     """
 

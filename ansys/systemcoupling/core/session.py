@@ -1,3 +1,5 @@
+from typing import Callable, Optional
+
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.settings.datamodel import get_root
 from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
@@ -54,7 +56,7 @@ class Session:
         self.__setup_root = None
         self.__solution_root = None
 
-    def start_output(self, handle_output=None):
+    def start_output(self, handle_output: Optional[Callable[[str], None]] = None):
         """Start streaming the `standard output` written by the System Coupling server.
 
         The ``stdout`` and ``stderr`` streams of the server process are
@@ -72,50 +74,17 @@ class Session:
 
         Parameters
         ----------
-        handle_output : callable
-            Called with str argument that provides the latest text in the
-            stream. Might represent multiple lines of output (with embedded
-            newlines).
+        handle_output : callable, optional
+            Called with string argument that provides the latest text in the
+            stream. The text may be assumed to comprise one or more complete
+            lines of text, with no final newline character. The callback
+            should therefore be consistent with a simple call to ``print(text)``.
         """
         self.__rpc.start_output(handle_output)
 
     def end_output(self):
         """Cancels output streaming previously started by ``start_output``."""
         self.__rpc.end_output()
-
-    def solve(self):
-        """Solves the current case."""
-        self.__rpc.solve()
-
-    def interrupt(self, reason_msg=""):
-        """Interrupts a solve in progress.
-
-        See also ``abort``. The difference between an interrupted and
-        aborted solve is that an interrupted solve may be resumed.
-
-        Parameters
-        ----------
-        reason_msg : str
-            Text to describe the reason for the interrupt. This might be
-            used for such purposes as providing additional annotation in
-            transcript output.
-        """
-        self.__rpc.interrupt(reason=reason_msg)
-
-    def abort(self, reason_msg=""):
-        """Aborts a solve in progress.
-
-        See also ``interrupt``. In contrast to an interrupted solve,
-        an aborted solve may not be resumed.
-
-        Parameters
-        ----------
-        reason_msg : str
-            Text to describe the reason for the abort. This might be
-            used for such purposes as providing additional annotation in
-            transcript output.
-        """
-        self.__rpc.abort(reason=reason_msg)
 
     def ping(self):
         """Simple test that the server is alive and responding."""

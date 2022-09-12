@@ -114,11 +114,6 @@ native_api.OutputControl.PrintState()
 solution = syc.solution
 
 solution.solve()
-# (Note: `solve()` is also currently exposed directly via the
-# top-level `syc` object, as are `interrupt` and `abort`. These
-# last two are exposed *only* at the top level. This is a work
-# in progress - eventually everything will be rationalised to
-# the "solution" API.)
 
 # ===================================================================
 # ======================= RESTART RUN ===============================
