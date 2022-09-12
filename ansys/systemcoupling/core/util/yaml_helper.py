@@ -26,6 +26,9 @@ yaml.add_representer(str, _str_presenter)
 def yaml_dump_to_file(data: Any, filepath: str, sort_keys: bool = False) -> None:
     """Dump provided data as YAML to specified filepath.
 
+    Multiline strings are output with the literal block scalar style,
+    preserving newlines.
+
     Default is not to sort dictionary keys, thus preserving
     order of insertion."""
     with open(filepath, "w") as f:
@@ -33,9 +36,11 @@ def yaml_dump_to_file(data: Any, filepath: str, sort_keys: bool = False) -> None
 
 
 def yaml_load_from_file(filepath: str) -> Any:
+    """Simple wrapper function to load YAML from a specified file."""
     with open(filepath, "r") as f:
         return yaml.load(stream=f, Loader=Loader)
 
 
 def yaml_load_from_string(strdata: str) -> Any:
+    """Simple wrapper function to load YAML from a provided string."""
     return yaml.safe_load(strdata)
