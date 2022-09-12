@@ -1,5 +1,5 @@
 # Exclude grpc generated files etc.
-exclude: ^(ansys/api/systemcoupling/v0/|examples/)
+exclude: ^(src/ansys/api/systemcoupling/v0/|examples/)
 
 # initially copied from pymapdl
 repos:

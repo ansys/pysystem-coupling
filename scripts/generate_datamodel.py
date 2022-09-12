@@ -621,6 +621,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
         os.path.join(
             dirname,
             "..",
+            "src",
             "ansys",
             "systemcoupling",
             "core",
