@@ -13,8 +13,8 @@ class save(Command):
 
     Parameters
     ----------
-        file_path : str
-            'file_path' child.
+    file_path : str, optional
+        'file_path' child.
 
     """
 

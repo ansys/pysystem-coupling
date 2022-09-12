@@ -17,16 +17,16 @@ class add_participant(Command):
 
     Parameters
     ----------
-        additional_arguments : str
-            'additional_arguments' child.
-        executable : str
-            'executable' child.
-        input_file : str
-            'input_file' child.
-        participant_type : str
-            'participant_type' child.
-        working_directory : str
-            'working_directory' child.
+    additional_arguments : str, optional
+        'additional_arguments' child.
+    executable : str, optional
+        'executable' child.
+    input_file : str, optional
+        'input_file' child.
+    participant_type : str, optional
+        'participant_type' child.
+    working_directory : str, optional
+        'working_directory' child.
 
     """
 

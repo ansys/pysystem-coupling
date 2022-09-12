@@ -13,8 +13,8 @@ class get_parameter_options(PathCommand):
 
     Parameters
     ----------
-        name : str
-            'name' child.
+    name : str, optional
+        'name' child.
 
     """
 
