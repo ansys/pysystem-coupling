@@ -20,11 +20,12 @@ get_data.data = None
 
 # Metadata handling is a bit of a mess at the moment as it relies on blending together
 # data from multiple sources into opaque dictionaries. The data here is a further
-# source representing locally defined "commands" that are to be injected into the
-# generated API so that they are presented as if they are any other command. The YAML
-# format here is equivalent to the format of the command data already being obtained
-# by blending the result of two queries to System Coupling. This format is therefore
-# amendable to simply being merged into that data.
+# source that represents locally defined "commands" that are to be injected into the
+# generated API so that they are presented in a uniform manner (i.e. same as generated).
+#
+# The YAML format here is equivalent to the format of the command data already being
+# obtained by blending the result of two queries to System Coupling. This format is
+# therefore amenable to simply being merged into that data.
 # (TODO: investigate rationalisation of raw queried data and look at introduction of
 # dataclasses etc on this side.)
 
