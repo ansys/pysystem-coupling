@@ -2,6 +2,7 @@
 # Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
 #
 
+from copy import deepcopy
 import os
 import platform
 import subprocess
@@ -42,8 +43,6 @@ class SycProcess:
 
 
 def _start_system_coupling(host, port, working_dir, log_level):
-    from copy import deepcopy
-
     env = deepcopy(os.environ)
     env["PYTHONUNBUFFERED"] = "1"
     env["SYC_GUI_SILENT_SERVER"] = "1"
