@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .reference_frame_2 import reference_frame
 from .transformation_name import transformation_name

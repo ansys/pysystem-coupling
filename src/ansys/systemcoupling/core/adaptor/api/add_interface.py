@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .side_one_participant import side_one_participant
 from .side_one_regions import side_one_regions

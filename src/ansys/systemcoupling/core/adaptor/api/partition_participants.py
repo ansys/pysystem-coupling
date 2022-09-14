@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .algorithm_name import algorithm_name
 from .machine_list import machine_list

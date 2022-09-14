@@ -2,9 +2,9 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-SHASH = "8232084ce7710e6356fdd5d4ee2c963545bb67edbd0e629e69f645f3c4ef60ff"
+SHASH = "2ddf12ef96b1c136370fe44237991247b1a51577fe636e5fae32e558b6a00ef6"
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .activate_hidden import activate_hidden
 from .add_data_transfer import add_data_transfer

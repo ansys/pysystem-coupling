@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .binary import binary
 from .file_name import file_name

@@ -2,9 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .apip import apip
+from .avoid_data_reconstruction import avoid_data_reconstruction
 from .global_stabilization import global_stabilization
 from .unmapped_value_options import unmapped_value_options
 
@@ -16,7 +17,12 @@ class analysis_control(Group):
 
     syc_name = "AnalysisControl"
 
-    child_names = ["global_stabilization", "apip", "unmapped_value_options"]
+    child_names = [
+        "global_stabilization",
+        "apip",
+        "avoid_data_reconstruction",
+        "unmapped_value_options",
+    ]
 
     global_stabilization: global_stabilization = global_stabilization
     """
@@ -25,6 +31,10 @@ class analysis_control(Group):
     apip: apip = apip
     """
     apip child of analysis_control.
+    """
+    avoid_data_reconstruction: avoid_data_reconstruction = avoid_data_reconstruction
+    """
+    avoid_data_reconstruction child of analysis_control.
     """
     unmapped_value_options: unmapped_value_options = unmapped_value_options
     """
@@ -38,7 +48,6 @@ class analysis_control(Group):
         ("simultaneous_participants", "SimultaneousParticipants", "String"),
         ("partitioning_algorithm", "PartitioningAlgorithm", "String"),
         ("allow_iterations_only_mode", "AllowIterationsOnlyMode", "Boolean"),
-        ("avoid_data_reconstruction", "AvoidDataReconstruction", "Boolean"),
         ("target_initialization_option", "TargetInitializationOption", "String"),
         ("fluent_region_update_at_step", "FluentRegionUpdateAtStep", "Boolean"),
         ("mesh_import_on_initialization", "MeshImportOnInitialization", "Boolean"),
@@ -134,15 +143,6 @@ class analysis_control(Group):
     @allow_iterations_only_mode.setter
     def allow_iterations_only_mode(self, value: Boolean):
         self.set_property_state("allow_iterations_only_mode", value)
-
-    @property
-    def avoid_data_reconstruction(self) -> Boolean:
-        """Control whether data reconstruction should be done for elemental intensive data."""
-        return self.get_property_state("avoid_data_reconstruction")
-
-    @avoid_data_reconstruction.setter
-    def avoid_data_reconstruction(self, value: Boolean):
-        self.set_property_state("avoid_data_reconstruction", value)
 
     @property
     def target_initialization_option(self) -> String:

@@ -4,7 +4,7 @@
 
 ``datamodel``
 =============
-.. currentmodule:: ansys.systemcoupling.core.adaptor
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl
 
 .. autosummary::
    :toctree: _autosummary

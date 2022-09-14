@@ -4,7 +4,7 @@
 
 SHASH = "27c8965e90341cbb34e5988228cec247cbb77badd07a8d3141434a9c39a95416"
 
-from ansys.systemcoupling.core.adaptor.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .abort import abort
 from .create_restart_point import create_restart_point
