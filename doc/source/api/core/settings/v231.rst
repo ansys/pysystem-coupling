@@ -1,4 +1,4 @@
-.. _ref_v231:
+.. _ref_api:
 
 Commands and Settings API
 =========================

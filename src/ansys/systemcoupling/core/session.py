@@ -1,7 +1,7 @@
 from typing import Callable, Optional
 
+from ansys.systemcoupling.core.adaptor.datamodel import get_root
 from ansys.systemcoupling.core.native_api import NativeApi
-from ansys.systemcoupling.core.settings.datamodel import get_root
 from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
 
 

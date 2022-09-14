@@ -2,7 +2,7 @@
 
 Settings
 ========
-.. currentmodule:: ansys.systemcoupling.core.settings
+.. currentmodule:: ansys.systemcoupling.core.adaptor
 
 .. autosummary::
    :toctree: _autosummary
@@ -11,4 +11,4 @@ Settings
    :maxdepth: 2
    :hidden:
 
-   v231
+   api

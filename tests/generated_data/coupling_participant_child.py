@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.settings.datamodel import *
+from ansys.systemcoupling.core.adaptor.datamodel import *
 
 from .execution_control import execution_control
 from .external_data_file import external_data_file
