@@ -2,7 +2,7 @@ from typing import Callable, Optional
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import get_root
 from ansys.systemcoupling.core.native_api import NativeApi
-from ansys.systemcoupling.core.syc_proxy_adapter import SycProxyAdapter
+from ansys.systemcoupling.core.syc_proxy_adaptor import SycProxyAdaptor
 
 
 class _DefunctRpcImpl:
@@ -120,7 +120,7 @@ class Session:
     def _get_api_root(self, category):
         if isinstance(self.__rpc, _DefunctRpcImpl):
             self.__rpc.trigger_error
-        sycproxy = SycProxyAdapter(self.__rpc)
+        sycproxy = SycProxyAdaptor(self.__rpc)
         return get_root(sycproxy, category=category)
 
     @property

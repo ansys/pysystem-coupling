@@ -8,7 +8,7 @@ from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyI
 from ansys.systemcoupling.core.util.state_keys import adapt_native_named_object_keys
 
 
-class SycProxyAdapter(SycProxyInterface):
+class SycProxyAdaptor(SycProxyInterface):
     def __init__(self, rpc):
         self.__rpc = rpc
 

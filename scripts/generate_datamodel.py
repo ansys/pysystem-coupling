@@ -57,7 +57,7 @@ from ansys.systemcoupling.core.adaptor.impl import datamodel
 from ansys.systemcoupling.core.adaptor.impl.command_data import (
     process as process_command_data,
 )
-from ansys.systemcoupling.core.syc_proxy_adapter import (
+from ansys.systemcoupling.core.syc_proxy_adaptor import (
     get_dm_metadata,
     get_extended_cmd_metadata,
 )
