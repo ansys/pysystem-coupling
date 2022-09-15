@@ -4,7 +4,7 @@ and commands tree.
 Running this module generates a .rst files for the System Coupling auto-generated API classes.
 The output is placed at:
 
-- doc/source/api/core/settings/_autosummary/v231
+- doc/source/api/core/settings/_autosummary/api
 
 Process
 -------
@@ -27,7 +27,7 @@ python <path to datamodel_rstgen.py>
 
 import os
 
-from ansys.systemcoupling.core.settings.v231 import case_root, setup_root, solution_root
+from ansys.systemcoupling.core.adaptor.api import case_root, setup_root, solution_root
 
 parents_dict = {}
 rst_list = []
@@ -167,7 +167,7 @@ def _populate_rst_from_settings(rst_dir, cls):
         r.write(f"{title}\n")
         r.write(f'{"="*(len(title))}\n\n')
         r.write(
-            f".. currentmodule:: ansys.systemcoupling.core.settings.v231.{file_name}\n\n"
+            f".. currentmodule:: ansys.systemcoupling.core.adaptor.api.{file_name}\n\n"
         )
         r.write(f".. autoclass:: {cls_name}\n")
         r.write(f"{istr1}:show-inheritance:\n")
@@ -260,7 +260,7 @@ if __name__ == "__main__":
             "core",
             "settings",
             "_autosummary",
-            "v231",
+            "api",
         )
     )
     if not os.path.exists(rst_dir):

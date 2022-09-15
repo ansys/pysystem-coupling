@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.settings.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .data_transfer_child import data_transfer_child
 

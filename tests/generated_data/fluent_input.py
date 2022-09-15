@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.settings.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 
 class fluent_input(Group):

@@ -4,7 +4,7 @@ Script to generate the System Coupling settings tree.
 This generates a python module with the definition of the System Coupling
 generated API classes. The modules are placed at:
 
-- ansys/systemcoupling/core/solver/settings/v231
+- ansys/systemcoupling/core/adaptor/api
 
 PySystemCoupling itself is run in a 'basic' mode to query for the input
 metadata on which the generated module is based. Therefore this script
@@ -53,8 +53,8 @@ sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
-from ansys.systemcoupling.core.settings import datamodel
-from ansys.systemcoupling.core.settings.command_data import (
+from ansys.systemcoupling.core.adaptor.impl import datamodel
+from ansys.systemcoupling.core.adaptor.impl.command_data import (
     process as process_command_data,
 )
 from ansys.systemcoupling.core.syc_proxy_adapter import (
@@ -279,7 +279,9 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 out.write(f'SHASH = "{root_hash}"\n\n')
 
             # write imports to py file
-            out.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
+            out.write(
+                "from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n"
+            )
             if children_hash:
                 for child in children_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
@@ -406,7 +408,7 @@ def _write_init_file(parent_dir, sinfo):
         f.write("\n")
         f.write(f'"""A package providing the System Coupling API in Python."""')
         f.write("\n")
-        f.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
+        f.write("from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n")
         f.write(f'SHASH = "{hash}"\n')
         f.write(f"from .{root_class_path} import root")
 
@@ -486,7 +488,7 @@ def write_settings_classes(out: IO, cls, obj_info):
     hash = _gethash(obj_info)
     out.write('"""This is an auto-generated file.  DO NOT EDIT!"""\n')
     out.write("\n")
-    out.write("from ansys.systemcoupling.core.settings.datamodel import *\n\n")
+    out.write("from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n")
     out.write(f'SHASH = "{hash}"\n')
     _write_cls_helper(out, cls)
 
@@ -625,8 +627,8 @@ def _generate_real_classes(dirname, generate_flat_classes):
             "ansys",
             "systemcoupling",
             "core",
-            "settings",
-            "v231",
+            "adaptor",
+            "api",
         )
     )
 

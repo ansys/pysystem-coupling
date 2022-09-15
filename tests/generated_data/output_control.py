@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.settings.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
 from .ascii_output import ascii_output
 from .results import results

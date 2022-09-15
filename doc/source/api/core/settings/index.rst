@@ -1,8 +1,8 @@
 .. _ref_settings:
 
-Settings
-========
-.. currentmodule:: ansys.systemcoupling.core.settings
+Commands and Settings API
+=========================
+.. currentmodule:: ansys.systemcoupling.core.adaptor
 
 .. autosummary::
    :toctree: _autosummary
@@ -11,4 +11,4 @@ Settings
    :maxdepth: 2
    :hidden:
 
-   v231
+   api

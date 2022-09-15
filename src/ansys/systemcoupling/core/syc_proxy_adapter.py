@@ -1,8 +1,10 @@
-from ansys.systemcoupling.core.settings.command_data import process as process_cmd_data
-from ansys.systemcoupling.core.settings.injected_commands import (
+from ansys.systemcoupling.core.adaptor.impl.command_data import (
+    process as process_cmd_data,
+)
+from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
     get_data as get_injected_cmd_data,
 )
-from ansys.systemcoupling.core.settings.syc_proxy_interface import SycProxyInterface
+from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
 from ansys.systemcoupling.core.util.state_keys import adapt_native_named_object_keys
 
 

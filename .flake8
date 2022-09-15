@@ -4,8 +4,8 @@ exclude =
     __init__.py,
     doc/_build,
     src/ansys/api/systemcoupling/v0/,
-    #ansys/systemcoupling/core/settings/v231/,    # <<< WHY DOESN'T THIS WORK?
-    src/ansys/systemcoupling/core/settings/v231/*.py, # <<< BUT THIS DOES
+    #ansys/systemcoupling/core/adaptor/api/,    # <<< WHY DOESN'T THIS WORK?
+    src/ansys/systemcoupling/core/adaptor/api/*.py, # <<< BUT THIS DOES
     generated_testing_datamodel.py,
     tests/generated_data/*.py,
 select = W191, W291, W293, W391, E115, E117, E122, E124, E125, E225, E231, E301, E303, E501, F401, F403
