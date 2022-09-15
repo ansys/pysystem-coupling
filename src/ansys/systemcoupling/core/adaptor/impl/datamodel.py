@@ -24,11 +24,14 @@ import importlib
 import json
 import keyword
 import sys
-from typing import Dict, Generic, List, NewType, Tuple, TypeVar, Union
+from types import ModuleType
+from typing import Callable, Dict, Generic, List, NewType, Tuple, TypeVar, Union
 import weakref
 
 from ansys.systemcoupling.core.util import name_util
 from ansys.systemcoupling.core.util.logging import LOG
+
+from .syc_proxy_interface import SycProxyInterface
 
 # Type hints
 RealType = NewType("real", Union[float, str])  # constant or expression
@@ -931,17 +934,17 @@ def _gethash(obj_info):
 
 
 def get_root(
-    sycproxy,
-    category="setup",
-    generated_module=None,
-    report_whether_dynamic_classes_created=lambda _: None,
+    sycproxy: SycProxyInterface,
+    category: str = "setup",
+    generated_module: ModuleType = None,
+    report_whether_dynamic_classes_created: Callable[[bool], None] = lambda _: None,
 ) -> Group:
     """
     Get the root settings object.
 
     Parameters
     ----------
-    sycproxy: Proxy
+    sycproxy: SycProxyInterface
             Object that interfaces with the System Coupling backend
     category: str
             Category of data that this 'root' refers to.

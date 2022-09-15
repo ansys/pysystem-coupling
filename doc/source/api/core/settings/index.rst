@@ -1,7 +1,7 @@
 .. _ref_settings:
 
-Settings
-========
+Commands and Settings API
+=========================
 .. currentmodule:: ansys.systemcoupling.core.adaptor
 
 .. autosummary::

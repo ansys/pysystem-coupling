@@ -4,7 +4,7 @@ and commands tree.
 Running this module generates a .rst files for the System Coupling auto-generated API classes.
 The output is placed at:
 
-- doc/source/api/core/adaptor/_autosummary/api
+- doc/source/api/core/settings/_autosummary/api
 
 Process
 -------
