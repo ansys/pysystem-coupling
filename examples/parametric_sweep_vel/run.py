@@ -2,8 +2,8 @@ import os
 
 def solve_coupled_analysis():
   import ansys.systemcoupling.core as pysyc
-  
-  with pysyc.launch() as syc:  
+
+  with pysyc.launch() as syc:
 
     print("Setting up the coupled analysis")
 
@@ -38,7 +38,9 @@ def set_inlet_velocity(inlet_velocity):
   with pyfluent.launch_fluent(precision="double", processor_count=2) as session:
       case_file = os.path.join("Fluent", "case.cas.gz")
       session.solver.root.file.read(file_type="case", file_name=case_file)
-      session.solver.root.setup.boundary_conditions.velocity_inlet["wall_inlet"].vmag = inlet_velocity
+      session.solver.root.setup.boundary_conditions.velocity_inlet[
+          "wall_inlet"
+      ].vmag = inlet_velocity
       session.solver.tui.file.write_case(case_file)
 
   print(f"Inlet velocity is set to {inlet_velocity}")
