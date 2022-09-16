@@ -23,28 +23,43 @@ Its current state reflects work on the following aspects:
 The content itself is incomplete and possibly incorrect in places.
 
 
-Introduction
-------------
-The Ansys portfolio of simulation software facilitates the creation of multidisciplinary physics analyses — 
-not only within the context of a single product, but also through the use of Ansys `System Coupling`. 
+Introduction - Ansys System Coupling
+------------------------------------
+The Ansys portfolio of simulation software facilitates the creation of multidisciplinary physics analyses —
+not only within the context of a single product, but also through the use of Ansys `System Coupling`.
 
-System Coupling can integrate multiple individual analyses, enabling you to leverage different physics 
-solvers and/or static external data sources in a single multiphpysics simulation. When two or more analyses
-are coupled, an examination of their combined results can capture more complex interactions than an 
-examination of those results in isolation, producing more accurate results and yielding an optimal solution.
+Ansys System Coupling is a software for solving multiphysics problems by connecting independent physics
+solvers and coordinating the exchange of the solution data. This enables accurate capturing of the
+complex interactions between physical models, typically simulated in separate solvers.
+
+System Coupling connects to several existing Ansys physics solvers, including Ansys CFX,
+Ansys Forte, Ansys MAPDL, and Ansys Electronics Desktop. Examples of problems that can be solved
+by System Coupling include Fluid-Structure Interaction (FSI), Conjugate Heat Transfer (CHT), and Joule
+Heating.
+
+System Coupling capabilities include ability to solve steady and transient coupled analyses, coupling
+on surface and on volume regions, coupling of any scalar or vector, real or complex fields.
+
+For more information about System Coupling, see Ansys System Coupling page on the Ansys website:
+
+`<https://www.ansys.com/products/platform/multiphysics-simulation/system-coupling/>`_
 
 What is PySystemCoupling?
 -------------------------
-
 PySystemCoupling is part of the `PyAnsys <https://docs.pyansys.com>`_ ecosystem that
 lets you use Ansys System Coupling within or alongside any other Python environment,
 whether it is in conjunction with other Ansys Python libraries and packages or
 with other external Python products.
 
-PySystemCoupling implements a client-server architecture. Internally, it uses 
-`Google remote procedure call` (`gRPC`) interfaces, to launch or connect 
-with a running System Coupling process as a server. However, you only need to interact 
+PySystemCoupling implements a client-server architecture. Internally, it uses
+`Google remote procedure call` (`gRPC`) interfaces, to launch or connect
+with a running System Coupling process as a server. However, you only need to interact
 with the Python interface.
+
+You can use PySystemCoupling to programmatically create, interact with, and control a
+System Coupling session to create your own customized workspace. In addition, you can
+use PySystemCoupling to enhance your productivity with highly configurable,
+customized scripts.
 
 License
 -------
