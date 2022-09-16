@@ -3,19 +3,19 @@ from copy import deepcopy
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
 
-def get_data() -> list:
+def get_injected_cmd_data() -> list:
     """Returns list of injected command data in the right form to be inserted
     at a convenient point in the current processing.
 
     Returned data is always a new copy so can be manipulated at will.
     """
-    if get_data.data is None:
+    if get_injected_cmd_data.data is None:
         data = yaml_load_from_string(_cmd_yaml)
-        get_data.data = data
-    return deepcopy(get_data.data)
+        get_injected_cmd_data.data = data
+    return deepcopy(get_injected_cmd_data.data)
 
 
-get_data.data = None
+get_injected_cmd_data.data = None
 
 
 # Metadata handling is a bit of a mess at the moment as it relies on blending together

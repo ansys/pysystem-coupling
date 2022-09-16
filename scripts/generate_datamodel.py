@@ -37,7 +37,6 @@ Usage
 python <path to generate_datamodel.py> [-t] [-n] [-d] [-y]
 """
 
-from copy import deepcopy
 import io
 import os
 import pprint
@@ -54,12 +53,11 @@ sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
 from ansys.systemcoupling.core.adaptor.impl import datamodel
-from ansys.systemcoupling.core.adaptor.impl.command_data import (
-    process as process_command_data,
-)
-from ansys.systemcoupling.core.syc_proxy_adaptor import (
+from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,
+    make_cmdonly_metadata,
+    make_combined_metadata,
 )
 from ansys.systemcoupling.core.util.yaml_helper import yaml_dump_to_file
 
@@ -568,22 +566,13 @@ def _isort_content(content, filename):
     return content
 
 
-def _make_combined_metadata(dm_metadata, cmd_metadata, category):
-    metadata = deepcopy(dm_metadata)
-    cmd_meta = deepcopy(process_command_data(cmd_metadata, category=category))
-    metadata["SystemCoupling"]["__commands"] = cmd_meta
-    metadata["SystemCoupling"]["category_root"] = f"{category}_root"
-
-    return metadata
-
-
 def _generate_test_classes(dirname, generate_flat_classes):
     # NB need to add tests dir to sys.path to find dm_raw_metadata
     sys.path.append(os.path.normpath(os.path.join(dirname, "..", "tests")))
 
     from dm_raw_metadata import cmd_metadata, dm_metadata
 
-    dm_metadata = _make_combined_metadata(dm_metadata, cmd_metadata, category="setup")
+    dm_metadata = make_combined_metadata(dm_metadata, cmd_metadata, category="setup")
     _dump_yaml(dm_metadata, "combined_metadata_test.yml")
 
     filepath = os.path.normpath(
@@ -614,7 +603,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
     _dump_yaml(cmd_metadata_orig, "command_metadata.yml")
     LOG.debug("Command metadata received. Processing...")
 
-    dm_metadata = _make_combined_metadata(
+    dm_metadata = make_combined_metadata(
         dm_metadata, cmd_metadata_orig, category="setup"
     )
     _dump_yaml(dm_metadata, "combined_metadata.yml")
@@ -638,17 +627,9 @@ def _generate_real_classes(dirname, generate_flat_classes):
 
     for category in ("case", "solution"):
         LOG.debug(f"Processing '{category}' command data...")
-        cat_cmd_metadata = process_command_data(cmd_metadata_orig, category=category)
-        root_type = category.title() + "Commands"
-        cat_metadata = {
-            root_type: {
-                "__commands": cat_cmd_metadata,
-                "isEntity": False,
-                "isNamed": False,
-                "ordinal": 0,
-                "category_root": f"{category}_root",
-            }
-        }
+        cat_metadata, root_type = make_cmdonly_metadata(
+            cmd_metadata_orig, category=category
+        )
         _dump_yaml(cat_metadata, f"cat_metadata_{category}.yml")
         LOG.debug(f"Creating '{category}' classes...")
         filepath = os.path.join(filedir, f"{category}.py")
