@@ -12,14 +12,14 @@ else:
 import pytest
 from state import StateForTesting
 
-from ansys.systemcoupling.core.adaptor.impl.command_data import process
 from ansys.systemcoupling.core.adaptor.impl.datamodel import get_root
+from ansys.systemcoupling.core.adaptor.impl.static_info import process_cmd_data
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
 
 
 def _make_metadata():
     metadata = deepcopy(dm_metadata)
-    cmd_meta = deepcopy(process(cmd_metadata, category="setup"))
+    cmd_meta = deepcopy(process_cmd_data(cmd_metadata, category="setup"))
     metadata["SystemCoupling"]["__commands"] = cmd_meta
     metadata["SystemCoupling"]["category_root"] = "setup_root"
     return metadata
