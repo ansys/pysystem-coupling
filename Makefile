@@ -19,3 +19,8 @@ flake8:
 docker-pull:
 	@pip install docker
 	@bash .ci/pull_syc_image.sh
+
+unittest:
+	@echo "Running unit tests (including coverage)"
+	@pip install -r requirements/requirements_test.txt
+	@pytest -v --cov=ansys.systemcoupling --cov-report html:cov_html --cov-config=.coveragerc
