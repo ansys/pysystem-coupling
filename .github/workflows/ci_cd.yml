@@ -72,11 +72,21 @@ jobs:
         env:
           SYC_IMAGE_TAG: latest
 
+      # - name: Unit testing
+      #   run: |
+      #     pip install -r requirements/requirements_test.txt
+      #     cd tests  # so we're testing the install, not local
+      #     pytest -vx
+
       - name: Unit testing
-        run: |
-          pip install -r requirements/requirements_test.txt
-          cd tests  # so we're testing the install, not local
-          pytest -vx
+        run: make unittest
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v3
+        with:
+          name: HTML-coverage-syc
+          path: cov_html
+          retention-days: 7
 
       - name: Upload wheel
         uses: actions/upload-artifact@v2
