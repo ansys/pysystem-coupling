@@ -21,10 +21,12 @@ _SC_ROOT_ENV = "SYSC_ROOT"
 _SCRIPT_EXT = ".bat" if _isWindows else ""
 _SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 
-# pragma : no cover
+
+# NB: Coverage disabled in this file as coverage is obtained in context of
+#     GitHub CI where we are restricted to launching SyC in container mode.
 
 
-class SycProcess:
+class SycProcess:  # pragma : no cover
     def __init__(self, host, port, working_dir, log_level=1):
         self.__process = _start_system_coupling(host, port, working_dir, log_level)
 
@@ -44,7 +46,7 @@ class SycProcess:
             self.__process = None
 
 
-def _start_system_coupling(host, port, working_dir, log_level):
+def _start_system_coupling(host, port, working_dir, log_level):  # pragma : no cover
     env = deepcopy(os.environ)
     env["PYTHONUNBUFFERED"] = "1"
     env["SYC_GUI_SILENT_SERVER"] = "1"
@@ -61,7 +63,7 @@ def _start_system_coupling(host, port, working_dir, log_level):
     )
 
 
-def _path_to_system_coupling():
+def _path_to_system_coupling():  # pragma : no cover
     scroot = os.environ.get(_SC_ROOT_ENV, None)
 
     if not scroot:
@@ -82,7 +84,7 @@ def _path_to_system_coupling():
     return script_path
 
 
-def _kill_process_tree(pid, timeout):
+def _kill_process_tree(pid, timeout):  # pragma : no cover
     """Kill a process tree rooted at process `pid`."""
     parent = psutil.Process(pid)
     children = parent.children(recursive=True)
