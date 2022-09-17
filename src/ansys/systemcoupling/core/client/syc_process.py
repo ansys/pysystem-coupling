@@ -21,6 +21,8 @@ _SC_ROOT_ENV = "SYSC_ROOT"
 _SCRIPT_EXT = ".bat" if _isWindows else ""
 _SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 
+# pragma : no cover
+
 
 class SycProcess:
     def __init__(self, host, port, working_dir, log_level=1):
