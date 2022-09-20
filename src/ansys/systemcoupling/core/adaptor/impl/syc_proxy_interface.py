@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 
-class SycProxyInterface(ABC):
+class SycProxyInterface(ABC):  # pragma: no cover
     """Abstract base defining the interface for the SystemCoupling
     'proxy' object that the `datamodel` module depends on.
 

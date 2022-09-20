@@ -37,3 +37,48 @@ def test_set_and_get() -> None:
     assert setup.library.expression.get_object_names() == ["expr1"]
 
     syc.exit()
+
+
+def test_more_datamodel_operations() -> None:
+    syc = pysystemcoupling.launch_container()
+    assert syc.ping()
+
+    setup = syc.setup
+
+    setup.activate_hidden.beta_features = True
+    setup.activate_hidden.alpha_features = True
+
+    frame_name = setup.add_reference_frame()
+
+    frame = setup.library.reference_frame[frame_name]
+
+    assert frame.get_property_options("option")
+
+    state = setup.get_state()
+    assert "activate_hidden" in state and "library" in state
+
+
+def test_streaming() -> None:
+    syc = pysystemcoupling.launch_container()
+    assert syc.ping()
+
+    setup = syc.setup
+    for i in range(5):
+        expr = setup.library.expression.create(f"expr{i}")
+        expr.expression_name = f"expr_{i}"
+        expr.expression_string = f"{i+1} * x"
+
+    def handle_output(text):
+        handle_output.buf += text
+
+    handle_output.buf = ""
+
+    syc.start_output(handle_output=handle_output)
+
+    native_api = syc._native_api
+    for i in range(5):
+        native_api.PrintState()
+
+    syc.end_output()
+
+    assert "expr_2" in handle_output.buf
