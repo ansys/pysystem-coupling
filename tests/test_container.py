@@ -90,3 +90,23 @@ def test_streaming() -> None:
         for i in range(5):
             native_api.PrintState()
         assert handle_output.buf == ""
+
+
+def test_misc_items_for_coverage() -> None:
+    # Mop up some coverage items that are
+    # relatively difficult to probe.
+    with pysystemcoupling.launch_container() as syc:
+        assert syc.ping()
+
+        # Access case and solution apis.
+        # (Accessors not currently exercised otherwise.)
+        syc.case
+        solution = syc.solution
+
+        # Try calling solve even though we know it will fail.
+        # This exercises error handling and "injected commands".
+        try:
+            solution.solve()
+            assert False
+        except RuntimeError:
+            assert True
