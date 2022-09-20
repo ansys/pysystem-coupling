@@ -1,3 +1,5 @@
+import time
+
 import ansys.systemcoupling.core as pysystemcoupling
 
 
@@ -79,7 +81,9 @@ def test_streaming() -> None:
         native_api = syc._native_api
         for i in range(5):
             native_api.PrintState()
-
+        # output is managed on separate thread and sometimes doesn't
+        # flush immediately
+        time.sleep(5)
         syc.end_output()
 
         # Rough test that we got some output
