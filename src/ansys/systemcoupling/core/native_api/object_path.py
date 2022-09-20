@@ -97,12 +97,5 @@ class ObjectPath(str):
             )
         raise AttributeError(name)
 
-    def __dir__(self):
-        return (
-            list(self.parameter_names())
-            + list(self.child_types())
-            + self._rules.get_objpath_command_and_query_names()
-        )
-
     def make_path(self, path_str):
         return ObjectPath(path_str, self._api, self._rules)

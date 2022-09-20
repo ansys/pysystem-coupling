@@ -12,9 +12,6 @@ class CommandMetadata:
     def _init_data(self, raw_data):
         self.__data = {item["name"]: item for item in raw_data}
 
-    def get_objpath_command_and_query_names(self):
-        return list(self.__data.keys())
-
     def is_command_or_query(self, name):
         return name in self.__data
 
