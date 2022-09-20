@@ -152,21 +152,6 @@ class Base:
         ppath = self._parent.syc_path
         return ppath + self._parent._syc_pathsep + self.obj_name
 
-    def get_attrs(self, attrs) -> DictStateType:
-        """Get all specified attributes ``attrs`` of this object in the form of a `state dict`."""
-        return self.sycproxy.get_attrs(self.syc_path, attrs)
-
-    def get_attr(self, attr) -> StateType:
-        """Get the named attribute ``attr`` of this object."""
-        attrs = self.get_attrs([attr])
-        if attr != "active?" and attrs.get("active?", True) is False:
-            raise RuntimeError("Object is not active")
-        return attrs[attr]
-
-    def is_active(self) -> bool:
-        """TODO: "active" settings are not currently identified."""
-        return True
-
 
 StateT = TypeVar("StateT")
 
@@ -459,22 +444,6 @@ class Group(SettingsBase[DictStateType]):
     command_names = []
     property_names_types = []
 
-    def get_active_child_names(self):
-        """Names of children that are currently active."""
-        ret = []
-        for child in self.child_names:
-            if getattr(self, child).is_active():
-                ret.append(child)
-        return ret
-
-    def get_active_command_names(self):
-        """Names of commands that are currently active."""
-        ret = []
-        for command in self.command_names:
-            if getattr(self, command).is_active():
-                ret.append(command)
-        return ret
-
     def get_property_options(self, name: str) -> StringList:
         """Returns the currently available options for the specified property name.
 
@@ -499,9 +468,10 @@ class Group(SettingsBase[DictStateType]):
         return self.sycproxy.get_property_options(self.syc_path, syc_prop_name)
 
     def __getattribute__(self, name):
-        if name in super().__getattribute__("child_names"):
-            if not self.is_active():
-                raise RuntimeError(f"'{self.path}' is currently not active")
+        # No "is_active" checks for now.
+        # if name in super().__getattribute__("child_names"):
+        #     if not self.is_active():
+        #         raise RuntimeError(f"'{self.path}' is currently not active")
         return super().__getattribute__(name)
 
     def __setattr__(self, name: str, value):
