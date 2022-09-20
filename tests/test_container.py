@@ -98,15 +98,23 @@ def test_misc_items_for_coverage() -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
 
+        # Force error response in generic command handling
+        native_api = syc._native_api
+        try:
+            native_api.AddNamedExpression()
+            assert False, "Exception expected"
+        except RuntimeError:
+            pass
+
         # Access case and solution apis.
         # (Accessors not currently exercised otherwise.)
         syc.case
         solution = syc.solution
 
         # Try calling solve even though we know it will fail.
-        # This exercises error handling and "injected commands".
+        # This exercises specialised error handling on solve and "injected commands".
         try:
             solution.solve()
-            assert False
+            assert False, "Exception expected"
         except RuntimeError:
-            assert True
+            pass
