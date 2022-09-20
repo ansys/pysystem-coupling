@@ -58,15 +58,6 @@ class ObjectPath(str):
             self.__setattr("_is_object_path", self._rules.is_object_path(self))
         return self._is_object_path
 
-    def renamed(self, name):
-        stem, sep, last_comp = self.rpartition("/")
-        type, sep, old_name = last_comp.partition(":")
-        if not old_name:
-            stem = self
-        else:
-            stem += "/" + type
-        return self.make_path(stem)[name]
-
     def get_name(self):
         left, sep, right = self.rpartition("/")
         assert ":" in right

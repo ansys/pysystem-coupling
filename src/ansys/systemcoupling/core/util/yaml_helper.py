@@ -1,4 +1,5 @@
-from typing import Any
+import io
+from typing import Any, TextIO
 
 import yaml
 
@@ -32,7 +33,18 @@ def yaml_dump_to_file(data: Any, filepath: str, sort_keys: bool = False) -> None
     Default is not to sort dictionary keys, thus preserving
     order of insertion."""
     with open(filepath, "w") as f:
-        yaml.dump(data, stream=f, indent=4, sort_keys=sort_keys)
+        _yaml_dump_to_stream(data, f, sort_keys)
+
+
+def yaml_dump_to_string(data: Any, sort_keys: bool = False) -> str:
+    """As ``yaml_dump_to_file`` but return YAML as string."""
+    stream = io.StringIO()
+    _yaml_dump_to_stream(data, stream, sort_keys)
+    return stream.getvalue()
+
+
+def _yaml_dump_to_stream(data: Any, stream: TextIO, sort_keys: bool) -> None:
+    yaml.dump(data, stream=stream, indent=4, sort_keys=sort_keys)
 
 
 def yaml_load_from_file(filepath: str) -> Any:
