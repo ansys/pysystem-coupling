@@ -21,8 +21,6 @@ _SC_ROOT_ENV = "SYSC_ROOT"
 _SCRIPT_EXT = ".bat" if _isWindows else ""
 _SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 
-raise Exception("Force exception")
-
 # NB: Coverage disabled in this file as coverage is obtained in context of
 #     GitHub CI where we are restricted to launching SyC in container mode.
 
