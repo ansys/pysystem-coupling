@@ -24,8 +24,8 @@ def test_set_and_get() -> None:
     assert setup.library.expression.get_object_names() == ["expr1"]
 
     expr2 = setup.library.expression.create("expr2")
-    assert list(setup.library.expression.keys()) == ["expr1", "expr2"]
-    assert setup.library.expression.get_object_names() == ["expr1", "expr2"]
+    assert set(setup.library.expression.keys()) == set(["expr1", "expr2"])
+    assert set(setup.library.expression.get_object_names()) == set(["expr1", "expr2"])
 
     expr2.expression_name = "bob"
     expr2.expression_string = "2 * x"

@@ -598,7 +598,7 @@ class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
                 self._create_child_object(name)
 
     def __delitem__(self, name: str):
-        self.sycproxy.delete(self.syc_path, name)
+        self.sycproxy.delete(f"{self.syc_path}:{name}")
         if name in self._objects:
             del self._objects[name]
 
