@@ -8,7 +8,7 @@ PySystemCoupling
 .. |GH-CI| image:: https://github.com/pyansys/pysystem-coupling/actions/workflows/ci_cd.yml/badge.svg
    :target: https://github.com/pyansys/pysystem-coupling/actions/workflows/ci_cd.yml
 
-.. |codecov| image:: https://codecov.io/gh/pysystem-coupling/pymapdl/branch/main/graph/badge.svg
+.. |codecov| image:: https://codecov.io/gh/pysystem-coupling/branch/main/graph/badge.svg
    :target: https://codecov.io/gh/pyansys/pysystem-coupling
 
 .. |MIT| image:: https://img.shields.io/badge/License-MIT-yellow.svg
