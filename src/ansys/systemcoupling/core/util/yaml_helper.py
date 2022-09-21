@@ -24,7 +24,9 @@ def _str_presenter(dumper, data):
 yaml.add_representer(str, _str_presenter)
 
 
-def yaml_dump_to_file(data: Any, filepath: str, sort_keys: bool = False) -> None:
+def yaml_dump_to_file(
+    data: Any, filepath: str, sort_keys: bool = False
+) -> None:  # pragma: no cover
     """Dump provided data as YAML to specified filepath.
 
     Multiline strings are output with the literal block scalar style,
@@ -47,7 +49,7 @@ def _yaml_dump_to_stream(data: Any, stream: TextIO, sort_keys: bool) -> None:
     yaml.dump(data, stream=stream, indent=4, sort_keys=sort_keys)
 
 
-def yaml_load_from_file(filepath: str) -> Any:
+def yaml_load_from_file(filepath: str) -> Any:  # pragma: no cover
     """Simple wrapper function to load YAML from a specified file."""
     with open(filepath, "r") as f:
         return yaml.load(stream=f, Loader=Loader)
