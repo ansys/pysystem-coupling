@@ -58,15 +58,6 @@ class ObjectPath(str):
             self.__setattr("_is_object_path", self._rules.is_object_path(self))
         return self._is_object_path
 
-    def renamed(self, name):
-        stem, sep, last_comp = self.rpartition("/")
-        type, sep, old_name = last_comp.partition(":")
-        if not old_name:
-            stem = self
-        else:
-            stem += "/" + type
-        return self.make_path(stem)[name]
-
     def get_name(self):
         left, sep, right = self.rpartition("/")
         assert ":" in right
@@ -96,13 +87,6 @@ class ObjectPath(str):
                 name, ObjectPath=self, **kwds
             )
         raise AttributeError(name)
-
-    def __dir__(self):
-        return (
-            list(self.parameter_names())
-            + list(self.child_types())
-            + self._rules.get_objpath_command_and_query_names()
-        )
 
     def make_path(self, path_str):
         return ObjectPath(path_str, self._api, self._rules)

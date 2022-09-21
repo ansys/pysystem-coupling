@@ -81,6 +81,9 @@ jobs:
       - name: Unit testing
         run: make unittest
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
         with:

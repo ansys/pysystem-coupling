@@ -91,16 +91,15 @@ class SycGrpc(object):
                     '"working_dir" may not be specified when container launch requested.'
                 )
             self.start_container_and_connect(port)
-            return
-
-        if port is None:
-            port = _find_port()
-        if working_dir is None:
-            working_dir = "."
-        LOG.debug("Starting process...")
-        self.__process = SycProcess(_LOCALHOST_IP, port, working_dir)
-        LOG.debug("...started")
-        self._connect(_LOCALHOST_IP, port)
+        else:  # pragma: no cover
+            if port is None:
+                port = _find_port()
+            if working_dir is None:
+                working_dir = "."
+            LOG.debug("Starting process...")
+            self.__process = SycProcess(_LOCALHOST_IP, port, working_dir)
+            LOG.debug("...started")
+            self._connect(_LOCALHOST_IP, port)
 
     def start_container_and_connect(self, port: int = None):
         """Start system coupling container and establish a connection."""

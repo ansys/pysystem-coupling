@@ -47,7 +47,7 @@ def launch_container() -> Session:
     return syc
 
 
-def connect(host: str, port: int) -> Session:
+def connect(host: str, port: int) -> Session:  # pragma: no cover
     """Connect to instance of System Coupling already running in server mode.
 
     Parameters

@@ -53,7 +53,7 @@ class Metadata:
             c.id for c in node.children if c.category in (Node.Singleton, Node.Object)
         ]
 
-    def is_parameter_path(self, path):
+    def is_parameter_path(self, path: str) -> bool:
         parent, _, last = path.rpartition("/")
         try:
             parent_node = self._find_node(parent)
@@ -64,21 +64,21 @@ class Metadata:
         except:
             return False
 
-    def is_object_path(self, path):
+    def is_object_path(self, path: str) -> bool:
         try:
             node = self._find_node(path)
             return node.category in (Node.Singleton, Node.Object)
         except:
             return False
 
-    def is_named_object_path(self, path):
+    def is_named_object_path(self, path: str) -> bool:
         try:
             node = self._find_node(path)
             return node.category == Node.Object
         except:
             return False
 
-    def _find_node(self, path):
+    def _find_node(self, path: str) -> Node:
         types = to_typelist(path)
         node = self.__root
         if types[0] != node.id:
