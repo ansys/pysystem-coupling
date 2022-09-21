@@ -81,8 +81,7 @@ to follow Python conventions. Users who are already familiar with System Couplin
 API, but the native form is made available as a convenience, particularly to user who might be transitioning existing scripts.
 It should be noted that, while most commands should work as expected via the native API, no guarantees can be given because of the nature of how it is exposed.
 
-The following example shows the set up and solve of the "oscillating
- plate" tutorial in the Pythonic API, using Ansys Fluent as the CFD solver.
+The following example shows the set up and solve of the "oscillating plate" tutorial in the Pythonic API, using Ansys Fluent as the CFD solver.
 
 .. code:: python
 
