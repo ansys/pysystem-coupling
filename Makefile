@@ -23,4 +23,4 @@ docker-pull:
 unittest:
 	@echo "Running unit tests (including coverage)"
 	@pip install -r requirements/requirements_test.txt
-	@pytest -v --cov=ansys.systemcoupling --cov-report html:cov_html --cov-config=.coveragerc
+	@pytest -v --cov=ansys.systemcoupling --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
