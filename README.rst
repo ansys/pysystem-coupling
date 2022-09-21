@@ -20,6 +20,7 @@ PySystemCoupling
   :target: https://github.com/psf/black
   :alt: black
 
+Overview
 --------
 The PySystemCoupling project provides Pythonic access to Ansys System
 Coupling. Although the System Coupling product itself exposes a
