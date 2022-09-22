@@ -250,6 +250,11 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                     break
 
         if cmd_cls_name:
+            # Dummy file name for arguments as ultimately we will
+            # be writing to the same file as the command. We are
+            # assuming that command file names will be unique.
+            # TODO: reasonable to assume uniqueness among commands
+            # but what about clash between command and datamodel item?
             files_dict[key] = f"__cmd__{cmd_cls_name}"
         else:
             i = 0
@@ -268,7 +273,8 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
     # populate files
 
     # Ensure command classes are written before arguments
-    # as arguments are appended to the command class file
+    # because we want the main class content to exist before
+    # we start adding the argument content.
     non_arg_items = []
     arg_items = []
     for key, value in hash_dict.items():
@@ -278,16 +284,17 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
         else:
             non_arg_items.append((key, value))
 
-    # Command class file writing needs to be deferred because we suffix the
-    # argument classes. It works out simpler to defer all classes. Thus
-    # we gather the class definitions in a structure that is geared to
-    # storing command and argument class definitions but allows other class
-    # definitions also to be stored.
+    # Command class content relies on the main command itself and its
+    # argument classes. Thus we gather the class definitions in a structure
+    # that is geared to storing command and argument class definitions but
+    # allows other class definitions also to be stored.
+    # Everything is gathered in the storage before files are written.
     # The storage is a dict of filename to a 2-tuple. The first element of
     # the tuple contains the class definition. For a command, the second
     # element stores the argument definitions.
-    # i.e., for cmd:
-    #           filename => (<cmd def>, [<arg def>...])
+    # i.e.,
+    # for cmd:
+    #           filename => (<cmd cls def>, [<arg def>...])
     # for other:
     #           filename => (<cls def>, [])
     cls_content = {}
@@ -337,11 +344,6 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 for child in commands_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
                     out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
-
-            # if arguments_hash:
-            #     for child in arguments_hash:
-            #         pchild_name = hash_dict.get(child)[0].__name__
-            #         out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
 
             if object_hash:
                 pchild_name = hash_dict.get(object_hash)[0].__name__
@@ -422,12 +424,6 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
                 out.write(f"{istr2}{mn}\n\n")
 
-                # for argument in arguments:
-                #     out.write(f"{istr1}{argument}: {argument} = {argument}\n")
-                #     out.write(f'{istr1}"""\n')
-                #     out.write(f"{istr1}{argument} argument of {cls_name}.")
-                #     out.write(f'\n{istr1}"""\n')
-
             # write object type
             child_object_type = getattr(cls, "child_object_type", None)
             if child_object_type:
@@ -447,8 +443,6 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
     # Now write classes
     for file_name, the_content in cls_content.items():
-        if file_name == "add_interface":
-            bh = 1
         # We reindent the arg content so that it is nested.
         # (This is empty for non-command classes.)
         lines = []
