@@ -4,9 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .overwrite_existing import overwrite_existing
-from .snapshot_name import snapshot_name
-
 
 class save_snapshot(Command):
     """
@@ -38,11 +35,20 @@ class save_snapshot(Command):
 
     argument_names = ["snapshot_name", "overwrite_existing"]
 
-    snapshot_name: snapshot_name = snapshot_name
-    """
-    snapshot_name argument of save_snapshot.
-    """
-    overwrite_existing: overwrite_existing = overwrite_existing
-    """
-    overwrite_existing argument of save_snapshot.
-    """
+    class snapshot_name(String):
+        """
+        Name of the snapshot to be saved.
+        """
+
+        syc_name = "SnapshotName"
+
+    class overwrite_existing(Boolean):
+        """
+        Boolean argument controlling whether an existing snapshot should be
+        overwritten. If ``True``, then an existing snapshot named ``snapshot_name`` will
+        be overwritten if it exists. If ``False`` (default), then if ``snapshot_name`` is
+        shared with an existing snapshot, a warning will be written and the
+        command will return without saving the snapshot.
+        """
+
+        syc_name = "OverwriteExisting"

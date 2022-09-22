@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .participant_name_3 import participant_name
-
 
 class has_input_file_changed(Command):
     """
@@ -30,7 +28,9 @@ class has_input_file_changed(Command):
 
     argument_names = ["participant_name"]
 
-    participant_name: participant_name = participant_name
-    """
-    participant_name argument of has_input_file_changed.
-    """
+    class participant_name(String):
+        """
+        Name of the participant
+        """
+
+        syc_name = "ParticipantName"

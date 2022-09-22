@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .participant_name import participant_name
-
 
 class get_region_names_for_participant(Command):
     """
@@ -25,7 +23,9 @@ class get_region_names_for_participant(Command):
 
     argument_names = ["participant_name"]
 
-    participant_name: participant_name = participant_name
-    """
-    participant_name argument of get_region_names_for_participant.
-    """
+    class participant_name(String):
+        """
+        String indicating the participant for which regions are returned.
+        """
+
+        syc_name = "ParticipantName"

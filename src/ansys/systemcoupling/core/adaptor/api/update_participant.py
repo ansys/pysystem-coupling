@@ -4,9 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .input_file import input_file
-from .participant_name_1 import participant_name
-
 
 class update_participant(Command):
     """
@@ -45,11 +42,20 @@ class update_participant(Command):
 
     argument_names = ["participant_name", "input_file"]
 
-    participant_name: participant_name = participant_name
-    """
-    participant_name argument of update_participant.
-    """
-    input_file: input_file = input_file
-    """
-    input_file argument of update_participant.
-    """
+    class participant_name(String):
+        """
+        Participant name. Must be the name of an existing participant.
+        Participant type can be either DEFAULT-SRV, MECH-SRV, or CFD-SRV.
+        """
+
+        syc_name = "ParticipantName"
+
+    class input_file(String):
+        """
+        Name of the input file for the participant to be added.
+        Currently supported formats are SCP files, Forte input (FTSIM)
+        files, mechanical server (*.rst) files, cfd server (*.csv) files,
+        and FMU (.fmu) files (Beta).
+        """
+
+        syc_name = "InputFile"

@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .count import count
-
 
 class step(Command):
     """
@@ -51,7 +49,9 @@ class step(Command):
 
     argument_names = ["count"]
 
-    count: count = count
-    """
-    count argument of step.
-    """
+    class count(Integer):
+        """
+        Integer specifying the number of steps to be run. Defaults to 1.
+        """
+
+        syc_name = "Count"

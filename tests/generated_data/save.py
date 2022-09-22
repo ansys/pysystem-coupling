@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .file_path import file_path
-
 
 class save(Command):
     """
@@ -22,7 +20,9 @@ class save(Command):
 
     argument_names = ["file_path"]
 
-    file_path: file_path = file_path
-    """
-    file_path argument of save.
-    """
+    class file_path(String):
+        """
+        'file_path' child.
+        """
+
+        syc_name = "FilePath"

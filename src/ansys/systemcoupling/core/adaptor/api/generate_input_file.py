@@ -4,9 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .file_name import file_name
-from .participant_name_2 import participant_name
-
 
 class generate_input_file(Command):
     """
@@ -27,11 +24,18 @@ class generate_input_file(Command):
 
     argument_names = ["participant_name", "file_name"]
 
-    participant_name: participant_name = participant_name
-    """
-    participant_name argument of generate_input_file.
-    """
-    file_name: file_name = file_name
-    """
-    file_name argument of generate_input_file.
-    """
+    class participant_name(String):
+        """
+        Name of the participant for which the execution command will
+        be returned.
+        """
+
+        syc_name = "ParticipantName"
+
+    class file_name(String):
+        """
+        Name of the journal script to be written. Note that this name is relative
+        to the participant's working directory.
+        """
+
+        syc_name = "FileName"

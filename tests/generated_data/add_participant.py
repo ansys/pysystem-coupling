@@ -4,12 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .additional_arguments import additional_arguments
-from .executable import executable
-from .input_file import input_file
-from .participant_type import participant_type
-from .working_directory import working_directory
-
 
 class add_participant(Command):
     """
@@ -40,23 +34,37 @@ class add_participant(Command):
         "working_directory",
     ]
 
-    additional_arguments: additional_arguments = additional_arguments
-    """
-    additional_arguments argument of add_participant.
-    """
-    executable: executable = executable
-    """
-    executable argument of add_participant.
-    """
-    input_file: input_file = input_file
-    """
-    input_file argument of add_participant.
-    """
-    participant_type: participant_type = participant_type
-    """
-    participant_type argument of add_participant.
-    """
-    working_directory: working_directory = working_directory
-    """
-    working_directory argument of add_participant.
-    """
+    class additional_arguments(String):
+        """
+        'additional_arguments' child.
+        """
+
+        syc_name = "AdditionalArguments"
+
+    class executable(String):
+        """
+        'executable' child.
+        """
+
+        syc_name = "Executable"
+
+    class input_file(String):
+        """
+        'input_file' child.
+        """
+
+        syc_name = "InputFile"
+
+    class participant_type(String):
+        """
+        'participant_type' child.
+        """
+
+        syc_name = "ParticipantType"
+
+    class working_directory(String):
+        """
+        'working_directory' child.
+        """
+
+        syc_name = "WorkingDirectory"

@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .file_path_1 import file_path
-
 
 class save(Command):
     """
@@ -44,7 +42,10 @@ class save(Command):
 
     argument_names = ["file_path"]
 
-    file_path: file_path = file_path
-    """
-    file_path argument of save.
-    """
+    class file_path(String):
+        """
+        Writeable directory to which the SyC directory is added. (Settings and
+        results .h5 files will be written to the SyC directory.)
+        """
+
+        syc_name = "FilePath"

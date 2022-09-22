@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .file_path import file_path
-
 
 class import_system_coupling_input_file(Command):
     """
@@ -30,7 +28,9 @@ class import_system_coupling_input_file(Command):
 
     argument_names = ["file_path"]
 
-    file_path: file_path = file_path
-    """
-    file_path argument of import_system_coupling_input_file.
-    """
+    class file_path(String):
+        """
+        Path and file name for the SCI file to be read.
+        """
+
+        syc_name = "FilePath"
