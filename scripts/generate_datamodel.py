@@ -435,10 +435,8 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             content = out.getvalue()
 
         if cmd_cls_name:
-            print(f"Adding arg {cls.__name__} for file name = {file_name}")
             cls_content[file_name][1].append(content)
         else:
-            print(f"Adding {file_name} content")
             cls_content[file_name] = (content, [])
 
     # Now write classes

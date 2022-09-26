@@ -46,7 +46,7 @@ class variable_child(Group):
 
         - \"Unspecified\"
         - \"Force\"
-        - \"Incrementatal Displacement\"
+        - \"Incremental Displacement\"
         - \"Temperature\"
         - \"Heat Rate\"
         - \"Heat Transfer Coefficient\"
