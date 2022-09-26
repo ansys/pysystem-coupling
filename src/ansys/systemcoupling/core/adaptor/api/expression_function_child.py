@@ -2,10 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class expression_function_child(Group):
+class expression_function_child(Container):
     """
     Makes an external Python function accessible from expressions.
     """

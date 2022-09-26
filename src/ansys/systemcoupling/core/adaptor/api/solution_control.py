@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .available_ports import available_ports
 
 
-class solution_control(Group):
+class solution_control(Container):
     """
     Configure solution controls.
     """

@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .instancing_child import instancing_child
 
 
-class instancing(NamedObject[instancing_child]):
+class instancing(NamedContainer[instancing_child]):
     """
     'instancing' child.
     """

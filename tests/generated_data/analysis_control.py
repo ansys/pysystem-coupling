@@ -2,14 +2,14 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .apip import apip
 from .global_stabilization import global_stabilization
 from .unmapped_value_options import unmapped_value_options
 
 
-class analysis_control(Group):
+class analysis_control(Container):
     """
     'analysis_control' child.
     """

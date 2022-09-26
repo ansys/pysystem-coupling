@@ -4,7 +4,7 @@
 
 SHASH = "27c8965e90341cbb34e5988228cec247cbb77badd07a8d3141434a9c39a95416"
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .abort import abort
 from .create_restart_point import create_restart_point
@@ -21,7 +21,7 @@ from .write_csv_chart_files import write_csv_chart_files
 from .write_ensight import write_ensight
 
 
-class solution_root(Group):
+class solution_root(Container):
     """
     'root' object
     """

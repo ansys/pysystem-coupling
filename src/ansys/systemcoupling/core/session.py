@@ -1,6 +1,6 @@
 from typing import Callable, Optional
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import Group, get_root
+from ansys.systemcoupling.core.adaptor.impl.source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
 
@@ -14,7 +14,9 @@ try:
 except ImportError:
     # Fallback to generic type
     # (should not occur in normal use and in doc generation)
-    case_root = setup_root = solution_root = Group
+    from ansys.systemcoupling.core.adaptor.impl.types import Container
+
+    case_root = setup_root = solution_root = Container
 
 
 class _DefunctRpcImpl:

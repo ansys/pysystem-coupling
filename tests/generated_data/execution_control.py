@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .fluent_input import fluent_input
 
 
-class execution_control(Group):
+class execution_control(Container):
     """
     'execution_control' child.
     """

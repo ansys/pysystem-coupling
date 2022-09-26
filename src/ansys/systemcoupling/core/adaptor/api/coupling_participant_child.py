@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .execution_control import execution_control
 from .external_data_file import external_data_file
@@ -12,7 +12,7 @@ from .update_control import update_control
 from .variable import variable
 
 
-class coupling_participant_child(Group):
+class coupling_participant_child(Container):
     """
     Configure a coupling participant.
 

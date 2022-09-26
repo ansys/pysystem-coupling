@@ -2,8 +2,8 @@
 
 :orphan:
 
-``datamodel``
-=============
+``API Implementation Types``
+============================
 .. currentmodule:: ansys.systemcoupling.core.adaptor.impl
 
 .. autosummary::
@@ -11,4 +11,4 @@
    :template: datamodel-module-template.rst
    :recursive:
 
-   datamodel
+   types

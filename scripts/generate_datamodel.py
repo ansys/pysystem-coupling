@@ -53,7 +53,7 @@ sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
-from ansys.systemcoupling.core.adaptor.impl import datamodel
+from ansys.systemcoupling.core.adaptor.impl import source as adaptor_source
 from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,
@@ -76,7 +76,7 @@ files_dict = {}
 
 
 def _gethash(obj_info):
-    return datamodel._gethash(obj_info)
+    return adaptor_source.get_hash(obj_info)
 
 
 def _get_indent_str(indent):
@@ -333,7 +333,7 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             # write imports to py file
             if not is_arg_cls:
                 out.write(
-                    "from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n"
+                    "from ansys.systemcoupling.core.adaptor.impl.types import *\n\n"
                 )
             if children_hash:
                 for child in children_hash:
@@ -464,7 +464,7 @@ def _write_init_file(parent_dir, sinfo):
         f.write("\n")
         f.write(f'"""A package providing the System Coupling API in Python."""')
         f.write("\n")
-        f.write("from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n")
+        f.write("from ansys.systemcoupling.core.adaptor.impl.types import *\n\n")
         f.write(f'SHASH = "{hash}"\n')
         f.write(f"from .{root_class_path} import root")
 
@@ -544,7 +544,7 @@ def write_settings_classes(out: IO, cls, obj_info):
     hash = _gethash(obj_info)
     out.write('"""This is an auto-generated file.  DO NOT EDIT!"""\n')
     out.write("\n")
-    out.write("from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n")
+    out.write("from ansys.systemcoupling.core.adaptor.impl.types import *\n\n")
     out.write(f'SHASH = "{hash}"\n')
     _write_cls_helper(out, cls)
 
@@ -552,7 +552,7 @@ def write_settings_classes(out: IO, cls, obj_info):
 def write_classes_to_file(
     filepath, obj_info, root_type="SystemCoupling", want_flat=False
 ):
-    cls = datamodel.get_cls(root_type, obj_info[root_type])
+    cls = adaptor_source.get_cls(root_type, obj_info[root_type])
 
     if want_flat:
         hash_dict.clear()

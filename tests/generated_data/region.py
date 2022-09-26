@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .region_child import region_child
 
 
-class region(NamedObject[region_child]):
+class region(NamedContainer[region_child]):
     """
     'region' child.
     """

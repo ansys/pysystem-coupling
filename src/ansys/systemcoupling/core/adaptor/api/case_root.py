@@ -4,7 +4,7 @@
 
 SHASH = "0fbfd3e7593591d8e52193a6e92828c6174e531b26437aee17285b3d0d114664"
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .clear_state import clear_state
 from .delete_snapshot import delete_snapshot
@@ -15,7 +15,7 @@ from .save import save
 from .save_snapshot import save_snapshot
 
 
-class case_root(Group):
+class case_root(Container):
     """
     'root' object
     """

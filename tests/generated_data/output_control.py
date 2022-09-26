@@ -2,13 +2,13 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .ascii_output import ascii_output
 from .results import results
 
 
-class output_control(Group):
+class output_control(Container):
     """
     'output_control' child.
     """

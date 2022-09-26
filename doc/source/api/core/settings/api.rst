@@ -10,17 +10,21 @@ A System Coupling analysis is defined in terms of a hierarchical data model of s
 exposed that provides direct access to the data model as well as to commands that assist in
 various aspects of setting up and solving an analysis.
 
-The API is defined in terms of a number of generic objects which will be described.
+Although it is possible to set up an analysis by directly assigning the relevant
+data model objects and settings, the expected - and more convenient - approach is to use the
+various commands that are provided to set up the main objects. Direct data model assignment
+should then be used for fine adjustments to the setup.
 
-**TODO** This has been adapted/cut down from Fluent docs. Needs more customising for SyC differences
-as well as expansion in places.
+The API implementation is built on a number of generic objects, which will be described. Note that while
+it is anticpated that the API as it is used in practice will remain stable, the details of the underlying
+generic implementation classes should not be relied on to any great extent.
 
-**Q** Should we draw attention to similarities with Fluent, or should we change implementation object names to make them more distinct.
+
 
 Top-level Objects
 -----------------
 
-The commands and settings API is accessible via the top-level attributes of the ``Analysis`` class,
+The commands and settings API is accessible via the top-level attributes of the ``Session`` class,
 ``case``, ``setup``, and ``solution``.
 
 .. code-block::
@@ -29,45 +33,52 @@ The commands and settings API is accessible via the top-level attributes of the 
   >>> analysis = pysystemcoupling.launch()
   >>> setup = analysis.setup
 
+These top-level attributes are all instances of the ``Container`` type.
+
+
 Types of Settings Objects
 -------------------------
 
 A settings object can be one of the primitive types like ``Integer``, ``Real``,
-``String`` and ``Boolean`` or a container object.
+``String`` and ``Boolean`` or a `container` object.
 
-There are two types of container objects: ``Group`` and ``NamedObject``.
+There are two types of container objects: ``Container`` and ``NamedContainer``.
 
-A ``Group`` object is a static container with pre-defined child objects which
+A ``Container`` object is a static object with pre-defined child objects which
 can be accessed via attribute access. For example, ``setup.output_control.results``
 refers to the ``results`` child of ``output_control`` child of the ``setup`` object. The
 names of the child objects of a group can be accessed with the ``child_names``
-attribute of a ``Group`` object.
+attribute of a ``Container`` object.
 
-A ``NamedObject`` is a container holding dynamically created named objects of
+A ``NamedContainer`` is a container holding dynamically created named objects of
 its specified child type (accessible via ``child_object_type`` attribute)
 similar to a dictionary. A specific named object can be accessed using the
 index operator. For example,
 ``setup.coupling_interface['intf-1']`` refers to the
 ``coupling_interface`` object with name ``intf-1``. The current list of named
 object children can be accessed with the ``get_object_names()`` function of the
-container class.
+container class. In practice, the named object instances are ``Container``
+objects. Thus, in the example just given, ``setup.coupling_interface['intf-1']``
+is a ``Container``.
 
 
 Setting and Modifying State
 ---------------------------
 
-The state of any object can be accessed by "calling" it. For container objects,
+The state of any container object can be accessed by "calling" it and
 this will return the state of the children as a dictionary.
 
-To modify the state of any object, you could assign the corresponding attribute
-in its parent object. This assignment could be done at any level. For ``Group``
-and ``NamedObject`` type objects, the state value will be a dictionary.
+The state of a container can be modified by assigning the corresponding attribute
+in its parent object. This assignment could be done at any level. The assigned
+state value should be a dictionary.
 
-The state of an object can also be accessed via the ``get_state`` method, and
+Individual settings may be queries and assigned as properties on their container objects.
+
+The state of a container can also be accessed via the ``get_state`` method, and
 modified via the ``set_state`` method.
 
-The current state can also be printed in a simple text format with the
-``print_state`` method. For example, the following
+The current state can be printed in a simple text format with the
+``print_state`` method.
 
 
 Commands
@@ -82,10 +93,8 @@ arguments can be accessed using the ``arguments`` attribute.  If an argument is
 not specified, its default value is used. Arguments are also settings objects
 and can be either primitive type or container type.
 
-Additional Metadata
--------------------
-
-**Unused in System Coupling.**
+Note: while the implementation of the settings classes is sufficiently flexible to
+allow commands to be exposed at any level of the container hierarchy,
 
 Active Objects and Commands
 ---------------------------

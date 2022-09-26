@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .attribute_child import attribute_child
 
 
-class attribute(NamedObject[attribute_child]):
+class attribute(NamedContainer[attribute_child]):
     """
     'attribute' child.
     """

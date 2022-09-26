@@ -2,10 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class unmapped_value_options(Group):
+class unmapped_value_options(Container):
     """
     'unmapped_value_options' child.
     """

@@ -2,10 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class transformation_child(Group):
+class transformation_child(Container):
     """
     Use to apply transformations to coupling interface sides to control
     positioning of the geometry.
