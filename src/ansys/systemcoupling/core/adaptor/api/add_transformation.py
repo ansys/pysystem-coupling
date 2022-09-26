@@ -4,12 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .angle import angle
-from .axis import axis
-from .reference_frame_1 import reference_frame
-from .transformation_type import transformation_type
-from .vector import vector
-
 
 class add_transformation(Command):
     """
@@ -63,23 +57,46 @@ class add_transformation(Command):
         "vector",
     ]
 
-    reference_frame: reference_frame = reference_frame
-    """
-    reference_frame argument of add_transformation.
-    """
-    transformation_type: transformation_type = transformation_type
-    """
-    transformation_type argument of add_transformation.
-    """
-    angle: angle = angle
-    """
-    angle argument of add_transformation.
-    """
-    axis: axis = axis
-    """
-    axis argument of add_transformation.
-    """
-    vector: vector = vector
-    """
-    vector argument of add_transformation.
-    """
+    class reference_frame(String):
+        """
+        Name of the reference frame to which the transformation will be added.
+        """
+
+        syc_name = "ReferenceFrame"
+
+    class transformation_type(String):
+        """
+        Type of transformation to be added. Available options are \"Rotation\" or
+        \"Translation\".
+
+        Required Parameters for Transformation Types:
+            Rotation: ``angle``, ``axis``, ``vector`` (if ``axis`` is \"UserDefined\")
+            Translation: ``vector``
+        """
+
+        syc_name = "TransformationType"
+
+    class angle(Real):
+        """
+        Angle to rotate a reference frame. Used with \"Rotation\"
+        ``transformation_type``. Default unit is Radians.
+        """
+
+        syc_name = "Angle"
+
+    class axis(String):
+        """
+        Axis about which a rotation is applied. Used with
+        Rotation ``transformation_type``. Available options are: \"XAxis\", \"YAxis\",
+        \"ZAxis\", and \"UserDefined\".
+        """
+
+        syc_name = "Axis"
+
+    class vector(RealVector):
+        """
+        A vector for use with \"Translation\" ``transformation_type`` or \"Rotation\"
+        ``transformation_type`` if the ``axis`` is \"UserDefined\".
+        """
+
+        syc_name = "Vector"

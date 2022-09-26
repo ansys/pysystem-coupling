@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .snapshot_name_1 import snapshot_name
-
 
 class open_snapshot(Command):
     """
@@ -29,7 +27,11 @@ class open_snapshot(Command):
 
     argument_names = ["snapshot_name"]
 
-    snapshot_name: snapshot_name = snapshot_name
-    """
-    snapshot_name argument of open_snapshot.
-    """
+    class snapshot_name(String):
+        """
+        The name of the snapshot to be opened. This is optional if and only if
+        there is only one snapshot available to be loaded. If multiple
+        snapshots exist, then the snapshot name must be specified.
+        """
+
+        syc_name = "SnapshotName"

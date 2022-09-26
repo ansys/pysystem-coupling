@@ -1,8 +1,20 @@
 from typing import Callable, Optional
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import get_root
+from ansys.systemcoupling.core.adaptor.impl.datamodel import Group, get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
+
+try:
+    # It's worth having these for type hinting and documentation links but
+    # we need the import check and fallback because they are generated
+    # classes and Session plays a "bootstrapping" role in generating them
+    from ansys.systemcoupling.core.adaptor.api.case_root import case_root
+    from ansys.systemcoupling.core.adaptor.api.setup_root import setup_root
+    from ansys.systemcoupling.core.adaptor.api.solution_root import solution_root
+except ImportError:
+    # Fallback to generic type
+    # (should not occur in normal use and in doc generation)
+    case_root = setup_root = solution_root = Group
 
 
 class _DefunctRpcImpl:
@@ -38,7 +50,7 @@ class Session:
         self.__rpc = rpc
         self.__native_api = None
 
-    def exit(self):
+    def exit(self) -> None:
         """Close the System Coupling server instance.
 
         Following this, the current instance of this class will not
@@ -56,7 +68,9 @@ class Session:
         self.__setup_root = None
         self.__solution_root = None
 
-    def start_output(self, handle_output: Optional[Callable[[str], None]] = None):
+    def start_output(
+        self, handle_output: Optional[Callable[[str], None]] = None
+    ) -> None:
         """Start streaming the `standard output` written by the System Coupling server.
 
         The ``stdout`` and ``stderr`` streams of the server process are
@@ -82,16 +96,16 @@ class Session:
         """
         self.__rpc.start_output(handle_output)
 
-    def end_output(self):
+    def end_output(self) -> None:
         """Cancels output streaming previously started by ``start_output``."""
         self.__rpc.end_output()
 
-    def ping(self):
+    def ping(self) -> bool:
         """Simple test that the server is alive and responding."""
         return self.__rpc.ping()
 
     @property
-    def case(self):
+    def case(self) -> case_root:
         """Provides access to the `Pythonic` client-side form of the System
         Coupling case persistence API.
         """
@@ -100,7 +114,7 @@ class Session:
         return self.__case_root
 
     @property
-    def setup(self):
+    def setup(self) -> setup_root:
         """Provides access to the `Pythonic` client-side form of the System
         Coupling setup API and data model.
         """
@@ -109,7 +123,7 @@ class Session:
         return self.__setup_root
 
     @property
-    def solution(self):
+    def solution(self) -> solution_root:
         """Provides access to the `Pythonic` client-side form of the System
         Coupling solution API.
         """

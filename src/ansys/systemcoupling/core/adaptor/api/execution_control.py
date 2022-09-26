@@ -35,6 +35,7 @@ class execution_control(Group):
         ("gui_mode", "GuiMode", "Boolean"),
         ("base_output_file_name", "BaseOutputFileName", "String"),
         ("overwrite_existing_files", "OverwriteExistingFiles", "Boolean"),
+        ("mass_normalized", "MassNormalized", "Boolean"),
     ]
 
     @property
@@ -170,3 +171,12 @@ class execution_control(Group):
     @overwrite_existing_files.setter
     def overwrite_existing_files(self, value: Boolean):
         self.set_property_state("overwrite_existing_files", value)
+
+    @property
+    def mass_normalized(self) -> Boolean:
+        """Controls whether mode shapes are mass normalized"""
+        return self.get_property_state("mass_normalized")
+
+    @mass_normalized.setter
+    def mass_normalized(self, value: Boolean):
+        self.set_property_state("mass_normalized", value)

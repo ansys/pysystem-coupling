@@ -111,14 +111,14 @@ def _populate_parents_list(cls):
             if not cls in parents_dict[child_file]:
                 parents_dict[child_file].append(cls)
 
-    if hasattr(cls, "argument_names"):
-        for child in cls.argument_names:
-            child_cls = getattr(cls, child)
-            child_file = child_cls.__module__.split(".")[-1]
-            if not parents_dict.get(child_file):
-                parents_dict[child_file] = []
-            if not cls in parents_dict[child_file]:
-                parents_dict[child_file].append(cls)
+    # if hasattr(cls, "argument_names"):
+    #     for child in cls.argument_names:
+    #         child_cls = getattr(cls, child)
+    #         child_file = child_cls.__module__.split(".")[-1]
+    #         if not parents_dict.get(child_file):
+    #             parents_dict[child_file] = []
+    #         if not cls in parents_dict[child_file]:
+    #             parents_dict[child_file].append(cls)
 
     if hasattr(cls, "child_object_type"):
         child_cls = getattr(cls, "child_object_type")
@@ -149,6 +149,7 @@ def _populate_rst_from_settings(rst_dir, cls):
     cls_name = cls.__name__
     file_name = cls.__module__.split(".")[-1]
     rstpath = os.path.normpath(os.path.join(rst_dir, file_name + ".rst"))
+
     has_properties = (
         hasattr(cls, "property_names_types") and len(cls.property_names_types) > 0
     )
@@ -241,9 +242,9 @@ def _populate_rst_from_settings(rst_dir, cls):
             for child in cls.command_names:
                 _populate_rst_from_settings(rst_dir, getattr(cls, child))
 
-        if has_arguments:
-            for child in cls.argument_names:
-                _populate_rst_from_settings(rst_dir, getattr(cls, child))
+        # if has_arguments:
+        #    for child in cls.argument_names:
+        #        _populate_rst_from_settings(rst_dir, getattr(cls, child))
 
         if has_named_object:
             _populate_rst_from_settings(rst_dir, getattr(cls, "child_object_type"))

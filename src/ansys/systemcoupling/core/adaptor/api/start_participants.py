@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .participant_names import participant_names
-
 
 class start_participants(Command):
     """
@@ -41,7 +39,9 @@ class start_participants(Command):
 
     argument_names = ["participant_names"]
 
-    participant_names: participant_names = participant_names
-    """
-    participant_names argument of start_participants.
-    """
+    class participant_names(StringList):
+        """
+        This argument has been deprecated and will be removed in future releases.
+        """
+
+        syc_name = "ParticipantNames"

@@ -19,7 +19,7 @@ class avoid_data_reconstruction(Group):
 
     @property
     def volume_mapping(self) -> Boolean:
-        """'volume_mapping' property of 'analysis_control' object"""
+        """UNDOCUMENTED"""
         return self.get_property_state("volume_mapping")
 
     @volume_mapping.setter
@@ -28,7 +28,7 @@ class avoid_data_reconstruction(Group):
 
     @property
     def surface_mapping(self) -> Boolean:
-        """'surface_mapping' property of 'analysis_control' object"""
+        """UNDOCUMENTED"""
         return self.get_property_state("surface_mapping")
 
     @surface_mapping.setter

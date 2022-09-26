@@ -4,9 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .expression_name import expression_name
-from .expression_string import expression_string
-
 
 class add_named_expression(Command):
     """
@@ -29,11 +26,17 @@ class add_named_expression(Command):
 
     argument_names = ["expression_name", "expression_string"]
 
-    expression_name: expression_name = expression_name
-    """
-    expression_name argument of add_named_expression.
-    """
-    expression_string: expression_string = expression_string
-    """
-    expression_string argument of add_named_expression.
-    """
+    class expression_name(String):
+        """
+        The name by which this expression should be referenced when used in
+        another expression.
+        """
+
+        syc_name = "ExpressionName"
+
+    class expression_string(String):
+        """
+        String containing the definition of the expression.
+        """
+
+        syc_name = "ExpressionString"

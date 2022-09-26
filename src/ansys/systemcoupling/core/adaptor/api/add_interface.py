@@ -4,11 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .side_one_participant import side_one_participant
-from .side_one_regions import side_one_regions
-from .side_two_participant import side_two_participant
-from .side_two_regions import side_two_regions
-
 
 class add_interface(Command):
     """
@@ -47,19 +42,34 @@ class add_interface(Command):
         "side_two_regions",
     ]
 
-    side_one_participant: side_one_participant = side_one_participant
-    """
-    side_one_participant argument of add_interface.
-    """
-    side_one_regions: side_one_regions = side_one_regions
-    """
-    side_one_regions argument of add_interface.
-    """
-    side_two_participant: side_two_participant = side_two_participant
-    """
-    side_two_participant argument of add_interface.
-    """
-    side_two_regions: side_two_regions = side_two_regions
-    """
-    side_two_regions argument of add_interface.
-    """
+    class side_one_participant(String):
+        """
+        String indicating the name of the participant to be associated with
+        side \"One\" of the interface.
+        """
+
+        syc_name = "SideOneParticipant"
+
+    class side_one_regions(StringList):
+        """
+        List specifying the name(s) of region(s) to be added to side \"One\" of
+        the interface.
+        """
+
+        syc_name = "SideOneRegions"
+
+    class side_two_participant(String):
+        """
+        String indicating the name of the participant to be associated with
+        side \"Two\" of the interface.
+        """
+
+        syc_name = "SideTwoParticipant"
+
+    class side_two_regions(StringList):
+        """
+        List specifying the name(s) of region(s) to be added to side \"Two\" of
+        the interface.
+        """
+
+        syc_name = "SideTwoRegions"

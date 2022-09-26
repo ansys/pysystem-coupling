@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .name import name
-
 
 class get_parameter_options(PathCommand):
     """
@@ -22,7 +20,9 @@ class get_parameter_options(PathCommand):
 
     argument_names = ["name"]
 
-    name: name = name
-    """
-    name argument of get_parameter_options.
-    """
+    class name(String):
+        """
+        'name' child.
+        """
+
+        syc_name = "Name"

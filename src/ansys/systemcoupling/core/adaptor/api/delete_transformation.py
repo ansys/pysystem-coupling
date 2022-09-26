@@ -4,9 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .reference_frame_2 import reference_frame
-from .transformation_name import transformation_name
-
 
 class delete_transformation(Command):
     """
@@ -29,11 +26,17 @@ class delete_transformation(Command):
 
     argument_names = ["reference_frame", "transformation_name"]
 
-    reference_frame: reference_frame = reference_frame
-    """
-    reference_frame argument of delete_transformation.
-    """
-    transformation_name: transformation_name = transformation_name
-    """
-    transformation_name argument of delete_transformation.
-    """
+    class reference_frame(String):
+        """
+        Name of the reference frame from which the transformation will be
+        deleted.
+        """
+
+        syc_name = "ReferenceFrame"
+
+    class transformation_name(String):
+        """
+        Name of the transformation which will be deleted.
+        """
+
+        syc_name = "TransformationName"

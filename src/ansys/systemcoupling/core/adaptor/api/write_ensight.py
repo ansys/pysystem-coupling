@@ -4,9 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .binary import binary
-from .file_name import file_name
-
 
 class write_ensight(Command):
     """
@@ -30,11 +27,20 @@ class write_ensight(Command):
 
     argument_names = ["file_name", "binary"]
 
-    file_name: file_name = file_name
-    """
-    file_name argument of write_ensight.
-    """
-    binary: binary = binary
-    """
-    binary argument of write_ensight.
-    """
+    class file_name(String):
+        """
+        Base name for Ensight files. It will generate <base>.encas file which
+        should be loaded into Ensight. Other files are generated for geometry
+        and variables.
+        """
+
+        syc_name = "FileName"
+
+    class binary(Boolean):
+        """
+        To control if file is to be written in binary format or ASCII. ASCII
+        slows down performance, but may be useful for debugging and seeing
+        raw data.
+        """
+
+        syc_name = "Binary"

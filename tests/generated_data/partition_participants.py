@@ -4,10 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .algorithm_name import algorithm_name
-from .machine_list import machine_list
-from .names_and_fractions import names_and_fractions
-
 
 class partition_participants(Command):
     """
@@ -28,15 +24,23 @@ class partition_participants(Command):
 
     argument_names = ["algorithm_name", "machine_list", "names_and_fractions"]
 
-    algorithm_name: algorithm_name = algorithm_name
-    """
-    algorithm_name argument of partition_participants.
-    """
-    machine_list: machine_list = machine_list
-    """
-    machine_list argument of partition_participants.
-    """
-    names_and_fractions: names_and_fractions = names_and_fractions
-    """
-    names_and_fractions argument of partition_participants.
-    """
+    class algorithm_name(String):
+        """
+        'algorithm_name' child.
+        """
+
+        syc_name = "AlgorithmName"
+
+    class machine_list(StrOrIntDictList):
+        """
+        'machine_list' child.
+        """
+
+        syc_name = "MachineList"
+
+    class names_and_fractions(StrFloatPairList):
+        """
+        'names_and_fractions' child.
+        """
+
+        syc_name = "NamesAndFractions"

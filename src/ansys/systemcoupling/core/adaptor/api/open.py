@@ -4,10 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .coupling_iteration import coupling_iteration
-from .coupling_step import coupling_step
-from .file_path import file_path
-
 
 class open(Command):
     """
@@ -63,15 +59,44 @@ class open(Command):
 
     argument_names = ["file_path", "coupling_step", "coupling_iteration"]
 
-    file_path: file_path = file_path
-    """
-    file_path argument of open.
-    """
-    coupling_step: coupling_step = coupling_step
-    """
-    coupling_step argument of open.
-    """
-    coupling_iteration: coupling_iteration = coupling_iteration
-    """
-    coupling_iteration argument of open.
-    """
+    class file_path(String):
+        """
+        Working directory containing the ``SyC`` subdirectory (and its .h5
+        file(s)) to be read.
+        """
+
+        syc_name = "FilePath"
+
+    class coupling_step(Integer):
+        """
+        Integer specifying the coupling step at which the coupled analysis is
+        restarted. When used, System Coupling reads the corresponding
+        ``Results_step<#>.h5`` file in the specified directory and restarts the
+        analysis at the end of the specified coupling step. When this argument
+        is used, System Coupling automatically removes the output files related
+        to all later coupling steps. If the files cannot be removed, then
+        System Coupling generates an exception message instructing you to free
+        up the files and reissue the ``open`` command with the ``coupling_step``
+        argument. If the simulation's results files are associated with
+        coupling iterations, then System Coupling prints an error message
+        indicating this.
+        """
+
+        syc_name = "CouplingStep"
+
+    class coupling_iteration(Integer):
+        """
+        Integer specifying the coupling iteration at which the coupled analysis
+        is restarted. When used, System Coupling reads the corresponding
+        ``Results_iter<#>.h5`` file in the specified directory and restarts the
+        analysis at the end of the specified coupling iteration. When this
+        argument is used, System Coupling automatically removes the output
+        files related to all later coupling iterations. If the files cannot be
+        removed, then System Coupling generates an exception message
+        instructing you to free up the files and reissue the ``open`` command with
+        the ``coupling_iteration`` argument. If the simulation's results files are
+        associated with coupling steps, then System Coupling prints an error
+        message indicating this.
+        """
+
+        syc_name = "CouplingIteration"

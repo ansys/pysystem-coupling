@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .parent_reference_frame import parent_reference_frame
-
 
 class add_reference_frame(Command):
     """
@@ -32,7 +30,11 @@ class add_reference_frame(Command):
 
     argument_names = ["parent_reference_frame"]
 
-    parent_reference_frame: parent_reference_frame = parent_reference_frame
-    """
-    parent_reference_frame argument of add_reference_frame.
-    """
+    class parent_reference_frame(String):
+        """
+        Name of a reference frame that the added frame should use as the
+        parent. If the argument is not provided, the default parent reference
+        frame "GlobalReferenceFrame" will be added.
+        """
+
+        syc_name = "ParentReferenceFrame"

@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .reason_msg import reason_msg
-
 
 class interrupt(InjectedCommand):
     """
@@ -30,7 +28,12 @@ class interrupt(InjectedCommand):
 
     argument_names = ["reason_msg"]
 
-    reason_msg: reason_msg = reason_msg
-    """
-    reason_msg argument of interrupt.
-    """
+    class reason_msg(String):
+        """
+        Text to describe the reason for the interrupt.
+
+        This might be used for such purposes as providing
+        additional annotation in transcript output.
+        """
+
+        syc_name = "reason_msg"

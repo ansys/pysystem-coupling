@@ -38,6 +38,7 @@ python <path to generate_datamodel.py> [-t] [-n] [-d] [-y]
 """
 
 import io
+import itertools
 import os
 import pprint
 import sys
@@ -82,7 +83,9 @@ def _get_indent_str(indent):
     return f"{' '*indent*4}"
 
 
-def _gather_hashes(name, info, cls, is_named_child=False, is_parameter=False):
+def _gather_hashes(
+    name, info, cls, is_named_child=False, is_parameter=False, cmd_cls_name=None
+):
 
     # For named objects we visit the info twice - once for the
     # parent container, and once for the contained child. The latter
@@ -134,7 +137,11 @@ def _gather_hashes(name, info, cls, is_named_child=False, is_parameter=False):
             for argument in getattr(cls, "argument_names", None):
                 argument_cls = getattr(cls, argument)
                 if aname == argument_cls.syc_name:
-                    arguments_hash.append(_gather_hashes(aname, ainfo, argument_cls))
+                    arguments_hash.append(
+                        _gather_hashes(
+                            aname, ainfo, argument_cls, cmd_cls_name=cls.__name__
+                        )
+                    )
                     break
     else:
         arguments_hash = None
@@ -167,6 +174,7 @@ def _gather_hashes(name, info, cls, is_named_child=False, is_parameter=False):
         commands_hash,
         arguments_hash,
         object_hash,
+        cmd_cls_name,
     )
     hash = _gethash(cls_tuple)
     if not hash_dict.get(hash):
@@ -177,6 +185,7 @@ def _gather_hashes(name, info, cls, is_named_child=False, is_parameter=False):
             commands_hash,
             arguments_hash,
             object_hash,
+            cmd_cls_name,
         )
     return hash
 
@@ -219,6 +228,7 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
         commands_hash,
         arguments_hash,
         object_hash,
+        cmd_cls_name,
     ) in hash_dict.items():
         if cls is None:
             # parameter - doesn't get its own class
@@ -233,24 +243,62 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 commands_hash1,
                 arguments_hash1,
                 object_hash1,
+                cmd_cls_name1,
             ) in hash_dict.values():
                 if key == object_hash1:
                     cls.__name__ = file_name = cls1.__name__ + "_child"
                     break
-        i = 0
-        base_file_name = file_name
-        while file_name in files:
-            i += 1
-            file_name = f"{base_file_name}_{i}"
-        files.append(file_name)
-        files_dict[key] = file_name
 
-        file_name += ".py"
-        filepath = os.path.normpath(os.path.join(parent_dir, file_name))
-        with open(filepath, "w") as out:
-            out.write(f"name: {cls_name}")
+        if cmd_cls_name:
+            # Dummy file name for arguments as ultimately we will
+            # be writing to the same file as the command. We are
+            # assuming that command file names will be unique.
+            # TODO: reasonable to assume uniqueness among commands
+            # but what about clash between command and datamodel item?
+            files_dict[key] = f"__cmd__{cmd_cls_name}"
+        else:
+            i = 0
+            base_file_name = file_name
+            while file_name in files:
+                i += 1
+                file_name = f"{base_file_name}_{i}"
+            files.append(file_name)
+            files_dict[key] = file_name
+
+            file_name += ".py"
+            filepath = os.path.normpath(os.path.join(parent_dir, file_name))
+            with open(filepath, "w") as out:
+                out.write(f"name: {cls_name}")
 
     # populate files
+
+    # Ensure command classes are written before arguments
+    # because we want the main class content to exist before
+    # we start adding the argument content.
+    non_arg_items = []
+    arg_items = []
+    for key, value in hash_dict.items():
+        file_name = files_dict.get(key)
+        if file_name and file_name.startswith("__cmd__"):
+            arg_items.append((key, value))
+        else:
+            non_arg_items.append((key, value))
+
+    # Command class content relies on the main command itself and its
+    # argument classes. Thus we gather the class definitions in a structure
+    # that is geared to storing command and argument class definitions but
+    # allows other class definitions also to be stored.
+    # Everything is gathered in the storage before files are written.
+    # The storage is a dict of filename to a 2-tuple. The first element of
+    # the tuple contains the class definition. For a command, the second
+    # element stores the argument definitions.
+    # i.e.,
+    # for cmd:
+    #           filename => (<cmd cls def>, [<arg def>...])
+    # for other:
+    #           filename => (<cls def>, [])
+    cls_content = {}
+
     for key, (
         cls,
         children_hash,
@@ -258,28 +306,35 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
         commands_hash,
         arguments_hash,
         object_hash,
-    ) in hash_dict.items():
+        cmd_cls_name,
+    ) in itertools.chain(non_arg_items, arg_items):
         if cls is None:
             # parameter
             continue
         file_name = files_dict.get(key)
+        is_arg_cls = False
+        if file_name.startswith("__cmd__"):
+            is_arg_cls = True
+            file_name = file_name[len("__cmd__") :]
         cls_name = cls.__name__
         with io.StringIO() as out:
             if file_name.endswith("root"):
                 print(f"writing  {file_name}  (cls_name = {cls_name}")
             # disclaimer to py file
-            out.write("#\n")
-            out.write("# This is an auto-generated file.  DO NOT EDIT!\n")
-            out.write("#\n")
-            out.write("\n")
+            if not is_arg_cls:
+                out.write("#\n")
+                out.write("# This is an auto-generated file.  DO NOT EDIT!\n")
+                out.write("#\n")
+                out.write("\n")
             if cls_name == root_classname:
                 print("writing hash for", file_name)
                 out.write(f'SHASH = "{root_hash}"\n\n')
 
             # write imports to py file
-            out.write(
-                "from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n"
-            )
+            if not is_arg_cls:
+                out.write(
+                    "from ansys.systemcoupling.core.adaptor.impl.datamodel import *\n\n"
+                )
             if children_hash:
                 for child in children_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
@@ -287,11 +342,6 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
             if commands_hash:
                 for child in commands_hash:
-                    pchild_name = hash_dict.get(child)[0].__name__
-                    out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
-
-            if arguments_hash:
-                for child in arguments_hash:
                     pchild_name = hash_dict.get(child)[0].__name__
                     out.write(f"from .{files_dict.get(child)} import {pchild_name}\n")
 
@@ -374,12 +424,6 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
                 mn = ("\n" + istr2).join(strout.getvalue().strip().split("\n"))
                 out.write(f"{istr2}{mn}\n\n")
 
-                for argument in arguments:
-                    out.write(f"{istr1}{argument}: {argument} = {argument}\n")
-                    out.write(f'{istr1}"""\n')
-                    out.write(f"{istr1}{argument} argument of {cls_name}.")
-                    out.write(f'\n{istr1}"""\n')
-
             # write object type
             child_object_type = getattr(cls, "child_object_type", None)
             if child_object_type:
@@ -390,6 +434,20 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
             content = out.getvalue()
 
+        if cmd_cls_name:
+            cls_content[file_name][1].append(content)
+        else:
+            cls_content[file_name] = (content, [])
+
+    # Now write classes
+    for file_name, the_content in cls_content.items():
+        # We reindent the arg content so that it is nested.
+        # (This is empty for non-command classes.)
+        lines = []
+        for cmd_arg in the_content[1]:
+            lines += cmd_arg.split("\n")
+        arg_content = istr1 + f"\n{istr1}".join(lines)
+        content = f"{the_content[0]}\n{arg_content}"
         content = _format_content(content, file_name + ".py")
         filepath = os.path.normpath(os.path.join(parent_dir, file_name + ".py"))
         with open(filepath, "w") as f:

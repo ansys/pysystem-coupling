@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .snapshot_name_2 import snapshot_name
-
 
 class delete_snapshot(Command):
     """
@@ -22,7 +20,9 @@ class delete_snapshot(Command):
 
     argument_names = ["snapshot_name"]
 
-    snapshot_name: snapshot_name = snapshot_name
-    """
-    snapshot_name argument of delete_snapshot.
-    """
+    class snapshot_name(String):
+        """
+        Name of the snapshot to be deleted.
+        """
+
+        syc_name = "SnapshotName"

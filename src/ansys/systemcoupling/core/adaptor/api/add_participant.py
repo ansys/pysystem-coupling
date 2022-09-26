@@ -4,12 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .additional_arguments import additional_arguments
-from .executable import executable
-from .input_file import input_file
-from .participant_type import participant_type
-from .working_directory import working_directory
-
 
 class add_participant(Command):
     """
@@ -77,23 +71,54 @@ class add_participant(Command):
         "working_directory",
     ]
 
-    participant_type: participant_type = participant_type
-    """
-    participant_type argument of add_participant.
-    """
-    input_file: input_file = input_file
-    """
-    input_file argument of add_participant.
-    """
-    executable: executable = executable
-    """
-    executable argument of add_participant.
-    """
-    additional_arguments: additional_arguments = additional_arguments
-    """
-    additional_arguments argument of add_participant.
-    """
-    working_directory: working_directory = working_directory
-    """
-    working_directory argument of add_participant.
-    """
+    class participant_type(String):
+        """
+        Participant type. Currently supported types are:
+
+        - \"DEFAULT\"
+        - \"CFX\"
+        - \"FLUENT\"
+        - \"MAPDL\"
+        - \"AEDT\"
+        - \"FMU\"
+        - \"FORTE\"
+        - \"DEFAULT-SRV\"
+        - \"MECH-SRV\"
+        - \"CFD-SRV\"
+
+        If unspecified, ``add_participant`` will attempt to deduce
+        the type from ``input_file``.
+        """
+
+        syc_name = "ParticipantType"
+
+    class input_file(String):
+        """
+        Name of the input file for the participant to be added.
+        Currently supported formats are SCP files, Forte input (FTSIM)
+        files, mechanical server (*.rst) files, cfd server (*.csv) files,
+        and FMU (.fmu) files (Beta).
+        """
+
+        syc_name = "InputFile"
+
+    class executable(String):
+        """
+        Path to the executable file for the participant to be added.
+        """
+
+        syc_name = "Executable"
+
+    class additional_arguments(String):
+        """
+        Any additional arguments to be passed to the participant's executable.
+        """
+
+        syc_name = "AdditionalArguments"
+
+    class working_directory(String):
+        """
+        Path to the working directory for this participant.
+        """
+
+        syc_name = "WorkingDirectory"

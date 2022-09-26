@@ -4,10 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .function import function
-from .function_name import function_name
-from .module import module
-
 
 class add_expression_function(Command):
     """
@@ -39,15 +35,27 @@ class add_expression_function(Command):
 
     argument_names = ["module", "function", "function_name"]
 
-    module: module = module
-    """
-    module argument of add_expression_function.
-    """
-    function: function = function
-    """
-    function argument of add_expression_function.
-    """
-    function_name: function_name = function_name
-    """
-    function_name argument of add_expression_function.
-    """
+    class module(String):
+        """
+        The name of the Python module (in the 'Modules' sub-directory of
+        the working directory) from which the function is to be obtained.
+        """
+
+        syc_name = "Module"
+
+    class function(String):
+        """
+        The name of the function in the module. If no ``function_name`` is
+        specified, this will also be the name by which the function should
+        be referenced when used in an expression.
+        """
+
+        syc_name = "Function"
+
+    class function_name(String):
+        """
+        Optionally specify a different name from ``function`` which should be
+        the name used to reference the function in an expression.
+        """
+
+        syc_name = "FunctionName"

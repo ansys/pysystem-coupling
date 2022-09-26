@@ -4,8 +4,6 @@
 
 from ansys.systemcoupling.core.adaptor.impl.datamodel import *
 
-from .participant_name_2 import participant_name
-
 
 class get_execution_command(Command):
     """
@@ -23,7 +21,10 @@ class get_execution_command(Command):
 
     argument_names = ["participant_name"]
 
-    participant_name: participant_name = participant_name
-    """
-    participant_name argument of get_execution_command.
-    """
+    class participant_name(String):
+        """
+        Name of the participant for which the execution command will
+        be returned.
+        """
+
+        syc_name = "ParticipantName"
