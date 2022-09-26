@@ -13,22 +13,18 @@ various aspects of setting up and solving an analysis.
 Although it is possible to set up an analysis by directly assigning the relevant
 data model objects and settings, the expected - and more convenient - approach is to use the
 various commands that are provided to set up the main objects. Direct data model assignment
-should then be used for fine adjustments to the set up.
+should then be used for fine adjustments to the setup.
 
-The API is defined in terms of a number of generic objects which will be described. Note that while
-it is anticpated that the API as it is used in practice will remain stable, the details of the
-generic implementation classes should not be relied on.
-
-
+The API implementation is built on a number of generic objects, which will be described. Note that while
+it is anticpated that the API as it is used in practice will remain stable, the details of the underlying
+generic implementation classes should not be relied on to any great extent.
 
 
-**TODO** This has been adapted/cut down from Fluent docs. Needs more customising for SyC differences
-as well as expansion in places.
 
 Top-level Objects
 -----------------
 
-The commands and settings API is accessible via the top-level attributes of the ``Analysis`` class,
+The commands and settings API is accessible via the top-level attributes of the ``Session`` class,
 ``case``, ``setup``, and ``solution``.
 
 .. code-block::

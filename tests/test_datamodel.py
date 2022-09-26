@@ -12,9 +12,9 @@ else:
 import pytest
 from state import StateForTesting
 
+from ansys.systemcoupling.core.adaptor.impl.source import get_root
 from ansys.systemcoupling.core.adaptor.impl.static_info import process_cmd_data
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
-from ansys.systemcoupling.core.adaptor.impl.types import get_root
 
 
 def _make_metadata():

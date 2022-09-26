@@ -53,7 +53,7 @@ sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
-from ansys.systemcoupling.core.adaptor.impl import types
+from ansys.systemcoupling.core.adaptor.impl import source as adaptor_source
 from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,
@@ -76,7 +76,7 @@ files_dict = {}
 
 
 def _gethash(obj_info):
-    return types._gethash(obj_info)
+    return adaptor_source.get_hash(obj_info)
 
 
 def _get_indent_str(indent):
@@ -552,7 +552,7 @@ def write_settings_classes(out: IO, cls, obj_info):
 def write_classes_to_file(
     filepath, obj_info, root_type="SystemCoupling", want_flat=False
 ):
-    cls = types.get_cls(root_type, obj_info[root_type])
+    cls = adaptor_source.get_cls(root_type, obj_info[root_type])
 
     if want_flat:
         hash_dict.clear()
