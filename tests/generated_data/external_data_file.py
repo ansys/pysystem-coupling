@@ -2,10 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class external_data_file(Group):
+class external_data_file(Container):
     """
     'external_data_file' child.
     """

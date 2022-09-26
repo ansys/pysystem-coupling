@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .expression import expression
 from .expression_function import expression_function
@@ -10,7 +10,7 @@ from .instancing import instancing
 from .reference_frame import reference_frame
 
 
-class library(Group):
+class library(Container):
     """
     'library' child.
     """

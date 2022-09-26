@@ -5,7 +5,7 @@ The only useful method is 'get_root' which returns the root object for
 accessing System Coupling settings.
 
 Child objects can be generally accessed/modified using attribute access.
-Named child objects can be accessed/modified using index operator.
+Named child objects can be accessed/modified using the index operator.
 
 Primitive settings are accessed (get/set) as properties.
 
@@ -173,7 +173,7 @@ class SettingsBase(Base, Generic[StateT]):
     def to_syc_keys(cls, value: StateT) -> StateT:
         """Convert value to have keys with native System Coupling names.
 
-        This is overridden in Group and NamedObject classes.
+        This is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return value
 
@@ -181,7 +181,7 @@ class SettingsBase(Base, Generic[StateT]):
     def to_python_keys(cls, value: StateT) -> StateT:
         """Convert value to have keys with python names.
 
-        This is overridden in Group and NamedObject classes.
+        This is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return value
 
@@ -189,7 +189,7 @@ class SettingsBase(Base, Generic[StateT]):
     def to_syc_name(cls, name: str) -> str:
         """Convert Python name native System Coupling identifier.
 
-        This is overridden in Group and NamedObject classes.
+        This is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return name
 
@@ -197,7 +197,7 @@ class SettingsBase(Base, Generic[StateT]):
     def to_python_name(cls, name: str) -> str:
         """Convert native System Coupling identifier to Python name.
 
-        This is overridden in Group and NamedObject classes.
+        This is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return name
 
@@ -332,24 +332,33 @@ class StrOrIntDictListDict(SettingsBase[StrOrIntDictListDictType]):
     _state_type = StrOrIntDictListDictType
 
 
-class Group(SettingsBase[DictStateType]):
-    """A Group container object.
+class Container(SettingsBase[DictStateType]):
+    """Container object for primitive values and other settings objects.
 
-    A Group object is a container similar to a C++ struct object. Child objects
-    can be accessed via attribute access.
+    A ``Container`` may contain child objects which are further objects of
+    type ``Container``, objects of type ``NamedContainer``, or various
+    types of 'command' object. Child objects are accessed as attributes.
+
+    Concrete instances of ``Container`` will usually provide access to
+    primitive settings (e.g., real, string values, etc.) as Python properties.
+
+    Note: the attributes listed below are mainly for implementation purposes.
 
     Attributes
     ----------
     child_names: list[str]
-                 Names of the child objects
+        Names of the child objects
     command_names: list[str]
-                   Names of the commands
+        Names of the commands
+    property_names_types: List[Tuple[str, str, str]]
+        List of tuples, each comprising property name, System Coupling property name,
+        type identifier.
     """
 
     _state_type = DictStateType
 
     def __init__(self, name: str = None, parent=None):
-        """Initializes an instance of the Group class.
+        """Initializes an instance of the ``Container`` class.
 
         Parameters
         ----------
@@ -425,7 +434,7 @@ class Group(SettingsBase[DictStateType]):
     def to_syc_name(cls, name: str) -> str:
         """Convert Python property name to native System Coupling name.
 
-        This is overridden in Group and NamedObject classes.
+        This is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         for prop, sycprop, _ in cls.property_names_types:
             if prop == name:
@@ -436,7 +445,7 @@ class Group(SettingsBase[DictStateType]):
     def to_python_name(cls, name: str) -> str:
         """Convert native System Coupling property name to Python name.
 
-        This is overridden in Group and NamedObject classes.
+        This is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return cls._syc_to_py_propertymap()[name]
 
@@ -494,10 +503,10 @@ class Group(SettingsBase[DictStateType]):
 ChildTypeT = TypeVar("ChildTypeT")
 
 
-class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
-    """A NamedObject container.
+class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
+    """A container for named instances of ``Container`` objects.
 
-    A NamedObject is a container object, similar to a Python dict object.
+    A ``NamedContainer`` is a container object, similar to a Python dict object.
     Generally, many such objects can be created with different names.
 
     Attributes
@@ -511,7 +520,7 @@ class NamedObject(SettingsBase[DictStateType], Generic[ChildTypeT]):
     # New objects could get inserted by other operations, so we cannot assume
     # that the local cache in self._objects is always up-to-date
     def __init__(self, name: str = None, parent=None):
-        """Initializes an instance of the Group class.
+        """Initializes an instance of the ``NamedContainer`` class.
 
         Parameters
         ----------
@@ -730,7 +739,7 @@ def _get_param_type(id, info):
 
 def _get_type(id, info):
     if id == "child_object_type":
-        return Group
+        return Container
     data_type = info.get("type", None)
 
     if data_type is None:
@@ -748,7 +757,7 @@ def _get_type(id, info):
                 is_named = info["isNamed"]
             except:
                 raise RuntimeError(f"Data model metadata for '{id}' is badly formed.")
-            return NamedObject if is_named else Group
+            return NamedContainer if is_named else Container
     else:
         try:
             return _param_types[data_type]
@@ -801,7 +810,7 @@ def _get_cls(name, info, parent):
 
     children = info.get("__children")
     parameters = info.get("__parameters")
-    if base == NamedObject:
+    if base == NamedContainer:
         children = parameters = None
 
     def unique_name(base_name, existing_names):
@@ -890,7 +899,7 @@ def _get_cls(name, info, parent):
         ]
 
     # object_type = info.get('object-type')
-    object_type = Group if base == NamedObject else None
+    object_type = Container if base == NamedContainer else None
     if object_type:
         cls.child_object_type = get_cls("child_object_type", info, cls)
 
@@ -908,7 +917,7 @@ def get_root(
     category: str = "setup",
     generated_module: ModuleType = None,
     report_whether_dynamic_classes_created: Callable[[bool], None] = lambda _: None,
-) -> Group:
+) -> Container:
     """
     Get the root settings object.
 

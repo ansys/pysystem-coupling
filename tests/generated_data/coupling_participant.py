@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .coupling_participant_child import coupling_participant_child
 
 
-class coupling_participant(NamedObject[coupling_participant_child]):
+class coupling_participant(NamedContainer[coupling_participant_child]):
     """
     'coupling_participant' child.
     """

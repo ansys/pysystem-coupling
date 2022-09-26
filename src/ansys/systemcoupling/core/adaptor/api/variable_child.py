@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .attribute import attribute
 
 
-class variable_child(Group):
+class variable_child(Container):
     """
     Configure a variable for the coupling participant.
     """

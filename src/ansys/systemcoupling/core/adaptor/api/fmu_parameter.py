@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .fmu_parameter_child import fmu_parameter_child
 
 
-class fmu_parameter(NamedObject[fmu_parameter_child]):
+class fmu_parameter(NamedContainer[fmu_parameter_child]):
     """
     Configure a parameter for an FMU coupling participant.
     """

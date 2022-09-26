@@ -4,7 +4,7 @@
 
 SHASH = "037cacec643026d88863ee3a62cc9739194c61371c4aa8ad85581665e4302e54"
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .activate_hidden import activate_hidden
 from .add_data_transfer import add_data_transfer
@@ -33,7 +33,7 @@ from .solution_control import solution_control
 from .update_participant import update_participant
 
 
-class setup_root(Group):
+class setup_root(Container):
     """
     'root' object
     """

@@ -2,10 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class stabilization(Group):
+class stabilization(Container):
     """
     'stabilization' child.
     """

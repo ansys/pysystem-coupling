@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .type import type
 
 
-class results(Group):
+class results(Container):
     """
     'results' child.
     """

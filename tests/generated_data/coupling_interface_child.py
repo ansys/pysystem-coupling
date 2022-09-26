@@ -2,14 +2,14 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .data_transfer import data_transfer
 from .mapping_control import mapping_control
 from .side import side
 
 
-class coupling_interface_child(Group):
+class coupling_interface_child(Container):
     """
     'child_object_type' child.
     """

@@ -2,10 +2,10 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class avoid_data_reconstruction(Group):
+class avoid_data_reconstruction(Container):
     """
     Control whether data reconstruction should be done for elemental intensive data.
     """

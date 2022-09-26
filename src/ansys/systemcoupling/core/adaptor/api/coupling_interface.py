@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .coupling_interface_child import coupling_interface_child
 
 
-class coupling_interface(NamedObject[coupling_interface_child]):
+class coupling_interface(NamedContainer[coupling_interface_child]):
     """
     Configure a coupling interface.
     """

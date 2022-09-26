@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .stabilization import stabilization
 
 
-class data_transfer_child(Group):
+class data_transfer_child(Container):
     """
     Configure data transfers for a coupling interface.
     """

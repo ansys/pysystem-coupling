@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .reference_frame_child import reference_frame_child
 
 
-class reference_frame(NamedObject[reference_frame_child]):
+class reference_frame(NamedContainer[reference_frame_child]):
     """
     Provide a transformation relative to a ParentReferenceFrame.
     """

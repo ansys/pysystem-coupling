@@ -2,12 +2,12 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-from ansys.systemcoupling.core.adaptor.impl.datamodel import *
+from ansys.systemcoupling.core.adaptor.impl.types import *
 
 from .expression_child import expression_child
 
 
-class expression(NamedObject[expression_child]):
+class expression(NamedContainer[expression_child]):
     """
     Define a named expression that can be referenced in other expressions.
     """
