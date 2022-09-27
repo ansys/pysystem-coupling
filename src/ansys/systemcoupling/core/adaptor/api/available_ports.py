@@ -12,13 +12,10 @@ class available_ports(Container):
 
     syc_name = "AvailablePorts"
 
-    property_names_types = [
-        ("option", "Option", "String"),
-        ("range", "Range", "String"),
-    ]
+    property_names_types = [("option", "Option", "str"), ("range", "Range", "str")]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """Specify how available ports are determined.
 
         - \"ProgramControlled\" - System Coupling will find an
@@ -28,16 +25,16 @@ class available_ports(Container):
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def range(self) -> String:
+    def range(self) -> str:
         """Port range expressed as a comma-separated list of integers and/or
         integer ranges. An integer range is a pair of integers separated
         with a "-" character, specify an inclusive range of port numbers."""
         return self.get_property_state("range")
 
     @range.setter
-    def range(self, value: String):
+    def range(self, value: str):
         self.set_property_state("range", value)

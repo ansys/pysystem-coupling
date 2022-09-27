@@ -21,154 +21,154 @@ class variable_child(Container):
     attribute child of variable_child.
     """
     property_names_types = [
-        ("quantity_type", "QuantityType", "String"),
-        ("location", "Location", "String"),
-        ("participant_display_name", "ParticipantDisplayName", "String"),
-        ("display_name", "DisplayName", "String"),
-        ("data_type", "DataType", "String"),
-        ("real_initial_value", "RealInitialValue", "Real"),
-        ("integer_initial_value", "IntegerInitialValue", "Integer"),
-        ("logical_initial_value", "LogicalInitialValue", "Boolean"),
-        ("string_initial_value", "StringInitialValue", "String"),
-        ("real_min", "RealMin", "Real"),
-        ("real_max", "RealMax", "Real"),
-        ("integer_min", "IntegerMin", "Integer"),
-        ("integer_max", "IntegerMax", "Integer"),
-        ("tensor_type", "TensorType", "String"),
-        ("is_extensive", "IsExtensive", "Boolean"),
+        ("quantity_type", "QuantityType", "str"),
+        ("location", "Location", "str"),
+        ("participant_display_name", "ParticipantDisplayName", "str"),
+        ("display_name", "DisplayName", "str"),
+        ("data_type", "DataType", "str"),
+        ("real_initial_value", "RealInitialValue", "RealType"),
+        ("integer_initial_value", "IntegerInitialValue", "int"),
+        ("logical_initial_value", "LogicalInitialValue", "bool"),
+        ("string_initial_value", "StringInitialValue", "str"),
+        ("real_min", "RealMin", "RealType"),
+        ("real_max", "RealMax", "RealType"),
+        ("integer_min", "IntegerMin", "int"),
+        ("integer_max", "IntegerMax", "int"),
+        ("tensor_type", "TensorType", "str"),
+        ("is_extensive", "IsExtensive", "bool"),
     ]
 
     @property
-    def quantity_type(self) -> String:
+    def quantity_type(self) -> str:
         """'quantity_type' property of 'variable' object"""
         return self.get_property_state("quantity_type")
 
     @quantity_type.setter
-    def quantity_type(self, value: String):
+    def quantity_type(self, value: str):
         self.set_property_state("quantity_type", value)
 
     @property
-    def location(self) -> String:
+    def location(self) -> str:
         """'location' property of 'variable' object"""
         return self.get_property_state("location")
 
     @location.setter
-    def location(self, value: String):
+    def location(self, value: str):
         self.set_property_state("location", value)
 
     @property
-    def participant_display_name(self) -> String:
+    def participant_display_name(self) -> str:
         """'participant_display_name' property of 'variable' object"""
         return self.get_property_state("participant_display_name")
 
     @participant_display_name.setter
-    def participant_display_name(self, value: String):
+    def participant_display_name(self, value: str):
         self.set_property_state("participant_display_name", value)
 
     @property
-    def display_name(self) -> String:
+    def display_name(self) -> str:
         """'display_name' property of 'variable' object"""
         return self.get_property_state("display_name")
 
     @display_name.setter
-    def display_name(self, value: String):
+    def display_name(self, value: str):
         self.set_property_state("display_name", value)
 
     @property
-    def data_type(self) -> String:
+    def data_type(self) -> str:
         """'data_type' property of 'variable' object"""
         return self.get_property_state("data_type")
 
     @data_type.setter
-    def data_type(self, value: String):
+    def data_type(self, value: str):
         self.set_property_state("data_type", value)
 
     @property
-    def real_initial_value(self) -> Real:
+    def real_initial_value(self) -> RealType:
         """'real_initial_value' property of 'variable' object"""
         return self.get_property_state("real_initial_value")
 
     @real_initial_value.setter
-    def real_initial_value(self, value: Real):
+    def real_initial_value(self, value: RealType):
         self.set_property_state("real_initial_value", value)
 
     @property
-    def integer_initial_value(self) -> Integer:
+    def integer_initial_value(self) -> int:
         """'integer_initial_value' property of 'variable' object"""
         return self.get_property_state("integer_initial_value")
 
     @integer_initial_value.setter
-    def integer_initial_value(self, value: Integer):
+    def integer_initial_value(self, value: int):
         self.set_property_state("integer_initial_value", value)
 
     @property
-    def logical_initial_value(self) -> Boolean:
+    def logical_initial_value(self) -> bool:
         """'logical_initial_value' property of 'variable' object"""
         return self.get_property_state("logical_initial_value")
 
     @logical_initial_value.setter
-    def logical_initial_value(self, value: Boolean):
+    def logical_initial_value(self, value: bool):
         self.set_property_state("logical_initial_value", value)
 
     @property
-    def string_initial_value(self) -> String:
+    def string_initial_value(self) -> str:
         """'string_initial_value' property of 'variable' object"""
         return self.get_property_state("string_initial_value")
 
     @string_initial_value.setter
-    def string_initial_value(self, value: String):
+    def string_initial_value(self, value: str):
         self.set_property_state("string_initial_value", value)
 
     @property
-    def real_min(self) -> Real:
+    def real_min(self) -> RealType:
         """'real_min' property of 'variable' object"""
         return self.get_property_state("real_min")
 
     @real_min.setter
-    def real_min(self, value: Real):
+    def real_min(self, value: RealType):
         self.set_property_state("real_min", value)
 
     @property
-    def real_max(self) -> Real:
+    def real_max(self) -> RealType:
         """'real_max' property of 'variable' object"""
         return self.get_property_state("real_max")
 
     @real_max.setter
-    def real_max(self, value: Real):
+    def real_max(self, value: RealType):
         self.set_property_state("real_max", value)
 
     @property
-    def integer_min(self) -> Integer:
+    def integer_min(self) -> int:
         """'integer_min' property of 'variable' object"""
         return self.get_property_state("integer_min")
 
     @integer_min.setter
-    def integer_min(self, value: Integer):
+    def integer_min(self, value: int):
         self.set_property_state("integer_min", value)
 
     @property
-    def integer_max(self) -> Integer:
+    def integer_max(self) -> int:
         """'integer_max' property of 'variable' object"""
         return self.get_property_state("integer_max")
 
     @integer_max.setter
-    def integer_max(self, value: Integer):
+    def integer_max(self, value: int):
         self.set_property_state("integer_max", value)
 
     @property
-    def tensor_type(self) -> String:
+    def tensor_type(self) -> str:
         """'tensor_type' property of 'variable' object"""
         return self.get_property_state("tensor_type")
 
     @tensor_type.setter
-    def tensor_type(self, value: String):
+    def tensor_type(self, value: str):
         self.set_property_state("tensor_type", value)
 
     @property
-    def is_extensive(self) -> Boolean:
+    def is_extensive(self) -> bool:
         """'is_extensive' property of 'variable' object"""
         return self.get_property_state("is_extensive")
 
     @is_extensive.setter
-    def is_extensive(self, value: Boolean):
+    def is_extensive(self, value: bool):
         self.set_property_state("is_extensive", value)

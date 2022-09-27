@@ -14,32 +14,32 @@ class transformation_child(Container):
     syc_name = "child_object_type"
 
     property_names_types = [
-        ("option", "Option", "String"),
-        ("angle", "Angle", "Real"),
-        ("axis", "Axis", "String"),
-        ("vector", "Vector", "RealVector"),
+        ("option", "Option", "str"),
+        ("angle", "Angle", "RealType"),
+        ("axis", "Axis", "str"),
+        ("vector", "Vector", "RealVectorType"),
     ]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """Specifies the type of transformation, ``Rotation`` or ``Translation``."""
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def angle(self) -> Real:
+    def angle(self) -> RealType:
         """The angle of rotation for a rotation transformation."""
         return self.get_property_state("angle")
 
     @angle.setter
-    def angle(self, value: Real):
+    def angle(self, value: RealType):
         self.set_property_state("angle", value)
 
     @property
-    def axis(self) -> String:
+    def axis(self) -> str:
         """The axis of rotation to be used for a rotation transformation.
 
         - \"XAxis\" - Rotation is about the x-axis.
@@ -49,14 +49,14 @@ class transformation_child(Container):
         return self.get_property_state("axis")
 
     @axis.setter
-    def axis(self, value: String):
+    def axis(self, value: str):
         self.set_property_state("axis", value)
 
     @property
-    def vector(self) -> RealVector:
+    def vector(self) -> RealVectorType:
         """Define an axis of rotation vector in the ``UserDefined`` case."""
         return self.get_property_state("vector")
 
     @vector.setter
-    def vector(self, value: RealVector):
+    def vector(self, value: RealVectorType):
         self.set_property_state("vector", value)

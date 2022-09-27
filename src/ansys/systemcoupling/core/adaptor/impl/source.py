@@ -33,7 +33,19 @@ from ansys.systemcoupling.core.util.logging import LOG
 
 from .syc_proxy_interface import SycProxyInterface
 
-_param_types = {
+# Datamodel property types defined as primitive types/type hint names
+_property_types = {
+    "Integer": int,
+    "Logical": bool,
+    "Real": "RealType",
+    "String": str,
+    "Real List": "RealListType",
+    "Real Triplet": "RealVectorType",
+    "String List": "StringListType",
+}
+
+# Command arguments still defined as settings classes
+_arg_types = {
     "Integer": Integer,
     "Logical": Boolean,
     "Real": Real,
@@ -47,10 +59,14 @@ _param_types = {
 }
 
 
-def _get_param_type(id, info):
+def _get_property_type(id, info):
     data_type = info.get("type", None)
     try:
-        return _param_types[data_type].__name__
+        t = _property_types[data_type]
+        return t if isinstance(t, str) else t.__name__
+    except AttributeError:
+        print(f"AttributeError with property type = {_property_types[data_type]}")
+        raise
     except KeyError:
         raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
 
@@ -78,7 +94,7 @@ def _get_type(id, info):
             return NamedContainer if is_named else Container
     else:
         try:
-            return _param_types[data_type]
+            return _arg_types[data_type]
         except KeyError:
             raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
 
@@ -166,7 +182,7 @@ def _get_cls(name, info, parent):
             sycname = prname
             prinfo = parameters[sycname]
             prname = prinfo.get("py_sycname") or to_python_name(prname)
-            prtype = _get_param_type(prname, prinfo)
+            prtype = _get_property_type(prname, prinfo)
             docstr_default = f"'{prname}' property of '{parent.__name__}' object"
             docstr = prinfo.get("help", docstr_default)
             setattr(

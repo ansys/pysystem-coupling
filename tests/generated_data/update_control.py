@@ -13,24 +13,24 @@ class update_control(Container):
     syc_name = "UpdateControl"
 
     property_names_types = [
-        ("option", "Option", "String"),
-        ("update_frequency", "UpdateFrequency", "Integer"),
+        ("option", "Option", "str"),
+        ("update_frequency", "UpdateFrequency", "int"),
     ]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """'option' property of 'child_object_type' object"""
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def update_frequency(self) -> Integer:
+    def update_frequency(self) -> int:
         """'update_frequency' property of 'child_object_type' object"""
         return self.get_property_state("update_frequency")
 
     @update_frequency.setter
-    def update_frequency(self, value: Integer):
+    def update_frequency(self, value: int):
         self.set_property_state("update_frequency", value)

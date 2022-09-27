@@ -12,13 +12,10 @@ class ascii_output(Container):
 
     syc_name = "AsciiOutput"
 
-    property_names_types = [
-        ("option", "Option", "String"),
-        ("format", "Format", "String"),
-    ]
+    property_names_types = [("option", "Option", "str"), ("format", "Format", "str")]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """Control ASCII interface data output.
 
         Allowed values:
@@ -29,11 +26,11 @@ class ascii_output(Container):
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def format(self) -> String:
+    def format(self) -> str:
         """ASCII output format type.
 
         Allowed values:
@@ -43,5 +40,5 @@ class ascii_output(Container):
         return self.get_property_state("format")
 
     @format.setter
-    def format(self, value: String):
+    def format(self, value: str):
         self.set_property_state("format", value)

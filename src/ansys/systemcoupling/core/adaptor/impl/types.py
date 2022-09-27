@@ -468,7 +468,7 @@ class Container(SettingsBase[DictStateType]):
           cases.
         """
         syc_prop_name, prop_type = self._get_property_name_type(name, self.path)
-        if prop_type not in ("String", "StringList"):
+        if prop_type not in ("str", "StringListType"):
             raise RuntimeError(
                 f"Options are not available for non-string type '{name}'."
             )

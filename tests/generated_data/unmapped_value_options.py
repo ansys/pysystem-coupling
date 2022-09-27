@@ -13,144 +13,144 @@ class unmapped_value_options(Container):
     syc_name = "UnmappedValueOptions"
 
     property_names_types = [
-        ("matrix_verbosity", "MatrixVerbosity", "Integer"),
-        ("solver_verbosity", "SolverVerbosity", "Integer"),
-        ("solver", "Solver", "String"),
-        ("solver_relative_tolerance", "SolverRelativeTolerance", "Real"),
-        ("solver_max_iterations", "SolverMaxIterations", "Integer"),
-        ("solver_max_search_directions", "SolverMaxSearchDirections", "Integer"),
-        ("preconditioner", "Preconditioner", "String"),
-        ("ilut_tau", "IlutTau", "Real"),
-        ("ilut_max_fill", "IlutMaxFill", "Integer"),
-        ("ilut_pivot_tol", "IlutPivotTol", "Real"),
-        ("face_filter_tolerance", "FaceFilterTolerance", "Real"),
-        ("rbf_shape_parameter", "RbfShapeParameter", "Real"),
-        ("rbf_linear_correction", "RbfLinearCorrection", "Boolean"),
-        ("rbf_colinearity_tolerance", "RbfColinearityTolerance", "Real"),
+        ("matrix_verbosity", "MatrixVerbosity", "int"),
+        ("solver_verbosity", "SolverVerbosity", "int"),
+        ("solver", "Solver", "str"),
+        ("solver_relative_tolerance", "SolverRelativeTolerance", "RealType"),
+        ("solver_max_iterations", "SolverMaxIterations", "int"),
+        ("solver_max_search_directions", "SolverMaxSearchDirections", "int"),
+        ("preconditioner", "Preconditioner", "str"),
+        ("ilut_tau", "IlutTau", "RealType"),
+        ("ilut_max_fill", "IlutMaxFill", "int"),
+        ("ilut_pivot_tol", "IlutPivotTol", "RealType"),
+        ("face_filter_tolerance", "FaceFilterTolerance", "RealType"),
+        ("rbf_shape_parameter", "RbfShapeParameter", "RealType"),
+        ("rbf_linear_correction", "RbfLinearCorrection", "bool"),
+        ("rbf_colinearity_tolerance", "RbfColinearityTolerance", "RealType"),
     ]
 
     @property
-    def matrix_verbosity(self) -> Integer:
+    def matrix_verbosity(self) -> int:
         """'matrix_verbosity' property of 'analysis_control' object"""
         return self.get_property_state("matrix_verbosity")
 
     @matrix_verbosity.setter
-    def matrix_verbosity(self, value: Integer):
+    def matrix_verbosity(self, value: int):
         self.set_property_state("matrix_verbosity", value)
 
     @property
-    def solver_verbosity(self) -> Integer:
+    def solver_verbosity(self) -> int:
         """'solver_verbosity' property of 'analysis_control' object"""
         return self.get_property_state("solver_verbosity")
 
     @solver_verbosity.setter
-    def solver_verbosity(self, value: Integer):
+    def solver_verbosity(self, value: int):
         self.set_property_state("solver_verbosity", value)
 
     @property
-    def solver(self) -> String:
+    def solver(self) -> str:
         """'solver' property of 'analysis_control' object"""
         return self.get_property_state("solver")
 
     @solver.setter
-    def solver(self, value: String):
+    def solver(self, value: str):
         self.set_property_state("solver", value)
 
     @property
-    def solver_relative_tolerance(self) -> Real:
+    def solver_relative_tolerance(self) -> RealType:
         """'solver_relative_tolerance' property of 'analysis_control' object"""
         return self.get_property_state("solver_relative_tolerance")
 
     @solver_relative_tolerance.setter
-    def solver_relative_tolerance(self, value: Real):
+    def solver_relative_tolerance(self, value: RealType):
         self.set_property_state("solver_relative_tolerance", value)
 
     @property
-    def solver_max_iterations(self) -> Integer:
+    def solver_max_iterations(self) -> int:
         """'solver_max_iterations' property of 'analysis_control' object"""
         return self.get_property_state("solver_max_iterations")
 
     @solver_max_iterations.setter
-    def solver_max_iterations(self, value: Integer):
+    def solver_max_iterations(self, value: int):
         self.set_property_state("solver_max_iterations", value)
 
     @property
-    def solver_max_search_directions(self) -> Integer:
+    def solver_max_search_directions(self) -> int:
         """'solver_max_search_directions' property of 'analysis_control' object"""
         return self.get_property_state("solver_max_search_directions")
 
     @solver_max_search_directions.setter
-    def solver_max_search_directions(self, value: Integer):
+    def solver_max_search_directions(self, value: int):
         self.set_property_state("solver_max_search_directions", value)
 
     @property
-    def preconditioner(self) -> String:
+    def preconditioner(self) -> str:
         """'preconditioner' property of 'analysis_control' object"""
         return self.get_property_state("preconditioner")
 
     @preconditioner.setter
-    def preconditioner(self, value: String):
+    def preconditioner(self, value: str):
         self.set_property_state("preconditioner", value)
 
     @property
-    def ilut_tau(self) -> Real:
+    def ilut_tau(self) -> RealType:
         """'ilut_tau' property of 'analysis_control' object"""
         return self.get_property_state("ilut_tau")
 
     @ilut_tau.setter
-    def ilut_tau(self, value: Real):
+    def ilut_tau(self, value: RealType):
         self.set_property_state("ilut_tau", value)
 
     @property
-    def ilut_max_fill(self) -> Integer:
+    def ilut_max_fill(self) -> int:
         """'ilut_max_fill' property of 'analysis_control' object"""
         return self.get_property_state("ilut_max_fill")
 
     @ilut_max_fill.setter
-    def ilut_max_fill(self, value: Integer):
+    def ilut_max_fill(self, value: int):
         self.set_property_state("ilut_max_fill", value)
 
     @property
-    def ilut_pivot_tol(self) -> Real:
+    def ilut_pivot_tol(self) -> RealType:
         """'ilut_pivot_tol' property of 'analysis_control' object"""
         return self.get_property_state("ilut_pivot_tol")
 
     @ilut_pivot_tol.setter
-    def ilut_pivot_tol(self, value: Real):
+    def ilut_pivot_tol(self, value: RealType):
         self.set_property_state("ilut_pivot_tol", value)
 
     @property
-    def face_filter_tolerance(self) -> Real:
+    def face_filter_tolerance(self) -> RealType:
         """'face_filter_tolerance' property of 'analysis_control' object"""
         return self.get_property_state("face_filter_tolerance")
 
     @face_filter_tolerance.setter
-    def face_filter_tolerance(self, value: Real):
+    def face_filter_tolerance(self, value: RealType):
         self.set_property_state("face_filter_tolerance", value)
 
     @property
-    def rbf_shape_parameter(self) -> Real:
+    def rbf_shape_parameter(self) -> RealType:
         """'rbf_shape_parameter' property of 'analysis_control' object"""
         return self.get_property_state("rbf_shape_parameter")
 
     @rbf_shape_parameter.setter
-    def rbf_shape_parameter(self, value: Real):
+    def rbf_shape_parameter(self, value: RealType):
         self.set_property_state("rbf_shape_parameter", value)
 
     @property
-    def rbf_linear_correction(self) -> Boolean:
+    def rbf_linear_correction(self) -> bool:
         """'rbf_linear_correction' property of 'analysis_control' object"""
         return self.get_property_state("rbf_linear_correction")
 
     @rbf_linear_correction.setter
-    def rbf_linear_correction(self, value: Boolean):
+    def rbf_linear_correction(self, value: bool):
         self.set_property_state("rbf_linear_correction", value)
 
     @property
-    def rbf_colinearity_tolerance(self) -> Real:
+    def rbf_colinearity_tolerance(self) -> RealType:
         """'rbf_colinearity_tolerance' property of 'analysis_control' object"""
         return self.get_property_state("rbf_colinearity_tolerance")
 
     @rbf_colinearity_tolerance.setter
-    def rbf_colinearity_tolerance(self, value: Real):
+    def rbf_colinearity_tolerance(self, value: RealType):
         self.set_property_state("rbf_colinearity_tolerance", value)
