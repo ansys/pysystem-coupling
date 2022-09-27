@@ -11,3 +11,4 @@
    :template: datamodel-module-template.rst
    :recursive:
 
+   types

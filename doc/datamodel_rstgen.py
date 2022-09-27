@@ -49,7 +49,6 @@ def _generate_property_list_for_rst(r, data_dict={}):
     indent = " " * 4
     for prop, info in data_dict.items():
         doc, type = info
-        # r.write(f"{prop} : :ref:`{type}<dm_{type}>`\n")
         if type.endswith("Type"):
             r.write(f"{prop} : :ref:`{type}<{to_snake_case(type)}>`\n")
         else:
