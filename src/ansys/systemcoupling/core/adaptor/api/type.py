@@ -13,26 +13,26 @@ class type(Container):
     syc_name = "Type"
 
     property_names_types = [
-        ("option", "Option", "String"),
-        ("binary_format", "BinaryFormat", "Boolean"),
+        ("option", "Option", "str"),
+        ("binary_format", "BinaryFormat", "bool"),
     ]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """Allowed values:
 
         - \"EnsightGold\" (beta only)"""
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def binary_format(self) -> Boolean:
+    def binary_format(self) -> bool:
         """Output in Binary or ASCII format."""
         return self.get_property_state("binary_format")
 
     @binary_format.setter
-    def binary_format(self, value: Boolean):
+    def binary_format(self, value: bool):
         self.set_property_state("binary_format", value)

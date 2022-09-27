@@ -31,168 +31,168 @@ class analysis_control(Container):
     unmapped_value_options child of analysis_control.
     """
     property_names_types = [
-        ("analysis_type", "AnalysisType", "String"),
-        ("optimize_if_one_way", "OptimizeIfOneWay", "Boolean"),
-        ("allow_simultaneous_update", "AllowSimultaneousUpdate", "Boolean"),
-        ("simultaneous_participants", "SimultaneousParticipants", "String"),
-        ("partitioning_algorithm", "PartitioningAlgorithm", "String"),
-        ("allow_iterations_only_mode", "AllowIterationsOnlyMode", "Boolean"),
-        ("target_initialization_option", "TargetInitializationOption", "String"),
-        ("fluent_region_update_at_step", "FluentRegionUpdateAtStep", "Boolean"),
-        ("mesh_import_on_initialization", "MeshImportOnInitialization", "Boolean"),
-        ("import_all_regions", "ImportAllRegions", "Boolean"),
-        ("bypass_fluent_adapter", "BypassFluentAdapter", "Boolean"),
-        ("variable_to_expression_transfer", "VariableToExpressionTransfer", "Boolean"),
-        ("update_mapping_weights", "UpdateMappingWeights", "String"),
-        ("rotate_follower_forces", "RotateFollowerForces", "String"),
+        ("analysis_type", "AnalysisType", "str"),
+        ("optimize_if_one_way", "OptimizeIfOneWay", "bool"),
+        ("allow_simultaneous_update", "AllowSimultaneousUpdate", "bool"),
+        ("simultaneous_participants", "SimultaneousParticipants", "str"),
+        ("partitioning_algorithm", "PartitioningAlgorithm", "str"),
+        ("allow_iterations_only_mode", "AllowIterationsOnlyMode", "bool"),
+        ("target_initialization_option", "TargetInitializationOption", "str"),
+        ("fluent_region_update_at_step", "FluentRegionUpdateAtStep", "bool"),
+        ("mesh_import_on_initialization", "MeshImportOnInitialization", "bool"),
+        ("import_all_regions", "ImportAllRegions", "bool"),
+        ("bypass_fluent_adapter", "BypassFluentAdapter", "bool"),
+        ("variable_to_expression_transfer", "VariableToExpressionTransfer", "bool"),
+        ("update_mapping_weights", "UpdateMappingWeights", "str"),
+        ("rotate_follower_forces", "RotateFollowerForces", "str"),
         (
             "solve_incremental_displacement_first",
             "SolveIncrementalDisplacementFirst",
-            "Boolean",
+            "bool",
         ),
-        ("write_scs_file", "WriteScsFile", "Boolean"),
+        ("write_scs_file", "WriteScsFile", "bool"),
     ]
 
     @property
-    def analysis_type(self) -> String:
+    def analysis_type(self) -> str:
         """'analysis_type' property of 'setup_root' object"""
         return self.get_property_state("analysis_type")
 
     @analysis_type.setter
-    def analysis_type(self, value: String):
+    def analysis_type(self, value: str):
         self.set_property_state("analysis_type", value)
 
     @property
-    def optimize_if_one_way(self) -> Boolean:
+    def optimize_if_one_way(self) -> bool:
         """'optimize_if_one_way' property of 'setup_root' object"""
         return self.get_property_state("optimize_if_one_way")
 
     @optimize_if_one_way.setter
-    def optimize_if_one_way(self, value: Boolean):
+    def optimize_if_one_way(self, value: bool):
         self.set_property_state("optimize_if_one_way", value)
 
     @property
-    def allow_simultaneous_update(self) -> Boolean:
+    def allow_simultaneous_update(self) -> bool:
         """'allow_simultaneous_update' property of 'setup_root' object"""
         return self.get_property_state("allow_simultaneous_update")
 
     @allow_simultaneous_update.setter
-    def allow_simultaneous_update(self, value: Boolean):
+    def allow_simultaneous_update(self, value: bool):
         self.set_property_state("allow_simultaneous_update", value)
 
     @property
-    def simultaneous_participants(self) -> String:
+    def simultaneous_participants(self) -> str:
         """'simultaneous_participants' property of 'setup_root' object"""
         return self.get_property_state("simultaneous_participants")
 
     @simultaneous_participants.setter
-    def simultaneous_participants(self, value: String):
+    def simultaneous_participants(self, value: str):
         self.set_property_state("simultaneous_participants", value)
 
     @property
-    def partitioning_algorithm(self) -> String:
+    def partitioning_algorithm(self) -> str:
         """'partitioning_algorithm' property of 'setup_root' object"""
         return self.get_property_state("partitioning_algorithm")
 
     @partitioning_algorithm.setter
-    def partitioning_algorithm(self, value: String):
+    def partitioning_algorithm(self, value: str):
         self.set_property_state("partitioning_algorithm", value)
 
     @property
-    def allow_iterations_only_mode(self) -> Boolean:
+    def allow_iterations_only_mode(self) -> bool:
         """'allow_iterations_only_mode' property of 'setup_root' object"""
         return self.get_property_state("allow_iterations_only_mode")
 
     @allow_iterations_only_mode.setter
-    def allow_iterations_only_mode(self, value: Boolean):
+    def allow_iterations_only_mode(self, value: bool):
         self.set_property_state("allow_iterations_only_mode", value)
 
     @property
-    def target_initialization_option(self) -> String:
+    def target_initialization_option(self) -> str:
         """'target_initialization_option' property of 'setup_root' object"""
         return self.get_property_state("target_initialization_option")
 
     @target_initialization_option.setter
-    def target_initialization_option(self, value: String):
+    def target_initialization_option(self, value: str):
         self.set_property_state("target_initialization_option", value)
 
     @property
-    def fluent_region_update_at_step(self) -> Boolean:
+    def fluent_region_update_at_step(self) -> bool:
         """'fluent_region_update_at_step' property of 'setup_root' object"""
         return self.get_property_state("fluent_region_update_at_step")
 
     @fluent_region_update_at_step.setter
-    def fluent_region_update_at_step(self, value: Boolean):
+    def fluent_region_update_at_step(self, value: bool):
         self.set_property_state("fluent_region_update_at_step", value)
 
     @property
-    def mesh_import_on_initialization(self) -> Boolean:
+    def mesh_import_on_initialization(self) -> bool:
         """'mesh_import_on_initialization' property of 'setup_root' object"""
         return self.get_property_state("mesh_import_on_initialization")
 
     @mesh_import_on_initialization.setter
-    def mesh_import_on_initialization(self, value: Boolean):
+    def mesh_import_on_initialization(self, value: bool):
         self.set_property_state("mesh_import_on_initialization", value)
 
     @property
-    def import_all_regions(self) -> Boolean:
+    def import_all_regions(self) -> bool:
         """'import_all_regions' property of 'setup_root' object"""
         return self.get_property_state("import_all_regions")
 
     @import_all_regions.setter
-    def import_all_regions(self, value: Boolean):
+    def import_all_regions(self, value: bool):
         self.set_property_state("import_all_regions", value)
 
     @property
-    def bypass_fluent_adapter(self) -> Boolean:
+    def bypass_fluent_adapter(self) -> bool:
         """'bypass_fluent_adapter' property of 'setup_root' object"""
         return self.get_property_state("bypass_fluent_adapter")
 
     @bypass_fluent_adapter.setter
-    def bypass_fluent_adapter(self, value: Boolean):
+    def bypass_fluent_adapter(self, value: bool):
         self.set_property_state("bypass_fluent_adapter", value)
 
     @property
-    def variable_to_expression_transfer(self) -> Boolean:
+    def variable_to_expression_transfer(self) -> bool:
         """'variable_to_expression_transfer' property of 'setup_root' object"""
         return self.get_property_state("variable_to_expression_transfer")
 
     @variable_to_expression_transfer.setter
-    def variable_to_expression_transfer(self, value: Boolean):
+    def variable_to_expression_transfer(self, value: bool):
         self.set_property_state("variable_to_expression_transfer", value)
 
     @property
-    def update_mapping_weights(self) -> String:
+    def update_mapping_weights(self) -> str:
         """'update_mapping_weights' property of 'setup_root' object"""
         return self.get_property_state("update_mapping_weights")
 
     @update_mapping_weights.setter
-    def update_mapping_weights(self, value: String):
+    def update_mapping_weights(self, value: str):
         self.set_property_state("update_mapping_weights", value)
 
     @property
-    def rotate_follower_forces(self) -> String:
+    def rotate_follower_forces(self) -> str:
         """'rotate_follower_forces' property of 'setup_root' object"""
         return self.get_property_state("rotate_follower_forces")
 
     @rotate_follower_forces.setter
-    def rotate_follower_forces(self, value: String):
+    def rotate_follower_forces(self, value: str):
         self.set_property_state("rotate_follower_forces", value)
 
     @property
-    def solve_incremental_displacement_first(self) -> Boolean:
+    def solve_incremental_displacement_first(self) -> bool:
         """'solve_incremental_displacement_first' property of 'setup_root' object"""
         return self.get_property_state("solve_incremental_displacement_first")
 
     @solve_incremental_displacement_first.setter
-    def solve_incremental_displacement_first(self, value: Boolean):
+    def solve_incremental_displacement_first(self, value: bool):
         self.set_property_state("solve_incremental_displacement_first", value)
 
     @property
-    def write_scs_file(self) -> Boolean:
+    def write_scs_file(self) -> bool:
         """'write_scs_file' property of 'setup_root' object"""
         return self.get_property_state("write_scs_file")
 
     @write_scs_file.setter
-    def write_scs_file(self, value: Boolean):
+    def write_scs_file(self, value: bool):
         self.set_property_state("write_scs_file", value)

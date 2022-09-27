@@ -16,13 +16,13 @@ class instancing_child(Container):
     syc_name = "child_object_type"
 
     property_names_types = [
-        ("reference_frame", "ReferenceFrame", "String"),
-        ("instances_in_full_circle", "InstancesInFullCircle", "Integer"),
-        ("instances_for_mapping", "InstancesForMapping", "Integer"),
+        ("reference_frame", "ReferenceFrame", "str"),
+        ("instances_in_full_circle", "InstancesInFullCircle", "int"),
+        ("instances_for_mapping", "InstancesForMapping", "int"),
     ]
 
     @property
-    def reference_frame(self) -> String:
+    def reference_frame(self) -> str:
         """Reference frame that defines the orientation of the instancing.
 
         Rotation will be around the z-axis of the reference frame,
@@ -30,11 +30,11 @@ class instancing_child(Container):
         return self.get_property_state("reference_frame")
 
     @reference_frame.setter
-    def reference_frame(self, value: String):
+    def reference_frame(self, value: str):
         self.set_property_state("reference_frame", value)
 
     @property
-    def instances_in_full_circle(self) -> Integer:
+    def instances_in_full_circle(self) -> int:
         """Total number of instances (including the first instance) in
         a full 360 degree rotation of the participant mesh. This value
         includes the reference instance (with the participant mesh).
@@ -43,11 +43,11 @@ class instancing_child(Container):
         return self.get_property_state("instances_in_full_circle")
 
     @instances_in_full_circle.setter
-    def instances_in_full_circle(self, value: Integer):
+    def instances_in_full_circle(self, value: int):
         self.set_property_state("instances_in_full_circle", value)
 
     @property
-    def instances_for_mapping(self) -> Integer:
+    def instances_for_mapping(self) -> int:
         """Number of instances to be included in the mapping when instancing
         is applied.
 
@@ -58,5 +58,5 @@ class instancing_child(Container):
         return self.get_property_state("instances_for_mapping")
 
     @instances_for_mapping.setter
-    def instances_for_mapping(self, value: Integer):
+    def instances_for_mapping(self, value: int):
         self.set_property_state("instances_for_mapping", value)

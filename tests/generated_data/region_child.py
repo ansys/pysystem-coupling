@@ -13,44 +13,44 @@ class region_child(Container):
     syc_name = "child_object_type"
 
     property_names_types = [
-        ("topology", "Topology", "String"),
-        ("input_variables", "InputVariables", "StringList"),
-        ("output_variables", "OutputVariables", "StringList"),
-        ("display_name", "DisplayName", "String"),
+        ("topology", "Topology", "str"),
+        ("input_variables", "InputVariables", "StringListType"),
+        ("output_variables", "OutputVariables", "StringListType"),
+        ("display_name", "DisplayName", "str"),
     ]
 
     @property
-    def topology(self) -> String:
+    def topology(self) -> str:
         """'topology' property of 'region' object"""
         return self.get_property_state("topology")
 
     @topology.setter
-    def topology(self, value: String):
+    def topology(self, value: str):
         self.set_property_state("topology", value)
 
     @property
-    def input_variables(self) -> StringList:
+    def input_variables(self) -> StringListType:
         """'input_variables' property of 'region' object"""
         return self.get_property_state("input_variables")
 
     @input_variables.setter
-    def input_variables(self, value: StringList):
+    def input_variables(self, value: StringListType):
         self.set_property_state("input_variables", value)
 
     @property
-    def output_variables(self) -> StringList:
+    def output_variables(self) -> StringListType:
         """'output_variables' property of 'region' object"""
         return self.get_property_state("output_variables")
 
     @output_variables.setter
-    def output_variables(self, value: StringList):
+    def output_variables(self, value: StringListType):
         self.set_property_state("output_variables", value)
 
     @property
-    def display_name(self) -> String:
+    def display_name(self) -> str:
         """'display_name' property of 'region' object"""
         return self.get_property_state("display_name")
 
     @display_name.setter
-    def display_name(self, value: String):
+    def display_name(self, value: str):
         self.set_property_state("display_name", value)

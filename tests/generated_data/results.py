@@ -21,34 +21,34 @@ class results(Container):
     type child of results.
     """
     property_names_types = [
-        ("option", "Option", "String"),
-        ("include_instances", "IncludeInstances", "String"),
-        ("output_frequency", "OutputFrequency", "Integer"),
+        ("option", "Option", "str"),
+        ("include_instances", "IncludeInstances", "str"),
+        ("output_frequency", "OutputFrequency", "int"),
     ]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """'option' property of 'output_control' object"""
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def include_instances(self) -> String:
+    def include_instances(self) -> str:
         """'include_instances' property of 'output_control' object"""
         return self.get_property_state("include_instances")
 
     @include_instances.setter
-    def include_instances(self, value: String):
+    def include_instances(self, value: str):
         self.set_property_state("include_instances", value)
 
     @property
-    def output_frequency(self) -> Integer:
+    def output_frequency(self) -> int:
         """'output_frequency' property of 'output_control' object"""
         return self.get_property_state("output_frequency")
 
     @output_frequency.setter
-    def output_frequency(self, value: Integer):
+    def output_frequency(self, value: int):
         self.set_property_state("output_frequency", value)

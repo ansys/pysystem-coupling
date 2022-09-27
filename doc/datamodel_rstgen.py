@@ -28,6 +28,7 @@ python <path to datamodel_rstgen.py>
 import os
 
 from ansys.systemcoupling.core.adaptor.api import case_root, setup_root, solution_root
+from ansys.systemcoupling.core.util.name_util import to_python_name as to_snake_case
 
 parents_dict = {}
 rst_list = []
@@ -48,7 +49,11 @@ def _generate_property_list_for_rst(r, data_dict={}):
     indent = " " * 4
     for prop, info in data_dict.items():
         doc, type = info
-        r.write(f"{prop} : :ref:`{type}<dm_{type}>`\n")
+        # r.write(f"{prop} : :ref:`{type}<dm_{type}>`\n")
+        if type.endswith("Type"):
+            r.write(f"{prop} : :ref:`{type}<{to_snake_case(type)}>`\n")
+        else:
+            r.write(f"{prop} : `{type}`\n")
         lines = doc.split("\n")
         if len(lines) > 1:
             # Assume multi-line doc string has initial text immediately after

@@ -26,18 +26,18 @@ class output_control(Container):
     ascii_output child of output_control.
     """
     property_names_types = [
-        ("option", "Option", "String"),
-        ("generate_csv_chart_output", "GenerateCSVChartOutput", "Boolean"),
-        ("write_initial_snapshot", "WriteInitialSnapshot", "Boolean"),
-        ("transcript_precision", "TranscriptPrecision", "Integer"),
-        ("write_diagnostics", "WriteDiagnostics", "Boolean"),
-        ("write_weights_matrix", "WriteWeightsMatrix", "Boolean"),
-        ("write_residuals", "WriteResiduals", "Boolean"),
-        ("output_frequency", "OutputFrequency", "Integer"),
+        ("option", "Option", "str"),
+        ("generate_csv_chart_output", "GenerateCSVChartOutput", "bool"),
+        ("write_initial_snapshot", "WriteInitialSnapshot", "bool"),
+        ("transcript_precision", "TranscriptPrecision", "int"),
+        ("write_diagnostics", "WriteDiagnostics", "bool"),
+        ("write_weights_matrix", "WriteWeightsMatrix", "bool"),
+        ("write_residuals", "WriteResiduals", "bool"),
+        ("output_frequency", "OutputFrequency", "int"),
     ]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """Specifies when restart points are generated.
 
         Allowed values (step-based analyses only):
@@ -62,68 +62,68 @@ class output_control(Container):
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def generate_csv_chart_output(self) -> Boolean:
+    def generate_csv_chart_output(self) -> bool:
         """Write chart data in CSV format during solve."""
         return self.get_property_state("generate_csv_chart_output")
 
     @generate_csv_chart_output.setter
-    def generate_csv_chart_output(self, value: Boolean):
+    def generate_csv_chart_output(self, value: bool):
         self.set_property_state("generate_csv_chart_output", value)
 
     @property
-    def write_initial_snapshot(self) -> Boolean:
+    def write_initial_snapshot(self) -> bool:
         """Write initial snapshot."""
         return self.get_property_state("write_initial_snapshot")
 
     @write_initial_snapshot.setter
-    def write_initial_snapshot(self, value: Boolean):
+    def write_initial_snapshot(self, value: bool):
         self.set_property_state("write_initial_snapshot", value)
 
     @property
-    def transcript_precision(self) -> Integer:
+    def transcript_precision(self) -> int:
         """Number of digits after decimal point in transcript."""
         return self.get_property_state("transcript_precision")
 
     @transcript_precision.setter
-    def transcript_precision(self, value: Integer):
+    def transcript_precision(self, value: int):
         self.set_property_state("transcript_precision", value)
 
     @property
-    def write_diagnostics(self) -> Boolean:
+    def write_diagnostics(self) -> bool:
         """Write transfer diagnostics dictionary to file."""
         return self.get_property_state("write_diagnostics")
 
     @write_diagnostics.setter
-    def write_diagnostics(self, value: Boolean):
+    def write_diagnostics(self, value: bool):
         self.set_property_state("write_diagnostics", value)
 
     @property
-    def write_weights_matrix(self) -> Boolean:
+    def write_weights_matrix(self) -> bool:
         """Write mapping weights to file after calculation."""
         return self.get_property_state("write_weights_matrix")
 
     @write_weights_matrix.setter
-    def write_weights_matrix(self, value: Boolean):
+    def write_weights_matrix(self, value: bool):
         self.set_property_state("write_weights_matrix", value)
 
     @property
-    def write_residuals(self) -> Boolean:
+    def write_residuals(self) -> bool:
         """Write residuals to results files."""
         return self.get_property_state("write_residuals")
 
     @write_residuals.setter
-    def write_residuals(self, value: Boolean):
+    def write_residuals(self, value: bool):
         self.set_property_state("write_residuals", value)
 
     @property
-    def output_frequency(self) -> Integer:
+    def output_frequency(self) -> int:
         """Specify output frequency."""
         return self.get_property_state("output_frequency")
 
     @output_frequency.setter
-    def output_frequency(self, value: Integer):
+    def output_frequency(self, value: int):
         self.set_property_state("output_frequency", value)

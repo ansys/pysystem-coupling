@@ -21,34 +21,34 @@ class attribute_child(Container):
     dimensionality child of attribute_child.
     """
     property_names_types = [
-        ("attribute_type", "AttributeType", "String"),
-        ("real_value", "RealValue", "Real"),
-        ("integer_value", "IntegerValue", "Integer"),
+        ("attribute_type", "AttributeType", "str"),
+        ("real_value", "RealValue", "RealType"),
+        ("integer_value", "IntegerValue", "int"),
     ]
 
     @property
-    def attribute_type(self) -> String:
+    def attribute_type(self) -> str:
         """'attribute_type' property of 'attribute' object"""
         return self.get_property_state("attribute_type")
 
     @attribute_type.setter
-    def attribute_type(self, value: String):
+    def attribute_type(self, value: str):
         self.set_property_state("attribute_type", value)
 
     @property
-    def real_value(self) -> Real:
+    def real_value(self) -> RealType:
         """'real_value' property of 'attribute' object"""
         return self.get_property_state("real_value")
 
     @real_value.setter
-    def real_value(self, value: Real):
+    def real_value(self, value: RealType):
         self.set_property_state("real_value", value)
 
     @property
-    def integer_value(self) -> Integer:
+    def integer_value(self) -> int:
         """'integer_value' property of 'attribute' object"""
         return self.get_property_state("integer_value")
 
     @integer_value.setter
-    def integer_value(self, value: Integer):
+    def integer_value(self, value: int):
         self.set_property_state("integer_value", value)

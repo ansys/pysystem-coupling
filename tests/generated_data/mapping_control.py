@@ -13,178 +13,186 @@ class mapping_control(Container):
     syc_name = "MappingControl"
 
     property_names_types = [
-        ("stop_if_poor_intersection", "StopIfPoorIntersection", "Boolean"),
-        ("poor_intersection_threshold", "PoorIntersectionThreshold", "Real"),
-        ("face_alignment", "FaceAlignment", "String"),
-        ("absolute_gap_tolerance", "AbsoluteGapTolerance", "Real"),
-        ("relative_gap_tolerance", "RelativeGapTolerance", "Real"),
-        ("small_weight_tolerance", "SmallWeightTolerance", "Real"),
-        ("corner_tolerance", "CornerTolerance", "Real"),
-        ("halo_tolerance", "HaloTolerance", "Real"),
-        ("conservative_reciprocity_factor", "ConservativeReciprocityFactor", "Real"),
+        ("stop_if_poor_intersection", "StopIfPoorIntersection", "bool"),
+        ("poor_intersection_threshold", "PoorIntersectionThreshold", "RealType"),
+        ("face_alignment", "FaceAlignment", "str"),
+        ("absolute_gap_tolerance", "AbsoluteGapTolerance", "RealType"),
+        ("relative_gap_tolerance", "RelativeGapTolerance", "RealType"),
+        ("small_weight_tolerance", "SmallWeightTolerance", "RealType"),
+        ("corner_tolerance", "CornerTolerance", "RealType"),
+        ("halo_tolerance", "HaloTolerance", "RealType"),
+        (
+            "conservative_reciprocity_factor",
+            "ConservativeReciprocityFactor",
+            "RealType",
+        ),
         (
             "profile_preserving_reciprocity_factor",
             "ProfilePreservingReciprocityFactor",
-            "Real",
+            "RealType",
         ),
-        ("conservative_intensive", "ConservativeIntensive", "String"),
-        ("preserve_normal", "PreserveNormal", "String"),
-        ("conservation_fix_tolerance_volume", "ConservationFixToleranceVolume", "Real"),
-        ("rbf_option", "RBFOption", "String"),
-        ("rbf_shape_parameter", "RBFShapeParameter", "Real"),
-        ("rbf_linear_correction", "RBFLinearCorrection", "Boolean"),
-        ("rbf_clipping_scale", "RBFClippingScale", "Real"),
+        ("conservative_intensive", "ConservativeIntensive", "str"),
+        ("preserve_normal", "PreserveNormal", "str"),
+        (
+            "conservation_fix_tolerance_volume",
+            "ConservationFixToleranceVolume",
+            "RealType",
+        ),
+        ("rbf_option", "RBFOption", "str"),
+        ("rbf_shape_parameter", "RBFShapeParameter", "RealType"),
+        ("rbf_linear_correction", "RBFLinearCorrection", "bool"),
+        ("rbf_clipping_scale", "RBFClippingScale", "RealType"),
     ]
 
     @property
-    def stop_if_poor_intersection(self) -> Boolean:
+    def stop_if_poor_intersection(self) -> bool:
         """'stop_if_poor_intersection' property of 'child_object_type' object"""
         return self.get_property_state("stop_if_poor_intersection")
 
     @stop_if_poor_intersection.setter
-    def stop_if_poor_intersection(self, value: Boolean):
+    def stop_if_poor_intersection(self, value: bool):
         self.set_property_state("stop_if_poor_intersection", value)
 
     @property
-    def poor_intersection_threshold(self) -> Real:
+    def poor_intersection_threshold(self) -> RealType:
         """'poor_intersection_threshold' property of 'child_object_type' object"""
         return self.get_property_state("poor_intersection_threshold")
 
     @poor_intersection_threshold.setter
-    def poor_intersection_threshold(self, value: Real):
+    def poor_intersection_threshold(self, value: RealType):
         self.set_property_state("poor_intersection_threshold", value)
 
     @property
-    def face_alignment(self) -> String:
+    def face_alignment(self) -> str:
         """'face_alignment' property of 'child_object_type' object"""
         return self.get_property_state("face_alignment")
 
     @face_alignment.setter
-    def face_alignment(self, value: String):
+    def face_alignment(self, value: str):
         self.set_property_state("face_alignment", value)
 
     @property
-    def absolute_gap_tolerance(self) -> Real:
+    def absolute_gap_tolerance(self) -> RealType:
         """'absolute_gap_tolerance' property of 'child_object_type' object"""
         return self.get_property_state("absolute_gap_tolerance")
 
     @absolute_gap_tolerance.setter
-    def absolute_gap_tolerance(self, value: Real):
+    def absolute_gap_tolerance(self, value: RealType):
         self.set_property_state("absolute_gap_tolerance", value)
 
     @property
-    def relative_gap_tolerance(self) -> Real:
+    def relative_gap_tolerance(self) -> RealType:
         """'relative_gap_tolerance' property of 'child_object_type' object"""
         return self.get_property_state("relative_gap_tolerance")
 
     @relative_gap_tolerance.setter
-    def relative_gap_tolerance(self, value: Real):
+    def relative_gap_tolerance(self, value: RealType):
         self.set_property_state("relative_gap_tolerance", value)
 
     @property
-    def small_weight_tolerance(self) -> Real:
+    def small_weight_tolerance(self) -> RealType:
         """'small_weight_tolerance' property of 'child_object_type' object"""
         return self.get_property_state("small_weight_tolerance")
 
     @small_weight_tolerance.setter
-    def small_weight_tolerance(self, value: Real):
+    def small_weight_tolerance(self, value: RealType):
         self.set_property_state("small_weight_tolerance", value)
 
     @property
-    def corner_tolerance(self) -> Real:
+    def corner_tolerance(self) -> RealType:
         """'corner_tolerance' property of 'child_object_type' object"""
         return self.get_property_state("corner_tolerance")
 
     @corner_tolerance.setter
-    def corner_tolerance(self, value: Real):
+    def corner_tolerance(self, value: RealType):
         self.set_property_state("corner_tolerance", value)
 
     @property
-    def halo_tolerance(self) -> Real:
+    def halo_tolerance(self) -> RealType:
         """'halo_tolerance' property of 'child_object_type' object"""
         return self.get_property_state("halo_tolerance")
 
     @halo_tolerance.setter
-    def halo_tolerance(self, value: Real):
+    def halo_tolerance(self, value: RealType):
         self.set_property_state("halo_tolerance", value)
 
     @property
-    def conservative_reciprocity_factor(self) -> Real:
+    def conservative_reciprocity_factor(self) -> RealType:
         """'conservative_reciprocity_factor' property of 'child_object_type' object"""
         return self.get_property_state("conservative_reciprocity_factor")
 
     @conservative_reciprocity_factor.setter
-    def conservative_reciprocity_factor(self, value: Real):
+    def conservative_reciprocity_factor(self, value: RealType):
         self.set_property_state("conservative_reciprocity_factor", value)
 
     @property
-    def profile_preserving_reciprocity_factor(self) -> Real:
+    def profile_preserving_reciprocity_factor(self) -> RealType:
         """'profile_preserving_reciprocity_factor' property of 'child_object_type' object"""
         return self.get_property_state("profile_preserving_reciprocity_factor")
 
     @profile_preserving_reciprocity_factor.setter
-    def profile_preserving_reciprocity_factor(self, value: Real):
+    def profile_preserving_reciprocity_factor(self, value: RealType):
         self.set_property_state("profile_preserving_reciprocity_factor", value)
 
     @property
-    def conservative_intensive(self) -> String:
+    def conservative_intensive(self) -> str:
         """'conservative_intensive' property of 'child_object_type' object"""
         return self.get_property_state("conservative_intensive")
 
     @conservative_intensive.setter
-    def conservative_intensive(self, value: String):
+    def conservative_intensive(self, value: str):
         self.set_property_state("conservative_intensive", value)
 
     @property
-    def preserve_normal(self) -> String:
+    def preserve_normal(self) -> str:
         """'preserve_normal' property of 'child_object_type' object"""
         return self.get_property_state("preserve_normal")
 
     @preserve_normal.setter
-    def preserve_normal(self, value: String):
+    def preserve_normal(self, value: str):
         self.set_property_state("preserve_normal", value)
 
     @property
-    def conservation_fix_tolerance_volume(self) -> Real:
+    def conservation_fix_tolerance_volume(self) -> RealType:
         """'conservation_fix_tolerance_volume' property of 'child_object_type' object"""
         return self.get_property_state("conservation_fix_tolerance_volume")
 
     @conservation_fix_tolerance_volume.setter
-    def conservation_fix_tolerance_volume(self, value: Real):
+    def conservation_fix_tolerance_volume(self, value: RealType):
         self.set_property_state("conservation_fix_tolerance_volume", value)
 
     @property
-    def rbf_option(self) -> String:
+    def rbf_option(self) -> str:
         """'rbf_option' property of 'child_object_type' object"""
         return self.get_property_state("rbf_option")
 
     @rbf_option.setter
-    def rbf_option(self, value: String):
+    def rbf_option(self, value: str):
         self.set_property_state("rbf_option", value)
 
     @property
-    def rbf_shape_parameter(self) -> Real:
+    def rbf_shape_parameter(self) -> RealType:
         """'rbf_shape_parameter' property of 'child_object_type' object"""
         return self.get_property_state("rbf_shape_parameter")
 
     @rbf_shape_parameter.setter
-    def rbf_shape_parameter(self, value: Real):
+    def rbf_shape_parameter(self, value: RealType):
         self.set_property_state("rbf_shape_parameter", value)
 
     @property
-    def rbf_linear_correction(self) -> Boolean:
+    def rbf_linear_correction(self) -> bool:
         """'rbf_linear_correction' property of 'child_object_type' object"""
         return self.get_property_state("rbf_linear_correction")
 
     @rbf_linear_correction.setter
-    def rbf_linear_correction(self, value: Boolean):
+    def rbf_linear_correction(self, value: bool):
         self.set_property_state("rbf_linear_correction", value)
 
     @property
-    def rbf_clipping_scale(self) -> Real:
+    def rbf_clipping_scale(self) -> RealType:
         """'rbf_clipping_scale' property of 'child_object_type' object"""
         return self.get_property_state("rbf_clipping_scale")
 
     @rbf_clipping_scale.setter
-    def rbf_clipping_scale(self, value: Real):
+    def rbf_clipping_scale(self, value: RealType):
         self.set_property_state("rbf_clipping_scale", value)

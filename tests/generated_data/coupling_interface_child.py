@@ -30,13 +30,13 @@ class coupling_interface_child(Container):
     """
     mapping_control child of coupling_interface_child.
     """
-    property_names_types = [("display_name", "DisplayName", "String")]
+    property_names_types = [("display_name", "DisplayName", "str")]
 
     @property
-    def display_name(self) -> String:
+    def display_name(self) -> str:
         """'display_name' property of 'coupling_interface' object"""
         return self.get_property_state("display_name")
 
     @display_name.setter
-    def display_name(self, value: String):
+    def display_name(self, value: str):
         self.set_property_state("display_name", value)

@@ -34,6 +34,18 @@ from ansys.systemcoupling.core.util.logging import LOG
 from .syc_proxy_interface import SycProxyInterface
 
 _param_types = {
+    "Integer": int,
+    "Logical": bool,
+    "Real": "RealType",
+    "String": str,
+    "Real List": "RealListType",
+    "Real Triplet": "RealVectorType",
+    "String List": "StringListType",
+    "StrFloatPairList": "StrFloatPairListType",
+    "StrOrIntDictList": "StrOrIntDictListType",
+    "StrOrIntDictListDict": "StrOrIntDictListDictType",
+}
+_param_types2 = {
     "Integer": Integer,
     "Logical": Boolean,
     "Real": Real,
@@ -50,7 +62,11 @@ _param_types = {
 def _get_param_type(id, info):
     data_type = info.get("type", None)
     try:
-        return _param_types[data_type].__name__
+        t = _param_types[data_type]
+        return t if isinstance(t, str) else t.__name__
+    except AttributeError:
+        print(f"AttributeError with param type = {_param_types[data_type]}")
+        raise
     except KeyError:
         raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
 
@@ -78,7 +94,7 @@ def _get_type(id, info):
             return NamedContainer if is_named else Container
     else:
         try:
-            return _param_types[data_type]
+            return _param_types2[data_type]
         except KeyError:
             raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
 

@@ -13,14 +13,14 @@ class fluent_input(Container):
     syc_name = "FluentInput"
 
     property_names_types = [
-        ("option", "Option", "String"),
-        ("case_file", "CaseFile", "String"),
-        ("data_file", "DataFile", "String"),
-        ("journal_file", "JournalFile", "String"),
+        ("option", "Option", "str"),
+        ("case_file", "CaseFile", "str"),
+        ("data_file", "DataFile", "str"),
+        ("journal_file", "JournalFile", "str"),
     ]
 
     @property
-    def option(self) -> String:
+    def option(self) -> str:
         """Type of solver input file(s) to be used for the Fluent run.
 
         Allowed values:
@@ -36,32 +36,32 @@ class fluent_input(Container):
         return self.get_property_state("option")
 
     @option.setter
-    def option(self, value: String):
+    def option(self, value: str):
         self.set_property_state("option", value)
 
     @property
-    def case_file(self) -> String:
+    def case_file(self) -> str:
         """Set Fluent initial case file."""
         return self.get_property_state("case_file")
 
     @case_file.setter
-    def case_file(self, value: String):
+    def case_file(self, value: str):
         self.set_property_state("case_file", value)
 
     @property
-    def data_file(self) -> String:
+    def data_file(self) -> str:
         """Set Fluent initial data file."""
         return self.get_property_state("data_file")
 
     @data_file.setter
-    def data_file(self, value: String):
+    def data_file(self, value: str):
         self.set_property_state("data_file", value)
 
     @property
-    def journal_file(self) -> String:
+    def journal_file(self) -> str:
         """Set Fluent journal file."""
         return self.get_property_state("journal_file")
 
     @journal_file.setter
-    def journal_file(self, value: String):
+    def journal_file(self, value: str):
         self.set_property_state("journal_file", value)
