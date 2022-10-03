@@ -6,12 +6,12 @@
 API Reference
 =============
 
-The PySystemCoupling API can be described in terms of three main aspects:
+There are three main "levels" to consider in the PySystemCoupling API:
 
 * Launching and/or connecting to a System Coupling server instance by calling
   :func:`launch<core.launch>` or :func:`connect<core.connect>`. These functions
-  returns a :class:`Session<core.session.Session>` object through
-  which one may interact with System Coupling.
+  returns a :class:`Session<core.session.Session>` object by means of
+  which the user may interact with the System Coupling server.
 * The :class:`Session<core.session.Session>` object itself provides some high-level
   functionality such as controlling streaming of standard streams from the server,
   and lifetime management of the session. It also contains three important attributes, ``case``, ``setup`` and
