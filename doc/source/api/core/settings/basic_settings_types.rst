@@ -6,7 +6,7 @@ Basic Settings Types
 ====================
 
 Although organized hierarchically into dictionary-like structures, all System
-Coupling settings are ultimately instances of basic Python types or are simple
+Coupling settings are ultimately instances of basic Python built-in types or are simple
 containers of such types.
 
 The basic types are:
@@ -16,7 +16,7 @@ The basic types are:
 - Real (`float`)
 - Boolean (`bool`)
 
-System Coupling supports expressions for Real settings, and these are specified as strings.
+System Coupling supports expressions for real valued settings, and these are specified as strings.
 Therefore a Python `type hint` :ref:`RealType<real_type>` is defined in the API to
 allow this option to be expressed.
 
