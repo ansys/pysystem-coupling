@@ -5,10 +5,12 @@
 from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class get_errors(Command):
+class get_errors(InjectedCommand):
     """
-    If errors exist, returns them as a list of dictionaries containing error
-    details; otherwise, returns an empty list.
+    Returns a list of errors (and warning messages, informational messages, etc.)
+    relating to the current state of the analysis setup.
     """
 
-    syc_name = "GetErrors"
+    syc_name = "get_errors"
+
+    cmd_name = "get_errors"

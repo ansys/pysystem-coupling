@@ -1,6 +1,28 @@
 from copy import deepcopy
+from typing import Callable, Dict
 
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
+
+from .get_errors_injected import get_errors
+from .types import Container
+
+
+def get_injected_cmd_map(
+    category: str, root_object: Container, rpc
+) -> Dict[str, Callable]:
+    """Returns a dictionary that maps names to functions that implement injected command.
+
+    The map returned pertains to the commands in the specified category.
+    """
+    if category == "setup":
+        return {"get_errors": lambda **kwargs: get_errors(rpc, root_object, **kwargs)}
+    if category == "solution":
+        return {
+            "solve": lambda **kwargs: rpc.solve(),
+            "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
+            "abort": lambda **kwargs: rpc.abort(**kwargs),
+        }
+    return {}
 
 
 def get_injected_cmd_data() -> list:
@@ -89,4 +111,17 @@ _cmd_yaml = """
 
                This might be used for such purposes as providing
                additional annotation in transcript output.
+-   name: GetErrors
+    pyname: get_errors
+    exposure: setup
+    isInjected: true
+    isQuery: true
+    retType: <class 'list'>
+    doc: |-
+        Returns a list of errors (and warning messages, informational messages, etc.)
+        relating to the current state of the analysis setup.
+
+    essentialArgNames: []
+    optionalArgNames: []
+    args: []
 """

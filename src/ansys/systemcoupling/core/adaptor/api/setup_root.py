@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-SHASH = "037cacec643026d88863ee3a62cc9739194c61371c4aa8ad85581665e4302e54"
+SHASH = "b89cbf8aec52893788249bce098a4ed6afacab520839a1fc71cd965dde0da0d2"
 
 from ansys.systemcoupling.core.adaptor.impl.types import *
 
@@ -92,11 +92,11 @@ class setup_root(Container):
         "get_execution_command",
         "generate_input_file",
         "import_system_coupling_input_file",
-        "get_errors",
         "add_named_expression",
         "add_expression_function",
         "reload_expression_function_modules",
         "has_input_file_changed",
+        "get_errors",
     ]
 
     add_interface: add_interface = add_interface
@@ -159,10 +159,6 @@ class setup_root(Container):
     """
     import_system_coupling_input_file command of setup_root.
     """
-    get_errors: get_errors = get_errors
-    """
-    get_errors command of setup_root.
-    """
     add_named_expression: add_named_expression = add_named_expression
     """
     add_named_expression command of setup_root.
@@ -180,4 +176,8 @@ class setup_root(Container):
     has_input_file_changed: has_input_file_changed = has_input_file_changed
     """
     has_input_file_changed command of setup_root.
+    """
+    get_errors: get_errors = get_errors
+    """
+    get_errors command of setup_root.
     """

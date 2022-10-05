@@ -33,7 +33,7 @@ class reference_frame_child(Container):
 
         - \"ByTransformation\" - Define the reference frame by one or more
           transformation operations.
-        - \"Automatic\" - Only available if Alpha features are activated.
+        - \"Automatic\" - Align source and target automatically.
         - \"ByMatrix\" - Only available if Alpha features are activated."""
         return self.get_property_state("option")
 

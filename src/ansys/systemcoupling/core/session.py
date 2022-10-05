@@ -1,5 +1,8 @@
 from typing import Callable, Optional
 
+from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
+    get_injected_cmd_map,
+)
 from ansys.systemcoupling.core.adaptor.impl.source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
@@ -137,7 +140,9 @@ class Session:
         if isinstance(self.__rpc, _DefunctRpcImpl):
             self.__rpc.trigger_error
         sycproxy = SycProxy(self.__rpc)
-        return get_root(sycproxy, category=category)
+        root = get_root(sycproxy, category=category)
+        sycproxy.set_injected_commands(get_injected_cmd_map(category, root, self.__rpc))
+        return root
 
     @property
     def _native_api(self) -> NativeApi:
