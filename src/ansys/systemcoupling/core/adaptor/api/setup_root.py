@@ -2,7 +2,7 @@
 # This is an auto-generated file.  DO NOT EDIT!
 #
 
-SHASH = "b163698137068ba24cd3d8a8958e228062e65956c419fae095bf77e856d98ab2"
+SHASH = "c6f9896adfe04a8a0852257753ba00ff19377711c6a2b2d404b93dd49df3a441"
 
 from ansys.systemcoupling.core.adaptor.impl.types import *
 
@@ -21,9 +21,9 @@ from .coupling_interface import coupling_interface
 from .coupling_participant import coupling_participant
 from .delete_transformation import delete_transformation
 from .generate_input_file import generate_input_file
-from .get_errors import get_errors
 from .get_execution_command import get_execution_command
 from .get_region_names_for_participant import get_region_names_for_participant
+from .get_status_messages import get_status_messages
 from .has_input_file_changed import has_input_file_changed
 from .import_system_coupling_input_file import import_system_coupling_input_file
 from .library import library
@@ -96,7 +96,7 @@ class setup_root(Container):
         "add_expression_function",
         "reload_expression_function_modules",
         "has_input_file_changed",
-        "get_errors",
+        "get_status_messages",
     ]
 
     add_interface: add_interface = add_interface
@@ -177,7 +177,7 @@ class setup_root(Container):
     """
     has_input_file_changed command of setup_root.
     """
-    get_errors: get_errors = get_errors
+    get_status_messages: get_status_messages = get_status_messages
     """
-    get_errors command of setup_root.
+    get_status_messages command of setup_root.
     """

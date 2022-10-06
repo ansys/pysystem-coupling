@@ -3,7 +3,7 @@ from typing import Callable, Dict
 
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
-from .get_errors_injected import get_errors
+from .get_status_messages import get_status_messages
 from .types import Container
 
 
@@ -15,7 +15,11 @@ def get_injected_cmd_map(
     The map returned pertains to the commands in the specified category.
     """
     if category == "setup":
-        return {"get_errors": lambda **kwargs: get_errors(rpc, root_object, **kwargs)}
+        return {
+            "get_status_messages": lambda **kwargs: get_status_messages(
+                rpc, root_object, **kwargs
+            )
+        }
     if category == "solution":
         return {
             "solve": lambda **kwargs: rpc.solve(),
@@ -112,7 +116,7 @@ _cmd_yaml = """
                This might be used for such purposes as providing
                additional annotation in transcript output.
 -   name: GetErrors
-    pyname: get_errors
+    pyname: get_status_messages
     exposure: setup
     isInjected: true
     isQuery: true
@@ -134,7 +138,7 @@ _cmd_yaml = """
 
            Generally, there is a straightforward mapping to the PySystemCoupling
            exposure of settings and so on, so the messages should not be difficult
-           to interpret. Nevertheless ``get_errors`` should be regarded as "beta"
+           to interpret. Nevertheless ``get_status_messages`` should be regarded as "beta"
            functionality in the current release.
 
         The "level" field provides information about the severity or nature of the

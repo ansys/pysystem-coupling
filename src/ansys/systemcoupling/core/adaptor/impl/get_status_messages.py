@@ -1,9 +1,11 @@
-"""Local implementation of ``get_errors`` command, to be injected in the ``setup`` hierarchy."""
+"""Local implementation of the System Coupling ``GetErrors`` command, to be injected
+into the ``setup`` hierarchy.
+"""
 
 from .types import Container, NamedContainer
 
 
-def get_errors(rpc, setup_root_obj: Container, **kwargs):
+def get_status_messages(rpc, setup_root_obj: Container, **kwargs):
     def get_field(msg, field_name):
         field = msg.get(field_name)
         if field is None:

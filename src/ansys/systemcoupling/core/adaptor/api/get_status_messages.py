@@ -5,7 +5,7 @@
 from ansys.systemcoupling.core.adaptor.impl.types import *
 
 
-class get_errors(InjectedCommand):
+class get_status_messages(InjectedCommand):
     """
     Provides information relating to the current state of the analysis setup.
 
@@ -23,7 +23,7 @@ class get_errors(InjectedCommand):
 
        Generally, there is a straightforward mapping to the PySystemCoupling
        exposure of settings and so on, so the messages should not be difficult
-       to interpret. Nevertheless ``get_errors`` should be regarded as "beta"
+       to interpret. Nevertheless ``get_status_messages`` should be regarded as "beta"
        functionality in the current release.
 
     The "level" field provides information about the severity or nature of the
@@ -48,4 +48,4 @@ class get_errors(InjectedCommand):
 
     syc_name = "GetErrors"
 
-    cmd_name = "get_errors"
+    cmd_name = "get_status_messages"
