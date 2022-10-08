@@ -24,12 +24,30 @@ def test_partlib_cosim_volume_simple() -> None:
             side_two_regions=["volume"],
         )
 
+        messages = setup.get_status_messages()
+
+        assert len(messages) == 1
+        assert messages[0]["path"] == 'coupling_interface["Interface-1"]'
+        assert messages[0]["message"].startswith(
+            "No data transfers exist on Interface-1"
+        )
+        assert messages[0]["level"] == "Error"
+
         dt1 = setup.add_data_transfer(
             interface=interface,
             target_side="Two",
             side_one_variable="p1_to_p2",
             side_two_variable="p1_to_p2",
         )
+
+        messages = setup.get_status_messages()
+
+        assert len(messages) == 1
+        assert messages[0]["path"] == "analysis_control"
+        assert messages[0]["message"].startswith(
+            "The data transfers define an optimized one-way workflow."
+        )
+        assert messages[0]["level"] == "Information"
 
         dt2 = setup.add_data_transfer(
             interface=interface,

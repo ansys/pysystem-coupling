@@ -11,6 +11,15 @@ from ansys.systemcoupling.core.util.state_keys import adapt_native_named_object_
 class SycProxy(SycProxyInterface):
     def __init__(self, rpc):
         self.__rpc = rpc
+        self.__injected_cmds = {}
+
+    def set_injected_commands(self, cmd_dict: dict) -> None:
+        """Sets a dictionary of names mapped to locally defined "injected commands".
+
+        This will be used to find the function to be called
+        in ``execute_injected_command`` if that method is called.
+        """
+        self.__injected_cmds = cmd_dict
 
     def get_static_info(self, category):
         if category == "setup":
@@ -53,5 +62,5 @@ class SycProxy(SycProxyInterface):
 
     def execute_injected_cmd(self, *args, **kwargs):
         cmd_name = args[1]
-        cmd = getattr(self.__rpc, cmd_name)
+        cmd = self.__injected_cmds.get(cmd_name, None)
         return cmd(**kwargs)
