@@ -6,7 +6,7 @@
 API Reference
 =============
 
-There are three main "levels" to consider in the PySystemCoupling API:
+There are three main "levels" of interaction with the PySystemCoupling API:
 
 * Launching and/or connecting to a System Coupling server instance by calling
   :func:`launch<core.launch>` or :func:`connect<core.connect>`. These functions
@@ -31,4 +31,4 @@ There are three main "levels" to consider in the PySystemCoupling API:
 
    core/launching
    core/session
-   core/settings/api
+   core/adaptor/api

@@ -149,6 +149,8 @@ class Session:
         """Provides access to the 'native' System Coupling API and data
         model.
 
+        :meta public:
+
         Use of this API is not particularly encouraged but there may be
         situations where it is useful to access functionality that has
         not directly been exposed in PySystemCoupling.
@@ -161,6 +163,7 @@ class Session:
         little runtime assistance and documentation.
 
         See the ``NativeApi`` class itself for more details.
+
         """
         if self.__native_api is None:
             self.__native_api = NativeApi(self.__rpc)
