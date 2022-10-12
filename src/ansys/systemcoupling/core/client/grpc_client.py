@@ -77,13 +77,16 @@ class SycGrpc(object):
         for instance in list(cls._instances.values()):
             instance.exit()
 
-    def start_and_connect(self, port, working_dir):
+    def start_and_connect(self, **kwargs):
         """Start system coupling in server mode and establish a connection."""
 
         # Support backdoor container launch via env var.
         # For example we might want to default to launching installation
         # locally but container on GitHub (e.g. for build tasks like code generation).
         # Can still switch to container locally by setting variable.
+
+        working_dir = kwargs.pop("working_dir", None)
+        port = kwargs.pop("port", None)
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
             if working_dir is not None:
@@ -97,7 +100,7 @@ class SycGrpc(object):
             if working_dir is None:
                 working_dir = "."
             LOG.debug("Starting process...")
-            self.__process = SycProcess(_LOCALHOST_IP, port, working_dir)
+            self.__process = SycProcess(_LOCALHOST_IP, port, working_dir, **kwargs)
             LOG.debug("...started")
             self._connect(_LOCALHOST_IP, port)
 
