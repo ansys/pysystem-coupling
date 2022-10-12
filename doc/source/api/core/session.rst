@@ -1,4 +1,4 @@
-.. ref_analysis
+.. _ref_session:
 
 Session
 ========
@@ -9,3 +9,6 @@ Session
     :toctree: _autosummary
 
     session.Session
+
+The ``Session`` class also exposes a `quasi-private` property to access
+the System Coupling `native API` directly. See :ref:`ref_native_api_property` for details.

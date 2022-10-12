@@ -54,7 +54,7 @@ setup(
     # add it here.
     install_requires=[
         "grpcio>=1.30.0",
-        "grpcio-status>=1.30.0",
+        "grpcio-status>=1.30.0,<=1.48.2",
         "googleapis-common-protos>=1.50.0",
         "protobuf>=3.12.2,<4.0.0",
         "psutil>=5.7.0",

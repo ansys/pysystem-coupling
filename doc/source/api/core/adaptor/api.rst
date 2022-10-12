@@ -1,5 +1,7 @@
 .. _ref_api:
 
+.. currentmodule:: ansys.systemcoupling.core.session
+
 Commands and Settings API
 =========================
 
@@ -16,6 +18,99 @@ various commands that are provided to set up the main objects. Direct data model
 should then be used for fine adjustments to the setup.
 
 The API implementation is built on a number of generic objects, which will be briefly described below.
+
+
+Relationship with "Native" System Coupling API
+----------------------------------------------
+
+The API exposed in PySystemCoupling is mainly an `adaptation` of the API that exists
+natively in Ansys System Coupling.
+
+Users who are already familiar with System Coupling, or who wish to consult the System
+Coupling documentation for more in-depth advice on some aspect of the system, should
+find it easy to translate to the API as exposed in PySystemCoupling.
+
+The key differences are as follows:
+
+* Whereas naming of commands and datamodel elements follows `camel case` conventions
+  in System Coupling,
+  their equivalents in PySystemCoupling follow the `snake case` convention, which is
+  the generally preferred Pythonic naming convention. Thus, the command ``AddParticipant``
+  in System Coupling becomes ``add_participant`` in PySystemCoupling, and the datamodel
+  object ``CouplingInterface`` becomes ``coupling_interface``.
+
+* Commands and queries in System Coupling are all exposed in its Python environment as top-level
+  global names. In PySystemCoupling, commands are exposed as callable objects that are accessible
+  as attributes of one of the `root` attributes, :meth:`case<Session.case>`,
+  :meth:`case<Session.setup>` and :meth:`case<Session.solution>`,
+  of the :class:`Session<Session>` class.
+
+* In System Coupling, the setup datamodel is in practice manipulated (and queried) in one of the following
+  ways:
+
+  * Using high level commands to create and initialize the main objects in the datamodel -
+    for example, commands such as ``AddParticipant`` to add a new coupling participant, and
+    ``AddDataTransfer`` to add a new data transfer object.
+
+  * Accessing individual settings using a `path like` syntax, starting at a `root`
+    returned by the ``DatamodelRoot`` command. For example::
+
+      # Get the root object
+      root = DatamodelRoot()
+
+      # Path-like attribute access to navigate to setting of interest and assign to it
+      root.CouplingInterface[
+        "interface-1"
+      ].DataTransfer["Force"].Value = "force*scaleFactor"
+
+      # Similarly, path-like attribute access to query setting value
+      print(root.ExecutionControl.Option)
+
+* In PySystemCoupling, the setup datamodel may be manipulated in essentially the same way.
+  As noted above, the setup commands are exposed from the
+  :meth:`case<Session.setup>` attribute of
+  :class:`Session<Session>`, and this attribute also
+  plays the role of ``DatamodelRoot()`` as an entry point to accessing
+  individual settings via a similar path-like syntax::
+
+    # Given a Session object, get the setup root
+    setup = session.setup
+
+    # Assign a setting using "path" syntax
+    setup.coupling_interface[
+      "interface-1"
+    ].data_transfer["Force"].value = "force*scaleFactor"
+
+    # Query a setting
+    print(root.execution_control.option)
+
+Directly Accessing the Native API
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+For users who want to try to perform a very quick translation from an existing
+System Coupling script into the PySystemCoupling environment, or have a
+specific need to access a feature not currently exposed in PySystemCoupling,
+a `back door`, more direct, access to the native form of the API is offered by the
+:ref:`_native_api<ref_native_api_property>` attribute of the :class:`Session<Session>` class.
+An existing script will still need
+some adjustment as the calls have to be via the ``_native_api`` attribute rather
+than as global commands as in a System Coupling script.
+
+For example, in a System Coupling script::
+
+  AddParticipant(InputFile="FLUENT/fluent.scp")
+
+The equivalent, using the `native API` in PySystemCoupling, would be::
+
+  # Given a Session object, get the native api
+  api = session._native_api
+
+  api.AddParticipant(InputFile="FLUENT/fluent.scp")
+
+It is recommended that this API should not be used as a matter of course, but it may
+be useful in specific and limited circumstances.
+
+
+
 
 Top-level Objects
 -----------------
@@ -111,3 +206,11 @@ Settings API Content
 :ref:`Analysis setup commands and datamodel<setup_root>`
 
 :ref:`Solution commands<solution_root>`
+
+.. toctree::
+   :maxdepth: 4
+   :hidden:
+
+   case
+   setup
+   solution
