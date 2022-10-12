@@ -150,7 +150,8 @@ class Session:
         model.
 
         Use of this API is not particularly encouraged but there may be
-        situations where it is useful to access functionality that has
+        situations where it is useful to access functionality that, for
+        some reason, not been fully exposed in PySystemCoupling.
 
         Furthermore, existing users of the System Coupling CLI may initially
         find it comfortable to work with the familiar API while transitioning

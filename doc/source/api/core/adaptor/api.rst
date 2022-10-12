@@ -90,7 +90,7 @@ For users who want to try to perform a very quick translation from an existing
 System Coupling script into the PySystemCoupling environment, or have a
 specific need to access a feature not currently exposed in PySystemCoupling,
 a `back door`, more direct, access to the native form of the API is offered by the
-:meth:`_native_api<Session._native_api>` attribute of the :class:`Session<Session>` class.
+:ref:`_native_api<ref_native_api_property>` attribute of the :class:`Session<Session>` class.
 An existing script will still need
 some adjustment as the calls have to be via the ``_native_api`` attribute rather
 than as global commands as in a System Coupling script.
@@ -99,14 +99,14 @@ For example, in a System Coupling script::
 
   AddParticipant(InputFile="FLUENT/fluent.scp")
 
-The equivalent using the `native API` in PySystemCoupling would be:
+The equivalent, using the `native API` in PySystemCoupling, would be::
 
   # Given a Session object, get the native api
   api = session._native_api
 
   api.AddParticipant(InputFile="FLUENT/fluent.scp")
 
-It is not recommended that this API is used as a matter of course, but it may
+It is recommended that this API should not be used as a matter of course, but it may
 be useful in specific and limited circumstances.
 
 
