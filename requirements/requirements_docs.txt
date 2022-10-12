@@ -6,8 +6,8 @@
 # This requirements list might need tweaking. It was derived
 # by comparing those from mapdl and fluent and excluding those
 # that appeared to be specific to one or other product. Also
-# excluded some like plotly, pandas and vtx, that do not
-# seem relevant to SyC at this point.
+# excluded some like plotly, matplotlib, pandas and vtx, that
+# do not seem relevant to SyC at this point.
 # Where there was a version mismatch between mapdl and fluent,
 # the higher version has been taken.
 
@@ -16,7 +16,6 @@ jupyter_sphinx==0.4.0
 ansys-sphinx-theme==0.6.1
 numpydoc==1.5.0
 pypandoc==1.9
-#matplotlib==3.6.0
 pytest-sphinx==0.5.0
 sphinx-autobuild==2021.3.14
 sphinx-autodoc-typehints==1.19.4
