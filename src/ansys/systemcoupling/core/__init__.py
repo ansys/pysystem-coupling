@@ -1,10 +1,19 @@
+from typing import List
+
 from ansys.systemcoupling.core._version import __version__
 from ansys.systemcoupling.core.client.grpc_client import SycGrpc
 from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
 
 
-def launch(port: int = None, working_dir: str = None):
+def launch(
+    *,
+    port: int = None,
+    working_dir: str = None,
+    nprocs: int = None,
+    sycnprocs: int = None,
+    extra_args: List[str] = []
+) -> Session:
     """Start a local instance of System Coupling and connects to it.
 
     Parameters
@@ -17,6 +26,23 @@ def launch(port: int = None, working_dir: str = None):
         The working directory of the System Coupling process. Defaults to
         the current directory of the client process.
 
+    nprocs : int, optional
+        The number of processes for coupling participants. If not provided,
+        the System Coupling server will use its own default.
+
+    sycnprocs : int, optional
+        The number of processes for the coupling engine. If not provided,
+        the System Coupling server will use its own default.
+
+    extra_args : List[str]
+        List of any additional arguments to be specified when the server
+        process is launched. Defaults to empty list.
+
+        If provided, this is concatenated as-is to the list of
+        arguments already being passed when the process is started. If
+        an argument has an associated value, the argument name and its
+        value should be specified as two consecutive items of the list.
+
     Returns
     -------
     ansys.systemcoupling.core.session.Session
@@ -24,7 +50,13 @@ def launch(port: int = None, working_dir: str = None):
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    rpc.start_and_connect(port, working_dir)
+    rpc.start_and_connect(
+        port=port,
+        working_dir=working_dir,
+        nprocs=nprocs,
+        sycnprocs=sycnprocs,
+        extra_args=extra_args,
+    )
     syc = Session(rpc)
     return syc
 

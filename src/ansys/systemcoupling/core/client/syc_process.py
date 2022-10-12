@@ -1,7 +1,3 @@
-#
-# Copyright 2022 ANSYS, Inc. Unauthorized use, distribution, or duplication is prohibited.
-#
-
 from copy import deepcopy
 import os
 import platform
@@ -26,8 +22,8 @@ _SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 
 
 class SycProcess:  # pragma: no cover
-    def __init__(self, host, port, working_dir, log_level=1):
-        self.__process = _start_system_coupling(host, port, working_dir, log_level)
+    def __init__(self, host, port, working_dir, **kwargs):
+        self.__process = _start_system_coupling(host, port, working_dir, **kwargs)
 
     def end(self):
         if self.__process and self.__process.poll() is None:
@@ -45,13 +41,27 @@ class SycProcess:  # pragma: no cover
             self.__process = None
 
 
-def _start_system_coupling(host, port, working_dir, log_level):  # pragma: no cover
+def _start_system_coupling(host, port, working_dir, **kwargs):  # pragma: no cover
     env = deepcopy(os.environ)
     env["PYTHONUNBUFFERED"] = "1"
     env["SYC_GUI_SILENT_SERVER"] = "1"
     args = [_path_to_system_coupling(), "-m", "cosimgui", f"--grpcport={host}:{port}"]
-    if log_level:
-        args += ["-l", str(log_level)]
+
+    # Extract arguments that we currently recognise - scope to extend in future
+    nprocs = kwargs.pop("nprocs", None)
+    if nprocs:
+        args += ["--nprocs", str(nprocs)]
+
+    sycnprocs = kwargs.pop("sycnprocs", None)
+    if sycnprocs:
+        args += ["--sycnprocs", str(sycnprocs)]
+
+    # "extra_args" gives us the option to pass though any args we want to
+    # but it's user beware
+    extra_args = kwargs.pop("extra_args", [])
+    if extra_args:
+        args += extra_args
+
     LOG.info(f"Starting System Coupling: {args[0]}")
     return subprocess.Popen(
         args,
