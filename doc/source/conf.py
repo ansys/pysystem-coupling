@@ -2,6 +2,7 @@
 from datetime import datetime
 
 from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
+from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.systemcoupling.core import __version__
 
@@ -27,7 +28,10 @@ extensions = [
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx.ext.intersphinx",
+    "sphinx_autodoc_typehints",
     "sphinx_copybutton",
+    "sphinx_gallery.gen_gallery",
+    "sphinxemoji.sphinxemoji",
 ]
 
 # Intersphinx mapping
@@ -100,6 +104,30 @@ todo_include_todos = False
 # exclude traditional Python prompts from the copied code
 copybutton_prompt_text = r">>> ?|\.\.\. "
 copybutton_prompt_is_regexp = True
+
+
+# -- Sphinx Gallery Options ---------------------------------------------------
+sphinx_gallery_conf = {
+    # path to your examples scripts
+    "examples_dirs": ["../../examples/"],
+    # path where to save gallery generated examples
+    "gallery_dirs": ["examples"],
+    # Pattern to search for example files
+    "filename_pattern": r"\.py",
+    # Remove the "Download all examples" button from the top level gallery
+    "download_all_examples": False,
+    # Sort gallery example by file name instead of number of lines (default)
+    "within_subsection_order": FileNameSortKey,
+    # directory where function granular galleries are stored
+    "backreferences_dir": None,
+    # Modules for which function level galleries are created.  In
+    "doc_module": "ansys-systemcoupling-core",
+    "ignore_pattern": "flycheck*",
+    "thumbnail_size": (350, 350),
+    # "reset_modules_order": "after",
+    # "reset_modules": (_stop_fluent_container),
+}
+
 
 # -- Options for HTML output -------------------------------------------------
 html_short_title = html_title = "PySystemCoupling"

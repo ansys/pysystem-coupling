@@ -6,7 +6,29 @@
 # pySystemCoupling.                                                   #
 # --------------------------------------------------------------------#
 
+# %%
+# Example Setup
+# -------------
+#
+# Perform required imports
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# Import the PySystemCoupling package and other required imports, and download
+# the input files for this example.
+
+import os
 import ansys.systemcoupling.core as pysystemcoupling
+from ansys.systemcoupling.core import examples
+
+mapdl_scp_file = examples.download_file(
+    "mapdl.scp", "pysystem-coupling/oscillating_plate_fluent"
+)
+
+fluent_scp_file = examples.download_file(
+    "fluent.scp", "pysystem-coupling/oscillating_plate_fluent"
+)
+
+
+
 
 # Launch a remote System Coupling instance and return a "client" object
 # that allows us to interact with System Coupling via an API exposed
