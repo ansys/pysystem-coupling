@@ -37,8 +37,8 @@ def _decompress(filename: str) -> None:
 
 
 def _get_file_url(filename: str, directory: Optional[str] = None) -> str:
-    # root_url = "https://github.com/pyansys/example-data/raw/master/"
-    root_url = "https://github.com/pyansys/pysystem-coupling/raw/feature/more-doc/"
+    root_url = "https://github.com/pyansys/example-data/raw/master/"
+    # root_url = "https://github.com/pyansys/pysystem-coupling/raw/feature/more_doc/"
     if directory:
         return f"{root_url}" f"{directory}/{filename}"
     return f"{root_url}/{filename}"
@@ -63,6 +63,27 @@ def _retrieve_file(url: str, filename: str):
     return local_path, resp
 
 
+def _temp_get_file(filename: str, directory: Optional[str] = None):
+    example_dir = os.environ.get("PYSYC_EXAMPLE_DIR")
+    if example_dir is None:
+        raise Exception(
+            "PYSYC_EXAMPLE_DIR is not set. "
+            "(This is a temporary requirement during development.)"
+        )
+    local_path = os.path.join(pysyc.EXAMPLES_PATH, os.path.basename(filename))
+    local_path_no_zip = local_path.replace(".zip", "")
+    if os.path.isfile(local_path_no_zip) or os.path.isdir(local_path_no_zip):
+        return local_path_no_zip
+
+    file_path = os.path.join(example_dir, directory, filename)
+    shutil.copy(file_path, local_path)
+    if get_ext(local_path) in [".zip"]:
+        _decompress(local_path)
+        local_path = local_path[:-4]
+    return local_path
+
+
 def download_file(filename: str, directory: Optional[str] = None):
     url = _get_file_url(filename, directory)
     return _retrieve_file(url, filename)[0]
+    # return _temp_get_file(filename, directory)

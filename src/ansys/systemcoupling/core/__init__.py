@@ -107,7 +107,7 @@ def connect(host: str, port: int) -> Session:  # pragma: no cover
 
 # Set up data directory
 try:
-    USER_DATA_PATH = appdirs.user_data_dir("ansys_mapdl_core")
+    USER_DATA_PATH = appdirs.user_data_dir("ansys_systemcoupling_core")
     if not os.path.exists(USER_DATA_PATH):  # pragma: no cover
         os.makedirs(USER_DATA_PATH)
 
