@@ -119,11 +119,11 @@ jobs:
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
 
-      - name: Build PDF Documentation
-        run: |
-          sudo apt update
-          sudo apt-get install -y texlive-latex-extra latexmk
-          make -C doc latexpdf SPHINXERRWARN=""
+      # - name: Build PDF Documentation
+      #   run: |
+      #     sudo apt update
+      #     sudo apt-get install -y texlive-latex-extra latexmk
+      #     make -C doc latexpdf SPHINXERRWARN=""
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v2
@@ -132,12 +132,12 @@ jobs:
           path: doc/_build/html
           retention-days: 7
 
-      - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: Documentation-pdf
-          path: doc/_build/latex/*.pdf
-          retention-days: 7
+      # - name: Upload PDF Documentation
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: Documentation-pdf
+      #     path: doc/_build/latex/*.pdf
+      #     retention-days: 7
 
   Release:
     if: contains(github.ref, 'refs/tags')
