@@ -93,7 +93,7 @@ jobs:
           retention-days: 7
 
       - name: Upload wheel
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ansys-systemcoupling-core-wheel
           path: dist/
@@ -126,14 +126,14 @@ jobs:
       #     make -C doc latexpdf SPHINXERRWARN=""
 
       - name: Upload HTML Documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Documentation-html
           path: doc/_build/html
           retention-days: 7
 
       # - name: Upload PDF Documentation
-      #   uses: actions/upload-artifact@v2
+      #   uses: actions/upload-artifact@v3
       #   with:
       #     name: Documentation-pdf
       #     path: doc/_build/latex/*.pdf
