@@ -1,4 +1,6 @@
 """Sphinx documentation configuration file."""
+import os
+
 from datetime import datetime
 
 from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
@@ -30,9 +32,13 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
-    "sphinx_gallery.gen_gallery",
     "sphinxemoji.sphinxemoji",
 ]
+
+# Default is *not* to build gallery as it needs to be done manually
+# and it can't be done on GitHub
+if os.environ.get("PYSYC_BUILD_SPHINX_GALLERY"):
+    extensions.append("sphinx_gallery.gen_gallery")
 
 # Intersphinx mapping
 intersphinx_mapping = {

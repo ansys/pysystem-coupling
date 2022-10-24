@@ -353,47 +353,47 @@ Coupling interface state. Note the "FORC" and "displacement"
 
     data_transfer : 
       displacement : 
-        target_variable : displacement
-        suppress : False
-        display_name : displacement
-        ramping_option : None
         mapping_type : ProfilePreserving
-        target_side : Two
-        unmapped_value_option : Nearest Value
         relaxation_factor : 1.0
+        target_variable : displacement
         option : UsingVariable
+        target_side : Two
+        suppress : False
+        convergence_target : 0.01
+        unmapped_value_option : Nearest Value
         source_variable : INCD
-        convergence_target : 0.01
+        ramping_option : None
+        display_name : displacement
       FORC : 
+        ramping_option : None
+        source_variable : force
+        display_name : Force
         convergence_target : 0.01
-        target_variable : FORC
         target_side : One
         relaxation_factor : 1.0
         option : UsingVariable
         suppress : False
+        target_variable : FORC
         mapping_type : Conservative
-        display_name : Force
-        source_variable : force
-        ramping_option : None
     side : 
-      One : 
-        coupling_participant : MAPDL-1
-        instancing : None
-        region_list : 
-          0 : FSIN_1
-        reference_frame : GlobalReferenceFrame
       Two : 
-        reference_frame : GlobalReferenceFrame
         region_list : 
           0 : wall_deforming
         coupling_participant : FLUENT-2
+        reference_frame : GlobalReferenceFrame
+        instancing : None
+      One : 
+        reference_frame : GlobalReferenceFrame
+        coupling_participant : MAPDL-1
+        region_list : 
+          0 : FSIN_1
         instancing : None
     mapping_control : 
-      poor_intersection_threshold : 0.5
-      face_alignment : ProgramControlled
-      absolute_gap_tolerance : 0.0 [m]
-      stop_if_poor_intersection : True
       relative_gap_tolerance : 1.0
+      poor_intersection_threshold : 0.5
+      stop_if_poor_intersection : True
+      absolute_gap_tolerance : 0.0 [m]
+      face_alignment : ProgramControlled
     display_name : interface-1
 
 
@@ -481,10 +481,10 @@ actually have Python values of ``None``.
  .. code-block:: none
 
 
-    time_step_size : <None>
-    minimum_iterations : 1
     maximum_iterations : 5
     duration_option : EndTime
+    minimum_iterations : 1
+    time_step_size : <None>
     end_time : <None>
 
 
@@ -567,13 +567,13 @@ View `output_control`:
 
 
     option : LastStep
-    write_initial_snapshot : True
-    generate_csv_chart_output : False
     results : 
       option : ProgramControlled
       include_instances : ProgramControlled
       type : 
         option : EnsightGold
+    generate_csv_chart_output : False
+    write_initial_snapshot : True
 
 
 
@@ -640,15 +640,15 @@ View `output_control` again:
  .. code-block:: none
 
 
-    output_frequency : 1
     option : StepInterval
-    write_initial_snapshot : True
-    generate_csv_chart_output : False
     results : 
-      include_instances : ProgramControlled
       type : 
         option : EnsightGold
       option : ProgramControlled
+      include_instances : ProgramControlled
+    output_frequency : 1
+    generate_csv_chart_output : False
+    write_initial_snapshot : True
 
 
 
@@ -853,14 +853,32 @@ be useful to review this before starting the solve.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 264-268
+.. GENERATED FROM PYTHON SOURCE LINES 264-270
 
 Run solution
 ------------
 
+The System Coupling server's stdout/stderr output is not shown
+in PySystemCoupling by default. We must turn on output
+streaming if we want to see it:
+
+.. GENERATED FROM PYTHON SOURCE LINES 270-271
+
+.. code-block:: default
+
+    syc.start_output()
+
+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 272-273
+
 Access `solve` via the `solution` API.
 
-.. GENERATED FROM PYTHON SOURCE LINES 268-271
+.. GENERATED FROM PYTHON SOURCE LINES 273-276
 
 .. code-block:: default
 
@@ -871,10 +889,1184 @@ Access `solve` via the `solution` API.
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 272-278
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                          Summary of Coupling Setup                          |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+    +=============================================================================+
+    |                          Coupling Participants (2)                          |
+    +=============================================================================+
+    |                                                                             |
+    | Participant: Fluid Flow (Fluent)                                            |
+    |    Type :                                                            FLUENT |
+    |    UpdateControls:                                                          |
+    |       Option :                                            ProgramControlled |
+    |    Region: wall_deforming                                                   |
+    |       Topology :                                                    Surface |
+    |       Input Variables :                                        displacement |
+    |       Output Variables :                                              force |
+    |    Variable: displacement                                                   |
+    |       Quantity Type :                              Incremental Displacement |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                  False |
+    |       Data Type :                                                      Real |
+    |    Variable: force                                                          |
+    |       Quantity Type :                                                 Force |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                   True |
+    |       Data Type :                                                      Real |
+    |                                                                             |
+    +-----------------------------------------------------------------------------+
+    |                                                                             |
+    | Participant: MAPDL Transient                                                |
+    |    Type :                                                             MAPDL |
+    |    UpdateControls:                                                          |
+    |       Option :                                            ProgramControlled |
+    |    Region: FSIN_1_Fluid Solid Interface                                     |
+    |       Topology :                                                    Surface |
+    |       Input Variables :                                               Force |
+    |       Output Variables :                           Incremental_Displacement |
+    |    Variable: Force                                                          |
+    |       Quantity Type :                                                 Force |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                   True |
+    |       Data Type :                                                      Real |
+    |    Variable: Incremental_Displacement                                       |
+    |       Quantity Type :                              Incremental Displacement |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                  False |
+    |       Data Type :                                                      Real |
+    |                                                                             |
+    +=============================================================================+
+    |                              Analysis Control                               |
+    +=============================================================================+
+    |                                                                             |
+    | Analysis Type :                                                   Transient |
+    | Global Stabilization :                                                 None |
+    | OptimizeIfOneWay :                                                     True |
+    | AllowSimultaneousUpdate :                                             False |
+    | PartitioningAlgorithm :                              SharedAllocateMachines |
+    |                                                                             |
+    +=============================================================================+
+    |                           Coupling Interfaces (1)                           |
+    +=============================================================================+
+    |                                                                             |
+    | Interface: interface-1                                                      |
+    |    Side: One                                                                |
+    |       Coupling Participant :                                MAPDL Transient |
+    |       Region List :                            FSIN_1_Fluid Solid Interface |
+    |       Reference Frame :                                GlobalReferenceFrame |
+    |    Side: Two                                                                |
+    |       Coupling Participant :                            Fluid Flow (Fluent) |
+    |       Region List :                                          wall_deforming |
+    |       Reference Frame :                                GlobalReferenceFrame |
+    |    Data Transfer: Force                                                     |
+    |       Suppress :                                                      False |
+    |       Target Side :                                                     One |
+    |       Source Variable :                                               force |
+    |       Target Variable :                                               Force |
+    |       Mapping Type :                                   Surface Conservative |
+    |       Convergence Target :                                         1.00E-02 |
+    |       Ramping Option :                                                 None |
+    |       Relaxation Factor :                                          1.00E+00 |
+    |    Data Transfer: displacement                                              |
+    |       Suppress :                                                      False |
+    |       Target Side :                                                     Two |
+    |       Source Variable :                            Incremental_Displacement |
+    |       Target Variable :                                        displacement |
+    |       Unmapped Value Option :                                 Nearest Value |
+    |       Mapping Type :                             Surface Profile Preserving |
+    |       Convergence Target :                                         1.00E-02 |
+    |       Ramping Option :                                                 None |
+    |       Relaxation Factor :                                          1.00E+00 |
+    |    Mapping Control:                                                         |
+    |       Absolute Gap Tolerance :                                      0.0 [m] |
+    |       Face Alignment :                                    ProgramControlled |
+    |       Poor Intersection Threshold :                                5.00e-01 |
+    |       Relative Gap Tolerance :                                     1.00e+00 |
+    |       Stop If Poor Intersection :                                      True |
+    |                                                                             |
+    +=============================================================================+
+    |                              Solution Control                               |
+    +=============================================================================+
+    |                                                                             |
+    | Duration Option :                                                   EndTime |
+    | End Time :                                                          1.0 [s] |
+    | Maximum Iterations :                                                      5 |
+    | Minimum Iterations :                                                      1 |
+    | Time Step Size :                                                    0.1 [s] |
+    |                                                                             |
+    +=============================================================================+
+    |                               Output Control                                |
+    +=============================================================================+
+    |                                                                             |
+    | Output Control Option :                                        StepInterval |
+    |    Frequency :                                                            2 |
+    | Results                                                                     |
+    |    IncludeInstances :                                     ProgramControlled |
+    |    Option :                                               ProgramControlled |
+    |    Type                                                                     |
+    |       Option :                                                  EnsightGold |
+    | Write Initial Snapshot :                                               True |
+    |                                                                             |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                            Execution Information                            |
+    +=============================================================================+
+    |                                                                             |
+    | System Coupling                                                             |
+    |   Command Line Arguments:                                                   |
+    |     -m cosimgui --grpcport 127.0.0.1:54671                                  |
+    |   Working Directory:                                                        |
+    |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
+    |     pling_core\examples                                                     |
+    |                                                                             |
+    | Fluid Flow (Fluent)                                                         |
+    |   Execution Command:                                                        |
+    |     "C:\ANSYSDev\ANSYS Inc\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
+    |     ort=54709 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
+    |     ou                                                                      |
+    |   Working Directory:                                                        |
+    |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
+    |     pling_core\examples\Fluent                                              |
+    |                                                                             |
+    | MAPDL Transient                                                             |
+    |   Execution Command:                                                        |
+    |     "C:\ANSYSDev\ANSYS Inc\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s |
+    |      noread -scport 54709 -schost host.docker.internal -scname "MAPDL-1" -i |
+    |      "mapdl.dat" -o MAPDL-1.out                                             |
+    |   Working Directory:                                                        |
+    |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
+    |     pling_core\examples\MAPDL                                               |
+    |                                                                             |
+    +=============================================================================+
+    Awaiting connections from coupling participants... done.
+
+    +=============================================================================+
+    |                              Build Information                              |
+    +-----------------------------------------------------------------------------+
+    | System Coupling                                                             |
+    |   2023 R1: Build ID: dfb47f4 Build Date: 2022-09-06T13:55                   |
+    | Fluid Flow (Fluent)                                                         |
+    |   ANSYS Fluent 23.1.0, Build Time:Oct 16 2022 12:29:50 EDT, Build Id:188,   |
+    |   OS Version:win64                                                          |
+    | MAPDL Transient                                                             |
+    |   Mechanical APDL Release 2023 R1          Build 23.1BETA UP20221016        |
+    |   DISTRIBUTED WINDOWS x64  Version                                          |
+    +=============================================================================+
+
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                           Analysis Initialization                           |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+    +-----------------------------------------------------------------------------+
+    |                               MESH STATISTICS                               |
+    +-----------------------------------------------------------------------------+
+    | Participant: FLUENT-2                                                       |
+    |   Number of face regions                                                  1 |
+    |     Number of faces                                                      11 |
+    |       Quadrilateral                                                      11 |
+    |     Area (m2)                                                     8.240e-01 |
+    |   Bounding Box (m)                                                          |
+    |     Minimum                              [ 1.000e+01  0.000e+00  0.000e+00] |
+    |     Maximum                              [ 1.006e+01  1.000e+00  4.000e-01] |
+    |                                                                             |
+    | Participant: MAPDL-1                                                        |
+    |   Number of face regions                                                  1 |
+    |     Number of faces                                                      84 |
+    |       Quadrilateral8                                                     84 |
+    |     Area (m2)                                                     8.240e-01 |
+    |   Bounding Box (m)                                                          |
+    |     Minimum                              [ 1.000e+01  0.000e+00  0.000e+00] |
+    |     Maximum                              [ 1.006e+01  1.000e+00  4.000e-01] |
+    |                                                                             |
+    | Total                                                                       |
+    |   Number of cells                                                         0 |
+    |   Number of faces                                                        95 |
+    |   Number of nodes                                                       327 |
+    +-----------------------------------------------------------------------------+
+
+
+    +-----------------------------------------------------------------------------+
+    |                               MAPPING SUMMARY                               |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    | interface-1                         |                                       |
+    |   Force                             |                                       |
+    |     Mapped Area [%]                 |       100               100           |
+    |     Mapped Elements [%]             |       100               100           |
+    |     Mapped Nodes [%]                |       100               100           |
+    |   displacement                      |                                       |
+    |     Mapped Area [%]                 |       100               100           |
+    |     Mapped Elements [%]             |       100               100           |
+    |     Mapped Nodes [%]                |       100               100           |
+    +-----------------------------------------------------------------------------+
+
+
+    +-----------------------------------------------------------------------------+
+    |                            Transfer Diagnostics                             |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |                                       |
+    |       Weighted Average x            |     0.00E+00          0.00E+00        |
+    |       Weighted Average y            |     0.00E+00          0.00E+00        |
+    |       Weighted Average z            |     0.00E+00          0.00E+00        |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |                                       |
+    |       Sum x                         |     0.00E+00          0.00E+00        |
+    |       Sum y                         |     0.00E+00          0.00E+00        |
+    |       Sum z                         |     0.00E+00          0.00E+00        |
+    +-----------------------------------------------------------------------------+
+
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                              Coupled Solution                               |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+
+    +=============================================================================+
+    | COUPLING STEP = 1                         SIMULATION TIME = 1.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.00E+00          1.00E+00        |
+    |       Sum x                         |     0.00E+00          0.00E+00        |
+    |       Sum y                         |     0.00E+00          0.00E+00        |
+    |       Sum z                         |     0.00E+00          0.00E+00        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     1.00E+00          1.00E+00        |
+    |       Weighted Average x            |    -1.50E-03         -1.51E-03        |
+    |       Weighted Average y            |     5.05E-07          4.42E-07        |
+    |       Weighted Average z            |    -1.38E-17         -1.39E-17        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.05E+00          7.39E-01        |
+    |       Sum x                         |     1.34E-01          1.34E-01        |
+    |       Sum y                         |     9.55E-04          9.55E-04        |
+    |       Sum z                         |    -1.31E-15         -1.31E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.20E-03          3.24E-03        |
+    |       Weighted Average x            |    -1.49E-03         -1.51E-03        |
+    |       Weighted Average y            |     5.27E-07          4.64E-07        |
+    |       Weighted Average z            |    -2.11E-17         -2.07E-17        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.87E-02          1.29E-02        |
+    |       Sum x                         |     1.36E-01          1.36E-01        |
+    |       Sum y                         |     1.01E-03          1.01E-03        |
+    |       Sum z                         |    -1.29E-15         -1.29E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.49E-05          3.49E-05        |
+    |       Weighted Average x            |    -1.49E-03         -1.51E-03        |
+    |       Weighted Average y            |     5.27E-07          4.65E-07        |
+    |       Weighted Average z            |    -1.36E-17         -1.36E-17        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.35E-03          9.24E-04        |
+    |       Sum x                         |     1.36E-01          1.36E-01        |
+    |       Sum y                         |     1.01E-03          1.01E-03        |
+    |       Sum z                         |    -1.28E-15         -1.28E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.05E-06          1.05E-06        |
+    |       Weighted Average x            |    -1.49E-03         -1.51E-03        |
+    |       Weighted Average y            |     5.27E-07          4.65E-07        |
+    |       Weighted Average z            |    -1.17E-17         -1.25E-17        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 2                         SIMULATION TIME = 2.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     7.06E-05          4.84E-05        |
+    |       Sum x                         |     1.36E-01          1.36E-01        |
+    |       Sum y                         |     1.01E-03          1.01E-03        |
+    |       Sum z                         |    -1.24E-15         -1.24E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     8.75E-01          8.84E-01        |
+    |       Weighted Average x            |    -5.03E-03         -5.07E-03        |
+    |       Weighted Average y            |    -4.11E-05         -4.17E-05        |
+    |       Weighted Average z            |     6.05E-17          6.11E-17        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     6.05E-01          4.42E-01        |
+    |       Sum x                         |     3.43E-01          3.43E-01        |
+    |       Sum y                         |     5.99E-03          5.99E-03        |
+    |       Sum z                         |     3.92E-15          3.92E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     8.29E-03          8.55E-03        |
+    |       Weighted Average x            |    -4.99E-03         -5.03E-03        |
+    |       Weighted Average y            |    -4.10E-05         -4.16E-05        |
+    |       Weighted Average z            |     1.20E-16          1.22E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     9.48E-03          6.52E-03        |
+    |       Sum x                         |     3.43E-01          3.43E-01        |
+    |       Sum y                         |     6.12E-03          6.12E-03        |
+    |       Sum z                         |     3.93E-15          3.93E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.84E-04          2.95E-04        |
+    |       Weighted Average x            |    -4.99E-03         -5.03E-03        |
+    |       Weighted Average y            |    -4.10E-05         -4.15E-05        |
+    |       Weighted Average z            |     1.01E-16          1.03E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 3                         SIMULATION TIME = 3.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     8.02E-04          5.68E-04        |
+    |       Sum x                         |     3.43E-01          3.43E-01        |
+    |       Sum y                         |     6.13E-03          6.13E-03        |
+    |       Sum z                         |     4.11E-15          4.11E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.97E-01          8.14E-01        |
+    |       Weighted Average x            |    -8.65E-03         -8.69E-03        |
+    |       Weighted Average y            |    -1.98E-04         -1.99E-04        |
+    |       Weighted Average z            |     4.99E-16          5.11E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.93E-01          1.51E-01        |
+    |       Sum x                         |     4.07E-01          4.07E-01        |
+    |       Sum y                         |     1.64E-02          1.64E-02        |
+    |       Sum z                         |     1.82E-14          1.82E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.20E-03          3.37E-03        |
+    |       Weighted Average x            |    -8.63E-03         -8.66E-03        |
+    |       Weighted Average y            |    -1.98E-04         -1.99E-04        |
+    |       Weighted Average z            |     2.00E-16          2.07E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     8.84E-03          6.71E-03        |
+    |       Sum x                         |     4.03E-01          4.03E-01        |
+    |       Sum y                         |     1.64E-02          1.64E-02        |
+    |       Sum z                         |     1.80E-14          1.80E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.20E-04          1.35E-04        |
+    |       Weighted Average x            |    -8.63E-03         -8.66E-03        |
+    |       Weighted Average y            |    -1.98E-04         -1.99E-04        |
+    |       Weighted Average z            |     4.11E-16          4.13E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 4                         SIMULATION TIME = 4.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     4.67E-04          3.49E-04        |
+    |       Sum x                         |     4.03E-01          4.03E-01        |
+    |       Sum y                         |     1.63E-02          1.63E-02        |
+    |       Sum z                         |     1.81E-14          1.81E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.41E-01          7.68E-01        |
+    |       Weighted Average x            |    -1.16E-02         -1.16E-02        |
+    |       Weighted Average y            |    -5.40E-04         -5.39E-04        |
+    |       Weighted Average z            |     3.07E-16          3.43E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.36E-01          9.40E-02        |
+    |       Sum x                         |     3.93E-01          3.93E-01        |
+    |       Sum y                         |     3.19E-02          3.19E-02        |
+    |       Sum z                         |     3.25E-14          3.25E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.24E-03          1.36E-03        |
+    |       Weighted Average x            |    -1.16E-02         -1.16E-02        |
+    |       Weighted Average y            |    -5.40E-04         -5.40E-04        |
+    |       Weighted Average z            |     5.08E-16          5.46E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     5.99E-03          4.26E-03        |
+    |       Sum x                         |     3.91E-01          3.91E-01        |
+    |       Sum y                         |     3.18E-02          3.18E-02        |
+    |       Sum z                         |     3.09E-14          3.09E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.28E-05          2.50E-05        |
+    |       Weighted Average x            |    -1.16E-02         -1.16E-02        |
+    |       Weighted Average y            |    -5.40E-04         -5.40E-04        |
+    |       Weighted Average z            |     1.84E-16          2.08E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 5                         SIMULATION TIME = 5.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     3.56E-04          2.49E-04        |
+    |       Sum x                         |     3.91E-01          3.91E-01        |
+    |       Sum y                         |     3.18E-02          3.18E-02        |
+    |       Sum z                         |     3.11E-14          3.11E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.24E-01          7.57E-01        |
+    |       Weighted Average x            |    -1.42E-02         -1.42E-02        |
+    |       Weighted Average y            |    -1.18E-03         -1.18E-03        |
+    |       Weighted Average z            |    -5.62E-16         -5.67E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     9.32E-02          6.61E-02        |
+    |       Sum x                         |     4.19E-01          4.19E-01        |
+    |       Sum y                         |     5.75E-02          5.75E-02        |
+    |       Sum z                         |     4.49E-14          4.49E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.18E-03          2.46E-03        |
+    |       Weighted Average x            |    -1.42E-02         -1.42E-02        |
+    |       Weighted Average y            |    -1.18E-03         -1.18E-03        |
+    |       Weighted Average z            |    -5.92E-16         -5.74E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.67E-03          1.72E-03        |
+    |       Sum x                         |     4.19E-01          4.19E-01        |
+    |       Sum y                         |     5.76E-02          5.76E-02        |
+    |       Sum z                         |     4.31E-14          4.31E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     6.64E-05          7.49E-05        |
+    |       Weighted Average x            |    -1.42E-02         -1.42E-02        |
+    |       Weighted Average y            |    -1.18E-03         -1.18E-03        |
+    |       Weighted Average z            |    -6.02E-16         -5.94E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 6                         SIMULATION TIME = 6.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.61E-04          1.06E-04        |
+    |       Sum x                         |     4.19E-01          4.19E-01        |
+    |       Sum y                         |     5.76E-02          5.76E-02        |
+    |       Sum z                         |     4.28E-14          4.28E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.31E-01          7.61E-01        |
+    |       Weighted Average x            |    -1.53E-02         -1.53E-02        |
+    |       Weighted Average y            |    -1.98E-03         -1.96E-03        |
+    |       Weighted Average z            |    -1.48E-15         -1.49E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.53E-01          1.02E-01        |
+    |       Sum x                         |     3.52E-01          3.52E-01        |
+    |       Sum y                         |     7.37E-02          7.37E-02        |
+    |       Sum z                         |     2.22E-14          2.22E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     6.36E-03          6.49E-03        |
+    |       Weighted Average x            |    -1.52E-02         -1.51E-02        |
+    |       Weighted Average y            |    -1.96E-03         -1.95E-03        |
+    |       Weighted Average z            |    -1.44E-15         -1.47E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     3.03E-02          2.00E-02        |
+    |       Sum x                         |     3.39E-01          3.39E-01        |
+    |       Sum y                         |     7.15E-02          7.15E-02        |
+    |       Sum z                         |     2.11E-14          2.11E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.46E-05          3.40E-05        |
+    |       Weighted Average x            |    -1.52E-02         -1.51E-02        |
+    |       Weighted Average y            |    -1.96E-03         -1.95E-03        |
+    |       Weighted Average z            |    -1.43E-15         -1.47E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     6.92E-04          4.43E-04        |
+    |       Sum x                         |     3.39E-01          3.39E-01        |
+    |       Sum y                         |     7.15E-02          7.15E-02        |
+    |       Sum z                         |     2.10E-14          2.10E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     8.92E-07          1.02E-06        |
+    |       Weighted Average x            |    -1.52E-02         -1.51E-02        |
+    |       Weighted Average y            |    -1.96E-03         -1.95E-03        |
+    |       Weighted Average z            |    -1.44E-15         -1.48E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 7                         SIMULATION TIME = 7.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.23E-05          1.42E-05        |
+    |       Sum x                         |     3.39E-01          3.39E-01        |
+    |       Sum y                         |     7.15E-02          7.15E-02        |
+    |       Sum z                         |     2.13E-14          2.13E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.33E-01          7.62E-01        |
+    |       Weighted Average x            |    -1.38E-02         -1.38E-02        |
+    |       Weighted Average y            |    -2.39E-03         -2.38E-03        |
+    |       Weighted Average z            |    -1.33E-15         -1.34E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     7.29E-01          4.28E-01        |
+    |       Sum x                         |     1.57E-01          1.57E-01        |
+    |       Sum y                         |     5.38E-02          5.38E-02        |
+    |       Sum z                         |    -9.74E-15         -9.74E-15        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.69E-03          1.81E-03        |
+    |       Weighted Average x            |    -1.38E-02         -1.38E-02        |
+    |       Weighted Average y            |    -2.39E-03         -2.37E-03        |
+    |       Weighted Average z            |    -1.34E-15         -1.36E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.24E-02          7.06E-03        |
+    |       Sum x                         |     1.55E-01          1.55E-01        |
+    |       Sum y                         |     5.33E-02          5.33E-02        |
+    |       Sum z                         |    -1.13E-14         -1.13E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     5.78E-05          5.89E-05        |
+    |       Weighted Average x            |    -1.38E-02         -1.38E-02        |
+    |       Weighted Average y            |    -2.39E-03         -2.37E-03        |
+    |       Weighted Average z            |    -1.34E-15         -1.35E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 8                         SIMULATION TIME = 8.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.18E-03          6.71E-04        |
+    |       Sum x                         |     1.55E-01          1.55E-01        |
+    |       Sum y                         |     5.32E-02          5.32E-02        |
+    |       Sum z                         |    -1.13E-14         -1.13E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.41E-01          7.68E-01        |
+    |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
+    |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
+    |       Weighted Average z            |     1.09E-15          1.08E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.45E+00          7.24E-01        |
+    |       Sum x                         |     2.97E-02          2.97E-02        |
+    |       Sum y                         |     2.66E-02          2.66E-02        |
+    |       Sum z                         |    -3.66E-14         -3.66E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     8.73E-04          9.81E-04        |
+    |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
+    |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
+    |       Weighted Average z            |     1.18E-15          1.15E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     3.74E-02          1.81E-02        |
+    |       Sum x                         |     2.72E-02          2.72E-02        |
+    |       Sum y                         |     2.58E-02          2.58E-02        |
+    |       Sum z                         |    -3.54E-14         -3.54E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     4.98E-05          5.57E-05        |
+    |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
+    |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
+    |       Weighted Average z            |     1.06E-15          1.05E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.78E-03          1.32E-03        |
+    |       Sum x                         |     2.72E-02          2.72E-02        |
+    |       Sum y                         |     2.58E-02          2.58E-02        |
+    |       Sum z                         |    -3.54E-14         -3.54E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     4.03E-06          4.44E-06        |
+    |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
+    |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
+    |       Weighted Average z            |     1.02E-15          1.01E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 9                         SIMULATION TIME = 9.00000E-01 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.04E-04          5.00E-05        |
+    |       Sum x                         |     2.72E-02          2.72E-02        |
+    |       Sum y                         |     2.58E-02          2.58E-02        |
+    |       Sum z                         |    -3.54E-14         -3.54E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.80E-01          7.99E-01        |
+    |       Weighted Average x            |    -8.49E-03         -8.51E-03        |
+    |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
+    |       Weighted Average z            |     3.94E-15          3.93E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.11E+00          8.12E-01        |
+    |       Sum x                         |    -8.40E-02         -8.40E-02        |
+    |       Sum y                         |    -4.61E-03         -4.61E-03        |
+    |       Sum z                         |    -4.17E-14         -4.17E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.21E-03          2.36E-03        |
+    |       Weighted Average x            |    -8.47E-03         -8.50E-03        |
+    |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
+    |       Weighted Average z            |     3.85E-15          3.85E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     3.77E-02          2.62E-02        |
+    |       Sum x                         |    -8.74E-02         -8.74E-02        |
+    |       Sum y                         |    -5.49E-03         -5.49E-03        |
+    |       Sum z                         |    -4.03E-14         -4.03E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     7.77E-05          8.51E-05        |
+    |       Weighted Average x            |    -8.47E-03         -8.50E-03        |
+    |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
+    |       Weighted Average z            |     3.94E-15          3.94E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.23E-03          1.55E-03        |
+    |       Sum x                         |    -8.75E-02         -8.75E-02        |
+    |       Sum y                         |    -5.51E-03         -5.51E-03        |
+    |       Sum z                         |    -4.03E-14         -4.03E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.98E-06          3.42E-06        |
+    |       Weighted Average x            |    -8.47E-03         -8.50E-03        |
+    |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
+    |       Weighted Average z            |     3.66E-15          3.66E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 10                        SIMULATION TIME = 1.00000E+00 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     7.34E-05          5.05E-05        |
+    |       Sum x                         |    -8.75E-02         -8.75E-02        |
+    |       Sum y                         |    -5.51E-03         -5.51E-03        |
+    |       Sum z                         |    -4.03E-14         -4.03E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     8.10E-01          8.26E-01        |
+    |       Weighted Average x            |    -4.95E-03         -4.98E-03        |
+    |       Weighted Average y            |    -1.08E-03         -1.08E-03        |
+    |       Weighted Average z            |     3.42E-15          3.46E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     6.20E-01          4.48E-01        |
+    |       Sum x                         |    -2.17E-01         -2.17E-01        |
+    |       Sum y                         |    -4.08E-02         -4.08E-02        |
+    |       Sum z                         |    -2.72E-14         -2.72E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.88E-03          4.36E-03        |
+    |       Weighted Average x            |    -4.95E-03         -4.97E-03        |
+    |       Weighted Average y            |    -1.07E-03         -1.08E-03        |
+    |       Weighted Average z            |     3.38E-15          3.42E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.65E-02          1.15E-02        |
+    |       Sum x                         |    -2.20E-01         -2.20E-01        |
+    |       Sum y                         |    -4.17E-02         -4.17E-02        |
+    |       Sum z                         |    -2.74E-14         -2.74E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.63E-04          1.87E-04        |
+    |       Weighted Average x            |    -4.95E-03         -4.97E-03        |
+    |       Weighted Average y            |    -1.07E-03         -1.08E-03        |
+    |       Weighted Average z            |     3.34E-15          3.38E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     5.70E-04          3.95E-04        |
+    |       Sum x                         |    -2.21E-01         -2.21E-01        |
+    |       Sum y                         |    -4.17E-02         -4.17E-02        |
+    |       Sum z                         |    -2.72E-14         -2.72E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     9.44E-06          1.09E-05        |
+    |       Weighted Average x            |    -4.95E-03         -4.97E-03        |
+    |       Weighted Average y            |    -1.07E-03         -1.08E-03        |
+    |       Weighted Average z            |     3.38E-15          3.42E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                                  Shut Down                                  |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+    +=============================================================================+
+    |                          Available Restart Points                           |
+    +=============================================================================+
+    | Restart Point                        | File Name                            |
+    +-----------------------------------------------------------------------------+
+    | Coupling Step 2                      | Restart_step2.h5                     |
+    | Coupling Step 4                      | Restart_step4.h5                     |
+    | Coupling Step 6                      | Restart_step6.h5                     |
+    | Coupling Step 8                      | Restart_step8.h5                     |
+    | Coupling Step 10                     | Restart_step10.h5                    |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             Timing Summary [s]                              |
+    +=============================================================================+
+    | Total Time :                                                    7.30177E+01 |
+    | Coupling Participant Time                                                   |
+    |    Fluid Flow (Fluent) :                                        4.98380E+01 |
+    |    MAPDL Transient :                                            5.38761E+00 |
+    |    Total :                                                      5.52257E+01 |
+    | Coupling Engine Time                                                        |
+    |    Solution Control :                                           6.77293E+00 |
+    |    Mesh Import :                                                2.34741E-01 |
+    |    Mapping Setup :                                              3.37117E-02 |
+    |    Mapping :                                                    7.97450E-03 |
+    |    Numerics :                                                   3.02975E-02 |
+    |    Misc. :                                                      1.07124E+01 |
+    |    Total :                                                      1.77920E+01 |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                 System coupling run completed successfully.                 |
+    +=============================================================================+
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 277-283
 
 Extend analysis end time for a restarted run
 --------------------------------------------
@@ -883,7 +2075,7 @@ Access the `case` API for file handling and persistence.
 Use this to completely clear the current case and reload
 from the case saved during the solve.
 
-.. GENERATED FROM PYTHON SOURCE LINES 278-283
+.. GENERATED FROM PYTHON SOURCE LINES 283-288
 
 .. code-block:: default
 
@@ -896,10 +2088,19 @@ from the case saved during the solve.
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+
+    Reading settings
+
+    Opened analysis at the end of coupling step 10.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 284-289
+
+.. GENERATED FROM PYTHON SOURCE LINES 289-294
 
 Extend analysis
 ~~~~~~~~~~~~~~~
@@ -907,7 +2108,7 @@ Extend analysis
 View `solution_control`, change `end-time` and verify setting.
 The analysis is extended to 1.5 seconds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 289-293
+.. GENERATED FROM PYTHON SOURCE LINES 294-298
 
 .. code-block:: default
 
@@ -924,29 +2125,29 @@ The analysis is extended to 1.5 seconds.
  .. code-block:: none
 
 
-    minimum_iterations : 1
     maximum_iterations : 5
     duration_option : EndTime
+    minimum_iterations : 1
+    time_step_size : 0.1 [s]
     end_time : 1.0 [s]
-    time_step_size : 0.1 [s]
 
-    time_step_size : 0.1 [s]
-    minimum_iterations : 1
     maximum_iterations : 5
     duration_option : EndTime
+    minimum_iterations : 1
+    time_step_size : 0.1 [s]
     end_time : 1.5 [s]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 294-298
+.. GENERATED FROM PYTHON SOURCE LINES 299-303
 
 Additional settings changes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Examine "Force" data transfer.
 
-.. GENERATED FROM PYTHON SOURCE LINES 298-303
+.. GENERATED FROM PYTHON SOURCE LINES 303-308
 
 .. code-block:: default
 
@@ -964,26 +2165,26 @@ Examine "Force" data transfer.
  .. code-block:: none
 
 
-    mapping_type : Conservative
-    relaxation_factor : 1.0
     source_variable : force
-    suppress : False
-    convergence_target : 0.01
-    ramping_option : None
-    display_name : Force
-    target_side : One
     option : UsingVariable
+    suppress : False
+    relaxation_factor : 1.0
+    target_side : One
+    convergence_target : 0.01
+    mapping_type : Conservative
+    ramping_option : None
     target_variable : FORC
+    display_name : Force
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 304-306
+.. GENERATED FROM PYTHON SOURCE LINES 309-311
 
 Change `convergence_target` and `ramping_option` of "Force" data
 transfer, and set minimum iterations value.
 
-.. GENERATED FROM PYTHON SOURCE LINES 306-311
+.. GENERATED FROM PYTHON SOURCE LINES 311-316
 
 .. code-block:: default
 
@@ -999,12 +2200,12 @@ transfer, and set minimum iterations value.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 312-314
+.. GENERATED FROM PYTHON SOURCE LINES 317-319
 
 Review setup
 ~~~~~~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 314-316
+.. GENERATED FROM PYTHON SOURCE LINES 319-321
 
 .. code-block:: default
 
@@ -1169,12 +2370,12 @@ Review setup
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 317-319
+.. GENERATED FROM PYTHON SOURCE LINES 322-324
 
 Restart solution
 ----------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 319-321
+.. GENERATED FROM PYTHON SOURCE LINES 324-326
 
 .. code-block:: default
 
@@ -1184,14 +2385,792 @@ Restart solution
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 322-323
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                          Summary of Coupling Setup                          |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+    +=============================================================================+
+    |                          Coupling Participants (2)                          |
+    +=============================================================================+
+    |                                                                             |
+    | Participant: Fluid Flow (Fluent)                                            |
+    |    Type :                                                            FLUENT |
+    |    UpdateControls:                                                          |
+    |       Option :                                            ProgramControlled |
+    |    Region: wall_deforming                                                   |
+    |       Topology :                                                    Surface |
+    |       Input Variables :                                        displacement |
+    |       Output Variables :                                              force |
+    |    Variable: displacement                                                   |
+    |       Quantity Type :                              Incremental Displacement |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                  False |
+    |       Data Type :                                                      Real |
+    |    Variable: force                                                          |
+    |       Quantity Type :                                                 Force |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                   True |
+    |       Data Type :                                                      Real |
+    |                                                                             |
+    +-----------------------------------------------------------------------------+
+    |                                                                             |
+    | Participant: MAPDL Transient                                                |
+    |    Type :                                                             MAPDL |
+    |    UpdateControls:                                                          |
+    |       Option :                                            ProgramControlled |
+    |    Region: FSIN_1_Fluid Solid Interface                                     |
+    |       Topology :                                                    Surface |
+    |       Input Variables :                                               Force |
+    |       Output Variables :                           Incremental_Displacement |
+    |    Variable: Force                                                          |
+    |       Quantity Type :                                                 Force |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                   True |
+    |       Data Type :                                                      Real |
+    |    Variable: Incremental_Displacement                                       |
+    |       Quantity Type :                              Incremental Displacement |
+    |       Location :                                                       Node |
+    |       Tensor Type :                                                  Vector |
+    |       Is Extensive :                                                  False |
+    |       Data Type :                                                      Real |
+    |                                                                             |
+    +=============================================================================+
+    |                              Analysis Control                               |
+    +=============================================================================+
+    |                                                                             |
+    | Analysis Type :                                                   Transient |
+    | Global Stabilization :                                                 None |
+    | OptimizeIfOneWay :                                                     True |
+    | AllowSimultaneousUpdate :                                             False |
+    | PartitioningAlgorithm :                              SharedAllocateMachines |
+    |                                                                             |
+    +=============================================================================+
+    |                           Coupling Interfaces (1)                           |
+    +=============================================================================+
+    |                                                                             |
+    | Interface: interface-1                                                      |
+    |    Side: One                                                                |
+    |       Coupling Participant :                                MAPDL Transient |
+    |       Region List :                            FSIN_1_Fluid Solid Interface |
+    |       Reference Frame :                                GlobalReferenceFrame |
+    |    Side: Two                                                                |
+    |       Coupling Participant :                            Fluid Flow (Fluent) |
+    |       Region List :                                          wall_deforming |
+    |       Reference Frame :                                GlobalReferenceFrame |
+    |    Data Transfer: Force                                                     |
+    |       Suppress :                                                      False |
+    |       Target Side :                                                     One |
+    |       Source Variable :                                               force |
+    |       Target Variable :                                               Force |
+    |       Mapping Type :                                   Surface Conservative |
+    |       Convergence Target :                                         1.00E-03 |
+    |       Ramping Option :                                               Linear |
+    |       Relaxation Factor :                                          1.00E+00 |
+    |    Data Transfer: displacement                                              |
+    |       Suppress :                                                      False |
+    |       Target Side :                                                     Two |
+    |       Source Variable :                            Incremental_Displacement |
+    |       Target Variable :                                        displacement |
+    |       Unmapped Value Option :                                 Nearest Value |
+    |       Mapping Type :                             Surface Profile Preserving |
+    |       Convergence Target :                                         1.00E-02 |
+    |       Ramping Option :                                                 None |
+    |       Relaxation Factor :                                          1.00E+00 |
+    |    Mapping Control:                                                         |
+    |       Absolute Gap Tolerance :                                      0.0 [m] |
+    |       Face Alignment :                                    ProgramControlled |
+    |       Poor Intersection Threshold :                                5.00e-01 |
+    |       Relative Gap Tolerance :                                     1.00e+00 |
+    |       Stop If Poor Intersection :                                      True |
+    |                                                                             |
+    +=============================================================================+
+    |                              Solution Control                               |
+    +=============================================================================+
+    |                                                                             |
+    | Duration Option :                                                   EndTime |
+    | End Time :                                                          1.5 [s] |
+    | Maximum Iterations :                                                      5 |
+    | Minimum Iterations :                                                      2 |
+    | Time Step Size :                                                    0.1 [s] |
+    |                                                                             |
+    +=============================================================================+
+    |                               Output Control                                |
+    +=============================================================================+
+    |                                                                             |
+    | Output Control Option :                                        StepInterval |
+    |    Frequency :                                                            2 |
+    | Results                                                                     |
+    |    IncludeInstances :                                     ProgramControlled |
+    |    Option :                                               ProgramControlled |
+    |    Type                                                                     |
+    |       Option :                                                  EnsightGold |
+    | Write Initial Snapshot :                                               True |
+    |                                                                             |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                            Execution Information                            |
+    +=============================================================================+
+    |                                                                             |
+    | System Coupling                                                             |
+    |   Command Line Arguments:                                                   |
+    |     -m cosimgui --grpcport 127.0.0.1:54671                                  |
+    |   Working Directory:                                                        |
+    |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
+    |     pling_core\examples                                                     |
+    |                                                                             |
+    | Fluid Flow (Fluent)                                                         |
+    |   Execution Command:                                                        |
+    |     "C:\ANSYSDev\ANSYS Inc\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
+    |     ort=54862 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
+    |     ou                                                                      |
+    |   Working Directory:                                                        |
+    |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
+    |     pling_core\examples\Fluent                                              |
+    |                                                                             |
+    | MAPDL Transient                                                             |
+    |   Execution Command:                                                        |
+    |     "C:\ANSYSDev\ANSYS Inc\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s |
+    |      noread -scport 54862 -schost host.docker.internal -scname "MAPDL-1" -i |
+    |      "MAPDL-1.dat" -o MAPDL-1.out                                           |
+    |   Working Directory:                                                        |
+    |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
+    |     pling_core\examples\MAPDL                                               |
+    |                                                                             |
+    +=============================================================================+
+    Awaiting connections from coupling participants... done.
+
+    +=============================================================================+
+    |                              Build Information                              |
+    +-----------------------------------------------------------------------------+
+    | System Coupling                                                             |
+    |   2023 R1: Build ID: dfb47f4 Build Date: 2022-09-06T13:55                   |
+    | Fluid Flow (Fluent)                                                         |
+    |   ANSYS Fluent 23.1.0, Build Time:Oct 16 2022 12:29:50 EDT, Build Id:188,   |
+    |   OS Version:win64                                                          |
+    | MAPDL Transient                                                             |
+    |   Mechanical APDL Release 2023 R1          Build 23.1BETA UP20221016        |
+    |   DISTRIBUTED WINDOWS x64  Version                                          |
+    +=============================================================================+
+
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                           Analysis Initialization                           |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+    +-----------------------------------------------------------------------------+
+    |                               MESH STATISTICS                               |
+    +-----------------------------------------------------------------------------+
+    | Participant: FLUENT-2                                                       |
+    |   Number of face regions                                                  1 |
+    |     Number of faces                                                      11 |
+    |       Quadrilateral                                                      11 |
+    |     Area (m2)                                                     8.241e-01 |
+    |   Bounding Box (m)                                                          |
+    |     Minimum                              [ 9.771e+00  0.000e+00  0.000e+00] |
+    |     Maximum                              [ 1.006e+01  9.778e-01  4.000e-01] |
+    |                                                                             |
+    | Participant: MAPDL-1                                                        |
+    |   Number of face regions                                                  1 |
+    |     Number of faces                                                      84 |
+    |       Quadrilateral8                                                     84 |
+    |     Area (m2)                                                     8.240e-01 |
+    |   Bounding Box (m)                                                          |
+    |     Minimum                              [ 9.770e+00  0.000e+00 -9.064e-04] |
+    |     Maximum                              [ 1.006e+01  9.778e-01  4.009e-01] |
+    |                                                                             |
+    | Total                                                                       |
+    |   Number of cells                                                         0 |
+    |   Number of faces                                                        95 |
+    |   Number of nodes                                                       327 |
+    +-----------------------------------------------------------------------------+
+
+
+    +-----------------------------------------------------------------------------+
+    |                               MAPPING SUMMARY                               |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    | interface-1                         |                                       |
+    |   Force                             |                                       |
+    |     Mapped Area [%]                 |       100               100           |
+    |     Mapped Elements [%]             |       100               100           |
+    |     Mapped Nodes [%]                |       100               100           |
+    |   displacement                      |                                       |
+    |     Mapped Area [%]                 |       100               100           |
+    |     Mapped Elements [%]             |       100               100           |
+    |     Mapped Nodes [%]                |       100               100           |
+    +-----------------------------------------------------------------------------+
+
+
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                              Coupled Solution                               |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+
+    +=============================================================================+
+    | COUPLING STEP = 11                        SIMULATION TIME = 1.10000E+00 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.00E+00          1.00E+00        |
+    |       Sum x                         |    -2.21E-01         -2.20E-01        |
+    |       Sum y                         |    -4.17E-02         -4.16E-02        |
+    |       Sum z                         |    -2.74E-14         -2.75E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     1.00E+00          1.00E+00        |
+    |       Weighted Average x            |    -1.05E-03         -1.04E-03        |
+    |       Weighted Average y            |    -2.54E-04         -2.51E-04        |
+    |       Weighted Average z            |    -1.66E-16         -1.26E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     3.89E-01          2.79E-01        |
+    |       Sum x                         |    -3.40E-01         -3.39E-01        |
+    |       Sum y                         |    -7.67E-02         -7.66E-02        |
+    |       Sum z                         |    -5.42E-14         -5.44E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     4.30E-03          4.72E-03        |
+    |       Weighted Average x            |    -1.05E-03         -1.05E-03        |
+    |       Weighted Average y            |    -2.55E-04         -2.52E-04        |
+    |       Weighted Average z            |    -2.68E-16         -2.31E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     7.11E-03          4.96E-03        |
+    |       Sum x                         |    -3.42E-01         -3.41E-01        |
+    |       Sum y                         |    -7.72E-02         -7.71E-02        |
+    |       Sum z                         |    -5.69E-14         -5.71E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.03E-04          3.46E-04        |
+    |       Weighted Average x            |    -1.05E-03         -1.05E-03        |
+    |       Weighted Average y            |    -2.55E-04         -2.52E-04        |
+    |       Weighted Average z            |    -2.56E-16         -2.19E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     5.03E-04          3.43E-04        |
+    |       Sum x                         |    -3.42E-01         -3.41E-01        |
+    |       Sum y                         |    -7.73E-02         -7.72E-02        |
+    |       Sum z                         |    -5.76E-14         -5.78E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.35E-05          2.64E-05        |
+    |       Weighted Average x            |    -1.05E-03         -1.05E-03        |
+    |       Weighted Average y            |    -2.55E-04         -2.52E-04        |
+    |       Weighted Average z            |    -2.09E-16         -1.71E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 12                        SIMULATION TIME = 1.20000E+00 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.60E-05          1.82E-05        |
+    |       Sum x                         |    -3.42E-01         -3.41E-01        |
+    |       Sum y                         |    -7.73E-02         -7.72E-02        |
+    |       Sum z                         |    -5.75E-14         -5.77E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     8.66E-01          8.76E-01        |
+    |       Weighted Average x            |     2.88E-03          2.90E-03        |
+    |       Weighted Average y            |     5.70E-04          5.73E-04        |
+    |       Weighted Average z            |    -4.32E-15         -4.34E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.95E-01          1.45E-01        |
+    |       Sum x                         |    -4.14E-01         -4.13E-01        |
+    |       Sum y                         |    -9.62E-02         -9.61E-02        |
+    |       Sum z                         |    -7.13E-14         -7.16E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     7.07E-03          7.43E-03        |
+    |       Weighted Average x            |     2.86E-03          2.88E-03        |
+    |       Weighted Average y            |     5.70E-04          5.72E-04        |
+    |       Weighted Average z            |    -4.32E-15         -4.34E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     5.16E-03          3.60E-03        |
+    |       Sum x                         |    -4.12E-01         -4.11E-01        |
+    |       Sum y                         |    -9.58E-02         -9.57E-02        |
+    |       Sum z                         |    -7.03E-14         -7.06E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.36E-04          2.54E-04        |
+    |       Weighted Average x            |     2.86E-03          2.89E-03        |
+    |       Weighted Average y            |     5.70E-04          5.72E-04        |
+    |       Weighted Average z            |    -4.28E-15         -4.30E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     7.57E-05          5.06E-05        |
+    |       Sum x                         |    -4.12E-01         -4.11E-01        |
+    |       Sum y                         |    -9.58E-02         -9.57E-02        |
+    |       Sum z                         |    -7.05E-14         -7.07E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     8.07E-06          8.61E-06        |
+    |       Weighted Average x            |     2.86E-03          2.89E-03        |
+    |       Weighted Average y            |     5.70E-04          5.72E-04        |
+    |       Weighted Average z            |    -4.24E-15         -4.25E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 13                        SIMULATION TIME = 1.30000E+00 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     9.73E-06          6.85E-06        |
+    |       Sum x                         |    -4.12E-01         -4.11E-01        |
+    |       Sum y                         |    -9.58E-02         -9.57E-02        |
+    |       Sum z                         |    -7.05E-14         -7.07E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.73E-01          7.93E-01        |
+    |       Weighted Average x            |     6.34E-03          6.36E-03        |
+    |       Weighted Average y            |     1.34E-03          1.34E-03        |
+    |       Weighted Average z            |    -5.29E-15         -5.35E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.13E-01          8.27E-02        |
+    |       Sum x                         |    -4.27E-01         -4.26E-01        |
+    |       Sum y                         |    -9.72E-02         -9.71E-02        |
+    |       Sum z                         |    -6.13E-14         -6.15E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.14E-03          2.11E-03        |
+    |       Weighted Average x            |     6.32E-03          6.34E-03        |
+    |       Weighted Average y            |     1.35E-03          1.34E-03        |
+    |       Weighted Average z            |    -5.15E-15         -5.21E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     6.58E-03          4.78E-03        |
+    |       Sum x                         |    -4.24E-01         -4.24E-01        |
+    |       Sum y                         |    -9.66E-02         -9.65E-02        |
+    |       Sum z                         |    -6.00E-14         -6.02E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     7.36E-05          7.41E-05        |
+    |       Weighted Average x            |     6.32E-03          6.34E-03        |
+    |       Weighted Average y            |     1.35E-03          1.34E-03        |
+    |       Weighted Average z            |    -5.24E-15         -5.30E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.38E-04          1.71E-04        |
+    |       Sum x                         |    -4.24E-01         -4.24E-01        |
+    |       Sum y                         |    -9.66E-02         -9.65E-02        |
+    |       Sum z                         |    -5.89E-14         -5.92E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.81E-06          3.99E-06        |
+    |       Weighted Average x            |     6.32E-03          6.34E-03        |
+    |       Weighted Average y            |     1.35E-03          1.34E-03        |
+    |       Weighted Average z            |    -5.30E-15         -5.37E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 14                        SIMULATION TIME = 1.40000E+00 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.71E-05          1.24E-05        |
+    |       Sum x                         |    -4.24E-01         -4.24E-01        |
+    |       Sum y                         |    -9.66E-02         -9.65E-02        |
+    |       Sum z                         |    -5.96E-14         -5.95E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.44E-01          7.71E-01        |
+    |       Weighted Average x            |     9.27E-03          9.27E-03        |
+    |       Weighted Average y            |     2.02E-03          2.01E-03        |
+    |       Weighted Average z            |    -2.64E-15         -2.71E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     1.05E-01          7.17E-02        |
+    |       Sum x                         |    -4.22E-01         -4.21E-01        |
+    |       Sum y                         |    -8.92E-02         -8.91E-02        |
+    |       Sum z                         |    -3.77E-14         -3.79E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.11E-03          1.18E-03        |
+    |       Weighted Average x            |     9.26E-03          9.26E-03        |
+    |       Weighted Average y            |     2.02E-03          2.00E-03        |
+    |       Weighted Average z            |    -2.78E-15         -2.83E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     3.38E-03          2.40E-03        |
+    |       Sum x                         |    -4.20E-01         -4.20E-01        |
+    |       Sum y                         |    -8.88E-02         -8.87E-02        |
+    |       Sum z                         |    -3.44E-14         -3.46E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.72E-05          2.79E-05        |
+    |       Weighted Average x            |     9.26E-03          9.26E-03        |
+    |       Weighted Average y            |     2.02E-03          2.00E-03        |
+    |       Weighted Average z            |    -2.57E-15         -2.63E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     2.46E-04          1.70E-04        |
+    |       Sum x                         |    -4.20E-01         -4.19E-01        |
+    |       Sum y                         |    -8.88E-02         -8.87E-02        |
+    |       Sum z                         |    -3.40E-14         -3.42E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     2.18E-06          2.29E-06        |
+    |       Weighted Average x            |     9.26E-03          9.26E-03        |
+    |       Weighted Average y            |     2.02E-03          2.00E-03        |
+    |       Weighted Average z            |    -2.70E-15         -2.76E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    +=============================================================================+
+    | COUPLING STEP = 15                        SIMULATION TIME = 1.50000E+00 [s] |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             COUPLING ITERATIONS                             |
+    +-----------------------------------------------------------------------------+
+    |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 1                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.33E-05          9.15E-06        |
+    |       Sum x                         |    -4.20E-01         -4.19E-01        |
+    |       Sum y                         |    -8.88E-02         -8.87E-02        |
+    |       Sum z                         |    -3.50E-14         -3.46E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |         Not yet converged             |
+    |       RMS Change                    |     7.33E-01          7.62E-01        |
+    |       Weighted Average x            |     1.20E-02          1.20E-02        |
+    |       Weighted Average y            |     2.31E-03          2.30E-03        |
+    |       Weighted Average z            |     7.86E-16          7.68E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 2                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     7.15E-02          5.03E-02        |
+    |       Sum x                         |    -4.41E-01         -4.41E-01        |
+    |       Sum y                         |    -7.62E-02         -7.62E-02        |
+    |       Sum z                         |    -2.60E-14         -2.61E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.62E-03          1.80E-03        |
+    |       Weighted Average x            |     1.20E-02          1.20E-02        |
+    |       Weighted Average y            |     2.31E-03          2.29E-03        |
+    |       Weighted Average z            |     1.15E-15          1.14E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |         Not yet converged             |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 3                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |         Not yet converged             |
+    |       RMS Change                    |     2.14E-03          1.44E-03        |
+    |       Sum x                         |    -4.41E-01         -4.40E-01        |
+    |       Sum y                         |    -7.60E-02         -7.59E-02        |
+    |       Sum z                         |    -2.09E-14         -2.10E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     3.90E-05          4.17E-05        |
+    |       Weighted Average x            |     1.20E-02          1.20E-02        |
+    |       Weighted Average y            |     2.31E-03          2.29E-03        |
+    |       Weighted Average z            |     1.01E-15          9.98E-16        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +-----------------------------------------------------------------------------+
+    |                           COUPLING ITERATION = 4                            |
+    +-----------------------------------------------------------------------------+
+    | MAPDL Transient                     |                                       |
+    |   Interface: interface-1            |                                       |
+    |     Force                           |             Converged                 |
+    |       RMS Change                    |     1.91E-04          1.28E-04        |
+    |       Sum x                         |    -4.41E-01         -4.40E-01        |
+    |       Sum y                         |    -7.60E-02         -7.59E-02        |
+    |       Sum z                         |    -2.04E-14         -2.05E-14        |
+    +-----------------------------------------------------------------------------+
+    | Fluid Flow (Fluent)                 |                                       |
+    |   Interface: interface-1            |                                       |
+    |     displacement                    |             Converged                 |
+    |       RMS Change                    |     1.45E-06          1.48E-06        |
+    |       Weighted Average x            |     1.20E-02          1.20E-02        |
+    |       Weighted Average y            |     2.31E-03          2.29E-03        |
+    |       Weighted Average z            |     1.17E-15          1.14E-15        |
+    +-----------------------------------------------------------------------------+
+    | Participant solution status         |                                       |
+    |   MAPDL Transient                   |             Converged                 |
+    |   Fluid Flow (Fluent)               |             Converged                 |
+    +=============================================================================+
+
+    ===============================================================================
+    +=============================================================================+
+    |                                                                             |
+    |                                  Shut Down                                  |
+    |                                                                             |
+    +=============================================================================+
+    ===============================================================================
+
+    +=============================================================================+
+    |                          Available Restart Points                           |
+    +=============================================================================+
+    | Restart Point                        | File Name                            |
+    +-----------------------------------------------------------------------------+
+    | Coupling Step 2                      | Restart_step2.h5                     |
+    | Coupling Step 4                      | Restart_step4.h5                     |
+    | Coupling Step 6                      | Restart_step6.h5                     |
+    | Coupling Step 8                      | Restart_step8.h5                     |
+    | Coupling Step 10                     | Restart_step10.h5                    |
+    | Coupling Step 12                     | Restart_step12.h5                    |
+    | Coupling Step 14                     | Restart_step14.h5                    |
+    | Coupling Step 15                     | Restart_step15.h5                    |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                             Timing Summary [s]                              |
+    +=============================================================================+
+    | Total Time :                                                    4.43831E+01 |
+    | Coupling Participant Time                                                   |
+    |    Fluid Flow (Fluent) :                                        3.15874E+01 |
+    |    MAPDL Transient :                                            2.99177E+00 |
+    |    Total :                                                      3.45791E+01 |
+    | Coupling Engine Time                                                        |
+    |    Solution Control :                                           3.71450E+00 |
+    |    Mesh Import :                                                4.56434E-02 |
+    |    Mapping Setup :                                              9.49260E-03 |
+    |    Mapping :                                                    4.41680E-03 |
+    |    Numerics :                                                   1.11418E-02 |
+    |    Misc. :                                                      6.01873E+00 |
+    |    Total :                                                      9.80393E+00 |
+    +=============================================================================+
+
+    +=============================================================================+
+    |                 System coupling run completed successfully.                 |
+    +=============================================================================+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 327-328
 
 Stop streaming output from server and shut down this server instance:
 
-.. GENERATED FROM PYTHON SOURCE LINES 323-326
+.. GENERATED FROM PYTHON SOURCE LINES 328-331
 
 .. code-block:: default
 
@@ -1205,7 +3184,7 @@ Stop streaming output from server and shut down this server instance:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 327-332
+.. GENERATED FROM PYTHON SOURCE LINES 332-337
 
 .. note::
    This `syc` object is now "defunct" and any attempt to
@@ -1216,7 +3195,7 @@ Stop streaming output from server and shut down this server instance:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  36.561 seconds)
+   **Total running time of the script:** ( 2 minutes  51.573 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_oscillating_plate.py:

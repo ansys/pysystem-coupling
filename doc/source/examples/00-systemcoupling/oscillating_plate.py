@@ -47,7 +47,6 @@ motion of the plate as it is damped.
 
 import os
 from pprint import pprint
-
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
 
@@ -265,6 +264,11 @@ print(setup.get_setup_summary())
 # Run solution
 # ------------
 #
+# The System Coupling server's stdout/stderr output is not shown
+# in PySystemCoupling by default. We must turn on output
+# streaming if we want to see it:
+syc.start_output()
+# %%
 # Access `solve` via the `solution` API.
 solution = syc.solution
 solution.solve()
