@@ -225,19 +225,19 @@ class SettingsBase(Base, Generic[StateT]):
             out.write("\n")
             for key, value in state.items():
                 if True:  # value is not None:
-                    out.write(f'{indent*indent_factor*" "}{key} : ')
+                    out.write(f'{indent*indent_factor*" "}{key} :')
                     SettingsBase._print_state_helper(
                         value, out, indent + 1, indent_factor
                     )
         elif isinstance(state, list):
             out.write("\n")
             for index, value in enumerate(state):
-                out.write(f'{indent*indent_factor*" "}{index} : ')
+                out.write(f'{indent*indent_factor*" "}{index} :')
                 SettingsBase._print_state_helper(value, out, indent + 1, indent_factor)
         elif state is None:
-            out.write("<None>\n")
+            out.write(" <None>\n")
         else:
-            out.write(f"{state}\n")
+            out.write(f" {state}\n")
 
     def print_state(self, out=None, indent_factor=2):
         """Print the state of this object."""
@@ -415,19 +415,27 @@ class Container(SettingsBase[DictStateType]):
         """Convert value to have keys with python names."""
         if isinstance(value, collections.abc.Mapping):
 
-            cmap = cls._syc_to_py_childmap()
-            pmap = cls._syc_to_py_propertymap()
+            # get_state and print_state rely on the value returned from here
+            # so we impose the correct datamodel ordering when we build the
+            # value. The code below should NOT be simplified unless this is
+            # understood! Note that we depend on dict preserving insertion order.
 
             ret = {}
-            for k, v in value.items():
-                pyname = cmap.get(k, None)
-                if pyname:
+            # Properties first...
+            for pyname, sycname, _ in cls.property_names_types:
+                # NB: don't use dict.get() here as we want to preserve
+                # any items that are present but unset (None).
+                if sycname in value:
+                    ret[pyname] = value[sycname]
+
+            # Then children...
+            cmap = cls._syc_to_py_childmap()
+            for sycname, pyname in cmap.items():
+                # NB: we are relying on cmap having been initialised with
+                # correct child order here!
+                v = value.get(sycname, None)
+                if v is not None:
                     ret[pyname] = getattr(cls, pyname).to_python_keys(v)
-                else:
-                    pyname = pmap.get(k, None)
-                    if pyname:
-                        # property => no need to procss v further
-                        ret[pyname] = v
             return ret
         else:
             return value
