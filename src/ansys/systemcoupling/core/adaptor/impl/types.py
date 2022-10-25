@@ -427,7 +427,8 @@ class Container(SettingsBase[DictStateType]):
             # Then children...
             cmap = cls._syc_to_py_childmap()
             for sycname, pyname in cmap.items():
-                # NB: we are relying on cmap initialisation order here!
+                # NB: we are relying on cmap having been initialised with
+                # correct child order here!
                 v = value.get(sycname, None)
                 if v is not None:
                     ret[pyname] = getattr(cls, pyname).to_python_keys(v)
