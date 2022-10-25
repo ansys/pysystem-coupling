@@ -290,3 +290,34 @@ def test_invoke_partition_particpants(dm):
         "MachineList": [{"machine-name": "host1", "core-count": 10}],
         "NamesAndFractions": [("PART-1", 0.5), ("PART-2", 0.7)],
     }
+
+
+def test_state_order(dm):
+    dm.output_control.set_state(
+        {
+            "results": {
+                "option": "ProgramControlled",
+                "type": {"option": "EnsightGold"},
+                "include_instances": "ProgramControlled",
+            },
+            "generate_csv_chart_output": False,
+            "write_initial_snapshot": True,
+            "option": "LastStep",
+        }
+    )
+
+    str_io = StringIO()
+    dm.print_state(out=str_io)
+    expected = """
+output_control :
+  option : LastStep
+  generate_csv_chart_output : False
+  write_initial_snapshot : True
+  results :
+    option : ProgramControlled
+    include_instances : ProgramControlled
+    type :
+      option : EnsightGold
+"""
+    actual = str_io.getvalue()
+    assert actual == expected
