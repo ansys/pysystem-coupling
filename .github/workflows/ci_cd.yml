@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
@@ -39,9 +39,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
@@ -93,7 +93,7 @@ jobs:
           retention-days: 7
 
       - name: Upload wheel
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ansys-systemcoupling-core-wheel
           path: dist/
@@ -104,9 +104,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
@@ -119,25 +119,27 @@ jobs:
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
 
-      - name: Build PDF Documentation
-        run: |
-          sudo apt update
-          sudo apt-get install -y texlive-latex-extra latexmk
-          make -C doc latexpdf SPHINXERRWARN=""
+      # This is hanging on GitHub so disable for now
+      # ============================================
+      # - name: Build PDF Documentation
+      #   run: |
+      #     sudo apt update
+      #     sudo apt-get install -y texlive-latex-extra latexmk
+      #     make -C doc latexpdf SPHINXERRWARN=""
 
       - name: Upload HTML Documentation
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Documentation-html
           path: doc/_build/html
           retention-days: 7
 
-      - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: Documentation-pdf
-          path: doc/_build/latex/*.pdf
-          retention-days: 7
+      # - name: Upload PDF Documentation
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Documentation-pdf
+      #     path: doc/_build/latex/*.pdf
+      #     retention-days: 7
 
   Release:
     if: contains(github.ref, 'refs/tags')
@@ -145,11 +147,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v1
+        uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - uses: actions/download-artifact@v2
         with:

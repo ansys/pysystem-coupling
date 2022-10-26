@@ -7,6 +7,7 @@ PySystemCoupling Documentation |version|
 
    getting_started/index
    users_guide/index
+   examples/index
    api/index
    contributing
 

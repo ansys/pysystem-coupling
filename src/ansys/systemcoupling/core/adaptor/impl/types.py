@@ -220,11 +220,11 @@ class SettingsBase(Base, Generic[StateT]):
         return self.sycproxy.get_state(self.syc_path + "/" + self.to_syc_name(prop))
 
     @staticmethod
-    def _print_state_helper(state, out=sys.stdout, indent=0, indent_factor=2):
+    def _print_state_helper(state, out, indent=0, indent_factor=2):
         if isinstance(state, dict):
             out.write("\n")
             for key, value in state.items():
-                if value is not None:
+                if True:  # value is not None:
                     out.write(f'{indent*indent_factor*" "}{key} :')
                     SettingsBase._print_state_helper(
                         value, out, indent + 1, indent_factor
@@ -234,12 +234,16 @@ class SettingsBase(Base, Generic[StateT]):
             for index, value in enumerate(state):
                 out.write(f'{indent*indent_factor*" "}{index} :')
                 SettingsBase._print_state_helper(value, out, indent + 1, indent_factor)
+        elif state is None:
+            out.write(" <None>\n")
         else:
             out.write(f" {state}\n")
 
-    def print_state(self, out=sys.stdout, indent_factor=2):
+    def print_state(self, out=None, indent_factor=2):
         """Print the state of this object."""
+        out = sys.stdout if out is None else out
         self._print_state_helper(self.get_state(), out, indent_factor=indent_factor)
+        out.flush()
 
 
 class Integer(SettingsBase[int]):

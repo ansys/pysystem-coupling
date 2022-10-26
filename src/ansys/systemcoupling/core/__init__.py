@@ -1,4 +1,7 @@
+import os
 from typing import List
+
+import appdirs
 
 from ansys.systemcoupling.core._version import __version__
 from ansys.systemcoupling.core.client.grpc_client import SycGrpc
@@ -100,3 +103,19 @@ def connect(host: str, port: int) -> Session:  # pragma: no cover
     rpc.connect(host, port)
     syc = Session(rpc)
     return syc
+
+
+# Set up data directory
+try:
+    USER_DATA_PATH = appdirs.user_data_dir("ansys_systemcoupling_core")
+    if not os.path.exists(USER_DATA_PATH):  # pragma: no cover
+        os.makedirs(USER_DATA_PATH)
+
+    EXAMPLES_PATH = os.path.join(USER_DATA_PATH, "examples")
+    if not os.path.exists(EXAMPLES_PATH):  # pragma: no cover
+        os.makedirs(EXAMPLES_PATH)
+
+except:  # pragma: no cover
+    pass
+
+BUILDING_GALLERY = False
