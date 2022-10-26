@@ -5,8 +5,8 @@
 
 Computation times
 =================
-**02:51.573** total execution time for **examples_00-systemcoupling** files:
+**02:46.068** total execution time for **examples_00-systemcoupling** files:
 
 +--------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py` (``oscillating_plate.py``) | 02:51.573 | 0.0 MB |
+| :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py` (``oscillating_plate.py``) | 02:46.068 | 0.0 MB |
 +--------------------------------------------------------------------------------------------+-----------+--------+

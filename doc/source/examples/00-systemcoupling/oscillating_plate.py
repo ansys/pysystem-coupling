@@ -50,6 +50,7 @@ from pprint import pprint
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
 
+
 # %%
 #
 # Download the input files for this example
@@ -214,7 +215,7 @@ setup.solution_control.print_state()
 
 
 # %%
-# Change `time_step_size` setting:
+# Change ``time_step_size`` setting:
 setup.solution_control.time_step_size = "0.1 [s]"
 
 # %%
@@ -222,15 +223,15 @@ setup.solution_control.time_step_size = "0.1 [s]"
 setup.solution_control.time_step_size
 
 # %%
-# Change `end_time`:
+# Change ``end_time``:
 setup.solution_control.end_time = "1.0 [s]"
 
 # %%
-# View `output_control`:
+# View ``output_control``:
 setup.output_control.print_state()
 
 # %%
-# Set `option` in `output_control`. First, see valid options:
+# Set ``option`` in ``output_control``. First, see valid options:
 setup.output_control.get_property_options("option")
 
 # %%
@@ -238,11 +239,12 @@ setup.output_control.get_property_options("option")
 setup.output_control.option = "StepInterval"
 
 # %%
-# View `output_control` again:
-setup.output_control.print_state()
-
-# Change `output_frequency`:
+# Change ``output_frequency``:
 setup.output_control.output_frequency = 2
+
+# %%
+# View ``output_control`` again:
+setup.output_control.print_state()
 
 # %%
 # Review setup
@@ -264,12 +266,12 @@ print(setup.get_setup_summary())
 # Run solution
 # ------------
 #
-# The System Coupling server's stdout/stderr output is not shown
+# The System Coupling server's ``stdout``/``stderr`` output is not shown
 # in PySystemCoupling by default. We must turn on output
 # streaming if we want to see it:
 syc.start_output()
 # %%
-# Access `solve` via the `solution` API.
+# Access ``solve`` via the ``solution`` API.
 solution = syc.solution
 solution.solve()
 
@@ -277,9 +279,9 @@ solution.solve()
 # Extend analysis end time for a restarted run
 # --------------------------------------------
 #
-# Access the `case` API for file handling and persistence.
+# Access the ``case`` API for file handling and persistence.
 # Use this to completely clear the current case and reload
-# from the case saved during the solve.
+# from the one saved during the solve.
 case = syc.case
 case.clear_state()
 case.open()
@@ -289,7 +291,7 @@ case.open()
 # Extend analysis
 # ~~~~~~~~~~~~~~~
 #
-# View `solution_control`, change `end-time` and verify setting.
+# View ``solution_control``, change ``end-time`` and verify setting.
 # The analysis is extended to 1.5 seconds.
 setup.solution_control.print_state()
 setup.solution_control.end_time = "1.5 [s]"
@@ -306,8 +308,9 @@ force_transfer = setup.coupling_interface[interface_name].data_transfer[
 force_transfer.print_state()
 
 # %%
-# Change `convergence_target` and `ramping_option` of "Force" data
-# transfer, and set minimum iterations value.
+# Change some settings of the "Force" data transfer, and increase the
+# minimum iterations value in ``solutions_control`` from its default
+# value of 1.
 force_transfer.convergence_target = 0.001
 force_transfer.ramping_option = "Linear"
 

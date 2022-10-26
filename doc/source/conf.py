@@ -3,6 +3,7 @@ import os
 
 from datetime import datetime
 
+import sphinx_gallery
 from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
 from sphinx_gallery.sorting import FileNameSortKey
 
@@ -33,12 +34,30 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinxemoji.sphinxemoji",
+    "sphinx_gallery.gen_gallery"
 ]
 
-# Default is *not* to build gallery as it needs to be done manually
-# and it can't be done on GitHub
-if os.environ.get("PYSYC_BUILD_SPHINX_GALLERY"):
-    extensions.append("sphinx_gallery.gen_gallery")
+# We can't build the gallery on GitHub as it requires full System Coupling
+# runs (involving Fluent, MAPDL, etc). Therefore we "pre-build" the
+# gallery locally as a development activity and commit the generated files in
+# doc/source/examples. The idea is that the GitHub doc build then just builds
+# from all the rst files in doc/source.
+#
+# Avoiding "gen_gallery" on GitHub builds *almost* works, but the thumbnail
+# page is not generated correctly.
+
+# Instead, we keep "gen_gallery" and fool Sphinx Gallery into thinking that
+# the examples are up to date by monkey patching the md5sum_is_current check.
+#
+# This was suggested at:
+#    https://github.com/sphinx-gallery/sphinx-gallery/issues/704
+
+# The default is *not* to rebuild the gallery so, to build locally, ensure
+# PYSYC_BUILD_SPHINX_GALLERY is set and then commit any resultant changes
+# in doc/source/examples as required.
+
+if os.environ.get("PYSYC_BUILD_SPHINX_GALLERY") is None:
+    sphinx_gallery.gen_rst.md5sum_is_current = lambda _, *a, **k: True
 
 # Intersphinx mapping
 intersphinx_mapping = {
@@ -132,6 +151,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (350, 350),
     # "reset_modules_order": "after",
     # "reset_modules": (_stop_fluent_container),
+    #"plot_gallery": False,
 }
 
 
