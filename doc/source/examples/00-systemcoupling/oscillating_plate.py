@@ -50,7 +50,6 @@ from pprint import pprint
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
 
-
 # %%
 #
 # Download the input files for this example

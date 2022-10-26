@@ -119,6 +119,8 @@ jobs:
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
 
+      # This is hanging on GitHub so disable for now
+      # ============================================
       # - name: Build PDF Documentation
       #   run: |
       #     sudo apt update
