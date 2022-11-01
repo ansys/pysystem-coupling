@@ -6,93 +6,71 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import message as _message
 from google.protobuf import reflection as _reflection
 from google.protobuf import symbol_database as _symbol_database
-
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
 
 
+
+
 DESCRIPTOR = _descriptor.FileDescriptor(
-    name="error.proto",
-    package="ansys.api.systemcoupling.v0",
-    syntax="proto3",
-    serialized_options=None,
-    create_key=_descriptor._internal_create_key,
-    serialized_pb=b'\n\x0b\x65rror.proto\x12\x1b\x61nsys.api.systemcoupling.v0"@\n\x0c\x45rrorDetails\x12\x1b\n\x13\x65xception_classname\x18\x01 \x01(\t\x12\x13\n\x0bstack_trace\x18\x02 \x01(\tb\x06proto3',
+  name='error.proto',
+  package='ansys.api.systemcoupling.v0',
+  syntax='proto3',
+  serialized_options=None,
+  create_key=_descriptor._internal_create_key,
+  serialized_pb=b'\n\x0b\x65rror.proto\x12\x1b\x61nsys.api.systemcoupling.v0\"@\n\x0c\x45rrorDetails\x12\x1b\n\x13\x65xception_classname\x18\x01 \x01(\t\x12\x13\n\x0bstack_trace\x18\x02 \x01(\tb\x06proto3'
 )
+
+
 
 
 _ERRORDETAILS = _descriptor.Descriptor(
-    name="ErrorDetails",
-    full_name="ansys.api.systemcoupling.v0.ErrorDetails",
-    filename=None,
-    file=DESCRIPTOR,
-    containing_type=None,
-    create_key=_descriptor._internal_create_key,
-    fields=[
-        _descriptor.FieldDescriptor(
-            name="exception_classname",
-            full_name="ansys.api.systemcoupling.v0.ErrorDetails.exception_classname",
-            index=0,
-            number=1,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-        _descriptor.FieldDescriptor(
-            name="stack_trace",
-            full_name="ansys.api.systemcoupling.v0.ErrorDetails.stack_trace",
-            index=1,
-            number=2,
-            type=9,
-            cpp_type=9,
-            label=1,
-            has_default_value=False,
-            default_value=b"".decode("utf-8"),
-            message_type=None,
-            enum_type=None,
-            containing_type=None,
-            is_extension=False,
-            extension_scope=None,
-            serialized_options=None,
-            file=DESCRIPTOR,
-            create_key=_descriptor._internal_create_key,
-        ),
-    ],
-    extensions=[],
-    nested_types=[],
-    enum_types=[],
-    serialized_options=None,
-    is_extendable=False,
-    syntax="proto3",
-    extension_ranges=[],
-    oneofs=[],
-    serialized_start=44,
-    serialized_end=108,
+  name='ErrorDetails',
+  full_name='ansys.api.systemcoupling.v0.ErrorDetails',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='exception_classname', full_name='ansys.api.systemcoupling.v0.ErrorDetails.exception_classname', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='stack_trace', full_name='ansys.api.systemcoupling.v0.ErrorDetails.stack_trace', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=44,
+  serialized_end=108,
 )
 
-DESCRIPTOR.message_types_by_name["ErrorDetails"] = _ERRORDETAILS
+DESCRIPTOR.message_types_by_name['ErrorDetails'] = _ERRORDETAILS
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-ErrorDetails = _reflection.GeneratedProtocolMessageType(
-    "ErrorDetails",
-    (_message.Message,),
-    {
-        "DESCRIPTOR": _ERRORDETAILS,
-        "__module__": "error_pb2"
-        # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.ErrorDetails)
-    },
-)
+ErrorDetails = _reflection.GeneratedProtocolMessageType('ErrorDetails', (_message.Message,), {
+  'DESCRIPTOR' : _ERRORDETAILS,
+  '__module__' : 'error_pb2'
+  # @@protoc_insertion_point(class_scope:ansys.api.systemcoupling.v0.ErrorDetails)
+  })
 _sym_db.RegisterMessage(ErrorDetails)
 
 
