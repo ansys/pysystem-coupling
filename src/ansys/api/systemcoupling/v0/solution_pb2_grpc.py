@@ -15,20 +15,20 @@ class SolutionStub(object):
             channel: A grpc.Channel.
         """
         self.Solve = channel.unary_unary(
-            "/ansys.api.systemcoupling.v0.Solution/Solve",
-            request_serializer=solution__pb2.SolveRequest.SerializeToString,
-            response_deserializer=solution__pb2.SolveResponse.FromString,
-        )
+                '/ansys.api.systemcoupling.v0.Solution/Solve',
+                request_serializer=solution__pb2.SolveRequest.SerializeToString,
+                response_deserializer=solution__pb2.SolveResponse.FromString,
+                )
         self.Interrupt = channel.unary_unary(
-            "/ansys.api.systemcoupling.v0.Solution/Interrupt",
-            request_serializer=solution__pb2.InterruptRequest.SerializeToString,
-            response_deserializer=solution__pb2.InterruptResponse.FromString,
-        )
+                '/ansys.api.systemcoupling.v0.Solution/Interrupt',
+                request_serializer=solution__pb2.InterruptRequest.SerializeToString,
+                response_deserializer=solution__pb2.InterruptResponse.FromString,
+                )
         self.Abort = channel.unary_unary(
-            "/ansys.api.systemcoupling.v0.Solution/Abort",
-            request_serializer=solution__pb2.AbortRequest.SerializeToString,
-            response_deserializer=solution__pb2.AbortResponse.FromString,
-        )
+                '/ansys.api.systemcoupling.v0.Solution/Abort',
+                request_serializer=solution__pb2.AbortRequest.SerializeToString,
+                response_deserializer=solution__pb2.AbortResponse.FromString,
+                )
 
 
 class SolutionServicer(object):
@@ -37,127 +37,93 @@ class SolutionServicer(object):
     def Solve(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def Interrupt(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
     def Abort(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
 
 def add_SolutionServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "Solve": grpc.unary_unary_rpc_method_handler(
-            servicer.Solve,
-            request_deserializer=solution__pb2.SolveRequest.FromString,
-            response_serializer=solution__pb2.SolveResponse.SerializeToString,
-        ),
-        "Interrupt": grpc.unary_unary_rpc_method_handler(
-            servicer.Interrupt,
-            request_deserializer=solution__pb2.InterruptRequest.FromString,
-            response_serializer=solution__pb2.InterruptResponse.SerializeToString,
-        ),
-        "Abort": grpc.unary_unary_rpc_method_handler(
-            servicer.Abort,
-            request_deserializer=solution__pb2.AbortRequest.FromString,
-            response_serializer=solution__pb2.AbortResponse.SerializeToString,
-        ),
+            'Solve': grpc.unary_unary_rpc_method_handler(
+                    servicer.Solve,
+                    request_deserializer=solution__pb2.SolveRequest.FromString,
+                    response_serializer=solution__pb2.SolveResponse.SerializeToString,
+            ),
+            'Interrupt': grpc.unary_unary_rpc_method_handler(
+                    servicer.Interrupt,
+                    request_deserializer=solution__pb2.InterruptRequest.FromString,
+                    response_serializer=solution__pb2.InterruptResponse.SerializeToString,
+            ),
+            'Abort': grpc.unary_unary_rpc_method_handler(
+                    servicer.Abort,
+                    request_deserializer=solution__pb2.AbortRequest.FromString,
+                    response_serializer=solution__pb2.AbortResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "ansys.api.systemcoupling.v0.Solution", rpc_method_handlers
-    )
+            'ansys.api.systemcoupling.v0.Solution', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
-# This class is part of an EXPERIMENTAL API.
+ # This class is part of an EXPERIMENTAL API.
 class Solution(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def Solve(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def Solve(request,
             target,
-            "/ansys.api.systemcoupling.v0.Solution/Solve",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Solution/Solve',
             solution__pb2.SolveRequest.SerializeToString,
             solution__pb2.SolveResponse.FromString,
-            options,
-            channel_credentials,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def Interrupt(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def Interrupt(request,
             target,
-            "/ansys.api.systemcoupling.v0.Solution/Interrupt",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Solution/Interrupt',
             solution__pb2.InterruptRequest.SerializeToString,
             solution__pb2.InterruptResponse.FromString,
-            options,
-            channel_credentials,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def Abort(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_unary(
-            request,
+    def Abort(request,
             target,
-            "/ansys.api.systemcoupling.v0.Solution/Abort",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/ansys.api.systemcoupling.v0.Solution/Abort',
             solution__pb2.AbortRequest.SerializeToString,
             solution__pb2.AbortResponse.FromString,
-            options,
-            channel_credentials,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)

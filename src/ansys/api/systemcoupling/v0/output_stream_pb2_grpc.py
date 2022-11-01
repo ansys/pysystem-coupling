@@ -15,10 +15,10 @@ class OutputStreamStub(object):
             channel: A grpc.Channel.
         """
         self.BeginStdStreaming = channel.unary_stream(
-            "/ansys.api.systemcoupling.v0.OutputStream/BeginStdStreaming",
-            request_serializer=output__stream__pb2.StdStreamRequest.SerializeToString,
-            response_deserializer=output__stream__pb2.StdStreamResponse.FromString,
-        )
+                '/ansys.api.systemcoupling.v0.OutputStream/BeginStdStreaming',
+                request_serializer=output__stream__pb2.StdStreamRequest.SerializeToString,
+                response_deserializer=output__stream__pb2.StdStreamResponse.FromString,
+                )
 
 
 class OutputStreamServicer(object):
@@ -27,51 +27,39 @@ class OutputStreamServicer(object):
     def BeginStdStreaming(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details("Method not implemented!")
-        raise NotImplementedError("Method not implemented!")
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
 
 
 def add_OutputStreamServicer_to_server(servicer, server):
     rpc_method_handlers = {
-        "BeginStdStreaming": grpc.unary_stream_rpc_method_handler(
-            servicer.BeginStdStreaming,
-            request_deserializer=output__stream__pb2.StdStreamRequest.FromString,
-            response_serializer=output__stream__pb2.StdStreamResponse.SerializeToString,
-        ),
+            'BeginStdStreaming': grpc.unary_stream_rpc_method_handler(
+                    servicer.BeginStdStreaming,
+                    request_deserializer=output__stream__pb2.StdStreamRequest.FromString,
+                    response_serializer=output__stream__pb2.StdStreamResponse.SerializeToString,
+            ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-        "ansys.api.systemcoupling.v0.OutputStream", rpc_method_handlers
-    )
+            'ansys.api.systemcoupling.v0.OutputStream', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
-# This class is part of an EXPERIMENTAL API.
+ # This class is part of an EXPERIMENTAL API.
 class OutputStream(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def BeginStdStreaming(
-        request,
-        target,
-        options=(),
-        channel_credentials=None,
-        call_credentials=None,
-        compression=None,
-        wait_for_ready=None,
-        timeout=None,
-        metadata=None,
-    ):
-        return grpc.experimental.unary_stream(
-            request,
+    def BeginStdStreaming(request,
             target,
-            "/ansys.api.systemcoupling.v0.OutputStream/BeginStdStreaming",
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/ansys.api.systemcoupling.v0.OutputStream/BeginStdStreaming',
             output__stream__pb2.StdStreamRequest.SerializeToString,
             output__stream__pb2.StdStreamResponse.FromString,
-            options,
-            channel_credentials,
-            call_credentials,
-            compression,
-            wait_for_ready,
-            timeout,
-            metadata,
-        )
+            options, channel_credentials,
+            call_credentials, compression, wait_for_ready, timeout, metadata)
