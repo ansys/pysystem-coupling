@@ -75,7 +75,7 @@ Perform required imports
 Import the PySystemCoupling package and other required imports, and download
 the input files for this example.
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-54
+.. GENERATED FROM PYTHON SOURCE LINES 47-53
 
 .. code-block:: default
 
@@ -92,8 +92,7 @@ the input files for this example.
 
 
 
-
-.. GENERATED FROM PYTHON SOURCE LINES 55-63
+.. GENERATED FROM PYTHON SOURCE LINES 54-62
 
 Download the input files for this example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -104,7 +103,7 @@ provide solver-specifc  information to System Coupling, and the respective
 solver input files for each solver run.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-83
+.. GENERATED FROM PYTHON SOURCE LINES 63-82
 
 .. code-block:: default
 
@@ -134,7 +133,7 @@ solver input files for each solver run.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 84-91
+.. GENERATED FROM PYTHON SOURCE LINES 83-90
 
 Prepare the expected directory structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,7 +143,7 @@ sub-directory in which Fluent runs, and an MAPDL sub-directory in
 which MAPDL runs. These directories should contain their respective
 input/case files.
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-103
+.. GENERATED FROM PYTHON SOURCE LINES 91-102
 
 .. code-block:: default
 
@@ -166,7 +165,7 @@ input/case files.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 104-109
+.. GENERATED FROM PYTHON SOURCE LINES 103-108
 
 Launch System Coupling
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -174,7 +173,7 @@ Launch a remote System Coupling instance and return a "client" object
 (a ``Session`` object) that allows us to interact with System Coupling
 via an API exposed into the current Python environment.
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-113
+.. GENERATED FROM PYTHON SOURCE LINES 109-112
 
 .. code-block:: default
 
@@ -188,14 +187,14 @@ via an API exposed into the current Python environment.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 114-118
+.. GENERATED FROM PYTHON SOURCE LINES 113-117
 
 Create analysis
 ~~~~~~~~~~~~~~~
 
 Access the `setup` API:
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-121
+.. GENERATED FROM PYTHON SOURCE LINES 117-120
 
 .. code-block:: default
 
@@ -209,7 +208,7 @@ Access the `setup` API:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 122-128
+.. GENERATED FROM PYTHON SOURCE LINES 121-127
 
 Load participants
 ^^^^^^^^^^^^^^^^^
@@ -218,7 +217,7 @@ representing the Fluent and MAPDL participants, based on the data
 in the `scp` files that were previously exported by the respective
 products.
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-131
+.. GENERATED FROM PYTHON SOURCE LINES 127-130
 
 .. code-block:: default
 
@@ -238,11 +237,11 @@ products.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-133
+.. GENERATED FROM PYTHON SOURCE LINES 131-132
 
 Verify that the ``coupling_participant`` objects now exist:
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-135
+.. GENERATED FROM PYTHON SOURCE LINES 132-134
 
 .. code-block:: default
 
@@ -261,7 +260,7 @@ Verify that the ``coupling_participant`` objects now exist:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 136-144
+.. GENERATED FROM PYTHON SOURCE LINES 135-143
 
 Create interfaces and data transfers by specifying participant regions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -272,7 +271,7 @@ approach. However, the following provides
 an illustration of creating a datamodel object directly via the
 PySystemCoupling API.
 
-.. GENERATED FROM PYTHON SOURCE LINES 144-167
+.. GENERATED FROM PYTHON SOURCE LINES 143-166
 
 .. code-block:: default
 
@@ -306,13 +305,13 @@ PySystemCoupling API.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 168-171
+.. GENERATED FROM PYTHON SOURCE LINES 167-170
 
 Verify creation of interface and data transfers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Coupling interface exists:
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-173
+.. GENERATED FROM PYTHON SOURCE LINES 170-172
 
 .. code-block:: default
 
@@ -331,12 +330,12 @@ Coupling interface exists:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-176
+.. GENERATED FROM PYTHON SOURCE LINES 173-175
 
 Coupling interface state. Note the "FORC" and "displacement"
 ``data_transfer`` child objects:
 
-.. GENERATED FROM PYTHON SOURCE LINES 176-179
+.. GENERATED FROM PYTHON SOURCE LINES 175-178
 
 .. code-block:: default
 
@@ -367,6 +366,17 @@ Coupling interface state. Note the "FORC" and "displacement"
         reference_frame : GlobalReferenceFrame
         instancing : None
     data_transfer :
+      FORC :
+        display_name : Force
+        suppress : False
+        target_side : One
+        option : UsingVariable
+        source_variable : force
+        target_variable : FORC
+        ramping_option : None
+        relaxation_factor : 1.0
+        convergence_target : 0.01
+        mapping_type : Conservative
       displacement :
         display_name : displacement
         suppress : False
@@ -379,17 +389,6 @@ Coupling interface state. Note the "FORC" and "displacement"
         convergence_target : 0.01
         mapping_type : ProfilePreserving
         unmapped_value_option : Nearest Value
-      FORC :
-        display_name : Force
-        suppress : False
-        target_side : One
-        option : UsingVariable
-        source_variable : force
-        target_variable : FORC
-        ramping_option : None
-        relaxation_factor : 1.0
-        convergence_target : 0.01
-        mapping_type : Conservative
     mapping_control :
       stop_if_poor_intersection : True
       poor_intersection_threshold : 0.5
@@ -400,7 +399,7 @@ Coupling interface state. Note the "FORC" and "displacement"
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-190
+.. GENERATED FROM PYTHON SOURCE LINES 179-189
 
 Query for any current setup errors
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -413,7 +412,7 @@ advises that, once the current setup is solved, it will
 not be possible to restart it from any point except the
 last step.
 
-.. GENERATED FROM PYTHON SOURCE LINES 190-193
+.. GENERATED FROM PYTHON SOURCE LINES 189-192
 
 .. code-block:: default
 
@@ -442,7 +441,7 @@ last step.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 194-204
+.. GENERATED FROM PYTHON SOURCE LINES 193-203
 
 .. note::
    In the current release of PySystemCoupling, ``get_status_messages``
@@ -455,7 +454,7 @@ last step.
    in System Coupling's ``OutputControl`` object corresponds to the
    PySystemCoupling ``output_control.end_time`` setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 206-214
+.. GENERATED FROM PYTHON SOURCE LINES 205-213
 
 Modify settings
 ^^^^^^^^^^^^^^^
@@ -466,7 +465,7 @@ consistent with what was shown in the status messages.
 Values shown in the ``print_state`` output as ``<None>``
 actually have Python values of ``None``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 214-217
+.. GENERATED FROM PYTHON SOURCE LINES 213-216
 
 .. code-block:: default
 
@@ -491,11 +490,11 @@ actually have Python values of ``None``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-219
+.. GENERATED FROM PYTHON SOURCE LINES 217-218
 
 Change ``time_step_size`` setting:
 
-.. GENERATED FROM PYTHON SOURCE LINES 219-221
+.. GENERATED FROM PYTHON SOURCE LINES 218-220
 
 .. code-block:: default
 
@@ -508,11 +507,11 @@ Change ``time_step_size`` setting:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 222-223
+.. GENERATED FROM PYTHON SOURCE LINES 221-222
 
 Verify setting:
 
-.. GENERATED FROM PYTHON SOURCE LINES 223-225
+.. GENERATED FROM PYTHON SOURCE LINES 222-224
 
 .. code-block:: default
 
@@ -531,11 +530,11 @@ Verify setting:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 226-227
+.. GENERATED FROM PYTHON SOURCE LINES 225-226
 
 Change ``end_time``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 227-229
+.. GENERATED FROM PYTHON SOURCE LINES 226-228
 
 .. code-block:: default
 
@@ -548,11 +547,11 @@ Change ``end_time``:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-231
+.. GENERATED FROM PYTHON SOURCE LINES 229-230
 
 View ``output_control``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 231-233
+.. GENERATED FROM PYTHON SOURCE LINES 230-232
 
 .. code-block:: default
 
@@ -579,11 +578,11 @@ View ``output_control``:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 234-235
+.. GENERATED FROM PYTHON SOURCE LINES 233-234
 
 Set ``option`` in ``output_control``. First, see valid options:
 
-.. GENERATED FROM PYTHON SOURCE LINES 235-237
+.. GENERATED FROM PYTHON SOURCE LINES 234-236
 
 .. code-block:: default
 
@@ -602,11 +601,11 @@ Set ``option`` in ``output_control``. First, see valid options:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 238-239
+.. GENERATED FROM PYTHON SOURCE LINES 237-238
 
 Set output option:
 
-.. GENERATED FROM PYTHON SOURCE LINES 239-241
+.. GENERATED FROM PYTHON SOURCE LINES 238-240
 
 .. code-block:: default
 
@@ -619,11 +618,11 @@ Set output option:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 242-243
+.. GENERATED FROM PYTHON SOURCE LINES 241-242
 
 Change ``output_frequency``:
 
-.. GENERATED FROM PYTHON SOURCE LINES 243-245
+.. GENERATED FROM PYTHON SOURCE LINES 242-244
 
 .. code-block:: default
 
@@ -636,11 +635,11 @@ Change ``output_frequency``:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-247
+.. GENERATED FROM PYTHON SOURCE LINES 245-246
 
 View ``output_control`` again:
 
-.. GENERATED FROM PYTHON SOURCE LINES 247-249
+.. GENERATED FROM PYTHON SOURCE LINES 246-248
 
 .. code-block:: default
 
@@ -668,14 +667,14 @@ View ``output_control`` again:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 250-254
+.. GENERATED FROM PYTHON SOURCE LINES 249-253
 
 Review setup
 ~~~~~~~~~~~~
 
 Verify that there are no longer any setup errors:
 
-.. GENERATED FROM PYTHON SOURCE LINES 254-257
+.. GENERATED FROM PYTHON SOURCE LINES 253-256
 
 .. code-block:: default
 
@@ -695,14 +694,14 @@ Verify that there are no longer any setup errors:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-262
+.. GENERATED FROM PYTHON SOURCE LINES 257-261
 
 ``get_setup_summary`` returns a string showing a summary of
 the coupled analysis setup. This will also be shown in the
 transcript output when the solve is started, but it can
 be useful to review this before starting the solve.
 
-.. GENERATED FROM PYTHON SOURCE LINES 262-265
+.. GENERATED FROM PYTHON SOURCE LINES 261-264
 
 .. code-block:: default
 
@@ -868,7 +867,7 @@ be useful to review this before starting the solve.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 266-272
+.. GENERATED FROM PYTHON SOURCE LINES 265-271
 
 Run solution
 ------------
@@ -877,7 +876,7 @@ The System Coupling server's ``stdout``/``stderr`` output is not shown
 in PySystemCoupling by default. We must turn on output
 streaming if we want to see it:
 
-.. GENERATED FROM PYTHON SOURCE LINES 272-273
+.. GENERATED FROM PYTHON SOURCE LINES 271-272
 
 .. code-block:: default
 
@@ -889,11 +888,11 @@ streaming if we want to see it:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 274-275
+.. GENERATED FROM PYTHON SOURCE LINES 273-274
 
 Access ``solve`` via the ``solution`` API.
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-278
+.. GENERATED FROM PYTHON SOURCE LINES 274-277
 
 .. code-block:: default
 
@@ -1046,7 +1045,7 @@ Access ``solve`` via the ``solution`` API.
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:56381                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:64882                                  |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
     |     pling_core\examples                                                     |
@@ -1054,7 +1053,7 @@ Access ``solve`` via the ``solution`` API.
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYS Inc\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
-    |     ort=56421 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
+    |     ort=64923 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
     |     ou                                                                      |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -1063,7 +1062,7 @@ Access ``solve`` via the ``solution`` API.
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYS Inc\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s |
-    |      noread -scport 56421 -schost host.docker.internal -scname "MAPDL-1" -i |
+    |      noread -scport 64923 -schost host.docker.internal -scname "MAPDL-1" -i |
     |      "mapdl.dat" -o MAPDL-1.out                                             |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2058,19 +2057,19 @@ Access ``solve`` via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    7.48432E+01 |
+    | Total Time :                                                    7.06251E+01 |
     | Coupling Participant Time                                                   |
-    |    Fluid Flow (Fluent) :                                        5.00088E+01 |
-    |    MAPDL Transient :                                            5.31803E+00 |
-    |    Total :                                                      5.53268E+01 |
+    |    Fluid Flow (Fluent) :                                        4.66749E+01 |
+    |    MAPDL Transient :                                            4.59188E+00 |
+    |    Total :                                                      5.12667E+01 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           6.71864E+00 |
-    |    Mesh Import :                                                2.03417E-01 |
-    |    Mapping Setup :                                              4.33490E-02 |
-    |    Mapping :                                                    8.00780E-03 |
-    |    Numerics :                                                   3.09971E-02 |
-    |    Misc. :                                                      1.25120E+01 |
-    |    Total :                                                      1.95164E+01 |
+    |    Solution Control :                                           7.09636E+00 |
+    |    Mesh Import :                                                2.23644E-01 |
+    |    Mapping Setup :                                              4.52802E-02 |
+    |    Mapping :                                                    7.21520E-03 |
+    |    Numerics :                                                   2.36305E-02 |
+    |    Misc. :                                                      1.19622E+01 |
+    |    Total :                                                      1.93583E+01 |
     +=============================================================================+
 
     +=============================================================================+
@@ -2081,7 +2080,7 @@ Access ``solve`` via the ``solution`` API.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 279-285
+.. GENERATED FROM PYTHON SOURCE LINES 278-284
 
 Extend analysis end time for a restarted run
 --------------------------------------------
@@ -2090,7 +2089,7 @@ Access the ``case`` API for file handling and persistence.
 Use this to completely clear the current case and reload
 from the one saved during the solve.
 
-.. GENERATED FROM PYTHON SOURCE LINES 285-290
+.. GENERATED FROM PYTHON SOURCE LINES 284-289
 
 .. code-block:: default
 
@@ -2115,7 +2114,7 @@ from the one saved during the solve.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 291-296
+.. GENERATED FROM PYTHON SOURCE LINES 290-295
 
 Extend analysis
 ~~~~~~~~~~~~~~~
@@ -2123,7 +2122,7 @@ Extend analysis
 View ``solution_control``, change ``end-time`` and verify setting.
 The analysis is extended to 1.5 seconds.
 
-.. GENERATED FROM PYTHON SOURCE LINES 296-300
+.. GENERATED FROM PYTHON SOURCE LINES 295-299
 
 .. code-block:: default
 
@@ -2155,14 +2154,14 @@ The analysis is extended to 1.5 seconds.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 301-305
+.. GENERATED FROM PYTHON SOURCE LINES 300-304
 
 Additional settings changes
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Examine "Force" data transfer.
 
-.. GENERATED FROM PYTHON SOURCE LINES 305-310
+.. GENERATED FROM PYTHON SOURCE LINES 304-309
 
 .. code-block:: default
 
@@ -2194,13 +2193,13 @@ Examine "Force" data transfer.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 311-314
+.. GENERATED FROM PYTHON SOURCE LINES 310-313
 
 Change some settings of the "Force" data transfer, and increase the
 minimum iterations value in ``solutions_control`` from its default
 value of 1.
 
-.. GENERATED FROM PYTHON SOURCE LINES 314-319
+.. GENERATED FROM PYTHON SOURCE LINES 313-318
 
 .. code-block:: default
 
@@ -2216,12 +2215,12 @@ value of 1.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 320-322
+.. GENERATED FROM PYTHON SOURCE LINES 319-321
 
 Review setup
 ~~~~~~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 322-324
+.. GENERATED FROM PYTHON SOURCE LINES 321-323
 
 .. code-block:: default
 
@@ -2386,12 +2385,12 @@ Review setup
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 325-327
+.. GENERATED FROM PYTHON SOURCE LINES 324-326
 
 Restart solution
 ----------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 327-329
+.. GENERATED FROM PYTHON SOURCE LINES 326-328
 
 .. code-block:: default
 
@@ -2543,7 +2542,7 @@ Restart solution
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:56381                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:64882                                  |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
     |     pling_core\examples                                                     |
@@ -2551,7 +2550,7 @@ Restart solution
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYS Inc\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
-    |     ort=56575 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
+    |     ort=65095 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
     |     ou                                                                      |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2560,7 +2559,7 @@ Restart solution
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYS Inc\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s |
-    |      noread -scport 56575 -schost host.docker.internal -scname "MAPDL-1" -i |
+    |      noread -scport 65095 -schost host.docker.internal -scname "MAPDL-1" -i |
     |      "MAPDL-1.dat" -o MAPDL-1.out                                           |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -3160,28 +3159,24 @@ Restart solution
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    4.65738E+01 |
+    | Total Time :                                                    4.35648E+01 |
     | Coupling Participant Time                                                   |
-    |    Fluid Flow (Fluent) :                                        3.24442E+01 |
-    |    MAPDL Transient :                                            3.26965E+00 |
-    |    Total :                                                      3.57139E+01 |
+    |    Fluid Flow (Fluent) :                                        2.95502E+01 |
+    |    MAPDL Transient :                                            3.15008E+00 |
+    |    Total :                                                      3.27003E+01 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           3.68840E+00 |
-    |    Mesh Import :                                                4.61660E-02 |
-    |    Mapping Setup :                                              6.26690E-03 |
-    |    Mapping :                                                    4.57140E-03 |
-    |    Numerics :                                                   1.21978E-02 |
-    |    Misc. :                                                      7.10235E+00 |
-    |    Total :                                                      1.08600E+01 |
+    |    Solution Control :                                           3.90137E+00 |
+    |    Mesh Import :                                                4.10919E-02 |
+    |    Mapping Setup :                                              7.64470E-03 |
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 330-331
+.. GENERATED FROM PYTHON SOURCE LINES 329-330
 
 Stop streaming output from server and shut down this server instance:
 
-.. GENERATED FROM PYTHON SOURCE LINES 331-334
+.. GENERATED FROM PYTHON SOURCE LINES 330-333
 
 .. code-block:: default
 
@@ -3192,10 +3187,16 @@ Stop streaming output from server and shut down this server instance:
 
 
 
+.. rst-class:: sphx-glr-script-out
+
+ .. code-block:: none
+
+    |    Numerics :                                                   9.55320E-03 |
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 335-340
+
+.. GENERATED FROM PYTHON SOURCE LINES 334-339
 
 .. note::
    This `syc` object is now "defunct" and any attempt to
@@ -3206,7 +3207,7 @@ Stop streaming output from server and shut down this server instance:
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  46.068 seconds)
+   **Total running time of the script:** ( 2 minutes  35.280 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_oscillating_plate.py:
