@@ -39,13 +39,13 @@ interrogation of the datamodel, and running the System Coupling solver to perfor
 .. only:: html
 
   .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_parametric_sweep_vel_thumb.png
-    :alt: Parametric Sweep Example
+    :alt: Parametric sweep example
 
   :ref:`sphx_glr_examples_00-systemcoupling_parametric_sweep_vel.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Parametric Sweep Example</div>
+      <div class="sphx-glr-thumbnail-title">Parametric sweep example</div>
     </div>
 
 

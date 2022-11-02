@@ -27,5 +27,5 @@ sphinxcontrib-websupport==1.2.4
 sphinxemoji==0.2.0
 
 # pyansys dependencies for sphinx gallery examples
-ansys-fluent-core
+#ansys-fluent-core # install manually from github until protobuf version fixed
 ansys-dpf-core
