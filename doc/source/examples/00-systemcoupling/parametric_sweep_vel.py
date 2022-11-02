@@ -165,7 +165,7 @@ def solve_coupled_analysis(working_dir):
 # %%
 # ``extract_max_displacement``
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Query the MAPDL results for the maximum displacement
+# Use PyDPF to query the MAPDL results for the maximum displacement
 # value in the solution.
 def extract_max_displacement(working_dir):
   print("Extracting max displacement value")
@@ -195,7 +195,7 @@ def get_max_displacement(working_dir, inlet_velocity):
 # Generate an `x-y` plot of the results, showing
 # maximum displacement of the plate vs the inlet velocity.
 #
-def plot(x, y):
+def plot(working_dir, x, y):
   fig, ax = plt.subplots()
   ax.plot(x, y, "-o")
   ax.set(
@@ -203,8 +203,7 @@ def plot(x, y):
     ylabel='Max Displacement [m]',
     title="Plate max displacement vs. inlet velocity")
   ax.grid()
-  #plt.show()
-  plt.savefig("displacement")
+  plt.savefig(os.path.join(working_dir, "displacement"))
 
 # %%
 # Run the analyses
@@ -215,8 +214,7 @@ def plot(x, y):
 # corresponding values of the ``y`` array. Finally, we can call
 # the ``plot`` function to generate a plot from the arrays.
 
-#x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
-x = np.array([5.0, 10.0])
+x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
 y = np.array([0.0] * len(x))
 
 working_dir = setup_working_directory()
@@ -224,4 +222,4 @@ working_dir = setup_working_directory()
 for index, inlet_velocity in enumerate(x):
   y[index] = get_max_displacement(working_dir, inlet_velocity)
 
-plot(x, y)
+plot(working_dir, x, y)

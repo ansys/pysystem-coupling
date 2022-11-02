@@ -247,7 +247,7 @@ setting is modified in the Fluent file prior to this function being called.
 
 ``extract_max_displacement``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Query the MAPDL results for the maximum displacement
+Use PyDPF to query the MAPDL results for the maximum displacement
 value in the solution.
 
 .. GENERATED FROM PYTHON SOURCE LINES 170-179
@@ -304,11 +304,11 @@ Generate an `x-y` plot of the results, showing
 maximum displacement of the plate vs the inlet velocity.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-209
+.. GENERATED FROM PYTHON SOURCE LINES 198-208
 
 .. code-block:: default
 
-    def plot(x, y):
+    def plot(working_dir, x, y):
       fig, ax = plt.subplots()
       ax.plot(x, y, "-o")
       ax.set(
@@ -316,8 +316,7 @@ maximum displacement of the plate vs the inlet velocity.
         ylabel='Max Displacement [m]',
         title="Plate max displacement vs. inlet velocity")
       ax.grid()
-      #plt.show()
-      plt.savefig("displacement")
+      plt.savefig(os.path.join(working_dir, "displacement"))
 
 
 
@@ -326,7 +325,7 @@ maximum displacement of the plate vs the inlet velocity.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 210-217
+.. GENERATED FROM PYTHON SOURCE LINES 209-216
 
 Run the analyses
 ----------------
@@ -336,13 +335,12 @@ The results of the ``get_max_displacement`` calls are used to fill in the
 corresponding values of the ``y`` array. Finally, we can call
 the ``plot`` function to generate a plot from the arrays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-228
+.. GENERATED FROM PYTHON SOURCE LINES 216-226
 
 .. code-block:: default
 
 
-    #x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
-    x = np.array([5.0, 10.0])
+    x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
     y = np.array([0.0] * len(x))
 
     working_dir = setup_working_directory()
@@ -350,7 +348,7 @@ the ``plot`` function to generate a plot from the arrays.
     for index, inlet_velocity in enumerate(x):
       y[index] = get_max_displacement(working_dir, inlet_velocity)
 
-    plot(x, y)
+    plot(working_dir, x, y)
 
 
 
@@ -369,13 +367,31 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.05236548595216133
+    Max displacement value = 0.05236548595137805
     Inlet velocity is set to 10.0
     Setting up the coupled analysis
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.1923282698969194
+    Max displacement value = 0.19232826989593016
+    Inlet velocity is set to 15.0
+    Setting up the coupled analysis
+    Solving the coupled analysis. This may take a while...
+    ...done!
+    Extracting max displacement value
+    Max displacement value = 0.372767517329969
+    Inlet velocity is set to 20.0
+    Setting up the coupled analysis
+    Solving the coupled analysis. This may take a while...
+    ...done!
+    Extracting max displacement value
+    Max displacement value = 0.5624418883722584
+    Inlet velocity is set to 25.0
+    Setting up the coupled analysis
+    Solving the coupled analysis. This may take a while...
+    ...done!
+    Extracting max displacement value
+    Max displacement value = 0.7212533243400617
 
 
 
@@ -383,7 +399,7 @@ the ``plot`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 6 minutes  11.497 seconds)
+   **Total running time of the script:** ( 14 minutes  40.129 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
