@@ -16,6 +16,12 @@ class _MockCommandExecutor:
     def GetCommandAndQueryMetadata(self):
         return cmd_metadata
 
+    def GetPySycCommandMetadata(self):
+        return {}
+
+    def GetPySycDatamodelMetadata(self):
+        return {}
+
     def SetState(self, ObjectPath, State):
         self.__state.set_state(ObjectPath, State)
 
@@ -37,9 +43,13 @@ class _MockCommandExecutor:
 
 
 @pytest.fixture
-def api():
+def session():
     cmd_exec = _MockCommandExecutor()
-    session = Session(cmd_exec)
+    return Session(cmd_exec)
+
+
+@pytest.fixture
+def api(session):
     return session._native_api
 
 

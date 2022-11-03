@@ -12,6 +12,22 @@ class SycProxy(SycProxyInterface):
     def __init__(self, rpc):
         self.__rpc = rpc
         self.__injected_cmds = {}
+        self.__defunct = False
+
+    def reset_rpc(self, rpc):
+        """To be called when the remote connection is lost and provides
+        a `rpc` instance to replace the original one, given in the
+        initializer, which behaves sensibly if any attempt
+        is made to use it.
+
+        The motivating use case is to catch attempted uses of stale
+        objects after the current session has ended.
+        """
+        self.__rpc = rpc
+        # We rely on attempted attribute access on self.__rpc to catch
+        # most cases, but this "defunct" flag can be used to mop up
+        # other cases.
+        self.__defunct = True
 
     def set_injected_commands(self, cmd_dict: dict) -> None:
         """Sets a dictionary of names mapped to locally defined "injected commands".
@@ -35,7 +51,6 @@ class SycProxy(SycProxyInterface):
         return metadata, root_type
 
     def set_state(self, path, state):
-        # XXX TODO nested state submission probably broken if it involves named objects
         self.__rpc.SetState(ObjectPath=path, State=state)
 
     def get_state(self, path):
@@ -61,6 +76,10 @@ class SycProxy(SycProxyInterface):
         return self.__rpc.execute_command(cmd_name, **kwargs)
 
     def execute_injected_cmd(self, *args, **kwargs):
+        if self.__defunct:
+            # The name of the 'rpc' here is arbitrary - we are just
+            # forcing it to raise its usual error.
+            self.__rpc.trigger_error
         cmd_name = args[1]
         cmd = self.__injected_cmds.get(cmd_name, None)
         return cmd(**kwargs)
