@@ -37,7 +37,7 @@ class _MockCommandExecutor:
 
 
 @pytest.fixture
-def api(session):
+def api():
     cmd_exec = _MockCommandExecutor()
     session = Session(cmd_exec)
     return session._native_api
