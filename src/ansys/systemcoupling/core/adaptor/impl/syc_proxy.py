@@ -15,9 +15,9 @@ class SycProxy(SycProxyInterface):
         self.__defunct = False
 
     def reset_rpc(self, rpc):
-        """To be called when the remote connection is lost and provides
-        a `rpc` instance to replace the original one, given in the
-        initializer, which behaves sensibly if any attempt
+        """Call when the remote connection is lost, providing an
+        `rpc` instance which replaces the original one from the
+        initializer and which raises a sensible error if any attempt
         is made to use it.
 
         The motivating use case is to catch attempted uses of stale
