@@ -53,7 +53,7 @@ sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
-from ansys.systemcoupling.core.adaptor.impl import source as adaptor_source
+from ansys.systemcoupling.core.adaptor.impl import root_source as adaptor_source
 from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,

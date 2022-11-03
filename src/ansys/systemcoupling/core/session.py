@@ -3,7 +3,7 @@ from typing import Callable, Optional
 from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
     get_injected_cmd_map,
 )
-from ansys.systemcoupling.core.adaptor.impl.source import get_root
+from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
 
