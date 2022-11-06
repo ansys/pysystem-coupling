@@ -122,3 +122,33 @@ def test_misc_items_for_coverage() -> None:
             assert False, "Exception expected"
         except RuntimeError:
             pass
+
+
+def test_defunct_session():
+    session = pysystemcoupling.launch_container()
+    setup = session.setup
+    case = session.case
+    solution = session.solution
+    assert setup
+    assert setup.library
+    assert case
+    assert solution
+    session.exit()
+
+    try:
+        session._native_api
+        assert False, "Expected exception was not raised"
+    except RuntimeError as e:
+        assert "This session instance has exited." in str(e)
+
+    try:
+        case.open()
+        assert False, "Expected exception was not raised"
+    except RuntimeError as e:
+        assert "This session instance has exited." in str(e)
+
+    try:
+        solution.solve()
+        assert False, "Expected exception was not raised"
+    except RuntimeError as e:
+        assert "This session instance has exited." in str(e)

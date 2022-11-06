@@ -3,7 +3,7 @@ from typing import Callable, Optional
 from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
     get_injected_cmd_map,
 )
-from ansys.systemcoupling.core.adaptor.impl.source import get_root
+from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
 
@@ -24,6 +24,8 @@ except ImportError:
 
 class _DefunctRpcImpl:
     def __getattr__(self, _):
+        """Any attempted attribute access will raise an exception
+        with an explanatory message."""
         raise RuntimeError(
             "This session instance has exited. Launch or attach to a new instance."
         )
@@ -69,9 +71,15 @@ class Session:
             self.__native_api._exit(self.__rpc)
             self.__native_api = None
         # XXX TODO see about doing something similar for case, setup, solution
-        self.__case_root = None
-        self.__setup_root = None
-        self.__solution_root = None
+        if self.__case_root:
+            self.__case_proxy.reset_rpc(self.__rpc)
+            self.__case_root = None
+        if self.__setup_root:
+            self.__setup_proxy.reset_rpc(self.__rpc)
+            self.__setup_root = None
+        if self.__solution_root:
+            self.__solution_proxy.reset_rpc(self.__rpc)
+            self.__solution_root = None
 
     def start_output(
         self, handle_output: Optional[Callable[[str], None]] = None
@@ -115,7 +123,7 @@ class Session:
         Coupling case persistence API.
         """
         if self.__case_root is None:
-            self.__case_root = self._get_api_root(category="case")
+            self.__case_root, self.__case_proxy = self._get_api_root(category="case")
         return self.__case_root
 
     @property
@@ -124,7 +132,7 @@ class Session:
         Coupling setup API and data model.
         """
         if self.__setup_root is None:
-            self.__setup_root = self._get_api_root(category="setup")
+            self.__setup_root, self.__setup_proxy = self._get_api_root(category="setup")
         return self.__setup_root
 
     @property
@@ -133,7 +141,9 @@ class Session:
         Coupling solution API.
         """
         if self.__solution_root is None:
-            self.__solution_root = self._get_api_root(category="solution")
+            self.__solution_root, self.__solution_proxy = self._get_api_root(
+                category="solution"
+            )
         return self.__solution_root
 
     def _get_api_root(self, category):
@@ -142,7 +152,7 @@ class Session:
         sycproxy = SycProxy(self.__rpc)
         root = get_root(sycproxy, category=category)
         sycproxy.set_injected_commands(get_injected_cmd_map(category, root, self.__rpc))
-        return root
+        return (root, sycproxy)
 
     @property
     def _native_api(self) -> NativeApi:
