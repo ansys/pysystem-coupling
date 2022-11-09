@@ -58,7 +58,7 @@ jobs:
       - name: Install library
         run: pip install dist/*
 
-      - name: Install gRPC API from private PyPi (temp)
+      - name: Install gRPC API from private PyPI (temp)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
@@ -117,7 +117,7 @@ jobs:
       - name: Install library
         run: pip install .
 
-      - name: Install gRPC API from private PyPi (temp)
+      - name: Install gRPC API from private PyPI (temp)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
@@ -186,7 +186,7 @@ jobs:
           CLEAN: true
 
       # note how we use the PyPI tokens
-      - name: Upload to Azure PyPi (disabled)
+      - name: Upload to Azure PyPI (disabled)
         run: |
           pip install twine
           # twine upload --skip-existing ./**/*.whl

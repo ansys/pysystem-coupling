@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package ansys.api.systemcoupling.v0;
-
-message ErrorDetails {
-  string exception_classname = 1;
-  string stack_trace = 2;
-}
