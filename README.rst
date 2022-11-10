@@ -49,11 +49,26 @@ Alternatively, clone and install in development mode with:
    cd pysystem-coupling
    pip install -e .
 
+**ADDITIONAL TEMPORARY STEP - !!!!WILL BE REMOVED BEFORE RELEASE!!!!**
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PySystemCoupling has a dependency on a "gRPC API" package, ``anays-api-systemcoupling``. This will
+soon be publicly available on PyPI and will be installed automatically along with the other dependencies
+of this package. In the interim period, the package wheel must be obtained and installed manually using
+``pip install``. It is available from the following locations:
+
+* `ansys-api-systemcoupling repository <https://github.com/ansys/ansys-api-systemcoupling>`_. Click on the
+"Tags" link under "Releases" on the home page to list the available tagged releases. Click on the
+latest release and download the wheel from the page shown.
+* The Ansys internal PyPI repository: ``pip install ansys-api-systemcoupling -i https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/``. (**NB**
+you will need to know the read-only PAT for the repository).
+
 
 Documentation and Issues
 ------------------------
 
-TODO
+For more information, see the `Documentation <https://systemcoupling.docs.pyansys.com>`_ page (**Link not active yet**).
+
+Use the `PySystemCoupling Issues page <https://github.com/pyansys/pysystem-coupling/issues>`_ to post bug reports, questions and feature requests.
 
 Usage
 -----
