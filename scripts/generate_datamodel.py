@@ -560,6 +560,8 @@ def write_classes_to_file(
 
         _gather_hashes("", obj_info[root_type], cls)
         parent_dir = os.path.dirname(filepath)
+        # Ensure parent dir exists
+        os.makedirs(parent_dir, exist_ok=True)
         _write_flat_class_files(parent_dir, cls.__name__, _gethash(obj_info))
         # _write_init_file(parent_dir, obj_info)
         return
