@@ -56,7 +56,7 @@ soon be publicly available on PyPI and will be installed automatically along wit
 of this package. In the interim period, the package wheel must be obtained and installed manually using
 ``pip install``. It is available from the following locations:
 
-* `ansys-api-systemcoupling repository <https://github.com/ansys/ansys-api-systemcoupling>`_. Click on the
+* The `ansys-api-systemcoupling repository <https://github.com/ansys/ansys-api-systemcoupling>`_. Click on the
   "Tags" link under "Releases" on the home page to list the available tagged releases. Click on the
   latest release and download the wheel from the page shown.
 * The Ansys internal PyPI repository: ``pip install ansys-api-systemcoupling -i https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/``. (**NB**

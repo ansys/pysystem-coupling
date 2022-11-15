@@ -1,4 +1,4 @@
-# Simple makefile to simplify repetitive build env management tasks under posix
+# Makefile to simplify repetitive build env management tasks under posix
 
 CODESPELL_DIRS ?= ./pyaedt
 CODESPELL_SKIP ?= "*.pyc,*.xml,*.txt,*.gif,*.png,*.jpg,*.js,*.html,*.doctree,*.ttf,*.woff,*.woff2,*.eot,*.mp4,*.inv,*.pickle,*.ipynb,flycheck*,./.git/*,./.hypothesis/*,*.yml,./docs/build/*,./docs/images/*,./dist/*,*~,.hypothesis*,./docs/source/examples/*,*cover,*.dat,*.mac,\#*,PKG-INFO,*.mypy_cache/*,*.xml,*.aedt,*.svg"
@@ -19,6 +19,19 @@ flake8:
 docker-pull:
 	@pip install docker
 	@bash .ci/pull_syc_image.sh
+
+build-install:
+	@pip install -r requirements/requirements_build.txt
+	@python -m build
+	@pip install -q --force-reinstall dist/*.whl
+
+generate-api:
+	@echo "Generate API classes"
+	@python -m venv env_generate
+	@. env_generate/bin/activate
+	@pip install -e .
+	@python scripts/generate_datamodel.py
+	@rm -rf env_generate
 
 unittest:
 	@echo "Running unit tests (including coverage)"
