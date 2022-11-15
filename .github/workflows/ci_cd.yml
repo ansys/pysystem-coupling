@@ -151,7 +151,7 @@ jobs:
 
   Release:
     if: contains(github.ref, 'refs/tags')
-    needs: [main, style, docs]
+    needs: [build_test, style, docs]
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
