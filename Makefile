@@ -30,6 +30,7 @@ generate-api:
 	@python -m venv env_generate
 	@. env_generate/bin/activate
 	@pip install -e .
+	@pip install -r requirements/requirements_classesgen.txt
 	@python scripts/generate_datamodel.py
 	@rm -rf env_generate
 
