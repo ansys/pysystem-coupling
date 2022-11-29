@@ -68,7 +68,7 @@ The key differences are as follows:
 
 * In PySystemCoupling, the setup data model may be manipulated in essentially the same way.
   As noted above, the setup commands are exposed from the
-  :meth:`case<Session.setup>` attribute of
+  :meth:`setup<Session.setup>` attribute of
   :class:`Session<Session>`, and this attribute also
   plays the role of ``DatamodelRoot()`` as an entry point to accessing
   individual settings via a similar path-like syntax::
