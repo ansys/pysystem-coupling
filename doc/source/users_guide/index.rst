@@ -28,6 +28,8 @@ Coupling features.
    system_coupling_concepts
    syc_datamodel
    analysis_setup
+   syc_solution
+   syc_persistence
 
 
 
