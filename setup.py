@@ -56,7 +56,7 @@ setup(
         "grpcio>=1.30.0",
         "grpcio-status>=1.30.0,<=1.48.2",
         "googleapis-common-protos>=1.50.0",
-        "protobuf>=3.20.2,<4.0.0",
+        "protobuf>=3.20.1,<4.0.0",
         "psutil>=5.7.0",
         "pyyaml",
         "appdirs>=1.4.0",

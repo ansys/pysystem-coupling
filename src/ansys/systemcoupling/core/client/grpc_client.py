@@ -5,9 +5,9 @@ import os
 import socket
 import threading
 
+import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
 import grpc
 
-import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
 from ansys.systemcoupling.core.client.services.process import SycProcessService
@@ -104,11 +104,13 @@ class SycGrpc(object):
             LOG.debug("...started")
             self._connect(_LOCALHOST_IP, port)
 
-    def start_container_and_connect(self, port: int = None):
+    def start_container_and_connect(
+        self, mounted_from: str, mounted_to: str, network: str, port: int = None
+    ):
         """Start system coupling container and establish a connection."""
         LOG.debug("Starting container...")
         port = port if port is not None else _find_port()
-        start_container(port)
+        start_container(mounted_from, mounted_to, network, port)
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
