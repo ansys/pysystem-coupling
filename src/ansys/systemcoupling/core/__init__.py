@@ -64,7 +64,9 @@ def launch(
     return syc
 
 
-def launch_container() -> Session:
+def launch_container(
+    mounted_from: str = "./", mounted_to: str = "/working", network: str = None
+) -> Session:
     """Start a System Coupling container instance and connect to it.
 
     `Note`: the container is currently only intended to be used for
@@ -77,7 +79,7 @@ def launch_container() -> Session:
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    rpc.start_container_and_connect()
+    rpc.start_container_and_connect(mounted_from, mounted_to, network)
     syc = Session(rpc)
     return syc
 

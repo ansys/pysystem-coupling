@@ -5,9 +5,9 @@ import os
 import socket
 import threading
 
+import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
 import grpc
 
-import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
 from ansys.systemcoupling.core.client.services.process import SycProcessService
@@ -89,11 +89,9 @@ class SycGrpc(object):
         port = kwargs.pop("port", None)
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
-            if working_dir is not None:
-                raise RuntimeError(
-                    '"working_dir" may not be specified when container launch requested.'
-                )
-            self.start_container_and_connect(port)
+            mounted_from = working_dir if working_dir else "./"
+            mounted_to = "/working"
+            self.start_container_and_connect(mounted_from, mounted_to, port=port)
         else:  # pragma: no cover
             if port is None:
                 port = _find_port()
@@ -104,11 +102,13 @@ class SycGrpc(object):
             LOG.debug("...started")
             self._connect(_LOCALHOST_IP, port)
 
-    def start_container_and_connect(self, port: int = None):
+    def start_container_and_connect(
+        self, mounted_from: str, mounted_to: str, network: str = None, port: int = None
+    ):
         """Start system coupling container and establish a connection."""
         LOG.debug("Starting container...")
         port = port if port is not None else _find_port()
-        start_container(port)
+        start_container(mounted_from, mounted_to, network, port)
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
