@@ -65,7 +65,7 @@ def launch(
 
 
 def launch_container(
-    mounted_from: str, mounted_to: str, network: str = None
+    mounted_from: str = "./", mounted_to: str = "/working", network: str = None
 ) -> Session:
     """Start a System Coupling container instance and connect to it.
 
