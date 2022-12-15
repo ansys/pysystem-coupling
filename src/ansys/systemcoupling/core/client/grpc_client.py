@@ -89,11 +89,9 @@ class SycGrpc(object):
         port = kwargs.pop("port", None)
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
-            if working_dir is not None:
-                raise RuntimeError(
-                    '"working_dir" may not be specified when container launch requested.'
-                )
-            self.start_container_and_connect(port)
+            mounted_from = working_dir if working_dir else "./"
+            mounted_to = "/working"
+            self.start_container_and_connect(mounted_from, mounted_to, port=port)
         else:  # pragma: no cover
             if port is None:
                 port = _find_port()
@@ -105,7 +103,7 @@ class SycGrpc(object):
             self._connect(_LOCALHOST_IP, port)
 
     def start_container_and_connect(
-        self, mounted_from: str, mounted_to: str, network: str, port: int = None
+        self, mounted_from: str, mounted_to: str, network: str = None, port: int = None
     ):
         """Start system coupling container and establish a connection."""
         LOG.debug("Starting container...")

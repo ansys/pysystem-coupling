@@ -49,5 +49,4 @@ def start_container(
 
 
 def create_network(name):
-
     subprocess.run(["docker", "network", "create", name])
