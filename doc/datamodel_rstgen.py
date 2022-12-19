@@ -27,7 +27,7 @@ python <path to datamodel_rstgen.py>
 import importlib
 import os
 
-# PYSYC_DOC_BUILD_VERSION should contain a string such as "23_2" that determines the 
+# PYSYC_DOC_BUILD_VERSION should contain a string such as "23_2" that determines the
 # System Coupling version the API is generated for and which we are building doc for.
 # This should be the only place in this script where we depend on the version.
 api_path = f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
