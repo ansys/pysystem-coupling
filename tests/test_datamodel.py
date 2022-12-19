@@ -51,6 +51,9 @@ class SycProxy(SycProxyInterface):
         info[next(iter(info))]["__dummy__"] = None
         return info, "SystemCoupling"
 
+    def get_version(self):
+        return ""
+
     def set_state(self, path, state):
         self.__state.set_state(path, state)
 

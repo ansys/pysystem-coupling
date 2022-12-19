@@ -5,8 +5,7 @@
 Case Persistence Commands
 =========================
 
-
-See the :class:`case_root<adaptor.api.case_root.case_root>` class for details.
+See the |CASE_ROOT_CLASS_REF| class for details.
 
 This is made available as an attribute, named :meth:`case<session.Session.case>`,
 on the :class:`Session<session.Session>` class, and exposes System Coupling's

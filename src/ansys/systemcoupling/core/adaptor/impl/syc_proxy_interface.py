@@ -15,6 +15,10 @@ class SycProxyInterface(ABC):  # pragma: no cover
         pass
 
     @abstractmethod
+    def get_version(self):
+        pass
+
+    @abstractmethod
     def set_state(self, path, state):
         pass
 

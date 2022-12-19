@@ -32,11 +32,11 @@ find it easy to translate to the API as exposed in PySystemCoupling.
 
 The key differences are as follows:
 
-* Whereas naming of commands and datamodel elements follows `camel case` conventions
+* Whereas naming of commands and data model elements follows `camel case` conventions
   in System Coupling,
   their equivalents in PySystemCoupling follow the `snake case` convention, which is
   the generally preferred Pythonic naming convention. Thus, the command ``AddParticipant``
-  in System Coupling becomes ``add_participant`` in PySystemCoupling, and the datamodel
+  in System Coupling becomes ``add_participant`` in PySystemCoupling, and the data model
   object ``CouplingInterface`` becomes ``coupling_interface``.
 
 * Commands and queries in System Coupling are all exposed in its Python environment as top-level
@@ -45,10 +45,10 @@ The key differences are as follows:
   :meth:`case<Session.setup>` and :meth:`case<Session.solution>`,
   of the :class:`Session<Session>` class.
 
-* In System Coupling, the setup datamodel is in practice manipulated (and queried) in one of the following
+* In System Coupling, the setup data model is in practice manipulated (and queried) in one of the following
   ways:
 
-  * Using high level commands to create and initialize the main objects in the datamodel -
+  * Using high level commands to create and initialize the main objects in the data model -
     for example, commands such as ``AddParticipant`` to add a new coupling participant, and
     ``AddDataTransfer`` to add a new data transfer object.
 
@@ -66,7 +66,7 @@ The key differences are as follows:
       # Similarly, path-like attribute access to query setting value
       print(root.ExecutionControl.Option)
 
-* In PySystemCoupling, the setup datamodel may be manipulated in essentially the same way.
+* In PySystemCoupling, the setup data model may be manipulated in essentially the same way.
   As noted above, the setup commands are exposed from the
   :meth:`case<Session.setup>` attribute of
   :class:`Session<Session>`, and this attribute also
@@ -131,7 +131,7 @@ These top-level attributes are all instances of the ``Container`` type.
 Settings Object Types
 ---------------------
 
-In essence, the datamodel settings that define a System Coupling analysis comprise
+In essence, the data model settings that define a System Coupling analysis comprise
 a collection of primitive property values - values of types such as ``Integer``,
 ``Real``, ``String`` or ``Boolean``. In order to provide a structure to the settings,
 they are organized as groups of properties in *container* objects.
@@ -193,7 +193,7 @@ and can be either primitive type or container type.
 *Note*: the implementation of the settings classes is sufficiently flexible to
 allow commands to be exposed at any level of the container hierarchy. This is
 not exploited in the current API but there is scope to do so in future extensions of
-the API. For example, where a command currently takes a reference to a datamodel object as
+the API. For example, where a command currently takes a reference to a data model object as
 an argument, the explicit argument could be avoided by allowing the command to be
 called on the relevant object.
 
@@ -203,7 +203,7 @@ Settings API Content
 --------------------
 :ref:`Case and persistence commands<case_root>`
 
-:ref:`Analysis setup commands and datamodel<setup_root>`
+:ref:`Analysis setup commands and data model<setup_root>`
 
 :ref:`Solution commands<solution_root>`
 

@@ -134,6 +134,23 @@ todo_include_todos = False
 copybutton_prompt_text = r">>> ?|\.\.\. "
 copybutton_prompt_is_regexp = True
 
+assert os.environ.get("PYSYC_DOC_BUILD_VERSION"), "PYSYC_DOC_BUILD_VERSION is not set!"
+
+def make_replacements_for_versioned_class_refs(names):
+    # returns Sphinx "substitutions" of the form
+    # .. |<NAME>_ROOT_CLASS_REF| replace:: :class:`<name>_root<..path to <name>_root module>`
+
+    api_path = f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+
+    name_root = lambda n: f"{n.lower()}_root"
+    make_subst_name = lambda n: f"{n.upper()}_ROOT_CLASS_REF"
+    make_class_ref = lambda n: f"{name_root(n)}<{api_path}.{name_root(n)}.{name_root(n)}>"
+
+    make_subst = lambda n: f".. |{make_subst_name(n)}| replace:: :class:`{make_class_ref(n)}`"
+
+    return "\n".join(make_subst(n) for n in names)
+
+rst_epilog = make_replacements_for_versioned_class_refs(("CASE", "SETUP", "SOLUTION"))
 
 # -- Sphinx Gallery Options ---------------------------------------------------
 sphinx_gallery_conf = {

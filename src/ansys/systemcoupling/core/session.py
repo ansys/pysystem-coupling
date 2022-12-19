@@ -1,3 +1,5 @@
+import importlib
+import os
 from typing import Callable, Optional
 
 from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
@@ -7,16 +9,17 @@ from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
 
-try:
-    # It's worth having these for type hinting and documentation links but
-    # we need the import check and fallback because they are generated
-    # classes and Session plays a "bootstrapping" role in generating them
-    from ansys.systemcoupling.core.adaptor.api.case_root import case_root
-    from ansys.systemcoupling.core.adaptor.api.setup_root import setup_root
-    from ansys.systemcoupling.core.adaptor.api.solution_root import solution_root
-except ImportError:
+if os.environ.get("PYSYC_DOC_BUILD_VERSION"):
+    # It is useful to import explicit types while building doc as it
+    # gives us better Sphinx-generated links.
+    api_path = (
+        f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+    )
+    case_root = importlib.import_module(f"{api_path}.case_root").case_root
+    setup_root = importlib.import_module(f"{api_path}.setup_root").setup_root
+    solution_root = importlib.import_module(f"{api_path}.solution_root").solution_root
+else:
     # Fallback to generic type
-    # (should not occur in normal use and in doc generation)
     from ansys.systemcoupling.core.adaptor.impl.types import Container
 
     case_root = setup_root = solution_root = Container
@@ -56,6 +59,7 @@ class Session:
         self.__solution_root = None
         self.__rpc = rpc
         self.__native_api = None
+        self.__syc_version = None
 
     def exit(self) -> None:
         """Close the System Coupling server instance.
@@ -150,7 +154,10 @@ class Session:
         if isinstance(self.__rpc, _DefunctRpcImpl):
             self.__rpc.trigger_error
         sycproxy = SycProxy(self.__rpc)
-        root = get_root(sycproxy, category=category)
+        if self.__syc_version is None:
+            version = sycproxy.get_version()
+            self.__syc_version = version.replace(".", "_")
+        root = get_root(sycproxy, category=category, version=self.__syc_version)
         sycproxy.set_injected_commands(get_injected_cmd_map(category, root, self.__rpc))
         return (root, sycproxy)
 
