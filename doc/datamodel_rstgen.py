@@ -1,4 +1,4 @@
-"""Provide a module to generate the documentation classes for System Coupling datamodel
+"""Provide a module to generate the documentation classes for System Coupling data model
 and commands tree.
 
 Running this module generates a .rst files for the System Coupling auto-generated API classes.
@@ -24,10 +24,17 @@ Usage
 -----
 python <path to datamodel_rstgen.py>
 """
-
+import importlib
 import os
 
-from ansys.systemcoupling.core.adaptor.api import case_root, setup_root, solution_root
+# PYSYC_DOC_BUILD_VERSION should contain a string such as "23_2" that determines the
+# System Coupling version the API is generated for and which we are building doc for.
+# This should be the only place in this script where we depend on the version.
+api_path = f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+case_root = importlib.import_module(f"{api_path}.case_root")
+setup_root = importlib.import_module(f"{api_path}.setup_root")
+solution_root = importlib.import_module(f"{api_path}.solution_root")
+
 from ansys.systemcoupling.core.util.name_util import to_python_name as to_snake_case
 
 parents_dict = {}
@@ -172,7 +179,7 @@ def _populate_rst_from_settings(rst_dir, cls):
         r.write(f"{title}\n")
         r.write(f'{"="*(len(title))}\n\n')
         r.write(
-            f".. currentmodule:: ansys.systemcoupling.core.adaptor.api.{file_name}\n\n"
+            f".. currentmodule:: {api_path}.{file_name}\n\n"
         )
         r.write(f".. autoclass:: {cls_name}\n")
         r.write(f"{istr1}:show-inheritance:\n")

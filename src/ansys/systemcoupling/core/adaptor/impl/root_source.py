@@ -256,6 +256,7 @@ def get_hash(obj_info):
 def get_root(
     sycproxy: SycProxyInterface,
     category: str = "setup",
+    version: str = None,
     generated_module: ModuleType = None,
     report_whether_dynamic_classes_created: Callable[[bool], None] = lambda _: None,
 ) -> Container:
@@ -267,16 +268,18 @@ def get_root(
             Object that interfaces with the System Coupling backend
     category: str, optional
             Category of API that this root refers to.
+    version: str, optional
+            Version of API that this root refers to.
     generated_module: module, optional
             Provide an alternative pre-generated module to be be used
-            instead of the one that is otherwise used by default. (Provided
-            to support unit testing.)
+            instead of the one that is otherwise used by default. (This parameter
+            exists to support unit testing.)
     report_whether_dynamic_classes_created: callable, optional
             Callback that will be called with a bool parameter to report whether
             dynamic classes were created (True) or whether the pre-existing module could
             be used (False). The former will happen if the static info provided by the proxy
-            does not match the hash of the pre-existing module. (Provided to support
-            unit testing.)
+            does not match the hash of the pre-existing module. (This parameter
+            exists to support unit testing.)
     Returns
     -------
     Root ``Container`` object.
@@ -284,8 +287,9 @@ def get_root(
     obj_info, root_type = sycproxy.get_static_info(category)
     try:
         if generated_module is None:
+            api_ver = f"api_{version}" if version else "api"
             generated_module = importlib.import_module(
-                f"ansys.systemcoupling.core.adaptor.api.{category}_root"
+                f"ansys.systemcoupling.core.adaptor.{api_ver}.{category}_root"
             )
 
         info_hash = get_hash(obj_info)

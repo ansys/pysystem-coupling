@@ -149,6 +149,8 @@ jobs:
           pip install -r requirements/requirements_docs.txt
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
+        env:
+          PYSYC_DOC_BUILD_VERSION: 23_1
 
       # This is hanging on GitHub so disable for now
       # ============================================

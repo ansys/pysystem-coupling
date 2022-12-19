@@ -297,3 +297,36 @@ def get_extended_cmd_metadata(api) -> list:
     injected_data = get_injected_cmd_data()
     merge_data(cmd_metadata, injected_data)
     return cmd_metadata
+
+
+def get_syc_version(api) -> str:
+    """Query System Coupling for its version.
+
+    This is returned in the form of a string such as "23.2".
+
+    System Coupling prior to 23.2 did not expose a version query. Since
+    the server that PySystemCoupling connects to did not exist prior to
+    23.1, we may assume the version is 23.1 if no version query exists.
+
+    Parameters
+    ----------
+    api : NativeApi
+        Object providing access to the System Coupling "native API" .
+    """
+
+    def clean_version_string(version_in: str) -> str:
+        year, _, release = version_in.partition(" ")
+        if len(year) == 4 and year.startswith("20") and release.startswith("R"):
+            try:
+                year = int(year[2:])
+                release = int(release[1:])
+                return f"{year}.{release}"
+            except:
+                pass
+        raise RuntimeError(
+            f"Version string {version_in} has invalid format (expect '20yy Rn')."
+        )
+
+    cmds = api.GetCommandAndQueryMetadata()
+    exists = any(cmd["name"] == "GetVersion" for cmd in cmds)
+    return clean_version_string(api.GetVersion()) if exists else "23.1"

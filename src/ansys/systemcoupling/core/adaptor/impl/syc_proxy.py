@@ -1,6 +1,7 @@
 from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,
+    get_syc_version,
     make_cmdonly_metadata,
     make_combined_metadata,
 )
@@ -12,6 +13,7 @@ class SycProxy(SycProxyInterface):
     def __init__(self, rpc):
         self.__rpc = rpc
         self.__injected_cmds = {}
+        self.__version = None
         self.__defunct = False
 
     def reset_rpc(self, rpc):
@@ -49,6 +51,11 @@ class SycProxy(SycProxyInterface):
         else:
             raise RuntimeError(f"Unrecognised 'static info' category: '{category}'.")
         return metadata, root_type
+
+    def get_version(self):
+        if self.__version is None:
+            self.__version = get_syc_version(self.__rpc)
+        return self.__version
 
     def set_state(self, path, state):
         self.__rpc.SetState(ObjectPath=path, State=state)

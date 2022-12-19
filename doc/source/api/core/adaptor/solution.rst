@@ -5,7 +5,7 @@
 Solution Commands
 =================
 
-See the :class:`solution_root<adaptor.api.solution_root.solution_root>` class for details.
+See the |SOLUTION_ROOT_CLASS_REF| class for details.
 
 This is made available as an attribute, named :meth:`solution<session.Session.solution>`,
 on the :class:`Session<session.Session>` class, and exposes System Coupling's

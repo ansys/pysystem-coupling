@@ -148,8 +148,8 @@ The following example shows the set up and solve of the "oscillating plate" tuto
    solution = syc.solution
    solution.solve()
 
-Note that the API is divided into a number of "areas". These are represented as "root" attributes from which
-an appropriate group of commands may be accessed. The above example shows ``setup`` and ``solution``. ``setup`` is the largest part of the
+The API is partitioned via three high-level "root" attributes from which
+pertinent commands may be accessed. The above example shows ``setup`` and ``solution``. ``setup`` is the largest part of the
 API, and is where one finds all of the commands related to populating the settings that define a coupled analysis. It also provides
 direct access to the hierarchical data model, as illustrated in the example. ``solution`` is home to ``solve`` and a few other related
 operations. There is also a ``case`` attribute available (not illustrated), for case file and persistence related commands.

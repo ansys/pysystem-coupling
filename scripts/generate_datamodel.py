@@ -57,6 +57,7 @@ from ansys.systemcoupling.core.adaptor.impl import root_source as adaptor_source
 from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,
+    get_syc_version,
     make_cmdonly_metadata,
     make_combined_metadata,
 )
@@ -454,21 +455,6 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
             f.write(content)
 
 
-def _write_init_file(parent_dir, sinfo):
-    hash = _gethash(sinfo)
-    filepath = os.path.normpath(os.path.join(parent_dir, "__init__.py"))
-    with open(filepath, "w") as f:
-        f.write("#\n")
-        f.write("# This is an auto-generated file.  DO NOT EDIT!\n")
-        f.write("#\n")
-        f.write("\n")
-        f.write(f'"""A package providing the System Coupling API in Python."""')
-        f.write("\n")
-        f.write("from ansys.systemcoupling.core.adaptor.impl.types import *\n\n")
-        f.write(f'SHASH = "{hash}"\n')
-        f.write(f"from .{root_class_path} import root")
-
-
 def _write_cls_helper(out, cls, indent=0):
     try:
         istr = _get_indent_str(indent)
@@ -563,7 +549,6 @@ def write_classes_to_file(
         # Ensure parent dir exists
         os.makedirs(parent_dir, exist_ok=True)
         _write_flat_class_files(parent_dir, cls.__name__, _gethash(obj_info))
-        # _write_init_file(parent_dir, obj_info)
         return
 
     with io.StringIO() as out:
@@ -668,6 +653,9 @@ def _generate_real_classes(dirname, generate_flat_classes):
     )
     _dump_yaml(dm_metadata, "combined_metadata.yml")
 
+    version = get_syc_version(api)
+    api_root = f"api_{version.replace('.', '_')}" if version else "api"
+
     filedir = os.path.normpath(
         os.path.join(
             dirname,
@@ -677,7 +665,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
             "systemcoupling",
             "core",
             "adaptor",
-            "api",
+            api_root,
         )
     )
 
