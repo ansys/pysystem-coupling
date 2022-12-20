@@ -3,7 +3,7 @@
 ==========
 User Guide
 ==========
-This guide provides a general overview of the basics and usage of the PySystemCoupling library.
+This guide provides a general overview of the PySystemCoupling library and its basic use.
 
 Although this guide does provide a brief overview of the main concepts in System Coupling, it is
 not intended to be a comprehensive introduction to cosimulation and the use of System Coupling.
@@ -11,8 +11,8 @@ The focus will be on guiding the use of PySystemCoupling client library to acces
 Coupling features.
 
 .. note::
-   Users who are licensed to use System Coupling may consult the product documentation for
-   a detailed introduction, illustrated with tutorial examples. The
+   Users who are licensed to use System Coupling can consult the product documentation for
+   a detailed introduction to the product, illustrated with tutorial examples. The
    steps in the documentation that refer to the Command Line Interface (CLI) will be those
    that are most readily translated to the PySystemCoupling environment.
 
@@ -57,7 +57,7 @@ In addition to the set up and solve API, ``Session`` provides access to a few ba
 
 Connection Check
 ----------------
-To confirm that there is a functioning connection to the System Coupling server, the ``ping`` method may be called.
+To confirm that there is a functioning connection to the System Coupling server, call the ``ping`` method.
 
 .. code:: python
 
@@ -83,10 +83,51 @@ Output may be turned off again using ``end_output``:
 
    syc_session.end_output()
 
+
+Exiting
+-------
+When finished with a PySystemCoupling session, it is advisable to terminate it cleanly using the
+``exit`` method. If this is not done, the PySystemCoupling library will still attempt to clean
+up active server sessions when the Python environment is exited, but this will naturally be less
+reliable than a directed exit.
+
+Once ``exit`` has been called on a session object, it will no longer be usable.
+
+.. code:: python
+
+   syc_session.exit()
+
+   # Will raise exception!
+   syc_session.ping()
+
+However, our ``syc_session`` variable could be reassigned to a new session:
+
+.. code:: python
+
+   syc_session = pysystemcoupling.launch()
+
+   # Ok
+   syc_session.ping()
+
+The ``Session`` class supports the Python `context manager protocol`. This means that
+if a ``Session`` is created using a Python ``with`` statement, it will automatically
+be cleaned up --- i.e., ``exit`` called on it --- on leaving the scope of the ``with``.
+
+.. code:: python
+
+   with pysystemcoupling.launch() as syc_session:
+      # Use syc_session
+      ...
+      # No need to call syc_session.exit() at the end
+
+   # syc_session has been exited at this point
+
+
+
 Logging
 =======
-Some basic logging capabilities may be accessed via the ``LOG`` object. This is built on the standard Python logging framework
-and allows a `level` to be set as a severity filter, and allows logging to a file and/or to the console.
+Some basic logging capabilities are accessible via the ``LOG`` object. This is built on the standard Python logging framework
+and allows you to set a `level` as a severity filter, and to specify whether logging goes to a file and/or to the console.
 
 .. code:: python
 

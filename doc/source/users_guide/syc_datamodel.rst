@@ -4,7 +4,7 @@ System Coupling Data Model
 ==========================
 
 The System Coupling data model is a hierarchical structure, represented in the PySystemCoupling API
-as nested attributes. Ultimately, the nested attributes navigate down to primitive values which are the
+as nested attributes. Ultimately, the nested attributes terminate at primitive values, which are the
 basic settings defining the set-up. The nested structure allows the data to be organized in a way
 that fits with the underlying concepts of a System Coupling analysis.
 
@@ -79,16 +79,16 @@ Populating the Data Model
 
 The examples above assume that the data model is already populated with data, so that the
 objects referenced from the hierarchy already exist. This would be the situation if modifying
-an existing case, perhaps one that had been previously set up and saved and has now been
+an existing case --- perhaps one that had  previously been set up and saved, and has now been
 re-opened.
 
-If a new analysis is being set up from scratch, the objects need to be created. In pricniple,
+If a new analysis is being set up from scratch, the objects need to be created. In principle,
 this can be done using direct, low-level, operations on the data model. This is not the
-recommended approach, which is to use the higher level "commands" that are provided by the
-API. See ????? for details on this.
+recommended approach; instead, you are advised to use the higher level "commands" that are provided by the
+API. See :ref:`ref_syc_analysis_setup` for details on this.
 
 Nevertheless, it can sometimes be useful to know how to create an object directly in the
-data model, so a couple of examples will be given below.
+data model, so a couple of examples are given below.
 
 Unnamed objects such as ``analysis_control`` can be accessed as attributes, even when
 they are initially "empty". This may be confirmed using ``print_state()``:
@@ -99,7 +99,7 @@ they are initially "empty". This may be confirmed using ``print_state()``:
 
 	>>>
 
-If a setting is applied on such an object, that not only applies the specified
+If a setting is applied on such an object, this not only applies the specified
 value but also fills the other settings with default values where possible:
 
 .. code::
@@ -143,7 +143,7 @@ Note that this is for illustration only. A ``coupling_participant`` requires ver
 data for it to be initialized in a useful manner. Usually, this data is derived from some external source.
 The ``add_participant()`` command exists to help with this, and this is how a participant would normally
 be created. This, and various other commands are available as methods on the session's ``setup``
-attribute. See ???<analysis set up> and ???<API> for more details.
+attribute. See :ref:`ref_syc_analysis_setup` and :ref:`ref_setup` for more details.
 
 
 

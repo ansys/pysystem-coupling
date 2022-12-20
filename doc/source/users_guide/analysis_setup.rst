@@ -50,12 +50,12 @@ may be captured in a variable to facilitiate subsequent access to the object:
     fluent_part = setup.add_participant(input_file="fluent.scp")
     assert setup.coupling_participant[fluent_part].participant_type == "FLUENT"
 
-The ``add_participant`` commands do not only create the participant object in question but
+The ``add_participant`` commands not only create the participant object in question but
 also help to initialise some other aspects of the data model state. After adding the `Fluent`
 and `MAPDL` participants as above, the ``analysis_control``, ``solution_control`` and
 ``output_control`` objects will also have been created with reasonable defaults. See the
-output from ``print_state`` below. (Note that some details have been omitted, as indicated
-by ``...``.)
+output from ``print_state`` below. (Note that some details have been omitted from the output
+shown, as indicated by ``...``.)
 
 .. code::
 
@@ -135,10 +135,11 @@ Missing/unset values
 ^^^^^^^^^^^^^^^^^^^^
 
 In the ``print_state`` output above, it can be seen that most settings have been defaulted
-to some value. `<None>` is used in this output to indicate "unset" values. Note that
-in some settings in the data model, "None" is a legitimate string value, so the `<None>`
-form is used in the output for unset values in order to avoid ambiguity. For example, the default value
-of ``analysis_control.global_stabilization.option`` is the string "None", which is one
+to some value. `<None>` is used in this output to indicate "unset" values. In some
+settings in the data model, "None" is a legitimate string value, so the `<None>`
+form is used in the ``print_state`` output for unset values in order to avoid
+ambiguity. For example, the default value of
+``analysis_control.global_stabilization.option`` is the string ``"None"``, which is one
 of the valid options for this setting.
 
 If queried in Python, an `unset` setting holds
@@ -148,9 +149,9 @@ The important missing values in the set-up in its current state are those in ``s
 These will be addressed later as these missing values are considered to be errors in the set up,
 and its solution will be blocked unless they are provided.
 
-That there are some other settings in the scope of the ``coupling_participant`` objects
-that are indicated as "unset" (i.e., `<None>` in the ``print_state`` output). These are not
-considered to be missing values or to indicate any
+There are some other settings in the scope of the ``coupling_participant`` objects
+that are indicated as "unset" (i.e., `<None>`) in the ``print_state`` output). However,
+these are not considered to be missing values nor to indicate any
 kind of error in the set up, but rather are more specialized optional settings that have not
 been provided in the relevant input files. Generally, ``coupling_participant`` state can be
 considered to be "read-only" once it has been created, and further edits should not be necessary.
@@ -294,10 +295,10 @@ and this can be used to filter the message list:
     object, but the the specific settings in error are indicated in the message itself. However,
     note that setting names referenced in the "message" text ("TimeStepSize" and "EndTime")
     are in the form that is used in System Coupling's native API. This reflects the
-    current way that ``get_status_messages`` is exposed into PySystemCoupling, which
-    does not allow for reliable translation to PySystemCoupling naming. Users should,
-    however, be able to infer the PySystemCoupling names relatively easily by converting
-    from "camel case" to "snake case".
+    current way that ``get_status_messages`` is exposed into PySystemCoupling. This
+    does not allow for reliable automatic translation to PySystemCoupling naming. Users should,
+    however, be able to infer the PySystemCoupling names relatively easily by assuming
+    a conversion from "camel case" to "snake case" of such identifiers.
 
 To address the errors, values need to be assigned to ``end_time`` and ``time_step_size``.
 These define, respectively, the duration of the transient coupled analysis and the time

@@ -54,7 +54,7 @@ You can launch System Coupling from Python using the ``launch`` function:
 
   import ansys.systemcoupling.core as pysystemcoupling
   syc = pysystemcoupling.launch()
-  syc.ping() # TODO: replace with health check
+  syc.ping()
 
 System Coupling is now active and ready to be used as a service. For details of
 using the PySystemCoupling interface, see :ref:`ref_user_guide`.
