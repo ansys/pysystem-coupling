@@ -1,4 +1,4 @@
-"""Template setup file."""
+"""Setup file for ansys-systemcoupling-core."""
 import codecs
 from io import open as io_open
 import os
@@ -33,7 +33,7 @@ with open(os.path.join(HERE, "README.rst"), encoding="utf-8") as f:
 packages = [
     pkg
     for pkg in find_namespace_packages(where="src", include="ansys*")
-    if pkg.startswith("ansys.systemcoupling.core") or pkg.startswith("ansys.api")
+    if pkg.startswith("ansys.systemcoupling.core")
 ]
 setup(
     name="ansys-systemcoupling-core",
@@ -45,13 +45,9 @@ setup(
     long_description_content_type="text/x-rst",
     url="https://github.com/pyansys/pysystem-coupling/",
     license="MIT",
-    author="ANSYS, Inc.",  # this is required
-    maintainer="Ian Boyd",  # you can change this
-    # this email group works
-    maintainer_email="ian.boyd@ansys.com",
-    # Include all install requirements here.  If you have a longer
-    # list, feel free just to create the list outside of ``setup`` and
-    # add it here.
+    author="ANSYS, Inc.",
+    maintainer="PyAnsys developers",
+    maintainer_email="pyansys.maintainers@ansys.com",
     install_requires=[
         "grpcio>=1.30.0",
         "grpcio-status>=1.30.0,<=1.48.2",
@@ -61,9 +57,7 @@ setup(
         "pyyaml",
         "appdirs>=1.4.0",
     ],
-    # Plan on supporting only the currently supported versions of Python
-    python_requires=">=3.6",
-    # Less than critical but helpful
+    python_requires=">=3.7",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
