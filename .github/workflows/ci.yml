@@ -24,7 +24,7 @@ jobs:
 
       - name: Install style requirements
         run: |
-          pip install -r .[style] --disable-pip-version-check
+          pip install .[style] --disable-pip-version-check
 
       - name: Codespell
         run: |
