@@ -21,7 +21,8 @@ docker-pull:
 	@bash .ci/pull_syc_image.sh
 
 build-install:
-	@pip install -r requirements/requirements_build.txt
+	#@pip install -r requirements/requirements_build.txt
+	@pip install build
 	@python -m build
 	@pip install -q --force-reinstall dist/*.whl
 
@@ -36,5 +37,6 @@ generate-api:
 
 unittest:
 	@echo "Running unit tests (including coverage)"
-	@pip install -r requirements/requirements_test.txt
+	#@pip install -r requirements/requirements_test.txt
+	@python -m pip install .[tests]
 	@pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
