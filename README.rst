@@ -41,13 +41,17 @@ Install PySystemCoupling with:
 
    pip install ansys-systemcoupling-core
 
-Alternatively, clone and install in development mode with:
+Alternatively, clone and install in development mode as follows:
 
 .. code::
 
    git clone https://github.com/pyansys/pysystem-coupling.git
    cd pysystem-coupling
+   python -m pip install --upgrade pip
    pip install -e .
+   pip install .[classesgen]
+   python scripts\generate_datamodel.py
+
 
 **ADDITIONAL TEMPORARY STEP - !!!!WILL BE REMOVED BEFORE RELEASE!!!!**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
