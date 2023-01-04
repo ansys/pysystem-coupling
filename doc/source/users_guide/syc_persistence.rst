@@ -137,7 +137,7 @@ This can be achieved by calling the ``clear_state`` command:
     case.clear_state()
 
 Another option to achieve a similar outcome in the PySystemCoupling environment
-would be exit the current session and create a new one.
+would be to exit the current session and create a new one.
 
 .. code:: python
 
