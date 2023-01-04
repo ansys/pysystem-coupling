@@ -21,7 +21,7 @@ docker-pull:
 	@bash .ci/pull_syc_image.sh
 
 build-install:
-	@python -m pip install build
+	@python -m pip install .[build]
 	@python -m build
 	@python -m pip install -q --force-reinstall dist/*.whl
 
