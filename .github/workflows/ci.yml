@@ -24,7 +24,7 @@ jobs:
 
       - name: Install style requirements
         run: |
-          pip install -r requirements/requirements_style.txt --disable-pip-version-check
+          pip install .[style] --disable-pip-version-check
 
       - name: Codespell
         run: |
@@ -146,7 +146,7 @@ jobs:
 
       - name: Build HTML
         run: |
-          pip install -r requirements/requirements_docs.txt
+          pip install .[doc]
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
         env:

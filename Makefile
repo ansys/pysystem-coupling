@@ -17,24 +17,24 @@ flake8:
 	@flake8 .
 
 docker-pull:
-	@pip install docker
+	@python -m pip install docker
 	@bash .ci/pull_syc_image.sh
 
 build-install:
-	@pip install -r requirements/requirements_build.txt
+	@python -m pip install .[build]
 	@python -m build
-	@pip install -q --force-reinstall dist/*.whl
+	@python -m pip install -q --force-reinstall dist/*.whl
 
 generate-api:
 	@echo "Generate API classes"
 	@python -m venv env_generate
 	@. env_generate/bin/activate
-	@pip install -e .
-	@pip install -r requirements/requirements_classesgen.txt
+	@python -m pip install -e .
+	@python -m pip install .[classesgen]
 	@python scripts/generate_datamodel.py
 	@rm -rf env_generate
 
 unittest:
 	@echo "Running unit tests (including coverage)"
-	@pip install -r requirements/requirements_test.txt
+	@python -m pip install .[tests]
 	@pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc

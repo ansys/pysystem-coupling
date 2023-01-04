@@ -11,19 +11,6 @@ PySystemCoupling Documentation |version|
    api/index
    contributing
 
-NOTE
-----
-
-The PySystemCoupling documentation is under development and none of the content should be relied on.
-
-Its current state reflects work on the following aspects:
-
-* Setting out of the approximate structure intended in the final documentation.
-* Development of infrastructure for automatic API generation.
-
-The content itself is incomplete and possibly incorrect in places.
-
-
 Introduction - Ansys System Coupling
 ------------------------------------
 The Ansys portfolio of simulation software facilitates the creation of multidisciplinary physics analyses —

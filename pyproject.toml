@@ -1,0 +1,89 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+# Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
+name = "ansys-systemcoupling-core"
+version = "0.1.dev0"
+description = "A Python wrapper for Ansys MAPDL."
+readme = "README.rst"
+requires-python = ">=3.7"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Ansys, Inc.", email = "pyansys.support@ansys.com"},
+]
+maintainers = [
+    {name = "PyAnsys developers", email = "pyansys.support@ansys.com"},
+]
+dependencies = [
+	"grpcio>=1.30.0",
+	"grpcio-status>=1.30.0,<=1.48.2",
+	"googleapis-common-protos>=1.50.0",
+	"protobuf>=3.20.1,<4.0.0",
+	"psutil>=5.7.0",
+	"pyyaml",
+	"appdirs>=1.4.0",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX",
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+]
+
+[project.optional-dependencies]
+build = [
+	"build",
+]
+classesgen = [
+	# Dependencies for API class generation from System Coupling metadata
+
+	# black and isort are called programmatically to keep generated code
+	# consistent with style elsewhere. We need to keep the versions
+	# in sync with the precommit dependencies.
+	"black==22.3.0",
+	"isort==5.10.1",
+]
+doc = [
+	"Sphinx==5.2.3",
+	"jupyter_sphinx==0.4.0",
+	"ansys-sphinx-theme==0.6.1",
+	"numpydoc==1.5.0",
+	"matplotlib",
+	"pypandoc==1.9",
+	"pytest-sphinx==0.5.0",
+	"sphinx-autobuild==2021.3.14",
+	"sphinx-autodoc-typehints==1.19.4",
+	"sphinx-copybutton==0.5.0",
+	"sphinx-gallery==0.11.1",
+	"sphinx-notfound-page==0.8.3",
+	"sphinxcontrib-websupport==1.2.4",
+	"sphinxemoji==0.2.0",
+
+	# pyansys dependencies for sphinx gallery examples
+	#"ansys-fluent-core", # install manually from github until protobuf version fixed
+	"ansys-dpf-core",
+]
+style = [
+	"codespell==2.1.0",
+	"flake8==3.9.2",
+]
+tests = [
+	"pytest",
+	"pytest-cov",
+	"psutil>=5.7.0",
+]
+
+[tool.flit.module]
+name = "ansys.systemcoupling.core"
+
+[project.urls]
+Source = "https://github.com/pyansys/pysystem-coupling/"
