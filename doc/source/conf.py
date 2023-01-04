@@ -177,6 +177,8 @@ sphinx_gallery_conf = {
     # "reset_modules_order": "after",
     # "reset_modules": (_stop_fluent_container),
     #"plot_gallery": False,
+    # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
+    "remove_config_comments": True,
 }
 
 

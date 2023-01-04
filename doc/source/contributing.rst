@@ -38,11 +38,30 @@ following the installation as described above.
     pip install .[classesgen]
     python scripts/generate_datamodel.py
 
+The generated code is written to a directory ``src/ansys/systemcoupling/core/adaptor/api_<version>``,
+where ``<version>`` is the version of the System Coupling instance that was run in the background
+by the generation script. The version takes the form ``23_1``, for example, which would correspond to
+the 2023 Release 1 of Ansys. ``23_1`` is in fact the current default and this release of System
+Coupling would be expected to be at an installation location given by the ``AWP_ROOT231`` environment
+variable.
+
+You can override the default behavior and run a different version -- and generate the API classes for
+this different version -- by setting either
+``SYSC_ROOT`` to point to the root directory of a System Coupling installation or ``AWP_ROOT`` to
+point to the root of an Ansys installation. If ``SYSC_ROOT`` and ``AWP_ROOT`` are both set, the
+former takes priority, and both take priority over ``AWP_ROOT231``.
+
 
 Build documentation
 -------------------
-To build the PySystemCoupling documentation locally, in the root directory of the
-repository, run:
+To build the PySystemCoupling documentation locally, the API classes must first have been generated
+as outlined above, because some of the documentation is extracted from these classes. Since
+multiple versions of the API classes can exist, it is necessary to
+set the environment variable ``PYSYC_DOC_BUILD_VERSION`` to tell the documentation build which
+version to use. This *must* be set -- there is no default in this case. This variable should be set to a string that has the same form as the ``<version>`` component
+of the ``api_<version>`` directory (e.g. "23_1").
+
+With this variable set, execute the following commands:
 
 .. code::
 
@@ -59,6 +78,20 @@ You can clear all HTML files from the ``_builds/html`` directory with:
 .. code::
 
     make clean
+
+Sphinx Gallery examples
+^^^^^^^^^^^^^^^^^^^^^^^
+By default, the `Sphinx Gallery`` examples are *not* run as part of a documentation build. This is
+because realistic runs of System Coupling, involving both System Coupling itself *and* the
+participant solvers, are not currently possible on GitHub. Therefore, the examples are run
+manually from time to time, and the resultant `Sphinx` files are committed to the repository.
+
+To override the default behavior and perform a complete rebuild of documentation, including
+regeneration of the `Sphinx Gallery` examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
+environment variable (only its existence is examined so it may be given any value).
+
+
+
 
 Post issues
 -----------

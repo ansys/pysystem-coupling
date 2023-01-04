@@ -74,7 +74,6 @@ class Session:
             # anyone has held on to a native API reference
             self.__native_api._exit(self.__rpc)
             self.__native_api = None
-        # XXX TODO see about doing something similar for case, setup, solution
         if self.__case_root:
             self.__case_proxy.reset_rpc(self.__rpc)
             self.__case_root = None
@@ -97,7 +96,7 @@ class Session:
         handler may be specified that deals with it in a different way (for
         example, the handler might write the output to a file or display it
         in a separate window). In the default case, printing is done from a
-        separate thread and this may lead to unusual behaviour in some
+        separate thread and this may lead to unusual behavior in some
         Python console environments. In such cases, a custom approach based
         on the handler might be preferred.
 
