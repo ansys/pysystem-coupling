@@ -29,9 +29,6 @@ exist in the working directory.
     case.open()
     ...
 
-    # Open a case from sub-directory SyC of specified directory
-    case.open(file_path="cht_cases/case1")
-
 Opening a case will restore the analysis settings at the time of saving, and
 will load results data if it exists.
 
@@ -43,18 +40,10 @@ Similarly for saving the current state of a case:
     case.save()
     ...
 
-    # Save a case to sub-directory SyC of specified directory
-    case.save(file_path="cht_cases/case1")
-
 When saving a case, the `SyC` directory will be created if it does not already exist.
 Settings data is saved in a file called `settings.h5`.
 
-Note that if a case is opened with a specified ``file_path`` and subsequently saved
-without specifying a path, it will be written to a `SyC` subdirectory of the `current
-working directory`; it will not be rewritten to the directory from which it was opened.
-
-If the case has been
-successfully solved, one or more `restart` files --- files with names of the form
+If the case has been successfully solved, one or more `restart` files --- files with names of the form
 *Restart_step<n>* or *Restart_iter<n>* --- will exist, depending on whether the analysis
 is a transient or steady cases. The restart files allow the
 results to be loaded at any point partway through the analysis for which a restart

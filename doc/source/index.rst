@@ -28,9 +28,6 @@ Heating.
 System Coupling capabilities include ability to solve steady and transient coupled analyses, coupling
 on surface and on volume regions, coupling of any scalar or vector, real or complex fields.
 
-For more information about System Coupling, see Ansys System Coupling page on the Ansys website:
-
-`<https://www.ansys.com/products/platform/multiphysics-simulation/system-coupling/>`_
 
 What is PySystemCoupling?
 -------------------------
