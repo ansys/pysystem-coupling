@@ -34,7 +34,6 @@ motion of the plate as it is damped.
 
 """
 
-# sphinx_gallery_thumbnail_path = '_static/oscplate_displacement.png'
 
 # %%
 # Example Setup
@@ -45,6 +44,7 @@ motion of the plate as it is damped.
 # Import the PySystemCoupling package and other required imports, and download
 # the input files for this example.
 
+# sphinx_gallery_thumbnail_path = '_static/oscplate_displacement.png'
 import os
 from pprint import pprint
 import ansys.systemcoupling.core as pysystemcoupling
@@ -124,8 +124,8 @@ setup = syc.setup
 # representing the Fluent and MAPDL participants, based on the data
 # in the `scp` files that were previously exported by the respective
 # products.
-setup.add_participant(input_file="mapdl.scp")
-setup.add_participant(input_file="fluent.scp")
+mapdl_part_name = setup.add_participant(input_file="mapdl.scp")
+fluent_part_name = setup.add_participant(input_file="fluent.scp")
 
 # %%
 # Verify that the ``coupling_participant`` objects now exist:
@@ -143,9 +143,9 @@ setup.coupling_participant.keys()
 
 interface_name = "interface-1"
 interface = setup.coupling_interface.create(interface_name)
-interface.side["One"].coupling_participant = "MAPDL-1"
+interface.side["One"].coupling_participant = mapdl_part_name
 interface.side["One"].region_list = ["FSIN_1"]
-interface.side["Two"].coupling_participant = "FLUENT-2"
+interface.side["Two"].coupling_participant = fluent_part_name
 interface.side["Two"].region_list = ["wall_deforming"]
 
 # Use commands to add data transfers
@@ -307,11 +307,10 @@ force_transfer = setup.coupling_interface[interface_name].data_transfer[
 force_transfer.print_state()
 
 # %%
-# Change some settings of the "Force" data transfer, and increase the
+# Change a setting in the "Force" data transfer, and increase the
 # minimum iterations value in ``solutions_control`` from its default
 # value of 1.
 force_transfer.convergence_target = 0.001
-force_transfer.ramping_option = "Linear"
 
 setup.solution_control.minimum_iterations = 2
 
