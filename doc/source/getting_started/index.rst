@@ -55,4 +55,4 @@ Launch System Coupling from Python using the ``launch`` function:
   syc.ping()
 
 System Coupling is now active and ready to be used as a service. For information on
-using the PySystemCoupling interface, see :ref:`ref_user_guide`.
+using the PySystemCoupling interface, see the :ref:`ref_user_guide`.
