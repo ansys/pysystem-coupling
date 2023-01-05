@@ -33,7 +33,7 @@ System Coupling capabilities include the ability to:
 
 What is PySystemCoupling?
 =========================
-`PySystemCoupling` is part of the `PyAnsys <https://docs.pyansys.com>`_ ecosystem. It lets you 
+**PySystemCoupling** is part of the `PyAnsys <https://docs.pyansys.com>`_ ecosystem. It lets you 
 use System Coupling within or alongside any other Python environment, whether in conjunction 
 with other Ansys Python libraries and packages or with other external Python products.
 

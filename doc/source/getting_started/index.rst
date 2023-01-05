@@ -1,34 +1,32 @@
 .. _getting_started:
 
-===============
-Getting Started
-===============
+Getting started
+###############
 To run PySystemCoupling, you must have a local copy of Ansys System Coupling.
-Although Ansys System Coupling itself does not need a license to enable it,
-licenses will be needed for all Ansys produces involved in your coupled analysis.
+Although System Coupling itself does not need a license, you need licenses 
+for all Ansys produces involved in your coupled analysis.
 
 PySystemCoupling supports Ansys System Coupling versions 2023 R1 or newer.
 
-Visit `Ansys <https://www.ansys.com/>`_ for more information on
-getting a licensed copy of Ansys products.
+For more information on getting a licensed copy of Ansys products, visit the `Ansys <https://www.ansys.com/>`_ website.
 
-************
-Installation
-************
 
-Python Module
-~~~~~~~~~~~~~
+Installating PySystemCoupling
+=============================
+
+Installing the package 
+----------------------
 The ``ansys-systemcoupling-core`` package currently supports Python 3.7 through
 Python 3.10 on Windows and Linux. (**THIS NEEDS TO BE VERFIIED!**)
 
-(**NB - Not yet, until released**) Install the latest release from `PyPi
+(**NB - Not yet, until released**) Install the latest release from `PyPI
 <https://pypi.org/project/ansys-systemcoupling-core/>`_ with:
 
 .. code::
 
    pip install ansys-systemcoupling-core
 
-Alternatively, install the latest from `PySystemCoupling GitHub
+Alternatively, install the latest version from `PySystemCoupling GitHub
 <https://github.com/pyansys/pysystem-coupling/issues>`_ via:
 
 .. code::
@@ -44,11 +42,11 @@ For a local "development" version, install with:
    cd pysystem-coupling
    pip install -e .
 
-*************************
-Launching System Coupling
-*************************
 
-You can launch System Coupling from Python using the ``launch`` function:
+Launching System Coupling
+==========================
+
+Launch System Coupling from Python using the ``launch`` function:
 
 .. code:: python
 
@@ -56,5 +54,5 @@ You can launch System Coupling from Python using the ``launch`` function:
   syc = pysystemcoupling.launch()
   syc.ping()
 
-System Coupling is now active and ready to be used as a service. For details of
+System Coupling is now active and ready to be used as a service. For information on
 using the PySystemCoupling interface, see :ref:`ref_user_guide`.
