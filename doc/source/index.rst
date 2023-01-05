@@ -57,7 +57,7 @@ System Coupling without changing the core behavior or license of the original
 software. The use of the interactive control of PySystemCoupling requires a legally
 licensed local copy of System Coupling. 
 
-.. TODO:: Add the appropriate link when available.
+.. TODO Add the appropriate link when available.
 
 For more information about System Coupling,
 visit the Ansys System Coupling page on the Ansys website.
