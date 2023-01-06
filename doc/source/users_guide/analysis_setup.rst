@@ -43,7 +43,7 @@ such as the variables it exposes and the regions on which they are available.
     'MAPDL-2'
 
 Note that the name of the created ``coupling_participant`` object is returned in each case. This
-may be captured in a variable to facilitiate subsequent access to the object:
+may be captured in a variable to facilitate subsequent access to the object:
 
 .. code:: python
 
@@ -150,7 +150,7 @@ These will be addressed later as these missing values are considered to be error
 and its solution will be blocked unless they are provided.
 
 There are some other settings in the scope of the ``coupling_participant`` objects
-that are indicated as "unset" (i.e., `<None>`) in the ``print_state`` output). However,
+that are indicated as "unset" (that is, `<None>`) in the ``print_state`` output). However,
 these are not considered to be missing values nor to indicate any
 kind of error in the set up, but rather are more specialized optional settings that have not
 been provided in the relevant input files. Generally, ``coupling_participant`` state can be
@@ -161,7 +161,7 @@ Create interfaces
 
 Each coupled analysis must have at least one coupling interface. Coupling interfaces must be added to
 the analysis individually. When adding a coupling interface, you must specify the participant name
-and region(s) to be associated with each side of the coupling interface.
+and the regions to be associated with each side of the coupling interface.
 
 Interface names must be unique within the coupled analysis. When coupling interfaces are added,
 they are assigned default names according to the convention "CouplingInterface#", where "#"
@@ -292,7 +292,7 @@ and this can be used to filter the message list:
 
     The "path" field of the message dictionary indicates the location in the data model
     to which the message pertains. In the above, this points to the ``solution_control``
-    object, but the the specific settings in error are indicated in the message itself. However,
+    object, but the specific settings in error are indicated in the message itself. However,
     note that setting names referenced in the "message" text ("TimeStepSize" and "EndTime")
     are in the form that is used in System Coupling's native API. This reflects the
     current way that ``get_status_messages`` is exposed into PySystemCoupling. This

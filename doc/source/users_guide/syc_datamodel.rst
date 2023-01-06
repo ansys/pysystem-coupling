@@ -16,6 +16,7 @@ The following shows the main hierarchy of the "objects" in the data model. Such 
 of primitive settings and/or further "child" objects.
 The primitive settings are named values of type integer, boolean, string, etc.
 
+.. vale off
 
 - *participant*
 
@@ -34,6 +35,8 @@ The primitive settings are named values of type integer, boolean, string, etc.
 - solution_control
 
 - output_control
+
+.. vale on
 
 The italicized names represent those for which more than one instance may exist --- each instance is given a name.
 In general, names may be freely chosen, but ``side`` is unusual in that exactly two instances exist, with fixed names "One" and "Two".
@@ -56,7 +59,7 @@ For example, to access the ``analysis_control`` object:
 
 As noted above, the data model objects hold basic settings of different value types.
 For example, ``analysis_control`` contains a setting ``analysis_type`` of type string. This defines the
-type of analysis to be performed. The valid values are "Steady" and "Transient". The following illustates
+type of analysis to be performed. The valid values are "Steady" and "Transient". The following illustrates
 how the setting may be set and queried:
 
 .. code:: python

@@ -11,10 +11,10 @@ containers of such types.
 
 The basic types are:
 
-- String (`str`)
-- Integer (`int`)
-- Real (`float`)
-- Boolean (`bool`)
+- String (``str``)
+- Integer (``int``)
+- Real (``float``)
+- Boolean (``bool``)
 
 System Coupling supports expressions for real valued settings, and these are specified as strings.
 Therefore a Python `type hint` :ref:`RealType<real_type>` is defined in the API to
@@ -30,7 +30,7 @@ These additional type hint definitions are documented in the following sections.
 RealType
 ~~~~~~~~
 
-``Union[float, str]`` - the underlying data model type is `float` but an expression string may also
+``Union[float, str]`` - the underlying data model type is ``float`` but an expression string may also
 be assigned.
 
 .. _string_list_type:
@@ -38,14 +38,14 @@ be assigned.
 StringListType
 ~~~~~~~~~~~~~~
 
-``List[str]`` - list of `str` values.
+``List[str]`` - list of ``str`` values.
 
 .. _integer_list_type:
 
 IntegerListType
 ~~~~~~~~~~~~~~~
 
-``List[int]`` - list of `int` values.
+``List[int]`` - list of ``int`` values.
 
 .. _real_list_type:
 
@@ -66,4 +66,4 @@ RealVectorType
 BoolListType
 ~~~~~~~~~~~~
 
-``List[bool]`` - list of `bool` values.
+``List[bool]`` - list of ``bool`` values.

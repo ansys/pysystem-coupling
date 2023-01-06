@@ -7,10 +7,10 @@ The ``case`` attribute of ``Session`` provides access to commands relating to pe
 of an analysis case:
 
 * Opening and saving a case
-* `Snapshotting` a case
+* Saving a `snapshot` of a case
 * Clearing/resetting the entire state
 
-In the code snippets below, the ``case`` variable is assumed to have been assgnied as follows:
+In the code snippets below, the ``case`` variable is assumed to have been assigned as follows:
 
 .. code:: python
 
@@ -55,7 +55,7 @@ option may be provided to ``open``:
     # Open at step 2
     case.open(coupling_step=2)
 
-The frequency with which restart files are writted during a solution is controlled by
+The frequency with which restart files are written during a solution is controlled by
 the setting ``setup.output_control.option``.
 
 .. note::

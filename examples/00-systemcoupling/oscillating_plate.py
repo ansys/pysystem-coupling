@@ -205,7 +205,7 @@ pprint(setup.get_status_messages())
 # Modify settings
 # ^^^^^^^^^^^^^^^
 #
-# View contents of `solution_control`. Notice that
+# View contents of ``solution_control``. Notice that
 # ``time_step_size`` and ``end_time`` are unset,
 # consistent with what was shown in the status messages.
 # Values shown in the ``print_state`` output as ``<None>``

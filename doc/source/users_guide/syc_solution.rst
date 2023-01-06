@@ -27,7 +27,7 @@ Currently, all commands in the PySystemCoupling API are executed synchronously, 
 This is a reflection of the underlying functionality of System Coupling.
 
 Sometimes, because ``solve`` tends to be a long running operation, it can be useful to run it
-aynchronously in the Python environment. This is not supported explicitly because
+asynchronously in the Python environment. This is not supported explicitly because
 in the current version of the API, there is not protection against trying to make calls
 concurrently. However, ``solve`` can be called asynchronous by "manual" coding, using Python
 threads:
@@ -76,10 +76,10 @@ Postprocessing support
 ----------------------
 
 The results for the individual participants in the analysis can be
-examined using their respective prostprocessing applications. Consult the relevant
+examined using their respective postprocessing applications. Consult the relevant
 documentation for details.
 
-For System Coupling-specific results, data can be writting in EnSight format, so that
+For System Coupling-specific results, data can be written in EnSight format, so that
 EnSight can be used for visualization, animation and postprocessing. PySystemCoupling
 also supports the writing of some convergence diagnostics in CSV format.
 

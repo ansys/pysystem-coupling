@@ -333,30 +333,19 @@ Coupling interface state. Note the "FORC" and "displacement"
 
     display_name : interface-1
     side :
-      Two :
-        coupling_participant : FLUENT-2
-        region_list :
-          0 : wall_deforming
-        reference_frame : GlobalReferenceFrame
-        instancing : None
       One :
         coupling_participant : MAPDL-1
         region_list :
           0 : FSIN_1
         reference_frame : GlobalReferenceFrame
         instancing : None
+      Two :
+        coupling_participant : FLUENT-2
+        region_list :
+          0 : wall_deforming
+        reference_frame : GlobalReferenceFrame
+        instancing : None
     data_transfer :
-      FORC :
-        display_name : Force
-        suppress : False
-        target_side : One
-        option : UsingVariable
-        source_variable : force
-        target_variable : FORC
-        ramping_option : None
-        relaxation_factor : 1.0
-        convergence_target : 0.01
-        mapping_type : Conservative
       displacement :
         display_name : displacement
         suppress : False
@@ -369,6 +358,17 @@ Coupling interface state. Note the "FORC" and "displacement"
         convergence_target : 0.01
         mapping_type : ProfilePreserving
         unmapped_value_option : Nearest Value
+      FORC :
+        display_name : Force
+        suppress : False
+        target_side : One
+        option : UsingVariable
+        source_variable : force
+        target_variable : FORC
+        ramping_option : None
+        relaxation_factor : 1.0
+        convergence_target : 0.01
+        mapping_type : Conservative
     mapping_control :
       stop_if_poor_intersection : True
       poor_intersection_threshold : 0.5
@@ -439,7 +439,7 @@ last step.
 Modify settings
 ^^^^^^^^^^^^^^^
 
-View contents of `solution_control`. Notice that
+View contents of ``solution_control``. Notice that
 ``time_step_size`` and ``end_time`` are unset,
 consistent with what was shown in the status messages.
 Values shown in the ``print_state`` output as ``<None>``
@@ -1025,7 +1025,9 @@ Access ``solve`` via the ``solution`` API.
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
+    |     -m cosimgui --grpcport 127.0.0.1:64882                                  |
     |     -m cosimgui --grpcport 127.0.0.1:58677                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:56941                                  |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
     |     pling_core\examples                                                     |
@@ -1033,7 +1035,10 @@ Access ``solve`` via the ``solution`` API.
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scpo |
+    |     ort=64923 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
+    |     ou                                                                      |
     |     rt=59010 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.jo |
+    |     rt=56974 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.jo |
     |     u                                                                       |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -1042,7 +1047,10 @@ Access ``solve`` via the ``solution`` API.
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s  |
+    |      noread -scport 64923 -schost host.docker.internal -scname "MAPDL-1" -i |
+    |      "mapdl.dat" -o MAPDL-1.out                                             |
     |     noread -scport 59010 -schost host.docker.internal -scname "MAPDL-1" -i  |
+    |     noread -scport 56974 -schost host.docker.internal -scname "MAPDL-1" -i  |
     |     "mapdl.dat" -o MAPDL-1.out                                              |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2037,15 +2045,38 @@ Access ``solve`` via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
+    | Total Time :                                                    7.06251E+01 |
     | Total Time :                                                    7.06412E+01 |
+    | Total Time :                                                    7.24130E+01 |
     | Coupling Participant Time                                                   |
+    |    Fluid Flow (Fluent) :                                        4.66749E+01 |
+    |    MAPDL Transient :                                            4.59188E+00 |
+    |    Total :                                                      5.12667E+01 |
     |    Fluid Flow (Fluent) :                                        4.97268E+01 |
     |    MAPDL Transient :                                            4.75775E+00 |
     |    Total :                                                      5.44846E+01 |
+    |    Fluid Flow (Fluent) :                                        5.17511E+01 |
+    |    MAPDL Transient :                                            4.73782E+00 |
+    |    Total :                                                      5.64889E+01 |
     | Coupling Engine Time                                                        |
+    |    Solution Control :                                           7.09636E+00 |
+    |    Mesh Import :                                                2.23644E-01 |
+    |    Mapping Setup :                                              4.52802E-02 |
+    |    Mapping :                                                    7.21520E-03 |
+    |    Numerics :                                                   2.36305E-02 |
+    |    Misc. :                                                      1.19622E+01 |
+    |    Total :                                                      1.93583E+01 |
+    +=============================================================================+
     |    Solution Control :                                           6.46127E+00 |
     |    Mesh Import :                                                4.61164E-02 |
-
+    |    Solution Control :                                           6.74567E+00 |
+    |    Mesh Import :                                                4.90553E-02 |
+    |    Mapping Setup :                                              4.75570E-03 |
+    |    Mapping :                                                    8.17660E-03 |
+    |    Numerics :                                                   2.23328E-02 |
+    |    Misc. :                                                      9.09413E+00 |
+    |    Total :                                                      1.59241E+01 |
+    +=============================================================================+
 
 
 
@@ -2520,7 +2551,9 @@ Restart solution
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
+    |     -m cosimgui --grpcport 127.0.0.1:64882                                  |
     |     -m cosimgui --grpcport 127.0.0.1:58677                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:56941                                  |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
     |     pling_core\examples                                                     |
@@ -2528,7 +2561,10 @@ Restart solution
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scpo |
+    |     ort=65095 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.j |
+    |     ou                                                                      |
     |     rt=59186 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.jo |
+    |     rt=57154 -schost=host.docker.internal -scname="FLUENT-2" -i FLUENT-2.jo |
     |     u                                                                       |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2537,7 +2573,10 @@ Restart solution
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s  |
+    |      noread -scport 65095 -schost host.docker.internal -scname "MAPDL-1" -i |
+    |      "MAPDL-1.dat" -o MAPDL-1.out                                           |
     |     noread -scport 59186 -schost host.docker.internal -scname "MAPDL-1" -i  |
+    |     noread -scport 57154 -schost host.docker.internal -scname "MAPDL-1" -i  |
     |     "MAPDL-1.dat" -o MAPDL-1.out                                            |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2736,7 +2775,9 @@ Restart solution
     |       RMS Change                    |     2.60E-05          1.82E-05        |
     |       Sum x                         |    -3.42E-01         -3.42E-01        |
     |       Sum y                         |    -7.73E-02         -7.72E-02        |
+    |       Sum z                         |    -5.67E-14         -5.68E-14        |
     |       Sum z                         |    -7.88E-14         -7.90E-14        |
+    |       Sum z                         |    -7.88E-14         -7.92E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2744,7 +2785,9 @@ Restart solution
     |       RMS Change                    |     8.66E-01          8.76E-01        |
     |       Weighted Average x            |     2.88E-03          2.90E-03        |
     |       Weighted Average y            |     5.70E-04          5.73E-04        |
+    |       Weighted Average z            |    -5.57E-15         -5.63E-15        |
     |       Weighted Average z            |     1.55E-15          1.53E-15        |
+    |       Weighted Average z            |     1.55E-15          1.54E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2766,7 +2809,9 @@ Restart solution
     |       RMS Change                    |     7.07E-03          7.43E-03        |
     |       Weighted Average x            |     2.86E-03          2.88E-03        |
     |       Weighted Average y            |     5.70E-04          5.72E-04        |
+    |       Weighted Average z            |    -5.54E-15         -5.59E-15        |
     |       Weighted Average z            |     1.56E-15          1.55E-15        |
+    |       Weighted Average z            |     1.52E-15          1.51E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2780,7 +2825,9 @@ Restart solution
     |       RMS Change                    |     5.16E-03          3.60E-03        |
     |       Sum x                         |    -4.12E-01         -4.11E-01        |
     |       Sum y                         |    -9.58E-02         -9.57E-02        |
+    |       Sum z                         |    -6.52E-14         -6.55E-14        |
     |       Sum z                         |    -5.58E-14         -5.60E-14        |
+    |       Sum z                         |    -5.64E-14         -5.67E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2788,7 +2835,9 @@ Restart solution
     |       RMS Change                    |     2.36E-04          2.54E-04        |
     |       Weighted Average x            |     2.86E-03          2.89E-03        |
     |       Weighted Average y            |     5.70E-04          5.72E-04        |
+    |       Weighted Average z            |    -5.55E-15         -5.60E-15        |
     |       Weighted Average z            |     1.55E-15          1.54E-15        |
+    |       Weighted Average z            |     1.51E-15          1.49E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2802,7 +2851,9 @@ Restart solution
     |       RMS Change                    |     7.57E-05          5.06E-05        |
     |       Sum x                         |    -4.12E-01         -4.11E-01        |
     |       Sum y                         |    -9.58E-02         -9.57E-02        |
+    |       Sum z                         |    -6.50E-14         -6.52E-14        |
     |       Sum z                         |    -5.62E-14         -5.65E-14        |
+    |       Sum z                         |    -5.60E-14         -5.62E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2810,7 +2861,9 @@ Restart solution
     |       RMS Change                    |     8.07E-06          8.61E-06        |
     |       Weighted Average x            |     2.86E-03          2.89E-03        |
     |       Weighted Average y            |     5.70E-04          5.72E-04        |
+    |       Weighted Average z            |    -5.51E-15         -5.57E-15        |
     |       Weighted Average z            |     1.55E-15          1.54E-15        |
+    |       Weighted Average z            |     1.53E-15          1.51E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2834,7 +2887,9 @@ Restart solution
     |       RMS Change                    |     9.73E-06          6.85E-06        |
     |       Sum x                         |    -4.12E-01         -4.11E-01        |
     |       Sum y                         |    -9.58E-02         -9.57E-02        |
+    |       Sum z                         |    -6.52E-14         -6.53E-14        |
     |       Sum z                         |    -5.62E-14         -5.65E-14        |
+    |       Sum z                         |    -5.57E-14         -5.61E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2842,7 +2897,9 @@ Restart solution
     |       RMS Change                    |     7.73E-01          7.93E-01        |
     |       Weighted Average x            |     6.34E-03          6.36E-03        |
     |       Weighted Average y            |     1.34E-03          1.34E-03        |
+    |       Weighted Average z            |    -4.62E-15         -4.67E-15        |
     |       Weighted Average z            |     1.41E-15          1.40E-15        |
+    |       Weighted Average z            |     1.41E-15          1.41E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2856,7 +2913,9 @@ Restart solution
     |       RMS Change                    |     1.13E-01          8.27E-02        |
     |       Sum x                         |    -4.27E-01         -4.26E-01        |
     |       Sum y                         |    -9.72E-02         -9.71E-02        |
+    |       Sum z                         |    -5.63E-14         -5.65E-14        |
     |       Sum z                         |    -1.93E-14         -1.95E-14        |
+    |       Sum z                         |    -1.85E-14         -1.87E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2864,7 +2923,9 @@ Restart solution
     |       RMS Change                    |     2.14E-03          2.11E-03        |
     |       Weighted Average x            |     6.32E-03          6.34E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
+    |       Weighted Average z            |    -4.46E-15         -4.50E-15        |
     |       Weighted Average z            |     1.27E-15          1.25E-15        |
+    |       Weighted Average z            |     1.45E-15          1.44E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2878,7 +2939,9 @@ Restart solution
     |       RMS Change                    |     6.58E-03          4.78E-03        |
     |       Sum x                         |    -4.24E-01         -4.24E-01        |
     |       Sum y                         |    -9.66E-02         -9.65E-02        |
+    |       Sum z                         |    -5.47E-14         -5.50E-14        |
     |       Sum z                         |    -1.84E-14         -1.87E-14        |
+    |       Sum z                         |    -1.64E-14         -1.67E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2886,7 +2949,9 @@ Restart solution
     |       RMS Change                    |     7.36E-05          7.41E-05        |
     |       Weighted Average x            |     6.32E-03          6.34E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
+    |       Weighted Average z            |    -4.54E-15         -4.59E-15        |
     |       Weighted Average z            |     1.31E-15          1.31E-15        |
+    |       Weighted Average z            |     1.44E-15          1.44E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2900,7 +2965,9 @@ Restart solution
     |       RMS Change                    |     2.38E-04          1.71E-04        |
     |       Sum x                         |    -4.24E-01         -4.24E-01        |
     |       Sum y                         |    -9.66E-02         -9.65E-02        |
+    |       Sum z                         |    -5.41E-14         -5.43E-14        |
     |       Sum z                         |    -1.88E-14         -1.90E-14        |
+    |       Sum z                         |    -1.70E-14         -1.73E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2908,7 +2975,9 @@ Restart solution
     |       RMS Change                    |     3.81E-06          3.99E-06        |
     |       Weighted Average x            |     6.32E-03          6.34E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
+    |       Weighted Average z            |    -4.51E-15         -4.55E-15        |
     |       Weighted Average z            |     1.22E-15          1.22E-15        |
+    |       Weighted Average z            |     1.41E-15          1.41E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2932,7 +3001,9 @@ Restart solution
     |       RMS Change                    |     1.71E-05          1.24E-05        |
     |       Sum x                         |    -4.24E-01         -4.24E-01        |
     |       Sum y                         |    -9.66E-02         -9.65E-02        |
+    |       Sum z                         |    -5.43E-14         -5.44E-14        |
     |       Sum z                         |    -1.85E-14         -1.88E-14        |
+    |       Sum z                         |    -1.70E-14         -1.73E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2940,7 +3011,9 @@ Restart solution
     |       RMS Change                    |     7.44E-01          7.71E-01        |
     |       Weighted Average x            |     9.27E-03          9.27E-03        |
     |       Weighted Average y            |     2.02E-03          2.01E-03        |
+    |       Weighted Average z            |    -4.34E-16         -4.43E-16        |
     |       Weighted Average z            |     4.70E-16          4.67E-16        |
+    |       Weighted Average z            |     1.46E-15          1.49E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2954,7 +3027,9 @@ Restart solution
     |       RMS Change                    |     1.05E-01          7.17E-02        |
     |       Sum x                         |    -4.22E-01         -4.21E-01        |
     |       Sum y                         |    -8.92E-02         -8.91E-02        |
+    |       Sum z                         |    -3.29E-14         -3.30E-14        |
     |       Sum z                         |     4.49E-15          4.29E-15        |
+    |       Sum z                         |     1.47E-14          1.45E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2962,7 +3037,9 @@ Restart solution
     |       RMS Change                    |     1.11E-03          1.18E-03        |
     |       Weighted Average x            |     9.26E-03          9.26E-03        |
     |       Weighted Average y            |     2.02E-03          2.00E-03        |
+    |       Weighted Average z            |    -4.03E-16         -4.23E-16        |
     |       Weighted Average z            |     3.26E-16          3.38E-16        |
+    |       Weighted Average z            |     1.39E-15          1.41E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2976,7 +3053,9 @@ Restart solution
     |       RMS Change                    |     3.38E-03          2.40E-03        |
     |       Sum x                         |    -4.20E-01         -4.20E-01        |
     |       Sum y                         |    -8.88E-02         -8.87E-02        |
+    |       Sum z                         |    -2.93E-14         -2.95E-14        |
     |       Sum z                         |     8.01E-15          7.81E-15        |
+    |       Sum z                         |     1.71E-14          1.69E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -2984,7 +3063,9 @@ Restart solution
     |       RMS Change                    |     2.72E-05          2.79E-05        |
     |       Weighted Average x            |     9.26E-03          9.26E-03        |
     |       Weighted Average y            |     2.02E-03          2.00E-03        |
+    |       Weighted Average z            |    -3.85E-16         -3.88E-16        |
     |       Weighted Average z            |     3.62E-16          3.56E-16        |
+    |       Weighted Average z            |     1.39E-15          1.41E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2998,7 +3079,9 @@ Restart solution
     |       RMS Change                    |     2.46E-04          1.70E-04        |
     |       Sum x                         |    -4.20E-01         -4.19E-01        |
     |       Sum y                         |    -8.88E-02         -8.87E-02        |
+    |       Sum z                         |    -2.92E-14         -2.93E-14        |
     |       Sum z                         |     7.62E-15          7.41E-15        |
+    |       Sum z                         |     1.78E-14          1.76E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -3006,7 +3089,9 @@ Restart solution
     |       RMS Change                    |     2.18E-06          2.29E-06        |
     |       Weighted Average x            |     9.26E-03          9.26E-03        |
     |       Weighted Average y            |     2.02E-03          2.00E-03        |
+    |       Weighted Average z            |    -4.37E-16         -4.47E-16        |
     |       Weighted Average z            |     5.44E-16          5.46E-16        |
+    |       Weighted Average z            |     1.42E-15          1.43E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3030,7 +3115,9 @@ Restart solution
     |       RMS Change                    |     1.33E-05          9.15E-06        |
     |       Sum x                         |    -4.20E-01         -4.19E-01        |
     |       Sum y                         |    -8.88E-02         -8.87E-02        |
+    |       Sum z                         |    -2.95E-14         -2.95E-14        |
     |       Sum z                         |     8.44E-15          8.23E-15        |
+    |       Sum z                         |     1.77E-14          1.75E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -3038,7 +3125,9 @@ Restart solution
     |       RMS Change                    |     7.33E-01          7.62E-01        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.30E-03        |
+    |       Weighted Average z            |     3.18E-15          3.18E-15        |
     |       Weighted Average z            |     6.11E-16          6.85E-16        |
+    |       Weighted Average z            |     2.47E-15          2.56E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3052,7 +3141,9 @@ Restart solution
     |       RMS Change                    |     7.15E-02          5.03E-02        |
     |       Sum x                         |    -4.41E-01         -4.41E-01        |
     |       Sum y                         |    -7.62E-02         -7.62E-02        |
+    |       Sum z                         |    -9.80E-15         -9.91E-15        |
     |       Sum z                         |     2.40E-14          2.38E-14        |
+    |       Sum z                         |     4.47E-14          4.45E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -3060,7 +3151,9 @@ Restart solution
     |       RMS Change                    |     1.62E-03          1.80E-03        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
+    |       Weighted Average z            |     2.58E-15          2.58E-15        |
     |       Weighted Average z            |     5.25E-16          5.86E-16        |
+    |       Weighted Average z            |     2.02E-15          2.10E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3074,7 +3167,9 @@ Restart solution
     |       RMS Change                    |     2.14E-03          1.44E-03        |
     |       Sum x                         |    -4.41E-01         -4.40E-01        |
     |       Sum y                         |    -7.60E-02         -7.59E-02        |
+    |       Sum z                         |    -5.22E-15         -5.34E-15        |
     |       Sum z                         |     2.89E-14          2.87E-14        |
+    |       Sum z                         |     4.89E-14          4.87E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -3082,7 +3177,9 @@ Restart solution
     |       RMS Change                    |     3.90E-05          4.17E-05        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
+    |       Weighted Average z            |     3.00E-15          3.01E-15        |
     |       Weighted Average z            |     6.57E-16          7.12E-16        |
+    |       Weighted Average z            |     2.19E-15          2.27E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3096,7 +3193,9 @@ Restart solution
     |       RMS Change                    |     1.91E-04          1.28E-04        |
     |       Sum x                         |    -4.41E-01         -4.40E-01        |
     |       Sum y                         |    -7.60E-02         -7.59E-02        |
+    |       Sum z                         |    -5.11E-15         -5.23E-15        |
     |       Sum z                         |     2.93E-14          2.91E-14        |
+    |       Sum z                         |     4.93E-14          4.91E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: interface-1            |                                       |
@@ -3104,7 +3203,9 @@ Restart solution
     |       RMS Change                    |     1.45E-06          1.48E-06        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
+    |       Weighted Average z            |     3.14E-15          3.16E-15        |
     |       Weighted Average z            |     9.06E-16          9.58E-16        |
+    |       Weighted Average z            |     2.09E-15          2.16E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3137,12 +3238,23 @@ Restart solution
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
+    | Total Time :                                                    4.35648E+01 |
     | Total Time :                                                    4.34894E+01 |
+    | Total Time :                                                    4.52590E+01 |
     | Coupling Participant Time                                                   |
+    |    Fluid Flow (Fluent) :                                        2.95502E+01 |
+    |    MAPDL Transient :                                            3.15008E+00 |
+    |    Total :                                                      3.27003E+01 |
     |    Fluid Flow (Fluent) :                                        3.18159E+01 |
     |    MAPDL Transient :                                            2.43380E+00 |
     |    Total :                                                      3.42497E+01 |
+    |    Fluid Flow (Fluent) :                                        3.25725E+01 |
+    |    MAPDL Transient :                                            3.44265E+00 |
+    |    Total :                                                      3.60151E+01 |
     | Coupling Engine Time                                                        |
+    |    Solution Control :                                           3.90137E+00 |
+    |    Mesh Import :                                                4.10919E-02 |
+    |    Mapping Setup :                                              7.64470E-03 |
     |    Solution Control :                                           3.64652E+00 |
     |    Mesh Import :                                                3.44727E-02 |
     |    Mapping Setup :                                              7.28290E-03 |
@@ -3151,6 +3263,13 @@ Restart solution
     |    Misc. :                                                      5.53477E+00 |
     |    Total :                                                      9.23968E+00 |
     +=============================================================================+
+    |    Solution Control :                                           3.78808E+00 |
+    |    Mesh Import :                                                4.24202E-02 |
+    |    Mapping Setup :                                              7.81920E-03 |
+    |    Mapping :                                                    4.83540E-03 |
+    |    Numerics :                                                   1.17206E-02 |
+    |    Misc. :                                                      5.38895E+00 |
+    |    Total :                                                      9.24382E+00 |
 
 
 
@@ -3173,18 +3292,21 @@ Stop streaming output from server and shut down this server instance:
 
 
 
+
 .. GENERATED FROM PYTHON SOURCE LINES 333-338
 
 .. note::
-   This `syc` object is now "defunct" and any attempt to
+   This ``syc`` object is now "defunct" and any attempt to
    use it to perform any further actions will yield an error. To do
-   more in the current Python session, create a new syc instance
+   more in the current Python session, create a new ``syc`` instance
    using ``syc = pysystemcoupling.launch()`` again.)
 
 
 .. rst-class:: sphx-glr-timing
 
+   **Total running time of the script:** ( 2 minutes  35.280 seconds)
    **Total running time of the script:** ( 2 minutes  26.962 seconds)
+   **Total running time of the script:** ( 2 minutes  28.706 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_oscillating_plate.py:
