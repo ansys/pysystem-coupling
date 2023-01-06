@@ -19,7 +19,7 @@ jobs:
     name: "Documentation style check"
     runs-on: ubuntu-latest
     steps:
-      - name: "PyAnsys documentation style checks"
+      - name: "PySystemCoupling documentation style checks"
         uses: pyansys/actions/doc-style@v2
         with:
           token: ${{ secrets.GH_TOKEN }}

@@ -5,10 +5,10 @@
 
 Computation times
 =================
-**14:40.129** total execution time for **examples_00-systemcoupling** files:
+**17:06.079** total execution time for **examples_00-systemcoupling** files:
 
 +--------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_00-systemcoupling_parametric_sweep_vel.py` (``parametric_sweep_vel.py``) | 14:40.129 | 0.0 MB |
+| :ref:`sphx_glr_examples_00-systemcoupling_parametric_sweep_vel.py` (``parametric_sweep_vel.py``) | 14:37.373 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py` (``oscillating_plate.py``)       | 00:00.000 | 0.0 MB |
+| :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py` (``oscillating_plate.py``)       | 02:28.706 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------+-----------+--------+

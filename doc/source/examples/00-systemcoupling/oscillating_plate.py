@@ -205,7 +205,7 @@ pprint(setup.get_status_messages())
 # Modify settings
 # ^^^^^^^^^^^^^^^
 #
-# View contents of `solution_control`. Notice that
+# View contents of ``solution_control``. Notice that
 # ``time_step_size`` and ``end_time`` are unset,
 # consistent with what was shown in the status messages.
 # Values shown in the ``print_state`` output as ``<None>``
@@ -332,7 +332,7 @@ syc.exit()
 
 # %%
 # .. note::
-#    This `syc` object is now "defunct" and any attempt to
+#    This ``syc`` object is now "defunct" and any attempt to
 #    use it to perform any further actions will yield an error. To do
-#    more in the current Python session, create a new syc instance
+#    more in the current Python session, create a new ``syc`` instance
 #    using ``syc = pysystemcoupling.launch()`` again.)

@@ -63,7 +63,7 @@ To confirm that there is a functioning connection to the System Coupling server,
 
    syc_session.ping()
 
-``ping`` returns ``True`` if a simple call can succesfully be made on System Coupling's `gRPC` server. Otherwise,
+``ping`` returns ``True`` if a simple call can successfully be made on System Coupling's `gRPC` server. Otherwise,
 the attempt to make the call will raise an exception.
 
 
@@ -111,7 +111,7 @@ However, our ``syc_session`` variable could be reassigned to a new session:
 
 The ``Session`` class supports the Python `context manager protocol`. This means that
 if a ``Session`` is created using a Python ``with`` statement, it will automatically
-be cleaned up --- i.e., ``exit`` called on it --- on leaving the scope of the ``with``.
+be cleaned up --- that is, ``exit`` called on it --- on leaving the scope of the ``with``.
 
 .. code:: python
 

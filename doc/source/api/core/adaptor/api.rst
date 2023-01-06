@@ -186,7 +186,7 @@ the application. For example, ... The ``command_names`` attribute of a settings 
 provides the names of its commands.
 
 If needed, commands can be passed keyword arguments, and the list of valid
-arguments can be accessed using the ``arguments`` attribute.  If an argument is
+arguments can be accessed using the ``arguments`` attribute. If an argument is
 not specified and is optional, its default value is used. Arguments are also settings objects
 and can be either primitive type or container type.
 

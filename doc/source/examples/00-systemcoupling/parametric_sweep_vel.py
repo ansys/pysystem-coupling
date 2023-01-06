@@ -57,8 +57,8 @@ from ansys.systemcoupling.core import examples
 # ``setup_working_directory``
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Set up the working directory with downloaded
-# data files for this example. The Mapdl files will be placed in a
-# sub-directory Mapdl of the working directory and the Fluent files
+# data files for this example. The MAPDL files will be placed in a
+# sub-directory MAPDL of the working directory and the Fluent files
 # in a sub-directory Fluent.
 #
 # The function returns the path of the working directory for later use.

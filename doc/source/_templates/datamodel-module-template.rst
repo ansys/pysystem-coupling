@@ -1,3 +1,5 @@
+.. vale off
+
 {{ name | escape | underline}}
 
 .. automodule:: {{ fullname }}
