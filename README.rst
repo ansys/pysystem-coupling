@@ -124,17 +124,17 @@ The following example shows the set up and solve of the "oscillating plate" tuto
 
    # Use commands to add data transfers
    force_transfer_name = setup.add_data_transfer(
-      interface=interface_name,
-      target_side="One",
-      side_one_variable="FORC",
-      side_two_variable="force",
+       interface=interface_name,
+       target_side="One",
+       side_one_variable="FORC",
+       side_two_variable="force",
    )
 
    disp_transfer_name = setup.add_data_transfer(
-      interface=interface_name,
-      target_side="Two",
-      side_one_variable="INCD",
-      side_two_variable="displacement",
+       interface=interface_name,
+       target_side="Two",
+       side_one_variable="INCD",
+       side_two_variable="displacement",
    )
 
    # Change analysis duration and step size
@@ -169,14 +169,15 @@ should be sufficient to illustrate the differences and connections between the A
 .. code:: python
 
    import ansys.systemcoupling.core as pysystemcoupling
+
    syc = pysystemcoupling.launch()
    native_api = syc._native_api
 
-   native_api.AddParticipant(InputFile = 'mapdl.scp')
-   native_api.AddParticipant(InputFile = 'fluent.scp')
+   native_api.AddParticipant(InputFile="mapdl.scp")
+   native_api.AddParticipant(InputFile="fluent.scp")
 
-   interface = native_api.CouplingInterface['interface-1']
-   interface.Side['One'].CouplingParticipant = 'MAPDL-1'
+   interface = native_api.CouplingInterface["interface-1"]
+   interface.Side["One"].CouplingParticipant = "MAPDL-1"
    ...
 
    native_api.SolutionControl.TimeStepSize = "0.1 [s]"
