@@ -73,7 +73,7 @@ doc = [
 	"ansys-dpf-core",
 ]
 style = [
-	"codespell==2.1.0",
+	"codespell==2.2.2",
 	"flake8==3.9.2",
 ]
 tests = [
