@@ -72,9 +72,7 @@ def _generate_property_list_for_rst(r, data_dict={}):
             # This falls down if all lines are meant to be indented
             # relative to first. Could be addressed by manually splitting first doc
             # line perhaps?
-            inferred_indent = min(
-                _find_indent(line) for line in lines[1:] if line.strip() != ""
-            )
+            inferred_indent = min( _find_indent(line) for line in lines[1:] if line.strip() != "" )
             lines = [lines[0]] + [line[inferred_indent:] for line in lines[1:]]
 
         doc = indent + (f"\n{indent}".join(lines))
