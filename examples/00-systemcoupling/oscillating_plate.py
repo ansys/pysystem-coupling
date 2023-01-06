@@ -331,7 +331,7 @@ syc.exit()
 
 # %%
 # .. note::
-#    This `syc` object is now "defunct" and any attempt to
+#    This ``syc`` object is now "defunct" and any attempt to
 #    use it to perform any further actions will yield an error. To do
-#    more in the current Python session, create a new syc instance
+#    more in the current Python session, create a new ``syc`` instance
 #    using ``syc = pysystemcoupling.launch()`` again.)

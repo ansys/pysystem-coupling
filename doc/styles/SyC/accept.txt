@@ -1,0 +1,24 @@
+[Bb]ooleans
+[Pp]ythonic
+[Pp]ythonically
+Ansys
+ANSYS
+APIs
+command prompt
+Command Prompt
+Docker
+GUI
+hostname
+Linux
+postprocess
+postprocessing
+Postprocessing
+postprocessor
+pyansys
+PyAnsys
+PySystemCoupling
+Python
+Windows
+Windows Subsystem
+Windows Subsystem for Linux
+WSL
