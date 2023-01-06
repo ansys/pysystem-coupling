@@ -21,7 +21,6 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
 
 """
 
-# sphinx_gallery_thumbnail_path = '_static/param_sweep_flow.png'
 
 # %%
 # Perform required imports
@@ -30,6 +29,7 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
 # and PyDPF for this example. In addition, facilities from `matplotlib` and
 # `numpy` are used to produce a simple plot of our results.
 
+# sphinx_gallery_thumbnail_path = '_static/param_sweep_flow.png'
 import os
 
 import matplotlib.pyplot as plt

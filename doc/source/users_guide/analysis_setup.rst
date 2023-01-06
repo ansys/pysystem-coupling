@@ -9,10 +9,10 @@ It assumes that a PySystemCoupling ``Session`` object has been created. This wil
 referred to as ``syc`` in the code snippets.
 
 This section focuses on the ``setup`` section of the API (``syc.setup``), which is concerned with
-defining the analysis in terms of the ?ref:data model.
+defining the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
 
-For the other main areas of the API, See ???Persistence??? for guidance on saving and resuming
-cases, and ???Solution for solution-related operations.
+For the other main areas of the API, See :ref:`ref_syc_persistence` for guidance on saving and resuming
+cases, and :ref:`ref_syc_solution` for solution-related operations.
 
 
 Participant case set-up
@@ -20,7 +20,7 @@ Participant case set-up
 
 Any participant that is involved in a coupled analysis must set up its case to solve its part of
 the coupled physics analysis. Typically, this will very similar to setting up a standalone case
-for that physics type. Each participant will have its own way of specifying the data transfers
+for that solver. Each participant will have its own way of specifying the data transfers
 to and from System Coupling - for example, as fluid boundary conditions in Fluent. Such details
 are beyond the scope of this guide. See the System Coupling documentation for examples that
 include details of setting up the participants' cases.
@@ -199,15 +199,15 @@ name is the value that was returned by ``add_interface``:
     force_transfer_name = setup.add_data_transfer(
         interface=interface_name,
         target_side="One",
-        side_one_variable="FORC",
-        side_two_variable="force"
+        target_variable="FORC",
+        source_variable="force"
     )
 
     displacement_transfer_name = setup.add_data_transfer(
         interface=interface_name,
         target_side="Two",
-        side_one_variable="INCD",
-        side_two_variable="displacement"
+        source_variable="INCD",
+        target_variable="displacement"
     )
 
 The resultant interface state can now be examined:
@@ -314,8 +314,8 @@ Next steps/Additional set up
 ----------------------------
 
 A minimal workflow for a basic analysis setup has been outlined. With this setup,
-the case is ready to be solved. See ??? for details. It might also be a good point to
-save the case or to take a "snapshot". See ??? for details.
+the case is ready to be solved. See :ref:`ref_syc_solution` for details. It might also be a good point to
+save the case or to take a "snapshot". See :ref:`ref_syc_persistence` for details.
 
 Although a complete setup has been defined, there are many optional settings that could be
 applied - for example, to control the frequency with which solution data is saved, or
@@ -324,7 +324,7 @@ to apply advanced settings to control the solution algorithm.
 In addition, there are various further data model object types that can be created to
 introduce more sophisticated features to the analysis, such as expressions and
 reference frames. Such features are beyond the scope of this User Guide but the data
-model content is fully documented in ???API and further guidance is available in the
+model content is fully documented in :ref:`ref_index_api` and further guidance is available in the
 System Coupling documentation.
 
 

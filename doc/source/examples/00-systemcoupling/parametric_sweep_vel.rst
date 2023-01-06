@@ -38,21 +38,7 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
    :width: 400pt
    :align: center
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-26
-
-.. code-block:: default
-
-
-    # sphinx_gallery_thumbnail_path = '_static/param_sweep_flow.png'
-
-
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 27-32
+.. GENERATED FROM PYTHON SOURCE LINES 26-31
 
 Perform required imports
 ------------------------
@@ -60,7 +46,7 @@ In addition to the PySystemCoupling package, we also need to import PyFluent
 and PyDPF for this example. In addition, facilities from `matplotlib` and
 `numpy` are used to produce a simple plot of our results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 32-45
+.. GENERATED FROM PYTHON SOURCE LINES 31-44
 
 .. code-block:: default
 
@@ -362,36 +348,328 @@ the ``plot`` function to generate a plot from the arrays.
 
  .. code-block:: none
 
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+    Done.
+    Multicore processors detected. Processor affinity set!
+
+    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+      Reading mesh ...
+           58065 cells,     1 cell zone  ...
+              58065 hexahedral cells,  zone id: 2
+          187138 faces,     8 face zones ...
+             161252 quadrilateral interior faces,  zone id: 1
+                295 quadrilateral velocity-inlet faces,  zone id: 5
+                295 quadrilateral pressure-outlet faces,  zone id: 6
+                980 quadrilateral wall faces,  zone id: 7
+                985 quadrilateral wall faces,  zone id: 8
+                105 quadrilateral wall faces,  zone id: 9
+              11613 quadrilateral symmetry faces,  zone id: 10
+              11613 quadrilateral symmetry faces,  zone id: 11
+           71280 nodes,     1 node zone  ...
+    Warning: reading 4 partition grid onto 2 compute node machine.
+             Combining every 2 partitions.
+      Done.
+
+
+    Building...
+         mesh
+            distributing mesh
+                    parts..,
+                    faces..,
+                    nodes..,
+                    cells..,
+            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
+         materials,
+         interface,
+         domains,
+            mixture
+         zones,
+            symmetry2
+            symmetry1
+            wall_deforming
+            wall_top
+            wall_bottom
+            interior-part-fluid
+            wall_inlet
+            wall_outlet
+            part-fluid
+         parallel,
+         dynamic zones,
+            wall_deforming
+            wall_top
+            wall_bottom
+            symmetry2
+            symmetry1
+    Done.
+
+    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+           58065 cells,     1 zone  ...
+          187138 faces,     8 zones ...
+           71280 nodes,     1 zone  ...
+      Done.
+    Done.
     Inlet velocity is set to 5.0
     Setting up the coupled analysis
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.05236548595137805
+    Max displacement value = 0.052365485951758946
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+    Done.
+    Multicore processors detected. Processor affinity set!
+
+    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+      Reading mesh ...
+           58065 cells,     1 cell zone  ...
+              58065 hexahedral cells,  zone id: 2
+          187138 faces,     8 face zones ...
+             161252 quadrilateral interior faces,  zone id: 1
+                295 quadrilateral velocity-inlet faces,  zone id: 5
+                295 quadrilateral pressure-outlet faces,  zone id: 6
+                980 quadrilateral wall faces,  zone id: 7
+                985 quadrilateral wall faces,  zone id: 8
+                105 quadrilateral wall faces,  zone id: 9
+              11613 quadrilateral symmetry faces,  zone id: 10
+              11613 quadrilateral symmetry faces,  zone id: 11
+           71280 nodes,     1 node zone  ...
+      Done.
+
+
+    Building...
+         mesh
+            distributing mesh
+                    parts..,
+                    faces..,
+                    nodes..,
+                    cells..,
+            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
+         materials,
+         interface,
+         domains,
+            mixture
+         zones,
+            symmetry2
+            symmetry1
+            wall_deforming
+            wall_top
+            wall_bottom
+            interior-part-fluid
+            wall_inlet
+            wall_outlet
+            part-fluid
+         parallel,
+         dynamic zones,
+            wall_deforming
+            wall_top
+            wall_bottom
+            symmetry2
+            symmetry1
+    Done.
+
+    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+           58065 cells,     1 zone  ...
+          187138 faces,     8 zones ...
+           71280 nodes,     1 zone  ...
+      Done.
+    Done.
     Inlet velocity is set to 10.0
     Setting up the coupled analysis
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.19232826989593016
+    Max displacement value = 0.1923282698976227
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+    Done.
+    Multicore processors detected. Processor affinity set!
+
+    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+      Reading mesh ...
+           58065 cells,     1 cell zone  ...
+              58065 hexahedral cells,  zone id: 2
+          187138 faces,     8 face zones ...
+             161252 quadrilateral interior faces,  zone id: 1
+                295 quadrilateral velocity-inlet faces,  zone id: 5
+                295 quadrilateral pressure-outlet faces,  zone id: 6
+                980 quadrilateral wall faces,  zone id: 7
+                985 quadrilateral wall faces,  zone id: 8
+                105 quadrilateral wall faces,  zone id: 9
+              11613 quadrilateral symmetry faces,  zone id: 10
+              11613 quadrilateral symmetry faces,  zone id: 11
+           71280 nodes,     1 node zone  ...
+      Done.
+
+
+    Building...
+         mesh
+            distributing mesh
+                    parts..,
+                    faces..,
+                    nodes..,
+                    cells..,
+            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
+         materials,
+         interface,
+         domains,
+            mixture
+         zones,
+            symmetry2
+            symmetry1
+            wall_deforming
+            wall_top
+            wall_bottom
+            interior-part-fluid
+            wall_inlet
+            wall_outlet
+            part-fluid
+         parallel,
+         dynamic zones,
+            wall_deforming
+            wall_top
+            wall_bottom
+            symmetry2
+            symmetry1
+    Done.
+
+    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+           58065 cells,     1 zone  ...
+          187138 faces,     8 zones ...
+           71280 nodes,     1 zone  ...
+      Done.
+    Done.
     Inlet velocity is set to 15.0
     Setting up the coupled analysis
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.372767517329969
+    Max displacement value = 0.372767517327828
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+    Done.
+    Multicore processors detected. Processor affinity set!
+
+    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+      Reading mesh ...
+           58065 cells,     1 cell zone  ...
+              58065 hexahedral cells,  zone id: 2
+          187138 faces,     8 face zones ...
+             161252 quadrilateral interior faces,  zone id: 1
+                295 quadrilateral velocity-inlet faces,  zone id: 5
+                295 quadrilateral pressure-outlet faces,  zone id: 6
+                980 quadrilateral wall faces,  zone id: 7
+                985 quadrilateral wall faces,  zone id: 8
+                105 quadrilateral wall faces,  zone id: 9
+              11613 quadrilateral symmetry faces,  zone id: 10
+              11613 quadrilateral symmetry faces,  zone id: 11
+           71280 nodes,     1 node zone  ...
+      Done.
+
+
+    Building...
+         mesh
+            distributing mesh
+                    parts..,
+                    faces..,
+                    nodes..,
+                    cells..,
+            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
+         materials,
+         interface,
+         domains,
+            mixture
+         zones,
+            symmetry2
+            symmetry1
+            wall_deforming
+            wall_top
+            wall_bottom
+            interior-part-fluid
+            wall_inlet
+            wall_outlet
+            part-fluid
+         parallel,
+         dynamic zones,
+            wall_deforming
+            wall_top
+            wall_bottom
+            symmetry2
+            symmetry1
+    Done.
+
+    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+           58065 cells,     1 zone  ...
+          187138 faces,     8 zones ...
+           71280 nodes,     1 zone  ...
+      Done.
+    Done.
     Inlet velocity is set to 20.0
     Setting up the coupled analysis
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.5624418883722584
+    Max displacement value = 0.5624418883916936
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+    Done.
+    Multicore processors detected. Processor affinity set!
+
+    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+      Reading mesh ...
+           58065 cells,     1 cell zone  ...
+              58065 hexahedral cells,  zone id: 2
+          187138 faces,     8 face zones ...
+             161252 quadrilateral interior faces,  zone id: 1
+                295 quadrilateral velocity-inlet faces,  zone id: 5
+                295 quadrilateral pressure-outlet faces,  zone id: 6
+                980 quadrilateral wall faces,  zone id: 7
+                985 quadrilateral wall faces,  zone id: 8
+                105 quadrilateral wall faces,  zone id: 9
+              11613 quadrilateral symmetry faces,  zone id: 10
+              11613 quadrilateral symmetry faces,  zone id: 11
+           71280 nodes,     1 node zone  ...
+      Done.
+
+
+    Building...
+         mesh
+            distributing mesh
+                    parts..,
+                    faces..,
+                    nodes..,
+                    cells..,
+            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
+         materials,
+         interface,
+         domains,
+            mixture
+         zones,
+            symmetry2
+            symmetry1
+            wall_deforming
+            wall_top
+            wall_bottom
+            interior-part-fluid
+            wall_inlet
+            wall_outlet
+            part-fluid
+         parallel,
+         dynamic zones,
+            wall_deforming
+            wall_top
+            wall_bottom
+            symmetry2
+            symmetry1
+    Done.
+
+    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+           58065 cells,     1 zone  ...
+          187138 faces,     8 zones ...
+           71280 nodes,     1 zone  ...
+      Done.
+    Done.
     Inlet velocity is set to 25.0
     Setting up the coupled analysis
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.7212533243400617
+    Max displacement value = 0.7212533243439518
 
 
 
@@ -399,7 +677,7 @@ the ``plot`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 14 minutes  40.129 seconds)
+   **Total running time of the script:** ( 14 minutes  38.303 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:

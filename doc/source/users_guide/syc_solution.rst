@@ -75,9 +75,6 @@ Such advanced usage is not considered further in this User Guide.
 Postprocessing support
 ----------------------
 
-Like System Coupling, PySystemCoupling has no built-in support for postprocessing of
-results data.
-
 The results for the individual participants in the analysis can be
 examined using their respective prostprocessing applications. Consult the relevant
 documentation for details.

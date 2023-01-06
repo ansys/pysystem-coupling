@@ -21,8 +21,12 @@ html_theme = "pyansys_sphinx_theme"
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pyansys-sphinx-theme",
+    "github_url": "https://github.com/pyansys/pysystem-coupling",
     "show_prev_next": False,
+    "show_breadcrumbs": True,
+    "additional_breadcrumbs": [
+        ("PyAnsys", "https://docs.pyansys.com"),
+    ],
 }
 
 # Sphinx extensions
@@ -173,6 +177,8 @@ sphinx_gallery_conf = {
     # "reset_modules_order": "after",
     # "reset_modules": (_stop_fluent_container),
     #"plot_gallery": False,
+    # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
+    "remove_config_comments": True,
 }
 
 
