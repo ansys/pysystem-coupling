@@ -1,9 +1,8 @@
-import grpc
-from grpc_status.rpc_status import from_call
-
 import ansys.api.systemcoupling.v0.error_pb2 as syc_error_pb2
 import ansys.api.systemcoupling.v0.solution_pb2 as solution_pb2
 import ansys.api.systemcoupling.v0.solution_pb2_grpc as solution_pb2_grpc
+import grpc
+from grpc_status.rpc_status import from_call
 
 
 class SolutionService:
