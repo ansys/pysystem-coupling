@@ -59,7 +59,7 @@ as outlined above, because some of the documentation is extracted from these cla
 multiple versions of the API classes can exist, it is necessary to
 set the environment variable ``PYSYC_DOC_BUILD_VERSION`` to tell the documentation build which
 version to use. This *must* be set -- there is no default in this case. This variable should be set to a string that has the same form as the ``<version>`` component
-of the ``api_<version>`` directory (e.g. "23_1").
+of the ``api_<version>`` directory (for example, "23_1").
 
 With this variable set, execute the following commands:
 

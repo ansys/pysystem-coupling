@@ -8,7 +8,7 @@ APIs
 command prompt
 Command Prompt
 cosimulation
-datamodel
+[Dd]atamodel
 Docker
 GUI
 hostname
@@ -27,6 +27,7 @@ PyAnsys
 PySystemCoupling
 Python
 scp
+SCP
 Windows
 Windows Subsystem
 Windows Subsystem for Linux
