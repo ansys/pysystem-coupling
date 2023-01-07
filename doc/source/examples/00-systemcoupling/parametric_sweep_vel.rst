@@ -413,7 +413,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.05236548595137805
+    Max displacement value = 0.05236548595127061
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -477,7 +477,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.19232826989593016
+    Max displacement value = 0.19232826989905066
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -541,7 +541,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.372767517329969
+    Max displacement value = 0.37276751732467445
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -605,7 +605,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.5624418883689476
+    Max displacement value = 0.5624418883792222
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -669,14 +669,15 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.7212533243400617
+    Max displacement value = 0.7212533247191898
+
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 14 minutes  37.373 seconds)
+   **Total running time of the script:** ( 14 minutes  26.143 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
