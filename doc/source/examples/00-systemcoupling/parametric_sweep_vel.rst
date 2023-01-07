@@ -142,7 +142,7 @@ The function returns the path of the working directory for later use.
 ``set_inlet_velocity``
 ~~~~~~~~~~~~~~~~~~~~~~
 Modify the Fluent case to adjust the
-inlet velocity on the `"wall_inlet"` velocity inlet boundary
+inlet velocity on the ``"wall_inlet"`` velocity inlet boundary
 condition. This function will be called with a varying ``inlet_velocity``
 parameter before each call of ``solve_coupled_analysis`` in
 a sequence of analyses.
@@ -413,7 +413,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.05236548595127061
+    Max displacement value = 0.05236548595219041
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -477,7 +477,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.19232826989905066
+    Max displacement value = 0.19232826989181576
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -541,7 +541,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.37276751732467445
+    Max displacement value = 0.372767517327828
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -605,7 +605,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.5624418883792222
+    Max displacement value = 0.5624418883468592
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -669,7 +669,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.7212533247191898
+    Max displacement value = 0.721253324888967
 
 
 
@@ -677,7 +677,7 @@ the ``plot`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 14 minutes  26.143 seconds)
+   **Total running time of the script:** ( 14 minutes  26.942 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:

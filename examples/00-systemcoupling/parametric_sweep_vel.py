@@ -100,7 +100,7 @@ def setup_working_directory():
 # ``set_inlet_velocity``
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Modify the Fluent case to adjust the
-# inlet velocity on the `"wall_inlet"` velocity inlet boundary
+# inlet velocity on the ``"wall_inlet"`` velocity inlet boundary
 # condition. This function will be called with a varying ``inlet_velocity``
 # parameter before each call of ``solve_coupled_analysis`` in
 # a sequence of analyses.
