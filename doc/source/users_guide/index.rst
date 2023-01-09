@@ -7,13 +7,13 @@ This guide provides a general overview of the PySystemCoupling library and its b
 
 Although this guide does provide a brief overview of the main concepts in System Coupling, it is
 not intended to be a comprehensive introduction to cosimulation and the use of System Coupling.
-The focus will be on guiding the use of PySystemCoupling client library to access System
+The focus is on guiding the use of PySystemCoupling client library to access System
 Coupling features.
 
 .. note::
    Users who are licensed to use System Coupling can consult the product documentation for
    a detailed introduction to the product, illustrated with tutorial examples. The
-   steps in the documentation that refer to the Command Line Interface (CLI) will be those
+   steps in the documentation that refer to the Command Line Interface (CLI) are those
    that are most readily translated to the PySystemCoupling environment.
 
 
@@ -64,7 +64,7 @@ To confirm that there is a functioning connection to the System Coupling server,
    syc_session.ping()
 
 ``ping`` returns ``True`` if a simple call can successfully be made on System Coupling's `gRPC` server. Otherwise,
-the attempt to make the call will raise an exception.
+the attempt to make the call raises an exception.
 
 
 Output Streaming
@@ -86,12 +86,12 @@ Output may be turned off again using ``end_output``:
 
 Exiting
 -------
-When finished with a PySystemCoupling session, it is advisable to terminate it cleanly using the
-``exit`` method. If this is not done, the PySystemCoupling library will still attempt to clean
-up active server sessions when the Python environment is exited, but this will naturally be less
+When finished with a PySystemCoupling session, it is advisable to end it cleanly using the
+``exit`` method. If this is not done, the PySystemCoupling library still attempts to clean
+up active server sessions when the Python environment is exited, but this is naturally less
 reliable than a directed exit.
 
-Once ``exit`` has been called on a session object, it will no longer be usable.
+Once ``exit`` has been called on a session object, it is no longer usable.
 
 .. code:: python
 
@@ -100,7 +100,7 @@ Once ``exit`` has been called on a session object, it will no longer be usable.
    # Will raise exception!
    syc_session.ping()
 
-However, our ``syc_session`` variable could be reassigned to a new session:
+However, the ``syc_session`` variable could be reassigned to a new session:
 
 .. code:: python
 
@@ -110,8 +110,8 @@ However, our ``syc_session`` variable could be reassigned to a new session:
    syc_session.ping()
 
 The ``Session`` class supports the Python `context manager protocol`. This means that
-if a ``Session`` is created using a Python ``with`` statement, it will automatically
-be cleaned up --- that is, ``exit`` called on it --- on leaving the scope of the ``with``.
+if a ``Session`` is created using a Python ``with`` statement, it is automatically
+cleaned up --- that is, ``exit`` called on it --- on leaving the scope of the ``with``.
 
 .. code:: python
 

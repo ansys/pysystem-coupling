@@ -4,7 +4,7 @@ System Coupling Data Model
 ==========================
 
 The System Coupling data model is a hierarchical structure, represented in the PySystemCoupling API
-as nested attributes. Ultimately, the nested attributes terminate at primitive values, which are the
+as nested attributes. Ultimately, the nested attributes end at primitive values, which are the
 basic settings defining the set-up. The nested structure allows the data to be organized in a way
 that fits with the underlying concepts of a System Coupling analysis.
 
@@ -57,7 +57,7 @@ For example, to access the ``analysis_control`` object:
    setup = syc_session.setup
    analysis_control = setup.analysis_control
 
-As noted above, the data model objects hold basic settings of different value types.
+As noted, the data model objects hold basic settings of different value types.
 For example, ``analysis_control`` contains a setting ``analysis_type`` of type string. This defines the
 type of analysis to be performed. The valid values are "Steady" and "Transient". The following illustrates
 how the setting may be set and queried:
@@ -80,7 +80,7 @@ Named objects are accessed using syntax like Python dictionary lookups:
 Populating the Data Model
 -------------------------
 
-The examples above assume that the data model is already populated with data, so that the
+The preceding examples assume that the data model is already populated with data, so that the
 objects referenced from the hierarchy already exist. This would be the situation if modifying
 an existing case --- perhaps one that had  previously been set up and saved, and has now been
 re-opened.

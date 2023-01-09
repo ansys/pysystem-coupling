@@ -24,6 +24,8 @@ mode, run:
     python -m pip install --upgrade pip
     pip install -e .
 
+.. _ref_generate_api:
+
 Build the generated API code
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 In the packaged version of PySystemCoupling, Python classes are generated during the
@@ -31,7 +33,7 @@ package build to provide an API to System Coupling facilities. The classes are l
 generated from metadata queried from a running instance of System Coupling.
 
 For local development, you need to perform this additional generation step manually,
-following the installation as described above.
+after the preceding installation steps.
 
 .. code::
 
@@ -55,7 +57,7 @@ former takes priority, and both take priority over ``AWP_ROOT231``.
 Build documentation
 -------------------
 To build the PySystemCoupling documentation locally, the API classes must first have been generated
-as outlined above, because some of the documentation is extracted from these classes. Since
+as outlined in :ref:`ref_generate_api`, because some of the documentation is extracted from these classes. Since
 multiple versions of the API classes can exist, it is necessary to
 set the environment variable ``PYSYC_DOC_BUILD_VERSION`` to tell the documentation build which
 version to use. This *must* be set -- there is no default in this case. This variable should be set to a string that has the same form as the ``<version>`` component
@@ -81,7 +83,7 @@ You can clear all HTML files from the ``_builds/html`` directory with:
 
 Sphinx Gallery examples
 ^^^^^^^^^^^^^^^^^^^^^^^
-By default, the `Sphinx Gallery`` examples are *not* run as part of a documentation build. This is
+By default, the `Sphinx Gallery` examples are *not* run as part of a documentation build. This is
 because realistic runs of System Coupling, involving both System Coupling itself *and* the
 participant solvers, are not currently possible on GitHub. Therefore, the examples are run
 manually from time to time, and the resultant `Sphinx` files are committed to the repository.

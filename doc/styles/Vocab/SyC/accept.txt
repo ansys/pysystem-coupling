@@ -1,3 +1,4 @@
+application
 [Bb]oolean
 [Bb]ooleans
 [Pp]ythonic
@@ -5,6 +6,8 @@
 Ansys
 ANSYS
 APIs
+CLI
+check
 command prompt
 Command Prompt
 cosimulation

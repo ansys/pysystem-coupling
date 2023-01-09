@@ -20,8 +20,8 @@ In the code snippets below, the ``case`` variable is assumed to have been assign
 Saving and opening a case
 -------------------------
 
-Files defining the state of an analysis case are always saved and loaded from a `SyC/` subdirectory and, by default, this will
-exist in the working directory.
+Files defining the state of an analysis case are always saved and loaded from a `SyC/` subdirectory and, by default, this
+exists in the working directory.
 
 .. code:: python
 
@@ -29,8 +29,8 @@ exist in the working directory.
     case.open()
     ...
 
-Opening a case will restore the analysis settings at the time of saving, and
-will load results data if it exists.
+Opening a case restores the analysis settings at the time of saving, and
+loads results data if it exists.
 
 Similarly for saving the current state of a case:
 
@@ -40,11 +40,11 @@ Similarly for saving the current state of a case:
     case.save()
     ...
 
-When saving a case, the `SyC` directory will be created if it does not already exist.
+When saving a case, the `SyC` directory is created if it does not already exist.
 Settings data is saved in a file called `settings.h5`.
 
-If the case has been successfully solved, one or more `restart` files --- files with names of the form
-*Restart_step<n>* or *Restart_iter<n>* --- will exist, depending on whether the analysis
+If the case has been successfully solved, `restart` files exist (these are files with names of the form
+*Restart_step<n>* or *Restart_iter<n>*), depending on whether the analysis
 is a transient or steady cases. The restart files allow the
 results to be loaded at any point partway through the analysis for which a restart
 file exists. For example, if results were saved at the end of step 2, then the ``coupling_step``
@@ -59,8 +59,8 @@ The frequency with which restart files are written during a solution is controll
 the setting ``setup.output_control.option``.
 
 .. note::
-    Opening a case at a restart point that is not the final step/iteration will result
-    in *later* restart files being deleted. Typically, the reason for opening at an
+    Opening a case at a restart point that is not the final step/iteration causes
+    *later* restart files to be deleted. Typically, the reason for opening at an
     earlier point is to re-run the analysis from that point. If it is important to
     save all of the results, the :ref:`ref_snapshots` facility may be used.
 

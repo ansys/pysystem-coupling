@@ -33,8 +33,8 @@ System Coupling capabilities include the ability to:
 
 What is PySystemCoupling?
 =========================
-**PySystemCoupling** is part of the `PyAnsys <https://docs.pyansys.com>`_ ecosystem. It lets you 
-use System Coupling within or alongside any other Python environment, whether in conjunction 
+**PySystemCoupling** is part of the `PyAnsys <https://docs.pyansys.com>`_ ecosystem. It lets you
+use System Coupling within or alongside any other Python environment, whether in conjunction
 with other Ansys Python libraries and packages or with other external Python products.
 
 PySystemCoupling implements a client-server architecture. Internally, it uses
@@ -52,10 +52,10 @@ License
 PySystemCoupling is licensed under the MIT license.
 
 This module makes no commercial claim over Ansys whatsoever. PySystemCoupling extends
-the functionality of Ansys System Coupling by adding an additional Python interface to
+the capabilities of Ansys System Coupling by adding an additional Python interface to
 System Coupling without changing the core behavior or license of the original
 software. The use of the interactive control of PySystemCoupling requires a legally
-licensed local copy of System Coupling. 
+licensed local copy of System Coupling.
 
 .. TODO Add the appropriate link when available.
 
