@@ -5,10 +5,9 @@ Setting Up An Analysis
 ======================
 
 This section outlines the basic workflow for setting up a coupled analysis from scratch.
-It assumes that a PySystemCoupling ``Session`` object has been created. This is be
-referred to as ``syc`` in the code snippets below.
+It assumes that a PySystemCoupling ``Session`` object (``syc_session``) has been created.
 
-This section focuses on the ``setup`` section of the API (``syc.setup``), which is concerned with
+This section focuses on the ``setup`` section of the API (``syc_session.setup``), which is concerned with
 defining the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
 
 For the other main areas of the API, See :ref:`ref_syc_persistence` for guidance on saving and resuming

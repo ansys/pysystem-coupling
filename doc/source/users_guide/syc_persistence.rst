@@ -14,7 +14,7 @@ In the code snippets below, the ``case`` variable is assumed to have been assign
 
 .. code:: python
 
-    case = syc.case
+    case = syc_session.case
 
 
 Saving and opening a case
