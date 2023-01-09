@@ -134,21 +134,13 @@ setup.coupling_participant.keys()
 # %%
 # Create interfaces and data transfers by specifying participant regions
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# `Note`: instead of direct datamodel assignment, the command
-# ``setup.add_interface(...)`` could have been used instead.
-# This would have been closer to the original tutorial and is usually the recommended
-# approach. However, the following provides
-# an illustration of creating a datamodel object directly via the
-# PySystemCoupling API.
+# Call the appropriate commands to create an interface, and force and
+# displacement data transfers.
 
-interface_name = "interface-1"
-interface = setup.coupling_interface.create(interface_name)
-interface.side["One"].coupling_participant = mapdl_part_name
-interface.side["One"].region_list = ["FSIN_1"]
-interface.side["Two"].coupling_participant = fluent_part_name
-interface.side["Two"].region_list = ["wall_deforming"]
+interface_name = setup.add_interface(
+    side_one_participant = mapdl_part_name, side_one_regions = ['FSIN_1'],
+    side_two_participant = fluent_part_name, side_two_regions = ['wall_deforming'])
 
-# Use commands to add data transfers
 force_transfer_name = setup.add_data_transfer(
     interface=interface_name,
     target_side="One",
@@ -166,11 +158,11 @@ disp_transfer_name = setup.add_data_transfer(
 # %%
 # Verify creation of interface and data transfers
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-# Coupling interface exists:
+# Confirm the coupling interface exists:
 setup.coupling_interface.keys()
 
 # %%
-# Coupling interface state. Note the "FORC" and "displacement"
+# Examine the coupling interface state. Note the ``"FORC"`` and ``"displacement"``
 # ``data_transfer`` child objects:
 setup.coupling_interface[interface_name].print_state()
 
@@ -299,14 +291,14 @@ setup.solution_control.print_state()
 # Additional settings changes
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
-# Examine "Force" data transfer.
+# Examine ``"Force"`` data transfer.
 force_transfer = setup.coupling_interface[interface_name].data_transfer[
     force_transfer_name
 ]
 force_transfer.print_state()
 
 # %%
-# Change a setting in the "Force" data transfer, and increase the
+# Change a setting in the ``"Force"`` data transfer, and increase the
 # minimum iterations value in ``solutions_control`` from its default
 # value of 1.
 force_transfer.convergence_target = 0.001
