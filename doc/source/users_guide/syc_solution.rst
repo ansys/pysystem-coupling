@@ -5,7 +5,7 @@ Solving An Analysis
 ===================
 
 As in :ref:`ref_syc_analysis_setup`, a PySystemCoupling ``Session`` object is assumed to have
-been created and will be referred to as ``syc_session`` in the code snippets.
+been created and is referred to as ``syc_session`` in the code snippets.
 
 This section focuses on the ``solution`` part of the API (``syc_session.solution``), which provides
 operations associated with solving an analysis and examining results data.

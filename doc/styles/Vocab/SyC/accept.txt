@@ -7,7 +7,7 @@ Ansys
 ANSYS
 APIs
 CLI
-check
+[Cc]heck
 command prompt
 Command Prompt
 cosimulation
