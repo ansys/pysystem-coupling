@@ -1,0 +1,37 @@
+application
+[Bb]oolean
+[Bb]ooleans
+[Pp]ythonic
+[Pp]ythonically
+Ansys
+ANSYS
+APIs
+CLI
+[Cc]heck
+command prompt
+Command Prompt
+cosimulation
+[Dd]atamodel
+Docker
+GUI
+hostname
+Linux
+lookups
+MAPDL
+matplotlib
+multiphysics
+numpy
+postprocess
+postprocessing
+Postprocessing
+postprocessor
+pyansys
+PyAnsys
+PySystemCoupling
+Python
+scp
+SCP
+Windows
+Windows Subsystem
+Windows Subsystem for Linux
+WSL

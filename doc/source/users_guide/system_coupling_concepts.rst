@@ -42,5 +42,5 @@ The main concepts therefore are:
     directions on the interface.
 
 Setting up a coupled analysis involves populating a hierarchical `data model` of settings. This data
-model closely follows the concepts that are outlined above. See :ref:`ref_syc_datamodel` for more
+model closely follows the concepts that have been outlined here. See :ref:`ref_syc_datamodel` for more
 information.

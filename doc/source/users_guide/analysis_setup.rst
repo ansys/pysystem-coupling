@@ -5,10 +5,9 @@ Setting Up An Analysis
 ======================
 
 This section outlines the basic workflow for setting up a coupled analysis from scratch.
-It assumes that a PySystemCoupling ``Session`` object has been created. This will be
-referred to as ``syc`` in the code snippets.
+It assumes that a PySystemCoupling ``Session`` object (``syc_session``) has been created.
 
-This section focuses on the ``setup`` section of the API (``syc.setup``), which is concerned with
+This section focuses on the ``setup`` section of the API (``syc_session.setup``), which is concerned with
 defining the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
 
 For the other main areas of the API, See :ref:`ref_syc_persistence` for guidance on saving and resuming
@@ -19,8 +18,8 @@ Participant case set-up
 -----------------------
 
 Any participant that is involved in a coupled analysis must set up its case to solve its part of
-the coupled physics analysis. Typically, this will very similar to setting up a standalone case
-for that solver. Each participant will have its own way of specifying the data transfers
+the coupled physics analysis. Typically, this is very similar to setting up a standalone case
+for that solver. Each participant has its own way of specifying the data transfers
 to and from System Coupling - for example, as fluid boundary conditions in Fluent. Such details
 are beyond the scope of this guide. See the System Coupling documentation for examples that
 include details of setting up the participants' cases.
@@ -43,7 +42,7 @@ such as the variables it exposes and the regions on which they are available.
     'MAPDL-2'
 
 Note that the name of the created ``coupling_participant`` object is returned in each case. This
-may be captured in a variable to facilitiate subsequent access to the object:
+may be captured in a variable to facilitate subsequent access to the object:
 
 .. code:: python
 
@@ -52,8 +51,8 @@ may be captured in a variable to facilitiate subsequent access to the object:
 
 The ``add_participant`` commands not only create the participant object in question but
 also help to initialise some other aspects of the data model state. After adding the `Fluent`
-and `MAPDL` participants as above, the ``analysis_control``, ``solution_control`` and
-``output_control`` objects will also have been created with reasonable defaults. See the
+and `MAPDL` participants as described, the ``analysis_control``, ``solution_control`` and
+``output_control`` objects exist, having been created with reasonable defaults. See the
 output from ``print_state`` below. (Note that some details have been omitted from the output
 shown, as indicated by ``...``.)
 
@@ -134,10 +133,10 @@ shown, as indicated by ``...``.)
 Missing/unset values
 ^^^^^^^^^^^^^^^^^^^^
 
-In the ``print_state`` output above, it can be seen that most settings have been defaulted
+In the preceding ``print_state`` output, it can be seen that most settings have been defaulted
 to some value. `<None>` is used in this output to indicate "unset" values. In some
 settings in the data model, "None" is a legitimate string value, so the `<None>`
-form is used in the ``print_state`` output for unset values in order to avoid
+form is used in the ``print_state`` output for unset values to avoid
 ambiguity. For example, the default value of
 ``analysis_control.global_stabilization.option`` is the string ``"None"``, which is one
 of the valid options for this setting.
@@ -146,11 +145,11 @@ If queried in Python, an `unset` setting holds
 the Python ``None`` object or, if a list-valued setting, the empty list, ``[]``.
 
 The important missing values in the set-up in its current state are those in ``solution_control``.
-These will be addressed later as these missing values are considered to be errors in the set up,
-and its solution will be blocked unless they are provided.
+This is addressed later as these missing values are considered to be errors in the set up,
+and its solution is blocked unless the values are provided.
 
 There are some other settings in the scope of the ``coupling_participant`` objects
-that are indicated as "unset" (i.e., `<None>`) in the ``print_state`` output). However,
+that are indicated as "unset" (that is, `<None>`) in the ``print_state`` output). However,
 these are not considered to be missing values nor to indicate any
 kind of error in the set up, but rather are more specialized optional settings that have not
 been provided in the relevant input files. Generally, ``coupling_participant`` state can be
@@ -161,7 +160,7 @@ Create interfaces
 
 Each coupled analysis must have at least one coupling interface. Coupling interfaces must be added to
 the analysis individually. When adding a coupling interface, you must specify the participant name
-and region(s) to be associated with each side of the coupling interface.
+and the regions to be associated with each side of the coupling interface.
 
 Interface names must be unique within the coupled analysis. When coupling interfaces are added,
 they are assigned default names according to the convention "CouplingInterface#", where "#"
@@ -179,7 +178,7 @@ To add an interface to the analysis, use the ``add_interface`` command:
         side_two_regions=["wall_deforming"]
     )
 
-``add_interface`` returns the name of the interface created. Note in the above that the name
+``add_interface`` returns the name of the interface created. Note that the name
 has been saved in a variable for later use.
 
 Create data transfers
@@ -269,7 +268,7 @@ The setup is essentially complete at this point. However, as mentioned earlier, 
 remain some missing settings. If you were to try to solve the analysis at this
 point, it would fail immediately with a raised exception because of the unset values.
 
-Call ``get_status_messages`` to query for any errors in the setup. This will also return
+Call ``get_status_messages`` to query for any errors in the setup. This also returns
 any current warning and informational messages (as well as any active settings that are
 at "Alpha" or "Beta" level).
 
@@ -291,8 +290,8 @@ and this can be used to filter the message list:
 .. note::
 
     The "path" field of the message dictionary indicates the location in the data model
-    to which the message pertains. In the above, this points to the ``solution_control``
-    object, but the the specific settings in error are indicated in the message itself. However,
+    to which the message pertains. In the preceding output, this points to the ``solution_control``
+    object, but the specific settings in error are indicated in the message itself. However,
     note that setting names referenced in the "message" text ("TimeStepSize" and "EndTime")
     are in the form that is used in System Coupling's native API. This reflects the
     current way that ``get_status_messages`` is exposed into PySystemCoupling. This

@@ -42,9 +42,9 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
 
 Perform required imports
 ------------------------
-In addition to the PySystemCoupling package, we also need to import PyFluent
-and PyDPF for this example. In addition, facilities from `matplotlib` and
-`numpy` are used to produce a simple plot of our results.
+As well as the PySystemCoupling package, PyFluent and PyDPF also need
+to be imported for this example. In addition, facilities from ``matplotlib`` and
+``numpy`` are used to produce a simple plot of the results.
 
 .. GENERATED FROM PYTHON SOURCE LINES 31-44
 
@@ -79,15 +79,15 @@ need to be performed. It makes particular sense to do this for the
 main task of running a coupled analysis as that needs to be repeated
 for multiple values of a single input parameter. This is encapsulated
 in ``get_max_displacement``. In turn, this is broken into further
-functions that represent its main steps. We also define a function that prepares our
+functions that represent its main steps. Also, define a function that prepares the
 working directory (``setup_working_directory``) and one that plots the final
 results (``plot``).
 
 ``setup_working_directory``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Set up the working directory with downloaded
-data files for this example. The Mapdl files will be placed in a
-sub-directory Mapdl of the working directory and the Fluent files
+data files for this example. The MAPDL files are placed in a
+sub-directory MAPDL of the working directory and the Fluent files
 in a sub-directory Fluent.
 
 The function returns the path of the working directory for later use.
@@ -142,8 +142,8 @@ The function returns the path of the working directory for later use.
 ``set_inlet_velocity``
 ~~~~~~~~~~~~~~~~~~~~~~
 Modify the Fluent case to adjust the
-inlet velocity on the `"wall_inlet"` velocity inlet boundary
-condition. This function will be called with a varying ``inlet_velocity``
+inlet velocity on the ``"wall_inlet"`` velocity inlet boundary
+condition. This function is called with a varying ``inlet_velocity``
 parameter before each call of ``solve_coupled_analysis`` in
 a sequence of analyses.
 
@@ -260,7 +260,7 @@ value in the solution.
 
 ``get_max_displacement``
 ~~~~~~~~~~~~~~~~~~~~~~~~
-Use the functions defined above to:
+Use the previously defined functions to:
 
 - Modify the Fluent input file to apply the provided ``inlet_velocity`` setting.
 - Run the coupled analysis based on that setting.
@@ -318,7 +318,7 @@ Run the analyses
 Use the ``get_max_displacement`` function sequentially, with input
 velocity values provided by an initialized ``x`` array.
 The results of the ``get_max_displacement`` calls are used to fill in the
-corresponding values of the ``y`` array. Finally, we can call
+corresponding values of the ``y`` array. Finally, call
 the ``plot`` function to generate a plot from the arrays.
 
 .. GENERATED FROM PYTHON SOURCE LINES 216-226
@@ -413,7 +413,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.052365485951758946
+    Max displacement value = 0.05236548595237256
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -477,7 +477,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.1923282698976227
+    Max displacement value = 0.19232826989695678
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -541,7 +541,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.372767517327828
+    Max displacement value = 0.3727675173293116
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -605,7 +605,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.5624418883916936
+    Max displacement value = 0.5624418884027582
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
@@ -669,7 +669,7 @@ the ``plot`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while...
     ...done!
     Extracting max displacement value
-    Max displacement value = 0.7212533243439518
+    Max displacement value = 0.7212533243298336
 
 
 
@@ -677,7 +677,7 @@ the ``plot`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 14 minutes  38.303 seconds)
+   **Total running time of the script:** ( 14 minutes  53.523 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:

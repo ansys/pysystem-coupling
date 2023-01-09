@@ -5,7 +5,7 @@ Solving An Analysis
 ===================
 
 As in :ref:`ref_syc_analysis_setup`, a PySystemCoupling ``Session`` object is assumed to have
-been created and will be referred to as ``syc_session`` in the code snippets.
+been created and is referred to as ``syc_session`` in the code snippets.
 
 This section focuses on the ``solution`` part of the API (``syc_session.solution``), which provides
 operations associated with solving an analysis and examining results data.
@@ -15,7 +15,7 @@ operations associated with solving an analysis and examining results data.
 
 If an analysis has been set up and has no errors, a solution may be attempted simply by
 calling ``solve``. If output streaming is not already turned on, it can be
-particularly useful to do this before solving in order to track the solution's progress via
+particularly useful to do this before solving to track the solution's progress via
 the solver transcript output.
 
 .. code:: python
@@ -24,12 +24,12 @@ the solver transcript output.
     syc_session.solution.solve()
 
 Currently, all commands in the PySystemCoupling API are executed synchronously, including ``solve``.
-This is a reflection of the underlying functionality of System Coupling.
+This is a reflection of how the underlying operations currently work in System Coupling.
 
 Sometimes, because ``solve`` tends to be a long running operation, it can be useful to run it
-aynchronously in the Python environment. This is not supported explicitly because
-in the current version of the API, there is not protection against trying to make calls
-concurrently. However, ``solve`` can be called asynchronous by "manual" coding, using Python
+asynchronously in the Python environment. This is not supported explicitly because
+in the current version of the API, there is no protection against trying to make calls
+concurrently. However, ``solve`` can be called asynchronously by "manual" coding, using Python
 threads:
 
 .. code:: python
@@ -48,12 +48,12 @@ threads:
     solve_thread.join()
 
 The majority of the session's API should be avoided while the thread is active.
-An exception is that it is possible to interrupt or abort a solve.
+An exception is that it is possible to interrupt or force the end of a solve.
 
 Interrupting and aborting a solve
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can interrupt or abort a solve using the ``solution.interrupt()`` and ``solution.abort()``
+You can interrupt or force the end of a solve using the ``solution.interrupt()`` and ``solution.abort()``
 calls. These are unusual PySystemCoupling calls in that they *must* be called in a different thread from the one
 in which ``solve`` is executing.
 
@@ -76,11 +76,11 @@ Postprocessing support
 ----------------------
 
 The results for the individual participants in the analysis can be
-examined using their respective prostprocessing applications. Consult the relevant
+examined using their respective postprocessing applications. Consult the relevant
 documentation for details.
 
-For System Coupling-specific results, data can be writting in EnSight format, so that
-EnSight can be used for visualization, animation and postprocessing. PySystemCoupling
+For System Coupling-specific results, data can be written in EnSight format, so that
+EnSight can be used for visualization, animation, and postprocessing. PySystemCoupling
 also supports the writing of some convergence diagnostics in CSV format.
 
 Generating EnSight data

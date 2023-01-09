@@ -25,9 +25,9 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
 # %%
 # Perform required imports
 # ------------------------
-# In addition to the PySystemCoupling package, we also need to import PyFluent
-# and PyDPF for this example. In addition, facilities from `matplotlib` and
-# `numpy` are used to produce a simple plot of our results.
+# As well as the PySystemCoupling package, PyFluent and PyDPF also need
+# to be imported for this example. In addition, facilities from ``matplotlib`` and
+# ``numpy`` are used to produce a simple plot of the results.
 
 # sphinx_gallery_thumbnail_path = '_static/param_sweep_flow.png'
 import os
@@ -50,15 +50,15 @@ from ansys.systemcoupling.core import examples
 # main task of running a coupled analysis as that needs to be repeated
 # for multiple values of a single input parameter. This is encapsulated
 # in ``get_max_displacement``. In turn, this is broken into further
-# functions that represent its main steps. We also define a function that prepares our
+# functions that represent its main steps. Also, define a function that prepares the
 # working directory (``setup_working_directory``) and one that plots the final
 # results (``plot``).
 #
 # ``setup_working_directory``
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Set up the working directory with downloaded
-# data files for this example. The Mapdl files will be placed in a
-# sub-directory Mapdl of the working directory and the Fluent files
+# data files for this example. The MAPDL files are placed in a
+# sub-directory MAPDL of the working directory and the Fluent files
 # in a sub-directory Fluent.
 #
 # The function returns the path of the working directory for later use.
@@ -100,8 +100,8 @@ def setup_working_directory():
 # ``set_inlet_velocity``
 # ~~~~~~~~~~~~~~~~~~~~~~
 # Modify the Fluent case to adjust the
-# inlet velocity on the `"wall_inlet"` velocity inlet boundary
-# condition. This function will be called with a varying ``inlet_velocity``
+# inlet velocity on the ``"wall_inlet"`` velocity inlet boundary
+# condition. This function is called with a varying ``inlet_velocity``
 # parameter before each call of ``solve_coupled_analysis`` in
 # a sequence of analyses.
 
@@ -179,7 +179,7 @@ def extract_max_displacement(working_dir):
 # %%
 # ``get_max_displacement``
 # ~~~~~~~~~~~~~~~~~~~~~~~~
-# Use the functions defined above to:
+# Use the previously defined functions to:
 #
 # - Modify the Fluent input file to apply the provided ``inlet_velocity`` setting.
 # - Run the coupled analysis based on that setting.
@@ -211,7 +211,7 @@ def plot(working_dir, x, y):
 # Use the ``get_max_displacement`` function sequentially, with input
 # velocity values provided by an initialized ``x`` array.
 # The results of the ``get_max_displacement`` calls are used to fill in the
-# corresponding values of the ``y`` array. Finally, we can call
+# corresponding values of the ``y`` array. Finally, call
 # the ``plot`` function to generate a plot from the arrays.
 
 x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])

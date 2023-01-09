@@ -17,7 +17,7 @@ data model objects and settings, the expected - and more convenient - approach i
 various commands that are provided to set up the main objects. Direct data model assignment
 should then be used for fine adjustments to the setup.
 
-The API implementation is built on a number of generic objects, which will be briefly described below.
+The API implementation is built on a number of generic objects, which are briefly described below.
 
 
 Relationship with "Native" System Coupling API
@@ -67,7 +67,7 @@ The key differences are as follows:
       print(root.ExecutionControl.Option)
 
 * In PySystemCoupling, the setup data model may be manipulated in essentially the same way.
-  As noted above, the setup commands are exposed from the
+  As noted, the setup commands are exposed from the
   :meth:`setup<Session.setup>` attribute of
   :class:`Session<Session>`, and this attribute also
   plays the role of ``DatamodelRoot()`` as an entry point to accessing
@@ -91,7 +91,7 @@ System Coupling script into the PySystemCoupling environment, or have a
 specific need to access a feature not currently exposed in PySystemCoupling,
 a `back door`, more direct, access to the native form of the API is offered by the
 :ref:`_native_api<ref_native_api_property>` attribute of the :class:`Session<Session>` class.
-An existing script will still need
+An existing script still requires
 some adjustment as the calls have to be via the ``_native_api`` attribute rather
 than as global commands as in a System Coupling script.
 
@@ -162,8 +162,8 @@ is a ``Container``.
 Setting and Modifying State
 ---------------------------
 
-The state of any container object can be accessed by "calling" it and
-this will return the state of its properties and any children as a nested dictionary.
+The state of any container object can be accessed by "calling" it, and the call returns
+the state of its properties and any children as a nested dictionary.
 
 The state of a container can be modified by assigning the corresponding attribute
 in its parent object. This assignment could be done at any level. The assigned
@@ -182,11 +182,11 @@ Commands
 --------
 
 Commands are methods of settings objects that are used to modify the state of
-the application. For example, ... The ``command_names`` attribute of a settings object
+the application. The ``command_names`` attribute of a settings object
 provides the names of its commands.
 
 If needed, commands can be passed keyword arguments, and the list of valid
-arguments can be accessed using the ``arguments`` attribute.  If an argument is
+arguments can be accessed using the ``arguments`` attribute. If an argument is
 not specified and is optional, its default value is used. Arguments are also settings objects
 and can be either primitive type or container type.
 

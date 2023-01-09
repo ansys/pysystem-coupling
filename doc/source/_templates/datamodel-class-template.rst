@@ -1,5 +1,7 @@
 .. _dm_{{objname}}:
 
+.. vale off
+
 {{ fullname | escape | underline}}
 
 .. currentmodule:: {{ module }}

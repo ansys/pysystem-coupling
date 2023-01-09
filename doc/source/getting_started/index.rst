@@ -3,7 +3,7 @@
 Getting started
 ###############
 To run PySystemCoupling, you must have a local copy of Ansys System Coupling.
-Although System Coupling itself does not need a license, you need licenses 
+Although System Coupling itself does not need a license, you need licenses
 for all Ansys produces involved in your coupled analysis.
 
 PySystemCoupling supports Ansys System Coupling versions 2023 R1 or newer.
@@ -11,10 +11,10 @@ PySystemCoupling supports Ansys System Coupling versions 2023 R1 or newer.
 For more information on getting a licensed copy of Ansys products, visit the `Ansys <https://www.ansys.com/>`_ website.
 
 
-Installating PySystemCoupling
-=============================
+Installing PySystemCoupling
+===========================
 
-Installing the package 
+Installing the package
 ----------------------
 The ``ansys-systemcoupling-core`` package currently supports Python 3.7 through
 Python 3.10 on Windows and Linux. (**THIS NEEDS TO BE VERFIIED!**)
