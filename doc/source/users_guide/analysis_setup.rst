@@ -1,40 +1,36 @@
 .. _ref_syc_analysis_setup:
 
-
-Setting Up An Analysis
+Setting up an analysis
 ======================
 
 This section outlines the basic workflow for setting up a coupled analysis from scratch.
 It assumes that a PySystemCoupling ``Session`` object (``syc_session``) has been created.
 
-This section focuses on the ``setup`` section of the API (``syc_session.setup``), which is concerned with
-defining the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
+This section focuses on the ``setup`` section of the API (``syc_session.setup``), which is concerned with defining the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
 
-For the other main areas of the API, See :ref:`ref_syc_persistence` for guidance on saving and resuming
-cases, and :ref:`ref_syc_solution` for solution-related operations.
+For information on the other main areas of the API, see :ref:`ref_syc_persistence` for guidance on saving and resuming cases and :ref:`ref_syc_solution` for solution-related operations.
 
 
-Participant case set-up
+Participant case setup
 -----------------------
 
 Any participant that is involved in a coupled analysis must set up its case to solve its part of
 the coupled physics analysis. Typically, this is very similar to setting up a standalone case
 for that solver. Each participant has its own way of specifying the data transfers
-to and from System Coupling - for example, as fluid boundary conditions in Fluent. Such details
-are beyond the scope of this guide. See the System Coupling documentation for examples that
-include details of setting up the participants' cases.
+to and from System Coupling --- for example, as fluid boundary conditions in Fluent. 
+
+Such details are beyond the scope of this guide. For examples that include details of setting up the participant cases, see the System Coupling documentation.
 
 
-Add participants
-----------------
+Adding participants
+--------------------
 
 Use the ``add_participant`` command to define the information about the participants involved
 in the analysis.
 
-In its most common usage form, this command accepts a file containing essential data about a participant,
-such as the variables it exposes and the regions on which they are available.
+In its most common usage form, this command accepts a file containing essential data about a participant, such as the variables it exposes and the regions on which they are available.
 
-.. code::
+.. code-block:: python
 
     >>> setup.add_participant(input_file="fluent.scp")
     'FLUENT-1'
@@ -44,19 +40,19 @@ such as the variables it exposes and the regions on which they are available.
 Note that the name of the created ``coupling_participant`` object is returned in each case. This
 may be captured in a variable to facilitate subsequent access to the object:
 
-.. code:: python
+.. code-block:: python
 
     fluent_part = setup.add_participant(input_file="fluent.scp")
     assert setup.coupling_participant[fluent_part].participant_type == "FLUENT"
 
 The ``add_participant`` commands not only create the participant object in question but
-also help to initialise some other aspects of the data model state. After adding the `Fluent`
-and `MAPDL` participants as described, the ``analysis_control``, ``solution_control`` and
+also help to initialise some other aspects of the data model state. After adding the Fluent
+and MAPDL participants as described, the ``analysis_control``, ``solution_control`` and
 ``output_control`` objects exist, having been created with reasonable defaults. See the
 output from ``print_state`` below. (Note that some details have been omitted from the output
 shown, as indicated by ``...``.)
 
-.. code::
+.. code-block:: python
 
     >>> setup.print_state()
 
@@ -131,7 +127,7 @@ shown, as indicated by ``...``.)
         ...
 
 Missing/unset values
-^^^^^^^^^^^^^^^^^^^^
+--------------------
 
 In the preceding ``print_state`` output, it can be seen that most settings have been defaulted
 to some value. `<None>` is used in this output to indicate "unset" values. In some
@@ -144,28 +140,21 @@ of the valid options for this setting.
 If queried in Python, an `unset` setting holds
 the Python ``None`` object or, if a list-valued setting, the empty list, ``[]``.
 
-The important missing values in the set-up in its current state are those in ``solution_control``.
-This is addressed later as these missing values are considered to be errors in the set up,
+The important missing values in the setup in its current state are those in ``solution_control``.
+These are addressed later, as these missing values are considered to be errors in the setup
 and its solution is blocked unless the values are provided.
 
-There are some other settings in the scope of the ``coupling_participant`` objects
-that are indicated as "unset" (that is, `<None>`) in the ``print_state`` output). However,
-these are not considered to be missing values nor to indicate any
-kind of error in the set up, but rather are more specialized optional settings that have not
-been provided in the relevant input files. Generally, ``coupling_participant`` state can be
-considered to be "read-only" once it has been created, and further edits should not be necessary.
+There are some other settings in the scope of the ``coupling_participant`` objects that are indicated as "unset" (that is, `<None>`) in the ``print_state`` output). However, these are not considered to be missing values nor to indicate any kind of error in the set up, but rather are more specialized optional settings that have not been provided in the relevant input files. Generally, the ``coupling_participant`` state can be considered to be read-only once it has been created, and further edits should not be necessary.
 
-Create interfaces
------------------
+Creating interfaces
+-------------------
 
-Each coupled analysis must have at least one coupling interface. Coupling interfaces must be added to
-the analysis individually. When adding a coupling interface, you must specify the participant name
-and the regions to be associated with each side of the coupling interface.
+Each coupled analysis must have at least one coupling interface. Coupling interfaces must be added to the analysis individually. When adding a coupling interface, you must specify the participant name and the regions to be associated with each side of the coupling interface.
 
 Interface names must be unique within the coupled analysis. When coupling interfaces are added,
-they are assigned default names according to the convention "CouplingInterface#", where "#"
+they are assigned default names according to the convention ``CouplingInterface#``", where ``#``
 indicates the order in which the interfaces were created. For example, if three interfaces are
-created, they are named "CouplingInterface1", "CouplingInterface2", and "CouplingInterface3".
+created, they are named ``CouplingInterface1``, ``CouplingInterface2``, and ``CouplingInterface3``.
 
 To add an interface to the analysis, use the ``add_interface`` command:
 
@@ -178,20 +167,17 @@ To add an interface to the analysis, use the ``add_interface`` command:
         side_two_regions=["wall_deforming"]
     )
 
-``add_interface`` returns the name of the interface created. Note that the name
+The ``add_interface`` command returns the name of the interface created. Note that the name
 has been saved in a variable for later use.
 
 Create data transfers
-^^^^^^^^^^^^^^^^^^^^^
+---------------------
 
-Each interface must contain at least one data transfer specification, in the form of a named ``data_transfer``
-object.
+Each interface must contain at least one data transfer specification, in the form of a named ``data_transfer`` object.
 
-When adding a data transfer, you must specify the interface on which the transfer is to be added, the target
-side for the transfer, and the variables to be associated with each side of the interface.
+When adding a data transfer, you must specify the interface on which the transfer is to be added, the target side for the transfer, and the variables to be associated with each side of the interface.
 
-To add a data transfer to an interface, use the ``add_data_transfer`` command. In the following, the interface
-name is the value that was returned by ``add_interface``:
+To add a data transfer to an interface, use the ``add_data_transfer`` command. In the following example, the interface name is the value that was returned by ``add_interface``:
 
 .. code:: python
 
@@ -209,9 +195,9 @@ name is the value that was returned by ``add_interface``:
         target_variable="displacement"
     )
 
-The resultant interface state can now be examined:
+You can now examine the state of the resulting interface:
 
-.. code::
+.. code-block:: python
 
     >>> setup.coupling_interface[interface_name].print_state()
 
@@ -273,10 +259,11 @@ any current warning and informational messages (as well as any active settings t
 at "Alpha" or "Beta" level).
 
 The return value of ``get_status_messages`` is a list of dictionaries where each
-dictionary provides details of a message. One of the dictionary fields is the "level"
-and this can be used to filter the message list:
+dictionary provides details of a message. One of the dictionary fields is the ``level``,
+which can be used to filter the message list:
 
-.. code::
+.. code-block:: python
+
 
     >>> from pprint import pprint
     >>> pprint([msg for msg in setup.get_status_messages() if msg["level"] == "Error"])
@@ -289,19 +276,17 @@ and this can be used to filter the message list:
 
 .. note::
 
-    The "path" field of the message dictionary indicates the location in the data model
+    The ``path`` field of the message dictionary indicates the location in the data model
     to which the message pertains. In the preceding output, this points to the ``solution_control``
-    object, but the specific settings in error are indicated in the message itself. However,
+    object, but the specific settings causing error are indicated in the message itself. However,
     note that setting names referenced in the "message" text ("TimeStepSize" and "EndTime")
     are in the form that is used in System Coupling's native API. This reflects the
-    current way that ``get_status_messages`` is exposed into PySystemCoupling. This
+    current way that ``get_status_messages`` is exposed into PySystemCoupling, but
     does not allow for reliable automatic translation to PySystemCoupling naming. Users should,
     however, be able to infer the PySystemCoupling names relatively easily by assuming
     a conversion from "camel case" to "snake case" of such identifiers.
 
-To address the errors, values need to be assigned to ``end_time`` and ``time_step_size``.
-These define, respectively, the duration of the transient coupled analysis and the time
-interval between each coupling step.
+To address the errors, assign values to ``end_time`` and ``time_step_size``. These define, respectively, the duration of the transient coupled analysis and the time interval between each coupling step.
 
 .. code:: python
 
@@ -309,21 +294,16 @@ interval between each coupling step.
     setup.solution_control.end_time = "1.0 [s]"
 
 
-Next steps/Additional set up
-----------------------------
+Next steps/additional setup
+---------------------------
 
-A minimal workflow for a basic analysis setup has been outlined. With this setup,
-the case is ready to be solved. See :ref:`ref_syc_solution` for details. It might also be a good point to
-save the case or to take a "snapshot". See :ref:`ref_syc_persistence` for details.
+By following the preceding steps, you have created a minimal workflow for a basic analysis setup.With this setup, you can attempt to solve the case. For details, see :ref:`ref_syc_solution`. At this time, you might also want to save the case or take a snapshot. For details, see :ref:`ref_syc_persistence`.
 
 Although a complete setup has been defined, there are many optional settings that could be
-applied - for example, to control the frequency with which solution data is saved, or
+applied --- for example, to control the frequency with which solution data is saved, or
 to apply advanced settings to control the solution algorithm.
 
-In addition, there are various further data model object types that can be created to
-introduce more sophisticated features to the analysis, such as expressions and
-reference frames. Such features are beyond the scope of this User Guide but the data
-model content is fully documented in :ref:`ref_index_api` and further guidance is available in the
+In addition, you can create other data model object types to introduce more sophisticated features --- such as expressions and reference frames --- to the analysis. These advance features are beyond the scope of this guide, but the contents of the data model is fully documented in :ref:`ref_index_api` and further guidance is available in the
 System Coupling documentation.
 
 

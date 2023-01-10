@@ -199,13 +199,14 @@ called on the relevant object.
 
 .. _ref_api_details:
 
-Settings API Content
+Settings API content
 --------------------
-:ref:`Case and persistence commands <case_root>`
 
-:ref:`Analysis setup commands and data model <setup_root>`
+For information on available commands, see:
 
-:ref:`Solution commands <solution_root>`
+* :ref:`Case and persistence commands <case_root>`
+* :ref:`Analysis setup commands and data model <setup_root>`
+* :ref:`Solution commands <solution_root>`
 
 .. toctree::
    :maxdepth: 4

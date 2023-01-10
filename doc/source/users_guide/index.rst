@@ -1,8 +1,8 @@
 .. _ref_user_guide:
 
-==========
+
 User Guide
-==========
+##########
 This guide provides a general overview of the PySystemCoupling library and its basic use.
 
 Although this guide does provide a brief overview of the main concepts in System Coupling, it is
