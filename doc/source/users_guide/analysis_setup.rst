@@ -171,7 +171,7 @@ The ``add_interface`` command returns the name of the interface created. Note th
 has been saved in a variable for later use.
 
 Creating data transfers
----------------------
+-------------------------
 
 Each interface must contain at least one data transfer specification, in the form of a named ``data_transfer`` object.
 
