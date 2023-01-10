@@ -30,8 +30,18 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
+  style:
+    name: Code style
+    runs-on: ubuntu-latest
+    steps:
+      - name: PyAnsys code style checks
+        uses: pyansys/actions/code-style@v3
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
   smoke-tests:
     name: Smoke Tests
+    needs: [style]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -74,15 +84,6 @@ jobs:
 
       - name: Test import
         run: make test-import
-
-  style:
-    name: Code style
-    runs-on: ubuntu-latest
-    steps:
-      - name: PyAnsys code style checks
-        uses: pyansys/actions/code-style@v3
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   build_test:
     name: Build and Testing
@@ -239,7 +240,7 @@ jobs:
 
   Release:
     if: contains(github.ref, 'refs/tags')
-    needs: [build_test, style, docs]
+    needs: [package]
     runs-on: ubuntu-latest
     steps:
       - name: Set up Python
