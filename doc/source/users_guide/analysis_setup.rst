@@ -170,7 +170,7 @@ To add an interface to the analysis, use the ``add_interface`` command:
 The ``add_interface`` command returns the name of the interface created. Note that the name
 has been saved in a variable for later use.
 
-Create data transfers
+Creating data transfers
 ---------------------
 
 Each interface must contain at least one data transfer specification, in the form of a named ``data_transfer`` object.
