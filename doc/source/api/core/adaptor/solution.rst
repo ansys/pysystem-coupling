@@ -2,7 +2,12 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
+<<<<<<< HEAD
 Solution commands
+=======
+
+Solution Commands
+>>>>>>> 35acd195105b21061bd34ac7ae1414eeaa34ec98
 =================
 
 See the |SOLUTION_ROOT_CLASS_REF| class for details.
