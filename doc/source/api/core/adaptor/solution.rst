@@ -2,6 +2,8 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
+.. _solution_root:
+
 Solution Commands
 =================
 

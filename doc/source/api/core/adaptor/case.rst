@@ -2,6 +2,8 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
+.. _case_root:
+
 Case Persistence Commands
 =========================
 
