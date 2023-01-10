@@ -15,32 +15,31 @@ responsible for performing this task.
 
 The main concepts therefore are:
 
-* The `participants` --- the solvers, representing different physics types, that are being coupled.
+Participants
+ These are the solvers, representing different physics types, that are being coupled.
 
-  * The participants in turn expose `variables` --- these are the quantities that are
-    potentially available to be transferred.
+    Variables
+     The participants expose `variables`. These are the quantities that are potentially available to be transferred.
+     
+    Regions
+     The participants also expose the potential `regions` on which the data may be transferred. For example, in an FSI case, the relevant fluid regions would be the wall boundaries where pressure is being transferred to the structure.
 
-  * They also expose the potential `regions` on which the data may be transferred. For example, in
-    an FSI case, the relevant fluid regions would be the wall boundaries where pressure is being
-    transferred to the structure.
+Interfaces
+ These are the `interfaces` between participants.
 
-* The `interfaces` between participants.
+    Sides    
+     Each interface has two `sides`.
+     
+     Each side is associated with a participant and with a subset of the regions exposed by that  participant.
+    
+    Data transfers
+     Each interface must define at least one `data transfer`.
+     
+     A data transfer is a one-way transfer of a particular variable (pressure, displacement, etc.) between the two participants/sides of the transfer's containing interface. For a given transfer, one of the  sides is regarded as the source and the other as the target of the data. This defines the direction of the transfer.
+     
+     A coupled analysis can be `one-way` or `two-way`, depending on whether transfers are defined in one or both directions on the interface.
 
-  * Each interface has two `sides`.
-
-  * Each side is associated with a participant and with a subset of the regions exposed by that
-    participant.
-
-  * An interface must also define at least one `data transfer`.
-
-* A `data transfer` is a one-way transfer of a particular variable (pressure, displacement, etc.) between
-  the two participants/sides of the transfer's containing interface. For a given transfer, one of the
-  sides is regarded as the source and the other the target of the data. This defines the direction of
-  the transfer.
-
-  * A coupled analysis can be `one-way` or `two-way` depending on whether transfers are defined in both
-    directions on the interface.
-
-Setting up a coupled analysis involves populating a hierarchical `data model` of settings. This data
-model closely follows the concepts that have been outlined here. See :ref:`ref_syc_datamodel` for more
-information.
+Data model
+ Setting up a coupled analysis involves populating a hierarchical `data model` of settings. The data model closely follows the concepts that have been outlined here. 
+ 
+ For more information, see  :ref:`ref_syc_datamodel`.
