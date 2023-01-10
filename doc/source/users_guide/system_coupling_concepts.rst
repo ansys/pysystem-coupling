@@ -1,6 +1,6 @@
 .. _ref_syc_concepts:
 
-System Coupling Concepts
+System Coupling concepts
 ========================
 
 A coupled analysis involves two or more `participant` solvers. System Coupling is responsible for
@@ -17,7 +17,7 @@ The main concepts therefore are:
 
 * The `participants` --- the solvers, representing different physics types, that are being coupled.
 
-  * The participants in turn expose various `variables` --- these are the quantities that are
+  * The participants in turn expose `variables` --- these are the quantities that are
     potentially available to be transferred.
 
   * They also expose the potential `regions` on which the data may be transferred. For example, in
