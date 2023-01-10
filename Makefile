@@ -25,6 +25,9 @@ build-install:
 	@python -m build
 	@python -m pip install -q --force-reinstall dist/*.whl
 
+test-import:
+	@python -c "import ansys.systemcoupling.core as pysystemcoupling"
+
 generate-api:
 	@echo "Generate API classes"
 	@python -m venv env_generate

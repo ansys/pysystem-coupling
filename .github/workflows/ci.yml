@@ -30,24 +30,65 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
+  # xsmoke-tests:
+  #   name: Build and Smoke tests
+  #   runs-on: ${{ matrix.os }}
+  #   needs: [style]
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       os: [ubuntu-latest, windows-latest]
+  #       python-version: ['3.7', '3.8', '3.9', '3.10']
+
+  #   steps:
+  #     - name: Build wheelhouse and perform smoke test
+  #       uses: pyansys/actions/build-wheelhouse@v3
+  #       with:
+  #         library-name: ${{ env.PACKAGE_NAME }}
+  #         library-namespace: ${{ env.PACKAGE_NAMESPACE }}
+  #         operating-system: ${{ matrix.os }}
+  #         python-version: ${{ matrix.python-version }}
+
   smoke-tests:
-    name: Build and Smoke tests
+    name: Smoke Tests
     runs-on: ${{ matrix.os }}
-    needs: [style]
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [windows-latest, ubuntu-latest]
         python-version: ['3.7', '3.8', '3.9', '3.10']
 
     steps:
-      - name: Build wheelhouse and perform smoke test
-        uses: pyansys/actions/build-wheelhouse@v3
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          library-namespace: ${{ env.PACKAGE_NAMESPACE }}
-          operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
+
+      - name: Linux pip cache
+        uses: actions/cache@v3
+        if: ${{ runner.os == 'Linux' }}
+        with:
+          path: ~/.cache/pip
+          key: Python-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            Python-${{ runner.os }}-${{ matrix.python-version }}
+
+      - name: Windows pip cache
+        uses: actions/cache@v3
+        if: ${{ runner.os == 'Windows' }}
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: Python-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            Python-${{ runner.os }}-${{ matrix.python-version }}
+
+      - name: Install pyfluent
+        run: make build-install
+
+      - name: Test import
+        run: make test-import
 
   style:
     name: Code style
