@@ -84,8 +84,12 @@ jobs:
           restore-keys: |
             Python-${{ runner.os }}-${{ matrix.python-version }}
 
-      - name: Install pyfluent
+      - name: Install pysystemcoupling
         run: make build-install
+
+      - name: Install gRPC API from private PyPI (temp)
+        run: |
+          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
       - name: Test import
         run: make test-import
