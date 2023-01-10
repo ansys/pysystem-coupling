@@ -2,11 +2,8 @@
 
 .. currentmodule:: ansys.systemcoupling.core.session
 
-Commands and Settings API
+Commands and settings API
 =========================
-
-Introduction
-------------
 
 A System Coupling analysis is defined in terms of a hierarchical data model of settings. An API is
 exposed that provides direct access to the data model as well as to commands that assist in
@@ -20,7 +17,7 @@ should then be used for fine adjustments to the setup.
 The API implementation is built on a number of generic objects, which are briefly described below.
 
 
-Relationship with "Native" System Coupling API
+Relationship with "native" System Coupling API
 ----------------------------------------------
 
 The API exposed in PySystemCoupling is mainly an `adaptation` of the API that exists
@@ -84,7 +81,7 @@ The key differences are as follows:
     # Query a setting
     print(root.execution_control.option)
 
-Directly Accessing the Native API
+Directly accessing the native API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 For users who want to try to perform a very quick translation from an existing
 System Coupling script into the PySystemCoupling environment, or have a
@@ -110,9 +107,7 @@ It is recommended that this API should not be used as a matter of course, but it
 be useful in specific and limited circumstances.
 
 
-
-
-Top-level Objects
+Top-level objects
 -----------------
 
 The commands and settings API is accessible via the top-level attributes of the ``Session`` class,
@@ -128,7 +123,7 @@ are given in the :ref:`ref_api_details` section below.
 These top-level attributes are all instances of the ``Container`` type.
 
 
-Settings Object Types
+Setting object types
 ---------------------
 
 In essence, the data model settings that define a System Coupling analysis comprise
@@ -159,7 +154,7 @@ objects. Thus, in the example just given, ``setup.coupling_interface['intf-1']``
 is a ``Container``.
 
 
-Setting and Modifying State
+Setting and modifying state
 ---------------------------
 
 The state of any container object can be accessed by "calling" it, and the call returns

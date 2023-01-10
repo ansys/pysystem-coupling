@@ -14,8 +14,8 @@ Data model structure
 
 This example shows the hierarchy of "objects" in the System Coupling data model. Such objects hold a collection of primitive settings and/or further "child" objects. The primitive settings are named values of type ``integer``, ``boolean``, ``string``, etc. In this example:
 
-* Highlighed items represent objects for which only one unnamed instance may appear at that level of the hierarchy ("singletons").
-* Non-highlighted items represent objects for which multipile named instances may exist. 
+* Highlighted items represent objects for which only one unnamed instance may appear at that level of the hierarchy ("singletons").
+* Non-highlighted items represent objects for which multiple named instances may exist. 
   
   .. note:: 
     In general, object names may be freely chosen. The exception is the ``side`` object, for which exactly two instances exist, with the fixed names ``One`` and ``Two``.
@@ -39,7 +39,7 @@ This example shows the hierarchy of "objects" in the System Coupling data model.
 Accessing the data model
 ------------------------
 
-Access the dat model using the ``setup`` attribute of ``Session``. The objects in the data model are
+Access the data model using the ``setup`` attribute of ``Session``. The objects in the data model are
 attributes of ``setup``. For example, to access the ``analysis_control`` object:
 
 .. code-block:: python

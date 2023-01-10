@@ -1,7 +1,7 @@
 .. _ref_syc_solution:
 
 
-Solving An Analysis
+Solving an analysis
 ===================
 
 As in :ref:`ref_syc_analysis_setup`, a PySystemCoupling ``Session`` object is assumed to have
@@ -10,29 +10,28 @@ been created and is referred to as ``syc_session`` in the code snippets.
 This section focuses on the ``solution`` part of the API (``syc_session.solution``), which provides
 operations associated with solving an analysis and examining results data.
 
-``solve`` command
------------------
+The ``solve`` command
+----------------------
 
-If an analysis has been set up and has no errors, a solution may be attempted simply by
-calling ``solve``. If output streaming is not already turned on, it can be
-particularly useful to do this before solving to track the solution's progress via
-the solver transcript output.
+If you have set up an analysis and it has no errors, you may attempt to solve it by calling ``solve``. 
 
-.. code:: python
+.. tip::
+    Before beginning the solve, you may wish to enable output streaming so you can use the solver transcript output to track the solution's progress.
+
+.. code-block:: python
 
     syc_session.start_output()
     syc_session.solution.solve()
 
-Currently, all commands in the PySystemCoupling API are executed synchronously, including ``solve``.
-This is a reflection of how the underlying operations currently work in System Coupling.
+Currently, all commands in the PySystemCoupling API (including ``solve``) are executed synchronously. This is a reflection of how the underlying operations currently work in System Coupling.
 
-Sometimes, because ``solve`` tends to be a long running operation, it can be useful to run it
-asynchronously in the Python environment. This is not supported explicitly because
+Because ``solve`` tends to be a long-running operation, it can be useful to execute it
+asynchronously in the Python environment. This is not supported explicitly, because
 in the current version of the API, there is no protection against trying to make calls
-concurrently. However, ``solve`` can be called asynchronously by "manual" coding, using Python
+concurrently. However, you can call ``solve`` asynchronously by "manual" coding using Python
 threads:
 
-.. code:: python
+.. code-block:: python
 
     import threading
     ...
@@ -53,9 +52,7 @@ An exception is that it is possible to interrupt or force the end of a solve.
 Interrupting and aborting a solve
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can interrupt or force the end of a solve using the ``solution.interrupt()`` and ``solution.abort()``
-calls. These are unusual PySystemCoupling calls in that they *must* be called in a different thread from the one
-in which ``solve`` is executing.
+You can interrupt or force the end of a solve using the ``solution.interrupt()`` and ``solution.abort()`` calls. These are unusual PySystemCoupling calls in that they *must* be called in a different thread from the one in which ``solve`` is executing.
 
 Both calls have the effect of stopping the solve that is in progress. The key difference
 is that ``interrupt`` supports the resumption of the solve (by calling ``solve`` again).
@@ -63,62 +60,50 @@ is that ``interrupt`` supports the resumption of the solve (by calling ``solve``
 Low-level solution control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Commands are available for more advanced scenarios offering lower level control over the
-solution process, specifically ``initialize``, ``step``, ``create_restart_point``
-and ``shutdown``. Roughly speaking, these provide the capability to perform the
-individual actions that are usually encapsulated in a simple ``solve`` call, allowing
-custom code to be executed between these actions.
+Commands are available for more advanced scenarios offering lower-level control over the
+solution process --- specifically ``initialize``, ``step``, ``create_restart_point``
+and ``shutdown``. Roughly speaking, these perform the individual actions that are usually encapsulated in a simple ``solve`` call, allowing Custom code to be executed between these actions.
 
-Such advanced usage is not considered further in this User Guide.
+Such advanced usage is not within the scope of this guide.
 
 
 Postprocessing support
 ----------------------
 
-The results for the individual participants in the analysis can be
-examined using their respective postprocessing applications. Consult the relevant
-documentation for details.
+You can examine the results for the individual participants in the analysis by using their respective postprocessing applications. For details, see the relevant product documentation.
 
-For System Coupling-specific results, data can be written in EnSight format, so that
-EnSight can be used for visualization, animation, and postprocessing. PySystemCoupling
-also supports the writing of some convergence diagnostics in CSV format.
+For System Coupling-specific results, data can be written in EnSight format. This allows you to use Ansys EnSight or visualization, animation, and postprocessing. PySystemCoupling also supports the writing of some convergence diagnostics in CSV format.
 
 Generating EnSight data
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-When a solution is available, EnSight files can be written on demand:
+When a solution is available, you can specify that EnSight files are written on demand:
 
 .. code:: python
 
     solution.write_ensight(file_name="EnSightResults")
 
-Alternatively, the ``output_control`` settings in the set-up data can be used
-to specify the automatic generation of EnSight data at certain points during the
-solution:
+Alternatively, you can use the ``output_control`` settings to specify the automatic generation of EnSight data at certain points during the solution:
 
 .. code:: python
 
     setup.output_control.results.option = "StepInterval"
     setup.output_control.results.output_frequency = 2
 
-The use of EnSight for postprocessing the output data is not covered in this
-User Guide. See the comprehensive System Coupling documentation and relevant
-EnSight documentation for more information.
+Using EnSight to postprocess output data is not covered in this guide. For more information, see the relevant System Coupling and EnSight product documentation.
 
 Convergence diagnostic data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-When a solution is available, CSV-formatted convergence data can be written on demand:
+When a solution is available, you can specify that CSV-formatted convergence data is written on demand:
 
 .. code:: python
 
     solution.write_csv_chart_files()
 
-This creates one file per coupling interface, where the file is named *<interface name>.csv*. Each file
-contains the interface's convergence and transfer data for each iteration.
+This creates one file per coupling interface, where the file is named ``<interface name>.csv``. Each file contains the interface's convergence and transfer data for each iteration.
 
-Alternatively, the ``output_control`` settings in the set-up data can be used to turn on
-automatic writing of these files:
+Alternatively, you can use the ``output_control`` settings to turn on automatic writing of these files:
 
 .. code:: python
 

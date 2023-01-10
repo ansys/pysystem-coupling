@@ -1,18 +1,17 @@
 .. _ref_syc_persistence:
 
-Analysis Persistence
+Analysis persistence
 ====================
 
-The ``case`` attribute of ``Session`` provides access to commands relating to persistence and overall state
-of an analysis case:
+Use the ``case`` attribute of ``Session`` to access commands relating to the persistence and overall state of an analysis case:
 
-* Opening and saving a case
-* Saving a `snapshot` of a case
+* Saving and opening a case
+* Saving a case snapshot
 * Clearing/resetting the entire state
 
-In the code snippets below, the ``case`` variable is assumed to have been assigned as follows:
+In the code snippets that follow, the ``case`` variable is assumed to have been assigned as follows:
 
-.. code:: python
+.. code-block:: python
 
     case = syc_session.case
 
@@ -20,10 +19,9 @@ In the code snippets below, the ``case`` variable is assumed to have been assign
 Saving and opening a case
 -------------------------
 
-Files defining the state of an analysis case are always saved and loaded from a `SyC/` subdirectory and, by default, this
-exists in the working directory.
+Files defining the state of an analysis case are always saved and loaded from a ``SyC/`` subdirectory which exists, by default, in the working directory.
 
-.. code:: python
+.. code-block:: python
 
     # Open a case from sub-directory SyC of current working directory:
     case.open()
@@ -34,7 +32,7 @@ loads results data if it exists.
 
 Similarly for saving the current state of a case:
 
-.. code:: python
+.. code-block:: python
 
     # Save a case to sub-directory SyC of current working directory:
     case.save()
@@ -50,7 +48,7 @@ results to be loaded at any point partway through the analysis for which a resta
 file exists. For example, if results were saved at the end of step 2, then the ``coupling_step``
 option may be provided to ``open``:
 
-.. code:: python
+.. code-block:: python
 
     # Open at step 2
     case.open(coupling_step=2)
@@ -90,12 +88,12 @@ snapshots are managed on demand using the API commands as discussed below.
 
 The basic operations supported are:
 
-* saving a snapshot
-* loading a snapshot
-* deleting a snapshot
-* querying available snapshots
+* Saving a snapshot
+* Loading a snapshot
+* Deleting a snapshot
+* Querying available snapshots
 
-.. code:: python
+.. code-block:: python
 
     # solve the current case
     solution.solve()
@@ -124,22 +122,21 @@ The basic operations supported are:
     # Delete Solution1
     case.delete_snapshot(snapshot_name='Solution1')
 
-Clearing current state
-----------------------
+Clearing the current state
+---------------------------
 
-Occasionally, it might be useful to be able to clear the entire state of settings and
+Occasionally, it might be useful to be able to clear the entire state of the settings and
 results that are loaded in the current System Coupling session.
 
-This can be achieved by calling the ``clear_state`` command:
+To do this, call the ``clear_state`` command:
 
-.. code:: python
+.. code-block:: python
 
     case.clear_state()
 
-Another option to achieve a similar outcome in the PySystemCoupling environment
-would be to exit the current session and create a new one.
+Another option for achieving the same result is to exit the current session and create a new one:
 
-.. code:: python
+.. code-block:: python
 
     syc_session.exit()
     syc_session = pysystemcoupling.launch()
