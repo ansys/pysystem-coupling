@@ -15,7 +15,6 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
 
-
 concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
@@ -42,6 +41,7 @@ jobs:
 
   build_test:
     name: Build and Testing
+    needs: [style]
     runs-on: ubuntu-latest
 
     steps:
@@ -97,22 +97,9 @@ jobs:
           path: cov_html
           retention-days: 7
 
-      # - name: Check wheel
-      #   run: |
-      #     pip install twine
-      #     twine check dist/*
-
-      # - name: Upload wheel
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ansys-systemcoupling-core-wheel
-      #     path: dist/
-      #     retention-days: 7
-
-
-
   docs:
     name: Build Documentation
+    needs: [doc-style]
     runs-on: ubuntu-latest
 
     steps:
