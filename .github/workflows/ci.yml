@@ -11,8 +11,9 @@ on:
 
 env:
   MAIN_PYTHON_VERSION: "3.8"
-
-
+  PACKAGE_NAME: "ansys-systemcoupling-core"
+  PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
+  DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
 
 concurrency:
   group: ${{ github.ref }}
@@ -29,6 +30,51 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
+  smoke-tests:
+    name: Smoke Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, ubuntu-latest]
+        python-version: ['3.7', '3.8', '3.9', '3.10']
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Linux pip cache
+        uses: actions/cache@v3
+        if: ${{ runner.os == 'Linux' }}
+        with:
+          path: ~/.cache/pip
+          key: Python-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            Python-${{ runner.os }}-${{ matrix.python-version }}
+
+      - name: Windows pip cache
+        uses: actions/cache@v3
+        if: ${{ runner.os == 'Windows' }}
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: Python-${{ runner.os }}-${{ matrix.python-version }}-${{ hashFiles('pyproject.toml') }}
+          restore-keys: |
+            Python-${{ runner.os }}-${{ matrix.python-version }}
+
+      - name: Install pysystemcoupling
+        run: make build-install
+
+      - name: Install gRPC API from private PyPI (temp)
+        run: |
+          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
+
+      - name: Test import
+        run: make test-import
+
   style:
     name: Code style
     runs-on: ubuntu-latest
@@ -40,6 +86,7 @@ jobs:
 
   build_test:
     name: Build and Testing
+    needs: [smoke-tests]
     runs-on: ubuntu-latest
 
     steps:
@@ -47,7 +94,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Create initial wheel and install
         run: make build-install
@@ -95,20 +142,9 @@ jobs:
           path: cov_html
           retention-days: 7
 
-      - name: Check wheel
-        run: |
-          pip install twine
-          twine check dist/*
-
-      - name: Upload wheel
-        uses: actions/upload-artifact@v3
-        with:
-          name: ansys-systemcoupling-core-wheel
-          path: dist/
-          retention-days: 7
-
   docs:
     name: Build Documentation
+    needs: [doc-style]
     runs-on: ubuntu-latest
 
     steps:
@@ -177,6 +213,17 @@ jobs:
       #     name: Documentation-pdf
       #     path: doc/_build/latex/*.pdf
       #     retention-days: 7
+
+  package:
+    name: Package library
+    needs: [build_test, docs]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build library source and wheel artifacts
+        uses: pyansys/actions/build-library@v3
+        with:
+          library-name: ${{ env.PACKAGE_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   Release:
     if: contains(github.ref, 'refs/tags')
