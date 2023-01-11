@@ -195,11 +195,11 @@ jobs:
 
       # This is hanging on GitHub so disable for now
       # ============================================
-      # - name: Build PDF Documentation
-      #   run: |
-      #     sudo apt update
-      #     sudo apt-get install -y texlive-latex-extra latexmk
-      #     make -C doc latexpdf SPHINXERRWARN=""
+      - name: Build PDF Documentation
+        run: |
+          #sudo apt update
+          #sudo apt-get install -y texlive-latex-extra latexmk
+          make -C doc latexpdf SPHINXERRWARN=""
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
@@ -208,12 +208,12 @@ jobs:
           path: doc/_build/html
           retention-days: 7
 
-      # - name: Upload PDF Documentation
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: Documentation-pdf
-      #     path: doc/_build/latex/*.pdf
-      #     retention-days: 7
+      - name: Upload PDF Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: Documentation-pdf
+          path: doc/_build/latex/*.pdf
+          retention-days: 7
 
   package:
     name: Package library
@@ -256,57 +256,3 @@ jobs:
         uses: pyansys/actions/release-github@v3
         with:
           library-name: ${{ env.PACKAGE_NAME }}
-
-
-  # release:
-  #   if: contains(github.ref, 'refs/tags')
-  #   needs: [package]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Set up Python
-  #       uses: actions/setup-python@v4
-  #       with:
-  #         python-version: 3.9
-
-  #     - uses: actions/checkout@v3
-
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: ansys-systemcoupling-core-wheel
-
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: Documentation-pdf
-
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: Documentation-html
-  #         path: ~/html
-
-  #     # list current directory
-  #     - name: List directory structure
-  #       run: ls -R
-
-  #     - name: Deploy
-  #       uses: JamesIves/github-pages-deploy-action@v4.4.1
-  #       with:
-  #         BRANCH: gh-pages
-  #         FOLDER: ~/html
-  #         CLEAN: true
-
-  #     # note how we use the PyPI tokens
-  #     - name: Upload to Azure PyPI (disabled)
-  #       run: |
-  #         pip install twine
-  #         # twine upload --skip-existing ./**/*.whl
-  #       env:
-  #         TWINE_USERNAME: __token__
-  #         TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-
-  #     - name: Release
-  #       uses: softprops/action-gh-release@v1
-  #       with:
-  #         files: |
-  #           ./**/*.whl
-  #           ./**/*.zip
-  #           ./**/*.pdf
