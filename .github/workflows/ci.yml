@@ -213,35 +213,18 @@ jobs:
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-      - name: Create initial wheel and install
-        run: make build-install
+      - name: Download package
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: dist
+
+      - name: Install pysystemcoupling
+        run: pip install -q --force-reinstall dist/*.whl > /dev/null
 
       - name: Install gRPC API from private PyPI (temp)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
-
-      - name: Pull docker image
-        run: make docker-pull
-        env:
-          SYC_IMAGE_TAG: v23.1.0
-
-      - name: Generate API code
-        run: make generate-api
-        env:
-          SYC_LAUNCH_CONTAINER: 1
-          SYC_IMAGE_TAG: v23.1.0
-
-      - name: Rebuild/reinstall wheel containing generated API
-        run: |
-          rm -rf dist
-          make build-install
 
       - name: Build HTML
         run: |
