@@ -127,11 +127,26 @@ jobs:
           rm -rf dist
           make build-install
 
-      - name: Build library source and wheel artifacts
-        uses: pyansys/actions/build-library@v3
+      - name: Check package
+        run: |
+          pip install twine
+          twine check dist/*
+
+      - name: Upload package
+        uses: actions/upload-artifact@v3
         with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          name: PyFluent-packages
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          retention-days: 7
+
+
+      # - name: Build library source and wheel artifacts
+      #   uses: pyansys/actions/build-library@v3
+      #   with:
+      #     library-name: ${{ env.PACKAGE_NAME }}
+      #     python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   build-test:
     name: Testing
