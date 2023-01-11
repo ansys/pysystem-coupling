@@ -197,8 +197,8 @@ jobs:
       # ============================================
       - name: Build PDF Documentation
         run: |
-          #sudo apt update
-          #sudo apt-get install -y texlive-latex-extra latexmk
+          sudo apt update
+          sudo apt-get install -y texlive-latex-extra latexmk
           make -C doc pdf SPHINXERRWARN=""
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
