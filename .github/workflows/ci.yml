@@ -151,7 +151,7 @@ jobs:
 
   docs:
     name: Build Documentation
-    needs: [doc-style]
+    needs: [doc-style, build_test]
     runs-on: ubuntu-latest
 
     steps:
