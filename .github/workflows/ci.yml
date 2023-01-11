@@ -219,8 +219,8 @@ jobs:
           name: ${{ env.PACKAGE_NAME }}-artifacts
           path: dist
 
-      - name: Install pysystemcoupling
-        run: pip install -q --force-reinstall dist/*.whl > /dev/null
+      - name: Install pysystemcoupling with doc dependencies
+        run: pip install -q --force-reinstall dist/*.whl[.doc] > /dev/null
 
       - name: Install gRPC API from private PyPI (temp)
         run: |
@@ -228,7 +228,7 @@ jobs:
 
       - name: Build HTML
         run: |
-          pip install .[doc]
+          #pip install .[doc]
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
         env:
