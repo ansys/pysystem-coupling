@@ -200,6 +200,8 @@ jobs:
           #sudo apt update
           #sudo apt-get install -y texlive-latex-extra latexmk
           make -C doc latexpdf SPHINXERRWARN=""
+        env:
+          PYSYC_DOC_BUILD_VERSION: 23_1
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
