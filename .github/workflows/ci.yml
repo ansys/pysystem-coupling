@@ -239,55 +239,74 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           doc-artifact-name: "documentation-html"
 
-  Release:
-    if: contains(github.ref, 'refs/tags')
+  release:
+    name: Release project
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     needs: [package]
     runs-on: ubuntu-latest
     steps:
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Release to the private PyPI repository
+        uses: pyansys/actions/release-pypi-private@v3
         with:
-          python-version: 3.9
+          library-name: ${{ env.PACKAGE_NAME }}
+          twine-username: "__token__"
+          twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
 
-      - uses: actions/checkout@v3
-
-      - uses: actions/download-artifact@v3
+      - name: Release to GitHub
+        uses: pyansys/actions/release-github@v3
         with:
-          name: ansys-systemcoupling-core-wheel
+          library-name: ${{ env.PACKAGE_NAME }}
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: Documentation-pdf
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: Documentation-html
-          path: ~/html
+  # release:
+  #   if: contains(github.ref, 'refs/tags')
+  #   needs: [package]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v4
+  #       with:
+  #         python-version: 3.9
 
-      # list current directory
-      - name: List directory structure
-        run: ls -R
+  #     - uses: actions/checkout@v3
 
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.4.1
-        with:
-          BRANCH: gh-pages
-          FOLDER: ~/html
-          CLEAN: true
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: ansys-systemcoupling-core-wheel
 
-      # note how we use the PyPI tokens
-      - name: Upload to Azure PyPI (disabled)
-        run: |
-          pip install twine
-          # twine upload --skip-existing ./**/*.whl
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: Documentation-pdf
 
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ./**/*.whl
-            ./**/*.zip
-            ./**/*.pdf
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: Documentation-html
+  #         path: ~/html
+
+  #     # list current directory
+  #     - name: List directory structure
+  #       run: ls -R
+
+  #     - name: Deploy
+  #       uses: JamesIves/github-pages-deploy-action@v4.4.1
+  #       with:
+  #         BRANCH: gh-pages
+  #         FOLDER: ~/html
+  #         CLEAN: true
+
+  #     # note how we use the PyPI tokens
+  #     - name: Upload to Azure PyPI (disabled)
+  #       run: |
+  #         pip install twine
+  #         # twine upload --skip-existing ./**/*.whl
+  #       env:
+  #         TWINE_USERNAME: __token__
+  #         TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+
+  #     - name: Release
+  #       uses: softprops/action-gh-release@v1
+  #       with:
+  #         files: |
+  #           ./**/*.whl
+  #           ./**/*.zip
+  #           ./**/*.pdf
