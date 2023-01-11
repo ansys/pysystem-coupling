@@ -199,7 +199,7 @@ jobs:
         run: |
           #sudo apt update
           #sudo apt-get install -y texlive-latex-extra latexmk
-          make -C doc latexpdf SPHINXERRWARN=""
+          make -C doc pdf SPHINXERRWARN=""
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
 
