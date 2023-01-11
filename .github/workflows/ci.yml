@@ -152,7 +152,7 @@ jobs:
           path: dist
 
       - name: Install pysystemcoupling
-        run: pip install -q --force-reinstall dist/*.whl > dev/null
+        run: pip install -q --force-reinstall dist/*.whl > /dev/null
 
       - name: Install gRPC API from private PyPI (temp)
         run: |
