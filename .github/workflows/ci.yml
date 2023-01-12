@@ -203,7 +203,7 @@ jobs:
 
   docs:
     name: Build Documentation
-    needs: [doc-style, build-test] # build-test for now
+    needs: [doc-style, build]
     runs-on: ubuntu-latest
 
     steps:
