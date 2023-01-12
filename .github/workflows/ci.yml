@@ -132,25 +132,6 @@ jobs:
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-      # - name: Rebuild/reinstall wheel containing generated API
-      #   run: |
-      #     rm -rf dist
-      #     make build-install
-
-      # - name: Check package
-      #   run: |
-      #     pip install twine
-      #     twine check dist/*
-
-      # - name: Upload package
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: ${{ env.PACKAGE_NAME }}-artifacts
-      #     path: |
-      #       dist/*.whl
-      #       dist/*.tar.gz
-      #     retention-days: 7
-
   test:
     name: Testing
     needs: [build]
