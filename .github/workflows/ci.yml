@@ -100,7 +100,7 @@ jobs:
       - name: Create initial wheel and install
         run: make build-install
 
-      - name: Install gRPC API from private PyPI (temp)
+      - name: Install gRPC API from private PyPI (temp - remove when API is released)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
@@ -141,14 +141,7 @@ jobs:
             dist/*.tar.gz
           retention-days: 7
 
-
-      # - name: Build library source and wheel artifacts
-      #   uses: pyansys/actions/build-library@v3
-      #   with:
-      #     library-name: ${{ env.PACKAGE_NAME }}
-      #     python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
-  build-test:
+  test:
     name: Testing
     needs: [build]
     runs-on: ubuntu-latest
@@ -169,7 +162,7 @@ jobs:
       - name: Install pysystemcoupling
         run: pip install -q --force-reinstall dist/*.whl > /dev/null
 
-      - name: Install gRPC API from private PyPI (temp)
+      - name: Install gRPC API from private PyPI (temp - remove when API is released)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
@@ -224,7 +217,7 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
 
-      - name: Install gRPC API from private PyPI (temp)
+      - name: Install gRPC API from private PyPI (temp - remove when API is released)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
@@ -236,14 +229,6 @@ jobs:
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
 
-      # This is hanging on GitHub so disable for now
-      # ============================================
-      # - name: Build PDF Documentation
-      #   run: |
-      #     sudo apt update
-      #     sudo apt-get install -y texlive-latex-extra latexmk
-      #     make -C doc latexpdf SPHINXERRWARN=""
-
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
         with:
@@ -251,23 +236,21 @@ jobs:
           path: doc/_build/html
           retention-days: 7
 
+      # This build errors on GitHub so disable for now
+      # ==============================================
+
+      # - name: Build PDF Documentation
+      #   run: |
+      #     sudo apt update
+      #     sudo apt-get install -y texlive-latex-extra latexmk
+      #     make -C doc latexpdf SPHINXERRWARN=""
+
       # - name: Upload PDF Documentation
       #   uses: actions/upload-artifact@v3
       #   with:
       #     name: Documentation-pdf
       #     path: doc/_build/latex/*.pdf
       #     retention-days: 7
-
-  # package:
-  #   name: Package library
-  #   needs: [build_test]
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Build library source and wheel artifacts
-  #       uses: pyansys/actions/build-library@v3
-  #       with:
-  #         library-name: ${{ env.PACKAGE_NAME }}
-  #         python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   upload_dev_docs:
     name: Upload dev documentation
@@ -282,10 +265,15 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           doc-artifact-name: "documentation-html"
 
+  # This is currently broken - the pyansys/actions expect PDF doc to be
+  # built and we can't currently build it. If we can't fix that then
+  # either the actions need to make PDF optional or we revert to more
+  # explicit implementation like the one commented out below. Note that
+  # that itself needs some attention if uncommented.
   release:
     name: Release project
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build-test, docs]
+    needs: [test, docs]
     runs-on: ubuntu-latest
     steps:
       - name: Release to the private PyPI repository
