@@ -86,7 +86,7 @@ jobs:
         run: make test-import
 
   build:
-    name: Build package, including generated API
+    name: Build package, incl. API generation
     needs: [smoke-tests]
     runs-on: ubuntu-latest
 
@@ -128,6 +128,7 @@ jobs:
       - name: Build library source and wheel artifacts
         uses: pyansys/actions/build-library@v3
         with:
+          checkout: false
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
