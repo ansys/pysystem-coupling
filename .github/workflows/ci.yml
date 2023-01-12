@@ -122,24 +122,33 @@ jobs:
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: v23.1.0
 
-      - name: Rebuild/reinstall wheel containing generated API
-        run: |
-          rm -rf dist
-          make build-install
+      - name: Clean out dist
+        run: rm -rf dist
 
-      - name: Check package
-        run: |
-          pip install twine
-          twine check dist/*
-
-      - name: Upload package
-        uses: actions/upload-artifact@v3
+      - name: Build library source and wheel artifacts
+        uses: pyansys/actions/build-library@v3
         with:
-          name: ${{ env.PACKAGE_NAME }}-artifacts
-          path: |
-            dist/*.whl
-            dist/*.tar.gz
-          retention-days: 7
+          library-name: ${{ env.PACKAGE_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      # - name: Rebuild/reinstall wheel containing generated API
+      #   run: |
+      #     rm -rf dist
+      #     make build-install
+
+      # - name: Check package
+      #   run: |
+      #     pip install twine
+      #     twine check dist/*
+
+      # - name: Upload package
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: ${{ env.PACKAGE_NAME }}-artifacts
+      #     path: |
+      #       dist/*.whl
+      #       dist/*.tar.gz
+      #     retention-days: 7
 
   test:
     name: Testing
