@@ -85,8 +85,8 @@ jobs:
       - name: Test import
         run: make test-import
 
-  build_test:
-    name: Build and Testing
+  build:
+    name: Build package, including generated API
     needs: [smoke-tests]
     runs-on: ubuntu-latest
 
@@ -100,7 +100,7 @@ jobs:
       - name: Create initial wheel and install
         run: make build-install
 
-      - name: Install gRPC API from private PyPI (temp)
+      - name: Install gRPC API from private PyPI (temp - remove when API is released)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
@@ -127,8 +127,62 @@ jobs:
           rm -rf dist
           make build-install
 
+      - name: Check package
+        run: |
+          pip install twine
+          twine check dist/*
+
+      - name: Upload package
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: |
+            dist/*.whl
+            dist/*.tar.gz
+          retention-days: 7
+
+  test:
+    name: Testing
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Download package
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: dist
+
+      - name: Install pysystemcoupling with test dependencies
+        run: |
+          wheel_name=`echo dist/*.whl`
+          pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
+
+      - name: Install gRPC API from private PyPI (temp - remove when API is released)
+        run: |
+          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.GH_TOKEN }}
+
+      - name: Pull docker image
+        run: make docker-pull
+        env:
+          SYC_IMAGE_TAG: v23.1.0
+
       - name: Unit testing
-        run: make unittest
+        run: |
+          pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
         env:
           SYC_IMAGE_TAG: v23.1.0
 
@@ -145,7 +199,7 @@ jobs:
 
   docs:
     name: Build Documentation
-    needs: [doc-style]
+    needs: [doc-style, build]
     runs-on: ubuntu-latest
 
     steps:
@@ -153,53 +207,29 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.8
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-      - name: Create initial wheel and install
-        run: make build-install
+      - name: Download package
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: dist
 
-      - name: Install gRPC API from private PyPI (temp)
+      - name: Install pysystemcoupling with doc dependencies
+        run: |
+          wheel_name=`echo dist/*.whl`
+          pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
+
+      - name: Install gRPC API from private PyPI (temp - remove when API is released)
         run: |
           pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
-
-      - name: Pull docker image
-        run: make docker-pull
-        env:
-          SYC_IMAGE_TAG: v23.1.0
-
-      - name: Generate API code
-        run: make generate-api
-        env:
-          SYC_LAUNCH_CONTAINER: 1
-          SYC_IMAGE_TAG: v23.1.0
-
-      - name: Rebuild/reinstall wheel containing generated API
-        run: |
-          rm -rf dist
-          make build-install
-
       - name: Build HTML
         run: |
-          pip install .[doc]
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
-
-      # This is hanging on GitHub so disable for now
-      # ============================================
-      # - name: Build PDF Documentation
-      #   run: |
-      #     sudo apt update
-      #     sudo apt-get install -y texlive-latex-extra latexmk
-      #     make -C doc latexpdf SPHINXERRWARN=""
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
@@ -208,6 +238,15 @@ jobs:
           path: doc/_build/html
           retention-days: 7
 
+      # This build errors on GitHub so disable for now
+      # ==============================================
+
+      # - name: Build PDF Documentation
+      #   run: |
+      #     sudo apt update
+      #     sudo apt-get install -y texlive-latex-extra latexmk
+      #     make -C doc latexpdf SPHINXERRWARN=""
+
       # - name: Upload PDF Documentation
       #   uses: actions/upload-artifact@v3
       #   with:
@@ -215,22 +254,11 @@ jobs:
       #     path: doc/_build/latex/*.pdf
       #     retention-days: 7
 
-  package:
-    name: Package library
-    needs: [build_test, docs]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build library source and wheel artifacts
-        uses: pyansys/actions/build-library@v3
-        with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
   upload_dev_docs:
     name: Upload dev documentation
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    needs: [package]
+    needs: [docs]
     steps:
       - name: Deploy the latest documentation
         uses: pyansys/actions/doc-deploy-dev@v3
@@ -239,10 +267,15 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           doc-artifact-name: "documentation-html"
 
+  # This is currently broken - the pyansys/actions expect PDF doc to be
+  # built and we can't currently build it. If we can't fix that then
+  # either the actions need to make PDF optional or we revert to more
+  # explicit implementation like the one commented out below. Note that
+  # that itself needs some attention if uncommented.
   release:
     name: Release project
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [package]
+    needs: [test, docs]
     runs-on: ubuntu-latest
     steps:
       - name: Release to the private PyPI repository
