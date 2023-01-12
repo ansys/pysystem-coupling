@@ -159,8 +159,10 @@ jobs:
           name: ${{ env.PACKAGE_NAME }}-artifacts
           path: dist
 
-      - name: Install pysystemcoupling
-        run: pip install -q --force-reinstall dist/*.whl > /dev/null
+      - name: Install pysystemcoupling with test dependencies
+        run: |
+          wheel_name=`echo dist/*.whl`
+          pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
 
       - name: Install gRPC API from private PyPI (temp - remove when API is released)
         run: |
@@ -179,7 +181,8 @@ jobs:
           SYC_IMAGE_TAG: v23.1.0
 
       - name: Unit testing
-        run: make unittest
+        run: |
+          pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
         env:
           SYC_IMAGE_TAG: v23.1.0
 
@@ -223,7 +226,6 @@ jobs:
 
       - name: Build HTML
         run: |
-          #pip install .[doc]
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
         env:
