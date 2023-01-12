@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 import sphinx_gallery
-from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black
+from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black, get_version_match
 from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.systemcoupling.core import __version__
@@ -14,10 +14,12 @@ project = "ansys-systemcoupling-core"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "Ansys Inc."
 release = version = __version__
+cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
 # use the default pyansys logo
+html_short_title = html_title = "PySystemCoupling"
+html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
-html_theme = "pyansys_sphinx_theme"
 
 # specify the location of your github repo
 html_theme_options = {
@@ -27,6 +29,12 @@ html_theme_options = {
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com"),
     ],
+    "navigation_depth": -1,
+    "switcher": {
+        "json_url": f"https://{cname}/release/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"]
 }
 
 # Sphinx extensions
@@ -179,19 +187,4 @@ sphinx_gallery_conf = {
     #"plot_gallery": False,
     # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
     "remove_config_comments": True,
-}
-
-
-# -- Options for HTML output -------------------------------------------------
-html_short_title = html_title = "PySystemCoupling"
-html_theme = "ansys_sphinx_theme"
-html_logo = pyansys_logo_black
-html_theme_options = {
-    "github_url": "https://github.com/pyansys/pysystem-coupling",
-    "show_prev_next": False,
-    "show_breadcrumbs": True,
-    "additional_breadcrumbs": [
-        ("PyAnsys", "https://docs.pyansys.com/"),
-    ],
-    "navigation_depth": -1,
 }
