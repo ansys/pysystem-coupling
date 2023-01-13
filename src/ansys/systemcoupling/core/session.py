@@ -100,7 +100,7 @@ class Session:
         Python console environments. In such cases, a custom approach based
         on the handler might be preferred.
 
-        Streaming can be cancelled by calling the ``end_output`` method.
+        Streaming can be cancelled by calling the `end_output` method.
 
         Parameters
         ----------
@@ -113,7 +113,7 @@ class Session:
         self.__rpc.start_output(handle_output)
 
     def end_output(self) -> None:
-        """Cancels output streaming previously started by ``start_output``."""
+        """Cancels output streaming previously started by `start_output`."""
         self.__rpc.end_output()
 
     def ping(self) -> bool:
@@ -162,7 +162,7 @@ class Session:
 
     @property
     def _native_api(self) -> NativeApi:
-        """Provides access to the 'native' System Coupling API and data
+        """Provides access to the "native" System Coupling API and data
         model.
 
         Use of this API is not particularly encouraged but there may be
@@ -176,7 +176,7 @@ class Session:
         This API is exposed dynamically on the client side and provides
         little runtime assistance and documentation.
 
-        See the ``NativeApi`` class itself for more details.
+        See the `NativeApi` class itself for more details.
         """
         if self.__native_api is None:
             self.__native_api = NativeApi(self.__rpc)
