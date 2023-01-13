@@ -37,7 +37,7 @@ after the preceding installation steps.
 
 .. code::
 
-    pip install .[classesgen]
+    pip install -e .[classesgen]
     python scripts/generate_datamodel.py
 
 The generated code is written to a directory ``src/ansys/systemcoupling/core/adaptor/api_<version>``,
@@ -67,7 +67,7 @@ With this variable set, execute the following commands:
 
 .. code::
 
-    pip install .[doc]
+    pip install -e .[doc]
     cd doc
     make html
 
