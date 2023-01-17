@@ -297,7 +297,7 @@ To address the errors, assign values to ``end_time`` and ``time_step_size``. The
 Next steps/additional setup
 ---------------------------
 
-By following the preceding steps, you have created a minimal workflow for a basic analysis setup.With this setup, you can attempt to solve the case. For details, see :ref:`ref_syc_solution`. At this time, you might also want to save the case or take a snapshot. For details, see :ref:`ref_syc_persistence`.
+By following the preceding steps, you have created a minimal workflow for a basic analysis setup. With this setup, you can attempt to solve the case. For details, see :ref:`ref_syc_solution`. At this time, you might also want to save the case or take a snapshot. For details, see :ref:`ref_syc_persistence`.
 
 Although a complete setup has been defined, there are many optional settings that could be
 applied --- for example, to control the frequency with which solution data is saved, or
