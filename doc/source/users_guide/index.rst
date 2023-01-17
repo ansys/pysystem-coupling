@@ -119,7 +119,7 @@ cleaned up --- that is, ``exit`` called on it --- upon leaving the scope of the 
 
 Logging
 =======
-Some basic logging capabilities are accessible via the ``LOG`` object. Built on the standard Python logging framework, this object allows you to set a `l`evel` as a severity filter and to specify whether logging goes to a file and/or to the console.
+Some basic logging capabilities are accessible via the ``LOG`` object. Built on the standard Python logging framework, this object allows you to set a ``level`` as a severity filter and to specify whether logging goes to a file and/or to the console.
 
 .. code-block:: python
 
