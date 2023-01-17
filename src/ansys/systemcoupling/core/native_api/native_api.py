@@ -10,7 +10,30 @@ from .object_path import ObjectPath
 
 
 class NativeApi:
+    """Exposes the "native" System Coupling command and query API into
+    PySystemCoupling.
+
+    This allows commands and queries to be scripted similarly to how it
+    would be done in System Coupling's own CLI. The main difference
+    is that rather than being exposed into the global Python environment,
+    here they are made available as attributes of this class.
+
+    The path-based syntax of the native API is also supported. However,
+    instead of using the global ``DatamodelRoot()`` query as the path root,
+    simply use the instance of this class as the root. (Note that while
+    ``DatamodelRoot`` can be called here, it simply returns the
+    string value of the root path, and cannot be used as in the System
+    Coupling CLI.)
+    """
+
     def __init__(self, rpc_impl):
+        """Create an instance of this class.
+
+        Parameters
+        ----------
+        rpc_impl
+            Provider of remote command and query services.
+        """
         self.__rpc_impl = rpc_impl
         LOG.debug("NativeApi: initialise datamodel...")
         self._init_datamodel()
@@ -34,48 +57,72 @@ class NativeApi:
 
         A few commands return a value (again with a type dependent on
         the command), but most return ``None``.
+
+        Note that the `__getattr__`-based exposure of the API provides
+        a more convenient syntax.
+
+        Parameters
+        ----------
+        name
+            Name of the command (or query) to execute.
+        kwargs
+            Keyword arguments to the command.
         """
         return self.__rpc_impl.execute_command(name, **kwargs)
 
     def __getattr__(self, name):
         """Provides access to the native System Coupling commands and queries API
-        (and, implicitly thereby, the data model settings) as attributes of
-        this class's instance.
+        as attributes of this class's instance.
 
         For example, the System Coupling command ``Solve()`` may be invoked on an
-        instance of this class, ``syc`` as follows:
+        instance of this class, ``syc``, as follows::
 
-        ``syc.Solve()``
+            syc.Solve()
 
-        This is an alternative to
+        .. note:: This is equivalent to using the `execute_command` method like this:
 
-        ``syc.execute_command('Solve')``
+            ``syc.execute_command('Solve')``
 
-        If System Coupling exposes a data model object, ``SolutionControl``
-        say, then the following interactions are enabled by the present
-        method.
+        This method also supports a convenient data model access syntax, which is
+        very close to that available in the native CLI.
 
-        Query state of object:
-        ``state = syc.SolutionControl.GetState()``
+        For example, if System Coupling exposes a data model object ``SolutionControl``,
+        then various operations are supported, as illustrated below.
 
-        (Note that this is an alternative to:
-        ``state = syc.execute_command('GetState',
-            ObjectPath='/SystemCoupling/SolutionControl')``)
+            Query state of object::
 
-        Query value of object property:
-        ``option = syc.SolutionControl.DurationOption``
+                state = syc.SolutionControl.GetState()
 
-        Set multiple object object properties:
-        ``syc.SolutionControl = {
-            'DurationOption': 'NumberOfSteps',
-            'NumberofSteps': 5
-          }``
+            Note that this is an alternative to::
 
-        Set single property:
-        ``syc.SolutionControl.NumberOfSteps = 6``
+                state = syc.execute_command('GetState',
+                                            ObjectPath='/SystemCoupling/SolutionControl')
 
-        Full "path" syntax for the data model is supported. Thus:
-        ``syc.CouplingInterface['intf1'].DataTransfer['temp']...``
+            Query value of object property::
+
+                option = syc.SolutionControl.DurationOption
+
+
+            Set multiple object object properties::
+
+                syc.SolutionControl = {
+                    'DurationOption': 'NumberOfSteps',
+                    'NumberofSteps': 5
+                }
+
+            Set single property::
+
+                syc.SolutionControl.NumberOfSteps = 6
+
+        In general, full "path" access to the data model is supported, including
+        named object syntax familiar from the native CLI::
+
+            syc.CouplingInterface['intf1'].DataTransfer['temp']...
+
+        Parameters
+        ----------
+        name
+            Name of the attribute being accessed.
         """
         if self.__cmd_meta.is_command_or_query(name):
             # Looks like an API command/query call
