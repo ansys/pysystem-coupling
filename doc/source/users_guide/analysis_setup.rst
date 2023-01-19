@@ -276,7 +276,7 @@ which can be used to filter the message list:
 
 .. note::
 
-    The ``path`` field of the message dictionary indicates the location in the data model
+    The "path" field of the message dictionary indicates the location in the data model
     to which the message pertains. In the preceding output, this points to the ``solution_control``
     object, but the specific settings causing error are indicated in the message itself. However,
     note that setting names referenced in the "message" text ("TimeStepSize" and "EndTime")

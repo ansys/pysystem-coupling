@@ -3,7 +3,7 @@
 System Coupling data model
 ==========================
 
-The System Coupling data model is a hierarchical structure, represented in the PySystemCoupling API
+The System Coupling data model is a hierarchical structure represented in the PySystemCoupling API
 as nested attributes. Ultimately, the nested attributes end at primitive values, which are the
 basic settings defining the set-up. The nested structure allows the data to be organized in a way
 that fits with the underlying concepts of a System Coupling analysis.
@@ -105,7 +105,7 @@ When you apply a setting to such an object, this not only sets a value for the s
     >>>
 
 To create a named object instance, use the ``create()`` method on the
-object's ``type`` attribute:
+object's type attribute:
 
 .. code-block:: python
 

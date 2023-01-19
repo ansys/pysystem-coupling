@@ -72,7 +72,7 @@ Postprocessing support
 
 You can examine the results for the individual participants in the analysis by using their respective postprocessing applications. For details, see the relevant product documentation.
 
-For System Coupling-specific results, data can be written in EnSight format. This allows you to use Ansys EnSight or visualization, animation, and postprocessing. PySystemCoupling also supports the writing of some convergence diagnostics in CSV format.
+For System Coupling-specific results, data can be written in EnSight format. This allows you to use Ansys EnSight for visualization, animation, and postprocessing. PySystemCoupling also supports the writing of some convergence diagnostics in CSV format.
 
 Generating EnSight data
 ^^^^^^^^^^^^^^^^^^^^^^^
