@@ -105,7 +105,7 @@ When you apply a setting to such an object, this not only sets a value for the s
     >>>
 
 To create a named object instance, use the ``create()`` method on the
-object's ``type`` attribute:
+object's type attribute:
 
 .. code-block:: python
 
