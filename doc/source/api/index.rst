@@ -3,7 +3,7 @@
 .. currentmodule:: ansys.systemcoupling
 
 =============
-API Reference
+API reference
 =============
 
 There are three main "levels" of interaction with the PySystemCoupling API:

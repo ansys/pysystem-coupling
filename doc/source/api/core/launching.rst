@@ -1,6 +1,6 @@
 .. ref_launching
 
-Launching and Connecting to System Coupling
+Launching and connecting to System Coupling
 ===========================================
 
 .. currentmodule:: ansys.systemcoupling.core
