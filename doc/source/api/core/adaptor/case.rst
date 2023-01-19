@@ -2,7 +2,7 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
-Case Persistence Commands
+Case persistence commands
 =========================
 
 See the |CASE_ROOT_CLASS_REF| class for details.

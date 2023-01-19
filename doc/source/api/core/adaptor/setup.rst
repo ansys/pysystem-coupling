@@ -2,7 +2,8 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
-Analysis Setup Commands and Datamodel
+
+Analysis setup commands and datamodel
 =====================================
 
 See the |SETUP_ROOT_CLASS_REF| class for details.

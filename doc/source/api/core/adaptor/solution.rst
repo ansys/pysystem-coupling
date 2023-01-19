@@ -2,7 +2,7 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
-Solution Commands
+Solution commands
 =================
 
 See the |SOLUTION_ROOT_CLASS_REF| class for details.
