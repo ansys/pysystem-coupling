@@ -50,7 +50,7 @@ classesgen = [
 	# consistent with style elsewhere. We need to keep the versions
 	# in sync with the precommit dependencies.
 	"black==22.12.0",
-	"isort==5.11.4",
+	"isort==5.11.5",
 ]
 doc = [
 	"ansys-sphinx-theme==0.8.1",
