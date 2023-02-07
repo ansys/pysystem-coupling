@@ -46,10 +46,9 @@ build = [
 classesgen = [
 	# Dependencies for API class generation from System Coupling metadata
 
-	# NB
 	# black and isort are called programmatically to keep generated code
-	# consistent with style elsewhere. We need to keep the versions in
-	# sync with the precommit dependencies.
+	# consistent with style elsewhere. We need to keep the versions
+	# in sync with the precommit dependencies.
 	"black==23.1.0",
 	"isort==5.11.5",
 ]
