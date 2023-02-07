@@ -71,7 +71,6 @@ def test_partlib_cosim_volume_simple() -> None:
 
 
 def _get_mocksolve_executable():
-
     # System Coupling is packaged under /syc in the image
 
     # Note that we don't use os.path.join here because it

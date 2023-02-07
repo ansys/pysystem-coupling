@@ -414,7 +414,6 @@ class Container(SettingsBase[DictStateType]):
     def to_python_keys(cls, value):
         """Convert value to have keys with python names."""
         if isinstance(value, collections.abc.Mapping):
-
             # get_state and print_state rely on the value returned from here
             # so we impose the correct datamodel ordering when we build the
             # value. The code below should NOT be simplified unless this is
