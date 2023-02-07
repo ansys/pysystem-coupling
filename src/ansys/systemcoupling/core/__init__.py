@@ -15,7 +15,7 @@ def launch(
     working_dir: str = None,
     nprocs: int = None,
     sycnprocs: int = None,
-    extra_args: List[str] = []
+    extra_args: List[str] = [],
 ) -> Session:
     """Start a local instance of System Coupling and connects to it.
 

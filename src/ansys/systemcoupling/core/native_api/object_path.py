@@ -11,7 +11,6 @@ class ObjectPath(str):
     """
 
     def __new__(cls, path, api, rules):
-
         inst = str.__new__(cls, path)
 
         inst.__setattr("_api", api)
