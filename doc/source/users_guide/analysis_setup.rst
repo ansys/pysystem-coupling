@@ -1,34 +1,39 @@
 .. _ref_syc_analysis_setup:
 
-Setting up an analysis
-======================
+Analysis Setup
+==============
 
-This section outlines the basic workflow for setting up a coupled analysis from scratch.
+This page outlines the basic workflow for setting up a coupled analysis from scratch.
 It assumes that a PySystemCoupling ``Session`` object (``syc_session``) has been created.
 
-This section focuses on the ``setup`` section of the API (``syc_session.setup``), which is concerned with defining the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
+The focus here is on the ``setup`` attribute (``syc_session.setup``) for the ``Session`` object.
+The ``setup`` atrribute defines the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
 
-For information on the other main areas of the API, see :ref:`ref_syc_persistence` for guidance on saving and resuming cases and :ref:`ref_syc_solution` for solution-related operations.
+For descriptions of the ``Session`` object's ``solution`` and ``case`` attributes, see these pages:
+
+- :ref:`ref_syc_solution`: Operations related to solving an analysis and examining the solution
+- :ref:`ref_syc_persistence`: Operatons for saving and resuming cases.
 
 
-Participant case setup
+Set up participant case
 -----------------------
 
 Any participant that is involved in a coupled analysis must set up its case to solve its part of
 the coupled physics analysis. Typically, this is very similar to setting up a standalone case
-for that solver. Each participant has its own way of specifying the data transfers
-to and from System Coupling --- for example, as fluid boundary conditions in Fluent. 
+for this solver. Each participant has its own way of specifying data transfers to and from
+System Coupling. For example, Fluent uses fluid boundary conditions. 
 
-Such details are beyond the scope of this guide. For examples that include details of setting up the participant cases, see the System Coupling documentation.
+While information about setting up participant cases is beyond the scope of this guide, you
+can see the System Coupling documentation for examples.
 
-
-Adding participants
---------------------
+Add participants
+----------------
 
 Use the ``add_participant`` command to define the information about the participants involved
 in the analysis.
 
-In its most common usage form, this command accepts a file containing essential data about a participant, such as the variables it exposes and the regions on which they are available.
+In its most common usage form, this command accepts a file containing essential data about a participant,
+such as the variables it exposes and the regions on which they are available.
 
 .. code-block:: python
 
@@ -37,8 +42,9 @@ In its most common usage form, this command accepts a file containing essential 
     >>> setup.add_participant(input_file="mapdl.scp")
     'MAPDL-2'
 
+
 Note that the name of the created ``coupling_participant`` object is returned in each case. This
-may be captured in a variable to facilitate subsequent access to the object:
+code shows how you can capture the name in a variable to facilitate subsequent access to the object:
 
 .. code-block:: python
 
@@ -46,11 +52,11 @@ may be captured in a variable to facilitate subsequent access to the object:
     assert setup.coupling_participant[fluent_part].participant_type == "FLUENT"
 
 The ``add_participant`` commands not only create the participant object in question but
-also help to initialise some other aspects of the data model state. After adding the Fluent
-and MAPDL participants as described, the ``analysis_control``, ``solution_control`` and
-``output_control`` objects exist, having been created with reasonable defaults. See the
-output from ``print_state`` below. (Note that some details have been omitted from the output
-shown, as indicated by ``...``.)
+also help to initialize some other aspects of the data model state. After the preceding code
+adds the Fluent and MAPDL participants, the ``analysis_control``, ``solution_control``, and
+``output_control`` objects are created with reasonable defaults. For more information, see
+the following output from the ``print_state`` command. Where details are ommitted from this
+out, ellipses (``...``) appear.
 
 .. code-block:: python
 
@@ -126,28 +132,34 @@ shown, as indicated by ``...``.)
         option : LastStep
         ...
 
+
 Missing/unset values
 --------------------
 
-In the preceding ``print_state`` output, it can be seen that most settings have been defaulted
-to some value. `<None>` is used in this output to indicate "unset" values. In some
-settings in the data model, "None" is a legitimate string value, so the `<None>`
-form is used in the ``print_state`` output for unset values to avoid
-ambiguity. For example, the default value of
-``analysis_control.global_stabilization.option`` is the string ``"None"``, which is one
-of the valid options for this setting.
+In the preceding ``print_state`` output, most settings have defaulted to some value.
+In this output, ``<None>`` indicates *unset* values. For some settings in the data
+model, ``"None"`` is a legitimate string value, so ``<None>``
+is the form used in the ``print_state`` output for unset values to avoid
+ambiguity. For example, the default value of the
+``analysis_control.global_stabilization.option`` setting is the string ``"None"``, which is one
+of the valid options.
 
-If queried in Python, an `unset` setting holds
-the Python ``None`` object or, if a list-valued setting, the empty list, ``[]``.
+If queried in Python, an *unset* setting holds the Python ``None`` object or, if for a list-valued
+setting, the empty list: ``[]``.
 
 The important missing values in the setup in its current state are those in ``solution_control``.
-These are addressed later, as these missing values are considered to be errors in the setup
+These are addressed later, as these missing values are considered to be errors in the setup,
 and its solution is blocked unless the values are provided.
 
-There are some other settings in the scope of the ``coupling_participant`` objects that are indicated as "unset" (that is, `<None>`) in the ``print_state`` output). However, these are not considered to be missing values nor to indicate any kind of error in the set up, but rather are more specialized optional settings that have not been provided in the relevant input files. Generally, the ``coupling_participant`` state can be considered to be read-only once it has been created, and further edits should not be necessary.
+There are some other settings in the scope of the ``coupling_participant`` objects that are
+indicated as *unset* (that is, ``<None>``) in the ``print_state`` output. However, these are not
+considered to be missing values nor to indicate any kind of error in the setup. They are rather
+more specialized optional settings that have not been provided in the relevant input files.
+Generally, the ``coupling_participant`` state can be considered to be read-only once it has bee
+ created, and further edits should not be necessary.
 
-Creating interfaces
--------------------
+Create interfaces
+-----------------
 
 Each coupled analysis must have at least one coupling interface. Coupling interfaces must be added to the analysis individually. When adding a coupling interface, you must specify the participant name and the regions to be associated with each side of the coupling interface.
 

@@ -22,26 +22,28 @@ PySystemCoupling
 
 Overview
 --------
-The PySystemCoupling project provides Pythonic access to Ansys System
-Coupling. Although the System Coupling product itself exposes a
-Python-based scripting and command line interface, this is embedded in
-the product and is based on a specific version of Python. PySystemCoupling,
-in contrast, enables seamless use of System Coupling within the Python
-ecosystem, providing:
+PySystemCoupling provides Pythonic access to Ansys System
+Coupling. Although this Ansys product exposes its own
+Python-based scripting and command line interface, it is embedded
+and based on a specific version of Python. In contrast,
+PySystemCoupling enables seamless use of System Coupling within the Python
+ecosystem, providing additional capabilities, including:
 
-* Ability to launch System Coupling using a local Ansys installation.
-* Access to APIs to set up and solve coupled analyses.
-* Full access to the System Coupling data model via a convenient and Pythonic interface.
+* Ability to launch System Coupling using a local Ansys installation
+* Access to APIs to set up and solve coupled analyses
+* Full access to the System Coupling data model via a convenient and Pythonic interface
 
 Installation
 ------------
-Install PySystemCoupling with:
+Install PySystemCoupling with with command:
 
 .. code::
 
    pip install ansys-systemcoupling-core
 
-Alternatively, clone and install in development mode as follows:
+
+Alternatively, clone and install PySystemCoupling in *development mode*
+with this code:
 
 .. code::
 
@@ -55,16 +57,25 @@ Alternatively, clone and install in development mode as follows:
 
 **ADDITIONAL TEMPORARY STEP - !!!!WILL BE REMOVED BEFORE RELEASE!!!!**
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-PySystemCoupling has a dependency on a "gRPC API" package, ``anays-api-systemcoupling``. This will
-soon be publicly available on PyPI and will be installed automatically along with the other dependencies
-of this package. In the interim period, the package wheel must be obtained and installed manually using
-``pip install``. It is available from the following locations:
+PySystemCoupling has a dependency on a gRPC API package, ``anays-api-systemcoupling``. This package
+will soon be publicly available on PyPI and will be installed automatically along with the other
+dependencies of the ``ansys-systemcoupling-core`` package. In the interim, you must obtain the
+package wheel install it manually using ``pip install``. You can obtain the ``anays-api-systemcoupling``
+package from these locations:
 
-* The `ansys-api-systemcoupling repository <https://github.com/ansys/ansys-api-systemcoupling>`_. Click on the
-  "Tags" link under "Releases" on the home page to list the available tagged releases. Click on the
-  latest release and download the wheel from the page shown.
-* The Ansys internal PyPI repository: ``pip install ansys-api-systemcoupling -i https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/``. (**NB**
-  you will need to know the read-only PAT for the repository).
+* The `ansys-api-systemcoupling repository <https://github.com/ansys/ansys-api-systemcoupling>`_.
+  Under **Releases** on the home page, click the **"Tags** link to see the available tagged
+  releases. Click the latest release and then download the wheel from the page that is shown.
+* The Ansys internal PyPI repository. To install the ``anays-api-systemcoupling`` package from here, run
+  this command:
+  
+  .. code::
+
+     pip install ansys-api-systemcoupling -i https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
+     
+   
+  .. note::
+     You must know the read-only personal access token (PAT) for the repository.
 
 
 Documentation and Issues
@@ -72,37 +83,44 @@ Documentation and Issues
 
 For more information, see the `Documentation <https://systemcoupling.docs.pyansys.com>`_ page (**Link not active yet**).
 
-Use the `PySystemCoupling Issues page <https://github.com/pyansys/pysystem-coupling/issues>`_ to post bug reports, questions and feature requests.
+Use the `PySystemCoupling Issues <https://github.com/pyansys/pysystem-coupling/issues>`_ page to
+post bug reports, questions and feature requests.
 
 Usage
 -----
 
-It is assumed that an Ansys installation is available, and that it
+It is assumed that an Ansys installation is available and that this installation
 includes System Coupling and the participant products needed for the coupled analysis.
 
-The System Coupling installation will be found by examining via the following environment variables
-in the given order:
+The System Coupling installation is found by examining the following environment variables
+in this order:
 
 * ``SYSC_ROOT``
 * ``AWP_ROOT``
 * ``AWP_ROOT231``
 
-Note that if a variable is set but is found not to refer to a valid installation, PySystemCoupling
-will fail at that point rather than attempting to use the next variable.
+If a variable is set but does not refer to a valid installation, PySystemCoupling
+fail at that point, rather than attempting to use the next variable.
 
-In a standard user installation, the expectation is that only ``AWP_ROOT231`` would be set.
+In a standard user installation, the expectation is that only ``AWP_ROOT231`` is set.
 
-The System Coupling API is exposed to PySystemCoupling in two basic forms:
+The System Coupling API is exposed to PySystemCoupling in two forms:
 
-* A documented interface based on concrete Python classes, following `Pythonic` conventions.
-* A dynamic, undocumented (in PySystemCoupling), interface that replicates the `native` System Coupling API.
+* A documented interface based on concrete Python classes, following Pythonic conventions
+* A dynamic inteface, undocumented in PySystemCoupling, that replicates the native System Coupling API
 
-Both forms are strongly related to each other. A key difference in the Pythonic API is that naming is adjusted, in a generally predictable manner,
-to follow Python conventions. Users who are already familiar with System Coupling should find it easy to adjust to this form, which is the recommended
-API, but the native form is made available as a convenience, particularly to user who might be transitioning existing scripts.
-It should be noted that, while most commands should work as expected via the native API, no guarantees can be given because of the nature of how it is exposed.
+Both forms are strongly related to each other. A key difference in the Pythonic API is that naming
+is adjusted, in a generally predictable manner, to follow Python conventions. If you are already
+familiar with System Coupling, adjusting to this form, which is the recommended API, should be easy.
+However, if you transitioning existing scripts, the native System Coupling API is made available
+as a convenience.
 
-The following example shows the set up and solve of the "oscillating plate" tutorial in the Pythonic API, using Ansys Fluent as the CFD solver.
+.. note::
+   While most commands should work as expected via the native System Coupling API,
+   no guarantees can be given because of the nature of how it is exposed.
+
+This example shows how to set up and solve an oscillating plate example in the Pythonic API.
+It uses Ansys Fluent as the CFD solver.
 
 .. code:: python
 
@@ -152,19 +170,27 @@ The following example shows the set up and solve of the "oscillating plate" tuto
    solution = syc.solution
    solution.solve()
 
-The API is partitioned via three high-level "root" attributes from which
-pertinent commands may be accessed. The above example shows ``setup`` and ``solution``. ``setup`` is the largest part of the
-API, and is where one finds all of the commands related to populating the settings that define a coupled analysis. It also provides
-direct access to the hierarchical data model, as illustrated in the example. ``solution`` is home to ``solve`` and a few other related
-operations. There is also a ``case`` attribute available (not illustrated), for case file and persistence related commands.
 
-In this example, the System Coupling server was started by the ``launch`` function. Alternatively, the server can be started in advance with
-command line arguments ``-m cosimgui --grpcport=<host:port>`` and ``pysystemcoupling.connect(host, port)`` called instead of
-``pysystemcoupling.launch()`` in the above.
+The Pythonic API partitions commands via three high-level *root* attributes of the
+``Session`` class: ``setup``, ``solution``, and ``case``. The preceding example
+uses both the ``setup`` and ``solution`` attributes.
 
-The following shows the use of the native form of the API. This involves setting up the same analysis as above; it is less complete but
-should be sufficient to illustrate the differences and connections between the API forms.
+* The ``setup`` attribute is the largest part of the API. It is where you find all
+  commands related to populating the settings that define a coupled analysis. This
+  attribute also provides direct access to the hierarchical data model.
+* The ``solution`` attribute is home to commands related to solving an analysis and
+  examining the solution. 
+* The ``case`` attribute, which is not used in the preceding example, provides all
+  commands related to case file management and persistence.
 
+While the preceding example uses the ``pysystemcoupling.launch()`` method to start the
+System Coupling server, alternatively, the server can be started in advance by calling
+command line arguments ``-m cosimgui --grpcport=<host:port>`` and
+``pysystemcoupling.connect(host, port)``.
+
+This next example shows how to set up the same analysis using the native System Coupling
+API. While the code here is less complete than the code shown previously, it should
+sufficiently illustrate the differences and connections between the two API forms.
 
 .. code:: python
 
@@ -185,15 +211,16 @@ should be sufficient to illustrate the differences and connections between the A
    syc.start_output()
    native_api.Solve()
 
+
 License
 -------
-``PySystemCoupling`` is licensed under the MIT license.
+PySystemCoupling is licensed under the MIT license.
 
-This module, ``ansys-systemcoupling-core`` makes no commercial claim over Ansys
-whatsoever.  This tool extends the functionality of ``System Coupling`` by
+The ``ansys-systemcoupling-core`` package makes no commercial claim over Ansys
+whatsoever.  It extends the functionality of Ansys System Coupling by
 adding a Python interface to the System Coupling service without changing the
-core behavior or license of the original software.  The use of the
-interactive System Coupling control of ``PySystemCoupling`` requires a legally licensed
-local copy of Ansys.
+core behavior or license of the original software. Interactively controlling
+System Coupling via PySystemCoupling requires a local copy of System Coupling.
+and licensess for all Ansys products involved in your coupled analysis.
 
-To get a copy of Ansys, please visit `Ansys <https://www.ansys.com/>`_.
+To get a copy of Ansys, visit `Ansys <https://www.ansys.com/>`_.
