@@ -3,8 +3,9 @@
 ========
 Examples
 ========
-End-to-end examples show how you can use PySystemCoupling. If the PySystemCoupling ``ansys-systemcoupling-core`` package is installed on your machine,
-you can download these examples as Python files or Jupyter notebooks and run them locally.
+End-to-end examples show how you can use PySystemCoupling. If the ``ansys-systemcoupling-core``
+package is installed on your machine, you can download these examples as Python files or
+Jupyter notebooks and run them locally.
 
 .. toctree::
    :maxdepth: 1
@@ -22,12 +23,12 @@ you can download these examples as Python files or Jupyter notebooks and run the
 
     </div>
 
-Coupled Analysis Examples
+Coupled analysis examples
 =========================
 These examples show you how you can use System Coupling capabilities from Python to perform
 coupled analyses. This includes importing setup data provided by participant solvers, initial
 population of the System Coupling datamodel to define the analysis, subsequent modification and
-interrogation of the datamodel, and running the System Coupling solver to perform the analysis.
+interrogation of the data model, and running the System Coupling solver to perform the analysis.
 
 
 .. raw:: html
@@ -37,7 +38,7 @@ interrogation of the datamodel, and running the System Coupling solver to perfor
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the Oscillating Plate case, which is often used as an introductory...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the oscillating plate case often used as a System Coupling tutorial.">
 
 .. only:: html
 
