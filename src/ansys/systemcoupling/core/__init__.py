@@ -26,7 +26,7 @@ def launch(
         ``None``, in which case an available port is found and used.
     working_dir : str, optional
         Path for the working directory of the System Coupling process.
-        The dafault is ``None``, in which the current directory of
+        The default is ``None``, in which the current directory of
         the client process is used.
     nprocs : int, optional
         Number of processes for coupling participants. The default is
@@ -36,7 +36,7 @@ def launch(
         ``None``, in which case the System Coupling server uses its own default.
     extra_args : List[str]
         List of any additional arguments to specify when the server
-        process is launched. The defalt is ``[]``. If a list of additional
+        process is launched. The default is ``[]``. If a list of additional
         arguments is provided, it is concatenated as-is to the list of
         arguments already being passed when the process is started. If
         an argument has an associated value, the argument name and its

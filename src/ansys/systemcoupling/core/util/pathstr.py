@@ -11,7 +11,7 @@ def to_typelist(path: str) -> List[str]:
 
 
 def to_typepath(path: str) -> str:
-    """Return path as a type path (meaing a path of types)."""
+    """Return path as a type path (meaning a path of types)."""
     if ":" not in path:
         return path
     return "/".join(c.split(":")[0] for c in path.split("/"))

@@ -57,8 +57,8 @@ class Logger:
         Parameters
         ----------
         level : Any
-            Logging level in string or enum format. Options are ``CRITICAL``, ``ERROR``, ``WARNING``,
-            ``INFO,`` and ``DEBUG``.
+            Logging level in string or enum format. Options are ``CRITICAL``,
+            ``ERROR``, ``WARNING``, ``INFO,`` and ``DEBUG``.
         """
         self.logger.setLevel(level)
 

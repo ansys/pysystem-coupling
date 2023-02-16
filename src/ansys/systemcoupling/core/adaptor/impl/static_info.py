@@ -19,7 +19,7 @@ def process_cmd_data(raw_data: list, category: str = None) -> dict:
         a command or query.
     category : str, optional
         Category for filtering the commands to process. The default is ``None``,
-        in wihch case all commands are process.
+        in which case all commands are process.
 
 Returns
 -------

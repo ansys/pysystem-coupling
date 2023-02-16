@@ -107,7 +107,7 @@ In a standard user installation, the expectation is that only ``AWP_ROOT231`` is
 The System Coupling API is exposed to PySystemCoupling in two forms:
 
 * A documented interface based on concrete Python classes, following Pythonic conventions
-* A dynamic inteface, undocumented in PySystemCoupling, that replicates the native System Coupling API
+* A dynamic interface, undocumented in PySystemCoupling, that replicates the native System Coupling API
 
 Both forms are strongly related to each other. A key difference in the Pythonic API is that naming
 is adjusted, in a generally predictable manner, to follow Python conventions. If you are already

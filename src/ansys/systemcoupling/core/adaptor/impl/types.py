@@ -90,7 +90,7 @@ class Base:
         name : str, optional
             Name of the object if it is a named-object child.
         parent: Base
-            Paret of the object.
+            Parent of the object.
         """
         self._parent = weakref.proxy(parent) if parent is not None else None
         if name is not None:
@@ -514,7 +514,7 @@ ChildTypeT = TypeVar("ChildTypeT")
 
 
 class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
-    """Provdies a container for named instances of ``Container`` objects.
+    """Provides a container for named instances of ``Container`` objects.
 
     A ``NamedContainer`` object is a ``Container`` object, similar to a Python
     dictionary object.
