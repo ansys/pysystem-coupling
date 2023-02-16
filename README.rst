@@ -35,7 +35,7 @@ ecosystem, providing additional capabilities, including:
 
 Installation
 ------------
-Install PySystemCoupling with with command:
+Install PySystemCoupling with this command:
 
 .. code::
 

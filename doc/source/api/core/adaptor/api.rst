@@ -123,7 +123,7 @@ for these root attributes, see :ref:`ref_api_details`.
 Container object types
 ----------------------
 
-In essence, the data model settings that define a System Coupling analysis consists
+In essence, the data model settings that define a System Coupling analysis consist
 of a collection of primitive property values, such as ``Integer``, ``Real``,
 ``String``, and ``Boolean``. To provide a structure to the settings,
 they are organized as groups of properties in *container* objects.
@@ -144,7 +144,7 @@ its specified child type, which is accessible via ``child_object_type`` attribut
 Because a specific named object can be accessed using the ``[]`` index operator, a
 ``NamedContaier`` object behaves somewhat like a Python dictionary. For example,
 ``setup.coupling_interface['intf-1']`` refers to the
-``coupling_interface`` object with name ``intf-1``. You can use ``get_object_names()``
+``coupling_interface`` object with name ``intf-1``. You can use the ``get_object_names()``
 method in the container class. In practice, the named object instances are ``Container``
 objects. Thus, in the example just given, ``setup.coupling_interface['intf-1']``
 is a ``Container`` object.
