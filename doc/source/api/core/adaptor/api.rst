@@ -101,7 +101,7 @@ When using the `native API` in PySystemCoupling, the equivalent would be::
 
   api.AddParticipant(InputFile="FLUENT/fluent.scp")
 
-You should not use the ``_native_api``attribute generally, but you
+You should not use the ``_native_api`` attribute generally, but you
 might find using it necessary in specific and limited circumstances.
 
 
