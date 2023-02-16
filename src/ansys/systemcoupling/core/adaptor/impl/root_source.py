@@ -1,24 +1,24 @@
-"""Source of adaptor API "root" classes, and related functionality.
+"""Source of adaptor API "root" classes and related functionality.
 
 At runtime, the key function provided here is ``get_root``. This
-returns a ``Container`` instance for the requested API root, based
+returns a ``Container`` instance for the requested API root based
 on queries to the System Coupling server. The default assumption in
-normal use is that this will return a concrete class that forms
+normal use is that this returns a concrete class that forms
 part of the PySystemCoupling package, which at some point was generated
 based on metadata queried from the current version of System Coupling.
 
-The API classes are generated at "build time" by a script that calls
+The API classes are generated at *build time* by a script that calls
 another function from this module, ``get_cls``. This takes the metadata
-queried from the System Coupling server, and constructs the classes in memory
-using Python facilities. The classes are then effectively "serialized"
+queried from the System Coupling server and constructs the classes in memory
+using Python facilities. The classes are then effectively *serialized*
 by writing out their definitions based on the in-memory objects to Python
 module files.
 
 If, at runtime, it is determined that the server is a different version
-from the one used to generate the API classes, ``get_root`` will fall back
-to using ``get_cls`` and instead of providing the "out of sync" pre-generated
-classes, runtime classes that are consistent with the System Coupling
-server will instead be constructed and returned.
+from the one used to generate the API classes, the ``get_root`` function falls back
+to using the ``get_cls`` method. In this case, instead of providing the *out of sync*
+pre-generated classes, runtime classes that are consistent with the System Coupling
+server are constructed and returned.
 """
 
 
@@ -33,7 +33,7 @@ from ansys.systemcoupling.core.util.logging import LOG
 
 from .syc_proxy_interface import SycProxyInterface
 
-# Datamodel property types defined as primitive types/type hint names
+# Data model property types defined as primitive types/type hint names
 _property_types = {
     "Integer": int,
     "Logical": bool,
@@ -65,10 +65,10 @@ def _get_property_type(id, info):
         t = _property_types[data_type]
         return t if isinstance(t, str) else t.__name__
     except AttributeError:
-        print(f"AttributeError with property type = {_property_types[data_type]}")
+        print(f"AttributeError occuured in property type = {_property_types[data_type]}.")
         raise
     except KeyError:
-        raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
+        raise RuntimeError(f"Property '{id}' type, '{data_type}' is not known.")
 
 
 def _get_type(id, info):
@@ -96,7 +96,7 @@ def _get_type(id, info):
         try:
             return _arg_types[data_type]
         except KeyError:
-            raise RuntimeError(f"Property '{id}' type, '{data_type}', not known.")
+            raise RuntimeError(f"Property '{id}' type, '{data_type}', is not known.")
 
 
 def get_cls(name: str, info: dict, parent=None):
@@ -112,7 +112,7 @@ def get_cls(name: str, info: dict, parent=None):
     except Exception:
         LOG.error(
             f"Unable to construct class for '{name}' of "
-            f"'{parent.syc_name if parent else None}'"
+            f"'{parent.syc_name if parent else None}'."
         )
         raise
 
@@ -156,7 +156,7 @@ def _get_cls(name, info, parent):
     def unique_name(base_name, existing_names):
         # TODO: this was new in Fluent; related to flattening changes, but
         # it is not entirely clear when we would see non-unique children and
-        # whether this is really needed
+        # whether this is really needed.
         candidate_name = base_name
         i = 0
         while candidate_name in existing_names:
@@ -189,8 +189,8 @@ def _get_cls(name, info, parent):
                 cls,
                 prname,
                 property(
-                    # NB: the prname defaults are needed to force capture
-                    #     StackOverflow Q 2295290 for details!
+                    # NB: the prname defaults are needed to force capture.
+                    #     For information, see StackOverflow Q 2295290.
                     fget=lambda slf, prname=prname: slf.get_property_state(prname),
                     fset=lambda slf, val, prname=prname: slf.set_property_state(
                         prname, val
@@ -247,7 +247,7 @@ def _get_cls(name, info, parent):
 
 
 def get_hash(obj_info):
-    """Returns hash for the metadata dictionary that is used in class generation."""
+    """Get hash for the metadata dictionary that is used in class generation."""
     dhash = hashlib.sha256()
     dhash.update(json.dumps(obj_info, sort_keys=True).encode())
     return dhash.hexdigest()
@@ -265,21 +265,23 @@ def get_root(
     Parameters
     ----------
     sycproxy: SycProxyInterface
-            Object that interfaces with the System Coupling backend
+            Object that interfaces with the System Coupling backend.
     category: str, optional
-            Category of API that this root refers to.
+            Category of the API that this root refers to. The default
+            is ``"setup"``.
     version: str, optional
-            Version of API that this root refers to.
+            Version of the API that this root refers to. The default is ``None``.
     generated_module: module, optional
-            Provide an alternative pre-generated module to be be used
-            instead of the one that is otherwise used by default. (This parameter
-            exists to support unit testing.)
+            Alternative pre-generated module to use instead in place of the
+            default one. The defaultis ``None``. This parameter exists to
+            support unit testing. 
     report_whether_dynamic_classes_created: callable, optional
-            Callback that will be called with a bool parameter to report whether
-            dynamic classes were created (True) or whether the pre-existing module could
-            be used (False). The former will happen if the static info provided by the proxy
+            Whether to report if dynamic classes were created. The default is
+            ``True``. If ``False``, the pre-existing module is used. The former
+            happens if the static information provided by the proxy
             does not match the hash of the pre-existing module. (This parameter
             exists to support unit testing.)
+    
     Returns
     -------
     Root ``Container`` object.
@@ -297,11 +299,11 @@ def get_root(
             LOG.debug("Using pre-generated datamodel classes.")
         else:
             LOG.warning(
-                "Mismatch between generated file and server object "
-                "info. Dynamically created settings classes will "
+                "Mismatch exists between generated file and server object "
+                "information. Dynamically created settings classes will "
                 "be used."
             )
-            raise RuntimeError("Mismatch in hash values")
+            raise RuntimeError("Mismatch exists in hash values.")
         cls = getattr(generated_module, f"{category}_root")
         report_whether_dynamic_classes_created(False)
     except Exception:

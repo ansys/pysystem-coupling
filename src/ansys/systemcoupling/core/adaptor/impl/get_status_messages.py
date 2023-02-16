@@ -56,8 +56,8 @@ def _map_path(setup_root, initial_path, extra_path):
     if path_components[0] == "SystemCoupling":
         path_components = path_components[1:]
 
-    # We drill down the path components, using the settings
-    # classes as a source of metadata
+    # Drilling down the path components uses the settings
+    # classes as a source of metadata.
     local_path = []
     local_property = None
     curr = setup_root
@@ -76,8 +76,8 @@ def _map_path(setup_root, initial_path, extra_path):
                 continue
         else:
             # Assume a property, so "type" is a property name
-            # if we have a valid path and we are at the last
-            # component
+            # if there is a valid path and the location is the last
+            # component.
             if len(local_path) == len(path_components) - 1:
                 pmap = curr._syc_to_py_propertymap()
                 local_property = pmap.get(type, None)
@@ -92,5 +92,5 @@ def _map_path(setup_root, initial_path, extra_path):
     ):
         return _make_attribute_path(local_path, local_property)
 
-    # If we get here, the path was invalid
+    # If you arrive here, the path was invalid.
     return None

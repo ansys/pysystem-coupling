@@ -2,11 +2,11 @@ import copy
 
 
 def adapt_native_named_object_keys(state):
-    """Transforms a System Coupling native-style nested state dict
+    """Transform a System Coupling native-style nested state dictionary
     to an equivalent client-side format.
 
-    In System Coupling each named object instance has a "<type>:<name>"
-    key in the state dict, so the structure is:
+    In System Coupling, each named object instance has a "<type>:<name>"
+    key in the state dictionary. Thus, the structure is:
 
     `"<type>:<name>" => {<state>}`
 
@@ -15,8 +15,9 @@ def adapt_native_named_object_keys(state):
     `"<type>" => {"<name>" => {<state>}}`
 
     This function leaves the source state unaltered and returns a completely
-    new dict in the required format. See `adapt_native_named_object_keys_in_place`
-    for an alternative that modifies the structure in place.
+    new dictionary in the required format. For an alternative that modifies
+    the structure in place, see the ``adapt_native_named_object_keys_in_place``
+    function.
     """
     state_mod = {}
     for k, v in state.items():
@@ -33,10 +34,10 @@ def adapt_native_named_object_keys(state):
 
 
 def adapt_native_named_object_keys_in_place(state):
-    """Modifies in place a provided System Coupling native-style nested state dict
+    """Modify in place a provided System Coupling native-style nested state dictionary
     to its equivalent client-side format.
 
-    See `adapt_native_named_object_keys` for details.
+    For more information, see the ``adapt_native_named_object_keys`` function.
     """
     to_delete = []
     for k in list(state.keys()):
@@ -52,23 +53,26 @@ def adapt_native_named_object_keys_in_place(state):
 
 
 def adapt_client_named_object_keys(state, level_type_map):
-    """Transforms a System Coupling client-style nested state dict
+    """Transform a System Coupling client-style nested state dictionary
     to an equivalent native format.
 
-    This is the opposite of the transformation that
-    `adapt_native_named_object_keys` performs. Unlike that function,
-    the present function cannot reliably do its job purely based on
+    This is the opposite of the transformation that the
+    `adapt_native_named_object_keys` function performs. Unlike that
+    function, this function cannot reliably do its job based only on
     the input state dictionary. This is because it is not possible
     to distinguish between what might be instances of a named object
-    within the dict from what might equally be unnamed object entries.
+    within the dictionary from what might be unnamed object entries.
     Some data model metadata is therefore required. This is provided
-    by the `level_type_map` parameter.
+    by the ``level_type_map`` parameter.
 
-    `level_type_map` is a dict from integer nest level (0-based) to
-    sets of named object types at that level. Note that the level is
-    the _datamodel_ level. This means it does not include the extra
-    levels introduced by the client-side format, but is more closely
-    aligned with the target native format.
+    Parameters
+    ----------
+    level_type_map: dict
+        Dictionary from the integer nest level (0-based) to sets of
+        named object types at this level. Note that the level is
+        the data model level. This means it does not include the extra
+        levels introduced by the client-side format but more closely
+        aligns with the target native format.
     """
 
     def do_adapt(s, level=0):

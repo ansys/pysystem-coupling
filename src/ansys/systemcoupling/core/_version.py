@@ -7,7 +7,7 @@ version_info = 0, 1, 'dev0'
 
 Examples
 --------
-Print the version
+Print the version.
 
 >>> from ansys.product import library
 >>> print(library.__version__)
@@ -18,5 +18,5 @@ Print the version
 # major, minor, patch
 version_info = 0, 1, "dev0"
 
-# Nice string for the version
+# string for the version
 __version__ = ".".join(map(str, version_info))

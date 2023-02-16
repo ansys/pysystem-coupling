@@ -64,8 +64,8 @@ class Session:
     def exit(self) -> None:
         """Close the System Coupling server instance.
 
-        Following this, the current instance of this class will not
-        be usable. Create a new instance if required.
+        After the server instance is closed, the current instance of
+        this class is not usable. Create a new instance if required.
         """
         self.__rpc.exit()
         self.__rpc = _DefunctRpcImpl()
@@ -87,33 +87,34 @@ class Session:
     def start_output(
         self, handle_output: Optional[Callable[[str], None]] = None
     ) -> None:
-        """Start streaming the `standard output` written by the System Coupling server.
+        """Start streaming the standard output written by the System Coupling server.
 
-        The ``stdout`` and ``stderr`` streams of the server process are
+        The *stdout* and *stderr* streams of the server process are
         merged into a single stream.
 
         By default, the output text is written to the console, but a custom
-        handler may be specified that deals with it in a different way (for
+        handler may be specified that deals with it in a different way. For
         example, the handler might write the output to a file or display it
-        in a separate window). In the default case, printing is done from a
-        separate thread and this may lead to unusual behavior in some
+        in a separate window. In the default case, printing is done from a
+        separate thread. This may lead to unusual behavior in some
         Python console environments. In such cases, a custom approach based
         on the handler might be preferred.
 
-        Streaming can be cancelled by calling the `end_output` method.
+        Streaming can be cancelled by calling the `end_output()` method.
 
         Parameters
         ----------
         handle_output : callable, optional
-            Called with string argument that provides the latest text in the
+            Called with a string argument that provides the latest text in the
             stream. The text may be assumed to comprise one or more complete
             lines of text, with no final newline character. The callback
-            should therefore be consistent with a simple call to ``print(text)``.
+            should therefore be consistent with a simple call to the
+            ``print(text) method``.
         """
         self.__rpc.start_output(handle_output)
 
     def end_output(self) -> None:
-        """Cancels output streaming previously started by `start_output`."""
+        """Cancels output streaming previously started by the ``start_output`` method."""
         self.__rpc.end_output()
 
     def ping(self) -> bool:
@@ -122,8 +123,7 @@ class Session:
 
     @property
     def case(self) -> case_root:
-        """Provides access to the `Pythonic` client-side form of the System
-        Coupling case persistence API.
+        """Pythonic client-side form of the System Coupling case persistence API.
         """
         if self.__case_root is None:
             self.__case_root, self.__case_proxy = self._get_api_root(category="case")
@@ -131,8 +131,7 @@ class Session:
 
     @property
     def setup(self) -> setup_root:
-        """Provides access to the `Pythonic` client-side form of the System
-        Coupling setup API and data model.
+        """Pythonic client-side form of the System Coupling setup API and data model.
         """
         if self.__setup_root is None:
             self.__setup_root, self.__setup_proxy = self._get_api_root(category="setup")
@@ -140,8 +139,7 @@ class Session:
 
     @property
     def solution(self) -> solution_root:
-        """Provides access to the `Pythonic` client-side form of the System
-        Coupling solution API.
+        """Pythonic client-side form of the System Coupling solution API.
         """
         if self.__solution_root is None:
             self.__solution_root, self.__solution_proxy = self._get_api_root(
@@ -162,10 +160,9 @@ class Session:
 
     @property
     def _native_api(self) -> NativeApi:
-        """Provides access to the "native" System Coupling API and data
-        model.
+        """Access to the *native* System Coupling API and data model.
 
-        Use of this API is not particularly encouraged but there may be
+        Use of this API is not particularly encouraged, but there may be
         situations where it is useful to access functionality that, for
         some reason, not been fully exposed in PySystemCoupling.
 
@@ -176,7 +173,7 @@ class Session:
         This API is exposed dynamically on the client side and provides
         little runtime assistance and documentation.
 
-        See the `NativeApi` class itself for more details.
+        For more information, see the `NativeApi` class itself.
         """
         if self.__native_api is None:
             self.__native_api = NativeApi(self.__rpc)

@@ -1,15 +1,14 @@
 """.. _parametric_sweep_example:
 
-Parametric sweep example
-========================
+Parametric sweep
+================
 
-This example is based on a steady FSI case, where the fluid is flowing over a flexible plate.
+This example is based on a steady FSI case where the fluid is flowing over a flexible plate.
+It shows how you use PySystemCoupling with some other PyAnsys libraries.
 
 The case is run a number of times, with varying fluid inlet velocity. The goal is to extract
-the maximum plate deflection from each solution and to examine how it responds to the
+the maximum plate deflection from each solution and examine how it responds to the
 changing velocity value.
-
-It illustrates the use of PySystemCoupling in conjunction with some other PyAnsys tools.
 
 .. image:: /_static/param_sweep_flow.png
    :width: 400pt
@@ -25,9 +24,9 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
 # %%
 # Perform required imports
 # ------------------------
-# As well as the PySystemCoupling package, PyFluent and PyDPF also need
-# to be imported for this example. In addition, facilities from ``matplotlib`` and
-# ``numpy`` are used to produce a simple plot of the results.
+# This example imports these PyAnsys libraries: PySystemCoupling,
+# PyFluent, and PyDPF. It also imports Matplotlib and NumPy to
+# produce a simple plot of the results.
 
 # sphinx_gallery_thumbnail_path = '_static/param_sweep_flow.png'
 import os
@@ -46,22 +45,22 @@ from ansys.systemcoupling.core import examples
 # Define functions
 # ----------------
 # This example is broken into functions that define the main steps that
-# need to be performed. It makes particular sense to do this for the
-# main task of running a coupled analysis as that needs to be repeated
+# must be performed. It makes particular sense to do this for the
+# main task of running a coupled analysis because this task must be repeated
 # for multiple values of a single input parameter. This is encapsulated
-# in ``get_max_displacement``. In turn, this is broken into further
-# functions that represent its main steps. Also, define a function that prepares the
-# working directory (``setup_working_directory``) and one that plots the final
-# results (``plot``).
+# in the ``get_max_displacement`` function. In turn, this function is broken
+# into further functions that represent its main steps. Also, functions are
+# defined to prepares the working directory (``setup_working_directory``)
+# and plot the final results (``plot``).
 #
-# ``setup_working_directory``
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Set up the working directory with downloaded
-# data files for this example. The MAPDL files are placed in a
-# sub-directory MAPDL of the working directory and the Fluent files
-# in a sub-directory Fluent.
-#
-# The function returns the path of the working directory for later use.
+# Set up working directory
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# To set up the working directory with the downloaded data files for this
+# example, use the ``setup_working_directory()`` function. In the working
+# directory, the MAPDL files are placed in a ``Mapdl`` subdirectory, and
+# the Fluent files are placed in a ``Fluent`` subdirectory. The
+# ``setup_working_directory()`` function returns the path of the
+# working directory for later use.
 
 def setup_working_directory():
     examples.delete_downloads()
@@ -97,13 +96,13 @@ def setup_working_directory():
     return working_dir
 
 # %%
-# ``set_inlet_velocity``
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Modify the Fluent case to adjust the
-# inlet velocity on the ``"wall_inlet"`` velocity inlet boundary
-# condition. This function is called with a varying ``inlet_velocity``
-# parameter before each call of ``solve_coupled_analysis`` in
-# a sequence of analyses.
+# Set inlet velocity
+# ~~~~~~~~~~~~~~~~~~
+# To modify the Fluent case to adjust the inlet velocity on the
+# ``"wall_inlet"`` velocity inlet boundary condition, use the
+# ``set_inlet_velocity()`` function. This function is called
+# with a varying ``inlet_velocity``value before each call of
+# the ``solve_coupled_analysis`` command in a sequence of analyses.
 
 def set_inlet_velocity(working_dir, inlet_velocity):
   with pyfluent.launch_fluent(precision="double", processor_count=2) as session:
@@ -117,12 +116,11 @@ def set_inlet_velocity(working_dir, inlet_velocity):
   print(f"Inlet velocity is set to {inlet_velocity}")
 
 # %%
-# ``solve_coupled_analysis``
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Perform a single coupled analysis.
-#
-# In this example, the only change between successive calls to this function
-# is in the content of the Fluent input file that is used. The inlet velocity
+# Solve coupled analysis
+# ~~~~~~~~~~~~~~~~~~~~~~
+# Perform a single coupled analysis. In this example, the only change
+# between successive calls to this function is in the content of the
+# Fluent input file that is used. The value for the ``inlet_velocity``
 # setting is modified in the Fluent file prior to this function being called.
 #
 # .. note::
@@ -135,7 +133,7 @@ def set_inlet_velocity(working_dir, inlet_velocity):
 
 def solve_coupled_analysis(working_dir):
     with pysyc.launch(working_dir=working_dir) as syc:
-        print("Setting up the coupled analysis")
+        print("Setting up the coupled analysis.")
 
         fluent_name = syc.setup.add_participant(
             input_file = os.path.join("Fluent", "fluent.scp"))
@@ -157,16 +155,16 @@ def solve_coupled_analysis(working_dir):
 
         syc.setup.solution_control.maximum_iterations = 7
 
-        print("Solving the coupled analysis. This may take a while...")
+        print("Solving the coupled analysis. This may take a while....")
         syc.solution.solve()
 
-    print("...done!")
+    print("...done.")
 
 # %%
-# ``extract_max_displacement``
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Use PyDPF to query the MAPDL results for the maximum displacement
-# value in the solution.
+# Extract maximum displacement value
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Use PyDPF to query the MAPDL results for the extract the
+# maximum displacement value in the solution.
 def extract_max_displacement(working_dir):
   print("Extracting max displacement value")
   model = pydpf.Model(os.path.join(working_dir, "Mapdl", "file.rst"))
@@ -177,23 +175,24 @@ def extract_max_displacement(working_dir):
   return value
 
 # %%
-# ``get_max_displacement``
+# Get maximum displacement
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # Use the previously defined functions to:
 #
 # - Modify the Fluent input file to apply the provided ``inlet_velocity`` setting.
-# - Run the coupled analysis based on that setting.
+# - Run the coupled analysis based on this setting.
 # - Extract and return the maximum displacement value from the MAPDL results.
+
 def get_max_displacement(working_dir, inlet_velocity):
   set_inlet_velocity(working_dir, inlet_velocity)
   solve_coupled_analysis(working_dir)
   return extract_max_displacement(working_dir)
 
 # %%
-# ``plot``
-# ~~~~~~~~
-# Generate an `x-y` plot of the results, showing
-# maximum displacement of the plate vs the inlet velocity.
+# Plot results
+# ~~~~~~~~~~~~
+# Generate an ``x-y`` plot of the results, showing the maximum
+# displacement of the plate versus the inlet velocity.
 #
 def plot(working_dir, x, y):
   fig, ax = plt.subplots()
@@ -206,13 +205,13 @@ def plot(working_dir, x, y):
   plt.savefig(os.path.join(working_dir, "displacement"))
 
 # %%
-# Run the analyses
-# ----------------
-# Use the ``get_max_displacement`` function sequentially, with input
+# Run analyses
+# ------------
+# Use the ``get_max_displacement()`` function sequentially, with input
 # velocity values provided by an initialized ``x`` array.
-# The results of the ``get_max_displacement`` calls are used to fill in the
-# corresponding values of the ``y`` array. Finally, call
-# the ``plot`` function to generate a plot from the arrays.
+# The results of the calls to the ``get_max_displacement()`` function
+# are used to fill in the corresponding values of the ``y`` array.
+# Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
 y = np.array([0.0] * len(x))

@@ -6,7 +6,7 @@ def _splitCamelCase(name):
 
 
 def to_python_name(name):
-    """Convert 'MyPropertyName' to pythonic 'my_property_name'."""
+    """Convert 'MyPropertyName' to Pythonic 'my_property_name'."""
 
     components = _splitCamelCase(name)
     return "_".join(comp.lower() for comp in components)

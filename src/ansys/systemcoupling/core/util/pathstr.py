@@ -2,7 +2,7 @@ from typing import Iterable, List
 
 
 def to_typelist(path: str) -> List[str]:
-    """Return types in path (i.e. discarding names) as a list."""
+    """Return types in path (meaning discarding names) as a list."""
     if "/" not in path:
         return []
     if ":" not in path:
@@ -11,16 +11,17 @@ def to_typelist(path: str) -> List[str]:
 
 
 def to_typepath(path: str) -> str:
-    """Return path as a "type path" (a path of types)."""
+    """Return path as a type path (meaing a path of types)."""
     if ":" not in path:
         return path
     return "/".join(c.split(":")[0] for c in path.split("/"))
 
 
 def join_path_strs(*path_strs: Iterable[str]) -> str:
-    """Join list of strings as a path string.
+    """Join a list of strings as a path string.
 
-    Note: a leading empty path component is required for
-    a leading path separtator "/" in the returned value.
+    .. note::
+       A leading empty path component is required for a
+       leading path separtator (``/``) in the returned value.
     """
     return "/".join(path_strs)

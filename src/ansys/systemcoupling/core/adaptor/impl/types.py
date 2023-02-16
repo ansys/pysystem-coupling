@@ -1,19 +1,19 @@
 """
 Implementation types for the System Coupling adaptor API.
 
-These comprise: "container" types supporting nesting, basic types
-for primitive settings values, and "command" types.
+These comprise *container* types supporting nesting, basic types
+for primitive settings values, and *command* types.
 
-Child containers can be generally accessed/modified using attribute access.
-Named child objects can be accessed/modified using the index operator.
+Child containers can be generally accessed or modified using attribute access.
+Named child objects can be accessed or modified using the index operator.
 
 Primitive settings are accessed (get/set) as properties.
 
-Calling an object will return its current value as a "state" dictionary.
+Calling an object returns its current value as a *state* dictionary.
 
 Example
 -------
-Given a root object, `setup` say:
+Here is an example using the root ``setup`` object.
 
 interface_name = "interface-1"
 interface = setup.coupling_interface.create(interface_name)
@@ -55,9 +55,9 @@ StrOrIntDictListDictType = Dict[str, StrOrIntDictListType]
 
 
 def to_python_name(syc_name: str) -> str:
-    """Convert a native SyC name string to python variable name.
+    """Convert the string for a native System Coupling name to a Python variable name.
 
-    Native names are camel case - we convert to snake case.
+    This method converts the native names in camel case to snake case.
     """
     if not syc_name:
         return syc_name
@@ -69,7 +69,7 @@ def to_python_name(syc_name: str) -> str:
 
 class Base:
     """
-    Base class for settings and command objects.
+    Provides the base class for settings and command objects.
 
 
     Attributes
@@ -83,14 +83,14 @@ class Base:
     _initialized = False
 
     def __init__(self, name: str = None, parent=None):
-        """Initializes an instance of the Base class.
+        """Initialize an instance of the ``Base`` class.
 
         Parameters
         ----------
-        name : str
-            name of the object if a child of named-object.
+        name : str, optional
+            Name of the object if it is a named-object child.
         parent: Base
-            Object's parent.
+            Paret of the object.
         """
         self._parent = weakref.proxy(parent) if parent is not None else None
         if name is not None:
@@ -107,7 +107,7 @@ class Base:
     def sycproxy(self):
         """Proxy object.
 
-        This is set at the root level, and accessed via parent for child
+        This is set at the root level and accessed via the parent for child
         classes.
         """
         if self._sycproxy is None:
@@ -120,7 +120,7 @@ class Base:
 
     @property
     def obj_name(self) -> str:
-        """SystemCoupling name of this object.
+        """System Coupling name of this object.
 
         By default, this returns the object's static name. If the object is a
         named-object child, the object's name is returned.
@@ -131,9 +131,9 @@ class Base:
 
     @property
     def path(self) -> str:
-        """Path of this object.
+        """Path of the object.
 
-        Constructed from obj_name of self and path of parent.
+        The path is constructed from this object's name and the path of its parent.
         """
         if self._parent is None:
             return self.obj_name
@@ -144,7 +144,7 @@ class Base:
 
     @property
     def syc_path(self) -> str:
-        """Path of this object in native SystemCoupling form."""
+        """Path of the object in native System Coupling form."""
         if self._parent is None:
             return "/" + self.syc_name
         ppath = self._parent.syc_path
@@ -156,46 +156,46 @@ StateT = TypeVar("StateT")
 
 class SettingsBase(Base, Generic[StateT]):
     """
-    Base class for settings objects.
+    Provides the base class for ``settings`` objects.
 
     Methods
     -------
     get_state()
-        Return the current state of the object
+        Get the current state of the object.
 
     set_state(state)
-        Set the state of the object
+        Set the state of the object.
     """
 
     @classmethod
     def to_syc_keys(cls, value: StateT) -> StateT:
         """Convert value to have keys with native System Coupling names.
 
-        This is overridden in ``Container`` and ``NamedContainer`` classes.
+        The value is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return value
 
     @classmethod
     def to_python_keys(cls, value: StateT) -> StateT:
-        """Convert value to have keys with python names.
+        """Convert value to have keys with Python names.
 
-        This is overridden in ``Container`` and ``NamedContainer`` classes.
+        The value is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return value
 
     @classmethod
     def to_syc_name(cls, name: str) -> str:
-        """Convert Python name native System Coupling identifier.
+        """Convert Python name to a native System Coupling identifier.
 
-        This is overridden in ``Container`` and ``NamedContainer`` classes.
+        This name is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return name
 
     @classmethod
     def to_python_name(cls, name: str) -> str:
-        """Convert native System Coupling identifier to Python name.
+        """Convert the native System Coupling identifier to a Python name.
 
-        This is overridden in ``Container`` and ``NamedContainer`` classes.
+        This name is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return name
 
@@ -204,19 +204,19 @@ class SettingsBase(Base, Generic[StateT]):
         return self.get_state()
 
     def get_state(self) -> StateT:
-        """Get the state of this object."""
+        """Get the state of the object."""
         return self.to_python_keys(self.sycproxy.get_state(self.syc_path))
 
     def set_state(self, state: StateT):
-        """Set the state of this object."""
+        """Set the state of the object."""
         return self.sycproxy.set_state(self.syc_path, self.to_syc_keys(state))
 
     def set_property_state(self, prop, value):
-        """Set the state of the property ``prop`` to ``value``."""
+        """Set the state of the ``prop`` property to ``value``."""
         self.set_state({prop: value})
 
     def get_property_state(self, prop):
-        """Get the state of the property ``prop``."""
+        """Get the state of the ``prop`` property ."""
         return self.sycproxy.get_state(self.syc_path + "/" + self.to_syc_name(prop))
 
     @staticmethod
@@ -240,22 +240,22 @@ class SettingsBase(Base, Generic[StateT]):
             out.write(f" {state}\n")
 
     def print_state(self, out=None, indent_factor=2):
-        """Print the state of this object."""
+        """Print the state of the object."""
         out = sys.stdout if out is None else out
         self._print_state_helper(self.get_state(), out, indent_factor=indent_factor)
         out.flush()
 
 
 class Integer(SettingsBase[int]):
-    """An Integer object represents an integer value setting."""
+    """Provides an ``Integer`` object that represents an integer value setting."""
 
     _state_type = int
 
 
 class Real(SettingsBase[RealType]):
-    """A Real object represents a real value setting.
+    """Provides a ``Real`` object that represents a real value setting.
 
-    Some Real objects also accept string arguments representing expression
+    Some ``Real`` objects also accept string arguments representing expression
     values.
     """
 
@@ -263,111 +263,111 @@ class Real(SettingsBase[RealType]):
 
 
 class String(SettingsBase[str]):
-    """A String object represents a string value setting."""
+    """Provides a ``String`` object that represents a string value setting."""
 
     _state_type = str
 
 
 class Filename(SettingsBase[str]):
-    """A Filename object represents a file name."""
-
+    """Provides a ``Filename`` object that represents a file name."""
     _state_type = str
 
 
 class Boolean(SettingsBase[bool]):
-    """A Boolean object represents a boolean value setting."""
+    """Provides a ``Boolean`` object that represents a Boolean value setting."""
 
     _state_type = bool
 
 
 class RealList(SettingsBase[RealListType]):
-    """A RealList object represents a real list setting."""
+    """Provides a ``RealList`` object that represents a real list setting."""
 
     _state_type = RealListType
 
 
 class IntegerList(SettingsBase[IntListType]):
-    """An Integer object represents a integer list setting."""
+    """Provides an ``IntegerList`` object that represents an integer list setting."""
 
     _state_type = IntListType
 
 
 class RealVector(SettingsBase[RealVectorType]):
-    """An object to represent a 3D vector.
+    """Provides a ``RealVector`` object that represents a 3D vector.
 
-    A RealVector object represents a real vector setting consisting of
-    3 real values.
+    A ``RealVector`` object represents a real vector setting consisting of
+    three real values.
     """
 
     _state_type = RealVectorType
 
 
 class StringList(SettingsBase[StringListType]):
-    """A StringList object represents a string list setting."""
+    """Provides a ``StringList`` object that represents a string list setting."""
 
     _state_type = StringListType
 
 
 class BooleanList(SettingsBase[BoolListType]):
-    """A BooleanList object represents a boolean list setting."""
+    """Provides a ``BooleanList`` object that represents a Boolean list setting."""
 
     _state_type = BoolListType
 
 
 class StrFloatPairList(SettingsBase[StrFloatPairListType]):
-    """A StrFloatPairList object represents a list of string-float pairs."""
+    """Provides a ``StrFloatPairList`` object that represents a list of string-float pairs."""
 
     _state_type = StrFloatPairListType
 
 
 class StrOrIntDictList(SettingsBase[StrOrIntDictListType]):
-    """A StrOrIntDictList object represents a list of simple dictionary values
-    with string keys and string or int values."""
+    """Provides a ``StrOrIntDictList`` object that represents a list of simple dictionary values
+    with string keys and string or integer values."""
 
     _state_type = StrOrIntDictListType
 
 
 class StrOrIntDictListDict(SettingsBase[StrOrIntDictListDictType]):
-    """A StrOrIntDictListDict object represents a dictionary of string keys to
-    StrOrIntDictList values."""
+    """Provides a ``StrOrIntDictListDict`` object that represents a dictionary of string keys to
+    ``StrOrIntDictList`` values."""
 
     _state_type = StrOrIntDictListDictType
 
 
 class Container(SettingsBase[DictStateType]):
-    """Container object for primitive values and other settings objects.
+    """Provides a ``Container`` object for primitive values and other ``settings`` objects.
 
-    A ``Container`` may contain child objects which are further objects of
-    type ``Container``, objects of type ``NamedContainer``, or various
-    types of 'command' object. Child objects are accessed as attributes.
+    A ``Container`` may contain child objects that are further objects of
+    type ``Container``, objects of the ``NamedContainer`` type, or various
+    types of ``command`` object. Child objects are accessed as attributes.
 
-    Concrete instances of ``Container`` will usually provide access to
-    primitive settings (e.g., real, string values, etc.) as Python properties.
+    Concrete instances of the ``Container`` object usually provide access to
+    primitive settings (such as real values and string values) as Python properties.
 
-    Note: the attributes listed below are mainly for implementation purposes.
+    .. note::
+       The following attributes are mainly for implementation purposes.
 
     Attributes
     ----------
     child_names: list[str]
-        Names of the child objects
+        List of names for the child objects.
     command_names: list[str]
-        Names of the commands
+        List of names of the commands.
     property_names_types: List[Tuple[str, str, str]]
         List of tuples, each comprising property name, System Coupling property name,
-        type identifier.
+        and type identifier.
     """
 
     _state_type = DictStateType
 
     def __init__(self, name: str = None, parent=None):
-        """Initializes an instance of the ``Container`` class.
+        """Initialize an instance of the ``Container`` class.
 
         Parameters
         ----------
         name : str
-            name of the object if a child of named-object.
+            Name of the object if a named-object child.
         parent: Base
-            Object's parent.
+            Parent of the object.
         """
         super().__init__(name, parent)
         for child in self.child_names:
@@ -412,12 +412,13 @@ class Container(SettingsBase[DictStateType]):
 
     @classmethod
     def to_python_keys(cls, value):
-        """Convert value to have keys with python names."""
+        """Convert value to have keys with Python names."""
         if isinstance(value, collections.abc.Mapping):
             # get_state and print_state rely on the value returned from here
             # so we impose the correct datamodel ordering when we build the
-            # value. The code below should NOT be simplified unless this is
-            # understood! Note that we depend on dict preserving insertion order.
+            # value. The following code should NOT be simplified unless this is
+            # understood! Note that we depend on the dictionary preserving the
+            # insertion order.
 
             ret = {}
             # Properties first...
@@ -443,7 +444,7 @@ class Container(SettingsBase[DictStateType]):
     def to_syc_name(cls, name: str) -> str:
         """Convert Python property name to native System Coupling name.
 
-        This is overridden in ``Container`` and ``NamedContainer`` classes.
+        The name is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         for prop, sycprop, _ in cls.property_names_types:
             if prop == name:
@@ -454,7 +455,7 @@ class Container(SettingsBase[DictStateType]):
     def to_python_name(cls, name: str) -> str:
         """Convert native System Coupling property name to Python name.
 
-        This is overridden in ``Container`` and ``NamedContainer`` classes.
+        The name is overridden in ``Container`` and ``NamedContainer`` classes.
         """
         return cls._syc_to_py_propertymap()[name]
 
@@ -463,18 +464,18 @@ class Container(SettingsBase[DictStateType]):
     property_names_types = []
 
     def get_property_options(self, name: str) -> StringList:
-        """Returns the currently available options for the specified property name.
+        """Get the currently available options for a specified property
 
-        This function is applicable as follows:
+        This method is applicable as follows:
 
-        - May only be called for `String` and `StringList` properties; an
-          exception will be thrown otherwise.
+        - It may only be called for ``String`` and ``StringList`` properties. An
+          exception is thrown otherwise.
 
-        - Should only be called for properties that are known currently to be
-          active in the data model. This requirement is not yet enforced or validated
-          but, if it is violated, the content of any value returned is unspecified.
+        - It should only be called for properties that are known currently to be
+          active in the data model. This requirement is not yet enforced or validated.
+          However, if it is violated, the content of any value returned is unspecified.
 
-        - Should only be called for properties that are known to be constrained
+        - It should only be called for properties that are known to be constrained
           to a certain list of allowed values. An empty list is returned in other
           cases.
         """
@@ -513,15 +514,17 @@ ChildTypeT = TypeVar("ChildTypeT")
 
 
 class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
-    """A container for named instances of ``Container`` objects.
+    """Provdies a container for named instances of ``Container`` objects.
 
-    A ``NamedContainer`` is a container object, similar to a Python dict object.
+    A ``NamedContainer`` object is a ``Container`` object, similar to a Python
+    dictionary object.
+    
     Generally, many such objects can be created with different names.
 
     Attributes
     ----------
     command_names: list[str]
-                   Names of the commands
+        List of mames of the commands.
     """
 
     _syc_pathsep = ":"
@@ -529,14 +532,15 @@ class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
     # New objects could get inserted by other operations, so we cannot assume
     # that the local cache in self._objects is always up-to-date
     def __init__(self, name: str = None, parent=None):
-        """Initializes an instance of the ``NamedContainer`` class.
+        """Initialize an instance of the ``NamedContainer`` class.
 
         Parameters
         ----------
-        name : str
-            name of the object if a child of named-object.
-        parent: Base
-            Object's parent.
+        name : str, optional
+            Nme of the object if a named-object child. The default
+            is ``None``.
+        parent: Base, optional
+            Paren to the object. The default is ``None``.
         """
         super().__init__(name, parent)
         self._objects = {}
@@ -616,22 +620,23 @@ class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
         return self._objects.items()
 
     def create(self, name: str):
-        """Create a named object with given name.
+        """Create a named object.
 
         Parameters
         ----------
         name: str
-              Name of new object
+            Name of the new object.
 
         Returns
         -------
-        The object that has been created
+        Obj
+           Object that has been created.
         """
         self.sycproxy.create_named_object(self.syc_path, name)
         return self._create_child_object(name)
 
     def get_object_names(self):
-        """Object names."""
+        """Get object names."""
         return self.sycproxy.get_object_names(self.syc_path)
 
     def __getitem__(self, name: str) -> ChildTypeT:
@@ -652,7 +657,7 @@ class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
 
 
 class Command(Base):
-    """Command object."""
+    """Provides the ``Command`` object."""
 
     _is_path_cmd = False
 
@@ -675,11 +680,11 @@ class Command(Base):
                 newkwds[ccls.syc_name] = ccls.to_syc_keys(v)
                 missing_args.discard(k)
             else:
-                raise RuntimeError("Argument '" + str(k) + "' is invalid")
+                raise RuntimeError("Argument '" + str(k) + "' is invalid.")
 
         if missing_args:
             raise RuntimeError(
-                "At least one essential argument has not been provided.\n"
+                "At least one essential argument must be provided.\n"
                 f"(Missing: {list(missing_args)})."
             )
 
@@ -687,17 +692,17 @@ class Command(Base):
 
 
 class InjectedCommand(Base):
-    """Call a locally defined function that has been injected into the
-    generated API hierarchy to appear alongside the generic commands.
+    """Provides a base class for calling a locally defined function that has
+    been injected into the generated API hierarchy so that it appears alongside
+    the generic commands.
 
-    This can also be used to override an existing API command with a local
-    version. In this case the ``syc_name`` will refer to the remote
-    System Coupling command name. If the command is not an override the
-    ``syc_name`` will be the same as the local function name.
+    This class can also be used to override an existing API command with a local
+    version. In this case the ``syc_name`` refers to the remote
+    System Coupling command name. If the command is not an override, the
+    ``syc_name`` is the same as the local function name.
 
-    In all cases, the ``cmd_name`` attribute, that is specific to this class
-    will be set and this will be the definitive name to call on the
-    proxy interface.
+    In all cases, the ``cmd_name`` attribute that is specific to this class
+    is set and used as the definitive name to call on the proxy interface.
 
     Attributes
     ----------
@@ -709,9 +714,9 @@ class InjectedCommand(Base):
     def __call__(self, **kwds):
         """Call a command with the specified keyword arguments.
 
-        Note that this is a straight "pass-through" call to execute the command
+        Note that this is a straight *pass-through* call to execute the command
         on the proxy. No argument processing is done as in the ``Command`` case
-        because we can make no assumptions about the local function.
+        because no assumptions can be made about the local function.
         """
         return self.sycproxy.execute_injected_cmd(
             self._parent.path, self.cmd_name, **kwds
@@ -719,6 +724,6 @@ class InjectedCommand(Base):
 
 
 class PathCommand(Command):
-    """Path-based command object."""
+    """Provides the path-based command object."""
 
     _is_path_cmd = True

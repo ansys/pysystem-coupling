@@ -10,24 +10,23 @@ from .object_path import ObjectPath
 
 
 class NativeApi:
-    """Exposes the "native" System Coupling command and query API into
+    """Exposes the *native* System Coupling command and query API into
     PySystemCoupling.
 
-    This allows commands and queries to be scripted similarly to how it
-    would be done in System Coupling's own CLI. The main difference
+    This class allows commands and queries to be scripted similarly to how it
+    is done in System Coupling's own command-line interface (CLI). The main difference
     is that rather than being exposed into the global Python environment,
-    here they are made available as attributes of this class.
+    here commands and queries are made available as attributes of this class.
 
     The path-based syntax of the native API is also supported. However,
     instead of using the global ``DatamodelRoot()`` query as the path root,
-    simply use the instance of this class as the root. (Note that while
-    ``DatamodelRoot`` can be called here, it simply returns the
-    string value of the root path, and cannot be used as in the System
-    Coupling CLI.)
+    use the instance of this class as the root. (Note that while
+    ``DatamodelRoot`` can be called here, it returns the string value
+    of the root path, which cannot be used as in the System Coupling CLI.)
     """
 
     def __init__(self, rpc_impl):
-        """Create an instance of this class.
+        """Create an instance of the ``NativeApi`` class.
 
         Parameters
         ----------
@@ -35,9 +34,9 @@ class NativeApi:
             Provider of remote command and query services.
         """
         self.__rpc_impl = rpc_impl
-        LOG.debug("NativeApi: initialise datamodel...")
+        LOG.debug("NativeApi: initialize datamodel...")
         self._init_datamodel()
-        LOG.debug("NativeApi: initialise commands...")
+        LOG.debug("NativeApi: initialize commands...")
         self._init_cmds()
         LOG.debug("...done")
         self.__meta_wrapper = MetaWrapper(self.__dm_meta, self.__cmd_meta)
@@ -49,10 +48,10 @@ class NativeApi:
     def execute_command(self, name, **kwargs):
         """Execute the named command or query and return the result.
 
-        All commands and queries take one or many keyword arguments. Some
-        of these can be optional, depending on the command or query.
+        All commands and queries take one or more keyword arguments. Some
+        of these areguments can be optional, depending on the command or query.
 
-        A query will return a value of a type that is dependent on the
+        A query returns a value of a type that is dependent on the
         query.
 
         A few commands return a value (again with a type dependent on
@@ -74,8 +73,8 @@ class NativeApi:
         """Provides access to the native System Coupling commands and queries API
         as attributes of this class's instance.
 
-        For example, the System Coupling command ``Solve()`` may be invoked on an
-        instance of this class, ``syc``, as follows::
+        For example, the System Coupling ``Solve()`` command can be invoked on an
+        instance of the ``syc`` class as follows::
 
             syc.Solve()
 
@@ -87,7 +86,7 @@ class NativeApi:
         very close to that available in the native CLI.
 
         For example, if System Coupling exposes a data model object ``SolutionControl``,
-        then various operations are supported, as illustrated below.
+        then various operations are supported, as shown below.
 
             Query state of object::
 
@@ -152,7 +151,7 @@ class NativeApi:
         dm_meta_raw = self.__rpc_impl.GetMetadata(json_ret=True)
         LOG.debug("Build local metadata")
         self.__dm_meta = build_dm_meta(dm_meta_raw)
-        LOG.debug("...datamodel metadata initialised for native API")
+        LOG.debug("...datamodel metadata initialized for native API")
 
     def _init_cmds(self):
         cmd_meta = self.__rpc_impl.GetCommandAndQueryMetadata()
