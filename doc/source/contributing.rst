@@ -60,11 +60,12 @@ as described in :ref:`ref_generate_api`. This is because some of the documentati
 from these classes. 
 
 Because multiple versions of the API classes can exist, you must set the ``PYSYC_DOC_BUILD_VERSION``
-environment variable to tell the documentation build which version to use. Because there is no
-default for this environment variable, you *must* set it. The value should be a string in the same
-form as the ``<version>`` component of the ``api_<version>`` directory. For example, "23_1"..
+environment variable to tell the documentation build which version to use. Given that there is
+no default for this environment variable, you *must* set it. The value should be a string in the
+same form as the ``<version>`` component of the ``api_<version>`` directory. For example,
+"23_1".
 
-With this variable set, execute this code to build the documentation:
+With this variable set, run this code to build the documentation:
 
 .. code::
 
