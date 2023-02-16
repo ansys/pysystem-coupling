@@ -20,7 +20,7 @@ class SycProxy(SycProxyInterface):
         """Reset the original ``rpc`` instance with a new one if the remote connection is lost.
         
         When a remote connection is lost, this method is called, providing an
-        `rpc` instance that replaces the original one from the initializer.
+        ``rpc`` instance that replaces the original one from the initializer.
         A sensible error is raised if any attempt is made to use this method.
 
         The motivating use case is to catch attempted uses of stale

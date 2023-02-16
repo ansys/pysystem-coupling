@@ -83,7 +83,7 @@ def _path_to_system_coupling():  # pragma: no cover
             scroot = os.path.join(scroot, "SystemCoupling")
 
     if scroot is None:
-        raise RuntimeError("Failed to locate System Coupling from environment variables.")
+        raise RuntimeError("Failed to locate System Coupling from environment.")
 
     script_path = os.path.join(scroot, "bin", _SCRIPT_NAME)
 
