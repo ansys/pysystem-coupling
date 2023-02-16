@@ -270,6 +270,7 @@ class String(SettingsBase[str]):
 
 class Filename(SettingsBase[str]):
     """Provides a ``Filename`` object that represents a file name."""
+
     _state_type = str
 
 
@@ -518,7 +519,7 @@ class NamedContainer(SettingsBase[DictStateType], Generic[ChildTypeT]):
 
     A ``NamedContainer`` object is a ``Container`` object, similar to a Python
     dictionary object.
-    
+
     Generally, many such objects can be created with different names.
 
     Attributes

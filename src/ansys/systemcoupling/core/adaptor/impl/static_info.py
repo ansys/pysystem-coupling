@@ -9,24 +9,24 @@ from ansys.systemcoupling.core.util.name_util import to_python_name
 
 def process_cmd_data(raw_data: list, category: str = None) -> dict:
     """Take the raw command and query metadata provided by System Coupling
-    and manipulate it into a form that can be used by the data model
-    generation functionality.
+        and manipulate it into a form that can be used by the data model
+        generation functionality.
 
-    Parameters
-    ----------
-    raw_data : list
-        List of dict objects, each of which contains the attributes defining
-        a command or query.
-    category : str, optional
-        Category for filtering the commands to process. The default is ``None``,
-        in which case all commands are process.
+        Parameters
+        ----------
+        raw_data : list
+            List of dict objects, each of which contains the attributes defining
+            a command or query.
+        category : str, optional
+            Category for filtering the commands to process. The default is ``None``,
+            in which case all commands are process.
 
-Returns
--------
-dict
-   Dictionary keyed by the System Coupling native name to a dictionary
-    of relevant attributes. If the ``category`` parameter is provided,
-    it is used to filter the commands that are processed.
+    Returns
+    -------
+    dict
+       Dictionary keyed by the System Coupling native name to a dictionary
+        of relevant attributes. If the ``category`` parameter is provided,
+        it is used to filter the commands that are processed.
     """
 
     cmds_out = {}
@@ -98,7 +98,7 @@ def make_combined_metadata(
         Metadata describing the commands and queries to expose.
     category : str
         The API category to extract metadata for.
-    
+
     Returns
     -------
     dict
@@ -116,7 +116,7 @@ def make_combined_metadata(
 
 def make_cmdonly_metadata(cmd_metadata: dict, category: str) -> Tuple[dict, str]:
     """Combine the command metadata into a single structure.
-    
+
     Although this method is similar to the ``make_combined_metadata`` method, it covers
     the case where the category contains commands but no hierarchical data model content.
 
@@ -126,7 +126,7 @@ def make_cmdonly_metadata(cmd_metadata: dict, category: str) -> Tuple[dict, str]
         Metadata describing the commands and queries to expose.
     category : str
         API category to extract metadata for.
-    
+
     Returns
     -------
     tuple
@@ -225,7 +225,7 @@ def get_cmd_metadata(api) -> list:
     ----------
     api : NativeApi
         Object providing access to the System Coupling *native API* .
-    
+
     Returns
     -------
     list
@@ -275,7 +275,7 @@ def get_cmd_metadata(api) -> list:
 def get_extended_cmd_metadata(api) -> list:
     """Get command metadata from System Coupling and adapt it to the
     form needed for the client implementation.
-    
+
     This metadata that this method gets includes locally defined *commands*
     that are injected into the API.
 

@@ -65,7 +65,9 @@ def _get_property_type(id, info):
         t = _property_types[data_type]
         return t if isinstance(t, str) else t.__name__
     except AttributeError:
-        print(f"AttributeError occuured in property type = {_property_types[data_type]}.")
+        print(
+            f"AttributeError occuured in property type = {_property_types[data_type]}."
+        )
         raise
     except KeyError:
         raise RuntimeError(f"Property '{id}' type, '{data_type}' is not known.")
@@ -274,14 +276,14 @@ def get_root(
     generated_module: module, optional
             Alternative pre-generated module to use instead in place of the
             default one. The defaultis ``None``. This parameter exists to
-            support unit testing. 
+            support unit testing.
     report_whether_dynamic_classes_created: callable, optional
             Whether to report if dynamic classes were created. The default is
             ``True``. If ``False``, the pre-existing module is used. The former
             happens if the static information provided by the proxy
             does not match the hash of the pre-existing module. (This parameter
             exists to support unit testing.)
-    
+
     Returns
     -------
     Root ``Container`` object.
