@@ -31,7 +31,7 @@ package build to provide an API to System Coupling facilities. The classes are l
 generated from metadata queried from a running instance of System Coupling.
 
 For local development, you must perform this additional generation step manually,
-after the preceding steps for cloning and installating the package.
+after the preceding steps for cloning and installing the package.
 
 .. code::
 

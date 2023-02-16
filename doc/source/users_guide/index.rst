@@ -50,8 +50,8 @@ A ``Session`` object is the client-side access point in PySystemCoupling to a Sy
 This object exposes an API that allows a System Coupling analysis to be set up and solved. One or more
 such server sessions can be launched simultaneously from the client.
 
-In addition to providing an API for estting up and solving coupled analyses, the``Session``
-objecct provides access to a few basic capabilities described in the sections that follow.
+In addition to providing an API for setting up and solving coupled analyses, the``Session``
+object provides access to a few basic capabilities described in the sections that follow.
 
 Connection check
 ----------------

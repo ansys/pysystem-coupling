@@ -5,9 +5,9 @@
 Case persistence commands
 =========================
 
-Case persistance commandas are made available in the :meth:`case<session.Session.case>`
+Case persistence commands are made available in the :meth:`case<session.Session.case>`
 attribute on the :class:`Session<session.Session>` class. This attribute exposes System Coupling's
-commandsrelated to analysis case management and persistence.
+commands related to analysis case management and persistence.
 
-For more inforamtion, see the |CASE_ROOT_CLASS_REF| class.
+For more information, see the |CASE_ROOT_CLASS_REF| class.
 

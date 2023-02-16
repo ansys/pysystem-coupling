@@ -12,7 +12,7 @@ in setting up and solving an analysis.
 Although it is possible to set up an analysis by directly assigning the relevant
 data model objects and settings, the expected and more convenient approach is to
 use the commands provided to set up the main objects. You then use direct
-data model assignment to finetune the setup.
+data model assignment to fine tune the setup.
 
 The API implementation is built on a number of generic objects. Subsequent
 sections provide brief descriptions of these objects.
@@ -31,7 +31,7 @@ The key differences are as follows:
 
 * While names of commands and data model elements follow *camel case* conventions
   in System Coupling, the names of commands and data models in PySystemCoupling follow
-  *snake case* convention, which is the the preferred Pythonic naming convention.
+  *snake case* convention, which is the preferred Pythonic naming convention.
   Thus, the ``AddParticipant`` command in System Coupling becomes the ``add_participant``
   command in PySystemCoupling. Similarly, the ``CouplingInterface`` data model object
   in System Coupling becomes the ``coupling_interface`` data model object in

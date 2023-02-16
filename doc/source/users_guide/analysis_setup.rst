@@ -7,12 +7,12 @@ This page describes the basic workflow for setting up a coupled analysis from sc
 It assumes that a PySystemCoupling ``Session`` object (``syc_session``) has been created.
 
 The focus here is on the ``setup`` attribute (``syc_session.setup``) for the ``Session`` object.
-This atrribute defines the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
+This attribute defines the analysis in terms of the :ref:`data model<ref_syc_datamodel>`.
 
 For descriptions of the ``Session`` object's ``solution`` and ``case`` attributes, see these pages:
 
 - :ref:`ref_syc_solution`: Operations related to solving an analysis and examining the solution
-- :ref:`ref_syc_persistence`: Operatons for saving and resuming cases
+- :ref:`ref_syc_persistence`: Operations for saving and resuming cases
 
 
 Set up participant cases
@@ -59,7 +59,7 @@ to initialize other aspects of the data model state. After the preceding code
 adds Fluent and MAPDL participants, the ``analysis_control``, ``solution_control``, and
 ``output_control`` objects are created with reasonable default values. For more information,
 see the following output from the ``print_state`` command. Ellipses (``...``) appear where
-details are ommitted from the output.
+details are omitted from the output.
 
 .. code-block:: python
 
@@ -145,7 +145,7 @@ A value of ``<None>`` indicates an *unset* (missing) value.
 .. note::
    For some settings in the data model, the string ``"None"`` is a legitimate value.
    For example, the default for the ``analysis_control.global_stabilization.option``
-   setting is ``"None"``. Thus, to avoid ambiguity, the ``print_state`` ouput
+   setting is ``"None"``. Thus, to avoid ambiguity, the ``print_state`` output
    displays ``<None>`` for unset values.
    
    If queried in Python, an unset value holds the Python ``None`` object or an empty list
@@ -337,5 +337,5 @@ apply advanced settings to control the solution algorithm.
 In addition, you can create other data model object types to introduce more advanced
 features, such as expressions and reference frames, to the analysis. While advance
 features are beyond the scope of this guide, the data model and its contents are fully
-documented in :ref:`ref_index_api`. Addiitonal guidance is available in the
+documented in :ref:`ref_index_api`. Additional guidance is available in the
 System Coupling documentation.
