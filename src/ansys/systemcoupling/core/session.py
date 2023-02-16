@@ -123,24 +123,21 @@ class Session:
 
     @property
     def case(self) -> case_root:
-        """Pythonic client-side form of the System Coupling case persistence API.
-        """
+        """Pythonic client-side form of the System Coupling case persistence API."""
         if self.__case_root is None:
             self.__case_root, self.__case_proxy = self._get_api_root(category="case")
         return self.__case_root
 
     @property
     def setup(self) -> setup_root:
-        """Pythonic client-side form of the System Coupling setup API and data model.
-        """
+        """Pythonic client-side form of the System Coupling setup API and data model."""
         if self.__setup_root is None:
             self.__setup_root, self.__setup_proxy = self._get_api_root(category="setup")
         return self.__setup_root
 
     @property
     def solution(self) -> solution_root:
-        """Pythonic client-side form of the System Coupling solution API.
-        """
+        """Pythonic client-side form of the System Coupling solution API."""
         if self.__solution_root is None:
             self.__solution_root, self.__solution_proxy = self._get_api_root(
                 category="solution"
