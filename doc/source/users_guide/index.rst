@@ -32,7 +32,7 @@ The focus here is on guiding the use of PySystemCoupling to access System Coupli
 
 
 Launch() function
-===============
+=================
 The ``launch()`` function in PySystemCoupling creates an instance of
 System Coupling in the background and sends commands to this service.
 
