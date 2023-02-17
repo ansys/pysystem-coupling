@@ -8,13 +8,13 @@ API reference
 
 There are three main *levels* of interaction with the PySystemCoupling API:
 
-* Launching and/or connecting to a System Coupling server instance by calling
-  the :func:`launch<core.launch>` or :func:`connect<core.connect>` method. These
-  methods return a :class:`Session<core.session.Session>` object that you use
+* Launching or connecting to a System Coupling server instance by calling
+  the :func:`launch<core.launch>` or :func:`connect<core.connect>` function. These
+  functions return a :class:`Session<core.session.Session>` object that you use
   to interact with the System Coupling server.
 * The :class:`Session<core.session.Session>` object itself provides some high-level
   capabilities such as controlling streaming of standard streams from the server
-  and lifetime management of the session. It also contains three important attributes,
+  and lifetime management of the session. It also contains three important attributes:
   ``case``, ``setup`` and ``solution``, through which you gain access to the third
   aspect of the API.
 * The :meth:`case<core.session.Session.case>`, :meth:`setup<core.session.Session.setup>`

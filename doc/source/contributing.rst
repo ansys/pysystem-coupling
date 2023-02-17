@@ -94,7 +94,7 @@ repository.
 To override the default behavior and rebuild the entire documentation, including
 regeneration of the Sphinx Gallery` examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
 environment variable. Because only its existence is examined, you can give any value
-to this environment variable..
+to this environment variable.
 
 Post issues
 -----------
