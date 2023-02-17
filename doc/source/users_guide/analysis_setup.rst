@@ -218,7 +218,7 @@ command.
         target_variable="displacement"
     )
 
-This code shows how can examine the state of the resulting interface:
+This code shows how you can examine the state of the resulting interface:
 
 .. code-block:: python
 
@@ -283,7 +283,7 @@ that are at *Alpha* or *Beta* level.
 
 As shown in the following code, the return value of the ``get_status_messages`` command
 is a list of dictionaries, where each dictionary provides the details of a message. You
-can use ``level`` field in a message dictionary to filter the message list:
+can use the ``level`` field in a message dictionary to filter the message list:
 
 .. code-block:: python
 
@@ -304,12 +304,12 @@ can use ``level`` field in a message dictionary to filter the message list:
     object, but the specific settings causing the error are indicated in the message itself.
     However, the setting names referenced in the message (such as ``'TimeStepSize'`` and
     ``'EndTime'``) are in the form that is used in System Coupling's native API. This reflects the
-    way that ``get_status_messages`` is exposed into PySystemCoupling, but it
+    way that ``get_status_messages`` is exposed into PySystemCoupling, which
     does not allow for reliable automatic translation to PySystemCoupling naming. You should
     be able to infer the PySystemCoupling names relatively easily by assuming a conversion
     from *camel case* to *snake case*.
 
-The following code addresses the ``'TimeStepSize'`` and ``'EndTime'``errors by assign values to
+The following code addresses the ``'TimeStepSize'`` and ``'EndTime'`` errors by assigning values to
 ``end_time`` and ``time_step_size`` in the ``solution_control`` object. These settings define,
 respectively, the duration of the transient coupled analysis and the time interval between
 each coupling step.
@@ -335,7 +335,7 @@ For example, you might want to control the frequency with which solution data is
 apply advanced settings to control the solution algorithm.
 
 In addition, you can create other data model object types to introduce more advanced
-features, such as expressions and reference frames, to the analysis. While advance
+features, such as expressions and reference frames, to the analysis. While advanced
 features are beyond the scope of this guide, the data model and its contents are fully
 documented in :ref:`ref_index_api`. Additional guidance is available in the
 System Coupling documentation.

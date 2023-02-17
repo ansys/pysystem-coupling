@@ -47,7 +47,7 @@ install the latest ``ansys-systemcoupling-core`` package with this code:
 Launch System Coupling
 ======================
 
-Launch System Coupling from Python using the ``launch()`` method:
+Launch System Coupling from Python using the ``launch()`` function:
 
 .. code:: python
 
