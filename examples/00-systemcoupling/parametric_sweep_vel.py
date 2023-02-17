@@ -50,7 +50,7 @@ from ansys.systemcoupling.core import examples
 # for multiple values of a single input parameter. This is encapsulated
 # in the ``get_max_displacement`` function. In turn, this function is broken
 # into further functions that represent its main steps. Also, functions are
-# defined to prepares the working directory (``setup_working_directory``)
+# defined to prepare the working directory (``setup_working_directory``)
 # and plot the final results (``plot``).
 #
 # Set up working directory

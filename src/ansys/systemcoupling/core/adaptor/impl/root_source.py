@@ -275,7 +275,7 @@ def get_root(
             Version of the API that this root refers to. The default is ``None``.
     generated_module: module, optional
             Alternative pre-generated module to use instead in place of the
-            default one. The defaultis ``None``. This parameter exists to
+            default one. The default is ``None``. This parameter exists to
             support unit testing.
     report_whether_dynamic_classes_created: callable, optional
             Whether to report if dynamic classes were created. The default is

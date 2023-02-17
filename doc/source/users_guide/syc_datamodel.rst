@@ -32,7 +32,7 @@ are named values of different value types, such as ``integer``, ``boolean``, and
       └── output_control   
 
 
-In the image, highlighting distinguish items representing objects at a level of the
+In the image, highlighting distinguishes items representing objects at a level of the
 hierarchy with only one *unnamed* instance versus multiple *named* instances:
 
 * Highlighted items represent objects for which only one unnamed instance can exist at this level

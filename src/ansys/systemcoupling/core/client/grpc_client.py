@@ -58,7 +58,8 @@ class SycGrpc(object):
     TODO:
 
     - All calls are synchronous at the moment. We might want to do something
-    different with the Solve() command. For example:
+    different with the Solve() command. For example, you might want to
+    do something like this:
     """
 
     _id_iter = itertools.count()
@@ -226,7 +227,7 @@ class SycGrpc(object):
         return f
 
     def execute_command(self, cmd_name, **kwargs):
-        """Run a System Coupling '*xternal interface* command or query,
+        """Run a System Coupling '*external interface* command or query,
         specified by its name and keyword arguments.
 
         All commands and queries are currently run synchronously.

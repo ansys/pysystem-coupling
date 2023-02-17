@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class SycProxyInterface(ABC):  # pragma: no cover
-    """Provides an abstract base clas defining the interface for the SystemCoupling
+    """Provides an abstract base class defining the interface for the SystemCoupling
     *proxy* object that the ``datamodel` module depends on.
 
     While Python doesn't strictly need this class, it is a

@@ -61,7 +61,7 @@ def adapt_client_named_object_keys(state, level_type_map):
     function, this function cannot reliably do its job based only on
     the input state dictionary. This is because it is not possible
     to distinguish between what might be instances of a named object
-    within the dictionary from what might be unnamed object entries.
+    within the dictionary and what might be unnamed object entries.
     Some data model metadata is therefore required. This is provided
     by the ``level_type_map`` parameter.
 

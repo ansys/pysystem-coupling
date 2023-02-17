@@ -85,7 +85,7 @@ fluent_cas_file = examples.download_file(
 # The SCP files are defined such that there is expected to be a Fluent
 # subdirectory in which Fluent runs and an MAPDL subdirectory in
 # which MAPDL runs. These directories should contain their respective
-# case and inpute files.
+# case and input files.
 
 working_dir = os.path.dirname(mapdl_scp_file)
 
@@ -317,7 +317,7 @@ print(setup.get_setup_summary())
 # %%
 # Restart solution
 # ----------------
-# To restart the solution, `ccess the ``solve`` command via the ``solution`` API.
+# To restart the solution, access the ``solve`` command via the ``solution`` API.
 solution.solve()
 
 # %%

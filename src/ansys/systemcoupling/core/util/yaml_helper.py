@@ -51,7 +51,7 @@ def _yaml_dump_to_stream(data: Any, stream: TextIO, sort_keys: bool) -> None:
 
 
 def yaml_load_from_file(filepath: str) -> Any:  # pragma: no cover
-    """Load the content in a specified YAM file."""
+    """Load the content in a specified YAML file."""
     with open(filepath, "r") as f:
         return yaml.load(stream=f, Loader=Loader)
 

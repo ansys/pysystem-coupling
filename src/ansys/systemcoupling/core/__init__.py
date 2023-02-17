@@ -26,7 +26,7 @@ def launch(
         ``None``, in which case an available port is found and used.
     working_dir : str, optional
         Path for the working directory of the System Coupling process.
-        The default is ``None``, in which the current directory of
+        The default is ``None``, in which case the current directory of
         the client process is used.
     nprocs : int, optional
         Number of processes for coupling participants. The default is

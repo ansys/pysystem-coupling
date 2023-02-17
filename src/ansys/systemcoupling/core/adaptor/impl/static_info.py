@@ -52,7 +52,7 @@ def process_cmd_data(raw_data: list, category: str = None) -> dict:
 
             arg_type = arg_info.get("type")
             if not arg_type:
-                raise Exception("Argument type ius missing.")
+                raise Exception("Argument type is missing.")
             arg_info_out["type"] = arg_type
 
             doc = arg_info.get("doc")
@@ -85,7 +85,7 @@ def process_cmd_data(raw_data: list, category: str = None) -> dict:
 def make_combined_metadata(
     dm_metadata: dict, cmd_metadata: list, category: str
 ) -> Tuple[dict, str]:
-    """Combine the preprocessed data amodel and command metadata into a single structure.
+    """Combine the preprocessed data model and command metadata into a single structure.
 
     This dictionary is the final form of the *static information* that is used to
     generate the adaptor API classes.
@@ -117,7 +117,7 @@ def make_combined_metadata(
 def make_cmdonly_metadata(cmd_metadata: dict, category: str) -> Tuple[dict, str]:
     """Combine the command metadata into a single structure.
 
-    Although this method is similar to the ``make_combined_metadata`` method, it covers
+    Although this method is similar to the ``make_combined_metadata`` function, it covers
     the case where the category contains commands but no hierarchical data model content.
 
     Parameters

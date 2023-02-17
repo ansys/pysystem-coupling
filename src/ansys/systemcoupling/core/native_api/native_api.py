@@ -22,7 +22,7 @@ class NativeApi:
     instead of using the global ``DatamodelRoot()`` query as the path root,
     use the instance of this class as the root. (Note that while
     ``DatamodelRoot`` can be called here, it returns the string value
-    of the root path, which cannot be used as in the System Coupling CLI.)
+    of the root path so that it cannot be used in the System Coupling CLI.)
     """
 
     def __init__(self, rpc_impl):
@@ -49,7 +49,7 @@ class NativeApi:
         """Execute the named command or query and return the result.
 
         All commands and queries take one or more keyword arguments. Some
-        of these areguments can be optional, depending on the command or query.
+        of these arguments can be optional, depending on the command or query.
 
         A query returns a value of a type that is dependent on the
         query.
