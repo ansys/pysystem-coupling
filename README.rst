@@ -112,7 +112,7 @@ The System Coupling API is exposed to PySystemCoupling in two forms:
 Both forms are strongly related to each other. A key difference in the Pythonic API is that naming
 is adjusted, in a generally predictable manner, to follow Python conventions. If you are already
 familiar with System Coupling, adjusting to this form, which is the recommended API, should be easy.
-However, if you transitioning existing scripts, the native System Coupling API is made available
+However, if you are transitioning existing scripts, the native System Coupling API is made available
 as a convenience.
 
 .. note::
