@@ -117,7 +117,7 @@ def make_combined_metadata(
 def make_cmdonly_metadata(cmd_metadata: dict, category: str) -> Tuple[dict, str]:
     """Combine the command metadata into a single structure.
 
-    Although this method is similar to the ``make_combined_metadata`` function, it covers
+    Although this function is similar to the ``make_combined_metadata`` function, it covers
     the case where the category contains commands but no hierarchical data model content.
 
     Parameters
@@ -276,11 +276,11 @@ def get_extended_cmd_metadata(api) -> list:
     """Get command metadata from System Coupling and adapt it to the
     form needed for the client implementation.
 
-    This metadata that this method gets includes locally defined *commands*
+    The metadata that this function gets includes locally defined *commands*
     that are injected into the API.
 
-    This method is essentially an extension of the ``get_cmd_metadata``
-    method that inserts *injected command data* into the queried data.
+    This function is essentially an extension of the ``get_cmd_metadata``
+    function that inserts *injected command data* into the queried data.
 
     Parameters
     ----------
@@ -324,9 +324,9 @@ def get_syc_version(api) -> str:
     The version is returned in a string like ``"23.2"``.
 
     System Coupling versions earlier than 23.2 (2023 R2) do not expose
-    this method. Because the server that PySystemCoupling connects to
-    did not exist prior to 23.1 (2023 R1), if no version query exists,
-    the version is assumed to be 23.1.
+    the ``GetVersion`` command. Because the server that PySystemCoupling
+    connects to did not exist prior to 23.1 (2023 R1), if no version query
+    exists, the version is assumed to be 23.1.
 
     Parameters
     ----------

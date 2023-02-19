@@ -227,7 +227,7 @@ class SycGrpc(object):
         return f
 
     def execute_command(self, cmd_name, **kwargs):
-        """Run a System Coupling '*external interface* command or query,
+        """Run a System Coupling *external interface* command or query,
         specified by its name and keyword arguments.
 
         All commands and queries are currently run synchronously.

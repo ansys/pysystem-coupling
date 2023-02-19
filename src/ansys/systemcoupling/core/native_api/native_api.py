@@ -22,7 +22,8 @@ class NativeApi:
     instead of using the global ``DatamodelRoot()`` query as the path root,
     use the instance of this class as the root. (Note that while
     ``DatamodelRoot`` can be called here, it returns the string value
-    of the root path so that it cannot be used in the System Coupling CLI.)
+    of the root path, so it cannot be used in the same way as in the System
+    Coupling CLI.)
     """
 
     def __init__(self, rpc_impl):
