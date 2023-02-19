@@ -220,7 +220,7 @@ The ``ansys-systemcoupling-core`` package makes no commercial claim over Ansys
 whatsoever.  It extends the functionality of Ansys System Coupling by
 adding a Python interface to the System Coupling service without changing the
 core behavior or license of the original software. Interactively controlling
-System Coupling via PySystemCoupling requires a local copy of System Coupling.
-and licensess for all Ansys products involved in your coupled analysis.
+System Coupling via PySystemCoupling requires a local copy of System Coupling
+and licenses for all Ansys products involved in your coupled analysis.
 
 To get a copy of Ansys, visit `Ansys <https://www.ansys.com/>`_.
