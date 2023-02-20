@@ -6,14 +6,12 @@ For example:
 version_info = 0, 1, 'dev0'
 
 """
-import sys
 
-if sys.version_info >= (3, 8):
-    from importlib import metadata as metadata
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:  # pragma: no cover
+    import importlib_metadata
 
-    __version__ = metadata.version("ansys.systemcoupling.core")
-
-else:
-    from importlib_metadata import metadata as metadata_backport
-
-    __version__ = metadata_backport("ansys.systemcoupling.core")["version"]
+# Read from the pyproject.toml
+# major, minor, patch
+__version__ = importlib_metadata.version("ansys.systemcoupling.core")
