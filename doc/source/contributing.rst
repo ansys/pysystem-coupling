@@ -4,7 +4,7 @@
 Contribute
 ==========
 Overall guidance on contributing to a PyAnsys library appears in the
-`Contributing <https://dev.docs.pyansys.com/overview/contributing.html>`_ topic
+`Contributing <https://dev.docs.pyansys.com/dev/how-to/contributing.html>`_ topic
 in the *PyAnsys Developer's Guide*. Ensure that you are thoroughly familiar with
 this guide before attempting to contribute to PySystemCoupling.
 
@@ -105,7 +105,7 @@ submit questions, report bugs, and request new features.
 Adhere to code style
 --------------------
 PySystemCoupling is compliant with the `PyAnsys code style
-<https://dev.docs.pyansys.com/coding-style/index.html>`_. It uses the tool
+<https://dev.docs.pyansys.com/dev/coding-style/index.html>`_. It uses the tool
 `pre-commit <https://pre-commit.com/>`_ to check the code style. You can
 install and activate this tool with:
 
