@@ -107,11 +107,11 @@ def setup_working_directory():
 def set_inlet_velocity(working_dir, inlet_velocity):
   with pyfluent.launch_fluent(precision="double", processor_count=2) as session:
       case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
-      session.solver.root.file.read(file_type="case", file_name=case_file)
-      session.solver.root.setup.boundary_conditions.velocity_inlet[
+      session.file.read(file_type="case", file_name=case_file)
+      session.setup.boundary_conditions.velocity_inlet[
           "wall_inlet"
-      ].vmag.constant = inlet_velocity
-      session.solver.tui.file.write_case(case_file)
+      ].vmag.value = inlet_velocity
+      session.tui.file.write_case(case_file)
 
   print(f"Inlet velocity is set to {inlet_velocity}")
 

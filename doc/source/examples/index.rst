@@ -38,35 +38,35 @@ interrogation of the data model, and running the System Coupling solver to perfo
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the oscillating plate case often used as a System Coupling tutorial.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the *Oscillating Plate* case that is often used as a tutorial for ...">
 
 .. only:: html
 
   .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_oscillating_plate_thumb.png
-    :alt: Oscillating Plate tutorial case
+    :alt: Oscillating plate
 
   :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Oscillating Plate tutorial case</div>
+      <div class="sphx-glr-thumbnail-title">Oscillating plate</div>
     </div>
 
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example is based on a steady FSI case, where the fluid is flowing over a flexible plate.">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example is based on a steady FSI case where the fluid is flowing over a flexible plate. It...">
 
 .. only:: html
 
   .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_parametric_sweep_vel_thumb.png
-    :alt: Parametric sweep example
+    :alt: Parametric sweep
 
   :ref:`sphx_glr_examples_00-systemcoupling_parametric_sweep_vel.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Parametric sweep example</div>
+      <div class="sphx-glr-thumbnail-title">Parametric sweep</div>
     </div>
 
 

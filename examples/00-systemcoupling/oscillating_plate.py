@@ -222,7 +222,7 @@ setup.solution_control.time_step_size
 setup.solution_control.end_time = "1.0 [s]"
 
 # %%
-# View the ``output_control` object.
+# View the ``output_control`` object.
 setup.output_control.print_state()
 
 # %%
@@ -283,7 +283,7 @@ case.open()
 # Extend analysis
 # ~~~~~~~~~~~~~~~
 #
-# View the ``solution_control`` object, change the ``end-time``setting,
+# View the ``solution_control`` object, change the ``end-time`` setting,
 # and verify the setting change.
 # This code extends the analysis to 1.5 seconds.
 setup.solution_control.print_state()
