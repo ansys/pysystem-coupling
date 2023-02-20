@@ -405,31 +405,31 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533243274801
+    Max displacement value = 0.7212533247210161
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533245191801
+    Max displacement value = 0.7212533247210161
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533246292607
+    Max displacement value = 0.7212533248804374
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533247210161
+    Max displacement value = 0.7212533252263177
     Inlet velocity is set to 25.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533243465665
+    Max displacement value = 0.7212533244801425
 
 
 
@@ -437,7 +437,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 13 minutes  55.655 seconds)
+   **Total running time of the script:** ( 13 minutes  51.498 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:

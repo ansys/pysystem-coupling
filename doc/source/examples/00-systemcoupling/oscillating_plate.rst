@@ -54,7 +54,7 @@ motion of the plate as it is damped.
 Set up example
 --------------
 Setting up this example consists of performing imports, downloading
-input files, preparing the directory structure, and launching System Couping.
+input files, preparing the directory structure, and launching System Coupling.
 
 Perform required imports
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -176,7 +176,7 @@ via an API exposed into the current Python environment.
 Create analysis
 ---------------
 Creating the analysis consists of accessing the ``setup`` API,
-loading particpants, creating and verifying both interfaces and
+loading participants, creating and verifying both interfaces and
 data transfers, querying for setup errors, and modifying settings.
 
 Access the ``setup`` API
@@ -308,7 +308,7 @@ Confirm the coupling interface exists.
 .. GENERATED FROM PYTHON SOURCE LINES 168-171
 
 Examine the coupling interface state. Note that
-``data_transfer`` child objects exuist for ``"displacement"``
+``data_transfer`` child objects exist for ``"displacement"``
 and ``"FORC"``.
 
 .. GENERATED FROM PYTHON SOURCE LINES 171-174
@@ -846,7 +846,7 @@ be useful to review this before starting the solve.
 
 Run solution
 ------------
-The System Coupling server's *stdout* and *stderr* output is not shown
+The System Coupling server's ``stdout`` and ``stderr`` output is not shown
 in PySystemCoupling by default. To see it, turn output streaming on.
 
 .. GENERATED FROM PYTHON SOURCE LINES 264-265
@@ -1018,7 +1018,7 @@ Access the ``solve`` command via the ``solution`` API.
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:50580                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:55541                                  |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
     |     pling_core\examples                                                     |
@@ -1026,7 +1026,7 @@ Access the ``solve`` command via the ``solution`` API.
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scpo |
-    |     rt=50617 -schost=MILIDBOYD1.mshome.net -scname="FLUENT-2" -i FLUENT-2.j |
+    |     rt=55574 -schost=MILIDBOYD1.mshome.net -scname="FLUENT-2" -i FLUENT-2.j |
     |     ou                                                                      |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -1035,7 +1035,7 @@ Access the ``solve`` command via the ``solution`` API.
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s  |
-    |     noread -scport 50617 -schost MILIDBOYD1.mshome.net -scname "MAPDL-1" -i |
+    |     noread -scport 55574 -schost MILIDBOYD1.mshome.net -scname "MAPDL-1" -i |
     |      "mapdl.dat" -o MAPDL-1.out                                             |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2030,25 +2030,22 @@ Access the ``solve`` command via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    7.23979E+01 |
+    | Total Time :                                                    7.01800E+01 |
     | Coupling Participant Time                                                   |
-    |    Fluid Flow (Fluent) :                                        5.12163E+01 |
-    |    MAPDL Transient :                                            5.39300E+00 |
-    |    Total :                                                      5.66093E+01 |
+    |    Fluid Flow (Fluent) :                                        5.00954E+01 |
+    |    MAPDL Transient :                                            4.58970E+00 |
+    |    Total :                                                      5.46851E+01 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           7.12628E+00 |
-    |    Mesh Import :                                                4.68665E-02 |
-    |    Mapping Setup :                                              4.74450E-03 |
-    |    Mapping :                                                    6.74550E-03 |
-    |    Numerics :                                                   1.94227E-02 |
-    |    Misc. :                                                      8.58450E+00 |
-    |    Total :                                                      1.57886E+01 |
+    |    Solution Control :                                           6.56125E+00 |
+    |    Mesh Import :                                                4.23348E-02 |
+    |    Mapping Setup :                                              3.36880E-03 |
+    |    Mapping :                                                    6.36730E-03 |
+    |    Numerics :                                                   2.00889E-02 |
+    |    Misc. :                                                      8.86153E+00 |
+    |    Total :                                                      1.54949E+01 |
     +=============================================================================+
 
     +=============================================================================+
-    |                 System coupling run completed successfully.                 |
-    +=============================================================================+
-
 
 
 
@@ -2078,6 +2075,9 @@ from the case saved during the solve.
 .. rst-class:: sphx-glr-script-out
 
  .. code-block:: none
+
+    |                 System coupling run completed successfully.                 |
+    +=============================================================================+
 
 
     Reading settings
@@ -2517,7 +2517,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:50580                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:55541                                  |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
     |     pling_core\examples                                                     |
@@ -2525,7 +2525,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\fluent\ntbin\win64\fluent.exe" 3ddp -g -scpo |
-    |     rt=50801 -schost=MILIDBOYD1.mshome.net -scname="FLUENT-2" -i FLUENT-2.j |
+    |     rt=55766 -schost=MILIDBOYD1.mshome.net -scname="FLUENT-2" -i FLUENT-2.j |
     |     ou                                                                      |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -2534,7 +2534,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
     |     "C:\ANSYSDev\ANSYSI~1\v231\ansys\bin\winx64\ANSYS231.exe" -b nolist -s  |
-    |     noread -scport 50801 -schost MILIDBOYD1.mshome.net -scname "MAPDL-1" -i |
+    |     noread -scport 55766 -schost MILIDBOYD1.mshome.net -scname "MAPDL-1" -i |
     |      "MAPDL-1.dat" -o MAPDL-1.out                                           |
     |   Working Directory:                                                        |
     |     C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcou |
@@ -3134,25 +3134,23 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    4.52792E+01 |
+    | Total Time :                                                    4.38544E+01 |
     | Coupling Participant Time                                                   |
-    |    Fluid Flow (Fluent) :                                        3.35924E+01 |
-    |    MAPDL Transient :                                            2.66481E+00 |
-    |    Total :                                                      3.62572E+01 |
+    |    Fluid Flow (Fluent) :                                        3.24801E+01 |
+    |    MAPDL Transient :                                            2.41271E+00 |
+    |    Total :                                                      3.48928E+01 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           3.67185E+00 |
-    |    Mesh Import :                                                5.23413E-02 |
-    |    Mapping Setup :                                              5.83260E-03 |
-    |    Mapping :                                                    4.74700E-03 |
-    |    Numerics :                                                   1.14923E-02 |
-    |    Misc. :                                                      5.27576E+00 |
-    |    Total :                                                      9.02202E+00 |
+    |    Solution Control :                                           3.82275E+00 |
+    |    Mesh Import :                                                3.59231E-02 |
+    |    Mapping Setup :                                              4.21090E-03 |
+    |    Mapping :                                                    4.16100E-03 |
+    |    Numerics :                                                   1.11373E-02 |
+    |    Misc. :                                                      5.08346E+00 |
+    |    Total :                                                      8.96165E+00 |
     +=============================================================================+
 
     +=============================================================================+
     |                 System coupling run completed successfully.                 |
-    +=============================================================================+
-
 
 
 
@@ -3188,7 +3186,7 @@ Stop streaming output from the server and shut down the server instance.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 2 minutes  27.039 seconds)
+   **Total running time of the script:** ( 2 minutes  22.811 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_oscillating_plate.py:

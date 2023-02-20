@@ -37,7 +37,7 @@ motion of the plate as it is damped.
 # Set up example
 # --------------
 # Setting up this example consists of performing imports, downloading
-# input files, preparing the directory structure, and launching System Couping.
+# input files, preparing the directory structure, and launching System Coupling.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -111,7 +111,7 @@ syc = pysystemcoupling.launch(working_dir=working_dir)
 # Create analysis
 # ---------------
 # Creating the analysis consists of accessing the ``setup`` API,
-# loading particpants, creating and verifying both interfaces and
+# loading participants, creating and verifying both interfaces and
 # data transfers, querying for setup errors, and modifying settings.
 #
 # Access the ``setup`` API
@@ -166,7 +166,7 @@ setup.coupling_interface.keys()
 
 # %%
 # Examine the coupling interface state. Note that
-# ``data_transfer`` child objects exuist for ``"displacement"``
+# ``data_transfer`` child objects exist for ``"displacement"``
 # and ``"FORC"``.
 setup.coupling_interface[interface_name].print_state()
 
@@ -259,7 +259,7 @@ print(setup.get_setup_summary())
 # %%
 # Run solution
 # ------------
-# The System Coupling server's *stdout* and *stderr* output is not shown
+# The System Coupling server's ``stdout`` and ``stderr`` output is not shown
 # in PySystemCoupling by default. To see it, turn output streaming on.
 syc.start_output()
 # %%
