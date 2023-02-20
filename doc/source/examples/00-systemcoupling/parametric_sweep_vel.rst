@@ -19,16 +19,15 @@
 
 .. _parametric_sweep_example:
 
-Parametric sweep example
-========================
+Parametric sweep
+================
 
-This example is based on a steady FSI case, where the fluid is flowing over a flexible plate.
+This example is based on a steady FSI case where the fluid is flowing over a flexible plate.
+It shows how you use PySystemCoupling with some other PyAnsys libraries.
 
 The case is run a number of times, with varying fluid inlet velocity. The goal is to extract
-the maximum plate deflection from each solution and to examine how it responds to the
+the maximum plate deflection from each solution and examine how it responds to the
 changing velocity value.
-
-It illustrates the use of PySystemCoupling in conjunction with some other PyAnsys tools.
 
 .. image:: /_static/param_sweep_flow.png
    :width: 400pt
@@ -38,15 +37,15 @@ It illustrates the use of PySystemCoupling in conjunction with some other PyAnsy
    :width: 400pt
    :align: center
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-31
+.. GENERATED FROM PYTHON SOURCE LINES 25-30
 
 Perform required imports
 ------------------------
-As well as the PySystemCoupling package, PyFluent and PyDPF also need
-to be imported for this example. In addition, facilities from ``matplotlib`` and
-``numpy`` are used to produce a simple plot of the results.
+This example imports these PyAnsys libraries: PySystemCoupling,
+PyFluent, and PyDPF. It also imports Matplotlib and NumPy to
+produce a simple plot of the results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 31-44
+.. GENERATED FROM PYTHON SOURCE LINES 30-43
 
 .. code-block:: default
 
@@ -70,29 +69,29 @@ to be imported for this example. In addition, facilities from ``matplotlib`` and
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-65
+.. GENERATED FROM PYTHON SOURCE LINES 45-64
 
 Define functions
 ----------------
 This example is broken into functions that define the main steps that
-need to be performed. It makes particular sense to do this for the
-main task of running a coupled analysis as that needs to be repeated
+must be performed. It makes particular sense to do this for the
+main task of running a coupled analysis because this task must be repeated
 for multiple values of a single input parameter. This is encapsulated
-in ``get_max_displacement``. In turn, this is broken into further
-functions that represent its main steps. Also, define a function that prepares the
-working directory (``setup_working_directory``) and one that plots the final
-results (``plot``).
+in the ``get_max_displacement`` function. In turn, this function is broken
+into further functions that represent its main steps. Also, functions are
+defined to prepare the working directory (``setup_working_directory``)
+and plot the final results (``plot``).
 
-``setup_working_directory``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Set up the working directory with downloaded
-data files for this example. The MAPDL files are placed in a
-sub-directory MAPDL of the working directory and the Fluent files
-in a sub-directory Fluent.
+Set up working directory
+~~~~~~~~~~~~~~~~~~~~~~~~
+To set up the working directory with the downloaded data files for this
+example, use the ``setup_working_directory()`` function. In the working
+directory, the MAPDL files are placed in a ``Mapdl`` subdirectory, and
+the Fluent files are placed in a ``Fluent`` subdirectory. The
+``setup_working_directory()`` function returns the path of the
+working directory for later use.
 
-The function returns the path of the working directory for later use.
-
-.. GENERATED FROM PYTHON SOURCE LINES 65-99
+.. GENERATED FROM PYTHON SOURCE LINES 64-98
 
 .. code-block:: default
 
@@ -137,17 +136,17 @@ The function returns the path of the working directory for later use.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-107
+.. GENERATED FROM PYTHON SOURCE LINES 99-106
 
-``set_inlet_velocity``
-~~~~~~~~~~~~~~~~~~~~~~
-Modify the Fluent case to adjust the
-inlet velocity on the ``"wall_inlet"`` velocity inlet boundary
-condition. This function is called with a varying ``inlet_velocity``
-parameter before each call of ``solve_coupled_analysis`` in
-a sequence of analyses.
+Set inlet velocity
+~~~~~~~~~~~~~~~~~~
+To modify the Fluent case to adjust the inlet velocity on the
+``"wall_inlet"`` velocity inlet boundary condition, use the
+``set_inlet_velocity()`` function. This function is called
+with a varying ``inlet_velocity``value before each call of
+the ``solve_coupled_analysis`` command in a sequence of analyses.
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-119
+.. GENERATED FROM PYTHON SOURCE LINES 106-118
 
 .. code-block:: default
 
@@ -155,11 +154,11 @@ a sequence of analyses.
     def set_inlet_velocity(working_dir, inlet_velocity):
       with pyfluent.launch_fluent(precision="double", processor_count=2) as session:
           case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
-          session.solver.root.file.read(file_type="case", file_name=case_file)
-          session.solver.root.setup.boundary_conditions.velocity_inlet[
+          session.file.read(file_type="case", file_name=case_file)
+          session.setup.boundary_conditions.velocity_inlet[
               "wall_inlet"
-          ].vmag.constant = inlet_velocity
-          session.solver.tui.file.write_case(case_file)
+          ].vmag.value = inlet_velocity
+          session.tui.file.write_case(case_file)
 
       print(f"Inlet velocity is set to {inlet_velocity}")
 
@@ -170,14 +169,13 @@ a sequence of analyses.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 120-135
+.. GENERATED FROM PYTHON SOURCE LINES 119-133
 
-``solve_coupled_analysis``
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-Perform a single coupled analysis.
-
-In this example, the only change between successive calls to this function
-is in the content of the Fluent input file that is used. The inlet velocity
+Solve coupled analysis
+~~~~~~~~~~~~~~~~~~~~~~
+Perform a single coupled analysis. In this example, the only change
+between successive calls to this function is in the content of the
+Fluent input file that is used. The value for the ``inlet_velocity``
 setting is modified in the Fluent file prior to this function being called.
 
 .. note::
@@ -188,14 +186,14 @@ setting is modified in the Fluent file prior to this function being called.
    that the System Coupling session is properly exited at the
    end of the scope defined by the ``with`` block.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-165
+.. GENERATED FROM PYTHON SOURCE LINES 133-163
 
 .. code-block:: default
 
 
     def solve_coupled_analysis(working_dir):
         with pysyc.launch(working_dir=working_dir) as syc:
-            print("Setting up the coupled analysis")
+            print("Setting up the coupled analysis.")
 
             fluent_name = syc.setup.add_participant(
                 input_file = os.path.join("Fluent", "fluent.scp"))
@@ -217,10 +215,10 @@ setting is modified in the Fluent file prior to this function being called.
 
             syc.setup.solution_control.maximum_iterations = 7
 
-            print("Solving the coupled analysis. This may take a while...")
+            print("Solving the coupled analysis. This may take a while....")
             syc.solution.solve()
 
-        print("...done!")
+        print("...done.")
 
 
 
@@ -229,14 +227,14 @@ setting is modified in the Fluent file prior to this function being called.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 166-170
+.. GENERATED FROM PYTHON SOURCE LINES 164-168
 
-``extract_max_displacement``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Use PyDPF to query the MAPDL results for the maximum displacement
-value in the solution.
+Extract maximum displacement value
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Use PyDPF to query the MAPDL results for the extract the
+maximum displacement value in the solution.
 
-.. GENERATED FROM PYTHON SOURCE LINES 170-179
+.. GENERATED FROM PYTHON SOURCE LINES 168-177
 
 .. code-block:: default
 
@@ -256,19 +254,20 @@ value in the solution.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-187
+.. GENERATED FROM PYTHON SOURCE LINES 178-185
 
-``get_max_displacement``
+Get maximum displacement
 ~~~~~~~~~~~~~~~~~~~~~~~~
 Use the previously defined functions to:
 
 - Modify the Fluent input file to apply the provided ``inlet_velocity`` setting.
-- Run the coupled analysis based on that setting.
+- Run the coupled analysis based on this setting.
 - Extract and return the maximum displacement value from the MAPDL results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 187-192
+.. GENERATED FROM PYTHON SOURCE LINES 185-191
 
 .. code-block:: default
+
 
     def get_max_displacement(working_dir, inlet_velocity):
       set_inlet_velocity(working_dir, inlet_velocity)
@@ -282,15 +281,15 @@ Use the previously defined functions to:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 193-198
+.. GENERATED FROM PYTHON SOURCE LINES 192-197
 
-``plot``
-~~~~~~~~
-Generate an `x-y` plot of the results, showing
-maximum displacement of the plate vs the inlet velocity.
+Plot results
+~~~~~~~~~~~~
+Generate an ``x-y`` plot of the results, showing the maximum
+displacement of the plate versus the inlet velocity.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 198-208
+.. GENERATED FROM PYTHON SOURCE LINES 197-207
 
 .. code-block:: default
 
@@ -311,17 +310,17 @@ maximum displacement of the plate vs the inlet velocity.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 209-216
+.. GENERATED FROM PYTHON SOURCE LINES 208-215
 
-Run the analyses
-----------------
-Use the ``get_max_displacement`` function sequentially, with input
+Run analyses
+------------
+Use the ``get_max_displacement()`` function sequentially, with input
 velocity values provided by an initialized ``x`` array.
-The results of the ``get_max_displacement`` calls are used to fill in the
-corresponding values of the ``y`` array. Finally, call
-the ``plot`` function to generate a plot from the arrays.
+The results of the calls to the ``get_max_displacement()`` function
+are used to fill in the corresponding values of the ``y`` array.
+Finally, call the ``plot()`` function to generate a plot from the arrays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 216-226
+.. GENERATED FROM PYTHON SOURCE LINES 215-225
 
 .. code-block:: default
 
@@ -348,7 +347,7 @@ the ``plot`` function to generate a plot from the arrays.
 
  .. code-block:: none
 
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v231\fluent\fluent23.1.0\\addons\afd\lib\hdfio.bin"
     Done.
     Multicore processors detected. Processor affinity set!
 
@@ -401,275 +400,36 @@ the ``plot`` function to generate a plot from the arrays.
             symmetry2
             symmetry1
     Done.
-
-    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
-           58065 cells,     1 zone  ...
-          187138 faces,     8 zones ...
-           71280 nodes,     1 zone  ...
-      Done.
-    Done.
     Inlet velocity is set to 5.0
-    Setting up the coupled analysis
-    Solving the coupled analysis. This may take a while...
-    ...done!
+    Setting up the coupled analysis.
+    Solving the coupled analysis. This may take a while....
+    ...done.
     Extracting max displacement value
-    Max displacement value = 0.05236548595237256
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
-    Done.
-    Multicore processors detected. Processor affinity set!
-
-    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
-      Reading mesh ...
-           58065 cells,     1 cell zone  ...
-              58065 hexahedral cells,  zone id: 2
-          187138 faces,     8 face zones ...
-             161252 quadrilateral interior faces,  zone id: 1
-                295 quadrilateral velocity-inlet faces,  zone id: 5
-                295 quadrilateral pressure-outlet faces,  zone id: 6
-                980 quadrilateral wall faces,  zone id: 7
-                985 quadrilateral wall faces,  zone id: 8
-                105 quadrilateral wall faces,  zone id: 9
-              11613 quadrilateral symmetry faces,  zone id: 10
-              11613 quadrilateral symmetry faces,  zone id: 11
-           71280 nodes,     1 node zone  ...
-      Done.
-
-
-    Building...
-         mesh
-            distributing mesh
-                    parts..,
-                    faces..,
-                    nodes..,
-                    cells..,
-            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
-         materials,
-         interface,
-         domains,
-            mixture
-         zones,
-            symmetry2
-            symmetry1
-            wall_deforming
-            wall_top
-            wall_bottom
-            interior-part-fluid
-            wall_inlet
-            wall_outlet
-            part-fluid
-         parallel,
-         dynamic zones,
-            wall_deforming
-            wall_top
-            wall_bottom
-            symmetry2
-            symmetry1
-    Done.
-
-    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
-           58065 cells,     1 zone  ...
-          187138 faces,     8 zones ...
-           71280 nodes,     1 zone  ...
-      Done.
-    Done.
+    Max displacement value = 0.7212533247210161
     Inlet velocity is set to 10.0
-    Setting up the coupled analysis
-    Solving the coupled analysis. This may take a while...
-    ...done!
+    Setting up the coupled analysis.
+    Solving the coupled analysis. This may take a while....
+    ...done.
     Extracting max displacement value
-    Max displacement value = 0.19232826989695678
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
-    Done.
-    Multicore processors detected. Processor affinity set!
-
-    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
-      Reading mesh ...
-           58065 cells,     1 cell zone  ...
-              58065 hexahedral cells,  zone id: 2
-          187138 faces,     8 face zones ...
-             161252 quadrilateral interior faces,  zone id: 1
-                295 quadrilateral velocity-inlet faces,  zone id: 5
-                295 quadrilateral pressure-outlet faces,  zone id: 6
-                980 quadrilateral wall faces,  zone id: 7
-                985 quadrilateral wall faces,  zone id: 8
-                105 quadrilateral wall faces,  zone id: 9
-              11613 quadrilateral symmetry faces,  zone id: 10
-              11613 quadrilateral symmetry faces,  zone id: 11
-           71280 nodes,     1 node zone  ...
-      Done.
-
-
-    Building...
-         mesh
-            distributing mesh
-                    parts..,
-                    faces..,
-                    nodes..,
-                    cells..,
-            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
-         materials,
-         interface,
-         domains,
-            mixture
-         zones,
-            symmetry2
-            symmetry1
-            wall_deforming
-            wall_top
-            wall_bottom
-            interior-part-fluid
-            wall_inlet
-            wall_outlet
-            part-fluid
-         parallel,
-         dynamic zones,
-            wall_deforming
-            wall_top
-            wall_bottom
-            symmetry2
-            symmetry1
-    Done.
-
-    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
-           58065 cells,     1 zone  ...
-          187138 faces,     8 zones ...
-           71280 nodes,     1 zone  ...
-      Done.
-    Done.
+    Max displacement value = 0.7212533247210161
     Inlet velocity is set to 15.0
-    Setting up the coupled analysis
-    Solving the coupled analysis. This may take a while...
-    ...done!
+    Setting up the coupled analysis.
+    Solving the coupled analysis. This may take a while....
+    ...done.
     Extracting max displacement value
-    Max displacement value = 0.3727675173293116
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
-    Done.
-    Multicore processors detected. Processor affinity set!
-
-    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
-      Reading mesh ...
-           58065 cells,     1 cell zone  ...
-              58065 hexahedral cells,  zone id: 2
-          187138 faces,     8 face zones ...
-             161252 quadrilateral interior faces,  zone id: 1
-                295 quadrilateral velocity-inlet faces,  zone id: 5
-                295 quadrilateral pressure-outlet faces,  zone id: 6
-                980 quadrilateral wall faces,  zone id: 7
-                985 quadrilateral wall faces,  zone id: 8
-                105 quadrilateral wall faces,  zone id: 9
-              11613 quadrilateral symmetry faces,  zone id: 10
-              11613 quadrilateral symmetry faces,  zone id: 11
-           71280 nodes,     1 node zone  ...
-      Done.
-
-
-    Building...
-         mesh
-            distributing mesh
-                    parts..,
-                    faces..,
-                    nodes..,
-                    cells..,
-            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
-         materials,
-         interface,
-         domains,
-            mixture
-         zones,
-            symmetry2
-            symmetry1
-            wall_deforming
-            wall_top
-            wall_bottom
-            interior-part-fluid
-            wall_inlet
-            wall_outlet
-            part-fluid
-         parallel,
-         dynamic zones,
-            wall_deforming
-            wall_top
-            wall_bottom
-            symmetry2
-            symmetry1
-    Done.
-
-    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
-           58065 cells,     1 zone  ...
-          187138 faces,     8 zones ...
-           71280 nodes,     1 zone  ...
-      Done.
-    Done.
+    Max displacement value = 0.7212533248804374
     Inlet velocity is set to 20.0
-    Setting up the coupled analysis
-    Solving the coupled analysis. This may take a while...
-    ...done!
+    Setting up the coupled analysis.
+    Solving the coupled analysis. This may take a while....
+    ...done.
     Extracting max displacement value
-    Max displacement value = 0.5624418884027582
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v222\fluent\fluent22.2.0\\addons\afd\lib\hdfio.bin"
-    Done.
-    Multicore processors detected. Processor affinity set!
-
-    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
-      Reading mesh ...
-           58065 cells,     1 cell zone  ...
-              58065 hexahedral cells,  zone id: 2
-          187138 faces,     8 face zones ...
-             161252 quadrilateral interior faces,  zone id: 1
-                295 quadrilateral velocity-inlet faces,  zone id: 5
-                295 quadrilateral pressure-outlet faces,  zone id: 6
-                980 quadrilateral wall faces,  zone id: 7
-                985 quadrilateral wall faces,  zone id: 8
-                105 quadrilateral wall faces,  zone id: 9
-              11613 quadrilateral symmetry faces,  zone id: 10
-              11613 quadrilateral symmetry faces,  zone id: 11
-           71280 nodes,     1 node zone  ...
-      Done.
-
-
-    Building...
-         mesh
-            distributing mesh
-                    parts..,
-                    faces..,
-                    nodes..,
-                    cells..,
-            bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
-         materials,
-         interface,
-         domains,
-            mixture
-         zones,
-            symmetry2
-            symmetry1
-            wall_deforming
-            wall_top
-            wall_bottom
-            interior-part-fluid
-            wall_inlet
-            wall_outlet
-            part-fluid
-         parallel,
-         dynamic zones,
-            wall_deforming
-            wall_top
-            wall_bottom
-            symmetry2
-            symmetry1
-    Done.
-
-    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
-           58065 cells,     1 zone  ...
-          187138 faces,     8 zones ...
-           71280 nodes,     1 zone  ...
-      Done.
-    Done.
+    Max displacement value = 0.7212533252263177
     Inlet velocity is set to 25.0
-    Setting up the coupled analysis
-    Solving the coupled analysis. This may take a while...
-    ...done!
+    Setting up the coupled analysis.
+    Solving the coupled analysis. This may take a while....
+    ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533243298336
+    Max displacement value = 0.7212533244801425
 
 
 
@@ -677,7 +437,7 @@ the ``plot`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 14 minutes  53.523 seconds)
+   **Total running time of the script:** ( 13 minutes  51.498 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:

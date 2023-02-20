@@ -70,7 +70,7 @@ doc = [
 	"sphinxemoji==0.2.0",
 
 	# pyansys dependencies for sphinx gallery examples
-	#"ansys-fluent-core", # install manually from github until protobuf version fixed
+	"ansys-fluent-core",
 	"ansys-dpf-core",
 ]
 style = [

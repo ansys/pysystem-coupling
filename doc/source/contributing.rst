@@ -1,14 +1,12 @@
 .. _ref_contributing:
 
-============
-Contributing
-============
+==========
+Contribute
+==========
 Overall guidance on contributing to a PyAnsys library appears in the
 `Contributing <https://dev.docs.pyansys.com/overview/contributing.html>`_ topic
 in the *PyAnsys Developer's Guide*. Ensure that you are thoroughly familiar with
-it and all `Guidelines and Best Practices
-<https://dev.docs.pyansys.com/guidelines/index.html>`_ before attempting to
-contribute to PySystemCoupling.
+this guide before attempting to contribute to PySystemCoupling.
 
 The following contribution information is specific to PySystemCoupling.
 
@@ -27,43 +25,47 @@ mode, run:
 .. _ref_generate_api:
 
 Build the generated API code
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+----------------------------
 In the packaged version of PySystemCoupling, Python classes are generated during the
 package build to provide an API to System Coupling facilities. The classes are largely
 generated from metadata queried from a running instance of System Coupling.
 
-For local development, you need to perform this additional generation step manually,
-after the preceding installation steps.
+For local development, you must perform this additional generation step manually,
+after the preceding steps for cloning and installing the package.
 
 .. code::
 
     pip install -e .[classesgen]
     python scripts/generate_datamodel.py
 
-The generated code is written to a directory ``src/ansys/systemcoupling/core/adaptor/api_<version>``,
-where ``<version>`` is the version of the System Coupling instance that was run in the background
-by the generation script. The version takes the form ``23_1``, for example, which would correspond to
-the 2023 Release 1 of Ansys. ``23_1`` is in fact the current default and this release of System
-Coupling would be expected to be at an installation location given by the ``AWP_ROOT231`` environment
-variable.
 
-You can override the default behavior and run a different version -- and generate the API classes for
-this different version -- by setting either
-``SYSC_ROOT`` to point to the root directory of a System Coupling installation or ``AWP_ROOT`` to
-point to the root of an Ansys installation. If ``SYSC_ROOT`` and ``AWP_ROOT`` are both set, the
-former takes priority, and both take priority over ``AWP_ROOT231``.
+The generated code is written to the directory ``src/ansys/systemcoupling/core/adaptor/api_<version>``,
+where ``<version>`` is the version of the System Coupling instance that was run in the background
+by the generation script. For example, the version ``23_1`` corresponds to the System Coupling 2023 R1.
+The default is ``23_1``, which means that this release of System Coupling is expected to be at the
+installation location given by the ``AWP_ROOT231`` environment variable.
+
+You can override the default behavior and run a different version, and generate the API classes for
+this different version, by setting either the ``SYSC_ROOT`` environment variable to point to the
+root directory of your System Coupling installation or the ``AWP_ROOT`` environment variable to
+point to the root of an Ansys installation. If ``SYSC_ROOT`` and ``AWP_ROOT`` environment variables
+are both set, the former takes priority. Additionally, both of these environment variables take priority
+over the ``AWP_ROOT231`` environment variable.
 
 
 Build documentation
 -------------------
-To build the PySystemCoupling documentation locally, the API classes must first have been generated
-as outlined in :ref:`ref_generate_api`, because some of the documentation is extracted from these classes. Since
-multiple versions of the API classes can exist, it is necessary to
-set the environment variable ``PYSYC_DOC_BUILD_VERSION`` to tell the documentation build which
-version to use. This *must* be set -- there is no default in this case. This variable should be set to a string that has the same form as the ``<version>`` component
-of the ``api_<version>`` directory (for example, "23_1").
+To build the PySystemCoupling documentation locally, you must have first generated the API classes
+as described in :ref:`ref_generate_api`. This is because some of the documentation is extracted
+from these classes. 
 
-With this variable set, execute the following commands:
+Because multiple versions of the API classes can exist, you must set the ``PYSYC_DOC_BUILD_VERSION``
+environment variable to tell the documentation build which version to use. Given that there is
+no default for this environment variable, you *must* set it. The value should be a string in the
+same form as the ``<version>`` component of the ``api_<version>`` directory. For example,
+"23_1".
+
+With this variable set, run this code to build the documentation:
 
 .. code::
 
@@ -81,19 +83,18 @@ You can clear all HTML files from the ``_builds/html`` directory with:
 
     make clean
 
-Sphinx Gallery examples
-^^^^^^^^^^^^^^^^^^^^^^^
-By default, the `Sphinx Gallery` examples are *not* run as part of a documentation build. This is
-because realistic runs of System Coupling, involving both System Coupling itself *and* the
-participant solvers, are not currently possible on GitHub. Therefore, the examples are run
-manually from time to time, and the resultant `Sphinx` files are committed to the repository.
+Run Sphinx Gallery examples
+---------------------------
+The *Sphinx Gallery* examples are *not* run as part of a documentation build by default.
+This is because realistic runs of System Coupling, involving both System Coupling itself
+*and* the participant solvers, are not currently possible on GitHub. Therefore, examples
+are run manually from time to time and the resulting `Sphinx` files are committed to the
+repository.
 
-To override the default behavior and perform a complete rebuild of documentation, including
-regeneration of the `Sphinx Gallery` examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
-environment variable (only its existence is examined so it may be given any value).
-
-
-
+To override the default behavior and rebuild the entire documentation, including
+regeneration of the Sphinx Gallery` examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
+environment variable. Because only its existence is examined, you can give any value
+to this environment variable.
 
 Post issues
 -----------
@@ -113,10 +114,11 @@ install and activate this tool with:
    python -m pip install pre-commit
    pre-commit install
 
-The ``pre-commit`` style checks will then run automatically on every ``git commit``
+When pre-commit is active, it automatically runs style checks on every ``git commit``
 to your branch.
 
-Alternatively, you can directly run `pre-commit <https://pre-commit.com/>`_ at any time with:
+Alternatively, you can directly run `pre-commit <https://pre-commit.com/>`_ at any time
+with this command:
 
 .. code:: bash
 

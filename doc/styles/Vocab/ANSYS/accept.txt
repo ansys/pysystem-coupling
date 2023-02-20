@@ -21,9 +21,10 @@ hostname
 Linux
 lookups
 MAPDL
-matplotlib
+[Mm]atplotlib
 multiphysics
 numpy
+NumPy
 output_control
 postprocess
 postprocessing

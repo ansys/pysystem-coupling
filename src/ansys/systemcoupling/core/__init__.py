@@ -17,31 +17,27 @@ def launch(
     sycnprocs: int = None,
     extra_args: List[str] = [],
 ) -> Session:
-    """Start a local instance of System Coupling and connects to it.
+    """Start a local instance of System Coupling and connect to it.
 
     Parameters
     ----------
     port : int, optional
-        Port on which to connect to System Coupling. If not specified,
-        an available port will be sought and used.
-
+        Port on which to connect to System Coupling. The default is
+        ``None``, in which case an available port is found and used.
     working_dir : str, optional
-        The working directory of the System Coupling process. Defaults to
-        the current directory of the client process.
-
+        Path for the working directory of the System Coupling process.
+        The default is ``None``, in which case the current directory of
+        the client process is used.
     nprocs : int, optional
-        The number of processes for coupling participants. If not provided,
-        the System Coupling server will use its own default.
-
+        Number of processes for coupling participants. The default is
+        ``None``, in which case the System Coupling server uses its own default.
     sycnprocs : int, optional
-        The number of processes for the coupling engine. If not provided,
-        the System Coupling server will use its own default.
-
+        Number of processes for the System Coupling engine. The default is
+        ``None``, in which case the System Coupling server uses its own default.
     extra_args : List[str]
-        List of any additional arguments to be specified when the server
-        process is launched. Defaults to empty list.
-
-        If provided, this is concatenated as-is to the list of
+        List of any additional arguments to specify when the server
+        process is launched. The default is ``[]``. If a list of additional
+        arguments is provided, it is concatenated as-is to the list of
         arguments already being passed when the process is started. If
         an argument has an associated value, the argument name and its
         value should be specified as two consecutive items of the list.
@@ -69,8 +65,9 @@ def launch_container(
 ) -> Session:
     """Start a System Coupling container instance and connect to it.
 
-    `Note`: the container is currently only intended to be used for
-    testing and development purposes.
+    .. note::
+       The container is currently only intended to be used for
+       testing and development purposes.
 
     Returns
     -------
@@ -85,13 +82,12 @@ def launch_container(
 
 
 def connect(host: str, port: int) -> Session:  # pragma: no cover
-    """Connect to instance of System Coupling already running in server mode.
+    """Connect to an instance of System Coupling already running in server mode.
 
     Parameters
     ----------
     host : str
-        IP address of the system running the instance of System Coupling.
-
+        IP address of the system running the System Coupling instance.
     port : int
         Port on which to connect to System Coupling.
 
