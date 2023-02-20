@@ -1,0 +1,13 @@
+documentation:
+- doc/source/**/*
+- README.rst
+maintenance:
+- .github/**/*
+- .flake8
+- pyproject.toml
+dependencies:
+- pyproject.toml
+enhancement:
+- src/**
+testing:
+- tests/**
