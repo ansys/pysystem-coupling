@@ -16,10 +16,10 @@ Install PySystemCoupling
 ========================
 
 The ``ansys-systemcoupling-core`` package currently supports Python 3.7 through
-Python 3.10 on Windows and Linux. (**THIS NEEDS TO BE VERFIIED!**)
+Python 3.10 on Windows and Linux.
 
-(**NB - Not yet, until released**) Install the latest release from `PyPI
-<https://pypi.org/project/ansys-systemcoupling-core/>`_ with this command:
+Install the latest release from `PyPI <https://pypi.org/project/ansys-systemcoupling-core/>`_
+with this command:
 
 .. code::
 

@@ -78,10 +78,6 @@ jobs:
       - name: Install pysystemcoupling
         run: make build-install
 
-      - name: Install gRPC API from private PyPI (temp)
-        run: |
-          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
-
       - name: Test import
         run: make test-import
 
@@ -99,10 +95,6 @@ jobs:
 
       - name: Create initial wheel and install
         run: make build-install
-
-      - name: Install gRPC API from private PyPI (temp - remove when API is released)
-        run: |
-          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -155,10 +147,6 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
 
-      - name: Install gRPC API from private PyPI (temp - remove when API is released)
-        run: |
-          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -210,10 +198,6 @@ jobs:
         run: |
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
-
-      - name: Install gRPC API from private PyPI (temp - remove when API is released)
-        run: |
-          pip install ansys-api-systemcoupling -i https://PAT:${{ secrets.PYANSYS_PYPI_PRIVATE_PAT_RO }}@pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
 
       - name: Build HTML
         run: |
