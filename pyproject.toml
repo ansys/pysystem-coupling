@@ -24,6 +24,7 @@ dependencies = [
 	"psutil>=5.7.0",
 	"pyyaml",
 	"appdirs>=1.4.0",
+	"importlib-metadata>=4.0",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
