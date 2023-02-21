@@ -14,7 +14,7 @@ def start_container(
     Parameters
     ----------
     port : int
-        gPRC server local port, mapped to same port in container.
+        gPRC server local port, mapped to the same port in container.
     """
     args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
     image_tag = os.getenv("SYC_IMAGE_TAG", "v23.1.0")

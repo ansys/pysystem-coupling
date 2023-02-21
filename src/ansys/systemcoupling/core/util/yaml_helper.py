@@ -27,19 +27,20 @@ yaml.add_representer(str, _str_presenter)
 def yaml_dump_to_file(
     data: Any, filepath: str, sort_keys: bool = False
 ) -> None:  # pragma: no cover
-    """Dump provided data as YAML to specified filepath.
+    """Save data to a YAML file in the filepath specified.
 
     Multiline strings are output with the literal block scalar style,
-    preserving newlines.
+    preserving new lines.
 
-    Default is not to sort dictionary keys, thus preserving
-    order of insertion."""
+    The default is not to sort dictionary keys, thus preserving
+    the order of insertion."""
     with open(filepath, "w") as f:
         _yaml_dump_to_stream(data, f, sort_keys)
 
 
 def yaml_dump_to_string(data: Any, sort_keys: bool = False) -> str:
-    """As ``yaml_dump_to_file`` but return YAML as string."""
+    """Save data to a YAML file in the filepath specified and return this
+    file's content as a string."""
     stream = io.StringIO()
     _yaml_dump_to_stream(data, stream, sort_keys)
     return stream.getvalue()
@@ -50,11 +51,11 @@ def _yaml_dump_to_stream(data: Any, stream: TextIO, sort_keys: bool) -> None:
 
 
 def yaml_load_from_file(filepath: str) -> Any:  # pragma: no cover
-    """Simple wrapper function to load YAML from a specified file."""
+    """Load the content in a specified YAML file."""
     with open(filepath, "r") as f:
         return yaml.load(stream=f, Loader=Loader)
 
 
 def yaml_load_from_string(strdata: str) -> Any:
-    """Simple wrapper function to load YAML from a provided string."""
+    """Load the YAML content from a provided string."""
     return yaml.safe_load(strdata)

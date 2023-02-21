@@ -47,7 +47,7 @@ def _start_system_coupling(host, port, working_dir, **kwargs):  # pragma: no cov
     env["SYC_GUI_SILENT_SERVER"] = "1"
     args = [_path_to_system_coupling(), "-m", "cosimgui", f"--grpcport={host}:{port}"]
 
-    # Extract arguments that we currently recognise - scope to extend in future
+    # Extract arguments that we currently recognize - scope to extend in future
     nprocs = kwargs.pop("nprocs", None)
     if nprocs:
         args += ["--nprocs", str(nprocs)]
@@ -56,8 +56,8 @@ def _start_system_coupling(host, port, working_dir, **kwargs):  # pragma: no cov
     if sycnprocs:
         args += ["--sycnprocs", str(sycnprocs)]
 
-    # "extra_args" gives us the option to pass though any args we want to
-    # but it's user beware
+    # "extra_args" gives us the option to pass though any arguments that we want to.
+    # However, it's user beware.
     extra_args = kwargs.pop("extra_args", [])
     if extra_args:
         args += extra_args
@@ -83,18 +83,18 @@ def _path_to_system_coupling():  # pragma: no cover
             scroot = os.path.join(scroot, "SystemCoupling")
 
     if scroot is None:
-        raise RuntimeError("Failed to locate SystemCoupling from environment.")
+        raise RuntimeError("Failed to locate System Coupling from environment.")
 
     script_path = os.path.join(scroot, "bin", _SCRIPT_NAME)
 
     if not os.path.isfile(script_path):
-        raise RuntimeError(f"System coupling script does not exist at {script_path}")
+        raise RuntimeError(f"System Coupling script does not exist at {script_path}.")
 
     return script_path
 
 
 def _kill_process_tree(pid, timeout):  # pragma: no cover
-    """Kill a process tree rooted at process `pid`."""
+    """Kill a process tree rooted at process ``pid``."""
     parent = psutil.Process(pid)
     children = parent.children(recursive=True)
     children.append(parent)

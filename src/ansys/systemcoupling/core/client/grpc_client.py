@@ -32,11 +32,12 @@ class SycGrpc(object):
     query external interface, built on a basic gRPC interface.
 
     An instance of this class controls starting System Coupling as
-    a server in cosimulation mode and handles the underlying RPC to
-    provide the command and query API. The ``start_and_connect`` method
-    should be used to start the remote SystemCoupling, and ``exit``
-    to close the connection and shut down SystemCoupling. Alternatively,
-    ``connect`` can be used to connect to an already running server
+    a server in cosimulation mode and handles the underlying RPC (remote
+    procedure call) to provide the command and query API. The
+    ``start_and_connect`` method should be used to start the remote
+    SystemCoupling instance, and the ``exit`` method should be used
+    to close the connection and shut down this instance. Alternatively,
+    the ``connect`` method can be used to connect to an already running server
     instance.
 
     This class supports two approaches to making API calls on System
@@ -44,7 +45,7 @@ class SycGrpc(object):
 
     # Using the ``execute_command`` method, which takes the command name
       as a string and a dictionary of keyword arguments.
-    # Using the ``__getattr__`` method that allows commands to be called
+    # Using the ``__getattr__`` method, which allows commands to be called
       as if direct methods of this class.
 
     Both of these are useful in different contexts.
@@ -57,7 +58,8 @@ class SycGrpc(object):
     TODO:
 
     - All calls are synchronous at the moment. We might want to do something
-    different with Solve(), for example.
+    different with the Solve() command. For example, you might want to
+    do something like this:
     """
 
     _id_iter = itertools.count()
@@ -78,12 +80,13 @@ class SycGrpc(object):
             instance.exit()
 
     def start_and_connect(self, **kwargs):
-        """Start system coupling in server mode and establish a connection."""
+        """Start System Coupling in server mode and establish a connection."""
 
-        # Support backdoor container launch via env var.
-        # For example we might want to default to launching installation
-        # locally but container on GitHub (e.g. for build tasks like code generation).
-        # Can still switch to container locally by setting variable.
+        # Support backdoor container launch via an environment variable.
+        # For example, we might want to default to launching installation
+        # locally but container on GitHub (for build tasks like code generation).
+        # You could still switch to the container locally by setting the
+        # environment variable.
 
         working_dir = kwargs.pop("working_dir", None)
         port = kwargs.pop("port", None)
@@ -105,7 +108,7 @@ class SycGrpc(object):
     def start_container_and_connect(
         self, mounted_from: str, mounted_to: str, network: str = None, port: int = None
     ):
-        """Start system coupling container and establish a connection."""
+        """Start the System Coupling container and establish a connection."""
         LOG.debug("Starting container...")
         port = port if port is not None else _find_port()
         start_container(mounted_from, mounted_to, network, port)
@@ -113,7 +116,7 @@ class SycGrpc(object):
         self._connect(_LOCALHOST_IP, port)
 
     def connect(self, host, port):
-        """Connect to an already running system coupling server running on a known
+        """Connect to an already running System Coupling server running on a known
         host and port.
         """
         self._connect(host, port)
@@ -137,7 +140,7 @@ class SycGrpc(object):
             grpc.channel_ready_future(self.__channel).result(timeout=timeout)
         except grpc.FutureTimeoutError:
             raise RuntimeError(
-                "Aborting attempt to connect to gRPC channel "
+                "Stopping attempt to connect to gRPC channel "
                 f"after {timeout} seconds."
             )
 
@@ -151,8 +154,8 @@ class SycGrpc(object):
     def exit(self):
         """Shut down the remote System Coupling server.
 
-        Reset this object ready to start and connect to a new
-        server if wished.
+        Reset this object so it is ready to start and connect to a new
+        server if needed.
         """
         if self.__id in SycGrpc._instances:
             # Remove from atexit cleanup list
@@ -172,7 +175,7 @@ class SycGrpc(object):
 
     def start_output(self, handle_output=None):
         """Start streaming of standard streams from System Coupling
-        and, by default, print to the console.
+        and print to the console be default.
 
         Standard output and error streams are combined in the output
         streamed to this client.
@@ -209,12 +212,12 @@ class SycGrpc(object):
                 break
 
     def __getattr__(self, name):
-        """Support command/query interface as method attributes as an
-        alternative to ``execute_command``.
+        """Support command and query interfaces as method attributes to provide an
+        alternative to the``execute_command`.
 
-        Thus, rather than
+        Here is how you use the ``execute_command``:
            ``client.execute_command('CommandName', Arg1='value1', Arg2='value2')``
-        the following is supported:
+        Instead, you can use this:
            ``client.CommandName(Arg1='value1', Arg2='value2')``
         """
 
@@ -224,7 +227,7 @@ class SycGrpc(object):
         return f
 
     def execute_command(self, cmd_name, **kwargs):
-        """Run a System Coupling 'external interface' command or query,
+        """Run a System Coupling *external interface* command or query,
         specified by its name and keyword arguments.
 
         All commands and queries are currently run synchronously.
@@ -243,16 +246,16 @@ class SycGrpc(object):
         response, meta = self.__command_service.execute_command(request)
 
         # The second element of the above tuple (which is actually gRPC
-        # trailing metadata) is currently unused but it comprises a 1-tuple
+        # trailing metadata) is currently unused, but it comprises a 1-tuple
         # containing a pair value, ('nosync', 'True'|'False').
         #     is_nosync = bool(meta[0][1])
         # This tells us whether the command was state changing. This will
         # be useful if, as is likely, we implement incremental updating to
-        # optimise client side state caching.
+        # optimize client-side state caching.
 
         ret = from_variant(response.result)
         if "json_ret" in kwargs:
-            # Expect the result to decode as a (json) string
+            # Expect the result to decode as a (JSON) string
             return json.loads(ret)
         return ret
 

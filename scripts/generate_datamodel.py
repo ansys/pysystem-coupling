@@ -87,7 +87,6 @@ def _get_indent_str(indent):
 def _gather_hashes(
     name, info, cls, is_named_child=False, is_parameter=False, cmd_cls_name=None
 ):
-
     # For named objects we visit the info twice - once for the
     # parent container, and once for the contained child. The latter
     # is what contains the object structure
@@ -633,7 +632,6 @@ def _generate_test_classes(dirname, generate_flat_classes):
 
 
 def _generate_real_classes(dirname, generate_flat_classes):
-
     LOG.log_to_stdout()
     LOG.set_level("DEBUG")
     syc = pysyc.launch()
@@ -693,7 +691,6 @@ def _set_yaml_dump(is_on):
 
 
 if __name__ == "__main__":
-
     if "SYSC_ROOT" not in os.environ:
         print(
             "*******************\nSYSC_ROOT is not set. Continuing, but this "

@@ -2,7 +2,6 @@ from ansys.systemcoupling.core.util import yaml_helper
 
 
 def test_write_to_string() -> None:
-
     d = {}
 
     d["A"] = {"text": ("This is a multi-\n" "line\n" "string.")}

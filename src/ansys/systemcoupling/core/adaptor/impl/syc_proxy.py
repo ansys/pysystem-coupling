@@ -17,25 +17,26 @@ class SycProxy(SycProxyInterface):
         self.__defunct = False
 
     def reset_rpc(self, rpc):
-        """Call when the remote connection is lost, providing an
-        `rpc` instance which replaces the original one from the
-        initializer and which raises a sensible error if any attempt
-        is made to use it.
+        """Reset the original ``rpc`` instance with a new one if the remote connection is lost.
+
+        When a remote connection is lost, this method is called, providing an
+        ``rpc`` instance that replaces the original one from the initializer.
+        A sensible error is raised if any attempt is made to use this method.
 
         The motivating use case is to catch attempted uses of stale
         objects after the current session has ended.
         """
         self.__rpc = rpc
         # We rely on attempted attribute access on self.__rpc to catch
-        # most cases, but this "defunct" flag can be used to mop up
+        # most cases, but this *defunct* flag can be used to mop up
         # other cases.
         self.__defunct = True
 
     def set_injected_commands(self, cmd_dict: dict) -> None:
-        """Sets a dictionary of names mapped to locally defined "injected commands".
+        """Set a dictionary of names mapped to locally defined *injected commands*.
 
-        This will be used to find the function to be called
-        in ``execute_injected_command`` if that method is called.
+        This method is used to find the function to call
+        if the ``execute_injected_command`` method is called.
         """
         self.__injected_cmds = cmd_dict
 
@@ -49,7 +50,7 @@ class SycProxy(SycProxyInterface):
             cmd_metadata = get_extended_cmd_metadata(self.__rpc)
             metadata, root_type = make_cmdonly_metadata(cmd_metadata, category)
         else:
-            raise RuntimeError(f"Unrecognised 'static info' category: '{category}'.")
+            raise RuntimeError(f"Unrecognized 'static info' category: '{category}'.")
         return metadata, root_type
 
     def get_version(self):
@@ -84,8 +85,8 @@ class SycProxy(SycProxyInterface):
 
     def execute_injected_cmd(self, *args, **kwargs):
         if self.__defunct:
-            # The name of the 'rpc' here is arbitrary - we are just
-            # forcing it to raise its usual error.
+            # The name of the 'rpc' here is arbitrary. This method just
+            # forces the raising of its usual error.
             self.__rpc.trigger_error
         cmd_name = args[1]
         cmd = self.__injected_cmds.get(cmd_name, None)

@@ -2,16 +2,15 @@ from ansys.systemcoupling.core.util.pathstr import join_path_strs
 
 
 class ObjectPath(str):
-    """A simple utility class for attribute-based access to children of data-model
+    """Provides a simple utility class for attribute-based access to children of data model
     objects and values.
 
-    e.g.,
+    For example:
 
     ``Root.CouplingInterface["intf-1"].Side["One"].CouplingParticipant = "MAPDL-1"``
     """
 
     def __new__(cls, path, api, rules):
-
         inst = str.__new__(cls, path)
 
         inst.__setattr("_api", api)

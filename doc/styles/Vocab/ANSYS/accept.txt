@@ -3,6 +3,7 @@ application
 [Bb]ooleans
 [Pp]ythonic
 [Pp]ythonically
+analysis_control
 Ansys
 ANSYS
 APIs
@@ -11,6 +12,8 @@ CLI
 command prompt
 Command Prompt
 cosimulation
+coupling_interface
+data_transfer
 [Dd]atamodel
 Docker
 GUI
@@ -18,9 +21,11 @@ hostname
 Linux
 lookups
 MAPDL
-matplotlib
+[Mm]atplotlib
 multiphysics
 numpy
+NumPy
+output_control
 postprocess
 postprocessing
 Postprocessing
@@ -31,6 +36,7 @@ PySystemCoupling
 Python
 scp
 SCP
+solution_control
 Windows
 Windows Subsystem
 Windows Subsystem for Linux
