@@ -1,9 +1,9 @@
-from cmd_raw_metadata import cmd_metadata
-from dm_raw_metadata import dm_metadata
 import pytest
-from state import StateForTesting
 
 from ansys.systemcoupling.core.session import Session
+from cmd_raw_metadata import cmd_metadata
+from dm_raw_metadata import dm_metadata
+from state import StateForTesting
 
 
 class _MockCommandExecutor:

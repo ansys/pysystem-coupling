@@ -2,11 +2,10 @@ import pytest
 
 """``datamodel_metadata`` is the datamodel API that plays a role in the "native" API."""
 
-from dm_raw_metadata import dm_metadata
-
 from ansys.systemcoupling.core.native_api.datamodel_metadata import (
     build as build_metadata,
 )
+from dm_raw_metadata import dm_metadata
 
 
 @pytest.fixture(name="metadata")

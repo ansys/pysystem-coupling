@@ -11,10 +11,10 @@ readme = "README.rst"
 requires-python = ">=3.7"
 license = {file = "LICENSE"}
 authors = [
-    {name = "Ansys, Inc.", email = "pyansys.support@ansys.com"},
+    {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
 ]
 maintainers = [
-    {name = "PyAnsys developers", email = "pyansys.support@ansys.com"},
+    {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
 ]
 dependencies = [
 	"grpcio>=1.30.0",
@@ -24,6 +24,7 @@ dependencies = [
 	"psutil>=5.7.0",
 	"pyyaml",
 	"appdirs>=1.4.0",
+	"importlib-metadata>=4.0",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -46,22 +47,23 @@ build = [
 classesgen = [
 	# Dependencies for API class generation from System Coupling metadata
 
+	# NB
 	# black and isort are called programmatically to keep generated code
-	# consistent with style elsewhere. We need to keep the versions
-	# in sync with the precommit dependencies.
-	"black==22.12.0",
-	"isort==5.11.4",
+	# consistent with style elsewhere. We need to keep the versions in
+	# sync with the precommit dependencies.
+	"black==23.1.0",
+	"isort==5.12.0",
 ]
 doc = [
-	"ansys-sphinx-theme==0.8.0",
+	"ansys-sphinx-theme==0.8.2",
 	"jupyter_sphinx==0.4.0",
 	"matplotlib",
 	"numpydoc==1.5.0",
 	"pypandoc==1.10",
 	"pytest-sphinx==0.5.0",
-	"Sphinx==6.1.3",
+	"Sphinx==5.3.0",
 	"sphinx-autobuild==2021.3.14",
-	"sphinx-autodoc-typehints==1.20.1",
+	"sphinx-autodoc-typehints==1.22",
 	"sphinx-copybutton==0.5.1",
 	"sphinx-gallery==0.11.1",
 	"sphinx-notfound-page==0.8.3",
@@ -69,7 +71,7 @@ doc = [
 	"sphinxemoji==0.2.0",
 
 	# pyansys dependencies for sphinx gallery examples
-	#"ansys-fluent-core", # install manually from github until protobuf version fixed
+	"ansys-fluent-core",
 	"ansys-dpf-core",
 ]
 style = [
@@ -87,3 +89,19 @@ name = "ansys.systemcoupling.core"
 
 [project.urls]
 Source = "https://github.com/pyansys/pysystem-coupling/"
+Homepage = "https://github.com/pyansys/pysystem-coupling/"
+Documentation = "https://systemcoupling.docs.pyansys.com/"
+Tracker = "https://github.com/pyansys/pysystem-coupling/issues"
+
+[tool.isort]
+profile = "black"
+force_sort_within_sections = true
+default_section = "THIRDPARTY"
+skip_glob = ["*__init__.py"]
+filter_files = "true"
+src_paths = ["doc", "src", "tests"]
+
+[tool.coverage.run]
+omit = [
+    "*/adaptor/api/*",
+]
