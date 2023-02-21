@@ -1,11 +1,11 @@
 """Logging module.
 
-This module provides a basic general framework for logging in pySystemCoupling.
+This module provides a basic framework for logging in PySystemCoupling.
 """
 
-# NOTE: The starting point for this module is the pyfluent logger.
-#       Unlike the pymapdl logger, this does not support instance-specific
-#       logging. Over time, we may want to adopt some of the mapdl approach.
+# NOTE: The starting point for this module is the PyFluent logger.
+#       Unlike the PyMAPDL logger, this logger does not support instance-specific
+#       logging. Over time, we may want to adopt some of the MAPDL approach.
 
 
 import logging
@@ -16,20 +16,20 @@ from typing import Any
 
 
 class Logger:
-    """Logger class.
+    """Provides the basic logging framework.
 
     Methods
     -------
     set_level(level)
-        Set logging level
+        Set the logging level.
     log_to_stdout()
-        Enable logging to stdout
+        Enable logging to stdout.
     disable_log_to_stdout()
-        Disable logging to stdout
+        Disable logging to stdout.
     log_to_file(filepath)
-        Enable logging to file
+        Enable logging to a file.
     disable_log_to_file()
-        Disable logging to file
+        Disable logging to a file.
     """
 
     def __init__(self, level: Any = logging.ERROR):
@@ -52,13 +52,13 @@ class Logger:
         self.log = self.logger.log
 
     def set_level(self, level: Any) -> None:
-        """Set logging level.
+        """Set the logging level.
 
         Parameters
         ----------
         level : Any
-            Any of the logging level (CRITICAL, ERROR, WARNING, INFO, DEBUG)
-            in string or enum format
+            Logging level in string or enum format. Options are ``CRITICAL``,
+            ``ERROR``, ``WARNING``, ``INFO,`` and ``DEBUG``.
         """
         self.logger.setLevel(level)
 
@@ -89,17 +89,17 @@ class Logger:
             self.stream_handler = None
 
     def log_to_file(self, filepath: str = None) -> None:
-        """Enable logging to file.
+        """Enable logging to a file.
 
         Only a single file logging handler may be active at any time. If a file logger is
-        already enabled, calling this with a different filepath will
-        switch file logging to the new file.
+        already enabled, calling this with a different filepath switches file logging to
+        the new file.
 
         Parameters
         ----------
         filepath : str, optional
-            path to log file. If a filepath is not passed, a default filepath will be chosen
-            unless the logger already logs to a file, in which case this call will be ignored.
+            Path to log file. If a filepath is not passed, a default filepath is chosen
+            unless the logger already logs to a file, in which case, this call is ignored.
         """
         if not filepath and not self.log_filepath:
             self.log_filepath = self._get_default_log_filepath()
@@ -114,7 +114,7 @@ class Logger:
         self.logger.addHandler(self.file_handler)
 
     def disable_log_to_file(self) -> None:
-        """Disable logging to file."""
+        """Disable logging to a file."""
         self.logger.removeHandler(self.file_handler)
 
 

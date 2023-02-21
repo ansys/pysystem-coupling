@@ -2,7 +2,7 @@
 
 :orphan:
 
-``API Implementation Types``
+``API implementation types``
 ============================
 .. currentmodule:: ansys.systemcoupling.core.adaptor.impl
 

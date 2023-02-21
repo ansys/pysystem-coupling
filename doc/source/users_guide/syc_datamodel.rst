@@ -1,73 +1,77 @@
 .. _ref_syc_datamodel:
 
-System Coupling Data Model
+System Coupling data model
 ==========================
 
-The System Coupling data model is a hierarchical structure, represented in the PySystemCoupling API
+The System Coupling data model is a hierarchical structure represented in the PySystemCoupling API
 as nested attributes. Ultimately, the nested attributes end at primitive values, which are the
-basic settings defining the set-up. The nested structure allows the data to be organized in a way
+basic settings defining the setup. The nested structure allows the data to be organized in a way
 that fits with the underlying concepts of a System Coupling analysis.
 
 
-Data Model Structure
---------------------
+Data model structure
+---------------------
 
-The following shows the main hierarchy of the "objects" in the data model. Such objects hold a collection
-of primitive settings and/or further "child" objects.
-The primitive settings are named values of type integer, boolean, string, etc.
+The following image shows the hierarchy of *objects* in the System Coupling data model. These objects
+hold a collection of *primitive settings* and/or additional *child objects*. The primitive settings
+are named values of different value types, such as ``integer``, ``boolean``, and ``string``.
 
-.. vale off
+  .. code-block:: none
+    :emphasize-lines: 5,9,10
+    :caption: System Coupling data model structure
+    
+    root
+      ├── participant
+      │      ├── variable
+      │      └── region
+      ├── analysis_control
+      ├── coupling_interface   
+      │      ├── side
+      │      └── data_transfer
+      ├── solution_control   
+      └── output_control   
 
-- *participant*
 
-  - *variable*
+In the image, highlighting distinguishes items representing objects at a level of the
+hierarchy with only one *unnamed* instance versus multiple *named* instances:
 
-  - *region*
+* Highlighted items represent objects for which only one unnamed instance can exist at this level
+  (*singletons*).
+* Non-highlighted items represent objects for which multiple named instances can exist at this
+  level. 
+  
+  .. note:: 
+    In general, object names can be freely chosen. The exception is the ``side`` object, for which exactly
+    two instances exist. These two instances have fixed names: ``One`` and ``Two``.
 
-- analysis_control
 
-- *coupling_interface*
+Access the data model
+---------------------
 
-  - *side*
+The ``setup`` attribute of the ``Session`` object is used to access the data model. The objects in the data model are
+attributes of the ``setup`` attribute. For example, this code accesses the ``analysis_control`` object:
 
-  - *data_transfer*
-
-- solution_control
-
-- output_control
-
-.. vale on
-
-The italicized names represent those for which more than one instance may exist --- each instance is given a name.
-In general, names may be freely chosen, but ``side`` is unusual in that exactly two instances exist, with fixed names "One" and "Two".
-
-Non-italic names indicate objects for which only one unnamed instance may appear at that level of the hierarchy.
-
-Accessing the Data Model
-------------------------
-
-The data model is accessed via the ``setup`` attribute of ``Session``. The objects in the data model are
-attributes of ``setup``.
-
-For example, to access the ``analysis_control`` object:
-
-.. code:: python
+.. code-block:: python
 
    ...
    setup = syc_session.setup
    analysis_control = setup.analysis_control
 
+
 As noted, the data model objects hold basic settings of different value types.
-For example, ``analysis_control`` contains a setting ``analysis_type`` of type string. This defines the
-type of analysis to be performed. The valid values are "Steady" and "Transient". The following illustrates
-how the setting may be set and queried:
+For example, the ``analysis_control`` object contains an ``analysis_type`` setting having a
+``string`` value type. Valid values are ``Steady`` and ``Transient``. Thus, this setting
+defines the type of analysis to be performed.
+
+This code shows how you set and query the ``analysis_type`` setting:
 
 .. code:: python
 
     analysis_control.analysis_type = "Transient"
     print(analysis_control.analysis_type)
 
-Named objects are accessed using syntax like Python dictionary lookups:
+
+To access a named object, use a syntax like Python dictionary lookups:
 
 .. code:: python
 
@@ -76,36 +80,35 @@ Named objects are accessed using syntax like Python dictionary lookups:
     print(dt.target_side)
 
 
+Populate the data model
+-----------------------
 
-Populating the Data Model
--------------------------
+The preceding code examples assume that the data model is already populated with data, so that the
+objects referenced from the hierarchy already exist. This would be the situation when you modify
+an existing case, perhaps one that had previously been set up and saved, and you have now re-opened.
 
-The preceding examples assume that the data model is already populated with data, so that the
-objects referenced from the hierarchy already exist. This would be the situation if modifying
-an existing case --- perhaps one that had  previously been set up and saved, and has now been
-re-opened.
-
-If a new analysis is being set up from scratch, the objects need to be created. In principle,
-this can be done using direct, low-level, operations on the data model. This is not the
-recommended approach; instead, you are advised to use the higher level "commands" that are provided by the
-API. See :ref:`ref_syc_analysis_setup` for details on this.
+When setting up an analysis from scratch, you must create the objects. In principle,
+you can do this using direct, low-level, operations on the data model, but this is not recommended.
+Instead,you should use the higher-level *commands* that are provided by the
+API. For more information, see :ref:`ref_syc_analysis_setup`.
 
 Nevertheless, it can sometimes be useful to know how to create an object directly in the
-data model, so a couple of examples are given below.
+data model, as shown in the following code examples.
 
-Unnamed objects such as ``analysis_control`` can be accessed as attributes, even when
-they are initially "empty". This may be confirmed using ``print_state()``:
+You can access unnamed objects, such as ``analysis_control`` attributes, even when
+they are initially *empty*. You can confirm this using the ``print_state()`` method:
 
-.. code::
+.. code-block:: python
 
 	>>> setup.analysis_control.print_state()
 
 	>>>
 
-If a setting is applied on such an object, this not only applies the specified
-value but also fills the other settings with default values where possible:
 
-.. code::
+When you apply a setting to such an object, this not only sets a value for the specified
+setting but also sets the default values for other settings (where possible):
+
+.. code-block:: python
 
     >>> setup.analysis_control.analysis_type = "Steady"
     >>> setup.analysis_control.print_state()
@@ -118,10 +121,11 @@ value but also fills the other settings with default values where possible:
     option : None
     >>>
 
-To create a named object instance, the ``create()`` method can be used on the
+
+To create a named object instance, use the ``create()`` method on the
 object's type attribute:
 
-.. code::
+.. code-block:: python
 
 	>>> setup.coupling_participant.create("Part1")
 	>>> setup.coupling_participant["Part1"].print_state()
@@ -142,12 +146,13 @@ object's type attribute:
 	parallel_fraction : 1.0
 	>>>
 
-Note that this is for illustration only. A ``coupling_participant`` requires very specific
-data for it to be initialized in a useful manner. Usually, this data is derived from some external source.
-The ``add_participant()`` command exists to help with this, and this is how a participant would normally
-be created. This, and various other commands are available as methods on the session's ``setup``
-attribute. See :ref:`ref_syc_analysis_setup` and :ref:`ref_setup` for more details.
 
-
-
-
+.. note::  
+  The preceding code examples are for illustration only. A ``coupling_participant``
+  object requires very specific data for it to be initialized in a useful manner. Usually,
+  this data is derived from some external source. The ``add_participant()`` command,
+  which is the recommended method for creating a participant, exists to help with this.
+  This command and various other commands are available as methods on the session's
+  ``setup`` attribute. For more information, see :ref:`ref_syc_analysis_setup` and
+  :ref:`ref_setup`.
+  

@@ -2,13 +2,15 @@
 
 .. currentmodule:: ansys.systemcoupling.core
 
-Solution Commands
+Solution commands
 =================
 
-See the |SOLUTION_ROOT_CLASS_REF| class for details.
+Solution commands are made available in the :meth:`solution<session.Session.solution>`
+attribute on the :class:`Session<session.Session>` class. This attribute exposes System
+Coupling's commands related to solving an analysis and examining its solution.
 
-This is made available as an attribute, named :meth:`solution<session.Session.solution>`,
-on the :class:`Session<session.Session>` class, and exposes System Coupling's
-commands related to solving an analysis and examining its solution.
+For more information, see the |SOLUTION_ROOT_CLASS_REF| class.
+
+
 
 

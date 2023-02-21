@@ -5,7 +5,7 @@ _DUMMY_KEY = "__@!%$__"
 
 
 def to_variant(val, var, convert_key=None):
-    """Convert Python datatype to Variant type"""
+    """Convert Python data type to Variant data type."""
     if val is None:
         var.none_state = variant_pb2.NONE_VALUE
     elif isinstance(val, bool):
@@ -35,7 +35,7 @@ def to_variant(val, var, convert_key=None):
 
 
 def from_variant(var, convert_key=None):
-    """Convert Variant to Python datatype"""
+    """Convert Variant data type to Python data type."""
     what = var.WhichOneof("as")
     if what == "none_state":
         return None
