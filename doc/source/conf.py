@@ -188,8 +188,6 @@ sphinx_gallery_conf = {
     # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
     "remove_config_comments": True,
 }
-<<<<<<< HEAD
-
 
 # -- Options for HTML output -------------------------------------------------
 html_short_title = html_title = "PySystemCoupling"
