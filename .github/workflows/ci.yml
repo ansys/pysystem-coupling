@@ -246,13 +246,6 @@ jobs:
           python-version: 3.9
 
       - uses: actions/download-artifact@v3
-        with:
-           name: ${{ env.PACKAGE_NAME }}-wheel
-
-      - uses: actions/download-artifact@v3
-        with:
-          name: documentation-html
-          path: ~/html
 
       - name: Display structure of downloaded files
         run: ls -R
