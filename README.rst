@@ -55,33 +55,10 @@ with this code:
    python scripts\generate_datamodel.py
 
 
-**ADDITIONAL TEMPORARY STEP - !!!!WILL BE REMOVED BEFORE RELEASE!!!!**
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-PySystemCoupling has a dependency on a gRPC API package, ``anays-api-systemcoupling``. This package
-will soon be publicly available on PyPI and will be installed automatically along with the other
-dependencies of the ``ansys-systemcoupling-core`` package. In the interim, you must obtain the
-package wheel install it manually using ``pip install``. You can obtain the ``anays-api-systemcoupling``
-package from these locations:
-
-* The `ansys-api-systemcoupling repository <https://github.com/ansys/ansys-api-systemcoupling>`_.
-  Under **Releases** on the home page, click the **"Tags** link to see the available tagged
-  releases. Click the latest release and then download the wheel from the page that is shown.
-* The Ansys internal PyPI repository. To install the ``anays-api-systemcoupling`` package from here, run
-  this command:
-  
-  .. code::
-
-     pip install ansys-api-systemcoupling -i https://pkgs.dev.azure.com/pyansys/_packaging/pyansys/pypi/simple/
-     
-   
-  .. note::
-     You must know the read-only personal access token (PAT) for the repository.
-
-
 Documentation and Issues
 ------------------------
 
-For more information, see the `Documentation <https://systemcoupling.docs.pyansys.com>`_ page (**Link not active yet**).
+For more information, see the `Documentation <https://systemcoupling.docs.pyansys.com>`_ page.
 
 Use the `PySystemCoupling Issues <https://github.com/pyansys/pysystem-coupling/issues>`_ page to
 post bug reports, questions and feature requests.
@@ -179,7 +156,7 @@ uses both the ``setup`` and ``solution`` attributes.
   commands related to populating the settings that define a coupled analysis. This
   attribute also provides direct access to the hierarchical data model.
 * The ``solution`` attribute is home to commands related to solving an analysis and
-  examining the solution. 
+  examining the solution.
 * The ``case`` attribute, which is not used in the preceding example, provides all
   commands related to case file management and persistence.
 
