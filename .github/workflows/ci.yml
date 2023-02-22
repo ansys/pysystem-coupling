@@ -219,11 +219,6 @@ jobs:
           token: ${{ secrets.GH_TOKEN }}
           doc-artifact-name: "documentation-html"
 
-  # This is currently broken - the pyansys/actions expect PDF doc to be
-  # built and we can't currently build it. If we can't fix that then
-  # either the actions need to make PDF optional or we revert to more
-  # explicit implementation like the one commented out below. Note that
-  # that itself needs some attention if uncommented.
   release:
     name: Release project
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
@@ -237,17 +232,38 @@ jobs:
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
 
-      - name: Release to GitHub
-        uses: pyansys/actions/release-github@v3
-        with:
-          library-name: ${{ env.PACKAGE_NAME }}
-      
       - name: "Release to the public PyPI repository"
         uses: pyansys/actions/release-pypi-public@v3
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYPI_TOKEN }}
+
+      # TODO: We can't use pyansys/actions/release-github as it assumes PDF doc.
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.9
+
+      - uses: actions/download-artifact@v3
+        with:
+           name: ${{ env.PACKAGE_NAME }}-wheel
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: documentation-html
+          path: ~/html
+
+      - name: Display structure of downloaded files
+        run: ls -R
+
+      - name: "Release to GitHub"
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./**/*.whl
+            ./**/*.tar.gz
+            documentation-html 
 
   upload_docs_release:
     name: "Upload release documentation"
