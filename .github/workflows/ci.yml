@@ -142,9 +142,8 @@ jobs:
         env:
           SYC_IMAGE_TAG: v23.1.0
 
-      # Codecov not available until we are public
-      #- name: Upload coverage to Codecov
-      #  uses: codecov/codecov-action@v2
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
 
       - name: Upload test coverage
         uses: actions/upload-artifact@v3
