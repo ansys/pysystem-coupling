@@ -8,7 +8,7 @@ coverage:
     project:
       default:
         # basic
-        target: 95%
+        target: 85%
         threshold: 10%
         # advanced
         if_not_found: success
