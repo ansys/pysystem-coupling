@@ -76,7 +76,7 @@ doc = [
 	"ansys-dpf-core",
 ]
 style = [
-	"codespell==2.2.2",
+	"codespell==2.2.4",
 	"flake8==6.0.0",
 ]
 tests = [
