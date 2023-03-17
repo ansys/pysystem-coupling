@@ -95,7 +95,10 @@ jobs:
         run: rm -rf dist
 
       - name: Build library source and wheel artifacts
-        uses: pyansys/actions/build-library@v4
+        # Note: v4 does not support checkout suppression flag.
+        #       We need this to prevent generated code from
+        #       being deleted and not included in library.
+        uses: pyansys/actions/build-library@v3
         with:
           checkout: false
           library-name: ${{ env.PACKAGE_NAME }}
