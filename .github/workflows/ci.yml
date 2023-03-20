@@ -98,7 +98,7 @@ jobs:
         # Note: v4 does not support checkout suppression flag.
         #       We need this to prevent generated code from
         #       being deleted and not included in library.
-        uses: pyansys/actions/build-library@v3
+        uses: pyansys/actions/build-library@v4
         with:
           checkout: false
           library-name: ${{ env.PACKAGE_NAME }}
