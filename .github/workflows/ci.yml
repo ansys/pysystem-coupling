@@ -185,8 +185,6 @@ jobs:
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
 
-      # This is hanging on GitHub so disable for now
-      # ============================================
       - name: Build PDF Documentation
         run: |
           sudo apt update
