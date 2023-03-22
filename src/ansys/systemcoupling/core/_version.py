@@ -5,18 +5,13 @@ For example:
 
 version_info = 0, 1, 'dev0'
 
-Examples
---------
-Print the version.
-
->>> from ansys.product import library
->>> print(library.__version__)
-0.1.dev0
-
 """
 
-# major, minor, patch
-version_info = 0, 1, "dev0"
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:  # pragma: no cover
+    import importlib_metadata
 
-# string for the version
-__version__ = ".".join(map(str, version_info))
+# Read from the pyproject.toml
+# major, minor, patch
+__version__ = importlib_metadata.version("ansys.systemcoupling.core")

@@ -1,0 +1,3 @@
+[run]
+# Omit generated API code as coverage is not realistic
+omit = */ansys/systemcoupling/core/adaptor/api_*/*

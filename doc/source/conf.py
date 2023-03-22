@@ -21,11 +21,19 @@ html_short_title = html_title = "PySystemCoupling"
 html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
 
+html_context = {
+    "github_user": "pyansys",
+    "github_repo": "pysystem-coupling",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
+
 # specify the location of your github repo
 html_theme_options = {
     "github_url": "https://github.com/pyansys/pysystem-coupling",
     "show_prev_next": False,
     "show_breadcrumbs": True,
+    "use_edit_page_button": True,
     "additional_breadcrumbs": [
         ("PyAnsys", "https://docs.pyansys.com"),
     ],
