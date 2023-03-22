@@ -231,6 +231,8 @@ jobs:
           make -C doc pdf SPHINXERRWARN=""
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
+          extra_mem_bot: 10000000
+          extra_mem_top: 15000000
 
 
       - name: Upload HTML Documentation
