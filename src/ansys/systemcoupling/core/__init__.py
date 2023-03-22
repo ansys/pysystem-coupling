@@ -3,10 +3,16 @@ from typing import List
 
 import appdirs
 
-from ansys.systemcoupling.core._version import __version__
 from ansys.systemcoupling.core.client.grpc_client import SycGrpc
 from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
+
+try:
+    import importlib.metadata as importlib_metadata
+except ModuleNotFoundError:  # pragma: no cover
+    import importlib_metadata  # type: ignore
+
+__version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 
 def launch(
