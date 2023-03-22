@@ -216,11 +216,4 @@ latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
 
 # change the preamble of latex with customized title page
 # variables are the title of pdf, watermark
-latex_elements = {"preamble": latex.generate_preamble(html_title),
-                'preamble': r'''
-                    \usepackage{etex}
-                    \reserveinserts{100}
-                    \usepackage{etoolbox}
-                    \usepackage{morefloats}
-                    \patchcmd{\reserveinserts}{27}{100}{}{}
-                    ''',}
+latex_elements = {"preamble": latex.generate_preamble(html_title)}
