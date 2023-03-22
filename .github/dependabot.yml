@@ -17,3 +17,5 @@ updates:
       interval: "daily"
     labels:
       - "maintenance"
+    assignees: 
+      - "pyansys-ci-bot"
