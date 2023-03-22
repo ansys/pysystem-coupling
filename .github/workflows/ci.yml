@@ -185,6 +185,17 @@ jobs:
         env:
           PYSYC_DOC_BUILD_VERSION: 23_1
 
+      - name: Build PDF Documentation
+        run: |
+          sudo apt update
+          sudo apt-get install -y texlive-latex-extra latexmk
+          make -C doc pdf SPHINXERRWARN=""
+        env:
+          PYSYC_DOC_BUILD_VERSION: 23_1
+          extra_mem_bot: 10000000
+          extra_mem_top: 15000000
+
+
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v3
         with:
@@ -192,21 +203,14 @@ jobs:
           path: doc/_build/html
           retention-days: 7
 
-      # This build errors on GitHub so disable for now
-      # ==============================================
 
-      # - name: Build PDF Documentation
-      #   run: |
-      #     sudo apt update
-      #     sudo apt-get install -y texlive-latex-extra latexmk
-      #     make -C doc latexpdf SPHINXERRWARN=""
+      - name: Upload PDF Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: documentation-pdf
+          path: doc/_build/latex/*.pdf
+          retention-days: 7
 
-      # - name: Upload PDF Documentation
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: Documentation-pdf
-      #     path: doc/_build/latex/*.pdf
-      #     retention-days: 7
 
   upload_dev_docs:
     name: Upload dev documentation
