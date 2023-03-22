@@ -213,5 +213,6 @@ latex_elements = {"preamble": latex.generate_preamble(html_title),
                     \usepackage{etex}
                     \reserveinserts{100}
                     \usepackage{etoolbox}
+                    \usepackage{morefloats}
                     \patchcmd{\reserveinserts}{27}{100}{}{}
                     ''',}
