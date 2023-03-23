@@ -211,19 +211,6 @@ sphinx_gallery_conf = {
     "remove_config_comments": True,
 }
 
-# -- Options for HTML output -------------------------------------------------
-html_short_title = html_title = "PySystemCoupling"
-html_theme = "ansys_sphinx_theme"
-html_logo = pyansys_logo_black
-html_theme_options = {
-    "github_url": "https://github.com/pyansys/pysystem-coupling",
-    "show_prev_next": False,
-    "show_breadcrumbs": True,
-    "additional_breadcrumbs": [
-        ("PyAnsys", "https://docs.pyansys.com/"),
-    ],
-    "navigation_depth": -1,
-}
 
 # additional logos for the latex coverpage
 latex_additional_files = [watermark, ansys_logo_white, ansys_logo_white_cropped]
