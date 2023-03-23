@@ -25,3 +25,9 @@ clean:
 	rm -rf $(BUILDDIR)/*
 	#rm -rf $(SOURCEDIR)/examples
 	find . -type d -name "_autosummary" -exec rm -rf {} +
+
+# Create PDF
+pdf:
+	@$(SPHINXBUILD) -M latex "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
+	cd $(BUILDDIR)/latex && latexmk -r latexmkrc -pdf *.tex -interaction=nonstopmode -f || true
+	(test -f $(BUILDDIR)/latex/ansys-systemcoupling-core*.pdf && echo pdf exists) || exit 1
