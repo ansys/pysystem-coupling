@@ -1,5 +1,5 @@
 # Exclusions
-exclude: ^(examples/|doc/)
+exclude: ^(examples/|doc/source/examples/)
 
 # initially copied from pymapdl
 repos:
@@ -8,11 +8,11 @@ repos:
   hooks:
   - id: black
 
-- repo: https://github.com/asottile/blacken-docs
-  rev: v1.12.1
-  hooks:
-  -   id: blacken-docs
-      additional_dependencies: [black==23.1.0]
+#- repo: https://github.com/asottile/blacken-docs
+#  rev: v1.12.1
+#  hooks:
+#  -   id: blacken-docs
+#      additional_dependencies: [black==23.1.0]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.12.0
