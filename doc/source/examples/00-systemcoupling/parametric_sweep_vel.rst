@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -325,7 +325,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 .. code-block:: default
 
 
-    x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
+    x = np.array([5.0, 10.0, 15.0, 20.0])
     y = np.array([0.0] * len(x))
 
     working_dir = setup_working_directory()
@@ -405,31 +405,25 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533247210161
+    Max displacement value = 0.7212533243547633
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533247210161
+    Max displacement value = 0.7212533237905043
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533248804374
+    Max displacement value = 0.7212533235618391
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533252263177
-    Inlet velocity is set to 25.0
-    Setting up the coupled analysis.
-    Solving the coupled analysis. This may take a while....
-    ...done.
-    Extracting max displacement value
-    Max displacement value = 0.7212533244801425
+    Max displacement value = 0.7212533243283991
 
 
 
@@ -437,7 +431,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 13 minutes  51.498 seconds)
+   **Total running time of the script:** ( 11 minutes  55.096 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
@@ -445,6 +439,8 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

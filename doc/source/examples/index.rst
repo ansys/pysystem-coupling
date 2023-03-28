@@ -38,12 +38,12 @@ interrogation of the data model, and running the System Coupling solver to perfo
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the *Oscillating Plate* case that is often used as a tutorial for ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the Oscillating Plate case that is often used as a tutorial for Sy...">
 
 .. only:: html
 
   .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_oscillating_plate_thumb.png
-    :alt: Oscillating plate
+    :alt:
 
   :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py`
 
@@ -60,7 +60,7 @@ interrogation of the data model, and running the System Coupling solver to perfo
 .. only:: html
 
   .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_parametric_sweep_vel_thumb.png
-    :alt: Parametric sweep
+    :alt:
 
   :ref:`sphx_glr_examples_00-systemcoupling_parametric_sweep_vel.py`
 
@@ -78,6 +78,7 @@ interrogation of the data model, and running the System Coupling solver to perfo
 .. toctree::
    :hidden:
    :includehidden:
+
 
    /examples/00-systemcoupling/index.rst
 

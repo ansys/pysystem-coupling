@@ -213,7 +213,7 @@ def plot(working_dir, x, y):
 # are used to fill in the corresponding values of the ``y`` array.
 # Finally, call the ``plot()`` function to generate a plot from the arrays.
 
-x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
+x = np.array([5.0, 10.0, 15.0, 20.0])
 y = np.array([0.0] * len(x))
 
 working_dir = setup_working_directory()
