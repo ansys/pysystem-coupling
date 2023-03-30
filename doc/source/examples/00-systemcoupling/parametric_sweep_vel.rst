@@ -158,7 +158,7 @@ the ``solve_coupled_analysis`` command in a sequence of analyses.
           session.setup.boundary_conditions.velocity_inlet[
               "wall_inlet"
           ].vmag.value = inlet_velocity
-          session.tui.file.write_case(case_file)
+          session.tui.file.write_case(case_file, "yes")
 
       print(f"Inlet velocity is set to {inlet_velocity}")
 
@@ -244,7 +244,7 @@ maximum displacement value in the solution.
       displacements = model.results.displacement()
       fields = displacements.outputs.fields_container()
       value = max([v[0] for v in fields[0].data])
-      print("Max displacement value = " + str(value))
+      print(f"Max displacement value = {value}")
       return value
 
 
@@ -325,7 +325,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 .. code-block:: default
 
 
-    x = np.array([5.0, 10.0, 15.0, 20.0])
+    x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
     y = np.array([0.0] * len(x))
 
     working_dir = setup_working_directory()
@@ -400,30 +400,43 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
             symmetry2
             symmetry1
     Done.
+
+    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+           58065 cells,     1 zone  ...
+          187138 faces,     8 zones ...
+           71280 nodes,     1 zone  ...
+      Done.
+    Done.
     Inlet velocity is set to 5.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533243547633
+    Max displacement value = 0.052365485950746894
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533237905043
+    Max displacement value = 0.19232826989790763
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533235618391
+    Max displacement value = 0.37276751732600016
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533243283991
+    Max displacement value = 0.5624418883785633
+    Inlet velocity is set to 25.0
+    Setting up the coupled analysis.
+    Solving the coupled analysis. This may take a while....
+    ...done.
+    Extracting max displacement value
+    Max displacement value = 0.7212533237739663
 
 
 
@@ -431,7 +444,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 11 minutes  55.096 seconds)
+   **Total running time of the script:** ( 14 minutes  59.902 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
