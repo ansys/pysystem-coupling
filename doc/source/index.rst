@@ -20,7 +20,7 @@ System Coupling is software for solving multiphysics problems by connecting inde
 solvers and coordinating the exchange of the solution data. This enables accurate capturing of the
 complex interactions between physical models, typically simulated in separate solvers.
 
-System Coupling connects to several existing Ansys physics solvers, including Ansys CFX,
+System Coupling connects to several existing Ansys physics solvers, including Ansys Fluent, Ansys CFX,
 Ansys Forte, Ansys MAPDL, and Ansys Electronics Desktop. Examples of problems that can be solved
 by System Coupling include Fluid-Structure Interaction (FSI), Conjugate Heat Transfer (CHT), and Joule
 Heating.
@@ -61,7 +61,7 @@ local copy of System Coupling.
 .. TODO Add the appropriate link when available.
 
 For more information about System Coupling,
-visit the Ansys System Coupling page on the Ansys website.
+visit the `Ansys System Coupling page <https://www.ansys.com/products/system-coupling>`_ on the Ansys website.
 
 Project index
 ==============

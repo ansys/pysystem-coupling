@@ -111,7 +111,7 @@ def set_inlet_velocity(working_dir, inlet_velocity):
       session.setup.boundary_conditions.velocity_inlet[
           "wall_inlet"
       ].vmag.value = inlet_velocity
-      session.tui.file.write_case(case_file)
+      session.tui.file.write_case(case_file, "yes")
 
   print(f"Inlet velocity is set to {inlet_velocity}")
 
@@ -171,7 +171,7 @@ def extract_max_displacement(working_dir):
   displacements = model.results.displacement()
   fields = displacements.outputs.fields_container()
   value = max([v[0] for v in fields[0].data])
-  print("Max displacement value = " + str(value))
+  print(f"Max displacement value = {value}")
   return value
 
 # %%
