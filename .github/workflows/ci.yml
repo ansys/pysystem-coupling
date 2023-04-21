@@ -90,6 +90,9 @@ jobs:
         with:
           image-tag: latest
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
       # - name: Pull docker image
       #   run: make docker-pull
       #   env:
