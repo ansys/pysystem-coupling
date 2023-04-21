@@ -85,6 +85,11 @@ jobs:
         with:
           image-tag: v23.1.0
 
+      - name: Generate API for v232
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: latest
+
       # - name: Pull docker image
       #   run: make docker-pull
       #   env:
