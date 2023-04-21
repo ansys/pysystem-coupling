@@ -80,16 +80,21 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.GH_TOKEN }}
 
-      - name: Pull docker image
-        run: make docker-pull
-        env:
-          SYC_IMAGE_TAG: v23.1.0
+      - name: Generate API for v231
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: v23.1.0
 
-      - name: Generate API code
-        run: make generate-api
-        env:
-          SYC_LAUNCH_CONTAINER: 1
-          SYC_IMAGE_TAG: v23.1.0
+      # - name: Pull docker image
+      #   run: make docker-pull
+      #   env:
+      #     SYC_IMAGE_TAG: v23.1.0
+
+      # - name: Generate API code
+      #   run: make generate-api
+      #   env:
+      #     SYC_LAUNCH_CONTAINER: 1
+      #     SYC_IMAGE_TAG: v23.1.0
 
       - name: Clean out dist
         run: rm -rf dist

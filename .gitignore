@@ -162,3 +162,7 @@ cython_debug/
 .vscode/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
+
+src/ansys/systemcoupling/core/adaptor/api*/
+venv_*/
+_autosummary/
