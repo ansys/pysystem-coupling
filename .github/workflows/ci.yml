@@ -90,20 +90,6 @@ jobs:
         with:
           image-tag: latest
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      # - name: Pull docker image
-      #   run: make docker-pull
-      #   env:
-      #     SYC_IMAGE_TAG: v23.1.0
-
-      # - name: Generate API code
-      #   run: make generate-api
-      #   env:
-      #     SYC_LAUNCH_CONTAINER: 1
-      #     SYC_IMAGE_TAG: v23.1.0
-
       - name: Clean out dist
         run: rm -rf dist
 
