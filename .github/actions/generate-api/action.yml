@@ -12,11 +12,13 @@ runs:
   steps:
     - name: Pull docker image
       run: make docker-pull
+      shell: bash
       env:
         SYC_IMAGE_TAG: ${{ inputs.image-tag }}
 
     - name: Generate API code
       run: make generate-api
+      shell: bash
       env:
         SYC_LAUNCH_CONTAINER: 1
         SYC_IMAGE_TAG: ${{ inputs.image-tag }}
