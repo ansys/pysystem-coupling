@@ -1,0 +1,39 @@
+name: 'Unit Test'
+
+description: 'Unit test for specified version'
+
+inputs:
+  image-tag:
+    description: 'Docker image tag for version'
+    required: true
+  upload-coverage:
+    description: 'Whether to upload coverage data to Codecov'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Pull docker image
+      run: make docker-pull
+      shell: bash
+      env:
+        SYC_IMAGE_TAG: ${{ inputs.image-tag }}
+
+    - name: Unit testing
+      run: |
+        pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
+      shell: bash
+      env:
+        SYC_IMAGE_TAG: ${{ inputs.image-tag }}
+
+    - name: Upload coverage to Codecov
+      if: ${{ inputs.upload-coverage }}
+      uses: codecov/codecov-action@v3
+
+    - name: Upload test coverage
+      if: ${{ inputs.upload-coverage }}
+      uses: actions/upload-artifact@v3
+      with:
+        name: HTML-coverage-syc
+        path: cov_html
+        retention-days: 7

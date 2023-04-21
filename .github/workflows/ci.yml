@@ -133,26 +133,38 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.GH_TOKEN }}
 
-      - name: Pull docker image
-        run: make docker-pull
-        env:
-          SYC_IMAGE_TAG: v23.1.0
-
-      - name: Unit testing
-        run: |
-          pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
-        env:
-          SYC_IMAGE_TAG: v23.1.0
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-
-      - name: Upload test coverage
-        uses: actions/upload-artifact@v3
+      - name: Unit Test v23.1.0
+        uses: .github/workflow/actions/unit-test
         with:
-          name: HTML-coverage-syc
-          path: cov_html
-          retention-days: 7
+          image-tag: v23.1.0
+          upload-coverage: true
+
+      - name: Unit Test v23.2.0
+        uses: .github/workflow/actions/unit-test
+        with:
+          image-tag: latest
+          upload-coverage: false
+
+      # - name: Pull docker image
+      #   run: make docker-pull
+      #   env:
+      #     SYC_IMAGE_TAG: v23.1.0
+
+      # - name: Unit testing
+      #   run: |
+      #     pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
+      #   env:
+      #     SYC_IMAGE_TAG: v23.1.0
+
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v3
+
+      # - name: Upload test coverage
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: HTML-coverage-syc
+      #     path: cov_html
+      #     retention-days: 7
 
   docs:
     name: Build Documentation
