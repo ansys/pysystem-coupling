@@ -134,13 +134,13 @@ jobs:
           password: ${{ secrets.GH_TOKEN }}
 
       - name: Unit Test v23.1.0
-        uses: .github/workflow/actions/unit-test
+        uses: .github/actions/unit-test
         with:
           image-tag: v23.1.0
           upload-coverage: true
 
       - name: Unit Test v23.2.0
-        uses: .github/workflow/actions/unit-test
+        uses: .github/actions/unit-test
         with:
           image-tag: latest
           upload-coverage: false
