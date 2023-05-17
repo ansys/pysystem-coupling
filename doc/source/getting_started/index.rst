@@ -27,11 +27,11 @@ with this command:
 
 
 Alternatively, install the latest version from `PySystemCoupling GitHub
-<https://github.com/pyansys/pysystem-coupling/issues>`_ with this command:
+<https://github.com/ansys/pysystem-coupling/issues>`_ with this command:
 
 .. code::
 
-   pip install git https://github.com/pyansys/pysystem-coupling.git
+   pip install git https://github.com/ansys/pysystem-coupling.git
 
 
 If you plan on doing local *development* of PySystemCoupling with Git,
@@ -39,7 +39,7 @@ install the latest ``ansys-systemcoupling-core`` package with this code:
 
 .. code::
 
-   git clone https://github.com/pyansys/pysystem-coupling.git
+   git clone https://github.com/ansys/pysystem-coupling.git
    cd pysystem-coupling
    pip install -e .
 
