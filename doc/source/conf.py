@@ -30,7 +30,7 @@ html_context = {
 
 # specify the location of your github repo
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pysystem-coupling",
+    "github_url": "https://github.com/ansys/pysystem-coupling",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "use_edit_page_button": True,
@@ -84,7 +84,7 @@ if os.environ.get("PYSYC_BUILD_SPHINX_GALLERY") is None:
 
 # Intersphinx mapping
 intersphinx_mapping = {
-    "python": ("https://docs.python.org/dev", None),
+    "python": ("https://docs.python.org/3/", None),
     # kept here as an example
     # "scipy": ("https://docs.scipy.org/doc/scipy/reference", None),
     # "numpy": ("https://numpy.org/devdocs", None),
@@ -201,7 +201,7 @@ html_short_title = html_title = "PySystemCoupling"
 html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
 html_theme_options = {
-    "github_url": "https://github.com/pyansys/pysystem-coupling",
+    "github_url": "https://github.com/ansys/pysystem-coupling",
     "show_prev_next": False,
     "show_breadcrumbs": True,
     "additional_breadcrumbs": [

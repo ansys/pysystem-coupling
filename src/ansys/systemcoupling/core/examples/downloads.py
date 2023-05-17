@@ -37,8 +37,8 @@ def _decompress(filename: str) -> None:
 
 
 def _get_file_url(filename: str, directory: Optional[str] = None) -> str:
-    root_url = "https://github.com/pyansys/example-data/raw/master/"
-    # root_url = "https://github.com/pyansys/pysystem-coupling/raw/feature/more_doc/"
+    root_url = "https://github.com/ansys/example-data/raw/master/"
+    # root_url = "https://github.com/ansys/pysystem-coupling/raw/feature/more_doc/"
     if directory:
         return f"{root_url}" f"{directory}/{filename}"
     return f"{root_url}/{filename}"

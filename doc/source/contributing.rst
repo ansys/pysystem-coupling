@@ -17,7 +17,7 @@ mode, run:
 
 .. code::
 
-    git clone https://github.com/pyansys/pysystem-coupling.git
+    git clone https://github.com/ansys/pysystem-coupling.git
     cd pysystem-coupling
     python -m pip install --upgrade pip
     pip install -e .
@@ -98,7 +98,7 @@ to this environment variable.
 
 Post issues
 -----------
-Use the `PySystemCoupling Issues <https://github.com/pyansys/pysystem-coupling/issues>`_ page to
+Use the `PySystemCoupling Issues <https://github.com/ansys/pysystem-coupling/issues>`_ page to
 submit questions, report bugs, and request new features.
 
 
