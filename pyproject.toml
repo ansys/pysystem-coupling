@@ -89,10 +89,10 @@ tests = [
 name = "ansys.systemcoupling.core"
 
 [project.urls]
-Source = "https://github.com/pyansys/pysystem-coupling/"
-Homepage = "https://github.com/pyansys/pysystem-coupling/"
+Source = "https://github.com/ansys/pysystem-coupling/"
+Homepage = "https://github.com/ansys/pysystem-coupling/"
 Documentation = "https://systemcoupling.docs.pyansys.com/"
-Tracker = "https://github.com/pyansys/pysystem-coupling/issues"
+Tracker = "https://github.com/ansys/pysystem-coupling/issues"
 
 [tool.isort]
 profile = "black"

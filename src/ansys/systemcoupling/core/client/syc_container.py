@@ -36,7 +36,7 @@ def start_container(
         f"{_MPI_VERSION_VAR}={_MPI_VERSION}",
         "-e",
         f"AWP_ROOT=/ansys_inc",
-        f"ghcr.io/pyansys/pysystem-coupling:{image_tag}",
+        f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
     ] + args
 
     if network:
