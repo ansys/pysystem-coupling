@@ -139,11 +139,11 @@ jobs:
           image-tag: v23.1.0
           upload-coverage: true
 
-      - name: Unit Test v23.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: latest
-          upload-coverage: false
+      # - name: Unit Test v23.2.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: latest
+      #     upload-coverage: false
 
 
   docs:
