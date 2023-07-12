@@ -57,7 +57,7 @@ Build documentation
 -------------------
 To build the PySystemCoupling documentation locally, you must have first generated the API classes
 as described in :ref:`ref_generate_api`. This is because some of the documentation is extracted
-from these classes. 
+from these classes.
 
 Because multiple versions of the API classes can exist, you must set the ``PYSYC_DOC_BUILD_VERSION``
 environment variable to tell the documentation build which version to use. Given that there is
@@ -92,7 +92,7 @@ are run manually from time to time and the resulting `Sphinx` files are committe
 repository.
 
 To override the default behavior and rebuild the entire documentation, including
-regeneration of the Sphinx Gallery` examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
+regeneration of the Sphinx Gallery examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
 environment variable. Because only its existence is examined, you can give any value
 to this environment variable.
 

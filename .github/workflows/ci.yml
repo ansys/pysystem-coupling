@@ -47,7 +47,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python-version: ['3.7', '3.8', '3.9', '3.10']
+        python-version: ['3.8', '3.9', '3.10', '3.11']
 
     steps:
       - name: "Build wheelhouse and perform smoke test"
@@ -139,11 +139,11 @@ jobs:
           image-tag: v23.1.0
           upload-coverage: true
 
-      # - name: Unit Test v23.2.0
-      #   uses: ./.github/actions/unit-test
-      #   with:
-      #     image-tag: latest
-      #     upload-coverage: false
+      - name: Unit Test v23.2.0
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: latest
+          upload-coverage: false
 
 
   docs:
