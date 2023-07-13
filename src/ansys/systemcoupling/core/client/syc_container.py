@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 import subprocess
 
+from ansys.systemcoupling.core.syc_version import SYC_DEFAULT_IMAGE_TAG
+
 _MPI_VERSION_VAR = "FLUENT_INTEL_MPI_VERSION"
 _MPI_VERSION = "2021"
 
@@ -17,7 +19,7 @@ def start_container(
         gPRC server local port, mapped to the same port in container.
     """
     args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
-    image_tag = os.getenv("SYC_IMAGE_TAG", "v23.1.0")
+    image_tag = os.getenv("SYC_IMAGE_TAG", SYC_DEFAULT_IMAGE_TAG)
 
     mounted_from = str(Path(mounted_from).absolute())
 

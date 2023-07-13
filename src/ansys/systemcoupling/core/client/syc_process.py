@@ -5,11 +5,12 @@ import subprocess
 
 import psutil
 
+from ansys.systemcoupling.core.syc_version import SYC_VERSION_CONCAT
 from ansys.systemcoupling.core.util.logging import LOG
 
 _isWindows = any(platform.win32_ver())
 
-_CURR_VER = "231"
+_CURR_VER = SYC_VERSION_CONCAT
 _INSTALL_ROOT_ENV = "AWP_ROOT"
 _INSTALL_ROOT_VER_ENV = _INSTALL_ROOT_ENV + _CURR_VER
 _SC_ROOT_ENV = "SYSC_ROOT"
