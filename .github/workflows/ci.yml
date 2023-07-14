@@ -222,7 +222,7 @@ jobs:
         uses: ansys/actions/doc-deploy-dev@v4
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           doc-artifact-name: "documentation-html"
 
   release:
