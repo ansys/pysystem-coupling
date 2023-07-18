@@ -2,14 +2,21 @@ import os
 from pathlib import Path
 import subprocess
 
-from ansys.systemcoupling.core.syc_version import SYC_DEFAULT_IMAGE_TAG
+from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT, normalize_version
 
 _MPI_VERSION_VAR = "FLUENT_INTEL_MPI_VERSION"
 _MPI_VERSION = "2021"
 
+_DEFAULT_IMAGE_TAG = f"v{SYC_VERSION_DOT}.0"
+
+
+def _image_tag(version: str) -> str:
+    major, minor = normalize_version(version)
+    return f"v{major}.{minor}.0"
+
 
 def start_container(
-    mounted_from: str, mounted_to: str, network: str, port: int
+    mounted_from: str, mounted_to: str, network: str, port: int, version: str
 ) -> None:
     """Start a System Coupling container.
 
@@ -19,7 +26,11 @@ def start_container(
         gPRC server local port, mapped to the same port in container.
     """
     args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
-    image_tag = os.getenv("SYC_IMAGE_TAG", SYC_DEFAULT_IMAGE_TAG)
+
+    if version:
+        image_tag = _image_tag(version)
+    else:
+        image_tag = os.getenv("SYC_IMAGE_TAG", _DEFAULT_IMAGE_TAG)
 
     mounted_from = str(Path(mounted_from).absolute())
 

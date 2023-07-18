@@ -80,6 +80,9 @@ fail at that point, rather than attempting to use the next variable.
 
 In a standard user installation, the expectation is that only ``AWP_ROOT232`` is set.
 
+(It is also possible to provide a different version number as an argument to the ``launch()``
+function. This will affect which ``AWP_ROOT<version>`` environment variable is examined.)
+
 The System Coupling API is exposed to PySystemCoupling in two forms:
 
 * A documented interface based on concrete Python classes, following Pythonic conventions
