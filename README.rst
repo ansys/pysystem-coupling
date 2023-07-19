@@ -76,7 +76,7 @@ in this order:
 * ``AWP_ROOT232``
 
 If a variable is set but does not refer to a valid installation, PySystemCoupling
-fail at that point, rather than attempting to use the next variable.
+fails at that point, rather than attempting to use the next variable.
 
 In a standard user installation, the expectation is that only ``AWP_ROOT232`` is set.
 
