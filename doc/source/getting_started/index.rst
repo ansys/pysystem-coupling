@@ -12,7 +12,7 @@ PySystemCoupling supports Ansys System Coupling version 2023 R1 and later.
 
    The detailed documentation, particularly that in the :ref:`ref_index_api`
    section, is based on the *current* official Ansys release at this release of
-   PySystemCoupling. This is **2023 R2**. Although the majority of it will not change
+   PySystemCoupling. This is **2023 R2**. Although the majority of it does not change
    between releases, you should consult the API documentation for an earlier
    applicable release of PySystemCoupling if you are running with an older System
    Coupling version and want to be sure of the details.
