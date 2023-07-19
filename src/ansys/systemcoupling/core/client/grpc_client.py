@@ -90,28 +90,38 @@ class SycGrpc(object):
 
         working_dir = kwargs.pop("working_dir", None)
         port = kwargs.pop("port", None)
+        version = kwargs.pop("version", None)
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
             mounted_from = working_dir if working_dir else "./"
             mounted_to = "/working"
-            self.start_container_and_connect(mounted_from, mounted_to, port=port)
+            self.start_container_and_connect(
+                mounted_from, mounted_to, port=port, version=version
+            )
         else:  # pragma: no cover
             if port is None:
                 port = _find_port()
             if working_dir is None:
                 working_dir = "."
             LOG.debug("Starting process...")
-            self.__process = SycProcess(_LOCALHOST_IP, port, working_dir, **kwargs)
+            self.__process = SycProcess(
+                _LOCALHOST_IP, port, working_dir, version, **kwargs
+            )
             LOG.debug("...started")
             self._connect(_LOCALHOST_IP, port)
 
     def start_container_and_connect(
-        self, mounted_from: str, mounted_to: str, network: str = None, port: int = None
+        self,
+        mounted_from: str,
+        mounted_to: str,
+        network: str = None,
+        port: int = None,
+        version: str = None,
     ):
         """Start the System Coupling container and establish a connection."""
         LOG.debug("Starting container...")
         port = port if port is not None else _find_port()
-        start_container(mounted_from, mounted_to, network, port)
+        start_container(mounted_from, mounted_to, network, port, version)
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 

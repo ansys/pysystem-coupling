@@ -21,6 +21,7 @@ def launch(
     working_dir: str = None,
     nprocs: int = None,
     sycnprocs: int = None,
+    version: str = None,
     extra_args: List[str] = [],
 ) -> Session:
     """Start a local instance of System Coupling and connect to it.
@@ -40,6 +41,15 @@ def launch(
     sycnprocs : int, optional
         Number of processes for the System Coupling engine. The default is
         ``None``, in which case the System Coupling server uses its own default.
+    version : str, optional
+        String specifying the version of System Coupling to use. For example,
+        to use System Coupling from the Ansys "2023 R1" release, specify ``"231"``.
+        (The forms ``"23.1"`` and ``"23_1"`` are also acceptable.)
+        The version will be sought in the standard installation location. The
+        default is ``None``, which is equivalent to specifying
+        ``"232"`` ("2023 R2" release), unless either of the environment
+        variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
+        to be an error if either these is set *and* ``version`` is provided.
     extra_args : List[str]
         List of any additional arguments to specify when the server
         process is launched. The default is ``[]``. If a list of additional
@@ -60,6 +70,7 @@ def launch(
         working_dir=working_dir,
         nprocs=nprocs,
         sycnprocs=sycnprocs,
+        version=version,
         extra_args=extra_args,
     )
     syc = Session(rpc)
@@ -67,7 +78,10 @@ def launch(
 
 
 def launch_container(
-    mounted_from: str = "./", mounted_to: str = "/working", network: str = None
+    mounted_from: str = "./",
+    mounted_to: str = "/working",
+    network: str = None,
+    version: str = None,
 ) -> Session:
     """Start a System Coupling container instance and connect to it.
 
@@ -82,7 +96,7 @@ def launch_container(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    rpc.start_container_and_connect(mounted_from, mounted_to, network)
+    rpc.start_container_and_connect(mounted_from, mounted_to, network, version=version)
     syc = Session(rpc)
     return syc
 

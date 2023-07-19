@@ -40,6 +40,7 @@ python <path to generate_datamodel.py> [-t] [-n] [-d] [-y]
 import io
 import itertools
 import os
+from pathlib import Path
 import pprint
 import sys
 from typing import IO
@@ -47,9 +48,11 @@ from typing import IO
 import black
 import isort
 
+_RAW_YAML_DUMP_DIR = "raw_data"
+
 # Allows us to run pysystemcoupling from source without setting PYTHONPATH
-_dirname = os.path.dirname(__file__)
-sys.path.append(os.path.normpath(os.path.join(_dirname, "..")))
+_scriptpath = Path(__file__)
+sys.path.append(_scriptpath.parents[1])
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
@@ -67,9 +70,11 @@ from ansys.systemcoupling.core.util.yaml_helper import yaml_dump_to_file
 dump_yaml_on = False
 
 
-def _dump_yaml(data, file):
+def _dump_yaml(data, file, version):
     if dump_yaml_on:
-        yaml_dump_to_file(data=data, filepath=file)
+        dir = _scriptpath.parent / _RAW_YAML_DUMP_DIR / version
+        dir.mkdir(parents=True, exist_ok=True)
+        yaml_dump_to_file(data=data, filepath=str(dir / file))
 
 
 hash_dict = {}
@@ -617,7 +622,7 @@ def _generate_test_classes(dirname, generate_flat_classes):
     from dm_raw_metadata import cmd_metadata, dm_metadata
 
     dm_metadata = make_combined_metadata(dm_metadata, cmd_metadata, category="setup")
-    _dump_yaml(dm_metadata, "combined_metadata_test.yml")
+    _dump_yaml(dm_metadata, "combined_metadata_test.yml", "test")
 
     filepath = os.path.normpath(
         os.path.join(
@@ -638,21 +643,22 @@ def _generate_real_classes(dirname, generate_flat_classes):
     LOG.debug("Helper instance of syc successfully launched.")
     LOG.debug("Initialise 'native' API...")
     api = syc._native_api
+    version = get_syc_version(api).replace(".", "_")
 
+    LOG.debug(f"Version: {version}")
     LOG.debug("Querying datamodel metadata...")
     dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
     cmd_metadata_orig = get_extended_cmd_metadata(api)
-    _dump_yaml(cmd_metadata_orig, "command_metadata.yml")
+    _dump_yaml(cmd_metadata_orig, "command_metadata.yml", version)
     LOG.debug("Command metadata received. Processing...")
 
     dm_metadata = make_combined_metadata(
         dm_metadata, cmd_metadata_orig, category="setup"
     )
-    _dump_yaml(dm_metadata, "combined_metadata.yml")
+    _dump_yaml(dm_metadata, "combined_metadata.yml", version)
 
-    version = get_syc_version(api)
-    api_root = f"api_{version.replace('.', '_')}" if version else "api"
+    api_root = f"api_{version}" if version else "api"
 
     filedir = os.path.normpath(
         os.path.join(
@@ -676,7 +682,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
         cat_metadata, root_type = make_cmdonly_metadata(
             cmd_metadata_orig, category=category
         )
-        _dump_yaml(cat_metadata, f"cat_metadata_{category}.yml")
+        _dump_yaml(cat_metadata, f"cat_metadata_{category}.yml", version)
         LOG.debug(f"Creating '{category}' classes...")
         filepath = os.path.join(filedir, f"{category}.py")
         write_classes_to_file(

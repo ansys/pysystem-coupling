@@ -41,7 +41,7 @@ The key differences are as follows:
   global names. Commands in PySystemCoupling are exposed as callable objects that are accessible
   as attributes of one of the *root* attributes of the :class:`Session<Session>` class:
   :meth:`case<Session.case>`, :meth:`case<Session.setup>`, and :meth:`case<Session.solution>`.
-  
+
 * In System Coupling, you manipulate and query the setup data model in one of these ways:
 
   * Use high level commands to create and initialize the main objects in the data model.
@@ -77,14 +77,14 @@ The key differences are as follows:
     ].data_transfer["Force"].value = "force*scaleFactor"
 
     # Query a setting
-    print(root.execution_control.option)
+    print(setup.execution_control.option)
 
 Direct access to the native System Coupling API
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 If you want to try to quickly translate an existing System Coupling script
 to the PySystemCoupling environment, or you need to access a feature
 not currently exposed in PySystemCoupling, you can use the
-:ref:`_native_api<ref_native_api_property>` attribute of the
+:ref:`_native_api<ref_native_api_property>` attribute that the
 :class:`Session<Session>` class offers as a *back door* for directly accessing
 the native System Coupling API. However, you must still make some adjustments
 to the existing System Coupling script because calls must be via the
@@ -135,34 +135,39 @@ property attributes. A ``Container`` object can also contain statically defined
 *child objects*, which are accessible as attributes. For example, ``setup.output_control.results``
 refers to the ``results`` child of the ``output_control`` child of the ``setup`` object.
 The names of child objects can be accessed with the ``child_names``
-attribute of the ``Container`` object. For example, the ``option`` setting of the
-``output_control`` object is accessed as ``setup.output_control.option``. This particular setting
-is a string value.
+attribute of the ``Container`` object.
+
+The names of the primitive settings attributes of a ``Container`` can be obtained via its
+``property_names_types`` attribute. Although, this is mainly for internal use, its value
+is a list of tuples, the first element of each tuple being the name of a primitive
+setting of the ``Container``. As an example of such a setting, the ``option``
+setting of the ``output_control`` object is accessed as ``setup.output_control.option``.
+This particular setting is a string value.
 
 A ``NamedContainer`` object is a container holding dynamically created named objects of
 its specified child type, which is accessible via ``child_object_type`` attribute.
 Because a specific named object can be accessed using the ``[]`` index operator, a
-``NamedContaier`` object behaves somewhat like a Python dictionary. For example,
-``setup.coupling_interface['intf-1']`` refers to the
-``coupling_interface`` object with name ``intf-1``. You can use the ``get_object_names()``
-method in the container class. In practice, the named object instances are ``Container``
-objects. Thus, in the example just given, ``setup.coupling_interface['intf-1']``
-is a ``Container`` object.
+``NamedContainer`` object behaves somewhat like a Python dictionary. For example,
+``setup.coupling_interface['intf-1']`` refers to the ``coupling_interface`` object with
+name ``intf-1``. You can use the ``get_object_names()`` method in the container class to
+obtain a list of the names of objects held by the ``NamedContainer``. In practice, the
+named object instances are ``Container`` objects. Thus, in the example just given,
+``setup.coupling_interface['intf-1']`` is a ``Container`` object.
 
 Container states
 ----------------
 
-You access the state of any container object by calling it. The call returns
-the state of its properties and any children as a nested dictionary.
+You access the state of any container object by *calling* it. The call returns
+the state of its properties and any children as a nested dictionary. The call
+syntax is an alias for the ``get_state`` method, which you can use as a more
+explicit alternative.
 
 You modify the state of a container by assigning the corresponding attribute
 in its parent object. This assignment can be done at any level. The assigned
-state value should be a dictionary.
+state value should be a dictionary. Again, a more explicit alternative is
+available in the form of the ``set_state`` method.
 
-You query and assign individual settings as properties on their container objects.
-
-You use the ``get_state`` method to get the state of a container and the ``set_state``
-method to modify the state of the container.
+You query and assign *individual* settings as properties on their container objects.
 
 You use the ``print_state`` method to print the current state of the container in
 a simple text format.
@@ -174,7 +179,7 @@ Commands are methods of settings objects that you use to modify the state of
 the app. The ``command_names`` attribute of a settings object
 provides the names of its commands.
 
-You can pass commands as keyword arguments if needed. You use the ``arguments``
+You can pass keyword arguments to commands if needed. You use the ``arguments``
 attribute to access the list of valid arguments. If an argument is
 not specified and is optional, its default value is used. Arguments are also settings objects
 and can be either a primitive type or container type.

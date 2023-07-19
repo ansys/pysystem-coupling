@@ -73,12 +73,15 @@ in this order:
 
 * ``SYSC_ROOT``
 * ``AWP_ROOT``
-* ``AWP_ROOT231``
+* ``AWP_ROOT232``
 
 If a variable is set but does not refer to a valid installation, PySystemCoupling
-fail at that point, rather than attempting to use the next variable.
+fails at that point, rather than attempting to use the next variable.
 
-In a standard user installation, the expectation is that only ``AWP_ROOT231`` is set.
+In a standard user installation, the expectation is that only ``AWP_ROOT232`` is set.
+
+(It is also possible to provide a different version number as an argument to the ``launch()``
+function. This will affect which ``AWP_ROOT<version>`` environment variable is examined.)
 
 The System Coupling API is exposed to PySystemCoupling in two forms:
 

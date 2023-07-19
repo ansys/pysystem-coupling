@@ -4,6 +4,7 @@ from typing import Tuple
 from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
     get_injected_cmd_data,
 )
+from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
 from ansys.systemcoupling.core.util.name_util import to_python_name
 
 
@@ -324,9 +325,9 @@ def get_syc_version(api) -> str:
     The version is returned in a string like ``"23.2"``.
 
     System Coupling versions earlier than 23.2 (2023 R2) do not expose
-    the ``GetVersion`` command. Because the server that PySystemCoupling
-    connects to did not exist prior to 23.1 (2023 R1), if no version query
-    exists, the version is assumed to be 23.1.
+    the ``GetVersion`` query. Because the first version of the server
+    that PySystemCoupling is able to connect to is 23.1 (2023 R1), the
+    version is assumed to be 23.1 if no version query exists.
 
     Parameters
     ----------
@@ -349,4 +350,4 @@ def get_syc_version(api) -> str:
 
     cmds = api.GetCommandAndQueryMetadata()
     exists = any(cmd["name"] == "GetVersion" for cmd in cmds)
-    return clean_version_string(api.GetVersion()) if exists else "23.1"
+    return clean_version_string(api.GetVersion()) if exists else SYC_VERSION_DOT
