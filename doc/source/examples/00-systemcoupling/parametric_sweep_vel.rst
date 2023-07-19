@@ -45,7 +45,7 @@ This example imports these PyAnsys libraries: PySystemCoupling,
 PyFluent, and PyDPF. It also imports Matplotlib and NumPy to
 produce a simple plot of the results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-43
+.. GENERATED FROM PYTHON SOURCE LINES 30-44
 
 .. code-block:: default
 
@@ -58,6 +58,7 @@ produce a simple plot of the results.
     import ansys.dpf.core as pydpf
     import ansys.fluent.core as pyfluent
     import ansys.systemcoupling.core as pysyc
+    from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
 
     from ansys.systemcoupling.core import examples
 
@@ -69,7 +70,7 @@ produce a simple plot of the results.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-64
+.. GENERATED FROM PYTHON SOURCE LINES 46-65
 
 Define functions
 ----------------
@@ -91,7 +92,7 @@ the Fluent files are placed in a ``Fluent`` subdirectory. The
 ``setup_working_directory()`` function returns the path of the
 working directory for later use.
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-98
+.. GENERATED FROM PYTHON SOURCE LINES 65-99
 
 .. code-block:: default
 
@@ -136,7 +137,7 @@ working directory for later use.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-106
+.. GENERATED FROM PYTHON SOURCE LINES 100-107
 
 Set inlet velocity
 ~~~~~~~~~~~~~~~~~~
@@ -146,13 +147,15 @@ To modify the Fluent case to adjust the inlet velocity on the
 with a varying ``inlet_velocity``value before each call of
 the ``solve_coupled_analysis`` command in a sequence of analyses.
 
-.. GENERATED FROM PYTHON SOURCE LINES 106-118
+.. GENERATED FROM PYTHON SOURCE LINES 107-121
 
 .. code-block:: default
 
 
     def set_inlet_velocity(working_dir, inlet_velocity):
-      with pyfluent.launch_fluent(precision="double", processor_count=2) as session:
+      with pyfluent.launch_fluent(product_version=f"{SYC_VERSION_DOT}.0",
+                                  precision="double",
+                                  processor_count=2) as session:
           case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
           session.file.read(file_type="case", file_name=case_file)
           session.setup.boundary_conditions.velocity_inlet[
@@ -169,7 +172,7 @@ the ``solve_coupled_analysis`` command in a sequence of analyses.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-133
+.. GENERATED FROM PYTHON SOURCE LINES 122-136
 
 Solve coupled analysis
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -186,7 +189,7 @@ setting is modified in the Fluent file prior to this function being called.
    that the System Coupling session is properly exited at the
    end of the scope defined by the ``with`` block.
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-163
+.. GENERATED FROM PYTHON SOURCE LINES 136-166
 
 .. code-block:: default
 
@@ -227,14 +230,14 @@ setting is modified in the Fluent file prior to this function being called.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 164-168
+.. GENERATED FROM PYTHON SOURCE LINES 167-171
 
 Extract maximum displacement value
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Use PyDPF to query the MAPDL results for the extract the
 maximum displacement value in the solution.
 
-.. GENERATED FROM PYTHON SOURCE LINES 168-177
+.. GENERATED FROM PYTHON SOURCE LINES 171-180
 
 .. code-block:: default
 
@@ -254,7 +257,7 @@ maximum displacement value in the solution.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-185
+.. GENERATED FROM PYTHON SOURCE LINES 181-188
 
 Get maximum displacement
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -264,7 +267,7 @@ Use the previously defined functions to:
 - Run the coupled analysis based on this setting.
 - Extract and return the maximum displacement value from the MAPDL results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-191
+.. GENERATED FROM PYTHON SOURCE LINES 188-194
 
 .. code-block:: default
 
@@ -281,7 +284,7 @@ Use the previously defined functions to:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 192-197
+.. GENERATED FROM PYTHON SOURCE LINES 195-200
 
 Plot results
 ~~~~~~~~~~~~
@@ -289,7 +292,7 @@ Generate an ``x-y`` plot of the results, showing the maximum
 displacement of the plate versus the inlet velocity.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 197-207
+.. GENERATED FROM PYTHON SOURCE LINES 200-210
 
 .. code-block:: default
 
@@ -310,7 +313,7 @@ displacement of the plate versus the inlet velocity.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 208-215
+.. GENERATED FROM PYTHON SOURCE LINES 211-218
 
 Run analyses
 ------------
@@ -320,7 +323,7 @@ The results of the calls to the ``get_max_displacement()`` function
 are used to fill in the corresponding values of the ``y`` array.
 Finally, call the ``plot()`` function to generate a plot from the arrays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 215-225
+.. GENERATED FROM PYTHON SOURCE LINES 218-228
 
 .. code-block:: default
 
@@ -347,11 +350,12 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
  .. code-block:: none
 
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v231\fluent\fluent23.1.0\\addons\afd\lib\hdfio.bin"
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v232\fluent\fluent23.2.0\\addons\afd\lib\hdfio.bin"
     Done.
-    Multicore processors detected. Processor affinity set!
 
-    Reading from MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+    HOSTNAME_1 is already loaded (21.9132).                       Process affinity not being set.
+
+    Reading from HOSTNAME_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
       Reading mesh ...
            58065 cells,     1 cell zone  ...
               58065 hexahedral cells,  zone id: 2
@@ -401,7 +405,8 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
             symmetry1
     Done.
 
-    Writing to MILIDBOYD1:"C:\Users\idboyd\AppData\Local\ansys_systemcoupling_core\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+    Writing to HOSTNAME_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+    Grouping cells for Laplace smoothing ...
            58065 cells,     1 zone  ...
           187138 faces,     8 zones ...
            71280 nodes,     1 zone  ...
@@ -412,31 +417,31 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.052365485950746894
+    Max displacement value = 0.05236548595077901
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.19232826989790763
+    Max displacement value = 0.19232826989915874
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.37276751732600016
+    Max displacement value = 0.3727675173251968
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.5624418883785633
+    Max displacement value = 0.5624418883505578
     Inlet velocity is set to 25.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533237739663
+    Max displacement value = 0.7212533244487364
 
 
 
@@ -444,7 +449,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 14 minutes  59.902 seconds)
+   **Total running time of the script:** ( 16 minutes  46.247 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:

@@ -37,6 +37,7 @@ import numpy as np
 import ansys.dpf.core as pydpf
 import ansys.fluent.core as pyfluent
 import ansys.systemcoupling.core as pysyc
+from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
 
 from ansys.systemcoupling.core import examples
 
@@ -105,7 +106,9 @@ def setup_working_directory():
 # the ``solve_coupled_analysis`` command in a sequence of analyses.
 
 def set_inlet_velocity(working_dir, inlet_velocity):
-  with pyfluent.launch_fluent(precision="double", processor_count=2) as session:
+  with pyfluent.launch_fluent(product_version=f"{SYC_VERSION_DOT}.0",
+                              precision="double",
+                              processor_count=2) as session:
       case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
       session.file.read(file_type="case", file_name=case_file)
       session.setup.boundary_conditions.velocity_inlet[
