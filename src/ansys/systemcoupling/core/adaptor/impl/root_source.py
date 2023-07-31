@@ -46,6 +46,7 @@ _property_types = {
 
 # Command arguments still defined as settings classes
 _arg_types = {
+    "ParticipantSession": ParticipantSession,
     "Integer": Integer,
     "Logical": Boolean,
     "Real": Real,

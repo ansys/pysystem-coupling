@@ -4,6 +4,7 @@ from typing import List
 import appdirs
 
 from ansys.systemcoupling.core.client.grpc_client import SycGrpc
+from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
 
@@ -22,6 +23,7 @@ def launch(
     nprocs: int = None,
     sycnprocs: int = None,
     version: str = None,
+    use_pyansys_participants: bool = None,
     extra_args: List[str] = [],
 ) -> Session:
     """Start a local instance of System Coupling and connect to it.
@@ -50,6 +52,8 @@ def launch(
         ``"232"`` ("2023 R2" release), unless either of the environment
         variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
         to be an error if either these is set *and* ``version`` is provided.
+    use_pyansys_participants : bool, optional
+        Experimental option. *Not for general use.*
     extra_args : List[str]
         List of any additional arguments to specify when the server
         process is launched. The default is ``[]``. If a list of additional
@@ -74,6 +78,8 @@ def launch(
         extra_args=extra_args,
     )
     syc = Session(rpc)
+    if use_pyansys_participants:
+        syc.set_pyansys_participant_mgr(ParticipantManager(syc))
     return syc
 
 

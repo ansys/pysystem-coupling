@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Callable, Dict
 
+from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
 from .get_status_messages import get_status_messages
@@ -8,26 +9,40 @@ from .types import Container
 
 
 def get_injected_cmd_map(
-    category: str, root_object: Container, rpc
+    category: str, root_object: Container, part_mgr: ParticipantManager, rpc
 ) -> Dict[str, Callable]:
     """Gets a dictionary that maps names to functions that implement the injected command.
 
     The map returned pertains to the commands in the specified category.
     """
+    ret = {}
+
     if category == "setup":
-        return {
+        ret = {
             "get_setup_summary": lambda **kwargs: rpc.GetSetupSummary(**kwargs),
             "get_status_messages": lambda **kwargs: get_status_messages(
                 rpc, root_object, **kwargs
             ),
         }
+        if part_mgr is not None:
+            ret["add_pyansys_participant"] = lambda **kwargs: part_mgr.add_participant(
+                **kwargs
+            )
+
     if category == "solution":
-        return {
+        ret = {
             "solve": lambda **kwargs: rpc.solve(),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
         }
-    return {}
+        if part_mgr is not None:
+            ret["solve"] = lambda **kwargs: _pyansys_solve(rpc, part_mgr)
+
+    return ret
+
+
+def _pyansys_solve(rpc, part_mgr: ParticipantManager) -> None:
+    part_mgr.solve()
 
 
 def get_injected_cmd_data() -> list:
@@ -60,6 +75,30 @@ _cmd_yaml = """
 -   name: Solve
     pyname: solve
     isInjected: true
+-   name: add_pyansys_participant
+    pyname: add_pyansys_participant
+    isInjected: true
+    exposure: setup
+    isQuery: false
+    retType: <class 'NoneType'>
+    doc: |-
+        Add a participant in the form of a PyAnsys *session* object.
+
+        The session object must implement the protocol required for such
+        participants. The session object will be retained and used
+        in the solve if this operation is performed on the analysis.
+    essentialArgNames:
+    - participant_session
+    optionalArgNames: []
+    defaults: []
+    args:
+    - #!!python/tuple
+        - participant_session
+        -   pyname: participant_session
+            Type: <class 'object'>
+            type: ParticipantSession
+            doc: |-
+                Participant session object. ...
 -   name: interrupt
     pyname: interrupt
     exposure: solution

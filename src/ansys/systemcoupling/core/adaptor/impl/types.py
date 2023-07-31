@@ -29,6 +29,7 @@ import sys
 from typing import Dict, Generic, List, NewType, Tuple, TypeVar, Union
 import weakref
 
+from ansys.systemcoupling.core.participant.protocol import ParticipantProtocol
 from ansys.systemcoupling.core.util import name_util
 
 # Type hints
@@ -244,6 +245,12 @@ class SettingsBase(Base, Generic[StateT]):
         out = sys.stdout if out is None else out
         self._print_state_helper(self.get_state(), out, indent_factor=indent_factor)
         out.flush()
+
+
+# Only used for special command argument types.
+# Need to rejig command arguments - they don't need to be "settings"...
+class ParticipantSession(SettingsBase[ParticipantProtocol]):
+    _state_type = ParticipantProtocol
 
 
 class Integer(SettingsBase[int]):

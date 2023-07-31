@@ -35,8 +35,8 @@ class ParticipantProtocol(Protocol):
     def get_analysis_type(self) -> str:
         ...
 
-    def syc_connect(self, host: str, port: int, name: str) -> None:
+    def connect(self, host: str, port: int, name: str) -> None:
         ...
 
-    def syc_solve(self) -> None:
+    def solve(self) -> None:
         ...

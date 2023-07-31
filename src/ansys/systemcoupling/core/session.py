@@ -60,6 +60,19 @@ class Session:
         self.__rpc = rpc
         self.__native_api = None
         self.__syc_version = None
+        self.__part_mgr = None
+
+    def set_pyansys_participant_mgr(self, part_mgr) -> None:
+        """Experimental API to support tighter integration between
+        PySystemCoupling and participants that are available as
+        PyAnsys client sessions.
+
+        .. warning:
+          At present, this experimental facility is undocumented and
+          has limited utility in its current form. Generally, its use
+          should be avoided.
+        """
+        self.__part_mgr = part_mgr
 
     def exit(self) -> None:
         """Close the System Coupling server instance.
@@ -152,7 +165,9 @@ class Session:
             version = sycproxy.get_version()
             self.__syc_version = version.replace(".", "_")
         root = get_root(sycproxy, category=category, version=self.__syc_version)
-        sycproxy.set_injected_commands(get_injected_cmd_map(category, root, self.__rpc))
+        sycproxy.set_injected_commands(
+            get_injected_cmd_map(category, root, self.__part_mgr, self.__rpc)
+        )
         return (root, sycproxy)
 
     @property
