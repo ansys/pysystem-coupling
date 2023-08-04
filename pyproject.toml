@@ -56,7 +56,7 @@ classesgen = [
 	"isort==5.12.0",
 ]
 doc = [
-	"ansys-sphinx-theme==0.9.9",
+	"ansys-sphinx-theme==0.10.2",
 	"jupyter_sphinx==0.4.0",
 	"matplotlib",
 	"numpydoc==1.5.0",
