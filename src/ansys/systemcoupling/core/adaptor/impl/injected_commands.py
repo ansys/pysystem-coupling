@@ -23,26 +23,43 @@ def get_injected_cmd_map(
             "get_status_messages": lambda **kwargs: get_status_messages(
                 rpc, root_object, **kwargs
             ),
+            "add_participant": lambda **kwargs: _pyansys_add_participant(
+                root_object, part_mgr, **kwargs
+            ),
         }
-        if part_mgr is not None:
-            ret["add_pyansys_participant"] = lambda **kwargs: part_mgr.add_participant(
-                **kwargs
-            )
 
     if category == "solution":
         ret = {
-            "solve": lambda **kwargs: rpc.solve(),
+            "solve": lambda **kwargs: _pyansys_solve(root_object, part_mgr, **kwargs),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
         }
-        if part_mgr is not None:
-            ret["solve"] = lambda **kwargs: _pyansys_solve(rpc, part_mgr)
 
     return ret
 
 
-def _pyansys_solve(rpc, part_mgr: ParticipantManager) -> None:
-    part_mgr.solve()
+def _pyansys_add_participant(
+    root_object: Container, part_mgr: ParticipantManager, **kwargs
+) -> str:
+    if session := kwargs.get("participant_session", None):
+        if len(kwargs) != 1:
+            raise RuntimeError(
+                "If a 'participant_session' argument is passed to "
+                "'add_participant', it must be the only argument."
+            )
+        if part_mgr is None:
+            raise RuntimeError("Internal error: participant manager is not available.")
+
+        return part_mgr.add_participant(participant_session=session)
+
+    return root_object._add_participant(**kwargs)
+
+
+def _pyansys_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
+    if part_mgr is None:
+        root_object._solve()
+    else:
+        part_mgr.solve()
 
 
 def get_injected_cmd_data() -> list:
@@ -75,30 +92,45 @@ _cmd_yaml = """
 -   name: Solve
     pyname: solve
     isInjected: true
--   name: add_pyansys_participant
-    pyname: add_pyansys_participant
+    pysyc_internal_name: _solve
+-   name: AddParticipant
+    pyname: add_participant
     isInjected: true
-    exposure: setup
-    isQuery: false
-    retType: <class 'NoneType'>
-    doc: |-
-        Add a participant in the form of a PyAnsys *session* object.
+    pysyc_internal_name: _add_participant
+    doc_prefix: |-
+        This command operates in one of two modes, depending on how it is called.
+        *Either* a single argument, ``participant_session``, should be provided, *or* some
+        combination of the other optional arguments not including ``participant_session``
+        should be provided.
 
-        The session object must implement the protocol required for such
-        participants. The session object will be retained and used
-        in the solve if this operation is performed on the analysis.
-    essentialArgNames:
+        In the ``participant_session`` mode, the session object is queried to
+        extract the information needed to define a new ``coupling_participant``
+        object in the setup datamodel. A reference to the session is also retained,
+        and this will play a further role if `solve` is called later. In that case,
+        the participant solver will be driven from the Python environment in which the
+        participant and PySystemCoupling sessions are active. From System Coupling's
+        perspective, the participant solver will be regarded as "externally managed"
+        (see the `execution_control` settings in `coupling_participant` for details).
+
+        .. note::
+            The ``participant_session`` mode currently has limited support in the
+            broader Ansys Python ecosystem. At present, only PyFluent supports
+            the API required of the session object.
+
+        The remainder of the documentation describes the more usual non-session mode.
+
+
+    essentialArgNames_extra: []
+    optionalArgNames_extra:
     - participant_session
-    optionalArgNames: []
-    defaults: []
-    args:
+    args_extra:
     - #!!python/tuple
         - participant_session
         -   pyname: participant_session
             Type: <class 'object'>
             type: ParticipantSession
             doc: |-
-                Participant session object. ...
+                Participant session object conforming to the ``ParticipantProtocol`` protocol class.
 -   name: interrupt
     pyname: interrupt
     exposure: solution

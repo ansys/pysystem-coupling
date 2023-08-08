@@ -1,5 +1,5 @@
 from copy import deepcopy
-from typing import Tuple
+from typing import Dict, List, Tuple
 
 from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
     get_injected_cmd_data,
@@ -289,22 +289,85 @@ def get_extended_cmd_metadata(api) -> list:
         Object providing access to the System Coupling *native API*.
     """
 
+    def find_item_by_name(items: List[Dict], name: str) -> dict:
+        for item in items:
+            if item["name"] == name:
+                return item
+        raise RuntimeError(f"Did not find dict element of list with 'name' == {name}")
+
     def merge_data(target: list, source: list) -> None:
         target_names = set(d["name"] for d in target)
         source_names = set(d["name"] for d in source)
         new_names = source_names - target_names
         common_names = source_names & target_names
 
+        # Injected commands can either be completely new commands injected into
+        # the set of available commands, or can be "overrides" that replace the
+        # SyC command that would have been generated. Occasionally, we still
+        # want to generate the command that is being replaced so that we can
+        # call it internally. This is identified by a "pysyc_internal_name"
+        # field. In this case we split the command data into an injected command
+        # and a "normal" command but with the internal name as the pysyc name
+        # for the latter.
+
+        special_injected_commands = [
+            name
+            for name in common_names
+            if "pysyc_internal_name" in find_item_by_name(source, name)
+        ]
+
+        for name in special_injected_commands:
+            src_item = find_item_by_name(source, name)
+            tgt_item = find_item_by_name(target, name)
+
+            # Target item becomes a "normally" exposed SyC command except that
+            # it is "internal" on the PySyC side - only intended for internal
+            # PySyC use.  It will be given a special internal name rather than
+            # the one derived from its SyC name. It will also have its doc
+            # info removed.
+
+            # - Take a copy of tgt before we remove doc.
+            tgt_copy = deepcopy(tgt_item)
+            if "doc" in tgt_item:
+                tgt_item["doc"] = "For internal use only."
+
+            for arg in tgt_item.get("args", []):
+                _, arg_info = arg
+                if "doc" in arg_info:
+                    arg_info["doc"] = "..."
+
+            # - Name for PySyC exposure is the "pysyc_internal_name" from the source item
+            tgt_item["pyname"] = src_item["pysyc_internal_name"]
+
+            # Source item becomes a normal injected command. It is processed like the
+            # items in the common_names later but has special treatment for its
+            # doc and arguments. That is done here, so it will be removed from
+            # common_names and added to new_names.
+            for k, v in tgt_copy.items():
+                if k in ("essentialArgNames", "optionalArgNames", "args"):
+                    src_item[k] = src_item.get(f"{k}_extra", []) + v
+                elif k == "doc":
+                    prefix = src_item.get(f"{k}_prefix", "")
+                    if prefix:
+                        prefix += "\n\n"
+                    suffix = src_item.get(f"{k}_suffix", "")
+                    if suffix:
+                        suffix = "\n" + suffix
+                    src_item[k] = prefix + v + suffix
+                else:
+                    src_item[k] = v
+
+            src_item["name"] = src_item["pyname"]
+
+            common_names.remove(name)
+            new_names.add(src_item["name"])
+
         for src_item in source:
             name = src_item["name"]
             if name in new_names:
                 target.append(src_item)
             elif name in common_names:
-                tgt_item = None
-                for titem in target:
-                    if titem["name"] == name:
-                        tgt_item = titem
-                        break
+                tgt_item = find_item_by_name(target, name)
 
                 # Single-level merge of source item dictionary into
                 # target item dictionary. If any aspect of the arguments

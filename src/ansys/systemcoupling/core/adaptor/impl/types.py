@@ -250,6 +250,9 @@ class SettingsBase(Base, Generic[StateT]):
 # Only used for special command argument types.
 # Need to rejig command arguments - they don't need to be "settings"...
 class ParticipantSession(SettingsBase[ParticipantProtocol]):
+    """Object conforming to the ``ParticipantProtocol`` runtime protocol
+    for participant session objects."""
+
     _state_type = ParticipantProtocol
 
 

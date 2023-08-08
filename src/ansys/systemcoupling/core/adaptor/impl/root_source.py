@@ -212,6 +212,7 @@ def _get_cls(name, info, parent):
             # pylint: disable=no-member
             cls.command_names.append(ccls.__name__)
             setattr(cls, ccls.__name__, ccls)
+        cls.command_names.sort()
 
     arguments = info.get("args")
     if arguments:

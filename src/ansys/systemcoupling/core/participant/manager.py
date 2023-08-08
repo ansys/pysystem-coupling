@@ -2,8 +2,6 @@ import threading
 from typing import Dict, List, Tuple
 
 from ansys.systemcoupling.core.participant.protocol import ParticipantProtocol
-
-# from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
 
 
@@ -12,22 +10,19 @@ class ParticipantManager:
         self.__participants: Dict[str, ParticipantProtocol] = {}
         self.__syc_session = syc_session
         self.__n_connected = 0
+        self.__solve_exception = None
         self.__connection_lock = threading.Lock()
 
     def clear(self):
         self.__participants = {}
         self.__syc_session = None
 
-    def add_participant(self, participant_session: ParticipantProtocol) -> None:
-        assert participant_session.participant_type == "FLUENT"
-
+    def add_participant(self, participant_session: ParticipantProtocol) -> str:
         participant_name = (
             f"{participant_session.participant_type}-{len(self.__participants) + 1}"
         )
 
         setup = self.__syc_session.setup
-
-        setup.activate_hidden.beta_features = True
 
         part_state = setup.coupling_participant.create(participant_name)
         part_state.participant_type = participant_session.participant_type
@@ -67,15 +62,21 @@ class ParticipantManager:
         return participant_name
 
     def _get_host_and_port(self, participant_name: str) -> Tuple[str, int]:
-        exe = self.__syc_session._native_api.GetExecutionCommand(
-            ParticipantName=participant_name
-        )
-        host = exe.split("schost=")[1].split(" ")[0]
-        port = exe.split("scport=")[1].split(" ")[0]
-        return host, int(port)
+        port, host = self.__syc_session._native_api.GetServerInfo()
+        return host, port
 
     def solve(self):
+        self.__solve_exception = None
         self._clear_n_connected()
+
+        if len(self.__participants) == 0:
+            # Fall back to normal solve
+            self.__syc_session.solution._solve()
+            return
+
+        # TODO : if we *don't* check for validation error before solve, and
+        # leave it for the SyC Solve() to find them, we see participants hang
+        # during connection. (This is independent of PySyC.)
 
         if any(
             msg
@@ -94,6 +95,9 @@ class ParticipantManager:
         finally:
             syc_solve_thread.join()
             LOG.info("SyC solve joined.")
+
+        if self.__solve_exception:
+            raise self.__solve_exception
 
     def _do_solve(self, syc_solve_thread):
         connection_threads = [
@@ -147,8 +151,7 @@ class ParticipantManager:
         try:
             # TODO
             # We expect this to fail quickly if for some reason the connection
-            # cannot be established.
-            # In practice, we are tending to see this call hang.
+            # cannot be established. However, in some situations we see this hang.
             participant.connect(*host_port, name)
             self._increment_n_connected()
         except Exception as e:
@@ -156,8 +159,9 @@ class ParticipantManager:
 
     def _syc_solve(self):
         try:
-            self.__syc_session._native_api.Solve()
+            self.__syc_session.solution._solve()
         except Exception as e:
+            self.__solve_exception = e
             LOG.error(f"Solve terminated with exception: {e}.")
 
 
