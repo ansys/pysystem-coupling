@@ -106,7 +106,7 @@ _cmd_yaml = """
         In the ``participant_session`` mode, the session object is queried to
         extract the information needed to define a new ``coupling_participant``
         object in the setup datamodel. A reference to the session is also retained,
-        and this will play a further role if `solve` is called later. In that case,
+        and this will play a further role if ``solve`` is called later. In that case,
         the participant solver will be driven from the Python environment in which the
         participant and PySystemCoupling sessions are active. System Coupling will
         regard the participant solver as "externally managed" (see the `execution_control`

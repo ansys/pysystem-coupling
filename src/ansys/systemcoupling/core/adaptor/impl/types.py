@@ -247,8 +247,10 @@ class SettingsBase(Base, Generic[StateT]):
         out.flush()
 
 
-# Only used for special command argument types.
-# Need to rejig command arguments - they don't need to be "settings"...
+# TODO: this doesn't make much sense as a "setting" but is needed to
+# make the special form of add_participant work. Ideally we want to move
+# away from treating command arguments as "settings" but that needs to be
+# handled as a separate task.
 class ParticipantSession(SettingsBase[ParticipantProtocol]):
     """Object conforming to the ``ParticipantProtocol`` runtime protocol
     for participant session objects."""

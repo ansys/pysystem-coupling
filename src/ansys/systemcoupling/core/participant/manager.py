@@ -173,9 +173,6 @@ class ParticipantManager:
         self, name: str, host_port: Tuple[str, int], participant: ParticipantProtocol
     ) -> None:
         try:
-            # TODO
-            # We expect this to fail quickly if for some reason the connection
-            # cannot be established. However, in some situations we see this hang.
             participant.connect(*host_port, name)
             self._increment_n_connected()
         except Exception as e:
