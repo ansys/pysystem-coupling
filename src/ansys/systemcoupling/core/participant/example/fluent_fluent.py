@@ -26,7 +26,7 @@ def _make_fluent_session(filename: str):
     return SystemCouplingAdaptor(session)
 
 
-syc = pysyc.launch(use_pyansys_participants=True, version="24.1", extra_args=["-l5"])
+syc = pysyc.launch(version="24.1", extra_args=["-l5"])
 
 pipe_fluid_session = _make_fluent_session("pipefluid/pipefluid.cas.h5")
 fluid_name = syc.setup.add_participant(participant_session=pipe_fluid_session)

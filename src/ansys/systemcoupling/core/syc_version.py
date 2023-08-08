@@ -56,3 +56,27 @@ def normalize_version(version: str) -> Tuple[int, int]:
         return process_major_minor(version[0:2], version[2])
     else:
         raise_error()
+
+
+def compare_versions(version_a: str, version_b: str) -> int:
+    """Compares two version strings that are in any form that can be parsed by
+    ``normalize_version``.
+
+    Returns < 0 if ``version_a`` is an earlier version than ``version_b``, 0
+    if they are the same version, and > 0 if ``version_a`` is a later version
+    than ``version_b``.
+
+    Parameters
+    ----------
+    version_a : str
+        The first version string to compare.
+    version_b: str
+        The second version string to compare.
+    """
+    va_maj, va_min = normalize_version(version_a)
+    vb_maj, vb_min = normalize_version(version_b)
+
+    if va_maj == vb_maj:
+        return va_min - vb_min
+    else:
+        return va_maj - vb_maj

@@ -2,6 +2,7 @@ from copy import deepcopy
 from typing import Callable, Dict
 
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
+from ansys.systemcoupling.core.syc_version import compare_versions
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
 from .get_status_messages import get_status_messages
@@ -9,7 +10,11 @@ from .types import Container
 
 
 def get_injected_cmd_map(
-    category: str, root_object: Container, part_mgr: ParticipantManager, rpc
+    version: str,
+    category: str,
+    root_object: Container,
+    part_mgr: ParticipantManager,
+    rpc,
 ) -> Dict[str, Callable]:
     """Gets a dictionary that maps names to functions that implement the injected command.
 
@@ -24,7 +29,7 @@ def get_injected_cmd_map(
                 rpc, root_object, **kwargs
             ),
             "add_participant": lambda **kwargs: _wrap_add_participant(
-                root_object, part_mgr, **kwargs
+                version, root_object, part_mgr, **kwargs
             ),
         }
 
@@ -39,7 +44,7 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    root_object: Container, part_mgr: ParticipantManager, **kwargs
+    server_version: str, root_object: Container, part_mgr: ParticipantManager, **kwargs
 ) -> str:
     if session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
@@ -49,6 +54,12 @@ def _wrap_add_participant(
             )
         if part_mgr is None:
             raise RuntimeError("Internal error: participant manager is not available.")
+
+        if compare_versions(server_version, "24.1") < 0:
+            raise RuntimeError(
+                f"System Coupling server version '{server_version}' is too low to"
+                "support this form of 'add_participant'. Minimum version is '24.1'."
+            )
 
         return part_mgr.add_participant(participant_session=session)
 
