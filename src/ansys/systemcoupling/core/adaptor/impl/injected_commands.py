@@ -23,14 +23,14 @@ def get_injected_cmd_map(
             "get_status_messages": lambda **kwargs: get_status_messages(
                 rpc, root_object, **kwargs
             ),
-            "add_participant": lambda **kwargs: _pyansys_add_participant(
+            "add_participant": lambda **kwargs: _wrap_add_participant(
                 root_object, part_mgr, **kwargs
             ),
         }
 
     if category == "solution":
         ret = {
-            "solve": lambda **kwargs: _pyansys_solve(root_object, part_mgr, **kwargs),
+            "solve": lambda **kwargs: _wrap_solve(root_object, part_mgr, **kwargs),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
         }
@@ -38,7 +38,7 @@ def get_injected_cmd_map(
     return ret
 
 
-def _pyansys_add_participant(
+def _wrap_add_participant(
     root_object: Container, part_mgr: ParticipantManager, **kwargs
 ) -> str:
     if session := kwargs.get("participant_session", None):
@@ -55,7 +55,7 @@ def _pyansys_add_participant(
     return root_object._add_participant(**kwargs)
 
 
-def _pyansys_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
+def _wrap_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
     if part_mgr is None:
         root_object._solve()
     else:
@@ -108,13 +108,14 @@ _cmd_yaml = """
         object in the setup datamodel. A reference to the session is also retained,
         and this will play a further role if `solve` is called later. In that case,
         the participant solver will be driven from the Python environment in which the
-        participant and PySystemCoupling sessions are active. From System Coupling's
-        perspective, the participant solver will be regarded as "externally managed"
-        (see the `execution_control` settings in `coupling_participant` for details).
+        participant and PySystemCoupling sessions are active. System Coupling will
+        regard the participant solver as "externally managed" (see the `execution_control`
+        settings in `coupling_participant` for details of this mode).
 
         .. note::
             The ``participant_session`` mode currently has limited support in the
-            broader Ansys Python ecosystem. At present, only PyFluent supports
+            broader Ansys Python ecosystem and its implementeation should be
+            regarded as Beta level at best. At present, only PyFluent supports
             the API required of the session object.
 
         The remainder of the documentation describes the more usual non-session mode.

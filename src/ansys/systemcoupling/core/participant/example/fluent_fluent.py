@@ -1,17 +1,19 @@
+"""Example case for PyAnsys-side integration of participants in a PySystemCoupling case.
+
+This functionality is still under development and should be regarded as being at best Beta.
+
+Once stable, this needs to be moved to the usual examples location and made into a proper
+Sphinx gallery example.
+"""
+
 import ansys.fluent.core as pyfluent
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
 from ansys.systemcoupling.core.participant.fluent_adaptor import SystemCouplingAdaptor
 
-# from ansys.systemcoupling.core.participant.manager import ParticipantManager
-
-
 LOG.set_level("INFO")
 LOG.log_to_stdout()
-
-input("any key...")
-print("Hello")
 
 
 def _make_fluent_session(filename: str):

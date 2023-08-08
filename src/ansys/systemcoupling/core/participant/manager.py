@@ -6,16 +6,42 @@ from ansys.systemcoupling.core.util.logging import LOG
 
 
 class ParticipantManager:
+    """Manages a System Coupling solution in which the participant solvers are
+    provided as "session" objects from other PyAnsys APIs.
+
+    These objects must conform (in a Python "duck typing" sense) to the
+    ``ParticipantProtocol`` protocol.
+
+    The ParticipantManager will play a role whenever participants are added to the
+    analysis using the ``add_participant`` command with ``participant_session`` being the one
+    and only argument.
+
+    In this case, the manager creates ``coupling_participant`` data model objects
+    based on queries to the session object. It will also store the session object
+    for later use if a solve is initiated.
+
+    If ``solve`` is called on the manager, it will coordinate both the connection of the
+    participants to System Coupling and, subsequently, the invocation of their solve
+    operations. In standard System Coupling terms, the solves that are initiated from
+    the "PyAnsys" environment will be regarded by the System Coupling solver as
+    "externally managed".
+
+    .. warning:
+        This facility should be regarded as sub-Beta level.
+        It is likely to be subject to further development, and has fairly limited utility
+        until more participant types support the protocol.
+    """
+
     def __init__(self, syc_session):
         self.__participants: Dict[str, ParticipantProtocol] = {}
         self.__syc_session = syc_session
-        self.__n_connected = 0
-        self.__solve_exception = None
         self.__connection_lock = threading.Lock()
+        self.clear()
 
     def clear(self):
-        self.__participants = {}
-        self.__syc_session = None
+        self.__participants: Dict[str, ParticipantProtocol] = {}
+        self.__n_connected = 0
+        self.__solve_exception = None
 
     def add_participant(self, participant_session: ParticipantProtocol) -> str:
         participant_name = (
@@ -61,10 +87,6 @@ class ParticipantManager:
         self.__participants[participant_name] = participant_session
         return participant_name
 
-    def _get_host_and_port(self, participant_name: str) -> Tuple[str, int]:
-        port, host = self.__syc_session._native_api.GetServerInfo()
-        return host, port
-
     def solve(self):
         self.__solve_exception = None
         self._clear_n_connected()
@@ -87,8 +109,6 @@ class ParticipantManager:
                 "The setup data contains errors. solve() cannot proceed until these are fixed."
             )
 
-        # Note that we can't currently use `syc_session.solution.solve` here because
-        # that has been overridden/hidden by *this* function
         syc_solve_thread = threading.Thread(target=self._syc_solve)
         try:
             self._do_solve(syc_solve_thread)
@@ -145,6 +165,10 @@ class ParticipantManager:
         with self.__connection_lock:
             self.__n_connected += 1
 
+    def _get_host_and_port(self, participant_name: str) -> Tuple[str, int]:
+        port, host = self.__syc_session._native_api.GetServerInfo()
+        return host, port
+
     def _participant_connect(
         self, name: str, host_port: Tuple[str, int], participant: ParticipantProtocol
     ) -> None:
@@ -159,6 +183,9 @@ class ParticipantManager:
 
     def _syc_solve(self):
         try:
+            # We use `syc_session.solution._solve` here as it is
+            # the lower level solve command. `sys_session.solution.solve`
+            # would bring us recursively back into *this* function
             self.__syc_session.solution._solve()
         except Exception as e:
             self.__solve_exception = e

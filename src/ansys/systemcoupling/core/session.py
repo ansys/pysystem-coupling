@@ -67,10 +67,9 @@ class Session:
         PySystemCoupling and participants that are available as
         PyAnsys client sessions.
 
-        .. warning:
-          At present, this experimental facility is undocumented and
-          has limited utility in its current form. Generally, its use
-          should be avoided.
+                TODO: remove this and always assign a manager that should
+        default to "non-managed" mode if no participants added.
+
         """
         self.__part_mgr = part_mgr
 
