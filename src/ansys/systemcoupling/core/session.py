@@ -67,9 +67,8 @@ class Session:
         PySystemCoupling and participants that are available as
         PyAnsys client sessions.
 
-                TODO: remove this and always assign a manager that should
+        TODO: remove this and always assign a manager that should
         default to "non-managed" mode if no participants added.
-
         """
         self.__part_mgr = part_mgr
 
