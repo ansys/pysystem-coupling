@@ -350,12 +350,12 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
  .. code-block:: none
 
-    Fast-loading "C:\ANSYSDev\ANSYSI~1\v232\fluent\fluent23.2.0\\addons\afd\lib\hdfio.bin"
+    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
+    Fast-loading "C:\ANSYSDev\ANSYSI~1\v241\fluent\fluent24.1.0\\addons\afd\lib\hdfio.bin"
     Done.
+    Multicore processors detected. Processor affinity set!
 
-    HOSTNAME_1 is already loaded (21.9132).                       Process affinity not being set.
-
-    Reading from HOSTNAME_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
+    Reading from hostname_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
       Reading mesh ...
            58065 cells,     1 cell zone  ...
               58065 hexahedral cells,  zone id: 2
@@ -405,7 +405,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
             symmetry1
     Done.
 
-    Writing to HOSTNAME_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
+    Writing to hostname_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode and compression level 1 ...
     Grouping cells for Laplace smoothing ...
            58065 cells,     1 zone  ...
           187138 faces,     8 zones ...
@@ -417,31 +417,35 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.05236548595077901
+    Max displacement value = 0.05236548595098285
+    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.19232826989915874
+    Max displacement value = 0.19232826989668578
+    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.3727675173251968
+    Max displacement value = 0.37276751732482466
+    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.5624418883505578
+    Max displacement value = 0.562441888345614
+    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
     Inlet velocity is set to 25.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533244487364
+    Max displacement value = 0.7212533247989504
 
 
 
@@ -449,7 +453,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 16 minutes  46.247 seconds)
+   **Total running time of the script:** ( 17 minutes  27.611 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
