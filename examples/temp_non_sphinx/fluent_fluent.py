@@ -40,9 +40,8 @@ interface = syc.setup.add_interface(
     side_two_regions=["innerwall"],
 )
 
-# Uncomment only this to force validation error on solve
-# Currently hangs if this happens
-# syc._native_api.AddThermalDataTransfers(Interface=interface)
+# Comment this to force validation error on solve. (Currently hangs if this happens.)
+syc._native_api.AddThermalDataTransfers(Interface=interface)
 
 syc.setup.solution_control.minimum_iterations = 2
 syc.setup.solution_control.maximum_iterations = (
@@ -50,7 +49,6 @@ syc.setup.solution_control.maximum_iterations = (
 )
 
 syc.setup.solution_control.available_ports.option = "UserDefined"
-syc.setup.solution_control.available_ports.range = "52000,52001,52002"
 
 syc.setup.print_state()
 

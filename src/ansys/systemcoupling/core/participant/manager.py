@@ -52,7 +52,6 @@ class ParticipantManager:
 
         part_state = setup.coupling_participant.create(participant_name)
         part_state.participant_type = participant_session.participant_type
-        part_state.use_new_apis = True
         part_state.participant_analysis_type = participant_session.get_analysis_type()
         part_state.execution_control.option = "ExternallyManaged"
 
