@@ -329,16 +329,16 @@ and ``"FORC"``.
 
     display_name : Interface-1
     side :
-      One :
-        coupling_participant : MAPDL-1
-        region_list :
-          0 : FSIN_1
-        reference_frame : GlobalReferenceFrame
-        instancing : None
       Two :
         coupling_participant : FLUENT-2
         region_list :
           0 : wall_deforming
+        reference_frame : GlobalReferenceFrame
+        instancing : None
+      One :
+        coupling_participant : MAPDL-1
+        region_list :
+          0 : FSIN_1
         reference_frame : GlobalReferenceFrame
         instancing : None
     data_transfer :
@@ -462,6 +462,7 @@ have Python values of ``None``.
     time_step_size : <None>
     minimum_iterations : 1
     maximum_iterations : 5
+    use_ip_address_when_possible : True
 
 
 
@@ -691,152 +692,204 @@ be useful to review this before starting the solve.
 
  .. code-block:: none
 
-
-
-    ===============================================================================
-    +=============================================================================+
-    |                                                                             |
-    |                          Summary of Coupling Setup                          |
-    |                                                                             |
-    +=============================================================================+
-    ===============================================================================
-
     +=============================================================================+
     |                          Coupling Participants (2)                          |
     +=============================================================================+
-    |                                                                             |
-    | Participant: Fluid Flow (Fluent)                                            |
-    |    Type :                                                            FLUENT |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: part-fluid                                                       |
-    |       Topology :                                                     Volume |
-    |    Region: wall_bottom                                                      |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_deforming                                                   |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                      [displacement] |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_inlet                                                       |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_outlet                                                      |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_top                                                         |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Variable: displacement                                                   |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
-    |    Variable: force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                    Element |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |                                                                             |
+    |    Fluid Flow (Fluent)                                                      |
     +-----------------------------------------------------------------------------+
+    |       Internal Name :                                              FLUENT-2 |
+    |       Participant Type :                                             FLUENT |
+    |       Participant Display Name :                        Fluid Flow (Fluent) |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Use New APIs :                                                   True |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : displacement                                            |
+    |             Internal Name :                                    displacement |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Participant Display Name :                         displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
     |                                                                             |
-    | Participant: MAPDL Transient                                                |
-    |    Type :                                                             MAPDL |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: FSIN_1_Fluid Solid Interface                                     |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                             [Force] |
-    |       Output Variables :                         [Incremental_Displacement] |
-    |    Variable: Force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |    Variable: Incremental_Displacement                                       |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
+    |          Variable : force                                                   |
+    |             Internal Name :                                           force |
+    |             Quantity Type :                                           Force |
+    |             Participant Display Name :                                force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |       Regions (6)                                                           |
+    |          Region : part-fluid                                                |
+    |             Internal Name :                                      part-fluid |
+    |             Topology :                                               Volume |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                           [] |
     |                                                                             |
+    |          Region : wall_bottom                                               |
+    |             Internal Name :                                     wall_bottom |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_deforming                                            |
+    |             Internal Name :                                  wall_deforming |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                [displacement] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_inlet                                                |
+    |             Internal Name :                                      wall_inlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_outlet                                               |
+    |             Internal Name :                                     wall_outlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_top                                                  |
+    |             Internal Name :                                        wall_top |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                         Fluent |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Fluent Input                                                       |
+    |             Option :                                        InitialCaseFile |
+    |             Case File :                                               plate |
+    +-----------------------------------------------------------------------------+
+    |    MAPDL Transient                                                          |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                               MAPDL-1 |
+    |       Participant Type :                                              MAPDL |
+    |       Participant Display Name :                            MAPDL Transient |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : Force                                                   |
+    |             Internal Name :                                            FORC |
+    |             Quantity Type :                                           Force |
+    |             Location :                                                 Node |
+    |             Participant Display Name :                                Force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |                                                                             |
+    |          Variable : Incremental_Displacement                                |
+    |             Internal Name :                                            INCD |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Location :                                                 Node |
+    |             Participant Display Name :             Incremental Displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
+    |       Regions (1)                                                           |
+    |          Region : FSIN_1_Fluid Solid Interface                              |
+    |             Internal Name :                                          FSIN_1 |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                        [FORC] |
+    |             Output Variables :                                       [INCD] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                          MAPDL |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Initial Input :                                          mapdl.dat |
+    |          Additional Restart Input File :                               None |
     +=============================================================================+
     |                              Analysis Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Analysis Type :                                                   Transient |
-    | Global Stabilization :                                                 None |
-    | OptimizeIfOneWay :                                                     True |
-    | AllowSimultaneousUpdate :                                             False |
-    | PartitioningAlgorithm :                              SharedAllocateMachines |
-    |                                                                             |
+    |    Analysis Type :                                                Transient |
+    |    Optimize If One Way :                                               True |
+    |    Allow Simultaneous Update :                                        False |
+    |    Partitioning Algorithm :                          SharedAllocateMachines |
+    |    Global Stabilization                                                     |
+    |       Option :                                                         None |
     +=============================================================================+
     |                           Coupling Interfaces (1)                           |
     +=============================================================================+
-    |                                                                             |
-    | Interface: Interface-1                                                      |
-    |    Side: One                                                                |
-    |       Coupling Participant :                                MAPDL Transient |
-    |       Region List :                          [FSIN_1_Fluid Solid Interface] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Side: Two                                                                |
-    |       Coupling Participant :                            Fluid Flow (Fluent) |
-    |       Region List :                                        [wall_deforming] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Data Transfer: Force                                                     |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     One |
-    |       Source Variable :                                               force |
-    |       Target Variable :                                               Force |
-    |       Mapping Type :                                   Surface Conservative |
-    |       Convergence Target :                                         1.00E-02 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Data Transfer: displacement                                              |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     Two |
-    |       Source Variable :                            Incremental_Displacement |
-    |       Target Variable :                                        displacement |
-    |       Unmapped Value Option :                                 Nearest Value |
-    |       Mapping Type :                             Surface Profile Preserving |
-    |       Convergence Target :                                         1.00E-02 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Mapping Control:                                                         |
-    |       Absolute Gap Tolerance :                                      0.0 [m] |
-    |       Face Alignment :                                    ProgramControlled |
-    |       Poor Intersection Threshold :                                5.00e-01 |
-    |       Relative Gap Tolerance :                                     1.00e+00 |
-    |       Stop If Poor Intersection :                                      True |
-    |                                                                             |
+    |    Interface-1                                                              |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                           Interface-1 |
+    |       Side                                                                  |
+    |          Side: One                                                          |
+    |             Coupling Participant :                                  MAPDL-1 |
+    |             Region List :                                          [FSIN_1] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |          Side: Two                                                          |
+    |             Coupling Participant :                                 FLUENT-2 |
+    |             Region List :                                  [wall_deforming] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |       Data Transfers (2)                                                    |
+    |          DataTransfer : Force                                               |
+    |             Internal Name :                                            FORC |
+    |             Suppress :                                                False |
+    |             Target Side :                                               One |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                         force |
+    |             Target Variable :                                          FORC |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-02 |
+    |             Mapping Type :                                     Conservative |
+    |          DataTransfer : displacement                                        |
+    |             Internal Name :                                    displacement |
+    |             Suppress :                                                False |
+    |             Target Side :                                               Two |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                          INCD |
+    |             Target Variable :                                  displacement |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-02 |
+    |             Mapping Type :                                ProfilePreserving |
+    |             Unmapped Value Option :                           Nearest Value |
+    |       Mapping Control                                                       |
+    |          Stop If Poor Intersection :                                   True |
+    |          Poor Intersection Threshold :                             5.00e-01 |
+    |          Face Alignment :                                 ProgramControlled |
+    |          Absolute Gap Tolerance :                                   0.0 [m] |
+    |          Relative Gap Tolerance :                                  1.00e+00 |
     +=============================================================================+
     |                              Solution Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Duration Option :                                                   EndTime |
-    | End Time :                                                          1.0 [s] |
-    | Maximum Iterations :                                                      5 |
-    | Minimum Iterations :                                                      1 |
-    | Time Step Size :                                                    0.1 [s] |
-    |                                                                             |
+    |    Duration Option :                                                EndTime |
+    |    End Time :                                                       1.0 [s] |
+    |    Time Step Size :                                                 0.1 [s] |
+    |    Minimum Iterations :                                                   1 |
+    |    Maximum Iterations :                                                   5 |
+    |    Use IP Address When Possible :                                      True |
     +=============================================================================+
     |                               Output Control                                |
     +=============================================================================+
-    |                                                                             |
-    | Output Control Option :                                        StepInterval |
-    |    Frequency :                                                            2 |
-    | Results                                                                     |
-    |    IncludeInstances :                                     ProgramControlled |
-    |    Option :                                               ProgramControlled |
-    |    Type                                                                     |
-    |       Option :                                                  EnsightGold |
-    | Write Initial Snapshot :                                               True |
-    |                                                                             |
+    |    Option :                                                    StepInterval |
+    |    Generate CSV Chart Output :                                        False |
+    |    Write Initial Snapshot :                                            True |
+    |    Output Frequency :                                                     2 |
+    |    Results                                                                  |
+    |       Option :                                            ProgramControlled |
+    |       Include Instances :                                 ProgramControlled |
+    |       Type                                                                  |
+    |          Option :                                               EnsightGold |
     +=============================================================================+
-
 
 
 
@@ -880,162 +933,228 @@ Access the ``solve`` command via the ``solution`` API.
 
  .. code-block:: none
 
-
-
-    ===============================================================================
-    +=============================================================================+
-    |                                                                             |
-    |                          Summary of Coupling Setup                          |
-    |                                                                             |
-    +=============================================================================+
-    ===============================================================================
-
     +=============================================================================+
     |                          Coupling Participants (2)                          |
     +=============================================================================+
-    |                                                                             |
-    | Participant: Fluid Flow (Fluent)                                            |
-    |    Type :                                                            FLUENT |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: wall_deforming                                                   |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                      [displacement] |
-    |       Output Variables :                                            [force] |
-    |    Variable: displacement                                                   |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
-    |    Variable: force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                    Element |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |                                                                             |
+    |    Fluid Flow (Fluent)                                                      |
     +-----------------------------------------------------------------------------+
+    |       Internal Name :                                              FLUENT-2 |
+    |       Participant Type :                                             FLUENT |
+    |       Participant Display Name :                        Fluid Flow (Fluent) |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Use New APIs :                                                   True |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : displacement                                            |
+    |             Internal Name :                                    displacement |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Participant Display Name :                         displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
     |                                                                             |
-    | Participant: MAPDL Transient                                                |
-    |    Type :                                                             MAPDL |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: FSIN_1_Fluid Solid Interface                                     |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                             [Force] |
-    |       Output Variables :                         [Incremental_Displacement] |
-    |    Variable: Force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |    Variable: Incremental_Displacement                                       |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
+    |          Variable : force                                                   |
+    |             Internal Name :                                           force |
+    |             Quantity Type :                                           Force |
+    |             Participant Display Name :                                force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |       Regions (6)                                                           |
+    |          Region : part-fluid                                                |
+    |             Internal Name :                                      part-fluid |
+    |             Topology :                                               Volume |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                           [] |
     |                                                                             |
+    |          Region : wall_bottom                                               |
+    |             Internal Name :                                     wall_bottom |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_deforming                                            |
+    |             Internal Name :                                  wall_deforming |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                [displacement] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_inlet                                                |
+    |             Internal Name :                                      wall_inlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_outlet                                               |
+    |             Internal Name :                                     wall_outlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_top                                                  |
+    |             Internal Name :                                        wall_top |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                         Fluent |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Fluent Input                                                       |
+    |             Option :                                        InitialCaseFile |
+    |             Case File :                                               plate |
+    +-----------------------------------------------------------------------------+
+    |    MAPDL Transient                                                          |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                               MAPDL-1 |
+    |       Participant Type :                                              MAPDL |
+    |       Participant Display Name :                            MAPDL Transient |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : Force                                                   |
+    |             Internal Name :                                            FORC |
+    |             Quantity Type :                                           Force |
+    |             Location :                                                 Node |
+    |             Participant Display Name :                                Force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |                                                                             |
+    |          Variable : Incremental_Displacement                                |
+    |             Internal Name :                                            INCD |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Location :                                                 Node |
+    |             Participant Display Name :             Incremental Displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
+    |       Regions (1)                                                           |
+    |          Region : FSIN_1_Fluid Solid Interface                              |
+    |             Internal Name :                                          FSIN_1 |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                        [FORC] |
+    |             Output Variables :                                       [INCD] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                          MAPDL |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Initial Input :                                          mapdl.dat |
+    |          Additional Restart Input File :                               None |
     +=============================================================================+
     |                              Analysis Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Analysis Type :                                                   Transient |
-    | Global Stabilization :                                                 None |
-    | OptimizeIfOneWay :                                                     True |
-    | AllowSimultaneousUpdate :                                             False |
-    | PartitioningAlgorithm :                              SharedAllocateMachines |
-    |                                                                             |
+    |    Analysis Type :                                                Transient |
+    |    Optimize If One Way :                                               True |
+    |    Allow Simultaneous Update :                                        False |
+    |    Partitioning Algorithm :                          SharedAllocateMachines |
+    |    Global Stabilization                                                     |
+    |       Option :                                                         None |
     +=============================================================================+
     |                           Coupling Interfaces (1)                           |
     +=============================================================================+
-    |                                                                             |
-    | Interface: Interface-1                                                      |
-    |    Side: One                                                                |
-    |       Coupling Participant :                                MAPDL Transient |
-    |       Region List :                          [FSIN_1_Fluid Solid Interface] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Side: Two                                                                |
-    |       Coupling Participant :                            Fluid Flow (Fluent) |
-    |       Region List :                                        [wall_deforming] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Data Transfer: Force                                                     |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     One |
-    |       Source Variable :                                               force |
-    |       Target Variable :                                               Force |
-    |       Mapping Type :                                   Surface Conservative |
-    |       Convergence Target :                                         1.00E-02 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Data Transfer: displacement                                              |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     Two |
-    |       Source Variable :                            Incremental_Displacement |
-    |       Target Variable :                                        displacement |
-    |       Unmapped Value Option :                                 Nearest Value |
-    |       Mapping Type :                             Surface Profile Preserving |
-    |       Convergence Target :                                         1.00E-02 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Mapping Control:                                                         |
-    |       Absolute Gap Tolerance :                                      0.0 [m] |
-    |       Face Alignment :                                    ProgramControlled |
-    |       Poor Intersection Threshold :                                5.00e-01 |
-    |       Relative Gap Tolerance :                                     1.00e+00 |
-    |       Stop If Poor Intersection :                                      True |
-    |                                                                             |
+    |    Interface-1                                                              |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                           Interface-1 |
+    |       Side                                                                  |
+    |          Side: One                                                          |
+    |             Coupling Participant :                                  MAPDL-1 |
+    |             Region List :                                          [FSIN_1] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |          Side: Two                                                          |
+    |             Coupling Participant :                                 FLUENT-2 |
+    |             Region List :                                  [wall_deforming] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |       Data Transfers (2)                                                    |
+    |          DataTransfer : Force                                               |
+    |             Internal Name :                                            FORC |
+    |             Suppress :                                                False |
+    |             Target Side :                                               One |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                         force |
+    |             Target Variable :                                          FORC |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-02 |
+    |             Mapping Type :                                     Conservative |
+    |          DataTransfer : displacement                                        |
+    |             Internal Name :                                    displacement |
+    |             Suppress :                                                False |
+    |             Target Side :                                               Two |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                          INCD |
+    |             Target Variable :                                  displacement |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-02 |
+    |             Mapping Type :                                ProfilePreserving |
+    |             Unmapped Value Option :                           Nearest Value |
+    |       Mapping Control                                                       |
+    |          Stop If Poor Intersection :                                   True |
+    |          Poor Intersection Threshold :                             5.00e-01 |
+    |          Face Alignment :                                 ProgramControlled |
+    |          Absolute Gap Tolerance :                                   0.0 [m] |
+    |          Relative Gap Tolerance :                                  1.00e+00 |
     +=============================================================================+
     |                              Solution Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Duration Option :                                                   EndTime |
-    | End Time :                                                          1.0 [s] |
-    | Maximum Iterations :                                                      5 |
-    | Minimum Iterations :                                                      1 |
-    | Time Step Size :                                                    0.1 [s] |
-    |                                                                             |
+    |    Duration Option :                                                EndTime |
+    |    End Time :                                                       1.0 [s] |
+    |    Time Step Size :                                                 0.1 [s] |
+    |    Minimum Iterations :                                                   1 |
+    |    Maximum Iterations :                                                   5 |
+    |    Use IP Address When Possible :                                      True |
     +=============================================================================+
     |                               Output Control                                |
     +=============================================================================+
-    |                                                                             |
-    | Output Control Option :                                        StepInterval |
-    |    Frequency :                                                            2 |
-    | Results                                                                     |
-    |    IncludeInstances :                                     ProgramControlled |
-    |    Option :                                               ProgramControlled |
-    |    Type                                                                     |
-    |       Option :                                                  EnsightGold |
-    | Write Initial Snapshot :                                               True |
-    |                                                                             |
+    |    Option :                                                    StepInterval |
+    |    Generate CSV Chart Output :                                        False |
+    |    Write Initial Snapshot :                                            True |
+    |    Output Frequency :                                                     2 |
+    |    Results                                                                  |
+    |       Option :                                            ProgramControlled |
+    |       Include Instances :                                 ProgramControlled |
+    |       Type                                                                  |
+    |          Option :                                               EnsightGold |
     +=============================================================================+
-
     +=============================================================================+
     |                            Execution Information                            |
     +=============================================================================+
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:49948                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:65423                                  |
     |   Working Directory:                                                        |
     |     C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples  |
     |                                                                             |
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
-    |     "C:\ANSYSDev\ANSYS Inc\v232\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
-    |     ort=49964 -schost=host.docker.internal -scname="FLUENT-2" -scapis -i FL |
-    |     UENT-2.jou                                                              |
+    |     "C:\ANSYSDev\ANSYS Inc\v241\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
+    |     ort=65439 -schost=10.121.3.113 -scname="FLUENT-2" -scapis -i FLUENT-2.j |
+    |     ou                                                                      |
     |   Working Directory:                                                        |
     |     C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\ |
     |     Fluent                                                                  |
     |                                                                             |
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
-    |     "C:\ANSYSDev\ANSYS Inc\v232\ansys\bin\winx64\ANSYS232.exe" -b nolist -s |
-    |      noread -scport 49964 -schost host.docker.internal -scname "MAPDL-1" -i |
-    |      "mapdl.dat" -o MAPDL-1.out                                             |
+    |     "C:\ANSYSDev\ANSYS Inc\v241\ansys\bin\winx64\ANSYS241.exe" -b nolist -s |
+    |      noread -scport 65439 -schost 10.121.3.113 -scname "MAPDL-1" -i "mapdl. |
+    |     dat" -o MAPDL-1.out                                                     |
     |   Working Directory:                                                        |
     |     C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\ |
     |     MAPDL                                                                   |
@@ -1047,13 +1166,12 @@ Access the ``solve`` command via the ``solution`` API.
     |                              Build Information                              |
     +-----------------------------------------------------------------------------+
     | System Coupling                                                             |
-    |   2023 R2: Branch: docker-release-23.2 Commit: 351ecae114 Date:             |
-    |   2023-07-18T21:22                                                          |
+    |   2024 R1: Branch: develop Commit: b0062890ca Date: 2023-08-09T10:12        |
     | Fluid Flow (Fluent)                                                         |
-    |   ANSYS Fluent 23.0 2.0 0.0 Build Time: May  7 2023 13:34:24 EDT  Build Id: |
-    |   209                                                                       |
+    |   ANSYS Fluent 24.0 1.0 0.0 Build Time: Jul 27 2023 02:05:43 EDT  Build Id: |
+    |   84                                                                        |
     | MAPDL Transient                                                             |
-    |   Mechanical APDL Release 2023 R2          Build 23.2BETA UP20230507        |
+    |   Mechanical APDL Release 2024 R1          Build 24.1BETA UP20230727        |
     |   DISTRIBUTED WINDOWS x64  Version                                          |
     +=============================================================================+
 
@@ -1163,7 +1281,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E+00          1.00E+00        |
     |       Weighted Average x            |    -1.50E-03         -1.51E-03        |
     |       Weighted Average y            |     5.05E-07          4.42E-07        |
-    |       Weighted Average z            |    -1.37E-17         -1.38E-17        |
+    |       Weighted Average z            |    -1.37E-17         -1.40E-17        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1185,7 +1303,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.19E-03          3.20E-03        |
     |       Weighted Average x            |    -1.49E-03         -1.51E-03        |
     |       Weighted Average y            |     5.27E-07          4.65E-07        |
-    |       Weighted Average z            |    -1.73E-17         -1.80E-17        |
+    |       Weighted Average z            |    -1.73E-17         -1.79E-17        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1199,7 +1317,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.67E-02          1.22E-02        |
     |       Sum x                         |     1.36E-01          1.36E-01        |
     |       Sum y                         |     1.01E-03          1.01E-03        |
-    |       Sum z                         |    -1.25E-15         -1.25E-15        |
+    |       Sum z                         |    -1.32E-15         -1.32E-15        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1207,7 +1325,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.46E-05          3.44E-05        |
     |       Weighted Average x            |    -1.49E-03         -1.51E-03        |
     |       Weighted Average y            |     5.27E-07          4.65E-07        |
-    |       Weighted Average z            |    -1.08E-17         -1.23E-17        |
+    |       Weighted Average z            |    -1.08E-17         -1.24E-17        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1229,7 +1347,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.04E-06          1.03E-06        |
     |       Weighted Average x            |    -1.49E-03         -1.51E-03        |
     |       Weighted Average y            |     5.27E-07          4.65E-07        |
-    |       Weighted Average z            |    -2.51E-17         -2.50E-17        |
+    |       Weighted Average z            |    -2.55E-17         -2.53E-17        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1261,7 +1379,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.75E-01          8.84E-01        |
     |       Weighted Average x            |    -5.03E-03         -5.07E-03        |
     |       Weighted Average y            |    -4.11E-05         -4.17E-05        |
-    |       Weighted Average z            |     1.11E-16          1.14E-16        |
+    |       Weighted Average z            |     1.24E-16          1.26E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1275,7 +1393,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.55E-01          4.07E-01        |
     |       Sum x                         |     3.44E-01          3.44E-01        |
     |       Sum y                         |     6.01E-03          6.01E-03        |
-    |       Sum z                         |     4.41E-15          4.41E-15        |
+    |       Sum z                         |     4.66E-15          4.66E-15        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1283,7 +1401,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.33E-03          8.61E-03        |
     |       Weighted Average x            |    -4.99E-03         -5.03E-03        |
     |       Weighted Average y            |    -4.10E-05         -4.16E-05        |
-    |       Weighted Average z            |     1.31E-16          1.33E-16        |
+    |       Weighted Average z            |     1.01E-16          1.02E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1297,7 +1415,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     9.24E-03          6.61E-03        |
     |       Sum x                         |     3.44E-01          3.44E-01        |
     |       Sum y                         |     6.14E-03          6.14E-03        |
-    |       Sum z                         |     4.32E-15          4.32E-15        |
+    |       Sum z                         |     4.66E-15          4.66E-15        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1305,7 +1423,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.85E-04          2.96E-04        |
     |       Weighted Average x            |    -4.99E-03         -5.03E-03        |
     |       Weighted Average y            |    -4.10E-05         -4.15E-05        |
-    |       Weighted Average z            |     7.23E-17          7.33E-17        |
+    |       Weighted Average z            |     1.00E-16          1.03E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1329,7 +1447,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.70E-04          5.52E-04        |
     |       Sum x                         |     3.44E-01          3.44E-01        |
     |       Sum y                         |     6.15E-03          6.15E-03        |
-    |       Sum z                         |     4.38E-15          4.38E-15        |
+    |       Sum z                         |     4.39E-15          4.39E-15        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1337,7 +1455,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.97E-01          8.14E-01        |
     |       Weighted Average x            |    -8.65E-03         -8.69E-03        |
     |       Weighted Average y            |    -1.98E-04         -1.99E-04        |
-    |       Weighted Average z            |     2.58E-16          2.64E-16        |
+    |       Weighted Average z            |     3.13E-16          3.19E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1351,7 +1469,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.97E-01          1.36E-01        |
     |       Sum x                         |     4.07E-01          4.07E-01        |
     |       Sum y                         |     1.65E-02          1.65E-02        |
-    |       Sum z                         |     1.99E-14          1.99E-14        |
+    |       Sum z                         |     1.86E-14          1.86E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1359,7 +1477,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.19E-03          3.36E-03        |
     |       Weighted Average x            |    -8.63E-03         -8.66E-03        |
     |       Weighted Average y            |    -1.98E-04         -1.99E-04        |
-    |       Weighted Average z            |     3.42E-16          3.47E-16        |
+    |       Weighted Average z            |     3.83E-16          3.91E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1373,7 +1491,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.22E-03          5.78E-03        |
     |       Sum x                         |     4.04E-01          4.04E-01        |
     |       Sum y                         |     1.64E-02          1.64E-02        |
-    |       Sum z                         |     1.90E-14          1.90E-14        |
+    |       Sum z                         |     1.80E-14          1.80E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1381,7 +1499,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.21E-04          1.37E-04        |
     |       Weighted Average x            |    -8.63E-03         -8.66E-03        |
     |       Weighted Average y            |    -1.97E-04         -1.99E-04        |
-    |       Weighted Average z            |     6.50E-17          6.70E-17        |
+    |       Weighted Average z            |     3.26E-16          3.33E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1405,7 +1523,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.32E-04          3.04E-04        |
     |       Sum x                         |     4.04E-01          4.04E-01        |
     |       Sum y                         |     1.64E-02          1.64E-02        |
-    |       Sum z                         |     1.92E-14          1.92E-14        |
+    |       Sum z                         |     1.87E-14          1.87E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1413,7 +1531,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.41E-01          7.68E-01        |
     |       Weighted Average x            |    -1.16E-02         -1.16E-02        |
     |       Weighted Average y            |    -5.40E-04         -5.39E-04        |
-    |       Weighted Average z            |     7.37E-16          7.60E-16        |
+    |       Weighted Average z            |     3.41E-16          3.56E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1427,7 +1545,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.43E-01          9.45E-02        |
     |       Sum x                         |     3.93E-01          3.93E-01        |
     |       Sum y                         |     3.20E-02          3.20E-02        |
-    |       Sum z                         |     2.48E-14          2.48E-14        |
+    |       Sum z                         |     3.06E-14          3.06E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1435,7 +1553,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.26E-03          1.39E-03        |
     |       Weighted Average x            |    -1.16E-02         -1.16E-02        |
     |       Weighted Average y            |    -5.40E-04         -5.40E-04        |
-    |       Weighted Average z            |     2.96E-16          2.94E-16        |
+    |       Weighted Average z            |    -7.18E-17         -5.52E-17        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1449,7 +1567,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.54E-03          3.76E-03        |
     |       Sum x                         |     3.91E-01          3.91E-01        |
     |       Sum y                         |     3.18E-02          3.18E-02        |
-    |       Sum z                         |     2.36E-14          2.36E-14        |
+    |       Sum z                         |     2.95E-14          2.95E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1457,7 +1575,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.34E-05          2.56E-05        |
     |       Weighted Average x            |    -1.16E-02         -1.16E-02        |
     |       Weighted Average y            |    -5.40E-04         -5.40E-04        |
-    |       Weighted Average z            |     9.67E-16          9.83E-16        |
+    |       Weighted Average z            |     3.20E-16          3.35E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1481,7 +1599,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.31E-04          2.26E-04        |
     |       Sum x                         |     3.91E-01          3.91E-01        |
     |       Sum y                         |     3.18E-02          3.18E-02        |
-    |       Sum z                         |     2.38E-14          2.38E-14        |
+    |       Sum z                         |     2.97E-14          2.97E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1489,7 +1607,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.24E-01          7.57E-01        |
     |       Weighted Average x            |    -1.42E-02         -1.42E-02        |
     |       Weighted Average y            |    -1.18E-03         -1.18E-03        |
-    |       Weighted Average z            |     1.84E-15          1.85E-15        |
+    |       Weighted Average z            |    -1.15E-16         -1.28E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1503,7 +1621,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     9.26E-02          6.19E-02        |
     |       Sum x                         |     4.19E-01          4.19E-01        |
     |       Sum y                         |     5.76E-02          5.76E-02        |
-    |       Sum z                         |     1.87E-14          1.87E-14        |
+    |       Sum z                         |     4.00E-14          4.00E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1511,7 +1629,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.19E-03          2.47E-03        |
     |       Weighted Average x            |    -1.42E-02         -1.42E-02        |
     |       Weighted Average y            |    -1.18E-03         -1.18E-03        |
-    |       Weighted Average z            |     1.77E-15          1.81E-15        |
+    |       Weighted Average z            |    -1.44E-16         -1.53E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1525,7 +1643,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.77E-03          1.79E-03        |
     |       Sum x                         |     4.20E-01          4.20E-01        |
     |       Sum y                         |     5.77E-02          5.77E-02        |
-    |       Sum z                         |     1.70E-14          1.70E-14        |
+    |       Sum z                         |     3.77E-14          3.77E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1533,7 +1651,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.68E-05          7.54E-05        |
     |       Weighted Average x            |    -1.42E-02         -1.42E-02        |
     |       Weighted Average y            |    -1.18E-03         -1.18E-03        |
-    |       Weighted Average z            |     1.77E-15          1.79E-15        |
+    |       Weighted Average z            |    -1.55E-16         -1.59E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1557,7 +1675,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.51E-04          1.01E-04        |
     |       Sum x                         |     4.20E-01          4.20E-01        |
     |       Sum y                         |     5.77E-02          5.77E-02        |
-    |       Sum z                         |     1.64E-14          1.64E-14        |
+    |       Sum z                         |     3.83E-14          3.83E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1565,7 +1683,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.31E-01          7.61E-01        |
     |       Weighted Average x            |    -1.53E-02         -1.53E-02        |
     |       Weighted Average y            |    -1.98E-03         -1.96E-03        |
-    |       Weighted Average z            |    -2.42E-16         -2.66E-16        |
+    |       Weighted Average z            |    -1.23E-15         -1.23E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1579,7 +1697,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.41E-01          9.09E-02        |
     |       Sum x                         |     3.52E-01          3.52E-01        |
     |       Sum y                         |     7.38E-02          7.38E-02        |
-    |       Sum z                         |    -5.82E-15         -5.82E-15        |
+    |       Sum z                         |     1.69E-14          1.69E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1587,7 +1705,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.36E-03          6.49E-03        |
     |       Weighted Average x            |    -1.52E-02         -1.51E-02        |
     |       Weighted Average y            |    -1.96E-03         -1.94E-03        |
-    |       Weighted Average z            |    -1.99E-16         -1.91E-16        |
+    |       Weighted Average z            |    -1.23E-15         -1.25E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1601,7 +1719,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.80E-02          1.79E-02        |
     |       Sum x                         |     3.39E-01          3.39E-01        |
     |       Sum y                         |     7.15E-02          7.15E-02        |
-    |       Sum z                         |    -5.93E-15         -5.93E-15        |
+    |       Sum z                         |     1.57E-14          1.57E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1609,7 +1727,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.49E-05          3.43E-05        |
     |       Weighted Average x            |    -1.52E-02         -1.51E-02        |
     |       Weighted Average y            |    -1.96E-03         -1.94E-03        |
-    |       Weighted Average z            |    -1.93E-16         -1.94E-16        |
+    |       Weighted Average z            |    -1.26E-15         -1.27E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1623,7 +1741,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.52E-04          4.13E-04        |
     |       Sum x                         |     3.39E-01          3.39E-01        |
     |       Sum y                         |     7.15E-02          7.15E-02        |
-    |       Sum z                         |    -6.11E-15         -6.11E-15        |
+    |       Sum z                         |     1.60E-14          1.60E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1631,7 +1749,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     9.15E-07          1.05E-06        |
     |       Weighted Average x            |    -1.52E-02         -1.51E-02        |
     |       Weighted Average y            |    -1.96E-03         -1.94E-03        |
-    |       Weighted Average z            |    -2.13E-16         -2.08E-16        |
+    |       Weighted Average z            |    -1.24E-15         -1.25E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1655,7 +1773,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.06E-05          1.32E-05        |
     |       Sum x                         |     3.39E-01          3.39E-01        |
     |       Sum y                         |     7.15E-02          7.15E-02        |
-    |       Sum z                         |    -5.77E-15         -5.77E-15        |
+    |       Sum z                         |     1.58E-14          1.58E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1663,7 +1781,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.33E-01          7.62E-01        |
     |       Weighted Average x            |    -1.38E-02         -1.38E-02        |
     |       Weighted Average y            |    -2.39E-03         -2.38E-03        |
-    |       Weighted Average z            |    -2.76E-15         -2.82E-15        |
+    |       Weighted Average z            |    -1.75E-15         -1.82E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1677,7 +1795,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.96E-01          3.92E-01        |
     |       Sum x                         |     1.56E-01          1.56E-01        |
     |       Sum y                         |     5.38E-02          5.38E-02        |
-    |       Sum z                         |    -1.74E-14         -1.74E-14        |
+    |       Sum z                         |    -1.20E-14         -1.20E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1685,7 +1803,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.70E-03          1.82E-03        |
     |       Weighted Average x            |    -1.38E-02         -1.38E-02        |
     |       Weighted Average y            |    -2.39E-03         -2.37E-03        |
-    |       Weighted Average z            |    -2.68E-15         -2.73E-15        |
+    |       Weighted Average z            |    -1.67E-15         -1.70E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1699,7 +1817,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.12E-02          7.14E-03        |
     |       Sum x                         |     1.55E-01          1.55E-01        |
     |       Sum y                         |     5.32E-02          5.32E-02        |
-    |       Sum z                         |    -1.87E-14         -1.87E-14        |
+    |       Sum z                         |    -1.34E-14         -1.34E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1707,7 +1825,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.78E-05          5.89E-05        |
     |       Weighted Average x            |    -1.38E-02         -1.38E-02        |
     |       Weighted Average y            |    -2.39E-03         -2.37E-03        |
-    |       Weighted Average z            |    -2.72E-15         -2.78E-15        |
+    |       Weighted Average z            |    -1.71E-15         -1.74E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1731,7 +1849,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     9.57E-04          6.32E-04        |
     |       Sum x                         |     1.55E-01          1.55E-01        |
     |       Sum y                         |     5.31E-02          5.31E-02        |
-    |       Sum z                         |    -1.88E-14         -1.88E-14        |
+    |       Sum z                         |    -1.35E-14         -1.35E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1739,7 +1857,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.41E-01          7.68E-01        |
     |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
     |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
-    |       Weighted Average z            |    -3.06E-15         -3.11E-15        |
+    |       Weighted Average z            |    -7.57E-16         -8.36E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1753,7 +1871,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.19E+00          7.13E-01        |
     |       Sum x                         |     2.89E-02          2.89E-02        |
     |       Sum y                         |     2.64E-02          2.64E-02        |
-    |       Sum z                         |    -3.73E-14         -3.73E-14        |
+    |       Sum z                         |    -3.77E-14         -3.77E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1761,7 +1879,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.76E-04          9.87E-04        |
     |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
     |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
-    |       Weighted Average z            |    -2.65E-15         -2.70E-15        |
+    |       Weighted Average z            |    -3.85E-16         -4.55E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1775,7 +1893,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.02E-02          1.81E-02        |
     |       Sum x                         |     2.65E-02          2.65E-02        |
     |       Sum y                         |     2.57E-02          2.57E-02        |
-    |       Sum z                         |    -3.60E-14         -3.60E-14        |
+    |       Sum z                         |    -3.64E-14         -3.64E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1783,7 +1901,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.04E-05          5.64E-05        |
     |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
     |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
-    |       Weighted Average z            |    -2.94E-15         -2.99E-15        |
+    |       Weighted Average z            |    -5.72E-16         -6.41E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1797,7 +1915,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.06E-03          1.25E-03        |
     |       Sum x                         |     2.65E-02          2.65E-02        |
     |       Sum y                         |     2.57E-02          2.57E-02        |
-    |       Sum z                         |    -3.60E-14         -3.60E-14        |
+    |       Sum z                         |    -3.63E-14         -3.63E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1805,7 +1923,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.09E-06          4.51E-06        |
     |       Weighted Average x            |    -1.14E-02         -1.14E-02        |
     |       Weighted Average y            |    -2.23E-03         -2.22E-03        |
-    |       Weighted Average z            |    -2.64E-15         -2.68E-15        |
+    |       Weighted Average z            |    -8.71E-16         -9.59E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1829,7 +1947,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.47E-05          5.13E-05        |
     |       Sum x                         |     2.65E-02          2.65E-02        |
     |       Sum y                         |     2.57E-02          2.57E-02        |
-    |       Sum z                         |    -3.60E-14         -3.60E-14        |
+    |       Sum z                         |    -3.64E-14         -3.64E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1837,7 +1955,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.80E-01          7.99E-01        |
     |       Weighted Average x            |    -8.48E-03         -8.51E-03        |
     |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
-    |       Weighted Average z            |    -8.94E-16         -8.70E-16        |
+    |       Weighted Average z            |     7.89E-16          8.03E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1851,7 +1969,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.18E+00          7.97E-01        |
     |       Sum x                         |    -8.45E-02         -8.45E-02        |
     |       Sum y                         |    -4.74E-03         -4.74E-03        |
-    |       Sum z                         |    -5.27E-14         -5.27E-14        |
+    |       Sum z                         |    -4.55E-14         -4.55E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1859,7 +1977,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.21E-03          2.36E-03        |
     |       Weighted Average x            |    -8.47E-03         -8.49E-03        |
     |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
-    |       Weighted Average z            |    -7.61E-16         -7.47E-16        |
+    |       Weighted Average z            |     7.33E-16          7.46E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1873,7 +1991,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.81E-02          2.60E-02        |
     |       Sum x                         |    -8.78E-02         -8.78E-02        |
     |       Sum y                         |    -5.62E-03         -5.62E-03        |
-    |       Sum z                         |    -5.10E-14         -5.10E-14        |
+    |       Sum z                         |    -4.38E-14         -4.38E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1881,7 +1999,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.84E-05          8.58E-05        |
     |       Weighted Average x            |    -8.47E-03         -8.50E-03        |
     |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
-    |       Weighted Average z            |    -7.33E-16         -7.11E-16        |
+    |       Weighted Average z            |     8.88E-16          9.02E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1895,7 +2013,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.23E-03          1.53E-03        |
     |       Sum x                         |    -8.79E-02         -8.79E-02        |
     |       Sum y                         |    -5.64E-03         -5.64E-03        |
-    |       Sum z                         |    -5.10E-14         -5.10E-14        |
+    |       Sum z                         |    -4.38E-14         -4.38E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1903,7 +2021,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.99E-06          3.41E-06        |
     |       Weighted Average x            |    -8.47E-03         -8.50E-03        |
     |       Weighted Average y            |    -1.73E-03         -1.73E-03        |
-    |       Weighted Average z            |    -9.17E-16         -9.00E-16        |
+    |       Weighted Average z            |     9.67E-16          9.86E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1927,7 +2045,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.49E-05          5.10E-05        |
     |       Sum x                         |    -8.79E-02         -8.79E-02        |
     |       Sum y                         |    -5.65E-03         -5.65E-03        |
-    |       Sum z                         |    -5.11E-14         -5.11E-14        |
+    |       Sum z                         |    -4.38E-14         -4.38E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1935,7 +2053,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.10E-01          8.26E-01        |
     |       Weighted Average x            |    -4.95E-03         -4.98E-03        |
     |       Weighted Average y            |    -1.07E-03         -1.08E-03        |
-    |       Weighted Average z            |     9.04E-16          9.34E-16        |
+    |       Weighted Average z            |     3.68E-15          3.74E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1949,7 +2067,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.50E-01          4.09E-01        |
     |       Sum x                         |    -2.18E-01         -2.18E-01        |
     |       Sum y                         |    -4.10E-02         -4.10E-02        |
-    |       Sum z                         |    -5.46E-14         -5.46E-14        |
+    |       Sum z                         |    -3.41E-14         -3.41E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1957,7 +2075,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.86E-03          4.33E-03        |
     |       Weighted Average x            |    -4.94E-03         -4.97E-03        |
     |       Weighted Average y            |    -1.07E-03         -1.07E-03        |
-    |       Weighted Average z            |     7.68E-16          7.97E-16        |
+    |       Weighted Average z            |     3.53E-15          3.60E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1971,7 +2089,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.47E-02          1.08E-02        |
     |       Sum x                         |    -2.21E-01         -2.21E-01        |
     |       Sum y                         |    -4.19E-02         -4.19E-02        |
-    |       Sum z                         |    -5.51E-14         -5.51E-14        |
+    |       Sum z                         |    -3.45E-14         -3.45E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -1979,7 +2097,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.64E-04          1.87E-04        |
     |       Weighted Average x            |    -4.94E-03         -4.97E-03        |
     |       Weighted Average y            |    -1.07E-03         -1.07E-03        |
-    |       Weighted Average z            |     8.49E-16          8.87E-16        |
+    |       Weighted Average z            |     3.53E-15          3.60E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -1993,7 +2111,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.17E-04          3.80E-04        |
     |       Sum x                         |    -2.21E-01         -2.21E-01        |
     |       Sum y                         |    -4.19E-02         -4.19E-02        |
-    |       Sum z                         |    -5.53E-14         -5.53E-14        |
+    |       Sum z                         |    -3.46E-14         -3.46E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2001,7 +2119,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     9.40E-06          1.08E-05        |
     |       Weighted Average x            |    -4.94E-03         -4.97E-03        |
     |       Weighted Average y            |    -1.07E-03         -1.07E-03        |
-    |       Weighted Average z            |     8.11E-16          8.40E-16        |
+    |       Weighted Average z            |     3.48E-15          3.55E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2031,23 +2149,24 @@ Access the ``solve`` command via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    9.64717E+01 |
+    | Total Time :                                                    9.68435E+01 |
     | Coupling Participant Time                                                   |
-    |    Fluid Flow (Fluent) :                                        5.06971E+01 |
-    |    MAPDL Transient :                                            5.47481E+00 |
-    |    Total :                                                      5.61719E+01 |
+    |    Fluid Flow (Fluent) :                                        5.07662E+01 |
+    |    MAPDL Transient :                                            4.56306E+00 |
+    |    Total :                                                      5.53293E+01 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           9.45564E+00 |
-    |    Mesh Import :                                                4.72095E-02 |
-    |    Mapping Setup :                                              3.38540E-03 |
-    |    Mapping :                                                    8.04810E-03 |
-    |    Numerics :                                                   2.22491E-02 |
-    |    Misc. :                                                      3.07632E+01 |
-    |    Total :                                                      4.02998E+01 |
+    |    Solution Control :                                           1.01136E+01 |
+    |    Mesh Import :                                                4.81631E-02 |
+    |    Mapping Setup :                                              3.35750E-03 |
+    |    Mapping :                                                    7.19380E-03 |
+    |    Numerics :                                                   2.07830E-02 |
+    |    Misc. :                                                      3.13211E+01 |
+    |    Total :                                                      4.15142E+01 |
     +=============================================================================+
 
     +=============================================================================+
     |                 System coupling run completed successfully.                 |
+    +=============================================================================+
 
 
 
@@ -2082,7 +2201,7 @@ from the case saved during the solve.
 
     Reading settings
 
-    Opened analysis at the end of coupling step 10.
+    Opened analysis at the end of coupling step  10.
 
 
 
@@ -2118,12 +2237,14 @@ This code extends the analysis to 1.5 seconds.
     time_step_size : 0.1 [s]
     minimum_iterations : 1
     maximum_iterations : 5
+    use_ip_address_when_possible : True
 
     duration_option : EndTime
     end_time : 1.5 [s]
     time_step_size : 0.1 [s]
     minimum_iterations : 1
     maximum_iterations : 5
+    use_ip_address_when_possible : True
 
 
 
@@ -2208,152 +2329,204 @@ showing a summary.
 
  .. code-block:: none
 
-
-
-    ===============================================================================
-    +=============================================================================+
-    |                                                                             |
-    |                          Summary of Coupling Setup                          |
-    |                                                                             |
-    +=============================================================================+
-    ===============================================================================
-
     +=============================================================================+
     |                          Coupling Participants (2)                          |
     +=============================================================================+
-    |                                                                             |
-    | Participant: Fluid Flow (Fluent)                                            |
-    |    Type :                                                            FLUENT |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: part-fluid                                                       |
-    |       Topology :                                                     Volume |
-    |    Region: wall_bottom                                                      |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_deforming                                                   |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                      [displacement] |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_inlet                                                       |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_outlet                                                      |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Region: wall_top                                                         |
-    |       Topology :                                                    Surface |
-    |       Output Variables :                                            [force] |
-    |    Variable: displacement                                                   |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
-    |    Variable: force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                    Element |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |                                                                             |
+    |    Fluid Flow (Fluent)                                                      |
     +-----------------------------------------------------------------------------+
+    |       Internal Name :                                              FLUENT-2 |
+    |       Participant Type :                                             FLUENT |
+    |       Participant Display Name :                        Fluid Flow (Fluent) |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Use New APIs :                                                   True |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : displacement                                            |
+    |             Internal Name :                                    displacement |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Participant Display Name :                         displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
     |                                                                             |
-    | Participant: MAPDL Transient                                                |
-    |    Type :                                                             MAPDL |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: FSIN_1_Fluid Solid Interface                                     |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                             [Force] |
-    |       Output Variables :                         [Incremental_Displacement] |
-    |    Variable: Force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |    Variable: Incremental_Displacement                                       |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
+    |          Variable : force                                                   |
+    |             Internal Name :                                           force |
+    |             Quantity Type :                                           Force |
+    |             Participant Display Name :                                force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |       Regions (6)                                                           |
+    |          Region : part-fluid                                                |
+    |             Internal Name :                                      part-fluid |
+    |             Topology :                                               Volume |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                           [] |
     |                                                                             |
+    |          Region : wall_bottom                                               |
+    |             Internal Name :                                     wall_bottom |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_deforming                                            |
+    |             Internal Name :                                  wall_deforming |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                [displacement] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_inlet                                                |
+    |             Internal Name :                                      wall_inlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_outlet                                               |
+    |             Internal Name :                                     wall_outlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_top                                                  |
+    |             Internal Name :                                        wall_top |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                         Fluent |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Fluent Input                                                       |
+    |             Option :                                        InitialCaseFile |
+    |             Case File :                                               plate |
+    +-----------------------------------------------------------------------------+
+    |    MAPDL Transient                                                          |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                               MAPDL-1 |
+    |       Participant Type :                                              MAPDL |
+    |       Participant Display Name :                            MAPDL Transient |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : Force                                                   |
+    |             Internal Name :                                            FORC |
+    |             Quantity Type :                                           Force |
+    |             Location :                                                 Node |
+    |             Participant Display Name :                                Force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |                                                                             |
+    |          Variable : Incremental_Displacement                                |
+    |             Internal Name :                                            INCD |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Location :                                                 Node |
+    |             Participant Display Name :             Incremental Displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
+    |       Regions (1)                                                           |
+    |          Region : FSIN_1_Fluid Solid Interface                              |
+    |             Internal Name :                                          FSIN_1 |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                        [FORC] |
+    |             Output Variables :                                       [INCD] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                          MAPDL |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Initial Input :                                          mapdl.dat |
+    |          Additional Restart Input File :                               None |
     +=============================================================================+
     |                              Analysis Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Analysis Type :                                                   Transient |
-    | Global Stabilization :                                                 None |
-    | OptimizeIfOneWay :                                                     True |
-    | AllowSimultaneousUpdate :                                             False |
-    | PartitioningAlgorithm :                              SharedAllocateMachines |
-    |                                                                             |
+    |    Analysis Type :                                                Transient |
+    |    Optimize If One Way :                                               True |
+    |    Allow Simultaneous Update :                                        False |
+    |    Partitioning Algorithm :                          SharedAllocateMachines |
+    |    Global Stabilization                                                     |
+    |       Option :                                                         None |
     +=============================================================================+
     |                           Coupling Interfaces (1)                           |
     +=============================================================================+
-    |                                                                             |
-    | Interface: Interface-1                                                      |
-    |    Side: One                                                                |
-    |       Coupling Participant :                                MAPDL Transient |
-    |       Region List :                          [FSIN_1_Fluid Solid Interface] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Side: Two                                                                |
-    |       Coupling Participant :                            Fluid Flow (Fluent) |
-    |       Region List :                                        [wall_deforming] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Data Transfer: Force                                                     |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     One |
-    |       Source Variable :                                               force |
-    |       Target Variable :                                               Force |
-    |       Mapping Type :                                   Surface Conservative |
-    |       Convergence Target :                                         1.00E-03 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Data Transfer: displacement                                              |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     Two |
-    |       Source Variable :                            Incremental_Displacement |
-    |       Target Variable :                                        displacement |
-    |       Unmapped Value Option :                                 Nearest Value |
-    |       Mapping Type :                             Surface Profile Preserving |
-    |       Convergence Target :                                         1.00E-02 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Mapping Control:                                                         |
-    |       Absolute Gap Tolerance :                                      0.0 [m] |
-    |       Face Alignment :                                    ProgramControlled |
-    |       Poor Intersection Threshold :                                5.00e-01 |
-    |       Relative Gap Tolerance :                                     1.00e+00 |
-    |       Stop If Poor Intersection :                                      True |
-    |                                                                             |
+    |    Interface-1                                                              |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                           Interface-1 |
+    |       Side                                                                  |
+    |          Side: One                                                          |
+    |             Coupling Participant :                                  MAPDL-1 |
+    |             Region List :                                          [FSIN_1] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |          Side: Two                                                          |
+    |             Coupling Participant :                                 FLUENT-2 |
+    |             Region List :                                  [wall_deforming] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |       Data Transfers (2)                                                    |
+    |          DataTransfer : Force                                               |
+    |             Internal Name :                                            FORC |
+    |             Suppress :                                                False |
+    |             Target Side :                                               One |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                         force |
+    |             Target Variable :                                          FORC |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-03 |
+    |             Mapping Type :                                     Conservative |
+    |          DataTransfer : displacement                                        |
+    |             Internal Name :                                    displacement |
+    |             Suppress :                                                False |
+    |             Target Side :                                               Two |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                          INCD |
+    |             Target Variable :                                  displacement |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-02 |
+    |             Mapping Type :                                ProfilePreserving |
+    |             Unmapped Value Option :                           Nearest Value |
+    |       Mapping Control                                                       |
+    |          Stop If Poor Intersection :                                   True |
+    |          Poor Intersection Threshold :                             5.00e-01 |
+    |          Face Alignment :                                 ProgramControlled |
+    |          Absolute Gap Tolerance :                                   0.0 [m] |
+    |          Relative Gap Tolerance :                                  1.00e+00 |
     +=============================================================================+
     |                              Solution Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Duration Option :                                                   EndTime |
-    | End Time :                                                          1.5 [s] |
-    | Maximum Iterations :                                                      5 |
-    | Minimum Iterations :                                                      2 |
-    | Time Step Size :                                                    0.1 [s] |
-    |                                                                             |
+    |    Duration Option :                                                EndTime |
+    |    End Time :                                                       1.5 [s] |
+    |    Time Step Size :                                                 0.1 [s] |
+    |    Minimum Iterations :                                                   2 |
+    |    Maximum Iterations :                                                   5 |
+    |    Use IP Address When Possible :                                      True |
     +=============================================================================+
     |                               Output Control                                |
     +=============================================================================+
-    |                                                                             |
-    | Output Control Option :                                        StepInterval |
-    |    Frequency :                                                            2 |
-    | Results                                                                     |
-    |    IncludeInstances :                                     ProgramControlled |
-    |    Option :                                               ProgramControlled |
-    |    Type                                                                     |
-    |       Option :                                                  EnsightGold |
-    | Write Initial Snapshot :                                               True |
-    |                                                                             |
+    |    Option :                                                    StepInterval |
+    |    Generate CSV Chart Output :                                        False |
+    |    Write Initial Snapshot :                                            True |
+    |    Output Frequency :                                                     2 |
+    |    Results                                                                  |
+    |       Option :                                            ProgramControlled |
+    |       Include Instances :                                 ProgramControlled |
+    |       Type                                                                  |
+    |          Option :                                               EnsightGold |
     +=============================================================================+
-
 
 
 
@@ -2379,162 +2552,228 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
 
  .. code-block:: none
 
-
-
-    ===============================================================================
-    +=============================================================================+
-    |                                                                             |
-    |                          Summary of Coupling Setup                          |
-    |                                                                             |
-    +=============================================================================+
-    ===============================================================================
-
     +=============================================================================+
     |                          Coupling Participants (2)                          |
     +=============================================================================+
-    |                                                                             |
-    | Participant: Fluid Flow (Fluent)                                            |
-    |    Type :                                                            FLUENT |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: wall_deforming                                                   |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                      [displacement] |
-    |       Output Variables :                                            [force] |
-    |    Variable: displacement                                                   |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
-    |    Variable: force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                    Element |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |                                                                             |
+    |    Fluid Flow (Fluent)                                                      |
     +-----------------------------------------------------------------------------+
+    |       Internal Name :                                              FLUENT-2 |
+    |       Participant Type :                                             FLUENT |
+    |       Participant Display Name :                        Fluid Flow (Fluent) |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Use New APIs :                                                   True |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : displacement                                            |
+    |             Internal Name :                                    displacement |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Participant Display Name :                         displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
     |                                                                             |
-    | Participant: MAPDL Transient                                                |
-    |    Type :                                                             MAPDL |
-    |    UpdateControls:                                                          |
-    |       Option :                                            ProgramControlled |
-    |    Region: FSIN_1_Fluid Solid Interface                                     |
-    |       Topology :                                                    Surface |
-    |       Input Variables :                                             [Force] |
-    |       Output Variables :                         [Incremental_Displacement] |
-    |    Variable: Force                                                          |
-    |       Quantity Type :                                                 Force |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                   True |
-    |       Data Type :                                                      Real |
-    |    Variable: Incremental_Displacement                                       |
-    |       Quantity Type :                              Incremental Displacement |
-    |       Location :                                                       Node |
-    |       Tensor Type :                                                  Vector |
-    |       Is Extensive :                                                  False |
-    |       Data Type :                                                      Real |
+    |          Variable : force                                                   |
+    |             Internal Name :                                           force |
+    |             Quantity Type :                                           Force |
+    |             Participant Display Name :                                force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |       Regions (6)                                                           |
+    |          Region : part-fluid                                                |
+    |             Internal Name :                                      part-fluid |
+    |             Topology :                                               Volume |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                           [] |
     |                                                                             |
+    |          Region : wall_bottom                                               |
+    |             Internal Name :                                     wall_bottom |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_deforming                                            |
+    |             Internal Name :                                  wall_deforming |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                [displacement] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_inlet                                                |
+    |             Internal Name :                                      wall_inlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_outlet                                               |
+    |             Internal Name :                                     wall_outlet |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |                                                                             |
+    |          Region : wall_top                                                  |
+    |             Internal Name :                                        wall_top |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                            [] |
+    |             Output Variables :                                      [force] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                         Fluent |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Fluent Input                                                       |
+    |             Option :                                        InitialCaseFile |
+    |             Case File :                                               plate |
+    +-----------------------------------------------------------------------------+
+    |    MAPDL Transient                                                          |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                               MAPDL-1 |
+    |       Participant Type :                                              MAPDL |
+    |       Participant Display Name :                            MAPDL Transient |
+    |       Dimension :                                                        3D |
+    |       Input Parameters :                                                 [] |
+    |       Output Parameters :                                                [] |
+    |       Participant Analysis Type :                                 Transient |
+    |       Restarts Supported :                                             True |
+    |       Variables (2)                                                         |
+    |          Variable : Force                                                   |
+    |             Internal Name :                                            FORC |
+    |             Quantity Type :                                           Force |
+    |             Location :                                                 Node |
+    |             Participant Display Name :                                Force |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                             True |
+    |                                                                             |
+    |          Variable : Incremental_Displacement                                |
+    |             Internal Name :                                            INCD |
+    |             Quantity Type :                        Incremental Displacement |
+    |             Location :                                                 Node |
+    |             Participant Display Name :             Incremental Displacement |
+    |             Data Type :                                                Real |
+    |             Tensor Type :                                            Vector |
+    |             Is Extensive :                                            False |
+    |       Regions (1)                                                           |
+    |          Region : FSIN_1_Fluid Solid Interface                              |
+    |             Internal Name :                                          FSIN_1 |
+    |             Topology :                                              Surface |
+    |             Input Variables :                                        [FORC] |
+    |             Output Variables :                                       [INCD] |
+    |       Update Control                                                        |
+    |          Option :                                         ProgramControlled |
+    |       Execution Control                                                     |
+    |          Option :                                         ProgramControlled |
+    |          Working Directory :                                          MAPDL |
+    |          Additional Arguments :                                        None |
+    |          Parallel Fraction :                                       1.00e+00 |
+    |          Initial Input :                                          mapdl.dat |
+    |          Additional Restart Input File :                               None |
     +=============================================================================+
     |                              Analysis Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Analysis Type :                                                   Transient |
-    | Global Stabilization :                                                 None |
-    | OptimizeIfOneWay :                                                     True |
-    | AllowSimultaneousUpdate :                                             False |
-    | PartitioningAlgorithm :                              SharedAllocateMachines |
-    |                                                                             |
+    |    Analysis Type :                                                Transient |
+    |    Optimize If One Way :                                               True |
+    |    Allow Simultaneous Update :                                        False |
+    |    Partitioning Algorithm :                          SharedAllocateMachines |
+    |    Global Stabilization                                                     |
+    |       Option :                                                         None |
     +=============================================================================+
     |                           Coupling Interfaces (1)                           |
     +=============================================================================+
-    |                                                                             |
-    | Interface: Interface-1                                                      |
-    |    Side: One                                                                |
-    |       Coupling Participant :                                MAPDL Transient |
-    |       Region List :                          [FSIN_1_Fluid Solid Interface] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Side: Two                                                                |
-    |       Coupling Participant :                            Fluid Flow (Fluent) |
-    |       Region List :                                        [wall_deforming] |
-    |       Reference Frame :                                GlobalReferenceFrame |
-    |    Data Transfer: Force                                                     |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     One |
-    |       Source Variable :                                               force |
-    |       Target Variable :                                               Force |
-    |       Mapping Type :                                   Surface Conservative |
-    |       Convergence Target :                                         1.00E-03 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Data Transfer: displacement                                              |
-    |       Suppress :                                                      False |
-    |       Target Side :                                                     Two |
-    |       Source Variable :                            Incremental_Displacement |
-    |       Target Variable :                                        displacement |
-    |       Unmapped Value Option :                                 Nearest Value |
-    |       Mapping Type :                             Surface Profile Preserving |
-    |       Convergence Target :                                         1.00E-02 |
-    |       Ramping Option :                                                 None |
-    |       Relaxation Factor :                                          1.00E+00 |
-    |    Mapping Control:                                                         |
-    |       Absolute Gap Tolerance :                                      0.0 [m] |
-    |       Face Alignment :                                    ProgramControlled |
-    |       Poor Intersection Threshold :                                5.00e-01 |
-    |       Relative Gap Tolerance :                                     1.00e+00 |
-    |       Stop If Poor Intersection :                                      True |
-    |                                                                             |
+    |    Interface-1                                                              |
+    +-----------------------------------------------------------------------------+
+    |       Internal Name :                                           Interface-1 |
+    |       Side                                                                  |
+    |          Side: One                                                          |
+    |             Coupling Participant :                                  MAPDL-1 |
+    |             Region List :                                          [FSIN_1] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |          Side: Two                                                          |
+    |             Coupling Participant :                                 FLUENT-2 |
+    |             Region List :                                  [wall_deforming] |
+    |             Reference Frame :                          GlobalReferenceFrame |
+    |             Instancing :                                               None |
+    |       Data Transfers (2)                                                    |
+    |          DataTransfer : Force                                               |
+    |             Internal Name :                                            FORC |
+    |             Suppress :                                                False |
+    |             Target Side :                                               One |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                         force |
+    |             Target Variable :                                          FORC |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-03 |
+    |             Mapping Type :                                     Conservative |
+    |          DataTransfer : displacement                                        |
+    |             Internal Name :                                    displacement |
+    |             Suppress :                                                False |
+    |             Target Side :                                               Two |
+    |             Option :                                          UsingVariable |
+    |             Source Variable :                                          INCD |
+    |             Target Variable :                                  displacement |
+    |             Ramping Option :                                           None |
+    |             Relaxation Factor :                                    1.00e+00 |
+    |             Convergence Target :                                   1.00e-02 |
+    |             Mapping Type :                                ProfilePreserving |
+    |             Unmapped Value Option :                           Nearest Value |
+    |       Mapping Control                                                       |
+    |          Stop If Poor Intersection :                                   True |
+    |          Poor Intersection Threshold :                             5.00e-01 |
+    |          Face Alignment :                                 ProgramControlled |
+    |          Absolute Gap Tolerance :                                   0.0 [m] |
+    |          Relative Gap Tolerance :                                  1.00e+00 |
     +=============================================================================+
     |                              Solution Control                               |
     +=============================================================================+
-    |                                                                             |
-    | Duration Option :                                                   EndTime |
-    | End Time :                                                          1.5 [s] |
-    | Maximum Iterations :                                                      5 |
-    | Minimum Iterations :                                                      2 |
-    | Time Step Size :                                                    0.1 [s] |
-    |                                                                             |
+    |    Duration Option :                                                EndTime |
+    |    End Time :                                                       1.5 [s] |
+    |    Time Step Size :                                                 0.1 [s] |
+    |    Minimum Iterations :                                                   2 |
+    |    Maximum Iterations :                                                   5 |
+    |    Use IP Address When Possible :                                      True |
     +=============================================================================+
     |                               Output Control                                |
     +=============================================================================+
-    |                                                                             |
-    | Output Control Option :                                        StepInterval |
-    |    Frequency :                                                            2 |
-    | Results                                                                     |
-    |    IncludeInstances :                                     ProgramControlled |
-    |    Option :                                               ProgramControlled |
-    |    Type                                                                     |
-    |       Option :                                                  EnsightGold |
-    | Write Initial Snapshot :                                               True |
-    |                                                                             |
+    |    Option :                                                    StepInterval |
+    |    Generate CSV Chart Output :                                        False |
+    |    Write Initial Snapshot :                                            True |
+    |    Output Frequency :                                                     2 |
+    |    Results                                                                  |
+    |       Option :                                            ProgramControlled |
+    |       Include Instances :                                 ProgramControlled |
+    |       Type                                                                  |
+    |          Option :                                               EnsightGold |
     +=============================================================================+
-
     +=============================================================================+
     |                            Execution Information                            |
     +=============================================================================+
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:49948                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:65423                                  |
     |   Working Directory:                                                        |
     |     C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples  |
     |                                                                             |
     | Fluid Flow (Fluent)                                                         |
     |   Execution Command:                                                        |
-    |     "C:\ANSYSDev\ANSYS Inc\v232\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
-    |     ort=50179 -schost=host.docker.internal -scname="FLUENT-2" -scapis -i FL |
-    |     UENT-2.jou                                                              |
+    |     "C:\ANSYSDev\ANSYS Inc\v241\fluent\ntbin\win64\fluent.exe" 3ddp -g -scp |
+    |     ort=49209 -schost=10.121.3.113 -scname="FLUENT-2" -scapis -i FLUENT-2.j |
+    |     ou                                                                      |
     |   Working Directory:                                                        |
     |     C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\ |
     |     Fluent                                                                  |
     |                                                                             |
     | MAPDL Transient                                                             |
     |   Execution Command:                                                        |
-    |     "C:\ANSYSDev\ANSYS Inc\v232\ansys\bin\winx64\ANSYS232.exe" -b nolist -s |
-    |      noread -scport 50179 -schost host.docker.internal -scname "MAPDL-1" -i |
-    |      "MAPDL-1.dat" -o MAPDL-1_SC_002.out                                    |
+    |     "C:\ANSYSDev\ANSYS Inc\v241\ansys\bin\winx64\ANSYS241.exe" -b nolist -s |
+    |      noread -scport 49209 -schost 10.121.3.113 -scname "MAPDL-1" -i "MAPDL- |
+    |     1.dat" -o MAPDL-1_SC_002.out                                            |
     |   Working Directory:                                                        |
     |     C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\ |
     |     MAPDL                                                                   |
@@ -2546,13 +2785,12 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |                              Build Information                              |
     +-----------------------------------------------------------------------------+
     | System Coupling                                                             |
-    |   2023 R2: Branch: docker-release-23.2 Commit: 351ecae114 Date:             |
-    |   2023-07-18T21:24                                                          |
+    |   2024 R1: Branch: develop Commit: b0062890ca Date: 2023-08-09T10:14        |
     | Fluid Flow (Fluent)                                                         |
-    |   ANSYS Fluent 23.0 2.0 0.0 Build Time: May  7 2023 13:34:24 EDT  Build Id: |
-    |   209                                                                       |
+    |   ANSYS Fluent 24.0 1.0 0.0 Build Time: Jul 27 2023 02:05:43 EDT  Build Id: |
+    |   84                                                                        |
     | MAPDL Transient                                                             |
-    |   Mechanical APDL Release 2023 R2          Build 23.2BETA UP20230507        |
+    |   Mechanical APDL Release 2024 R1          Build 24.1BETA UP20230727        |
     |   DISTRIBUTED WINDOWS x64  Version                                          |
     +=============================================================================+
 
@@ -2635,7 +2873,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E+00          1.00E+00        |
     |       Sum x                         |    -2.21E-01         -2.21E-01        |
     |       Sum y                         |    -4.19E-02         -4.18E-02        |
-    |       Sum z                         |    -5.54E-14         -5.56E-14        |
+    |       Sum z                         |    -3.45E-14         -3.47E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2643,7 +2881,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E+00          1.00E+00        |
     |       Weighted Average x            |    -1.05E-03         -1.04E-03        |
     |       Weighted Average y            |    -2.53E-04         -2.50E-04        |
-    |       Weighted Average z            |     1.94E-15          1.93E-15        |
+    |       Weighted Average z            |     3.35E-15          3.40E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2657,7 +2895,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.39E-01          2.51E-01        |
     |       Sum x                         |    -3.40E-01         -3.40E-01        |
     |       Sum y                         |    -7.69E-02         -7.68E-02        |
-    |       Sum z                         |    -7.52E-14         -7.54E-14        |
+    |       Sum z                         |    -5.98E-14         -6.01E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2665,7 +2903,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.38E-03          4.83E-03        |
     |       Weighted Average x            |    -1.05E-03         -1.04E-03        |
     |       Weighted Average y            |    -2.54E-04         -2.52E-04        |
-    |       Weighted Average z            |     1.90E-15          1.90E-15        |
+    |       Weighted Average z            |     3.26E-15          3.30E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2679,7 +2917,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.52E-03          4.72E-03        |
     |       Sum x                         |    -3.42E-01         -3.42E-01        |
     |       Sum y                         |    -7.75E-02         -7.74E-02        |
-    |       Sum z                         |    -7.91E-14         -7.94E-14        |
+    |       Sum z                         |    -6.27E-14         -6.30E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2687,7 +2925,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.07E-04          3.51E-04        |
     |       Weighted Average x            |    -1.05E-03         -1.04E-03        |
     |       Weighted Average y            |    -2.54E-04         -2.51E-04        |
-    |       Weighted Average z            |     1.92E-15          1.92E-15        |
+    |       Weighted Average z            |     3.28E-15          3.33E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2701,7 +2939,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.25E-04          3.84E-04        |
     |       Sum x                         |    -3.43E-01         -3.42E-01        |
     |       Sum y                         |    -7.75E-02         -7.74E-02        |
-    |       Sum z                         |    -7.94E-14         -7.96E-14        |
+    |       Sum z                         |    -6.32E-14         -6.35E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2709,7 +2947,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.40E-05          2.71E-05        |
     |       Weighted Average x            |    -1.05E-03         -1.04E-03        |
     |       Weighted Average y            |    -2.54E-04         -2.51E-04        |
-    |       Weighted Average z            |     1.85E-15          1.84E-15        |
+    |       Weighted Average z            |     3.27E-15          3.32E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2733,7 +2971,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.37E-05          1.74E-05        |
     |       Sum x                         |    -3.43E-01         -3.42E-01        |
     |       Sum y                         |    -7.75E-02         -7.74E-02        |
-    |       Sum z                         |    -7.95E-14         -7.98E-14        |
+    |       Sum z                         |    -6.36E-14         -6.39E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2741,7 +2979,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.66E-01          8.75E-01        |
     |       Weighted Average x            |     2.88E-03          2.90E-03        |
     |       Weighted Average y            |     5.71E-04          5.73E-04        |
-    |       Weighted Average z            |     1.82E-15          1.82E-15        |
+    |       Weighted Average z            |    -9.97E-16         -9.72E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2755,7 +2993,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.80E-01          1.31E-01        |
     |       Sum x                         |    -4.14E-01         -4.14E-01        |
     |       Sum y                         |    -9.63E-02         -9.62E-02        |
-    |       Sum z                         |    -5.87E-14         -5.89E-14        |
+    |       Sum z                         |    -6.96E-14         -6.99E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2763,7 +3001,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.05E-03          7.41E-03        |
     |       Weighted Average x            |     2.86E-03          2.89E-03        |
     |       Weighted Average y            |     5.71E-04          5.73E-04        |
-    |       Weighted Average z            |     1.81E-15          1.80E-15        |
+    |       Weighted Average z            |    -1.00E-15         -9.78E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2777,7 +3015,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.76E-03          3.45E-03        |
     |       Sum x                         |    -4.12E-01         -4.12E-01        |
     |       Sum y                         |    -9.59E-02         -9.58E-02        |
-    |       Sum z                         |    -5.79E-14         -5.82E-14        |
+    |       Sum z                         |    -6.84E-14         -6.87E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2785,7 +3023,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.38E-04          2.57E-04        |
     |       Weighted Average x            |     2.86E-03          2.89E-03        |
     |       Weighted Average y            |     5.71E-04          5.73E-04        |
-    |       Weighted Average z            |     1.83E-15          1.82E-15        |
+    |       Weighted Average z            |    -1.01E-15         -9.89E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2799,7 +3037,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.39E-05          5.70E-05        |
     |       Sum x                         |    -4.12E-01         -4.12E-01        |
     |       Sum y                         |    -9.59E-02         -9.58E-02        |
-    |       Sum z                         |    -5.76E-14         -5.79E-14        |
+    |       Sum z                         |    -6.88E-14         -6.90E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2807,7 +3045,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.15E-06          8.74E-06        |
     |       Weighted Average x            |     2.86E-03          2.89E-03        |
     |       Weighted Average y            |     5.71E-04          5.73E-04        |
-    |       Weighted Average z            |     1.79E-15          1.78E-15        |
+    |       Weighted Average z            |    -9.84E-16         -9.63E-16        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2831,7 +3069,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.11E-05          8.09E-06        |
     |       Sum x                         |    -4.12E-01         -4.12E-01        |
     |       Sum y                         |    -9.59E-02         -9.58E-02        |
-    |       Sum z                         |    -5.82E-14         -5.85E-14        |
+    |       Sum z                         |    -6.84E-14         -6.87E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2839,7 +3077,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.73E-01          7.93E-01        |
     |       Weighted Average x            |     6.34E-03          6.36E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
-    |       Weighted Average z            |     1.06E-15          1.06E-15        |
+    |       Weighted Average z            |    -4.49E-15         -4.54E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2853,7 +3091,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.19E-01          8.14E-02        |
     |       Sum x                         |    -4.27E-01         -4.27E-01        |
     |       Sum y                         |    -9.73E-02         -9.72E-02        |
-    |       Sum z                         |    -2.19E-14         -2.22E-14        |
+    |       Sum z                         |    -5.07E-14         -5.09E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2861,7 +3099,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.12E-03          2.10E-03        |
     |       Weighted Average x            |     6.33E-03          6.34E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
-    |       Weighted Average z            |     9.66E-16          9.60E-16        |
+    |       Weighted Average z            |    -4.35E-15         -4.40E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2875,7 +3113,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.96E-03          4.19E-03        |
     |       Sum x                         |    -4.25E-01         -4.24E-01        |
     |       Sum y                         |    -9.67E-02         -9.66E-02        |
-    |       Sum z                         |    -2.05E-14         -2.08E-14        |
+    |       Sum z                         |    -4.92E-14         -4.95E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2883,7 +3121,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.33E-05          7.38E-05        |
     |       Weighted Average x            |     6.33E-03          6.34E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
-    |       Weighted Average z            |     1.04E-15          1.04E-15        |
+    |       Weighted Average z            |    -4.19E-15         -4.24E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2897,7 +3135,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.27E-04          1.57E-04        |
     |       Sum x                         |    -4.25E-01         -4.24E-01        |
     |       Sum y                         |    -9.67E-02         -9.66E-02        |
-    |       Sum z                         |    -2.04E-14         -2.07E-14        |
+    |       Sum z                         |    -4.92E-14         -4.94E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2905,7 +3143,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.77E-06          3.94E-06        |
     |       Weighted Average x            |     6.33E-03          6.34E-03        |
     |       Weighted Average y            |     1.35E-03          1.34E-03        |
-    |       Weighted Average z            |     1.08E-15          1.08E-15        |
+    |       Weighted Average z            |    -4.23E-15         -4.29E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2929,7 +3167,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.56E-05          1.10E-05        |
     |       Sum x                         |    -4.25E-01         -4.24E-01        |
     |       Sum y                         |    -9.67E-02         -9.66E-02        |
-    |       Sum z                         |    -2.07E-14         -2.10E-14        |
+    |       Sum z                         |    -4.91E-14         -4.93E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2937,7 +3175,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.44E-01          7.71E-01        |
     |       Weighted Average x            |     9.27E-03          9.27E-03        |
     |       Weighted Average y            |     2.02E-03          2.01E-03        |
-    |       Weighted Average z            |     1.46E-16          1.43E-16        |
+    |       Weighted Average z            |    -3.28E-15         -3.33E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2951,7 +3189,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.08E-01          7.24E-02        |
     |       Sum x                         |    -4.22E-01         -4.21E-01        |
     |       Sum y                         |    -8.92E-02         -8.92E-02        |
-    |       Sum z                         |     4.18E-15          3.96E-15        |
+    |       Sum z                         |    -1.84E-14         -1.86E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2959,7 +3197,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.12E-03          1.19E-03        |
     |       Weighted Average x            |     9.27E-03          9.26E-03        |
     |       Weighted Average y            |     2.02E-03          2.00E-03        |
-    |       Weighted Average z            |     7.15E-16          7.20E-16        |
+    |       Weighted Average z            |    -2.83E-15         -2.89E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2973,7 +3211,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.13E-03          2.15E-03        |
     |       Sum x                         |    -4.20E-01         -4.20E-01        |
     |       Sum y                         |    -8.88E-02         -8.88E-02        |
-    |       Sum z                         |     7.98E-15          7.76E-15        |
+    |       Sum z                         |    -1.46E-14         -1.48E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -2981,7 +3219,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.74E-05          2.82E-05        |
     |       Weighted Average x            |     9.27E-03          9.26E-03        |
     |       Weighted Average y            |     2.02E-03          2.00E-03        |
-    |       Weighted Average z            |     1.47E-16          1.51E-16        |
+    |       Weighted Average z            |    -3.10E-15         -3.16E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -2995,7 +3233,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.24E-04          1.55E-04        |
     |       Sum x                         |    -4.20E-01         -4.20E-01        |
     |       Sum y                         |    -8.88E-02         -8.88E-02        |
-    |       Sum z                         |     7.65E-15          7.44E-15        |
+    |       Sum z                         |    -1.48E-14         -1.50E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -3003,7 +3241,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.19E-06          2.31E-06        |
     |       Weighted Average x            |     9.27E-03          9.26E-03        |
     |       Weighted Average y            |     2.02E-03          2.00E-03        |
-    |       Weighted Average z            |     3.01E-16          3.07E-16        |
+    |       Weighted Average z            |    -3.14E-15         -3.20E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3027,7 +3265,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.21E-05          8.39E-06        |
     |       Sum x                         |    -4.20E-01         -4.20E-01        |
     |       Sum y                         |    -8.88E-02         -8.88E-02        |
-    |       Sum z                         |     8.44E-15          8.22E-15        |
+    |       Sum z                         |    -1.47E-14         -1.49E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -3035,7 +3273,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.33E-01          7.62E-01        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
-    |       Weighted Average z            |    -1.44E-16         -1.52E-16        |
+    |       Weighted Average z            |     2.31E-15          2.37E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3049,7 +3287,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.10E-02          4.80E-02        |
     |       Sum x                         |    -4.42E-01         -4.41E-01        |
     |       Sum y                         |    -7.62E-02         -7.62E-02        |
-    |       Sum z                         |     2.49E-14          2.47E-14        |
+    |       Sum z                         |     2.24E-14          2.23E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -3057,7 +3295,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.63E-03          1.80E-03        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
-    |       Weighted Average z            |     6.10E-17          6.80E-17        |
+    |       Weighted Average z            |     2.03E-15          2.09E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3071,7 +3309,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.42E-03          1.60E-03        |
     |       Sum x                         |    -4.41E-01         -4.41E-01        |
     |       Sum y                         |    -7.60E-02         -7.60E-02        |
-    |       Sum z                         |     3.06E-14          3.04E-14        |
+    |       Sum z                         |     2.72E-14          2.70E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -3079,7 +3317,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.93E-05          4.20E-05        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
-    |       Weighted Average z            |    -8.86E-17         -7.89E-17        |
+    |       Weighted Average z            |     2.24E-15          2.30E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3093,7 +3331,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.90E-04          1.31E-04        |
     |       Sum x                         |    -4.41E-01         -4.41E-01        |
     |       Sum y                         |    -7.60E-02         -7.60E-02        |
-    |       Sum z                         |     2.98E-14          2.97E-14        |
+    |       Sum z                         |     2.68E-14          2.66E-14        |
     +-----------------------------------------------------------------------------+
     | Fluid Flow (Fluent)                 |                                       |
     |   Interface: Interface-1            |                                       |
@@ -3101,7 +3339,7 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.46E-06          1.49E-06        |
     |       Weighted Average x            |     1.20E-02          1.20E-02        |
     |       Weighted Average y            |     2.31E-03          2.29E-03        |
-    |       Weighted Average z            |    -3.03E-16         -3.21E-16        |
+    |       Weighted Average z            |     2.12E-15          2.17E-15        |
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   MAPDL Transient                   |             Converged                 |
@@ -3134,20 +3372,25 @@ To restart the solution, access the ``solve`` command via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    5.90321E+01 |
+    | Total Time :                                                    5.91729E+01 |
     | Coupling Participant Time                                                   |
-    |    Fluid Flow (Fluent) :                                        3.24158E+01 |
-    |    MAPDL Transient :                                            3.11938E+00 |
-    |    Total :                                                      3.55351E+01 |
+    |    Fluid Flow (Fluent) :                                        3.22508E+01 |
+    |    MAPDL Transient :                                            3.12547E+00 |
+    |    Total :                                                      3.53763E+01 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           5.49422E+00 |
-    |    Mesh Import :                                                4.18923E-02 |
-    |    Mapping Setup :                                              4.31860E-03 |
-    |    Mapping :                                                    5.07220E-03 |
-    |    Numerics :                                                   1.28212E-02 |
-    |    Misc. :                                                      1.79386E+01 |
-    |    Total :                                                      2.34969E+01 |
+    |    Solution Control :                                           5.87643E+00 |
+    |    Mesh Import :                                                5.55486E-02 |
+    |    Mapping Setup :                                              4.39350E-03 |
+    |    Mapping :                                                    4.73430E-03 |
+    |    Numerics :                                                   1.24495E-02 |
+    |    Misc. :                                                      1.78430E+01 |
+    |    Total :                                                      2.37966E+01 |
     +=============================================================================+
+
+    +=============================================================================+
+    |                 System coupling run completed successfully.                 |
+    +=============================================================================+
+
 
 
 
@@ -3183,7 +3426,7 @@ Stop streaming output from the server and shut down the server instance.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 3 minutes  12.860 seconds)
+   **Total running time of the script:** ( 3 minutes  23.883 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_oscillating_plate.py:

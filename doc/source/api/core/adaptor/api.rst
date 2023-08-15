@@ -40,7 +40,7 @@ The key differences are as follows:
 * Commands and queries in System Coupling are all exposed in its Python environment as top-level
   global names. Commands in PySystemCoupling are exposed as callable objects that are accessible
   as attributes of one of the *root* attributes of the :class:`Session<Session>` class:
-  :meth:`case<Session.case>`, :meth:`case<Session.setup>`, and :meth:`case<Session.solution>`.
+  :meth:`case<Session.case>`, :meth:`setup<Session.setup>`, and :meth:`case<Session.solution>`.
 
 * In System Coupling, you manipulate and query the setup data model in one of these ways:
 
