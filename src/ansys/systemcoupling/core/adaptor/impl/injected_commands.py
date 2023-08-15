@@ -1,6 +1,8 @@
 from copy import deepcopy
 from typing import Callable, Dict
 
+from ansys.systemcoupling.core.participant.manager import ParticipantManager
+from ansys.systemcoupling.core.syc_version import compare_versions
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
 from .get_status_messages import get_status_messages
@@ -8,26 +10,67 @@ from .types import Container
 
 
 def get_injected_cmd_map(
-    category: str, root_object: Container, rpc
+    version: str,
+    category: str,
+    root_object: Container,
+    part_mgr: ParticipantManager,
+    rpc,
 ) -> Dict[str, Callable]:
     """Gets a dictionary that maps names to functions that implement the injected command.
 
     The map returned pertains to the commands in the specified category.
     """
+    ret = {}
+
     if category == "setup":
-        return {
+        ret = {
             "get_setup_summary": lambda **kwargs: rpc.GetSetupSummary(**kwargs),
             "get_status_messages": lambda **kwargs: get_status_messages(
                 rpc, root_object, **kwargs
             ),
+            "add_participant": lambda **kwargs: _wrap_add_participant(
+                version, root_object, part_mgr, **kwargs
+            ),
         }
+
     if category == "solution":
-        return {
-            "solve": lambda **kwargs: rpc.solve(),
+        ret = {
+            "solve": lambda **kwargs: _wrap_solve(root_object, part_mgr, **kwargs),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
         }
-    return {}
+
+    return ret
+
+
+def _wrap_add_participant(
+    server_version: str, root_object: Container, part_mgr: ParticipantManager, **kwargs
+) -> str:
+    if session := kwargs.get("participant_session", None):
+        if len(kwargs) != 1:
+            raise RuntimeError(
+                "If a 'participant_session' argument is passed to "
+                "'add_participant', it must be the only argument."
+            )
+        if part_mgr is None:
+            raise RuntimeError("Internal error: participant manager is not available.")
+
+        if compare_versions(server_version, "24.1") < 0:
+            raise RuntimeError(
+                f"System Coupling server version '{server_version}' is too low to"
+                "support this form of 'add_participant'. Minimum version is '24.1'."
+            )
+
+        return part_mgr.add_participant(participant_session=session)
+
+    return root_object._add_participant(**kwargs)
+
+
+def _wrap_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
+    if part_mgr is None:
+        root_object._solve()
+    else:
+        part_mgr.solve()
 
 
 def get_injected_cmd_data() -> list:
@@ -60,6 +103,46 @@ _cmd_yaml = """
 -   name: Solve
     pyname: solve
     isInjected: true
+    pysyc_internal_name: _solve
+-   name: AddParticipant
+    pyname: add_participant
+    isInjected: true
+    pysyc_internal_name: _add_participant
+    doc_prefix: |-
+        This command operates in one of two modes, depending on how it is called.
+        *Either* a single argument, ``participant_session``, should be provided, *or* some
+        combination of the other optional arguments not including ``participant_session``
+        should be provided.
+
+        In the ``participant_session`` mode, the session object is queried to
+        extract the information needed to define a new ``coupling_participant``
+        object in the setup datamodel. A reference to the session is also retained,
+        and this will play a further role if ``solve`` is called later. In that case,
+        the participant solver will be driven from the Python environment in which the
+        participant and PySystemCoupling sessions are active. System Coupling will
+        regard the participant solver as "externally managed" (see the `execution_control`
+        settings in `coupling_participant` for details of this mode).
+
+        .. note::
+            The ``participant_session`` mode currently has limited support in the
+            broader Ansys Python ecosystem and its implementeation should be
+            regarded as Beta level at best. At present, only PyFluent supports
+            the API required of the session object.
+
+        The remainder of the documentation describes the more usual non-session mode.
+
+
+    essentialArgNames_extra: []
+    optionalArgNames_extra:
+    - participant_session
+    args_extra:
+    - #!!python/tuple
+        - participant_session
+        -   pyname: participant_session
+            Type: <class 'object'>
+            type: ParticipantSession
+            doc: |-
+                Participant session object conforming to the ``ParticipantProtocol`` protocol class.
 -   name: interrupt
     pyname: interrupt
     exposure: solution

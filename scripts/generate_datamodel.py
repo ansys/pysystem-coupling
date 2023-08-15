@@ -57,10 +57,10 @@ sys.path.append(_scriptpath.parents[1])
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
 from ansys.systemcoupling.core.adaptor.impl import root_source as adaptor_source
+from ansys.systemcoupling.core.adaptor.impl.get_syc_version import get_syc_version
 from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_dm_metadata,
     get_extended_cmd_metadata,
-    get_syc_version,
     make_cmdonly_metadata,
     make_combined_metadata,
 )
