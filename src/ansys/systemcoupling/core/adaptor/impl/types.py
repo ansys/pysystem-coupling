@@ -29,6 +29,7 @@ import sys
 from typing import Dict, Generic, List, NewType, Tuple, TypeVar, Union
 import weakref
 
+from ansys.systemcoupling.core.participant.protocol import ParticipantProtocol
 from ansys.systemcoupling.core.util import name_util
 
 # Type hints
@@ -244,6 +245,17 @@ class SettingsBase(Base, Generic[StateT]):
         out = sys.stdout if out is None else out
         self._print_state_helper(self.get_state(), out, indent_factor=indent_factor)
         out.flush()
+
+
+# TODO: this doesn't make much sense as a "setting" but is needed to
+# make the special form of add_participant work. Ideally we want to move
+# away from treating command arguments as "settings" but that needs to be
+# handled as a separate task.
+class ParticipantSession(SettingsBase[ParticipantProtocol]):
+    """Object conforming to the ``ParticipantProtocol`` runtime protocol
+    for participant session objects."""
+
+    _state_type = ParticipantProtocol
 
 
 class Integer(SettingsBase[int]):

@@ -73,8 +73,7 @@ def launch(
         version=version,
         extra_args=extra_args,
     )
-    syc = Session(rpc)
-    return syc
+    return Session(rpc)
 
 
 def launch_container(
@@ -97,8 +96,7 @@ def launch_container(
     """
     rpc = SycGrpc()
     rpc.start_container_and_connect(mounted_from, mounted_to, network, version=version)
-    syc = Session(rpc)
-    return syc
+    return Session(rpc)
 
 
 def connect(host: str, port: int) -> Session:  # pragma: no cover

@@ -11,6 +11,8 @@ _DEFAULT_IMAGE_TAG = f"v{SYC_VERSION_DOT}.0"
 
 
 def _image_tag(version: str) -> str:
+    if version == "latest":
+        return version
     major, minor = normalize_version(version)
     return f"v{major}.{minor}.0"
 
