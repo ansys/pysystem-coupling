@@ -46,6 +46,7 @@ _property_types = {
 
 # Command arguments still defined as settings classes
 _arg_types = {
+    "ParticipantSession": ParticipantSession,
     "Integer": Integer,
     "Logical": Boolean,
     "Real": Real,
@@ -211,6 +212,7 @@ def _get_cls(name, info, parent):
             # pylint: disable=no-member
             cls.command_names.append(ccls.__name__)
             setattr(cls, ccls.__name__, ccls)
+        cls.command_names.sort()
 
     arguments = info.get("args")
     if arguments:

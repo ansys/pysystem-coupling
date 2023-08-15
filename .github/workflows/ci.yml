@@ -14,7 +14,7 @@ env:
   PACKAGE_NAME: "ansys-systemcoupling-core"
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
-  DOC_BUILD_SYC_VERSION: 23_2
+  DOC_BUILD_SYC_VERSION: 24_1
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -55,7 +55,6 @@ jobs:
         uses: ansys/actions/build-wheelhouse@v4
         with:
           library-name: ${{ env.PACKAGE_NAME }}
-          library-namespace: ${{ env.PACKAGE_NAMESPACE }}
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
 
@@ -90,6 +89,11 @@ jobs:
         uses: ./.github/actions/generate-api
         with:
           image-tag: v23.2.0
+
+      - name: Generate API for v241
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: latest
 
       - name: Clean out dist
         run: rm -rf dist
@@ -145,6 +149,12 @@ jobs:
         with:
           image-tag: v23.2.0
           upload-coverage: true
+
+      - name: Unit Test v24.1.0
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: latest
+          upload-coverage: false
 
 
   docs:

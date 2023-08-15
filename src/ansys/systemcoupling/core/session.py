@@ -8,6 +8,7 @@ from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
 from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
+from ansys.systemcoupling.core.participant.manager import ParticipantManager
 
 if os.environ.get("PYSYC_DOC_BUILD_VERSION"):
     # It is useful to import explicit types while building doc as it
@@ -60,6 +61,7 @@ class Session:
         self.__rpc = rpc
         self.__native_api = None
         self.__syc_version = None
+        self.__part_mgr = ParticipantManager(self)
 
     def exit(self) -> None:
         """Close the System Coupling server instance.
@@ -152,7 +154,11 @@ class Session:
             version = sycproxy.get_version()
             self.__syc_version = version.replace(".", "_")
         root = get_root(sycproxy, category=category, version=self.__syc_version)
-        sycproxy.set_injected_commands(get_injected_cmd_map(category, root, self.__rpc))
+        sycproxy.set_injected_commands(
+            get_injected_cmd_map(
+                self.__syc_version, category, root, self.__part_mgr, self.__rpc
+            )
+        )
         return (root, sycproxy)
 
     @property

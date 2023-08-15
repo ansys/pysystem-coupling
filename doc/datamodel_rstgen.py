@@ -159,6 +159,10 @@ def _populate_rst_from_settings(rst_dir, cls):
     istr1 = _get_indent_str(1)
     cls_name = cls.__name__
     file_name = cls.__module__.split(".")[-1]
+    if file_name.startswith("_"):
+        # Internal - skip
+        return
+
     rstpath = os.path.normpath(os.path.join(rst_dir, file_name + ".rst"))
 
     has_properties = (
@@ -208,6 +212,8 @@ def _populate_rst_from_settings(rst_dir, cls):
             data_dict = {}
             data_dict["Command"] = "Summary"
             for child in cls.command_names:
+                if child.startswith("_"):
+                    continue
                 child_cls = getattr(cls, child)
                 ref_string = f":ref:`{child} <{child_cls.__module__.split('.')[-1]}>`"
                 data_dict[ref_string] = child_cls.__doc__.strip("\n").split("\n")[0]
