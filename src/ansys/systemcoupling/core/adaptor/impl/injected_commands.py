@@ -61,7 +61,14 @@ def _wrap_add_participant(
                 "support this form of 'add_participant'. Minimum version is '24.1'."
             )
 
-        return part_mgr.add_participant(participant_session=session)
+        if not hasattr(session, "system_coupling"):
+            raise RuntimeError(
+                "The 'participant_session' parameter does not provide a "
+                "'system_coupling' attribute and therefore cannot support this "
+                "form of 'add_participant'."
+            )
+
+        return part_mgr.add_participant(participant_session=session.system_coupling)
 
     return root_object._add_participant(**kwargs)
 

@@ -10,7 +10,6 @@ import ansys.fluent.core as pyfluent
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import LOG
-from ansys.systemcoupling.core.participant.fluent_adaptor import SystemCouplingAdaptor
 
 LOG.set_level("INFO")
 LOG.log_to_stdout()
@@ -23,7 +22,7 @@ def _make_fluent_session(filename: str):
     session = pyfluent.launch_fluent(**fluent_args)
     session.file.read(file_type="case", file_name=filename)
 
-    return SystemCouplingAdaptor(session)
+    return session
 
 
 syc = pysyc.launch(version="24.1", extra_args=["-l5"])
