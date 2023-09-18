@@ -126,15 +126,17 @@ _cmd_yaml = """
         object in the setup datamodel. A reference to the session is also retained,
         and this will play a further role if ``solve`` is called later. In that case,
         the participant solver will be driven from the Python environment in which the
-        participant and PySystemCoupling sessions are active. System Coupling will
+        participant and PySystemCoupling sessions are active and System Coupling will
         regard the participant solver as "externally managed" (see the `execution_control`
         settings in `coupling_participant` for details of this mode).
 
         .. note::
             The ``participant_session`` mode currently has limited support in the
-            broader Ansys Python ecosystem and its implementeation should be
-            regarded as Beta level at best. At present, only PyFluent supports
-            the API required of the session object.
+            broader Ansys Python ecosystem - at present, only PyFluent supports
+            the API required of the session object and product versions of Fluent and
+            System Coupling need to be at least 24.1. This capability should be
+            regarded as *Beta* as it may be subject to revision when extended to other
+            products.
 
         The remainder of the documentation describes the more usual non-session mode.
 
