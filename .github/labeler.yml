@@ -8,9 +8,11 @@ dependencies:
 - changed-files:
   - any-glob-to-any-file: ['pyproject.toml']
 enhancement:
-- src/**
+- changed-files:
+  - any-glob-to-any-file: ['src/**/*']
 testing:
-- tests/**
+- changed-files:
+  - any-glob-to-any-file: ['tests/**/*']
 CI/CD:
 - changed-files:
   - any-glob-to-any-file: ['.github/**/*', '.ci/**/*']
