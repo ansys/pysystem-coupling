@@ -1,13 +1,18 @@
 documentation:
-- doc/source/**/*
-- README.rst
+- changed-files:
+  - any-glob-to-any-file: ['doc/source/**/*', 'examples/**/*', README.rst]
 maintenance:
-- .github/**/*
-- .flake8
-- pyproject.toml
+- changed-files:
+  - any-glob-to-any-file: ['.github/**/*', 'codecov.yml', '.coveragerc', '.flake8', '.pre-commit-config.yaml', 'pyproject.toml']
 dependencies:
-- pyproject.toml
+- changed-files:
+  - any-glob-to-any-file: ['pyproject.toml']
 enhancement:
-- src/**
+- changed-files:
+  - any-glob-to-any-file: ['src/**/*']
 testing:
-- tests/**
+- changed-files:
+  - any-glob-to-any-file: ['tests/**/*']
+CI/CD:
+- changed-files:
+  - any-glob-to-any-file: ['.github/**/*', '.ci/**/*']
