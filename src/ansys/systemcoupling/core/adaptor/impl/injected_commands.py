@@ -2,6 +2,7 @@ from copy import deepcopy
 from typing import Callable, Dict
 
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
+from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
 from ansys.systemcoupling.core.syc_version import compare_versions
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
@@ -60,6 +61,10 @@ def _wrap_add_participant(
                 f"System Coupling server version '{server_version}' is too low to"
                 "support this form of 'add_participant'. Minimum version is '24.1'."
             )
+
+        # special handling for mapdl session
+        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(session)):
+            return part_mgr.add_participant(participant_session=MapdlSystemCouplingInterface(session))
 
         if not hasattr(session, "system_coupling"):
             raise RuntimeError(
