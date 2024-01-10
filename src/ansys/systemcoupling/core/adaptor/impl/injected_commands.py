@@ -64,7 +64,9 @@ def _wrap_add_participant(
 
         # special handling for mapdl session
         if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(session)):
-            return part_mgr.add_participant(participant_session=MapdlSystemCouplingInterface(session))
+            return part_mgr.add_participant(
+                participant_session=MapdlSystemCouplingInterface(session)
+            )
 
         if not hasattr(session, "system_coupling"):
             raise RuntimeError(

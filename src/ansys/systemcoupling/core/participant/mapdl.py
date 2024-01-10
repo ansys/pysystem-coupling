@@ -21,6 +21,7 @@ class MapdlSystemCouplingInterface(object):
         input_variables: List[str]
         output_variables: List[str]    
 
+
     def __init__(self, solver):
         self._solver = solver
         self.__clear()
@@ -66,7 +67,8 @@ class MapdlSystemCouplingInterface(object):
         self.__clear()
         # TODO: need to actually check element types connected to the FSI region
         et_index = self._solver.get(entity="ACTIVE", item1="TYPE")
-        element_type = int(self._solver.get(entity="ETYP", entnum=et_index, item1="ATTR", it1num="ENAM"))
+        element_type = int(self._solver.get(
+            entity="ETYP", entnum=et_index, item1="ATTR", it1num="ENAM"))
         # TODO: the elements list may not be complete
         if element_type in {181,185,186,187,190,225,226,227,281,285}:
             self._activate_structural()
@@ -75,8 +77,10 @@ class MapdlSystemCouplingInterface(object):
 
         num_comp = int(self._solver.get(entity = "COMP", item1 = "NCOMP"))
         for curr_comp in range(1, num_comp + 1):
-            region_name = self._solver.get(entity = "COMP", entnum = curr_comp, item1 = "NAME")                
-            comp_type = int(self._solver.get(entity="COMP", entnum=region_name, item1="TYPE"))
+            region_name = self._solver.get(
+                entity = "COMP", entnum = curr_comp, item1 = "NAME")                
+            comp_type = int(self._solver.get(
+                entity="COMP", entnum=region_name, item1="TYPE"))
             # if type of component is "Nodes" (1), check for SF FSIN
             if comp_type == 1:
                 res = self._solver.sflist(node = region_name, lab = "FSIN")
@@ -89,7 +93,10 @@ class MapdlSystemCouplingInterface(object):
                     self._add_volume_region(region_name)
 
     def _add_surface_region(self, region_name):
-        region = MapdlSystemCouplingInterface.Region(name=region_name, display_name = f"System Coupling (Surface) Region {len(self.__regions)}", topology = "Surface", input_variables = list(), output_variables = list())
+        region = MapdlSystemCouplingInterface.Region(
+            name=region_name, 
+            display_name = f"System Coupling (Surface) Region {len(self.__regions)}",
+            topology = "Surface", input_variables = list(), output_variables = list())
         if self.__structural:
             region.input_variables.append("FORC")
             region.input_variables.append("FDNS")
@@ -106,7 +113,10 @@ class MapdlSystemCouplingInterface(object):
         self.__regions.append(region)
 
     def _add_volume_region(self, region_name):
-        region = MapdlSystemCouplingInterface.Region(name=region_name, display_name = f"System Coupling (Volume) Region {len(self.__regions)}", topology = "Volume", input_variables = list(), output_variables = list())
+        region = MapdlSystemCouplingInterface.Region(
+            name=region_name, 
+            display_name = f"System Coupling (Volume) Region {len(self.__regions)}", 
+            topology = "Volume", input_variables = list(), output_variables = list())
         if self.__thermal:
             region.input_variables.append("HGEN")
             region.input_variables.append("TPLD")
@@ -116,9 +126,19 @@ class MapdlSystemCouplingInterface(object):
     def _activate_structural(self):
         if not self.__structural:
             self.__structural = True
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="FORC", display_name = "Force", tensor_type = "Vector", is_extensive = True, location = "Node", quantity_type = "Force"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="FDNS", display_name = "Force Density", tensor_type = "Vector", is_extensive = False, location = "Element", quantity_type = "Force"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="INCD", display_name = "Incremental Displacement", tensor_type = "Vector", is_extensive = False, location = "Node", quantity_type = "Incremental Displacement"))
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="FORC", display_name = "Force", tensor_type = "Vector",
+                is_extensive = True, location = "Node", quantity_type = "Force"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="FDNS", display_name = "Force Density", tensor_type = "Vector", 
+                is_extensive = False, location = "Element", quantity_type = "Force"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="INCD", display_name = "Incremental Displacement", 
+                tensor_type = "Vector", is_extensive = False, location = "Node",
+                quantity_type = "Incremental Displacement"))
+
             for region in self.__regions:
                 if region.topology == "Surface":
                     region.input_variables.append("FORC")
@@ -128,13 +148,39 @@ class MapdlSystemCouplingInterface(object):
     def _activate_thermal(self):
         if not self.__thermal:
             self.__thermal = True
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="TEMP", display_name = "Temperature", tensor_type = "Scalar", is_extensive = False, location = "Node", quantity_type = "Temperature"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="TBULK", display_name = "Bulk Temperature", tensor_type = "Scalar", is_extensive = False, location = "Node", quantity_type = "Convection Reference Temperature"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="HCOEF", display_name = "Heat Transfer Coefficient", tensor_type = "Scalar", is_extensive = False, location = "Node", quantity_type = "Heat Transfer Coefficient"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="HFLW", display_name = "Heat Flow", tensor_type = "Scalar", is_extensive = True, location = "Node", quantity_type = "Heat Rate"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="HGEN", display_name = "Heat Generation", tensor_type = "Scalar", is_extensive = False, location = "Node", quantity_type = "Heat Rate"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="TPLD", display_name = "Temperature Load", tensor_type = "Scalar", is_extensive = False, location = "Node", quantity_type = "Temperature"))
-            self.__variables.append(MapdlSystemCouplingInterface.Variable(name="TEMP", display_name = "Temperature", tensor_type = "Scalar", is_extensive = False, location = "Node", quantity_type = "Temperature"))                
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="TEMP", display_name = "Temperature", tensor_type = "Scalar", 
+                is_extensive = False, location = "Node", 
+                quantity_type = "Temperature"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="TBULK", display_name = "Bulk Temperature", 
+                tensor_type = "Scalar", is_extensive = False, location = "Node",
+                quantity_type = "Convection Reference Temperature"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="HCOEF", display_name = "Heat Transfer Coefficient", 
+                tensor_type = "Scalar", is_extensive = False, location = "Node", 
+                quantity_type = "Heat Transfer Coefficient"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="HFLW", display_name = "Heat Flow", tensor_type = "Scalar", 
+                is_extensive = True, location = "Node", quantity_type = "Heat Rate"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="HGEN", display_name = "Heat Generation", tensor_type = "Scalar", 
+                is_extensive = False, location = "Node", quantity_type = "Heat Rate"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="TPLD", display_name = "Temperature Load", tensor_type = "Scalar", 
+                is_extensive = False, location = "Node", 
+                quantity_type = "Temperature"))
+
+            self.__variables.append(MapdlSystemCouplingInterface.Variable(
+                name="TEMP", display_name = "Temperature", tensor_type = "Scalar", 
+                is_extensive = False, location = "Node", 
+                quantity_type = "Temperature"))                
+
             for region in self.__regions:
                 if region.topology == "Surface":
                     region.input_variables.append("TEMP")
