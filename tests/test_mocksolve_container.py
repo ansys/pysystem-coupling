@@ -26,7 +26,7 @@ def test_partlib_cosim_volume_simple() -> None:
 
         messages = setup.get_status_messages()
 
-        assert len(messages) == 1
+        assert len(messages) == 1, print(messages)
         assert messages[0]["path"] == 'coupling_interface["Interface-1"]'
         assert messages[0]["message"].startswith(
             "No data transfers exist on Interface-1"
