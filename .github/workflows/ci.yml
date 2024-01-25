@@ -102,10 +102,12 @@ jobs:
         run: rm -rf dist
 
       - name: Build library source and wheel artifacts
-        # Note: v4 does not support checkout suppression flag.
+        # Note: Use our own build-library action as the
+        #       ansys/actions one no longer supports the
+        #       `checkout` option.
         #       We need this to prevent generated code from
         #       being deleted and not included in library.
-        uses: ansys/actions/build-library@v5
+        uses: ./.github/actions/build-library
         with:
           checkout: false
           library-name: ${{ env.PACKAGE_NAME }}
