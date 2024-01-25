@@ -57,7 +57,7 @@ classesgen = [
 ]
 doc = [
 	"ansys-sphinx-theme==0.13.1",
-	"jupyter_sphinx==0.4.0",
+	"jupyter_sphinx==0.5.3",
 	"matplotlib",
 	"numpydoc==1.6.0",
 	"pypandoc==1.12",
