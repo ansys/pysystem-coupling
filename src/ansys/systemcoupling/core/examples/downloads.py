@@ -8,6 +8,7 @@ Examples
 >>> filename
 '/home/user/.local/share/ansys_systemcoupling_core/examples/mapdl.scp'
 """
+
 import os
 import shutil
 from typing import Optional
