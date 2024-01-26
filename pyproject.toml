@@ -68,7 +68,7 @@ doc = [
 	"sphinx-copybutton==0.5.2",
 	"sphinx-gallery==0.15.0",
 	"sphinx-notfound-page==1.0.0",
-	"sphinxcontrib-websupport==1.2.6",
+	"sphinxcontrib-websupport==1.2.7",
 	"sphinxemoji==0.3.1",
 
 	# pyansys dependencies for sphinx gallery examples
