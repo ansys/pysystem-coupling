@@ -1,5 +1,5 @@
 # Exclusions
-exclude: ^(examples/|doc/)
+exclude: ^(doc/source/examples)
 
 # initially copied from pymapdl
 repos:
