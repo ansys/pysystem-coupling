@@ -32,7 +32,6 @@ motion of the plate as it is damped.
 
 """
 
-
 # %%
 # Set up example
 # --------------

@@ -20,7 +20,6 @@ changing velocity value.
 
 """
 
-
 # %%
 # Perform required imports
 # ------------------------
@@ -112,9 +111,9 @@ def set_inlet_velocity(working_dir, inlet_velocity):
     ) as session:
         case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
         session.file.read(file_type="case", file_name=case_file)
-        session.setup.boundary_conditions.velocity_inlet[
-            "wall_inlet"
-        ].vmag.value = inlet_velocity
+        session.setup.boundary_conditions.velocity_inlet["wall_inlet"].vmag.value = (
+            inlet_velocity
+        )
         session.tui.file.write_case(case_file, "yes")
 
     print(f"Inlet velocity is set to {inlet_velocity}")

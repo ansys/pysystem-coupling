@@ -24,6 +24,7 @@ Usage
 -----
 python <path to datamodel_rstgen.py>
 """
+
 import importlib
 import os
 
