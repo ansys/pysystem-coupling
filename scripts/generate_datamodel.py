@@ -358,9 +358,11 @@ def _write_flat_class_files(parent_dir, root_classname, root_hash):
 
             # class name
             bases_gen = (
-                f"{c.__name__}[{hash_dict.get(object_hash)[0].__name__}]"
-                if object_hash
-                else c.__name__
+                (
+                    f"{c.__name__}[{hash_dict.get(object_hash)[0].__name__}]"
+                    if object_hash
+                    else c.__name__
+                )
                 for c in cls.__bases__
             )
             out.write(f"{istr}class {cls_name}" f'({", ".join(bases_gen)}):\n')
