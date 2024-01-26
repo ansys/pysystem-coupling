@@ -4,7 +4,7 @@ exclude: ^(examples/|doc/)
 # initially copied from pymapdl
 repos:
 - repo: https://github.com/psf/black
-  rev: 23.12.1  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY AS WELL!!
+  rev: 24.1.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY AS WELL!!
   hooks:
   - id: black
 
@@ -12,7 +12,7 @@ repos:
   rev: v1.12.1
   hooks:
   -   id: blacken-docs
-      additional_dependencies: [black==23.12.1]
+      additional_dependencies: [black==24.1.0]
 
 - repo: https://github.com/pycqa/isort
   rev: 5.13.2
