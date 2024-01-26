@@ -61,6 +61,7 @@ Launch System Coupling from Python using the ``launch()`` function:
 .. code:: python
 
   import ansys.systemcoupling.core as pysystemcoupling
+
   syc = pysystemcoupling.launch()
   syc.ping()
 

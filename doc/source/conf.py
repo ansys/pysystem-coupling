@@ -1,10 +1,17 @@
 """Sphinx documentation configuration file."""
+from datetime import datetime
 import os
 
-from datetime import datetime
-
+from ansys_sphinx_theme import (
+    ansys_favicon,
+    ansys_logo_white,
+    ansys_logo_white_cropped,
+    get_version_match,
+    latex,
+    pyansys_logo_black,
+    watermark,
+)
 import sphinx_gallery
-from ansys_sphinx_theme import ansys_favicon, pyansys_logo_black, latex, ansys_logo_white, ansys_logo_white_cropped,get_version_match, watermark
 from sphinx_gallery.sorting import FileNameSortKey
 
 from ansys.systemcoupling.core import __version__
@@ -41,7 +48,7 @@ html_theme_options = {
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
         "version_match": get_version_match(__version__),
-    }
+    },
 }
 
 # Sphinx extensions
@@ -53,7 +60,7 @@ extensions = [
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
     "sphinxemoji.sphinxemoji",
-    "sphinx_gallery.gen_gallery"
+    "sphinx_gallery.gen_gallery",
 ]
 
 # We can't build the gallery on GitHub as it requires full System Coupling
@@ -155,19 +162,27 @@ copybutton_prompt_is_regexp = True
 
 assert os.environ.get("PYSYC_DOC_BUILD_VERSION"), "PYSYC_DOC_BUILD_VERSION is not set!"
 
+
 def make_replacements_for_versioned_class_refs(names):
     # returns Sphinx "substitutions" of the form
     # .. |<NAME>_ROOT_CLASS_REF| replace:: :class:`<name>_root<..path to <name>_root module>`
 
-    api_path = f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+    api_path = (
+        f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+    )
 
     name_root = lambda n: f"{n.lower()}_root"
     make_subst_name = lambda n: f"{n.upper()}_ROOT_CLASS_REF"
-    make_class_ref = lambda n: f"{name_root(n)}<{api_path}.{name_root(n)}.{name_root(n)}>"
+    make_class_ref = (
+        lambda n: f"{name_root(n)}<{api_path}.{name_root(n)}.{name_root(n)}>"
+    )
 
-    make_subst = lambda n: f".. |{make_subst_name(n)}| replace:: :class:`{make_class_ref(n)}`"
+    make_subst = (
+        lambda n: f".. |{make_subst_name(n)}| replace:: :class:`{make_class_ref(n)}`"
+    )
 
     return "\n".join(make_subst(n) for n in names)
+
 
 rst_epilog = make_replacements_for_versioned_class_refs(("CASE", "SETUP", "SOLUTION"))
 
@@ -191,7 +206,7 @@ sphinx_gallery_conf = {
     "thumbnail_size": (350, 350),
     # "reset_modules_order": "after",
     # "reset_modules": (_stop_fluent_container),
-    #"plot_gallery": False,
+    # "plot_gallery": False,
     # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
     "remove_config_comments": True,
 }

@@ -30,7 +30,9 @@ import os
 # PYSYC_DOC_BUILD_VERSION should contain a string such as "23_2" that determines the
 # System Coupling version the API is generated for and which we are building doc for.
 # This should be the only place in this script where we depend on the version.
-api_path = f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+api_path = (
+    f"ansys.systemcoupling.core.adaptor.api_{os.environ['PYSYC_DOC_BUILD_VERSION']}"
+)
 case_root = importlib.import_module(f"{api_path}.case_root")
 setup_root = importlib.import_module(f"{api_path}.setup_root")
 solution_root = importlib.import_module(f"{api_path}.solution_root")
@@ -73,8 +75,9 @@ def _generate_property_list_for_rst(r, data_dict={}):
             # relative to first. Could be addressed by manually splitting first doc
             # line perhaps?
             inferred_indent = min(
-                (_find_indent(line) for line in lines[1:] if line.strip() != ""), default=0
-                )
+                (_find_indent(line) for line in lines[1:] if line.strip() != ""),
+                default=0,
+            )
             lines = [lines[0]] + [line[inferred_indent:] for line in lines[1:]]
 
         doc = indent + (f"\n{indent}".join(lines))
@@ -182,9 +185,7 @@ def _populate_rst_from_settings(rst_dir, cls):
         #    title = "Case and Persistence Commands"
         r.write(f"{title}\n")
         r.write(f'{"="*(len(title))}\n\n')
-        r.write(
-            f".. currentmodule:: {api_path}.{file_name}\n\n"
-        )
+        r.write(f".. currentmodule:: {api_path}.{file_name}\n\n")
         r.write(f".. autoclass:: {cls_name}\n")
         r.write(f"{istr1}:show-inheritance:\n")
         r.write(f"{istr1}:undoc-members:\n")
