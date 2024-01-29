@@ -24,14 +24,17 @@ def test_partlib_cosim_volume_simple() -> None:
             side_two_regions=["volume"],
         )
 
-        messages = setup.get_status_messages()
+        # As of 24.1 there are some expected warnings, so filter
+        # to Errors only
+        messages = [
+            msg for msg in setup.get_status_messages() if msg["level"] == "Error"
+        ]
 
         assert len(messages) == 1, print(messages)
         assert messages[0]["path"] == 'coupling_interface["Interface-1"]'
         assert messages[0]["message"].startswith(
             "No data transfers exist on Interface-1"
         )
-        assert messages[0]["level"] == "Error"
 
         dt1 = setup.add_data_transfer(
             interface=interface,
@@ -40,14 +43,20 @@ def test_partlib_cosim_volume_simple() -> None:
             side_two_variable="p1_to_p2",
         )
 
-        messages = setup.get_status_messages()
+        messages = [
+            msg for msg in setup.get_status_messages() if msg["level"] == "Error"
+        ]
+        assert len(messages) == 0
 
+        # At 24.1 there is a new Warning about unused input variables that we don't worry about here
+        messages = [
+            msg for msg in setup.get_status_messages() if msg["level"] == "Information"
+        ]
         assert len(messages) == 1
         assert messages[0]["path"] == "analysis_control"
         assert messages[0]["message"].startswith(
             "The data transfers define an optimized one-way workflow."
         )
-        assert messages[0]["level"] == "Information"
 
         dt2 = setup.add_data_transfer(
             interface=interface,
