@@ -1,4 +1,6 @@
-from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
+# This is the version we assume if no GetVersion query is available from
+# the SyC server.
+_FALLBACK_VERSION = "23.1"
 
 
 def get_syc_version(api) -> str:
@@ -32,4 +34,4 @@ def get_syc_version(api) -> str:
 
     cmds = api.GetCommandAndQueryMetadata()
     exists = any(cmd["name"] == "GetVersion" for cmd in cmds)
-    return clean_version_string(api.GetVersion()) if exists else SYC_VERSION_DOT
+    return clean_version_string(api.GetVersion()) if exists else _FALLBACK_VERSION
