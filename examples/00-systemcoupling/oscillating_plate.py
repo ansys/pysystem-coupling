@@ -32,7 +32,6 @@ motion of the plate as it is damped.
 
 """
 
-
 # %%
 # Set up example
 # --------------
@@ -46,6 +45,7 @@ motion of the plate as it is damped.
 # sphinx_gallery_thumbnail_path = '_static/oscplate_displacement.png'
 import os
 from pprint import pprint
+
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
 
@@ -141,8 +141,11 @@ setup.coupling_participant.keys()
 # and both force and displacement data transfers.
 
 interface_name = setup.add_interface(
-    side_one_participant = mapdl_part_name, side_one_regions = ['FSIN_1'],
-    side_two_participant = fluent_part_name, side_two_regions = ['wall_deforming'])
+    side_one_participant=mapdl_part_name,
+    side_one_regions=["FSIN_1"],
+    side_two_participant=fluent_part_name,
+    side_two_regions=["wall_deforming"],
+)
 
 force_transfer_name = setup.add_data_transfer(
     interface=interface_name,

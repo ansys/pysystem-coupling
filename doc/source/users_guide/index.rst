@@ -119,9 +119,9 @@ cleaned up --- that is, ``exit`` called on it --- upon leaving the scope of the 
 .. code-block:: python
 
    with pysystemcoupling.launch() as syc_session:
-      # Use syc_session
-      ...
-      # No need to call syc_session.exit() at the end
+       # Use syc_session
+       ...
+       # No need to call syc_session.exit() at the end
 
    # syc_session has been exited at this point
 
@@ -138,6 +138,6 @@ filter and to specify whether logging goes to a file, to the console, or to both
    from ansys.systemcoupling.core import LOG
 
    ...
-   LOG.set_level("ERROR") # Log at level Error or more severe
+   LOG.set_level("ERROR")  # Log at level Error or more severe
    LOG.log_to_stdout()
 
