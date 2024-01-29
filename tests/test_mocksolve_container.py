@@ -24,14 +24,17 @@ def test_partlib_cosim_volume_simple() -> None:
             side_two_regions=["volume"],
         )
 
-        messages = setup.get_status_messages()
+        # As of 24.1 there are some expected warnings, so filter
+        # to Errors only
+        messages = [
+            msg for msg in setup.get_status_messages() if msg["level"] == "Error"
+        ]
 
         assert len(messages) == 1, print(messages)
         assert messages[0]["path"] == 'coupling_interface["Interface-1"]'
         assert messages[0]["message"].startswith(
             "No data transfers exist on Interface-1"
         )
-        assert messages[0]["level"] == "Error"
 
         dt1 = setup.add_data_transfer(
             interface=interface,
