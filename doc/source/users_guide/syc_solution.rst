@@ -34,9 +34,10 @@ threads:
 .. code-block:: python
 
     import threading
+
     ...
 
-    solve_thread = threading.Thread(target = syc_session.solution.solve)
+    solve_thread = threading.Thread(target=syc_session.solution.solve)
 
     solve_thread.start()
 

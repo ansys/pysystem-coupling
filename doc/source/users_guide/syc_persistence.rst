@@ -100,15 +100,15 @@ The basic operations supported are:
     ...
 
     # Save the solution as a snapshot
-    case.save_snapshot(snapshot_name='Solution1')
+    case.save_snapshot(snapshot_name="Solution1")
 
     # Restore the the Initial snapshot from before solve
-    case.open_snapshot(snapshot_name='Initial')
+    case.open_snapshot(snapshot_name="Initial")
     # Make some changes and solve again
     ...
     solution.solve()
     # Save this solution to a snapshot
-    case.save_snapshot(snapshot_name='Solution2')
+    case.save_snapshot(snapshot_name="Solution2")
 
     # Query snapshots..
     case.get_snapshots()
@@ -120,7 +120,7 @@ The basic operations supported are:
     #
 
     # Delete Solution1
-    case.delete_snapshot(snapshot_name='Solution1')
+    case.delete_snapshot(snapshot_name="Solution1")
 
 Clearing the current state
 ---------------------------

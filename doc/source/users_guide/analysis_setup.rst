@@ -21,7 +21,7 @@ Set up participant cases
 Any participant that is involved in a coupled analysis must set up its case to solve its part of
 the coupled physics analysis. Typically, this is very similar to setting up a standalone case
 for this solver. Each participant has its own way of specifying data transfers to and from
-System Coupling. For example, Fluent uses fluid boundary conditions. 
+System Coupling. For example, Fluent uses fluid boundary conditions.
 
 While information on setting up participant cases is beyond the scope of this guide, you
 can see the System Coupling documentation for examples.
@@ -35,7 +35,7 @@ in the analysis.
 In its most common usage, this command accepts a file containing essential data about a participant,
 such as the variables it exposes and the regions on which they are available.
 
-.. code-block:: python
+.. code-block:: none
 
     >>> setup.add_participant(input_file="fluent.scp")
     'FLUENT-1'
@@ -61,7 +61,7 @@ adds Fluent and MAPDL participants, the ``analysis_control``, ``solution_control
 see the following output from the ``print_state`` command. Ellipses (``...``) appear where
 details are omitted from the output.
 
-.. code-block:: python
+.. code-block:: none
 
     >>> setup.print_state()
 
@@ -147,7 +147,7 @@ A value of ``<None>`` indicates an *unset* (missing) value.
    For example, the default for the ``analysis_control.global_stabilization.option``
    setting is ``"None"``. Thus, to avoid ambiguity, the ``print_state`` output
    displays ``<None>`` for unset values.
-   
+
    If queried in Python, an unset value holds the Python ``None`` object or an empty list
    (``[]``) for a setting whose value is a list.
 
@@ -184,7 +184,7 @@ This code shows how you use the ``add_interface`` command to add an interface to
         side_one_participant="MAPDL-2",
         side_one_regions=["FSIN_1"],
         side_two_participant="FLUENT-1",
-        side_two_regions=["wall_deforming"]
+        side_two_regions=["wall_deforming"],
     )
 
 The ``add_interface`` command returns the name of the interface created. This name
@@ -208,19 +208,19 @@ command.
         interface=interface_name,
         target_side="One",
         target_variable="FORC",
-        source_variable="force"
+        source_variable="force",
     )
 
     displacement_transfer_name = setup.add_data_transfer(
         interface=interface_name,
         target_side="Two",
         source_variable="INCD",
-        target_variable="displacement"
+        target_variable="displacement",
     )
 
 This code shows how you can examine the state of the resulting interface:
 
-.. code-block:: python
+.. code-block:: none
 
     >>> setup.coupling_interface[interface_name].print_state()
 
@@ -285,7 +285,7 @@ As shown in the following code, the return value of the ``get_status_messages`` 
 is a list of dictionaries, where each dictionary provides the details of a message. You
 can use the ``level`` field in a message dictionary to filter the message list:
 
-.. code-block:: python
+.. code-block:: none
 
 
     >>> from pprint import pprint

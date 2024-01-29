@@ -22,6 +22,6 @@ def join_path_strs(*path_strs: Iterable[str]) -> str:
 
     .. note::
        A leading empty path component is required for a
-       leading path separtator (``/``) in the returned value.
+       leading path separator (``/``) in the returned value.
     """
     return "/".join(path_strs)
