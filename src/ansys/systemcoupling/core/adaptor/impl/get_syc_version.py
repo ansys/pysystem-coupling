@@ -1,7 +1,7 @@
-
 # This is the version we assume if no GetVersion query is available from
 # the SyC server.
 _FALLBACK_VERSION = "23.1"
+
 
 def get_syc_version(api) -> str:
     """Get the System Coupling version.
