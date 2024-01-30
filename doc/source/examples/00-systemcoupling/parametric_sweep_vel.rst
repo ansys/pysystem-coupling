@@ -162,7 +162,7 @@ the ``solve_coupled_analysis`` command in a sequence of analyses.
             session.setup.boundary_conditions.velocity_inlet[
                 "wall_inlet"
             ].momentum.velocity = inlet_velocity
-            session.tui.file.write_case(case_file, "yes")
+            session.file.write(file_type="case", file_name=case_file)
 
         print(f"Inlet velocity is set to {inlet_velocity}")
 
@@ -432,46 +432,36 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
            71280 nodes,     1 zone  ...
       Done.
     Done.
-    The following solver settings object method could also be used to execute the above command:
-    <solver_session>.file.write(file_type = "case", file_name = r"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5")
     Inlet velocity is set to 5.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.052365485961839736
-    The following solver settings object method could also be used to execute the above command:
-    <solver_session>.file.write(file_type = "case", file_name = r"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5")
+    Max displacement value = 0.05236548596272902
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.1923282699266469
-    The following solver settings object method could also be used to execute the above command:
-    <solver_session>.file.write(file_type = "case", file_name = r"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5")
+    Max displacement value = 0.19232826991977978
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.3727675173584107
-    The following solver settings object method could also be used to execute the above command:
-    <solver_session>.file.write(file_type = "case", file_name = r"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5")
+    Max displacement value = 0.37276751735981967
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.5624418881052171
-    The following solver settings object method could also be used to execute the above command:
-    <solver_session>.file.write(file_type = "case", file_name = r"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5")
+    Max displacement value = 0.5624418880813694
     Inlet velocity is set to 25.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212668250457805
+    Max displacement value = 0.721266826019441
 
 
 
@@ -479,7 +469,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (11 minutes 18.168 seconds)
+   **Total running time of the script:** (11 minutes 27.899 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
