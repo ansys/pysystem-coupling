@@ -136,7 +136,7 @@ def set_inlet_velocity(working_dir, inlet_velocity):
         session.setup.boundary_conditions.velocity_inlet[
             "wall_inlet"
         ].momentum.velocity = inlet_velocity
-        session.tui.file.write_case(case_file, "yes")
+        session.file.write(file_type="case", file_name=case_file)
 
     print(f"Inlet velocity is set to {inlet_velocity}")
 
