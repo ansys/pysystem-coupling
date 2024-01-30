@@ -189,7 +189,6 @@ sphinx_gallery_conf = {
 html_short_title = html_title = "PySystemCoupling"
 html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
-DOCS_FQDN = "systemcoupling.docs.pyansys.com"
 html_theme_options = {
     "github_url": "https://github.com/ansys/pysystem-coupling",
     "show_prev_next": False,
@@ -203,12 +202,12 @@ html_theme_options = {
     "icon_links": [
         {
             "name": "Support",
-            "url": "https://github.com/ansys/pysystem-coupling/discussions",
+            "url": "https://github.com/ansys/pysystem-coupling/issues",
             "icon": "fa fa-comment fa-fw",
         },
         {
             "name": "Contribute",
-            "url": f"https://{DOCS_FQDN}/version/dev/getting_started/contribution.html",
+            "url": "https://systemcoupling.docs.pyansys.com/version/dev/contributing.html",
             "icon": "fa fa-wrench",
         },
     ],
