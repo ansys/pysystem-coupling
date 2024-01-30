@@ -17,6 +17,23 @@ interrogation of the data model, and running the System Coupling solver to perfo
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This demo illustrates a transient coupled simulation of convection heating of a fluid in a cyli...">
+
+.. only:: html
+
+  .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_heating_tank_fmu_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_00-systemcoupling_heating_tank_fmu.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Heating tank with a Functional Mock-up Unit (FMU)</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example is a version of the Oscillating Plate case that is often used as a tutorial for Sy...">
 
 .. only:: html
@@ -57,6 +74,7 @@ interrogation of the data model, and running the System Coupling solver to perfo
 .. toctree::
    :hidden:
 
+   /examples/00-systemcoupling/heating_tank_fmu
    /examples/00-systemcoupling/oscillating_plate
    /examples/00-systemcoupling/parametric_sweep_vel
 
