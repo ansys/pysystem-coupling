@@ -24,33 +24,6 @@ author = "Ansys Inc."
 release = version = __version__
 cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
 
-# use the default pyansys logo
-html_short_title = html_title = "PySystemCoupling"
-html_theme = "ansys_sphinx_theme"
-html_logo = pyansys_logo_black
-
-html_context = {
-    "github_user": "pyansys",
-    "github_repo": "pysystem-coupling",
-    "github_version": "main",
-    "doc_path": "doc/source",
-}
-
-# specify the location of your github repo
-html_theme_options = {
-    "github_url": "https://github.com/ansys/pysystem-coupling",
-    "show_prev_next": False,
-    "show_breadcrumbs": True,
-    "use_edit_page_button": True,
-    "additional_breadcrumbs": [
-        ("PyAnsys", "https://docs.pyansys.com"),
-    ],
-    "navigation_depth": -1,
-    "switcher": {
-        "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
-    },
-}
 
 # Sphinx extensions
 extensions = [
@@ -216,14 +189,42 @@ sphinx_gallery_conf = {
 html_short_title = html_title = "PySystemCoupling"
 html_theme = "ansys_sphinx_theme"
 html_logo = pyansys_logo_black
+DOCS_FQDN = "systemcoupling.docs.pyansys.com"
 html_theme_options = {
     "github_url": "https://github.com/ansys/pysystem-coupling",
     "show_prev_next": False,
     "show_breadcrumbs": True,
+    "use_edit_page_button": True,
     "additional_breadcrumbs": [
-        ("PyAnsys", "https://docs.pyansys.com/"),
+        ("PyAnsys", "https://docs.pyansys.com"),
     ],
     "navigation_depth": -1,
+    "collapse_navigation": True,
+    "icon_links": [
+        {
+            "name": "Support",
+            "url": "https://github.com/ansys/pysystem-coupling/discussions",
+            "icon": "fa fa-comment fa-fw",
+        },
+        {
+            "name": "Contribute",
+            "url": f"https://{DOCS_FQDN}/version/dev/getting_started/contribution.html",
+            "icon": "fa fa-wrench",
+        },
+    ],
+    "switcher": {
+        "json_url": f"https://{cname}/versions.json",
+        "version_match": get_version_match(__version__),
+    },
+}
+
+html_context = {
+    "display_github": True,  # Integrate GitHub
+    "github_user": "pyansys",
+    "github_repo": "pysystem-coupling",
+    "github_version": "main",
+    "doc_path": "doc/source",
+    "source_path": "src",
 }
 
 # additional logos for the latex coverpage
