@@ -1,0 +1,92 @@
+name: >
+  Build library action
+
+description: |
+  Verifies if a Python library builds properly. As a result of a successful
+  building process, wheel and source distribution artifacts are generated. This
+  action is expected to be used as an independent job.
+
+  .. note::
+
+      This is more or less a duplicate of the ansys/actions action of the same
+      name but it provides the option of not checking out the repository, as
+      was provided up to v3 of the ansys/actions action.
+
+      pysystem-coupling relies on this because API modules are generated in-place
+      in the checkout area in the preceding build ready for packaging, and a 
+      re-checkout blows this away.
+
+  .. note::
+
+      Use this action instead of the `build-ci-wheels
+      <https://actions.docs.ansys.com/version/stable/build-actions/index.html#build-ci-wheels-action>`_
+      if your library is a pure Python project with no source code to be compiled.
+
+inputs:
+
+  # Required inputs
+
+  library-name:
+    description: >
+      Name of the Python library. This is the name used when uploading the wheel
+      and source distribution as artifacts. The name should be the same one used
+      in the PyPI index.
+    required: true
+    type: string
+
+  # Optional inputs
+
+  python-version:
+    description: >
+      Python version used for installing and execution of the build process.
+    default: '3.10'
+    required: false
+    type: string
+
+  use-python-cache:
+    description: >
+      Whether to use the Python cache for installing previously downloaded
+      libraries. If ``true``, previously downloaded libraries are installed from the
+      Python cache. If ``false``, libraries are downloaded from the PyPI index.
+
+    required: false
+    default: true
+    type: boolean
+
+  checkout:
+      description: >
+        Whether to checkout the repository or not.
+      default: true
+      required: false
+      type: boolean
+
+runs:
+  using: "composite"
+  steps:
+
+    - name: "Install Git and clone project"
+      uses: actions/checkout@v4
+      if: inputs.checkout == 'true'
+
+    - name: "Set up Python"
+      uses: ansys/actions/_setup-python@main
+      with:
+        python-version: ${{ inputs.python-version }}
+        use-cache: ${{ inputs.use-python-cache }}
+
+    - name: "Install build and twine"
+      shell: bash
+      run: |
+        python -m pip install build twine
+
+    - name: "Build distribution artifacts and check their health"
+      shell: bash
+      run: |
+        python -m build && python -m twine check dist/*
+
+    - name: "Upload distribution artifacts to GitHub artifacts"
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ inputs.library-name }}-artifacts
+        path: dist/
+        retention-days: 7

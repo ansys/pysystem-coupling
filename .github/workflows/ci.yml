@@ -10,10 +10,7 @@ on:
       - main
 
 env:
-  MAIN_PYTHON_VERSION: "3.8"
-  # Doc build dependencies now need Python >= 3.9.  For now, bump version for doc
-  # build only but consider bumping main version and delete this:
-  DOC_PYTHON_VERSION: "3.9"
+  MAIN_PYTHON_VERSION: "3.9"
   PACKAGE_NAME: "ansys-systemcoupling-core"
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
@@ -30,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "PySystemCoupling documentation style checks"
-        uses: ansys/actions/doc-style@v4
+        uses: ansys/actions/doc-style@v5
         with:
           token: ${{ secrets.GH_TOKEN }}
 
@@ -39,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
-        uses: ansys/actions/code-style@v4
+        uses: ansys/actions/code-style@v5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -51,11 +48,11 @@ jobs:
       fail-fast: false
       matrix:
         os: [windows-latest, ubuntu-latest]
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.9', '3.10', '3.11', '3.12']
 
     steps:
       - name: "Build wheelhouse and perform smoke test"
-        uses: ansys/actions/build-wheelhouse@v4
+        uses: ansys/actions/build-wheelhouse@v5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           operating-system: ${{ matrix.os }}
@@ -96,16 +93,25 @@ jobs:
       - name: Generate API for v241
         uses: ./.github/actions/generate-api
         with:
+          image-tag: v24.1.0
+
+      # NB: try this in PR, but comment out before merging
+      #     uncomment after first SyC release targeting 24.1
+      - name: Generate API for v242
+        uses: ./.github/actions/generate-api
+        with:
           image-tag: latest
 
       - name: Clean out dist
         run: rm -rf dist
 
       - name: Build library source and wheel artifacts
-        # Note: v4 does not support checkout suppression flag.
+        # Note: Use our own build-library action as the
+        #       ansys/actions one no longer supports the
+        #       `checkout` option.
         #       We need this to prevent generated code from
         #       being deleted and not included in library.
-        uses: ansys/actions/build-library@v3
+        uses: ./.github/actions/build-library
         with:
           checkout: false
           library-name: ${{ env.PACKAGE_NAME }}
@@ -124,7 +130,7 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Download package
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.PACKAGE_NAME }}-artifacts
           path: dist
@@ -156,6 +162,13 @@ jobs:
       - name: Unit Test v24.1.0
         uses: ./.github/actions/unit-test
         with:
+          image-tag: v24.1.0
+          upload-coverage: false
+
+      # TODO comment out as for API generation
+      - name: Unit Test v24.2.0
+        uses: ./.github/actions/unit-test
+        with:
           image-tag: latest
           upload-coverage: false
 
@@ -170,10 +183,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: ${{ env.DOC_PYTHON_VERSION }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - name: Download package
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: ${{ env.PACKAGE_NAME }}-artifacts
           path: dist
@@ -202,7 +215,7 @@ jobs:
 
 
       - name: Upload HTML Documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: documentation-html
           path: doc/_build/html
@@ -210,7 +223,7 @@ jobs:
 
 
       - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: documentation-pdf
           path: doc/_build/latex/*.pdf
@@ -224,7 +237,7 @@ jobs:
     needs: [docs]
     steps:
       - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@v4
+        uses: ansys/actions/doc-deploy-dev@v5
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -237,14 +250,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release to the private PyPI repository
-        uses: ansys/actions/release-pypi-private@v4
+        uses: ansys/actions/release-pypi-private@v5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
 
       - name: "Release to the public PyPI repository"
-        uses: ansys/actions/release-pypi-public@v4
+        uses: ansys/actions/release-pypi-public@v5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           twine-username: "__token__"
@@ -257,7 +270,7 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
       - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -277,7 +290,7 @@ jobs:
     needs: [release]
     steps:
       - name: Deploy the stable documentation
-        uses: ansys/actions/doc-deploy-stable@v4
+        uses: ansys/actions/doc-deploy-stable@v5
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}

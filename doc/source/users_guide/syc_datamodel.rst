@@ -19,17 +19,17 @@ are named values of different value types, such as ``integer``, ``boolean``, and
   .. code-block:: none
     :emphasize-lines: 5,9,10
     :caption: System Coupling data model structure
-    
+
     root
       ├── participant
       │      ├── variable
       │      └── region
       ├── analysis_control
-      ├── coupling_interface   
+      ├── coupling_interface
       │      ├── side
       │      └── data_transfer
-      ├── solution_control   
-      └── output_control   
+      ├── solution_control
+      └── output_control
 
 
 In the image, highlighting distinguishes items representing objects at a level of the
@@ -38,9 +38,9 @@ hierarchy with only one *unnamed* instance versus multiple *named* instances:
 * Highlighted items represent objects for which only one unnamed instance can exist at this level
   (*singletons*).
 * Non-highlighted items represent objects for which multiple named instances can exist at this
-  level. 
-  
-  .. note:: 
+  level.
+
+  .. note::
     In general, object names can be freely chosen. The exception is the ``side`` object, for which exactly
     two instances exist. These two instances have fixed names: ``One`` and ``Two``.
 
@@ -98,7 +98,7 @@ data model, as shown in the following code examples.
 You can access unnamed objects, such as ``analysis_control`` attributes, even when
 they are initially *empty*. You can confirm this using the ``print_state()`` method:
 
-.. code-block:: python
+.. code-block:: none
 
 	>>> setup.analysis_control.print_state()
 
@@ -108,7 +108,7 @@ they are initially *empty*. You can confirm this using the ``print_state()`` met
 When you apply a setting to such an object, this not only sets a value for the specified
 setting but also sets the default values for other settings (where possible):
 
-.. code-block:: python
+.. code-block:: none
 
     >>> setup.analysis_control.analysis_type = "Steady"
     >>> setup.analysis_control.print_state()
@@ -125,7 +125,7 @@ setting but also sets the default values for other settings (where possible):
 To create a named object instance, use the ``create()`` method on the
 object's type attribute:
 
-.. code-block:: python
+.. code-block:: none
 
 	>>> setup.coupling_participant.create("Part1")
 	>>> setup.coupling_participant["Part1"].print_state()
@@ -147,7 +147,7 @@ object's type attribute:
 	>>>
 
 
-.. note::  
+.. note::
   The preceding code examples are for illustration only. A ``coupling_participant``
   object requires very specific data for it to be initialized in a useful manner. Usually,
   this data is derived from some external source. The ``add_participant()`` command,
@@ -155,4 +155,4 @@ object's type attribute:
   This command and various other commands are available as methods on the session's
   ``setup`` attribute. For more information, see :ref:`ref_syc_analysis_setup` and
   :ref:`ref_setup`.
-  
+

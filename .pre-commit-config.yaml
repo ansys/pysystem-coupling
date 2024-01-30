@@ -1,31 +1,31 @@
 # Exclusions
-exclude: ^(examples/|doc/)
+exclude: ^(doc/source/examples)
 
 # initially copied from pymapdl
 repos:
 - repo: https://github.com/psf/black
-  rev: 23.7.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY AS WELL!!
+  rev: 24.1.1  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY AS WELL!!
   hooks:
   - id: black
 
-- repo: https://github.com/asottile/blacken-docs
-  rev: v1.12.1
+- repo: https://github.com/adamchainz/blacken-docs
+  rev: 1.16.0
   hooks:
   -   id: blacken-docs
-      additional_dependencies: [black==23.7.0]
+      additional_dependencies: [black==24.1.1]
 
 - repo: https://github.com/pycqa/isort
-  rev: 5.12.0
+  rev: 5.13.2
   hooks:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 6.0.0
+  rev: 7.0.0
   hooks:
   - id: flake8
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.2
+  rev: v2.2.6
   hooks:
   - id: codespell
     args: ["--ignore-words", "doc/styles/Vocab/ANSYS/accept.txt"]
@@ -40,6 +40,13 @@ repos:
 
 # validate GitHub workflow files
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.21.0
+  rev: 0.27.3
   hooks:
     - id: check-github-workflows
+
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: v0.2.8
+  hooks:
+  - id: add-license-headers
+    args:
+    - --start_year=2023

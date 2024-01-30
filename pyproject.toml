@@ -52,12 +52,12 @@ classesgen = [
 	# black and isort are called programmatically to keep generated code
 	# consistent with style elsewhere. We need to keep the versions in
 	# sync with the precommit dependencies.
-	"black==23.12.0",
-	"isort==5.12.0",
+	"black==24.1.1",
+	"isort==5.13.2",
 ]
 doc = [
-	"ansys-sphinx-theme==0.12.5",
-	"jupyter_sphinx==0.4.0",
+	"ansys-sphinx-theme==0.13.1",
+	"jupyter_sphinx==0.5.3",
 	"matplotlib",
 	"numpydoc==1.6.0",
 	"pypandoc==1.12",
@@ -68,8 +68,8 @@ doc = [
 	"sphinx-copybutton==0.5.2",
 	"sphinx-gallery==0.15.0",
 	"sphinx-notfound-page==1.0.0",
-	"sphinxcontrib-websupport==1.2.6",
-	"sphinxemoji==0.2.0",
+	"sphinxcontrib-websupport==1.2.7",
+	"sphinxemoji==0.3.1",
 
 	# pyansys dependencies for sphinx gallery examples
 	"ansys-fluent-core",
@@ -77,7 +77,7 @@ doc = [
 ]
 style = [
 	"codespell==2.2.6",
-	"flake8==6.1.0",
+	"flake8==7.0.0",
 ]
 tests = [
 	"pytest",
