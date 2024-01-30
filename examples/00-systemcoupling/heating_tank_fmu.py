@@ -23,7 +23,7 @@
 """.. _ref_heating_tank_fmu_example:
 
 Heating tank with a Functional Mock-up Unit (FMU)
-------------------------------------------------
+-------------------------------------------------
 
 This demo illustrates a transient coupled simulation of convection
 heating of a fluid in a cylindrical tank. Fluent is used to prepare
@@ -46,15 +46,18 @@ Heating tank with FMU:
 The thermostat receives a temperature from the Fluent sensor
 and outputs a heat-rate. The FMU has three parameters that
 can be set:
+
     - Target temperature [K]
     - Maximum heat output [W]
     - Heat scale factor [W/K].
 
 Two coupling interfaces :
+
     - sensor-FMU coupling interface
     - heat source- FMU coupling interface
 
 Two data transfers :
+
     - temperature
     - heat flow
 
