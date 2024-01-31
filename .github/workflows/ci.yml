@@ -153,11 +153,12 @@ jobs:
           image-tag: v23.2.0
           upload-coverage: true
 
-      - name: Unit Test v24.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.1.0
-          upload-coverage: false
+      # Disable for patch release to avoid knock-on test changes
+      # - name: Unit Test v24.1.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: latest
+      #     upload-coverage: false
 
 
   docs:
