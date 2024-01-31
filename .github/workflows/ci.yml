@@ -156,7 +156,7 @@ jobs:
       - name: Unit Test v24.1.0
         uses: ./.github/actions/unit-test
         with:
-          image-tag: latest
+          image-tag: v24.1.0
           upload-coverage: false
 
 
