@@ -13,7 +13,7 @@ operations associated with solving an analysis and examining results data.
 The ``solve`` command
 ----------------------
 
-If you have set up an analysis and it has no errors, you may attempt to solve it by calling ``solve``. 
+If you have set up an analysis and it has no errors, you may attempt to solve it by calling ``solve``.
 
 .. tip::
     Before beginning the solve, you may wish to enable output streaming so you can use the solver transcript output to track the solution's progress.
@@ -41,7 +41,7 @@ threads:
 
     solve_thread.start()
 
-    # Do other thing in the Python environment
+    # Do other things in the Python environment
     ...
 
     # wait for solve to finish
@@ -56,14 +56,16 @@ Interrupting and aborting a solve
 You can interrupt or force the end of a solve using the ``solution.interrupt()`` and ``solution.abort()`` calls. These are unusual PySystemCoupling calls in that they *must* be called in a different thread from the one in which ``solve`` is executing.
 
 Both calls have the effect of stopping the solve that is in progress. The key difference
-is that ``interrupt`` supports the resumption of the solve (by calling ``solve`` again).
+is that ``interrupt`` allows you to resume the solve (by calling ``solve`` again).
 
 Low-level solution control
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Commands are available for more advanced scenarios offering lower-level control over the
 solution process --- specifically ``initialize``, ``step``, ``create_restart_point``
-and ``shutdown``. Roughly speaking, these perform the individual actions that are usually encapsulated in a simple ``solve`` call, allowing Custom code to be executed between these actions.
+and ``shutdown``. Roughly speaking, these perform the individual actions that are usually
+encapsulated in a simple ``solve`` call, allowing custom code to be executed between these
+actions.
 
 Such advanced usage is not within the scope of this guide.
 

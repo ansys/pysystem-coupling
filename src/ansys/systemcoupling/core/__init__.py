@@ -69,7 +69,7 @@ def launch(
         (The forms ``"23.1"`` and ``"23_1"`` are also acceptable.)
         The version will be sought in the standard installation location. The
         default is ``None``, which is equivalent to specifying
-        ``"232"`` ("2023 R2" release), unless either of the environment
+        ``"241"`` ("2024 R1" release), unless either of the environment
         variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
         to be an error if either these is set *and* ``version`` is provided.
     extra_args : List[str]

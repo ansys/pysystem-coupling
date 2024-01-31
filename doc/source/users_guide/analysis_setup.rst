@@ -156,7 +156,7 @@ In the preceding setup, the important unset values are those for ``solution_cont
 These unset values are addressed later because they are considered to be errors in the setup.
 Unless values are provided, the solution is blocked.
 
-While some settings in the ``coupling_participant`` objects have ``<None>`` values, these
+While some settings in the above ``coupling_participant`` objects have ``<None>`` values, these
 unset values are not considered to be missing values nor indicate any kind of error in the
 setup. They are rather more specialized optional settings that have not been provided in
 the relevant input files.
@@ -304,8 +304,8 @@ can use the ``level`` field in a message dictionary to filter the message list:
     object, but the specific settings causing the error are indicated in the message itself.
     However, the setting names referenced in the message (such as ``'TimeStepSize'`` and
     ``'EndTime'``) are in the form that is used in System Coupling's native API. This reflects the
-    way that ``get_status_messages`` is exposed into PySystemCoupling, which
-    does not allow for reliable automatic translation to PySystemCoupling naming. You should
+    way that ``get_status_messages`` is exposed into PySystemCoupling, which does not currently
+    allow for reliable automatic translation to PySystemCoupling naming. You should
     be able to infer the PySystemCoupling names relatively easily by assuming a conversion
     from *camel case* to *snake case*.
 

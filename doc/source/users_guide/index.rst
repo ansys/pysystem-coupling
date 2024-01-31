@@ -50,7 +50,7 @@ A ``Session`` object is the client-side access point in PySystemCoupling to a Sy
 This object exposes an API that allows a System Coupling analysis to be set up and solved. One or more
 such server sessions can be launched simultaneously from the client.
 
-In addition to providing an API for setting up and solving coupled analyses, the``Session``
+In addition to providing an API for setting up and solving coupled analyses, the ``Session``
 object provides access to a few basic capabilities described in the sections that follow.
 
 Connection check
@@ -87,8 +87,8 @@ You can turn off output streaming using this code to call the ``end_output()`` m
 Exiting
 -------
 When you are finished with a PySystemCoupling session, it is advisable to end it cleanly using the
-``exit()`` method. Otherwise, PySystemCoupling still attempts to clean up active server sessions
-when the Python environment is exited, which is naturally less reliable than a directed exit.
+``exit()`` method. If you do not do this, PySystemCoupling will still attempt to clean up any active server sessions
+when the Python environment is exited, but this is naturally less reliable than a directed exit.
 
 Once you use the following code to call the ``exit()`` method on a session object, the object
 is no longer usable.
