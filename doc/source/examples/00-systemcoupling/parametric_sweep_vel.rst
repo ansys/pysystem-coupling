@@ -37,7 +37,7 @@ changing velocity value.
    :width: 400pt
    :align: center
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-30
+.. GENERATED FROM PYTHON SOURCE LINES 46-51
 
 Perform required imports
 ------------------------
@@ -45,22 +45,22 @@ This example imports these PyAnsys libraries: PySystemCoupling,
 PyFluent, and PyDPF. It also imports Matplotlib and NumPy to
 produce a simple plot of the results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-44
+.. GENERATED FROM PYTHON SOURCE LINES 51-63
 
-.. code-block:: default
+.. code-block:: Python
 
 
     import os
 
+    import ansys.dpf.core as pydpf
+    import ansys.fluent.core as pyfluent
     import matplotlib.pyplot as plt
     import numpy as np
 
-    import ansys.dpf.core as pydpf
-    import ansys.fluent.core as pyfluent
     import ansys.systemcoupling.core as pysyc
+    from ansys.systemcoupling.core import examples
     from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
 
-    from ansys.systemcoupling.core import examples
 
 
 
@@ -68,9 +68,7 @@ produce a simple plot of the results.
 
 
 
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 46-65
+.. GENERATED FROM PYTHON SOURCE LINES 65-84
 
 Define functions
 ----------------
@@ -92,9 +90,10 @@ the Fluent files are placed in a ``Fluent`` subdirectory. The
 ``setup_working_directory()`` function returns the path of the
 working directory for later use.
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-99
+.. GENERATED FROM PYTHON SOURCE LINES 84-120
 
-.. code-block:: default
+.. code-block:: Python
+
 
 
     def setup_working_directory():
@@ -137,7 +136,8 @@ working directory for later use.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-107
+
+.. GENERATED FROM PYTHON SOURCE LINES 121-128
 
 Set inlet velocity
 ~~~~~~~~~~~~~~~~~~
@@ -147,32 +147,34 @@ To modify the Fluent case to adjust the inlet velocity on the
 with a varying ``inlet_velocity``value before each call of
 the ``solve_coupled_analysis`` command in a sequence of analyses.
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-121
+.. GENERATED FROM PYTHON SOURCE LINES 128-144
 
-.. code-block:: default
+.. code-block:: Python
+
 
 
     def set_inlet_velocity(working_dir, inlet_velocity):
-      with pyfluent.launch_fluent(product_version=f"{SYC_VERSION_DOT}.0",
-                                  precision="double",
-                                  processor_count=2) as session:
-          case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
-          session.file.read(file_type="case", file_name=case_file)
-          session.setup.boundary_conditions.velocity_inlet[
-              "wall_inlet"
-          ].vmag.value = inlet_velocity
-          session.tui.file.write_case(case_file, "yes")
+        with pyfluent.launch_fluent(
+            product_version=f"{SYC_VERSION_DOT}.0", precision="double", processor_count=2
+        ) as session:
+            case_file = os.path.join(working_dir, "Fluent", "case.cas.h5")
+            session.file.read(file_type="case", file_name=case_file)
+            session.setup.boundary_conditions.velocity_inlet[
+                "wall_inlet"
+            ].momentum.velocity = inlet_velocity
+            session.file.write(file_type="case", file_name=case_file)
 
-      print(f"Inlet velocity is set to {inlet_velocity}")
-
-
+        print(f"Inlet velocity is set to {inlet_velocity}")
 
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 122-136
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 145-159
 
 Solve coupled analysis
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -189,9 +191,10 @@ setting is modified in the Fluent file prior to this function being called.
    that the System Coupling session is properly exited at the
    end of the scope defined by the ``with`` block.
 
-.. GENERATED FROM PYTHON SOURCE LINES 136-166
+.. GENERATED FROM PYTHON SOURCE LINES 159-202
 
-.. code-block:: default
+.. code-block:: Python
+
 
 
     def solve_coupled_analysis(working_dir):
@@ -199,22 +202,33 @@ setting is modified in the Fluent file prior to this function being called.
             print("Setting up the coupled analysis.")
 
             fluent_name = syc.setup.add_participant(
-                input_file = os.path.join("Fluent", "fluent.scp"))
+                input_file=os.path.join("Fluent", "fluent.scp")
+            )
 
             mapdl_name = syc.setup.add_participant(
-                input_file = os.path.join("Mapdl", "mapdl.scp"))
+                input_file=os.path.join("Mapdl", "mapdl.scp")
+            )
 
             fsi_name = syc.setup.add_interface(
-                side_one_participant = fluent_name, side_one_regions = ['wall_deforming'],
-                side_two_participant = mapdl_name, side_two_regions = ['FSIN_1'])
+                side_one_participant=fluent_name,
+                side_one_regions=["wall_deforming"],
+                side_two_participant=mapdl_name,
+                side_two_regions=["FSIN_1"],
+            )
 
             syc.setup.add_data_transfer(
-                interface = fsi_name, target_side = 'One',
-                source_variable = 'INCD', target_variable = 'displacement')
+                interface=fsi_name,
+                target_side="One",
+                source_variable="INCD",
+                target_variable="displacement",
+            )
 
             syc.setup.add_data_transfer(
-                interface = fsi_name, target_side = 'Two',
-                source_variable = 'force', target_variable = 'FORC')
+                interface=fsi_name,
+                target_side="Two",
+                source_variable="force",
+                target_variable="FORC",
+            )
 
             syc.setup.solution_control.maximum_iterations = 7
 
@@ -230,25 +244,26 @@ setting is modified in the Fluent file prior to this function being called.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-171
+
+.. GENERATED FROM PYTHON SOURCE LINES 203-207
 
 Extract maximum displacement value
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Use PyDPF to query the MAPDL results for the extract the
 maximum displacement value in the solution.
 
-.. GENERATED FROM PYTHON SOURCE LINES 171-180
+.. GENERATED FROM PYTHON SOURCE LINES 207-217
 
-.. code-block:: default
+.. code-block:: Python
 
     def extract_max_displacement(working_dir):
-      print("Extracting max displacement value")
-      model = pydpf.Model(os.path.join(working_dir, "Mapdl", "file.rst"))
-      displacements = model.results.displacement()
-      fields = displacements.outputs.fields_container()
-      value = max([v[0] for v in fields[0].data])
-      print(f"Max displacement value = {value}")
-      return value
+        print("Extracting max displacement value")
+        model = pydpf.Model(os.path.join(working_dir, "Mapdl", "file.rst"))
+        displacements = model.results.displacement()
+        fields = displacements.outputs.fields_container()
+        value = max([v[0] for v in fields[0].data])
+        print(f"Max displacement value = {value}")
+        return value
 
 
 
@@ -257,7 +272,8 @@ maximum displacement value in the solution.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 181-188
+
+.. GENERATED FROM PYTHON SOURCE LINES 218-225
 
 Get maximum displacement
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -267,15 +283,16 @@ Use the previously defined functions to:
 - Run the coupled analysis based on this setting.
 - Extract and return the maximum displacement value from the MAPDL results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 188-194
+.. GENERATED FROM PYTHON SOURCE LINES 225-233
 
-.. code-block:: default
+.. code-block:: Python
+
 
 
     def get_max_displacement(working_dir, inlet_velocity):
-      set_inlet_velocity(working_dir, inlet_velocity)
-      solve_coupled_analysis(working_dir)
-      return extract_max_displacement(working_dir)
+        set_inlet_velocity(working_dir, inlet_velocity)
+        solve_coupled_analysis(working_dir)
+        return extract_max_displacement(working_dir)
 
 
 
@@ -284,7 +301,8 @@ Use the previously defined functions to:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-200
+
+.. GENERATED FROM PYTHON SOURCE LINES 234-239
 
 Plot results
 ~~~~~~~~~~~~
@@ -292,19 +310,20 @@ Generate an ``x-y`` plot of the results, showing the maximum
 displacement of the plate versus the inlet velocity.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 200-210
+.. GENERATED FROM PYTHON SOURCE LINES 239-251
 
-.. code-block:: default
+.. code-block:: Python
 
     def plot(working_dir, x, y):
-      fig, ax = plt.subplots()
-      ax.plot(x, y, "-o")
-      ax.set(
-        xlabel="Inlet velocity [m/s]",
-        ylabel='Max Displacement [m]',
-        title="Plate max displacement vs. inlet velocity")
-      ax.grid()
-      plt.savefig(os.path.join(working_dir, "displacement"))
+        fig, ax = plt.subplots()
+        ax.plot(x, y, "-o")
+        ax.set(
+            xlabel="Inlet velocity [m/s]",
+            ylabel="Max Displacement [m]",
+            title="Plate max displacement vs. inlet velocity",
+        )
+        ax.grid()
+        plt.savefig(os.path.join(working_dir, "displacement"))
 
 
 
@@ -313,7 +332,8 @@ displacement of the plate versus the inlet velocity.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 211-218
+
+.. GENERATED FROM PYTHON SOURCE LINES 252-259
 
 Run analyses
 ------------
@@ -323,9 +343,9 @@ The results of the calls to the ``get_max_displacement()`` function
 are used to fill in the corresponding values of the ``y`` array.
 Finally, call the ``plot()`` function to generate a plot from the arrays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-228
+.. GENERATED FROM PYTHON SOURCE LINES 259-269
 
-.. code-block:: default
+.. code-block:: Python
 
 
     x = np.array([5.0, 10.0, 15.0, 20.0, 25.0])
@@ -334,7 +354,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
     working_dir = setup_working_directory()
 
     for index, inlet_velocity in enumerate(x):
-      y[index] = get_max_displacement(working_dir, inlet_velocity)
+        y[index] = get_max_displacement(working_dir, inlet_velocity)
 
     plot(working_dir, x, y)
 
@@ -350,10 +370,10 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
  .. code-block:: none
 
-    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
     Fast-loading "C:\ANSYSDev\ANSYSI~1\v241\fluent\fluent24.1.0\\addons\afd\lib\hdfio.bin"
     Done.
-    Multicore processors detected. Processor affinity set!
+    Note: Rank = 0: Process affinity not being set (6).
+    Note: Rank = 1: Process affinity not being set (6).
 
     Reading from HOSTNAME_1:"C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5" in NODE0 mode ...
       Reading mesh ...
@@ -417,35 +437,31 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.05236548595098285
-    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
+    Max displacement value = 0.05236548596272902
     Inlet velocity is set to 10.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.19232826989668578
-    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
+    Max displacement value = 0.19232826991977978
     Inlet velocity is set to 15.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.37276751732482466
-    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
+    Max displacement value = 0.37276751735981967
     Inlet velocity is set to 20.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.562441888345614
-    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
+    Max displacement value = 0.5624418880813694
     Inlet velocity is set to 25.0
     Setting up the coupled analysis.
     Solving the coupled analysis. This may take a while....
     ...done.
     Extracting max displacement value
-    Max displacement value = 0.7212533247989504
+    Max displacement value = 0.721266826019441
 
 
 
@@ -453,7 +469,7 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 17 minutes  27.611 seconds)
+   **Total running time of the script:** (11 minutes 27.899 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_parametric_sweep_vel.py:
@@ -462,16 +478,13 @@ Finally, call the ``plot()`` function to generate a plot from the arrays.
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
 
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
+      :download:`Download Jupyter notebook: parametric_sweep_vel.ipynb <parametric_sweep_vel.ipynb>`
 
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: parametric_sweep_vel.py <parametric_sweep_vel.py>`
-
-    .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-      :download:`Download Jupyter notebook: parametric_sweep_vel.ipynb <parametric_sweep_vel.ipynb>`
 
 
 .. only:: html
