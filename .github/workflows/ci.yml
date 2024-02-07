@@ -95,13 +95,6 @@ jobs:
         with:
           image-tag: v24.1.0
 
-      # NB: try this in PR, but comment out before merging
-      #     uncomment after first SyC release targeting 24.1
-      - name: Generate API for v242
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: latest
-
       - name: Clean out dist
         run: rm -rf dist
 
@@ -157,21 +150,13 @@ jobs:
         uses: ./.github/actions/unit-test
         with:
           image-tag: v23.2.0
-          upload-coverage: true
+          upload-coverage: false
 
       - name: Unit Test v24.1.0
         uses: ./.github/actions/unit-test
         with:
           image-tag: v24.1.0
-          upload-coverage: false
-
-      # TODO comment out as for API generation
-      - name: Unit Test v24.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: latest
-          upload-coverage: false
-
+          upload-coverage: true
 
   docs:
     name: Build Documentation
