@@ -95,6 +95,11 @@ jobs:
         with:
           image-tag: v24.1.0
 
+      - name: Generate API for v242
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: latest
+
       - name: Clean out dist
         run: rm -rf dist
 
@@ -157,6 +162,13 @@ jobs:
         with:
           image-tag: v24.1.0
           upload-coverage: true
+
+      - name: Unit Test v24.2.0
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: latest
+          upload-coverage: false
+
 
   docs:
     name: Build Documentation
