@@ -52,7 +52,7 @@ classesgen = [
 	# black and isort are called programmatically to keep generated code
 	# consistent with style elsewhere. We need to keep the versions in
 	# sync with the precommit dependencies.
-	"black==24.1.1",
+	"black==24.2.0",
 	"isort==5.13.2",
 ]
 doc = [
