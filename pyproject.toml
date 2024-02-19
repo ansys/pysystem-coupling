@@ -60,7 +60,7 @@ doc = [
 	"jupyter_sphinx==0.5.3",
 	"matplotlib",
 	"numpydoc==1.6.0",
-	"pypandoc==1.12",
+	"pypandoc==1.13",
 	"pytest-sphinx==0.6.0",
 	"Sphinx==7.2.6",
 	"sphinx-autobuild==2024.2.4",
