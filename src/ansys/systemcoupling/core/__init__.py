@@ -50,6 +50,7 @@ def launch(
 
     Parameters
     ----------
+
     port : int, optional
         Port on which to connect to System Coupling. The default is
         ``None``, in which case an available port is found and used.
@@ -82,6 +83,7 @@ def launch(
 
     Returns
     -------
+
     ansys.systemcoupling.core.session.Session
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
@@ -112,6 +114,7 @@ def launch_container(
 
     Returns
     -------
+
     ansys.systemcoupling.core.session.Session
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
@@ -126,6 +129,7 @@ def connect(host: str, port: int) -> Session:  # pragma: no cover
 
     Parameters
     ----------
+
     host : str
         IP address of the system running the System Coupling instance.
     port : int
@@ -133,6 +137,7 @@ def connect(host: str, port: int) -> Session:  # pragma: no cover
 
     Returns
     -------
+
     ansys.systemcoupling.core.session.Session
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
