@@ -26,8 +26,10 @@ import json
 import os
 import socket
 import threading
+from typing import Optional
 
 import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
+import ansys.platform.instancemanagement as pypim
 import grpc
 
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
@@ -37,13 +39,14 @@ from ansys.systemcoupling.core.client.services.solution import SolutionService
 from ansys.systemcoupling.core.client.syc_container import start_container
 from ansys.systemcoupling.core.client.syc_process import SycProcess
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
+from ansys.systemcoupling.core.syc_version import normalize_version
 from ansys.systemcoupling.core.util.logging import LOG
 
 _CHANNEL_READY_TIMEOUT_SEC = 15
 _LOCALHOST_IP = "127.0.0.1"
 
 
-def _find_port():
+def _find_port() -> int:
     with socket.socket() as s:
         s.bind(("", 0))
         return s.getsockname()[1]
@@ -95,6 +98,8 @@ class SycGrpc(object):
         self.__process = None
         self.__channel = None
         self.__output_thread = None
+        self.__pim_instance = None
+        self.__skip_exit = False
 
     @classmethod
     def _cleanup(cls):
@@ -147,6 +152,21 @@ class SycGrpc(object):
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
+    def start_pim_and_connect(self, version: str = None):
+        product_version = "latest"
+        if version is not None:
+            maj_v, min_v = normalize_version(version)
+            product_version = f"{maj_v}{min_v}"
+
+        pim = pypim.connect()
+        instance = pim.create_instance(
+            product_name="systemcoupling", product_version=product_version
+        )
+        instance.wait_for_ready()
+        self.__pim_instance = instance
+        channel = instance.build_grpc_channel()
+        self._connect(channel=channel)
+
     def connect(self, host, port):
         """Connect to an already running System Coupling server running on a known
         host and port.
@@ -161,20 +181,34 @@ class SycGrpc(object):
             # Discard the sentinel
             del SycGrpc._instances[-1]
 
-    def _connect(self, host, port):
+    def _connect(
+        self,
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+        channel: Optional[grpc.Channel] = None,
+    ):
+        if (channel is None and (host is None or port is None)) or (
+            channel is not None and (host is not None or port is not None)
+        ):
+            raise ValueError("Internal error: _connect needs host and port OR channel")
+
         LOG.debug("Connecting...")
         self._register_for_cleanup()
-        self.__channel = grpc.insecure_channel(f"{host}:{port}")
+        if channel is None:
+            self.__channel = grpc.insecure_channel(f"{host}:{port}")
 
-        # Wait for server to be ready
-        timeout = _CHANNEL_READY_TIMEOUT_SEC
-        try:
-            grpc.channel_ready_future(self.__channel).result(timeout=timeout)
-        except grpc.FutureTimeoutError:
-            raise RuntimeError(
-                "Stopping attempt to connect to gRPC channel "
-                f"after {timeout} seconds."
-            )
+            # Wait for server to be ready
+            timeout = _CHANNEL_READY_TIMEOUT_SEC
+            try:
+                grpc.channel_ready_future(self.__channel).result(timeout=timeout)
+            except grpc.FutureTimeoutError:
+                raise RuntimeError(
+                    "Stopping attempt to connect to gRPC channel "
+                    f"after {timeout} seconds."
+                )
+
+        else:
+            self.__channel = channel
 
         LOG.debug("...connected")
 
@@ -182,6 +216,49 @@ class SycGrpc(object):
         self.__ostream_service = OutputStreamService(self.__channel)
         self.__process_service = SycProcessService(self.__channel)
         self.__solution_service = SolutionService(self.__channel)
+
+    @property
+    def _channel_str(self):
+        """The channel target string.
+
+        Generally of the form of "ip:port", like "127.0.0.1:50052".
+
+        """
+
+        # Note: this impl was taken from pymapdl and does more than SyC needs
+        # at the moment as we don't use interceptors.
+
+        channel = self.__channel
+        while channel is not None:
+            # When creating interceptors, channels have a nested "_channel" member
+            # containing the intercepted channel.
+            # Only the actual channel contains the "target" member describing the address
+            if hasattr(channel, "target"):
+                return channel.target().decode()
+            channel = getattr(channel, "_channel", None)
+        # This method is relying on grpc channel's private attributes, fallback in case
+        # it does not exist
+        return "unknown"  #  pragma: no cover Unreachable in the current gRPC version
+
+    @property
+    def _channel(self) -> grpc.Channel:
+        """Access the gRPC Channel object
+
+        Provided for testing purposes.
+        """
+        return self.__channel
+
+    @property
+    def _skip_exit(self) -> bool:
+        return self.__skip_exit
+
+    @_skip_exit.setter
+    def _skip_exit(self, value: bool) -> None:
+        """Make ``exit`` call a no-op for this instance.
+
+        Provided for testing purposes.
+        """
+        self.__skip_exit = value
 
     def exit(self):
         """Shut down the remote System Coupling server.
@@ -193,6 +270,9 @@ class SycGrpc(object):
             # Remove from atexit cleanup list
             del SycGrpc._instances[self.__id]
 
+        if self.__skip_exit:
+            return
+
         if self.__channel is not None:
             try:
                 self.__ostream_service.end_streaming()
@@ -203,6 +283,9 @@ class SycGrpc(object):
         if self.__process:
             self.__process.end()
             self.__process = None
+        if self.__pim_instance is not None:
+            self.__pim_instance.delete()
+            self.__pim_instance = None
         self._reset()
 
     def start_output(self, handle_output=None):

@@ -204,6 +204,11 @@ class Session:
             self.__native_api = NativeApi(self.__rpc)
         return self.__native_api
 
+    @property
+    def _grpc(self):
+        """The gRPC connection object, exposed for testing purposes only."""
+        return self.__rpc
+
     def __enter__(self):
         return self
 
