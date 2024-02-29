@@ -270,10 +270,10 @@ class SycGrpc(object):
             # Remove from atexit cleanup list
             del SycGrpc._instances[self.__id]
 
-        if self.__skip_exit:
-            return
+        # if self.__skip_exit:
+        #    return
 
-        if self.__channel is not None:
+        if self.__channel is not None and not self.__skip_exit:
             try:
                 self.__ostream_service.end_streaming()
             except Exception as e:

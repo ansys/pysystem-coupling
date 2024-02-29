@@ -98,3 +98,6 @@ def test_pim(monkeypatch, with_launching_container):
 
     # It connected using the channel created by PyPIM
     assert syc._grpc._channel == pim_channel
+
+    syc.exit()
+    assert mock_instance.delete.called
