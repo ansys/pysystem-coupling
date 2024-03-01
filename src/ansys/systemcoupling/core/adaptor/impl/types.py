@@ -196,6 +196,7 @@ class SettingsBase(Base, Generic[StateT]):
         """Convert value to have keys with native System Coupling names.
 
         The value is overridden in ``Container`` and ``NamedContainer`` classes.
+
         """
         return value
 
@@ -204,6 +205,7 @@ class SettingsBase(Base, Generic[StateT]):
         """Convert value to have keys with Python names.
 
         The value is overridden in ``Container`` and ``NamedContainer`` classes.
+
         """
         return value
 
@@ -212,6 +214,7 @@ class SettingsBase(Base, Generic[StateT]):
         """Convert Python name to a native System Coupling identifier.
 
         This name is overridden in ``Container`` and ``NamedContainer`` classes.
+
         """
         return name
 
@@ -220,6 +223,7 @@ class SettingsBase(Base, Generic[StateT]):
         """Convert the native System Coupling identifier to a Python name.
 
         This name is overridden in ``Container`` and ``NamedContainer`` classes.
+
         """
         return name
 
