@@ -209,6 +209,51 @@ class Session:
         """The gRPC connection object, exposed for testing purposes only."""
         return self.__rpc
 
+    def upload_file(
+        self,
+        file_name: str,
+        remote_file_name: Optional[str] = None,
+        overwrite: bool = False,
+    ):
+        """For internal use only: upload a file to the PIM-managed instance.
+
+        Reduces to a no-op if the System Coupling instance is not managed by PIM.
+
+        The remote file may optionally be given a different name from the local one.
+
+        Unless ``overwrite`` is ``True``, a ``FileExistsError`` will be raised if
+        the remote file already exists.
+
+        Parameters
+        ----------
+        file_name : str
+            local file name
+        remote_file_name : str, optional
+            remote file name - default is None
+        overwrite: bool, optional
+            whether to overwrite the remote file if it already exists - default is False
+        """
+        self.__rpc.upload_file(file_name, remote_file_name, overwrite)
+
+    def download_file(
+        self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
+    ):
+        """For internal use only: download a file from the PIM-managed instance.
+
+        Unless ``overwrite`` is ``True``, a ``FileExistsError`` will be raised if
+        the local file already exists.
+
+        Parameters
+        ----------
+        file_name : str
+            file name
+        local_file_dir : str, optional
+            local directory to write the file - default is current directory, "."
+        overwrite : bool, optional
+            whether to overwrite the remote file if it already exists - default is False
+        """
+        self.__rpc.download_file(file_name, local_file_dir, overwrite)
+
     def __enter__(self):
         return self
 

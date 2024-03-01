@@ -40,6 +40,7 @@ from ansys.systemcoupling.core.client.syc_container import start_container
 from ansys.systemcoupling.core.client.syc_process import SycProcess
 from ansys.systemcoupling.core.client.variant import from_variant, to_variant
 from ansys.systemcoupling.core.syc_version import normalize_version
+from ansys.systemcoupling.core.util.file_transfer import file_transfer_service
 from ansys.systemcoupling.core.util.logging import LOG
 
 _CHANNEL_READY_TIMEOUT_SEC = 15
@@ -153,6 +154,10 @@ class SycGrpc(object):
         self._connect(_LOCALHOST_IP, port)
 
     def start_pim_and_connect(self, version: str = None):
+        """Start PIM-managed instance.
+
+        Currently for internal use only.
+        """
         product_version = "latest"
         if version is not None:
             maj_v, min_v = normalize_version(version)
@@ -166,6 +171,20 @@ class SycGrpc(object):
         self.__pim_instance = instance
         channel = instance.build_grpc_channel()
         self._connect(channel=channel)
+
+    def upload_file(self, *args, **kwargs):
+        """Supports file upload to remote instance.
+
+        Currently for internal use only.
+        """
+        file_transfer_service(self.__pim_instance).upload_file(*args, **kwargs)
+
+    def download_file(self, *args, **kwargs):
+        """Supports file download from remote instance.
+
+        Currently for internal use only.
+        """
+        file_transfer_service(self.__pim_instance).download_file(*args, **kwargs)
 
     def connect(self, host, port):
         """Connect to an already running System Coupling server running on a known
@@ -269,9 +288,6 @@ class SycGrpc(object):
         if self.__id in SycGrpc._instances:
             # Remove from atexit cleanup list
             del SycGrpc._instances[self.__id]
-
-        # if self.__skip_exit:
-        #    return
 
         if self.__channel is not None and not self.__skip_exit:
             try:
