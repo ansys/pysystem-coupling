@@ -29,6 +29,8 @@ from ansys.systemcoupling.core.client.grpc_client import SycGrpc
 from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
 
+import ansys.platform.instancemanagement as pypim
+
 try:
     import importlib.metadata as importlib_metadata
 except ModuleNotFoundError:  # pragma: no cover
@@ -87,14 +89,21 @@ def launch(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    rpc.start_and_connect(
-        port=port,
-        working_dir=working_dir,
-        nprocs=nprocs,
-        sycnprocs=sycnprocs,
-        version=version,
-        extra_args=extra_args,
-    )
+    if pypim.is_configured():
+        LOG.info(
+            "Starting System Coupling remotely. Any launch arguments other "
+            "than 'version' are ignored."
+        )
+        rpc.start_pim_and_connect(version)
+    else:
+        rpc.start_and_connect(
+            port=port,
+            working_dir=working_dir,
+            nprocs=nprocs,
+            sycnprocs=sycnprocs,
+            version=version,
+            extra_args=extra_args,
+        )
     return Session(rpc)
 
 
@@ -118,6 +127,33 @@ def launch_container(
     """
     rpc = SycGrpc()
     rpc.start_container_and_connect(mounted_from, mounted_to, network, version=version)
+    return Session(rpc)
+
+
+def launch_remote(
+    version: str = None,
+) -> Session:
+    """Launch System Coupling remotely using `PyPIM <https://pypim.docs.pyansys.com>`.
+
+    When calling this function, you must ensure that you are in an
+    environment where ``PyPIM`` is configured. You can use the :func:
+    `pypim.is_configured <ansys.platform.instancemanagement.is_configured>`
+    method to verify that ``PyPIM`` is configured.
+
+    Parameters
+    ----------
+    version : str, optional
+        The System Coupling product version. See :func:`launch<core.launch>`
+        for details of supported version strings.
+
+    Returns
+    -------
+    ansys.systemcoupling.core.session.Session
+        Session object, providing access to a set up and solve API controlling a
+        remote System Coupling instance.
+    """
+    rpc = SycGrpc()
+    rpc.start_pim_and_connect(version)
     return Session(rpc)
 
 
