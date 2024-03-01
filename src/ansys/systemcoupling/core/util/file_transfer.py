@@ -24,7 +24,8 @@ import os
 from typing import Any, Optional, Protocol
 
 
-class FileTransferService(Protocol):
+# Note: generally exclude items in this file from coverage for now
+class FileTransferService(Protocol):  # pragma: no cover
     def upload_file(
         self, file_name: str, remote_file_name: Optional[str], overwrite: bool
     ): ...
@@ -32,13 +33,13 @@ class FileTransferService(Protocol):
     def download_file(self, file_name: str, local_file_dir: str, overwrite: bool): ...
 
 
-class NullFileTransferService(FileTransferService):
+class NullFileTransferService(FileTransferService):  # pragma: no cover
     """A do-nothing implementation of file upload/download service."""
 
     ...
 
 
-class PimFileTransferService:
+class PimFileTransferService:  # pragma: no cover
     """Provides a file upload and download service for the case when PySystemCoupling
     is running as a remote instance managed by
     `PyPIM<https://pypim.docs.pyansys.com/version/stable/>`.
@@ -120,7 +121,9 @@ class PimFileTransferService:
             raise FileNotFoundError(f"Remote file {file_name} does not exist.")
 
 
-def file_transfer_service(pim_instance: Optional[Any] = None) -> FileTransferService:
+def file_transfer_service(
+    pim_instance: Optional[Any] = None,
+) -> FileTransferService:  # pragma: no cover
     """If a ``PIM`` instance is provided, returns an object providing remote
     file upload and download, otherwise returns a 'no-op' version of the object.
     """
