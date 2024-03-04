@@ -1,0 +1,38 @@
+:orphan:
+
+.. _available_ports:
+
+available_ports
+===============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.available_ports
+
+.. autoclass:: available_ports
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Specify how available ports are determined.
+    
+    - "ProgramControlled" - System Coupling will find an
+      available port.
+    - "UserDefined" - An available port will be chosen,
+      if possible, from a specified range.
+
+range : `str`
+    Port range expressed as a comma-separated list of integers and/or
+    integer ranges. An integer range is a pair of integers separated
+    with a "-" character, specify an inclusive range of port numbers.
+
+.. rubric:: Included in:
+
+==========================================   ================================
+
+Parent                                                                Summary
+
+==========================================   ================================
+:ref:`solution_control <solution_control>`       Configure solution controls.
+
+==========================================   ================================
+
