@@ -63,6 +63,13 @@ def get_injected_cmd_map(
             "abort": lambda **kwargs: rpc.abort(**kwargs),
         }
 
+    if category == "case":
+        ret = {
+            "clear_state": lambda **kwargs: _wrap_clear_state(
+                root_object, part_mgr, **kwargs
+            )
+        }
+
     return ret
 
 
@@ -100,6 +107,13 @@ def _wrap_add_participant(
         return part_mgr.add_participant(participant_session=session.system_coupling)
 
     return root_object._add_participant(**kwargs)
+
+
+def _wrap_clear_state(
+    root_object: Container, part_mgr: ParticipantManager, **kwargs
+) -> None:
+    part_mgr.clear()
+    root_object._clear_state(**kwargs)
 
 
 def _wrap_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
@@ -309,4 +323,8 @@ _cmd_yaml = """
     essentialArgNames: []
     optionalArgNames: []
     args: []
+-   name: ClearState
+    pyname: clear_state
+    isInjected: true
+    pysyc_internal_name: _clear_state
 """
