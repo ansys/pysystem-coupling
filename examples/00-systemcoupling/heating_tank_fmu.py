@@ -69,7 +69,7 @@ Two data transfers :
 # Set up example
 # --------------
 # Setting up this example consists of performing imports, downloading
-# input files, preparing the directory structure, and launching System Coupling.
+# input files, and launching System Coupling.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -87,9 +87,8 @@ from ansys.systemcoupling.core import examples
 # Download input files
 # ~~~~~~~~~~~~~~~~~~~~
 # Clear the downloads target directory (which is to be used as the
-# working directory). Download the SCP files for Fluent and FMU, which
-# provide solver-specifc information to System Coupling and the respective
-# solver input files for each solver run.
+# working directory). Download the case file for Fluent and the FMU file, which
+# define the participant-specific setup information.
 
 examples.delete_downloads()
 fmu_file = examples.download_file(
@@ -102,23 +101,23 @@ fluent_cas_file = examples.download_file(
 
 
 # %%
-# Prepare expected directory structure
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# The target download directory is used as the working directory.
-# The SCP files are defined such that there is expected to be a Fluent
-# subdirectory in which Fluent runs and an FMU subdirectory in
-# which FMU runs. These directories should contain their respective
-# case and input files.
-
-# %%
-# Launch System Coupling
+# Launch Fluent
 # ~~~~~~~~~~~~~~~~~~~~~~
-# Launch a remote System Coupling instance and return a *client* object
-# (a ``Session`` object) that allows you to interact with System Coupling
+# Launch a remote Fluent instance and return a *client* object
+# (a ``Session`` object) that allows you to interact with Fluent
 # via an API exposed into the current Python environment.
-fluent_session = pyfluent.launch_fluent(
-    product_version="24.1.0", start_transcript=False
-)
+# Read in the Fluent case file.
+#
+# .. note::
+#    Fluent version greater than 24.1 is required.
+#    To specify Fluent version explicitly when launching Fluent,
+#    use ``product_version`` argument to the ``launch_fluent``
+#    function, e.g. ``pyfluent.launch_fluent(product_version="24.2.0")``
+
+fluent_session = pyfluent.launch_fluent(start_transcript=False)
+fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
+assert fluent_session.get_fluent_version() >= fluent_v241
+
 fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
@@ -142,11 +141,11 @@ setup = syc.setup
 
 
 # %%
-# Load participants
+# Add participants
 # ~~~~~~~~~~~~~~~~~
 # Use ``add_participant`` to create ``coupling_participant`` objects
-# representing the Fluent and FMU participants, based on the data
-# in the `scp` files that were previously exported by the respective
+# representing the Fluent and FMU participants, based on the setup
+# information that was previously defined in the respective
 # products.
 fluent_part_name = setup.add_participant(participant_session=fluent_session)
 fmu_part_name = setup.add_participant(input_file=fmu_file)
@@ -184,7 +183,7 @@ setup.coupling_participant[fmu_part_name].fmu_parameter[
 # and both force and displacement data transfers.
 
 # Create a coupling interface for Fluent -> FMU (sensor to FMU)
-sensorInterface = setup.add_interface(
+sensor_interface = setup.add_interface(
     side_one_participant=fluent_part_name,
     side_one_regions=["sensor"],
     side_two_participant=fmu_part_name,
@@ -199,7 +198,7 @@ heatSourceInterface = setup.add_interface(
 
 # Create data transfer for "temperature"
 temperatureDataTransfer = setup.add_data_transfer(
-    interface=sensorInterface,
+    interface=sensor_interface,
     target_side="Two",
     source_variable="temperature",
     target_variable="Real_0",
@@ -219,7 +218,7 @@ setup.solution_control.time_step_size = "0.5 [s]"
 
 # %%
 # Change the ``end_time`` setting.
-setup.solution_control.end_time = "40. [s]"
+setup.solution_control.end_time = "40.0 [s]"
 
 # %%
 # Change the ``minimum_iterations`` and ``maximum_iterations`` settings.

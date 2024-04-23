@@ -77,7 +77,7 @@ Two data transfers :
 Set up example
 --------------
 Setting up this example consists of performing imports, downloading
-input files, preparing the directory structure, and launching System Coupling.
+input files, and launching System Coupling.
 
 Perform required imports
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -101,16 +101,15 @@ Import the ``ansys-systemcoupling-core`` package and other required packages.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-92
+.. GENERATED FROM PYTHON SOURCE LINES 86-91
 
 Download input files
 ~~~~~~~~~~~~~~~~~~~~
 Clear the downloads target directory (which is to be used as the
-working directory). Download the SCP files for Fluent and FMU, which
-provide solver-specifc information to System Coupling and the respective
-solver input files for each solver run.
+working directory). Download the case file for Fluent and the FMU file, which
+define the participant-specific setup information.
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-104
+.. GENERATED FROM PYTHON SOURCE LINES 92-103
 
 .. code-block:: Python
 
@@ -132,31 +131,30 @@ solver input files for each solver run.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 105-112
+.. GENERATED FROM PYTHON SOURCE LINES 104-116
 
-Prepare expected directory structure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The target download directory is used as the working directory.
-The SCP files are defined such that there is expected to be a Fluent
-subdirectory in which Fluent runs and an FMU subdirectory in
-which FMU runs. These directories should contain their respective
-case and input files.
-
-.. GENERATED FROM PYTHON SOURCE LINES 114-119
-
-Launch System Coupling
+Launch Fluent
 ~~~~~~~~~~~~~~~~~~~~~~
-Launch a remote System Coupling instance and return a *client* object
-(a ``Session`` object) that allows you to interact with System Coupling
+Launch a remote Fluent instance and return a *client* object
+(a ``Session`` object) that allows you to interact with Fluent
 via an API exposed into the current Python environment.
+Read in the Fluent case file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-124
+.. note::
+   Fluent version greater than 24.1 is required.
+   To specify Fluent version explicitly when launching Fluent,
+   use ``product_version`` argument to the ``launch_fluent``
+   function, e.g. ``pyfluent.launch_fluent(product_version="24.2.0")``
+
+.. GENERATED FROM PYTHON SOURCE LINES 116-123
 
 .. code-block:: Python
 
-    fluent_session = pyfluent.launch_fluent(
-        product_version="24.1.0", start_transcript=False
-    )
+
+    fluent_session = pyfluent.launch_fluent(start_transcript=False)
+    fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
+    assert fluent_session.get_fluent_version() >= fluent_v241
+
     fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
 
 
@@ -167,12 +165,12 @@ via an API exposed into the current Python environment.
 
  .. code-block:: none
 
-
-    True
-
+    pyfluent.settings_api WARNING: Mismatch between generated file and server object info. Dynamically created settings classes will be used.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-130
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 124-129
 
 Launch System Coupling
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -180,7 +178,7 @@ Launch a remote System Coupling instance and return a *client* object
 (a ``Session`` object) that allows you to interact with System Coupling
 via an API exposed into the current Python environment.
 
-.. GENERATED FROM PYTHON SOURCE LINES 130-132
+.. GENERATED FROM PYTHON SOURCE LINES 129-131
 
 .. code-block:: Python
 
@@ -193,7 +191,7 @@ via an API exposed into the current Python environment.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 133-141
+.. GENERATED FROM PYTHON SOURCE LINES 132-140
 
 Create analysis
 ---------------
@@ -204,7 +202,7 @@ data transfers, querying for setup errors, and modifying settings.
 Access the ``setup`` API
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. GENERATED FROM PYTHON SOURCE LINES 141-144
+.. GENERATED FROM PYTHON SOURCE LINES 140-143
 
 .. code-block:: Python
 
@@ -218,16 +216,16 @@ Access the ``setup`` API
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 145-151
+.. GENERATED FROM PYTHON SOURCE LINES 144-150
 
-Load participants
+Add participants
 ~~~~~~~~~~~~~~~~~
 Use ``add_participant`` to create ``coupling_participant`` objects
-representing the Fluent and FMU participants, based on the data
-in the `scp` files that were previously exported by the respective
+representing the Fluent and FMU participants, based on the setup
+information that was previously defined in the respective
 products.
 
-.. GENERATED FROM PYTHON SOURCE LINES 151-155
+.. GENERATED FROM PYTHON SOURCE LINES 150-154
 
 .. code-block:: Python
 
@@ -236,19 +234,13 @@ products.
 
 
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 156-159
+.. GENERATED FROM PYTHON SOURCE LINES 155-158
 
 FMU settings
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Change FMU parameters by accessing ``fmu_parameter``
 
-.. GENERATED FROM PYTHON SOURCE LINES 159-165
+.. GENERATED FROM PYTHON SOURCE LINES 158-164
 
 .. code-block:: Python
 
@@ -265,11 +257,11 @@ Change FMU parameters by accessing ``fmu_parameter``
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 166-167
+.. GENERATED FROM PYTHON SOURCE LINES 165-166
 
 Change the "target temperature" settings
 
-.. GENERATED FROM PYTHON SOURCE LINES 167-172
+.. GENERATED FROM PYTHON SOURCE LINES 166-171
 
 .. code-block:: Python
 
@@ -285,11 +277,11 @@ Change the "target temperature" settings
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 173-174
+.. GENERATED FROM PYTHON SOURCE LINES 172-173
 
 Change the "heat scale factor" settings
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-179
+.. GENERATED FROM PYTHON SOURCE LINES 173-178
 
 .. code-block:: Python
 
@@ -305,7 +297,7 @@ Change the "heat scale factor" settings
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 180-185
+.. GENERATED FROM PYTHON SOURCE LINES 179-184
 
 Create interfaces and data transfers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -313,13 +305,13 @@ Create interfaces and data transfers by specifying participant regions.
 This consists of calling the appropriate commands to create an interface
 and both force and displacement data transfers.
 
-.. GENERATED FROM PYTHON SOURCE LINES 185-216
+.. GENERATED FROM PYTHON SOURCE LINES 184-215
 
 .. code-block:: Python
 
 
     # Create a coupling interface for Fluent -> FMU (sensor to FMU)
-    sensorInterface = setup.add_interface(
+    sensor_interface = setup.add_interface(
         side_one_participant=fluent_part_name,
         side_one_regions=["sensor"],
         side_two_participant=fmu_part_name,
@@ -334,7 +326,7 @@ and both force and displacement data transfers.
 
     # Create data transfer for "temperature"
     temperatureDataTransfer = setup.add_data_transfer(
-        interface=sensorInterface,
+        interface=sensor_interface,
         target_side="Two",
         source_variable="temperature",
         target_variable="Real_0",
@@ -355,11 +347,11 @@ and both force and displacement data transfers.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 217-218
+.. GENERATED FROM PYTHON SOURCE LINES 216-217
 
 Change the ``time_step_size`` setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 218-220
+.. GENERATED FROM PYTHON SOURCE LINES 217-219
 
 .. code-block:: Python
 
@@ -372,15 +364,15 @@ Change the ``time_step_size`` setting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 221-222
+.. GENERATED FROM PYTHON SOURCE LINES 220-221
 
 Change the ``end_time`` setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 222-224
+.. GENERATED FROM PYTHON SOURCE LINES 221-223
 
 .. code-block:: Python
 
-    setup.solution_control.end_time = "40. [s]"
+    setup.solution_control.end_time = "40.0 [s]"
 
 
 
@@ -389,11 +381,11 @@ Change the ``end_time`` setting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 225-226
+.. GENERATED FROM PYTHON SOURCE LINES 224-225
 
 Change the ``minimum_iterations`` and ``maximum_iterations`` settings.
 
-.. GENERATED FROM PYTHON SOURCE LINES 226-229
+.. GENERATED FROM PYTHON SOURCE LINES 225-228
 
 .. code-block:: Python
 
@@ -407,11 +399,11 @@ Change the ``minimum_iterations`` and ``maximum_iterations`` settings.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 230-231
+.. GENERATED FROM PYTHON SOURCE LINES 229-230
 
 Set the ``option`` setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 231-233
+.. GENERATED FROM PYTHON SOURCE LINES 230-232
 
 .. code-block:: Python
 
@@ -424,11 +416,11 @@ Set the ``option`` setting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 234-235
+.. GENERATED FROM PYTHON SOURCE LINES 233-234
 
 Change the ``output_frequency`` frequency setting.
 
-.. GENERATED FROM PYTHON SOURCE LINES 235-237
+.. GENERATED FROM PYTHON SOURCE LINES 234-236
 
 .. code-block:: Python
 
@@ -441,14 +433,14 @@ Change the ``output_frequency`` frequency setting.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 238-242
+.. GENERATED FROM PYTHON SOURCE LINES 237-241
 
 Run solution
 ------------
 The System Coupling server's ``stdout`` and ``stderr`` output is not shown
 in PySystemCoupling by default. To see it, turn output streaming on.
 
-.. GENERATED FROM PYTHON SOURCE LINES 242-244
+.. GENERATED FROM PYTHON SOURCE LINES 241-243
 
 .. code-block:: Python
 
@@ -461,11 +453,11 @@ in PySystemCoupling by default. To see it, turn output streaming on.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 245-246
+.. GENERATED FROM PYTHON SOURCE LINES 244-245
 
 Access the ``solve`` command via the ``solution`` API.
 
-.. GENERATED FROM PYTHON SOURCE LINES 246-249
+.. GENERATED FROM PYTHON SOURCE LINES 245-248
 
 .. code-block:: Python
 
@@ -609,6 +601,9 @@ Access the ``solve`` command via the ``solution`` API.
     |                                coefficient, heatflow, near-wall-            |
     |                                temperature]                                 |
     |             Region Discretization Type :                        Mesh Region |
+    |       Properties                                                            |
+    |          Accepts New Inputs :                                         False |
+    |          Time Integration :                                        Implicit |
     |       Update Control                                                        |
     |          Option :                                         ProgramControlled |
     |       Execution Control                                                     |
@@ -621,8 +616,9 @@ Access the ``solve`` command via the ``solution`` API.
     |       Participant Display Name :                                 testHeater |
     |       Input Variables :                                            [Real_0] |
     |       Output Variables :                                           [Real_1] |
-    |       Participant File Loaded : C:\Users\user00\AppData\Local\Ansys\ansys_s |
-    |                                 ystemcoupling_core\examples\thermostat.fmu  |
+    |       Participant File Loaded : C:\Users\user0000\AppData\Local\Ansys\ansys |
+    |                                 _systemcoupling_core\examples\thermostat.fm |
+    |                                 u                                           |
     |       Logging On :                                                    False |
     |       Can Serialize Fmu State :                                        True |
     |       Can Get And Set Fmu State :                                      True |
@@ -634,7 +630,6 @@ Access the ``solve`` command via the ``solution`` API.
     |             Real Initial Value :                                   0.00e+00 |
     |             Real Min :                                                 None |
     |             Real Max :                                                 None |
-    |             Tensor Type :                                            Scalar |
     |                                                                             |
     |          Variable : Temperature                                             |
     |             Internal Name :                                          Real_0 |
@@ -643,7 +638,6 @@ Access the ``solve`` command via the ``solution`` API.
     |             Real Initial Value :                                   0.00e+00 |
     |             Real Min :                                                 None |
     |             Real Max :                                                 None |
-    |             Tensor Type :                                            Scalar |
     |       Update Control                                                        |
     |          Option :                                         ProgramControlled |
     |       FMU Parameter                                                         |
@@ -729,7 +723,7 @@ Access the ``solve`` command via the ``solution`` API.
     |                              Solution Control                               |
     +=============================================================================+
     |    Duration Option :                                                EndTime |
-    |    End Time :                                                       40. [s] |
+    |    End Time :                                                      40.0 [s] |
     |    Time Step Size :                                                 0.5 [s] |
     |    Minimum Iterations :                                                   1 |
     |    Maximum Iterations :                                                   5 |
@@ -763,9 +757,8 @@ Access the ``solve`` command via the ``solution`` API.
     |     (CouplingParticipant:FLUENT-1).                                         |
     | Warning: Unused input variables ['temperature'] (temperature) on region     |
     |     heat_source for FLUENT-1 (CouplingParticipant:FLUENT-1).                |
-    | Warning: Unused input variables ['heatflow', 'temperature'] (heatflow,      |
-    |     temperature) on region sensor for FLUENT-1                              |
-    |     (CouplingParticipant:FLUENT-1).                                         |
+    | Warning: Unused input variables ['temperature', 'heatflow'] (temperature,   |
+    |     heatflow) on region sensor for FLUENT-1 (CouplingParticipant:FLUENT-1). |
     +-----------------------------------------------------------------------------+
 
     +=============================================================================+
@@ -774,16 +767,16 @@ Access the ``solve`` command via the ``solution`` API.
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:53191                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:59781                                  |
     |   Working Directory:                                                        |
-    |     D:\pyansys\pysystem-coupling\examples\00-systemcoupling                 |
+    |     D:\ANSYSDev\GitHub\ansys\pysystemcoupling\examples\00-systemcoupling    |
     |                                                                             |
     | FLUENT-1                                                                    |
     |   Not started by System Coupling                                            |
     |                                                                             |
     | testHeater                                                                  |
-    |   C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\th |
-    |   ermostat.fmu                                                              |
+    |   C:\Users\user0000\AppData\Local\Ansys\ansys_systemcoupling_core\examples\ |
+    |   thermostat.fmu                                                            |
     |                                                                             |
     +=============================================================================+
     Awaiting connections from coupling participants... done.
@@ -792,10 +785,10 @@ Access the ``solve`` command via the ``solution`` API.
     |                              Build Information                              |
     +-----------------------------------------------------------------------------+
     | System Coupling                                                             |
-    |   2024 R1: Build ID: db85a9c Build Date: 2023-11-01T14:38                   |
+    |   2024 R2: Build ID: baab662 Build Date: 2024-04-16T06:32                   |
     | FLUENT-1                                                                    |
-    |   ANSYS Fluent 24.0 1.0 0.0 Build Time: Nov 22 2023 10:32:41 EST  Build Id: |
-    |   10184                                                                     |
+    |   ANSYS Fluent 24.0 2.0 0.0 Build Time: Apr 11 2024 12:34:33 EST  Build Id: |
+    |   163                                                                       |
     | testHeater                                                                  |
     |   No build information available                                            |
     +=============================================================================+
@@ -827,29 +820,11 @@ Access the ``solve`` command via the ``solution`` API.
     |   Number of nodes                                                     4 164 |
     +-----------------------------------------------------------------------------+
 
-
-    +-----------------------------------------------------------------------------+
-    |                               MAPPING SUMMARY                               |
-    +-----------------------------------------------------------------------------+
-    |                                     |      Source            Target         |
-    +-----------------------------------------------------------------------------+
-    | Interface-1                         |                                       |
-    |   Temperature                       |                                       |
-    |     Mapped Area [%]                 |       100               N/A           |
-    |     Mapped Elements [%]             |       100               N/A           |
-    |     Mapped Nodes [%]                |       100               N/A           |
-    | Interface-2                         |                                       |
-    |   heatflow                          |                                       |
-    |     Mapped Area [%]                 |       N/A               100           |
-    |     Mapped Elements [%]             |       N/A               100           |
-    |     Mapped Nodes [%]                |       N/A               100           |
-    +-----------------------------------------------------------------------------+
-
-
     +-----------------------------------------------------------------------------+
     |                            Transfer Diagnostics                             |
     +-----------------------------------------------------------------------------+
     |                                     |      Source            Target         |
+    +-----------------------------------------------------------------------------+
     | FLUENT-1                            |                                       |
     |   Interface: Interface-2            |                                       |
     |     heatflow                        |                                       |
@@ -4119,19 +4094,19 @@ Access the ``solve`` command via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    5.12362E+02 |
+    | Total Time :                                                    6.92371E+02 |
     | Coupling Participant Time                                                   |
-    |    FLUENT-1 :                                                   4.50971E+02 |
-    |    testHeater :                                                 8.88183E-01 |
-    |    Total :                                                      4.51859E+02 |
+    |    FLUENT-1 :                                                   6.32549E+02 |
+    |    testHeater :                                                 1.80438E+00 |
+    |    Total :                                                      6.34353E+02 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           8.92246E+00 |
-    |    Mesh Import :                                                2.01738E-02 |
-    |    Mapping Setup :                                              6.74000E-05 |
-    |    Mapping :                                                    4.05040E-03 |
-    |    Numerics :                                                   1.27823E-02 |
-    |    Misc. :                                                      5.15429E+01 |
-    |    Total :                                                      6.05024E+01 |
+    |    Solution Control :                                           1.08790E+01 |
+    |    Mesh Import :                                                2.53418E-02 |
+    |    Mapping Setup :                                              1.60270E-03 |
+    |    Mapping :                                                    4.69890E-03 |
+    |    Numerics :                                                   1.84676E-02 |
+    |    Misc. :                                                      4.70882E+01 |
+    |    Total :                                                      5.80173E+01 |
     +=============================================================================+
 
     +=============================================================================+
@@ -4142,11 +4117,11 @@ Access the ``solve`` command via the ``solution`` API.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 250-251
+.. GENERATED FROM PYTHON SOURCE LINES 249-250
 
 Terminate the system coupling session with ``exit``.
 
-.. GENERATED FROM PYTHON SOURCE LINES 251-253
+.. GENERATED FROM PYTHON SOURCE LINES 250-252
 
 .. code-block:: Python
 
@@ -4159,16 +4134,16 @@ Terminate the system coupling session with ``exit``.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 254-256
+.. GENERATED FROM PYTHON SOURCE LINES 253-255
 
 Post-process the results
 ----------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 258-259
+.. GENERATED FROM PYTHON SOURCE LINES 257-258
 
 Set some graphics preferences
 
-.. GENERATED FROM PYTHON SOURCE LINES 259-265
+.. GENERATED FROM PYTHON SOURCE LINES 258-264
 
 .. code-block:: Python
 
@@ -4185,11 +4160,11 @@ Set some graphics preferences
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 266-267
+.. GENERATED FROM PYTHON SOURCE LINES 265-266
 
 Method to save png images
 
-.. GENERATED FROM PYTHON SOURCE LINES 267-275
+.. GENERATED FROM PYTHON SOURCE LINES 266-274
 
 .. code-block:: Python
 
@@ -4208,11 +4183,11 @@ Method to save png images
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 276-277
+.. GENERATED FROM PYTHON SOURCE LINES 275-276
 
 Create a plane
 
-.. GENERATED FROM PYTHON SOURCE LINES 277-286
+.. GENERATED FROM PYTHON SOURCE LINES 276-285
 
 .. code-block:: Python
 
@@ -4232,11 +4207,11 @@ Create a plane
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-288
+.. GENERATED FROM PYTHON SOURCE LINES 286-287
 
 Create a mutli-plane
 
-.. GENERATED FROM PYTHON SOURCE LINES 288-305
+.. GENERATED FROM PYTHON SOURCE LINES 287-304
 
 .. code-block:: Python
 
@@ -4264,11 +4239,11 @@ Create a mutli-plane
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 306-307
+.. GENERATED FROM PYTHON SOURCE LINES 305-306
 
 Method to create a contour
 
-.. GENERATED FROM PYTHON SOURCE LINES 307-345
+.. GENERATED FROM PYTHON SOURCE LINES 306-344
 
 .. code-block:: Python
 
@@ -4317,11 +4292,11 @@ Method to create a contour
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 346-347
+.. GENERATED FROM PYTHON SOURCE LINES 345-346
 
 Method to create a vector
 
-.. GENERATED FROM PYTHON SOURCE LINES 347-375
+.. GENERATED FROM PYTHON SOURCE LINES 346-374
 
 .. code-block:: Python
 
@@ -4360,11 +4335,11 @@ Method to create a vector
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 376-377
+.. GENERATED FROM PYTHON SOURCE LINES 375-376
 
 Method to define the outline of an object
 
-.. GENERATED FROM PYTHON SOURCE LINES 377-389
+.. GENERATED FROM PYTHON SOURCE LINES 376-388
 
 .. code-block:: Python
 
@@ -4387,11 +4362,11 @@ Method to define the outline of an object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 390-391
+.. GENERATED FROM PYTHON SOURCE LINES 389-390
 
 Method to create a scene
 
-.. GENERATED FROM PYTHON SOURCE LINES 391-407
+.. GENERATED FROM PYTHON SOURCE LINES 390-406
 
 .. code-block:: Python
 
@@ -4418,11 +4393,11 @@ Method to create a scene
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 408-409
+.. GENERATED FROM PYTHON SOURCE LINES 407-408
 
 Create the outline of the object
 
-.. GENERATED FROM PYTHON SOURCE LINES 409-411
+.. GENERATED FROM PYTHON SOURCE LINES 408-410
 
 .. code-block:: Python
 
@@ -4435,11 +4410,11 @@ Create the outline of the object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 412-413
+.. GENERATED FROM PYTHON SOURCE LINES 411-412
 
 Create contours and vectors
 
-.. GENERATED FROM PYTHON SOURCE LINES 413-448
+.. GENERATED FROM PYTHON SOURCE LINES 412-447
 
 .. code-block:: Python
 
@@ -4485,7 +4460,7 @@ Create contours and vectors
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 449-480
+.. GENERATED FROM PYTHON SOURCE LINES 448-479
 
 Results
 ------------
@@ -4522,7 +4497,7 @@ Total temperature on velocity vectors on zx plane at y = 0
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (9 minutes 36.384 seconds)
+   **Total running time of the script:** (12 minutes 45.145 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_heating_tank_fmu.py:
