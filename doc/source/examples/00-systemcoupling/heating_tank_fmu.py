@@ -88,7 +88,7 @@ from ansys.systemcoupling.core import examples
 # ~~~~~~~~~~~~~~~~~~~~
 # Clear the downloads target directory (which is to be used as the
 # working directory). Download the case file for Fluent and the FMU file, which
-# define the participant-specifc setup information.
+# define the participant-specific setup information.
 
 examples.delete_downloads()
 fmu_file = examples.download_file(

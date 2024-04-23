@@ -77,7 +77,7 @@ from ansys.systemcoupling.core import examples
 # ~~~~~~~~~~~~~~~~~~~~
 # Clear the downloads target directory (which is to be used as the
 # working directory). Download the SCP files for Fluent and MAPDL, which
-# provide solver-specifc information to System Coupling and the respective
+# provide solver-specific information to System Coupling and the respective
 # solver input files for each solver run.
 #
 

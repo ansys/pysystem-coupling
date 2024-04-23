@@ -107,7 +107,7 @@ Download input files
 ~~~~~~~~~~~~~~~~~~~~
 Clear the downloads target directory (which is to be used as the
 working directory). Download the case file for Fluent and the FMU file, which
-define the participant-specifc setup information.
+define the participant-specific setup information.
 
 .. GENERATED FROM PYTHON SOURCE LINES 92-103
 
