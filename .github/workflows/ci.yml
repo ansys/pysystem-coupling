@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "PySystemCoupling documentation style checks"
-        uses: ansys/actions/doc-style@v6
+        uses: ansys/actions/doc-style@v5
         with:
           token: ${{ secrets.GH_TOKEN }}
 
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
-        uses: ansys/actions/code-style@v6
+        uses: ansys/actions/code-style@v5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
@@ -52,7 +52,7 @@ jobs:
 
     steps:
       - name: "Build wheelhouse and perform smoke test"
-        uses: ansys/actions/build-wheelhouse@v6
+        uses: ansys/actions/build-wheelhouse@v5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           operating-system: ${{ matrix.os }}
@@ -234,7 +234,7 @@ jobs:
     needs: [docs]
     steps:
       - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@v6
+        uses: ansys/actions/doc-deploy-dev@v5
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -247,14 +247,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Release to the private PyPI repository
-        uses: ansys/actions/release-pypi-private@v6
+        uses: ansys/actions/release-pypi-private@v5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           twine-username: "__token__"
           twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
 
       - name: "Release to the public PyPI repository"
-        uses: ansys/actions/release-pypi-public@v6
+        uses: ansys/actions/release-pypi-public@v5
         with:
           library-name: ${{ env.PACKAGE_NAME }}
           twine-username: "__token__"
@@ -287,7 +287,7 @@ jobs:
     needs: [release]
     steps:
       - name: Deploy the stable documentation
-        uses: ansys/actions/doc-deploy-stable@v6
+        uses: ansys/actions/doc-deploy-stable@v5
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
