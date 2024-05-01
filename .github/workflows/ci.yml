@@ -30,6 +30,7 @@ jobs:
         uses: ansys/actions/doc-style@v6
         with:
           token: ${{ secrets.GH_TOKEN }}
+          vale-version: "3.4.1"
 
   style:
     name: Code style
