@@ -55,7 +55,7 @@ class Logger:
     """
 
     def __init__(self, level: Any = logging.ERROR):
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("pysystem-coupling")
         self.stream_handler = None
         self.file_handler = None
         self.log_filepath = None
