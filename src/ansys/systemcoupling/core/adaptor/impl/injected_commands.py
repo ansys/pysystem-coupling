@@ -103,7 +103,7 @@ def _wrap_add_participant(
                 "'system_coupling' attribute and therefore cannot support this "
                 "form of 'add_participant'."
             )
-
+        part_mgr.set_server_version(server_version)
         return part_mgr.add_participant(participant_session=session.system_coupling)
 
     return root_object._add_participant(**kwargs)

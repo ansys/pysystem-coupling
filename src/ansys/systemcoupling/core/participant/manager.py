@@ -24,6 +24,7 @@ import threading
 from typing import Dict, List, Tuple
 
 from ansys.systemcoupling.core.participant.protocol import ParticipantProtocol
+from ansys.systemcoupling.core.syc_version import compare_versions
 from ansys.systemcoupling.core.util.logging import LOG
 
 
@@ -61,9 +62,13 @@ class ParticipantManager:
         self.clear()
 
     def clear(self):
+        self.__server_version = None
         self.__participants: Dict[str, ParticipantProtocol] = {}
         self.__n_connected = 0
         self.__solve_exception = None
+
+    def set_server_version(self, server_version: str) -> None:
+        self.__server_version = server_version
 
     def add_participant(self, participant_session: ParticipantProtocol) -> str:
         participant_name = (
@@ -96,14 +101,23 @@ class ParticipantManager:
             )
 
         for region in participant_session.get_regions():
-            part_state.region.create(region.name).set_state(
-                {
-                    "topology": region.topology,
-                    "input_variables": region.input_variables,
-                    "output_variables": region.output_variables,
-                    "display_name": region.display_name,
-                }
-            )
+            region_state = {
+                "topology": region.topology,
+                "input_variables": region.input_variables,
+                "output_variables": region.output_variables,
+                "display_name": region.display_name,
+            }
+            if compare_versions(self.__server_version, "24.2") >= 0:
+                region_state.update(
+                    {
+                        "region_discretization_type": (
+                            region.region_discretization_type
+                            if region.hasattr("region_discretization_type")
+                            else "Mesh Region"
+                        )
+                    }
+                )
+            part_state.region.create(region.name).set_state(region_state)
 
         self.__participants[participant_name] = participant_session
         return participant_name

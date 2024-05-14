@@ -46,6 +46,7 @@ class Region:
     topology: str
     input_variables: List[str]
     output_variables: List[str]
+    region_discretization_type: str
 
 
 class Participant:

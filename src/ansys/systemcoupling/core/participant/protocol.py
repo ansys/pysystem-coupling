@@ -41,6 +41,7 @@ class Region(Protocol):
     topology: str
     input_variables: List[str]
     output_variables: List[str]
+    region_discretization_type: str = "Mesh Region"
 
 
 class ParticipantProtocol(Protocol):
