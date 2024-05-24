@@ -21,8 +21,10 @@
 # SOFTWARE.
 
 from copy import deepcopy
-from typing import Callable, Dict
+import os
+from typing import Callable, Dict, Protocol
 
+from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
@@ -31,9 +33,17 @@ from .get_status_messages import get_status_messages
 from .types import Container
 
 
+# We cannot import Session directly, so define a protocol for typing
+# We only use it as a means of accessing the "API roots".
+class SessionProtocol(Protocol):
+    case: Container
+    setup: Container
+    solution: Container
+
+
 def get_injected_cmd_map(
     category: str,
-    root_object: Container,
+    session: SessionProtocol,
     part_mgr: ParticipantManager,
     rpc,
 ) -> Dict[str, Callable]:
@@ -44,27 +54,37 @@ def get_injected_cmd_map(
     ret = {}
 
     if category == "setup":
+        # ``get_injected_cmd_map`` needs to be called during initialisation, where
+        # the session API roots are not necessarily available yet. We therefore
+        # defer their access via the lambda.
+        get_setup_root_object = lambda: session.setup
         ret = {
             "get_setup_summary": lambda **kwargs: rpc.GetSetupSummary(**kwargs),
             "get_status_messages": lambda **kwargs: get_status_messages(
-                rpc, root_object, **kwargs
+                rpc, get_setup_root_object(), **kwargs
             ),
             "add_participant": lambda **kwargs: _wrap_add_participant(
-                root_object, part_mgr, **kwargs
+                get_setup_root_object(), part_mgr, **kwargs
             ),
         }
 
     if category == "solution":
+        get_solution_root_object = lambda: session.solution
+        get_setup_root_object = lambda: session.setup
         ret = {
-            "solve": lambda **kwargs: _wrap_solve(root_object, part_mgr, **kwargs),
+            "solve": lambda **kwargs: _wrap_solve(
+                get_solution_root_object(), part_mgr, **kwargs
+            ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
+            "show_plot": lambda **kwargs: show_plot(get_setup_root_object(), **kwargs),
         }
 
     if category == "case":
+        get_case_root_object = lambda: session.case
         ret = {
             "clear_state": lambda **kwargs: _wrap_clear_state(
-                root_object, part_mgr, **kwargs
+                get_case_root_object(), part_mgr, **kwargs
             )
         }
 
@@ -72,7 +92,7 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    root_object: Container, part_mgr: ParticipantManager, **kwargs
+    str, setup: Container, part_mgr: ParticipantManager, **kwargs
 ) -> str:
     if session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
@@ -100,21 +120,50 @@ def _wrap_add_participant(
     if input_file := kwargs.get("input_file", None):
         part_mgr.upload_file(input_file)
 
-    return root_object._add_participant(**kwargs)
+    return setup._add_participant(**kwargs)
 
 
-def _wrap_clear_state(
-    root_object: Container, part_mgr: ParticipantManager, **kwargs
-) -> None:
+def _wrap_clear_state(case: Container, part_mgr: ParticipantManager, **kwargs) -> None:
     part_mgr.clear()
-    root_object._clear_state(**kwargs)
+    case._clear_state(**kwargs)
 
 
-def _wrap_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
+def _wrap_solve(solution: Container, part_mgr: ParticipantManager) -> None:
     if part_mgr is None:
-        root_object._solve()
+        solution._solve()
     else:
         part_mgr.solve()
+
+
+def show_plot(setup: Container, **kwargs):
+    working_dir = kwargs.pop("working_dir", ".")
+    interface_name = kwargs.pop("interface_name", None)
+    if interface_name is None:
+        interfaces = setup.coupling_interface.get_object_names()
+        if len(interfaces) == 0:
+            return
+        if len(interfaces) > 1:
+            raise RuntimeError(
+                "show_plot() currently only supports a single interface."
+            )
+        interface_name = interfaces[0]
+    interface_object = setup.coupling_interface[interface_name]
+    interface_disp_name = interface_object.display_name
+
+    transfer_names = kwargs.pop("transfer_names", [])
+    if not transfer_names:
+        transfer_names = interface_object.data_transfer.get_object_names()
+    transfer_disp_names = [
+        interface_object.data_transfer[trans_name].display_name
+        for trans_name in transfer_names
+    ]
+    # TODO : better way to do this?
+    is_transient = setup.solution_control.time_step_size is not None
+    create_and_show_plot(
+        is_transient,
+        [(interface_name, interface_disp_name, transfer_disp_names)],
+        [os.path.join(working_dir, "SyC", f"{interface_name}.csv")],
+    )
 
 
 def get_injected_cmd_data() -> list:
@@ -321,4 +370,42 @@ _cmd_yaml = """
     pyname: clear_state
     isInjected: true
     pysyc_internal_name: _clear_state
+-   name: show_plot
+    pyname: show_plot
+    exposure: solution
+    isInjected: true
+    isQuery: false
+    retType: <class 'NoneType'>
+    doc: |-
+        Shows plots.
+    essentialArgNames:
+    - interface_name
+    optionalArgNames:
+    - transfer_names
+    - working_dir
+    defaults:
+    - []
+    - "."
+    args:
+    - #!!python/tuple
+        - interface_name
+        -   pyname: interface_name
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Specification of which interface to plot
+    - #!!python/tuple
+        - transfer_names
+        -   pyname: transfer_names
+            Type: <class 'list'>
+            type: String List
+            doc:  |-
+                Specification of which data transfers to plot
+    - #!!python/tuple
+        - working_dir
+        -   pyname: working_dir
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Working directory (defaults = ".")
 """

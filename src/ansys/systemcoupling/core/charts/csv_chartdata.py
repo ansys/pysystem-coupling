@@ -48,7 +48,6 @@ class CsvReader:
         try:
             if not self._started:
                 self._read_data_initial()
-                print("initial data read")
                 self._started = True
             else:
                 self._read_data_incr()
@@ -56,6 +55,7 @@ class CsvReader:
             return True  # File exists - haven't necessarily read anything yet
         except FileNotFoundError:
             # It is expected that the file is not necessarily immediately available
+            print(f"Failed to open {self._file_or_filename}")
             return False
         except Exception as e:
             # Temporary - see if anything else goes wrong
@@ -63,6 +63,7 @@ class CsvReader:
             return False
 
     def _read_data_initial(self):
+        f = None
         try:
             f = self._get_file()
             reader = csv.reader(f)
@@ -164,8 +165,6 @@ class CsvChartDataReader:
     def _process_curr_data(self):
         raw_data = self._csv_reader.data
         last_data_len = len(self._data.series[0].data)
-        if len(raw_data) - last_data_len > 0:
-            print("more data read")
 
         has_time = self._metadata.is_transient
         for i in range(last_data_len, len(raw_data)):
