@@ -13,6 +13,7 @@ from ansys_sphinx_theme import (
     watermark,
 )
 import sphinx_gallery
+import sphinx_gallery.gen_rst
 
 from ansys.systemcoupling.core import __version__
 
