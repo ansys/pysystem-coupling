@@ -106,6 +106,9 @@ def _wrap_add_participant(
 
         return part_mgr.add_participant(participant_session=session.system_coupling)
 
+    if input_file := kwargs.get("input_file", None):
+        part_mgr.upload_file(input_file)
+
     return root_object._add_participant(**kwargs)
 
 
