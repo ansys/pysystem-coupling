@@ -26,10 +26,10 @@ from typing import Callable
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.datasource_csv import DataSource
 from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
-from ansys.systemcoupling.core.charts.plotdata_manager import (
+from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
     InterfaceSpec,
-    PlotDataManager,
+    PlotDefinitionManager,
     PlotSpec,
 )
 from ansys.systemcoupling.core.charts.plotter import Plotter
@@ -51,10 +51,10 @@ def make_plot_spec(
 
 def make_plot_data_manager(
     is_transient: bool, interface_list: list[tuple[str, str, list[str]]]
-) -> PlotDataManager:
+) -> PlotDefinitionManager:
     spec = make_plot_spec(is_transient, interface_list)
     # pprint(spec)
-    return PlotDataManager(spec)
+    return PlotDefinitionManager(spec)
 
 
 def create_and_show_plot(

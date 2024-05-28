@@ -34,13 +34,17 @@ from ansys.systemcoupling.core.charts.chart_datatypes import (
     SeriesData,
     TimestepData,
 )
-from ansys.systemcoupling.core.charts.plotdata_manager import PlotDataManager
+from ansys.systemcoupling.core.charts.plotdefinition_manager import (
+    PlotDefinitionManager,
+)
 
 
 # TODO: Only handles one interface at the moment! Generalise to multiple
 class Plotter:
     def __init__(
-        self, mgr: PlotDataManager, request_update: Optional[Callable[[], None]] = None
+        self,
+        mgr: PlotDefinitionManager,
+        request_update: Optional[Callable[[], None]] = None,
     ):
         self._mgr = mgr
         self._request_update = request_update

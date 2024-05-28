@@ -105,10 +105,10 @@ if __name__ == "__main__":
     import threading
 
     from ansys.systemcoupling.core.charts.datasource_csv import DataSource
-    from ansys.systemcoupling.core.charts.plotdata_manager import (
+    from ansys.systemcoupling.core.charts.plotdefinition_manager import (
         DataTransferSpec,
         InterfaceSpec,
-        PlotDataManager,
+        PlotDefinitionManager,
         PlotSpec,
     )
     from ansys.systemcoupling.core.charts.plotter import Plotter
@@ -130,7 +130,7 @@ if __name__ == "__main__":
 
     # Conversion of specification into a matplotlib-compatible
     # description of a figure and "subplots"
-    manager = PlotDataManager(spec=spec)
+    manager = PlotDefinitionManager(spec=spec)
 
     dispatcher = MessageDispatcher()
     plotter = Plotter(
