@@ -24,14 +24,20 @@ from dataclasses import dataclass
 from enum import IntEnum
 import queue
 import time
-from typing import Optional, Union
+from typing import Optional, Protocol, Union
 
 from ansys.systemcoupling.core.charts.chart_datatypes import (
     InterfaceInfo,
     SeriesData,
     TimestepData,
 )
-from ansys.systemcoupling.core.charts.plotter import Plotter
+
+
+class PlotterProtocol(Protocol):
+    def set_metadata(self, metadata: InterfaceInfo): ...
+    def set_timestep_data(self, timestep_data: TimestepData): ...
+    def update_line_series(self, series_data: SeriesData): ...
+    def close(self): ...
 
 
 class MsgType(IntEnum):
@@ -53,7 +59,7 @@ class MessageDispatcher:
     def __init__(self):
         self._q = queue.Queue()
 
-    def set_plotter(self, plotter: Plotter):
+    def set_plotter(self, plotter: PlotterProtocol):
         self._plotter = plotter
 
     def put_msg(self, msg: Message):
@@ -105,6 +111,7 @@ if __name__ == "__main__":
         PlotDataManager,
         PlotSpec,
     )
+    from ansys.systemcoupling.core.charts.plotter import Plotter
 
     # The very basic specification of what we want
     interface_list = [("Interface-1", "Interface-1", ["input", "input2"])]

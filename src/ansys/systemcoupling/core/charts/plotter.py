@@ -60,9 +60,7 @@ class Plotter:
         # We now have enough information to create the (empty) plots
         self._init_plots()
 
-    def set_timestep_data(
-        self, timestep_data: TimestepData
-    ) -> tuple[list[float], list[int]]:
+    def set_timestep_data(self, timestep_data: TimestepData):
         if not timestep_data.timestep:
             return [], []
 

@@ -23,7 +23,7 @@
 from pprint import pprint
 import threading
 import time
-from typing import Callable
+from typing import Callable, TextIO, Union
 
 from ansys.systemcoupling.core.charts.chart_datatypes import SeriesData
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
@@ -32,7 +32,10 @@ from ansys.systemcoupling.core.charts.message_dispatcher import Message, MsgType
 
 class DataSource:
     def __init__(
-        self, interface_name: str, csvfile: str, put_msg: Callable[[Message], None]
+        self,
+        interface_name: str,
+        csvfile: Union[str, TextIO],
+        put_msg: Callable[[Message], None],
     ):
         self._csv_reader = CsvChartDataReader(interface_name, csvfile)
         self._put_msg = put_msg

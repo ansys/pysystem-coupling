@@ -24,7 +24,11 @@ from io import StringIO
 
 import pytest
 
-from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
+from ansys.systemcoupling.core.charts.chart_datatypes import SeriesType
+from ansys.systemcoupling.core.charts.csv_chartdata import (
+    CsvChartDataReader,
+    parse_csv_metadata,
+)
 
 
 @pytest.fixture
@@ -76,6 +80,134 @@ def data4():
 2,0,0.2222222222222196,0.9375,0.9375,0.5454545454545375,0.875,0.875
 3,0,0.048780487804877544,0.984375,0.984375,0.10169491525423618,0.96875,0.96875
 """  # noqa: E501
+
+
+def test_parse_header():
+    header = (
+        "Iteration,"
+        "Step,"
+        "Time,"
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-1 - input,"
+        "input (Weighted Average): rootFind,"
+        "input (Weighted Average): rootFind 2,"
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-1 - input2,"
+        "input2 (Weighted Average): rootFind 2,"
+        "input2 (Weighted Average): rootFind"
+    )
+
+    info = parse_csv_metadata("Intf-1", header.split(","))
+
+    assert info.display_name == "Intf-1"
+    assert info.is_transient
+    assert len(info.transfer_info) == 6
+
+    info0 = info.transfer_info[0]
+    assert info0.transfer_display_name == "input"
+    assert info0.series_type == SeriesType.CONVERGENCE
+    assert info0.participant_display_name is None
+    assert info0.data_index == 0
+    assert info0.line_suffixes == []
+
+    info1 = info.transfer_info[1]
+    assert info1.transfer_display_name == "input"
+    assert info1.series_type == SeriesType.WEIGHTED_AVERAGE
+    assert info1.participant_display_name == "rootFind"
+    assert info1.data_index == 1
+    assert info1.line_suffixes == []
+
+    info2 = info.transfer_info[2]
+    assert info2.transfer_display_name == "input"
+    assert info2.series_type == SeriesType.WEIGHTED_AVERAGE
+    assert info2.participant_display_name == "rootFind 2"
+    assert info2.data_index == 2
+    assert info2.line_suffixes == []
+
+    info3 = info.transfer_info[3]
+    assert info3.transfer_display_name == "input2"
+    assert info3.series_type == SeriesType.CONVERGENCE
+    assert info3.participant_display_name is None
+    assert info3.data_index == 3
+    assert info3.line_suffixes == []
+
+    info4 = info.transfer_info[4]
+    assert info4.transfer_display_name == "input2"
+    assert info4.series_type == SeriesType.WEIGHTED_AVERAGE
+    assert info4.participant_display_name == "rootFind 2"
+    assert info4.data_index == 4
+    assert info4.line_suffixes == []
+
+    info5 = info.transfer_info[5]
+    assert info5.transfer_display_name == "input2"
+    assert info5.series_type == SeriesType.WEIGHTED_AVERAGE
+    assert info5.participant_display_name == "rootFind"
+    assert info5.data_index == 5
+    assert info5.line_suffixes == []
+
+
+def test_parse_header_components():
+    header = (
+        "Iteration,"
+        "Step,"
+        "Time,"
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-1 - input,"
+        "input (Sum): part1 x,"
+        "input (Sum): part1 y,"
+        "input (Sum): part1 z,"
+        "input (Sum): part2 x,"
+        "input (Sum): part2 y,"
+        "input (Sum): part2 z,"
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-1 - input2,"
+        "input2 (Sum): part2,"
+        "input2 (Sum): part1"
+    )
+
+    info = parse_csv_metadata("Intf-1", header.split(","))
+
+    assert info.display_name == "Intf-1"
+    assert info.is_transient
+    assert len(info.transfer_info) == 6
+
+    info0 = info.transfer_info[0]
+    assert info0.transfer_display_name == "input"
+    assert info0.series_type == SeriesType.CONVERGENCE
+    assert info0.participant_display_name is None
+    assert info0.data_index == 0
+    assert info0.line_suffixes == []
+
+    info1 = info.transfer_info[1]
+    assert info1.transfer_display_name == "input"
+    assert info1.series_type == SeriesType.SUM
+    assert info1.participant_display_name == "part1"
+    assert info1.data_index == 1
+    assert info1.line_suffixes == ["x", "y", "z"]
+
+    info2 = info.transfer_info[2]
+    assert info2.transfer_display_name == "input"
+    assert info2.series_type == SeriesType.SUM
+    assert info2.participant_display_name == "part2"
+    assert info2.data_index == 4
+    assert info2.line_suffixes == ["x", "y", "z"]
+
+    info3 = info.transfer_info[3]
+    assert info3.transfer_display_name == "input2"
+    assert info3.series_type == SeriesType.CONVERGENCE
+    assert info3.participant_display_name is None
+    assert info3.data_index == 7
+    assert info3.line_suffixes == []
+
+    info4 = info.transfer_info[4]
+    assert info4.transfer_display_name == "input2"
+    assert info4.series_type == SeriesType.SUM
+    assert info4.participant_display_name == "part2"
+    assert info4.data_index == 8
+    assert info4.line_suffixes == []
+
+    info5 = info.transfer_info[5]
+    assert info5.transfer_display_name == "input2"
+    assert info5.series_type == SeriesType.SUM
+    assert info5.participant_display_name == "part1"
+    assert info5.data_index == 9
+    assert info5.line_suffixes == []
 
 
 def test_timestep(data1):
