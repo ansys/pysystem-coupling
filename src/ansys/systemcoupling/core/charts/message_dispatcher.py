@@ -23,8 +23,7 @@
 from dataclasses import dataclass
 from enum import IntEnum
 import queue
-import time
-from typing import Optional, Protocol, Union
+from typing import Protocol, Union
 
 from ansys.systemcoupling.core.charts.chart_datatypes import (
     InterfaceInfo,
@@ -65,20 +64,20 @@ class MessageDispatcher:
     def put_msg(self, msg: Message):
         self._q.put(msg)
 
-    def wait_for_metadata(self) -> Optional[InterfaceInfo]:
-        # Alternative approach - supports waiting for metadata and
-        # initialising figure before creating the animation
-        while True:
-            try:
-                msg: Message = self._q.get(timeout=0.001)
-                msg_t = msg.type
-                if msg_t == MsgType.METADATA:
-                    return msg.data
-                elif msg_t == MsgType.END_OF_DATA:
-                    return None
-            except queue.Empty:
-                pass
-            time.sleep(0.2)
+    # def wait_for_metadata(self) -> Optional[InterfaceInfo]:
+    #     # Alternative approach - supports waiting for metadata and
+    #     # initialising figure before creating the animation
+    #     while True:
+    #         try:
+    #             msg: Message = self._q.get(timeout=0.001)
+    #             msg_t = msg.type
+    #             if msg_t == MsgType.METADATA:
+    #                 return msg.data
+    #             elif msg_t == MsgType.END_OF_DATA:
+    #                 return None
+    #         except queue.Empty:
+    #             pass
+    #         time.sleep(0.2)
 
     def dispatch_messages(self):
         while True:
@@ -98,53 +97,3 @@ class MessageDispatcher:
                     self._plotter.close()
             except queue.Empty:
                 return
-
-
-if __name__ == "__main__":
-    from pprint import pprint
-    import threading
-
-    from ansys.systemcoupling.core.charts.datasource_csv import DataSource
-    from ansys.systemcoupling.core.charts.plotdefinition_manager import (
-        DataTransferSpec,
-        InterfaceSpec,
-        PlotDefinitionManager,
-        PlotSpec,
-    )
-    from ansys.systemcoupling.core.charts.plotter import Plotter
-
-    # The very basic specification of what we want
-    interface_list = [("Interface-1", "Interface-1", ["input", "input2"])]
-
-    # The specification of what we want expanded into in a more structured form
-    spec = PlotSpec()
-    for interface_name, interface_disp_name, transfers in interface_list:
-        intf_spec = InterfaceSpec(interface_name, interface_disp_name)
-        spec.interfaces.append(intf_spec)
-        for transfer in transfers:
-            intf_spec.transfers.append(DataTransferSpec(transfer))
-    spec.plot_time = False
-
-    pprint(spec)
-    input("...")
-
-    # Conversion of specification into a matplotlib-compatible
-    # description of a figure and "subplots"
-    manager = PlotDefinitionManager(spec=spec)
-
-    dispatcher = MessageDispatcher()
-    plotter = Plotter(
-        manager, dispatcher.dispatch_messages  # ,dispatcher.wait_for_metadata
-    )
-    dispatcher.set_plotter(plotter)
-
-    data_source = DataSource(interface_name, "Interface-1.csv", dispatcher.put_msg)
-    data_thread = threading.Thread(target=data_source.read_data)
-
-    data_thread.start()
-
-    plotter.show_animated()
-    data_source.cancel()
-    data_thread.join()
-
-    input("...")
