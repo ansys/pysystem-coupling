@@ -46,6 +46,7 @@ def launch(
     nprocs: int = None,
     sycnprocs: int = None,
     version: str = None,
+    start_output: bool = False,
     extra_args: List[str] = [],
 ) -> Session:
     """Start a local instance of System Coupling and connect to it.
@@ -74,6 +75,11 @@ def launch(
         ``"241"`` ("2024 R1" release), unless either of the environment
         variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
         to be an error if either these is set *and* ``version`` is provided.
+    start_output: bool, optional
+        Boolean to specify if the user want to stream system coupling output.
+        The default is ``False``, in which case the output stream is kept hidden.
+        If ``True``, the output is printed to whichever console is available to
+        pysystem-coupling.
     extra_args : List[str]
         List of any additional arguments to specify when the server
         process is launched. The default is ``[]``. If a list of additional
@@ -92,9 +98,9 @@ def launch(
     if pypim.is_configured():
         LOG.info(
             "Starting System Coupling remotely. Any launch arguments other "
-            "than 'version' are ignored."
+            "than 'version' and 'start_output' are ignored."
         )
-        rpc.start_pim_and_connect(version)
+        rpc.start_pim_and_connect(start_output, version)
     else:
         rpc.start_and_connect(
             port=port,
@@ -102,6 +108,7 @@ def launch(
             nprocs=nprocs,
             sycnprocs=sycnprocs,
             version=version,
+            start_output=start_output,
             extra_args=extra_args,
         )
     return Session(rpc)
