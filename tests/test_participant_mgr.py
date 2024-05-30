@@ -26,6 +26,7 @@ import time
 from typing import List, Tuple
 
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
+from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
 from ansys.systemcoupling.core.util.logging import LOG
 
 
@@ -46,6 +47,7 @@ class Region:
     topology: str
     input_variables: List[str]
     output_variables: List[str]
+    region_discretization_type: str
 
 
 class Participant:
@@ -155,7 +157,7 @@ def test_add_participants():
     part1 = Participant()
     part2 = Participant()
 
-    mgr = ParticipantManager(syc)
+    mgr = ParticipantManager(syc, SYC_VERSION_DOT)
     mgr.add_participant(participant_session=part1)
     mgr.add_participant(participant_session=part2)
 
@@ -165,7 +167,7 @@ def test_basic_solve():
     part1 = Participant()
     part2 = Participant()
 
-    mgr = ParticipantManager(syc)
+    mgr = ParticipantManager(syc, SYC_VERSION_DOT)
     mgr.add_participant(participant_session=part1)
     mgr.add_participant(participant_session=part2)
 
@@ -181,7 +183,7 @@ def test_solve_with_connection_failure():
 
     part1.connect_fail_time = 1
 
-    mgr = ParticipantManager(syc)
+    mgr = ParticipantManager(syc, SYC_VERSION_DOT)
     mgr.add_participant(participant_session=part1)
     mgr.add_participant(participant_session=part2)
 
@@ -198,7 +200,7 @@ def test_solve_with_solver_failure():
     part1 = Participant()
     part2 = Participant()
 
-    mgr = ParticipantManager(syc)
+    mgr = ParticipantManager(syc, SYC_VERSION_DOT)
     mgr.add_participant(participant_session=part1)
     mgr.add_participant(participant_session=part2)
 

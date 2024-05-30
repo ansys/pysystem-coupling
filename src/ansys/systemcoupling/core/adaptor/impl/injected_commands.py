@@ -25,7 +25,6 @@ from typing import Callable, Dict
 
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
-from ansys.systemcoupling.core.syc_version import compare_versions
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
 from .get_status_messages import get_status_messages
@@ -33,7 +32,6 @@ from .types import Container
 
 
 def get_injected_cmd_map(
-    version: str,
     category: str,
     root_object: Container,
     part_mgr: ParticipantManager,
@@ -52,7 +50,7 @@ def get_injected_cmd_map(
                 rpc, root_object, **kwargs
             ),
             "add_participant": lambda **kwargs: _wrap_add_participant(
-                version, root_object, part_mgr, **kwargs
+                root_object, part_mgr, **kwargs
             ),
         }
 
@@ -74,7 +72,7 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    server_version: str, root_object: Container, part_mgr: ParticipantManager, **kwargs
+    root_object: Container, part_mgr: ParticipantManager, **kwargs
 ) -> str:
     if session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
@@ -84,12 +82,6 @@ def _wrap_add_participant(
             )
         if part_mgr is None:
             raise RuntimeError("Internal error: participant manager is not available.")
-
-        if compare_versions(server_version, "24.1") < 0:
-            raise RuntimeError(
-                f"System Coupling server version '{server_version}' is too low to"
-                "support this form of 'add_participant'. Minimum version is '24.1'."
-            )
 
         # special handling for mapdl session
         if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(session)):
@@ -103,7 +95,6 @@ def _wrap_add_participant(
                 "'system_coupling' attribute and therefore cannot support this "
                 "form of 'add_participant'."
             )
-
         return part_mgr.add_participant(participant_session=session.system_coupling)
 
     if input_file := kwargs.get("input_file", None):
