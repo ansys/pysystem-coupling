@@ -159,7 +159,7 @@ def show_plot(setup: Container, **kwargs):
     ]
     # TODO : better way to do this?
     is_transient = setup.solution_control.time_step_size is not None
-    create_and_show_plot(
+    return create_and_show_plot(
         is_transient,
         [(interface_name, interface_disp_name, transfer_disp_names)],
         [os.path.join(working_dir, "SyC", f"{interface_name}.csv")],

@@ -61,7 +61,7 @@ def create_and_show_plot(
     is_transient: bool,
     interface_list: list[tuple[str, str, list[str]]],
     csv_list: list[str],
-):
+) -> Plotter:
     assert len(interface_list) == 1, "Plots currently only support one interface"
     assert len(interface_list) == len(csv_list)
 
