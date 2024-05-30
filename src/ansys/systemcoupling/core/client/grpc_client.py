@@ -156,7 +156,7 @@ class SycGrpc(object):
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
-    def start_pim_and_connect(self, start_output: bool = False, version: str = None):
+    def start_pim_and_connect(self, version: str = None, start_output: bool = False):
         """Start PIM-managed instance.
 
         Currently for internal use only.

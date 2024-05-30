@@ -99,7 +99,7 @@ def launch(
             "Starting System Coupling remotely. Any launch arguments other "
             "than 'version' and 'start_output' are ignored."
         )
-        rpc.start_pim_and_connect(start_output, version)
+        rpc.start_pim_and_connect(version, start_output)
     else:
         rpc.start_and_connect(
             port=port,
