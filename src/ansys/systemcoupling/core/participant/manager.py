@@ -55,22 +55,24 @@ class ParticipantManager:
         until more participant types support the protocol.
     """
 
-    def __init__(self, syc_session):
+    def __init__(self, syc_session, server_version: str):
         self.__participants: Dict[str, ParticipantProtocol] = {}
         self.__syc_session = syc_session
         self.__connection_lock = threading.Lock()
+        self.__server_version = server_version
         self.clear()
 
     def clear(self):
-        self.__server_version = None
         self.__participants: Dict[str, ParticipantProtocol] = {}
         self.__n_connected = 0
         self.__solve_exception = None
 
-    def set_server_version(self, server_version: str) -> None:
-        self.__server_version = server_version
-
     def add_participant(self, participant_session: ParticipantProtocol) -> str:
+        if compare_versions(self.__server_version, "24.1") < 0:
+            raise RuntimeError(
+                f"System Coupling server version '{self.__server_version}' is too low to"
+                "support this form of 'add_participant'. Minimum version is '24.1'."
+            )
         participant_name = (
             f"{participant_session.participant_type}-{len(self.__participants) + 1}"
         )
