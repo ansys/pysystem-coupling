@@ -88,6 +88,10 @@ class PimFileTransferService:  # pragma: no cover
         """
         if os.path.isfile(file_name):
             remote_file_name = remote_file_name or os.path.basename(file_name)
+            if os.path.dirname(file_name):
+                raise IsADirectoryError(
+                    f"{remote_file_name} is not in the current working directory"
+                )
             if not overwrite and self.file_service.file_exist(remote_file_name):
                 raise FileExistsError(f"{remote_file_name} already exists remotely.")
             self.file_service.upload_file(file_name, remote_file_name)

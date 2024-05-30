@@ -119,6 +119,7 @@ class SycGrpc(object):
         working_dir = kwargs.pop("working_dir", None)
         port = kwargs.pop("port", None)
         version = kwargs.pop("version", None)
+        start_output = kwargs.pop("start_output", None)
 
         if os.environ.get("SYC_LAUNCH_CONTAINER") == "1":
             mounted_from = working_dir if working_dir else "./"
@@ -137,6 +138,8 @@ class SycGrpc(object):
             )
             LOG.debug("...started")
             self._connect(_LOCALHOST_IP, port)
+        if start_output:
+            self.start_output()
 
     def start_container_and_connect(
         self,
@@ -153,7 +156,7 @@ class SycGrpc(object):
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
-    def start_pim_and_connect(self, version: str = None):
+    def start_pim_and_connect(self, version: str = None, start_output: bool = False):
         """Start PIM-managed instance.
 
         Currently for internal use only.
@@ -171,6 +174,8 @@ class SycGrpc(object):
         self.__pim_instance = instance
         channel = instance.build_grpc_channel()
         self._connect(channel=channel)
+        if start_output:
+            self.start_output()
 
     def upload_file(self, *args, **kwargs):
         """Supports file upload to remote instance.
