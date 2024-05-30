@@ -76,10 +76,9 @@ def launch(
         variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
         to be an error if either these is set *and* ``version`` is provided.
     start_output: bool, optional
-        Boolean to specify if the user want to stream system coupling output.
+        Boolean to specify if the user wants to stream system coupling output.
         The default is ``False``, in which case the output stream is kept hidden.
-        If ``True``, the output is printed to whichever console is available to
-        pysystem-coupling.
+        If ``True``, the output information is printed to standard output.
     extra_args : List[str]
         List of any additional arguments to specify when the server
         process is launched. The default is ``[]``. If a list of additional
