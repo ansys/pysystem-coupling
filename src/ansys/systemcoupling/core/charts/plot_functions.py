@@ -24,7 +24,7 @@ import threading
 from typing import Callable
 
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
-from ansys.systemcoupling.core.charts.datasource_csv import LiveCsvDataSource
+from ansys.systemcoupling.core.charts.live_csv_datasource import LiveCsvDataSource
 from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
