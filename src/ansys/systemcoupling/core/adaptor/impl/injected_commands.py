@@ -98,7 +98,7 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    str, setup: Container, part_mgr: ParticipantManager, **kwargs
+    setup: Container, part_mgr: ParticipantManager, **kwargs
 ) -> str:
     if session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
