@@ -24,7 +24,7 @@ import threading
 from typing import Callable
 
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
-from ansys.systemcoupling.core.charts.datasource_csv import DataSource
+from ansys.systemcoupling.core.charts.datasource_csv import LiveCsvDataSource
 from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
@@ -98,7 +98,9 @@ def solve_with_live_plot(
     plotter = Plotter(manager, dispatcher.dispatch_messages)
     dispatcher.set_plotter(plotter)
 
-    data_source = DataSource(interface_list[0][0], csv_list[0], dispatcher.put_msg)
+    data_source = LiveCsvDataSource(
+        interface_list[0][0], csv_list[0], dispatcher.put_msg
+    )
     data_thread = threading.Thread(target=data_source.read_data)
 
     def solve():

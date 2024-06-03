@@ -22,9 +22,14 @@
 
 from copy import deepcopy
 import os
+import random
+import time
 from typing import Callable, Dict, Protocol
 
+import ansys.platform.instancemanagement as pypim
+
 from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
+from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
@@ -39,6 +44,7 @@ class SessionProtocol(Protocol):
     case: Container
     setup: Container
     solution: Container
+    _native_api: NativeApi
 
 
 def get_injected_cmd_map(
@@ -77,7 +83,7 @@ def get_injected_cmd_map(
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
-            "show_plot": lambda **kwargs: show_plot(get_setup_root_object(), **kwargs),
+            "show_plot": lambda **kwargs: show_plot(session, rpc, **kwargs),
         }
 
     if category == "case":
@@ -135,7 +141,37 @@ def _wrap_solve(solution: Container, part_mgr: ParticipantManager) -> None:
         part_mgr.solve()
 
 
-def show_plot(setup: Container, **kwargs):
+def _ensure_file_available(session: SessionProtocol, rpc, filepath: str) -> str:
+    """If we are in a "PIM" session, copies the file specified by ``filepath``
+    into the working directory, so that it is available for download.
+
+    A suffix is added to the name of the copy to make the name unique, and
+    the new name is returned.
+    """
+    # Note: it is a general issue with files in a PIM session that they can
+    # only be uploaded to/downloaded from the root working directory. We
+    # might want to consider integrating something like this directly into
+    # the file_transfer module later so that it is more seamless.
+
+    if not pypim.is_configured():
+        return filepath
+
+    # Copy file to a unique name in the working directory
+    file_name = os.path.basename(filepath)
+    root_name, _, ext = file_name.rpartition(".")
+    ext = f".{ext}" if ext else ""
+    new_name = f"{root_name}_{int(time.time())}_{random.randint(1, 10000000)}{ext}"
+
+    session._native_api.ExecPythonString(
+        PythonString=f"import shutil\nshutil.copy(filepath, new_name)"
+    )
+
+    rpc.download_file(new_name, ".")
+    return new_name
+
+
+def show_plot(session: SessionProtocol, rpc, **kwargs):
+    setup = session.setup
     working_dir = kwargs.pop("working_dir", ".")
     interface_name = kwargs.pop("interface_name", None)
     if interface_name is None:
@@ -159,10 +195,15 @@ def show_plot(setup: Container, **kwargs):
     ]
     # TODO : better way to do this?
     is_transient = setup.solution_control.time_step_size is not None
+
+    file_path = _ensure_file_available(
+        session, rpc, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+    )
+
     return create_and_show_plot(
         is_transient,
         [(interface_name, interface_disp_name, transfer_disp_names)],
-        [os.path.join(working_dir, "SyC", f"{interface_name}.csv")],
+        [file_path],
     )
 
 

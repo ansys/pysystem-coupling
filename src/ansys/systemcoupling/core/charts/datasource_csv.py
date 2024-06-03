@@ -30,7 +30,7 @@ from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.message_dispatcher import Message, MsgType
 
 
-class DataSource:
+class LiveCsvDataSource:
     def __init__(
         self,
         interface_name: str,
