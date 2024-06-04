@@ -251,6 +251,21 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
 
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Required Docker Images
+        run: |
+          chmod +x .ci/pull_syc_fluent_images.sh
+          .ci/pull_syc_fluent_images.sh
+        env:
+          SYC_IMAGE_VERSION: ${{ env.SYC_IMAGE_VERSION }}
+          FLUENT_IMAGE_VERSION: ${{ env.FLUENT_IMAGE_VERSION }}
+
       - name: Build HTML
         run: |
           make -C doc clean
