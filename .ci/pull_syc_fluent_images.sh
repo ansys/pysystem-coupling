@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "Cleaning Cached Images Off Runner"
+
+docker image prune -f -a
+
 echo "Pulling pysystem-coupling Image Version ${SYC_IMAGE_VERSION}"
 echo "Pulling pyfluent Image Version ${FLUENT_IMAGE_VERSION}"
 
