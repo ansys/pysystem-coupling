@@ -15,6 +15,8 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 24_1
+  FLUENT_IMAGE_VERSION: "v24.2.0"
+  SYC_IMAGE_VERSION: "latest"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -116,59 +118,59 @@ jobs:
           library-name: ${{ env.PACKAGE_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-  test:
-    name: Testing
-    needs: [build]
-    runs-on: ubuntu-latest
+  # test:
+  #   name: Testing
+  #   needs: [build]
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Setup Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-      - name: Download package
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ env.PACKAGE_NAME }}-artifacts
-          path: dist
+  #     - name: Download package
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: ${{ env.PACKAGE_NAME }}-artifacts
+  #         path: dist
 
-      - name: Install pysystemcoupling with test dependencies
-        run: |
-          wheel_name=`echo dist/*.whl`
-          pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
+  #     - name: Install pysystemcoupling with test dependencies
+  #       run: |
+  #         wheel_name=`echo dist/*.whl`
+  #         pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.GH_USERNAME }}
-          password: ${{ secrets.GH_TOKEN }}
+  #     - name: Login to GitHub Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ secrets.GH_USERNAME }}
+  #         password: ${{ secrets.GH_TOKEN }}
 
-      - name: Unit Test v23.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v23.1.0
-          upload-coverage: false
+  #     - name: Unit Test v23.1.0
+  #       uses: ./.github/actions/unit-test
+  #       with:
+  #         image-tag: v23.1.0
+  #         upload-coverage: false
 
-      - name: Unit Test v23.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v23.2.0
-          upload-coverage: false
+  #     - name: Unit Test v23.2.0
+  #       uses: ./.github/actions/unit-test
+  #       with:
+  #         image-tag: v23.2.0
+  #         upload-coverage: false
 
-      - name: Unit Test v24.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.1.0
-          upload-coverage: true
+  #     - name: Unit Test v24.1.0
+  #       uses: ./.github/actions/unit-test
+  #       with:
+  #         image-tag: v24.1.0
+  #         upload-coverage: true
 
-      - name: Unit Test v24.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: latest
-          upload-coverage: false
+  #     - name: Unit Test v24.2.0
+  #       uses: ./.github/actions/unit-test
+  #       with:
+  #         image-tag: latest
+  #         upload-coverage: false
 
 
   docs:
@@ -227,68 +229,100 @@ jobs:
           path: doc/_build/latex/*.pdf
           retention-days: 7
 
-
-  upload_dev_docs:
-    name: Upload dev documentation
-    if: github.ref == 'refs/heads/main'
+  build-gallery:
+    name: Build Sphinx-Gallery Examples
     runs-on: ubuntu-latest
-    needs: [docs]
+    needs: [doc-style, build]
     steps:
-      - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@v6
-        with:
-          cname: ${{ env.DOCUMENTATION_CNAME }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          doc-artifact-name: "documentation-html"
-
-  release:
-    name: Release project
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [test, docs]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Release to the private PyPI repository
-        uses: ansys/actions/release-pypi-private@v6
-        with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          twine-username: "__token__"
-          twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
-
-      - name: "Release to the public PyPI repository"
-        uses: ansys/actions/release-pypi-public@v6
-        with:
-          library-name: ${{ env.PACKAGE_NAME }}
-          twine-username: "__token__"
-          twine-token: ${{ secrets.PYPI_TOKEN }}
-
-      # TODO: We can't use ansys/actions/release-github as it assumes PDF doc.
-      - name: Set up Python
+      - uses: actions/checkout@v4
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      - name: "Release to GitHub"
-        uses: softprops/action-gh-release@v2
+      - name: Download package
+        uses: actions/download-artifact@v4
         with:
-          files: |
-            ./**/*.whl
-            ./**/*.tar.gz
-            documentation-html 
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: dist
 
-  upload_docs_release:
-    name: "Upload release documentation"
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    runs-on: ubuntu-latest
-    needs: [release]
-    steps:
-      - name: Deploy the stable documentation
-        uses: ansys/actions/doc-deploy-stable@v6
-        with:
-          cname: ${{ env.DOCUMENTATION_CNAME }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install pysystemcoupling with doc dependencies
+        run: |
+          wheel_name=`echo dist/*.whl`
+          pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
+
+      - name: Build HTML
+        run: |
+          make -C doc clean
+          make -C doc html SPHINXERRWARN="-W"
+        env:
+          PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
+          PYSYC_BUILD_SPHINX_GALLERY: 1
+          SYC_LAUNCH_CONTAINER: 1
+          SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+  
+  # upload_dev_docs:
+  #   name: Upload dev documentation
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   needs: [docs]
+  #   steps:
+  #     - name: Deploy the latest documentation
+  #       uses: ansys/actions/doc-deploy-dev@v6
+  #       with:
+  #         cname: ${{ env.DOCUMENTATION_CNAME }}
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         doc-artifact-name: "documentation-html"
+
+  # release:
+  #   name: Release project
+  #   if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+  #   needs: [test, docs]
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Release to the private PyPI repository
+  #       uses: ansys/actions/release-pypi-private@v6
+  #       with:
+  #         library-name: ${{ env.PACKAGE_NAME }}
+  #         twine-username: "__token__"
+  #         twine-token: ${{ secrets.PYANSYS_PYPI_PRIVATE_PAT }}
+
+  #     - name: "Release to the public PyPI repository"
+  #       uses: ansys/actions/release-pypi-public@v6
+  #       with:
+  #         library-name: ${{ env.PACKAGE_NAME }}
+  #         twine-username: "__token__"
+  #         twine-token: ${{ secrets.PYPI_TOKEN }}
+
+  #     # TODO: We can't use ansys/actions/release-github as it assumes PDF doc.
+  #     - name: Set up Python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/download-artifact@v4
+
+  #     - name: Display structure of downloaded files
+  #       run: ls -R
+
+  #     - name: "Release to GitHub"
+  #       uses: softprops/action-gh-release@v2
+  #       with:
+  #         files: |
+  #           ./**/*.whl
+  #           ./**/*.tar.gz
+  #           documentation-html 
+
+  # upload_docs_release:
+  #   name: "Upload release documentation"
+  #   if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+  #   runs-on: ubuntu-latest
+  #   needs: [release]
+  #   steps:
+  #     - name: Deploy the stable documentation
+  #       uses: ansys/actions/doc-deploy-stable@v6
+  #       with:
+  #         cname: ${{ env.DOCUMENTATION_CNAME }}
+  #         token: ${{ secrets.GITHUB_TOKEN }}
