@@ -251,6 +251,10 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
 
+      - name: DEBUG - Surface Docker Error
+        run: |
+          python -c "import docker; _ = docker.from_env()"
+
       - name: Docker Login
         uses: docker/login-action@v3
         with:
