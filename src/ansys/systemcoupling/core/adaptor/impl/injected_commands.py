@@ -163,7 +163,7 @@ def _ensure_file_available(session: SessionProtocol, rpc, filepath: str) -> str:
     new_name = f"{root_name}_{int(time.time())}_{random.randint(1, 10000000)}{ext}"
 
     session._native_api.ExecPythonString(
-        PythonString=f"import shutil\nshutil.copy({filepath}, {new_name})"
+        PythonString=f"import shutil\nshutil.copy('{filepath}', '{new_name}')"
     )
 
     rpc.download_file(new_name, ".")
