@@ -46,6 +46,10 @@ class SessionProtocol(Protocol):
     solution: Container
     _native_api: NativeApi
 
+    def download_file(
+        self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
+    ) -> None: ...
+
 
 def get_injected_cmd_map(
     category: str,
@@ -141,7 +145,7 @@ def _wrap_solve(solution: Container, part_mgr: ParticipantManager) -> None:
         part_mgr.solve()
 
 
-def _ensure_file_available(session: SessionProtocol, rpc, filepath: str) -> str:
+def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
     """If we are in a "PIM" session, copies the file specified by ``filepath``
     into the working directory, so that it is available for download.
 
@@ -166,7 +170,7 @@ def _ensure_file_available(session: SessionProtocol, rpc, filepath: str) -> str:
         PythonString=f"import shutil\nshutil.copy('{filepath}', '{new_name}')"
     )
 
-    rpc.download_file(new_name, ".")
+    session.download_file(new_name, ".")
     return new_name
 
 
@@ -197,7 +201,7 @@ def show_plot(session: SessionProtocol, rpc, **kwargs):
     is_transient = setup.solution_control.time_step_size is not None
 
     file_path = _ensure_file_available(
-        session, rpc, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+        session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
     )
 
     return create_and_show_plot(
