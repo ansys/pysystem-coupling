@@ -53,7 +53,7 @@ def get_injected_cmd_map(
     part_mgr: ParticipantManager,
     rpc,
 ) -> Dict[str, Callable]:
-    """Gets a dictionary that maps names to functions that implement the injected command.
+    """Gets a dictionary that maps names to functions that implement the injected commands.
 
     The map returned pertains to the commands in the specified category.
     """
@@ -163,7 +163,7 @@ def _ensure_file_available(session: SessionProtocol, rpc, filepath: str) -> str:
     new_name = f"{root_name}_{int(time.time())}_{random.randint(1, 10000000)}{ext}"
 
     session._native_api.ExecPythonString(
-        PythonString=f"import shutil\nshutil.copy(filepath, new_name)"
+        PythonString=f"import shutil\nshutil.copy({filepath}, {new_name})"
     )
 
     rpc.download_file(new_name, ".")
@@ -419,6 +419,11 @@ _cmd_yaml = """
     retType: <class 'NoneType'>
     doc: |-
         Shows plots.
+
+        .. note::
+           This functionality is unstable **work in progress** and is not yet
+           suitable for general use
+
     essentialArgNames:
     - interface_name
     optionalArgNames:
