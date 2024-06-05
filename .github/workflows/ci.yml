@@ -195,6 +195,7 @@ jobs:
         run: |
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
+          pip freeze
 
       - name: Build HTML
         run: |
