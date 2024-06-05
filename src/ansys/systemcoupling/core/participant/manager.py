@@ -114,7 +114,7 @@ class ParticipantManager:
                     {
                         "region_discretization_type": (
                             region.region_discretization_type
-                            if region.hasattr("region_discretization_type")
+                            if hasattr(region, "region_discretization_type")
                             else "Mesh Region"
                         )
                     }
