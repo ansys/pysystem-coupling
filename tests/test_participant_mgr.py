@@ -229,6 +229,8 @@ def test_add_participant_regionstate(
 
     syc = MockSycSession()
     part = Participant()
+
+    # Monkey patch `get_regions` as the default just returns an empty list.
     part.get_regions = lambda: [
         (
             Region("region1", "Region1", "Surface", ["a"], ["b"], "Point Cloud Region")
