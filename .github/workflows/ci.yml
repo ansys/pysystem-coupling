@@ -231,7 +231,7 @@ jobs:
 
   build-gallery:
     name: Build Sphinx-Gallery Examples
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest-4-cores
     needs: [doc-style, build]
     steps:
       - uses: actions/checkout@v4
