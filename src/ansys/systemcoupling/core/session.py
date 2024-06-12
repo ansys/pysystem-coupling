@@ -179,7 +179,7 @@ class Session:
         if self.__part_mgr is None:
             self.__part_mgr = ParticipantManager(self, self.__syc_version)
         sycproxy.set_injected_commands(
-            get_injected_cmd_map(category, root, self.__part_mgr, self.__rpc)
+            get_injected_cmd_map(category, self, self.__part_mgr, self.__rpc)
         )
         return (root, sycproxy)
 
