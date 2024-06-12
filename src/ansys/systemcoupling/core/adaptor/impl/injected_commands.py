@@ -21,7 +21,7 @@
 # SOFTWARE.
 
 from copy import deepcopy
-from typing import Callable, Dict, Protocol
+from typing import Callable, Dict, Optional, Protocol
 
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
@@ -44,6 +44,13 @@ class SessionProtocol(Protocol):
         self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
     ) -> None: ...
 
+    def upload_file(
+        self,
+        file_name: str,
+        remote_file_name: Optional[str] = None,
+        overwrite: bool = False,
+    ) -> None: ...
+
 
 def get_injected_cmd_map(
     category: str,
@@ -57,7 +64,7 @@ def get_injected_cmd_map(
     Whereas the set of commands that exists by default on the API represents a relatively
     mechanical exposure of native System Coupling commands to PySystemCoupling, the
     "injected commands" that are returned from here are either *additional* commands
-    that have no counterpart in System Coupling, or are *overrides* to existing commands
+    that have no counterpart in System Coupling or *overrides* to existing commands
     that provide modified or extended behavior.
 
     """
@@ -74,7 +81,7 @@ def get_injected_cmd_map(
                 rpc, get_setup_root_object(), **kwargs
             ),
             "add_participant": lambda **kwargs: _wrap_add_participant(
-                get_setup_root_object(), part_mgr, **kwargs
+                session, part_mgr, **kwargs
             ),
         }
 
@@ -101,8 +108,9 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    setup: Container, part_mgr: ParticipantManager, **kwargs
+    session: SessionProtocol, part_mgr: ParticipantManager, **kwargs
 ) -> str:
+    setup = session.setup
     if session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
             raise RuntimeError(
@@ -127,7 +135,7 @@ def _wrap_add_participant(
         return part_mgr.add_participant(participant_session=session.system_coupling)
 
     if input_file := kwargs.get("input_file", None):
-        part_mgr.upload_file(input_file)
+        session.upload_file(input_file)
 
     return setup._add_participant(**kwargs)
 
