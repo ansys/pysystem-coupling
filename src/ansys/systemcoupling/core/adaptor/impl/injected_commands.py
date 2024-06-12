@@ -56,8 +56,8 @@ def get_injected_cmd_map(
 
     Whereas the set of commands that exists by default on the API represents a relatively
     mechanical exposure of native System Coupling commands to PySystemCoupling, the
-    "injected commands" that are returned from here are either _additional_ commands
-    that have no counterpart in System Coupling, or are _overrides_ to existing commands
+    "injected commands" that are returned from here are either *additional* commands
+    that have no counterpart in System Coupling, or are *overrides* to existing commands
     that provide modified or extended behavior.
 
     """
