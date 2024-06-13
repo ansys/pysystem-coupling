@@ -21,8 +21,9 @@
 # SOFTWARE.
 
 from copy import deepcopy
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional, Protocol
 
+from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
@@ -31,40 +32,75 @@ from .get_status_messages import get_status_messages
 from .types import Container
 
 
+# We cannot import Session directly, so define a protocol for typing
+# We mainly use it as a means of accessing the "API roots".
+class SessionProtocol(Protocol):
+    case: Container
+    setup: Container
+    solution: Container
+    _native_api: NativeApi
+
+    def download_file(
+        self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
+    ) -> None: ...
+
+    def upload_file(
+        self,
+        file_name: str,
+        remote_file_name: Optional[str] = None,
+        overwrite: bool = False,
+    ) -> None: ...
+
+
 def get_injected_cmd_map(
     category: str,
-    root_object: Container,
+    session: SessionProtocol,
     part_mgr: ParticipantManager,
     rpc,
 ) -> Dict[str, Callable]:
-    """Gets a dictionary that maps names to functions that implement the injected command.
+    """Get a dictionary mapping names to functions that implement injected commands
+    for the specified API category.
 
-    The map returned pertains to the commands in the specified category.
+    Whereas the set of commands that exists by default on the API represents a relatively
+    mechanical exposure of native System Coupling commands to PySystemCoupling, the
+    "injected commands" that are returned from here are either *additional* commands
+    that have no counterpart in System Coupling or *overrides* to existing commands
+    that provide modified or extended behavior.
+
     """
     ret = {}
 
     if category == "setup":
+        # ``get_injected_cmd_map`` needs to be called during initialisation, where
+        # the session API roots are not necessarily available yet. We therefore
+        # defer their access via the lambda.
+        get_setup_root_object = lambda: session.setup
         ret = {
             "get_setup_summary": lambda **kwargs: rpc.GetSetupSummary(**kwargs),
             "get_status_messages": lambda **kwargs: get_status_messages(
-                rpc, root_object, **kwargs
+                rpc, get_setup_root_object(), **kwargs
             ),
             "add_participant": lambda **kwargs: _wrap_add_participant(
-                root_object, part_mgr, **kwargs
+                session, part_mgr, **kwargs
             ),
         }
 
     if category == "solution":
+        get_solution_root_object = lambda: session.solution
+        get_setup_root_object = lambda: session.setup
         ret = {
-            "solve": lambda **kwargs: _wrap_solve(root_object, part_mgr, **kwargs),
+            "solve": lambda **kwargs: _wrap_solve(
+                get_solution_root_object(), part_mgr, **kwargs
+            ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
         }
 
     if category == "case":
+        get_case_root_object = lambda: session.case
         ret = {
             "clear_state": lambda **kwargs: _wrap_clear_state(
-                root_object, part_mgr, **kwargs
+                get_case_root_object(), part_mgr, **kwargs
             )
         }
 
@@ -72,9 +108,10 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    root_object: Container, part_mgr: ParticipantManager, **kwargs
+    session: SessionProtocol, part_mgr: ParticipantManager, **kwargs
 ) -> str:
-    if session := kwargs.get("participant_session", None):
+    setup = session.setup
+    if participant_session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
             raise RuntimeError(
                 "If a 'participant_session' argument is passed to "
@@ -84,35 +121,35 @@ def _wrap_add_participant(
             raise RuntimeError("Internal error: participant manager is not available.")
 
         # special handling for mapdl session
-        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(session)):
+        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(participant_session)):
             return part_mgr.add_participant(
-                participant_session=MapdlSystemCouplingInterface(session)
+                participant_session=MapdlSystemCouplingInterface(participant_session)
             )
 
-        if not hasattr(session, "system_coupling"):
+        if not hasattr(participant_session, "system_coupling"):
             raise RuntimeError(
                 "The 'participant_session' parameter does not provide a "
                 "'system_coupling' attribute and therefore cannot support this "
                 "form of 'add_participant'."
             )
-        return part_mgr.add_participant(participant_session=session.system_coupling)
+        return part_mgr.add_participant(
+            participant_session=participant_session.system_coupling
+        )
 
     if input_file := kwargs.get("input_file", None):
-        part_mgr.upload_file(input_file)
+        session.upload_file(input_file)
 
-    return root_object._add_participant(**kwargs)
+    return setup._add_participant(**kwargs)
 
 
-def _wrap_clear_state(
-    root_object: Container, part_mgr: ParticipantManager, **kwargs
-) -> None:
+def _wrap_clear_state(case: Container, part_mgr: ParticipantManager, **kwargs) -> None:
     part_mgr.clear()
-    root_object._clear_state(**kwargs)
+    case._clear_state(**kwargs)
 
 
-def _wrap_solve(root_object: Container, part_mgr: ParticipantManager) -> None:
+def _wrap_solve(solution: Container, part_mgr: ParticipantManager) -> None:
     if part_mgr is None:
-        root_object._solve()
+        solution._solve()
     else:
         part_mgr.solve()
 
