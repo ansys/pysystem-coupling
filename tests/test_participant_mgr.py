@@ -23,7 +23,9 @@
 from dataclasses import dataclass
 import threading
 import time
-from typing import List, Tuple
+from typing import List, Optional, Tuple
+
+import pytest
 
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
@@ -48,6 +50,16 @@ class Region:
     input_variables: List[str]
     output_variables: List[str]
     region_discretization_type: str
+
+
+@dataclass
+class NoDiscrTypeRegion:
+    # no region_discretization_type field
+    name: str
+    display_name: str
+    topology: str
+    input_variables: List[str]
+    output_variables: List[str]
 
 
 class Participant:
@@ -85,7 +97,48 @@ class Participant:
         time.sleep(5)
 
 
-class NullObject(object):
+class DictWithAttr(dict[str, object]):
+    """
+    A dictionary that provides attribute access to its data
+    """
+
+    def __init__(self, *args, **kwds):
+        super().__init__(*args, **kwds)
+        for k, v in list(self.items()):
+            if isinstance(v, dict):
+                self[k] = DictWithAttr(v)
+
+    def __setitem__(self, name, value):
+        if isinstance(value, dict):
+            value = DictWithAttr(value)
+        return super().__setitem__(name, value)
+
+    def __getattr__(self, name):
+        if name not in self:
+            self[name] = DictWithAttr()
+        return self[name]
+
+    def __setattr__(self, name, value):
+        if value not in self.__dict__:
+            self[name] = value
+        else:
+            super().__setattr__(name, value)
+
+    def __call__(self, *args, **kwargs):
+        return NullObject()
+
+    def create(self, name: str):
+        self[name] = DictWithAttr()
+        return self[name]
+
+    def set_state(self, state: dict[str, object]):
+        self.update(state)
+
+    def hasattr(self, attr: str) -> bool:
+        return attr in self
+
+
+class NullObject:
     def __getattr__(self, name):
         return NullObject()
 
@@ -115,7 +168,7 @@ class NullObject(object):
 
 
 class MockSycSession:
-    class Setup(NullObject):
+    class Setup(DictWithAttr):
         pass
 
     class Solution(NullObject):
@@ -160,6 +213,52 @@ def test_add_participants():
     mgr = ParticipantManager(syc, SYC_VERSION_DOT)
     mgr.add_participant(participant_session=part1)
     mgr.add_participant(participant_session=part2)
+
+
+@pytest.mark.parametrize(
+    "version, region_has_discr_type, expected_discr_type",
+    [
+        ("24.2", True, "Point Cloud Region"),
+        ("24.2", False, "Mesh Region"),
+        ("24.1", False, None),
+    ],
+)
+def test_add_participant_regionstate(
+    version: str, region_has_discr_type: bool, expected_discr_type: Optional[str]
+):
+
+    syc = MockSycSession()
+    part = Participant()
+
+    # Monkey patch `get_regions` as the default just returns an empty list.
+    part.get_regions = lambda: [
+        (
+            Region("region1", "Region1", "Surface", ["a"], ["b"], "Point Cloud Region")
+            if region_has_discr_type
+            else NoDiscrTypeRegion("region1", "Region1", "Surface", ["a"], ["b"])
+        ),
+    ]
+
+    mgr = ParticipantManager(syc, version)
+    mgr.add_participant(participant_session=part)
+
+    assert (
+        syc.setup.coupling_participant["FLUENT-1"].region["region1"].display_name
+        == "Region1"
+    )
+
+    if expected_discr_type is None:
+        assert (
+            "region_discretization_type"
+            not in syc.setup.coupling_participant["FLUENT-1"].region["region1"]
+        )
+    else:
+        assert (
+            syc.setup.coupling_participant["FLUENT-1"]
+            .region["region1"]
+            .region_discretization_type
+            == expected_discr_type
+        )
 
 
 def test_basic_solve():

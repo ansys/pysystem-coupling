@@ -24,7 +24,7 @@ from copy import deepcopy
 import os
 import random
 import time
-from typing import Callable, Dict, Protocol
+from typing import Callable, Dict, Optional, Protocol
 
 import ansys.platform.instancemanagement as pypim
 
@@ -38,8 +38,8 @@ from .get_status_messages import get_status_messages
 from .types import Container
 
 
-# We cannot import Session directly, so define a protocol for typing
-# We only use it as a means of accessing the "API roots".
+# We cannot import Session directly, so define a protocol for typing.
+# We mainly use it as a means of accessing the "API roots".
 class SessionProtocol(Protocol):
     case: Container
     setup: Container
@@ -50,6 +50,13 @@ class SessionProtocol(Protocol):
         self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
     ) -> None: ...
 
+    def upload_file(
+        self,
+        file_name: str,
+        remote_file_name: Optional[str] = None,
+        overwrite: bool = False,
+    ) -> None: ...
+
 
 def get_injected_cmd_map(
     category: str,
@@ -57,9 +64,14 @@ def get_injected_cmd_map(
     part_mgr: ParticipantManager,
     rpc,
 ) -> Dict[str, Callable]:
-    """Gets a dictionary that maps names to functions that implement the injected commands.
+    """Get a dictionary mapping names to functions that implement injected commands
+    for the specified API category.
 
-    The map returned pertains to the commands in the specified category.
+    Whereas the set of commands that exists by default on the API represents a relatively
+    mechanical exposure of native System Coupling commands to PySystemCoupling, the
+    "injected commands" that are returned from here are either *additional* commands
+    that have no counterpart in System Coupling or *overrides* to existing commands
+    that provide modified or extended behavior.
     """
     ret = {}
 
@@ -74,7 +86,7 @@ def get_injected_cmd_map(
                 rpc, get_setup_root_object(), **kwargs
             ),
             "add_participant": lambda **kwargs: _wrap_add_participant(
-                get_setup_root_object(), part_mgr, **kwargs
+                session, part_mgr, **kwargs
             ),
         }
 
@@ -102,9 +114,10 @@ def get_injected_cmd_map(
 
 
 def _wrap_add_participant(
-    setup: Container, part_mgr: ParticipantManager, **kwargs
+    session: SessionProtocol, part_mgr: ParticipantManager, **kwargs
 ) -> str:
-    if session := kwargs.get("participant_session", None):
+    setup = session.setup
+    if participant_session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
             raise RuntimeError(
                 "If a 'participant_session' argument is passed to "
@@ -114,21 +127,23 @@ def _wrap_add_participant(
             raise RuntimeError("Internal error: participant manager is not available.")
 
         # special handling for mapdl session
-        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(session)):
+        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(participant_session)):
             return part_mgr.add_participant(
-                participant_session=MapdlSystemCouplingInterface(session)
+                participant_session=MapdlSystemCouplingInterface(participant_session)
             )
 
-        if not hasattr(session, "system_coupling"):
+        if not hasattr(participant_session, "system_coupling"):
             raise RuntimeError(
                 "The 'participant_session' parameter does not provide a "
                 "'system_coupling' attribute and therefore cannot support this "
                 "form of 'add_participant'."
             )
-        return part_mgr.add_participant(participant_session=session.system_coupling)
+        return part_mgr.add_participant(
+            participant_session=participant_session.system_coupling
+        )
 
     if input_file := kwargs.get("input_file", None):
-        part_mgr.upload_file(input_file)
+        session.upload_file(input_file)
 
     return setup._add_participant(**kwargs)
 
