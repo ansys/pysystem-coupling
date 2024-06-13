@@ -111,7 +111,7 @@ def _wrap_add_participant(
     session: SessionProtocol, part_mgr: ParticipantManager, **kwargs
 ) -> str:
     setup = session.setup
-    if session := kwargs.get("participant_session", None):
+    if participant_session := kwargs.get("participant_session", None):
         if len(kwargs) != 1:
             raise RuntimeError(
                 "If a 'participant_session' argument is passed to "
@@ -121,18 +121,20 @@ def _wrap_add_participant(
             raise RuntimeError("Internal error: participant manager is not available.")
 
         # special handling for mapdl session
-        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(session)):
+        if "ansys.mapdl.core.mapdl_grpc.MapdlGrpc" in str(type(participant_session)):
             return part_mgr.add_participant(
-                participant_session=MapdlSystemCouplingInterface(session)
+                participant_session=MapdlSystemCouplingInterface(participant_session)
             )
 
-        if not hasattr(session, "system_coupling"):
+        if not hasattr(participant_session, "system_coupling"):
             raise RuntimeError(
                 "The 'participant_session' parameter does not provide a "
                 "'system_coupling' attribute and therefore cannot support this "
                 "form of 'add_participant'."
             )
-        return part_mgr.add_participant(participant_session=session.system_coupling)
+        return part_mgr.add_participant(
+            participant_session=participant_session.system_coupling
+        )
 
     if input_file := kwargs.get("input_file", None):
         session.upload_file(input_file)
