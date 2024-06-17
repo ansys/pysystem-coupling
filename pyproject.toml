@@ -78,7 +78,7 @@ doc = [
 ]
 style = [
 	"codespell==2.3.0",
-	"flake8==7.0.0",
+	"flake8==7.1.0",
 ]
 tests = [
 	"pytest",
