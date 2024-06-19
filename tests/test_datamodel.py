@@ -183,6 +183,15 @@ def test_query_unset_property(dm):
     assert dm.library.expression["bob"].expression_name is None
 
 
+def test_query_unknown_property(dm):
+    dm.library.expression["bob"] = {}
+    try:
+        dm.library.expression["bob"].expression_unknown is None
+        assert False, "Expected exception not thrown"
+    except AttributeError:
+        pass
+
+
 def test_query_none_rhs_property(dm):
     dm.library.expression["bob"] = {
         "expression_name": None,
