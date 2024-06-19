@@ -99,7 +99,7 @@ jobs:
       - name: Generate API for v242
         uses: ./.github/actions/generate-api
         with:
-          image-tag: latest
+          image-tag: v24.2.0
 
       - name: Clean out dist
         run: rm -rf dist
@@ -167,7 +167,7 @@ jobs:
       - name: Unit Test v24.2.0
         uses: ./.github/actions/unit-test
         with:
-          image-tag: latest
+          image-tag: v24.2.0
           upload-coverage: false
 
 
