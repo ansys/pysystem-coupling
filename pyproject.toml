@@ -77,8 +77,9 @@ doc = [
 	"ansys-dpf-core",
 ]
 style = [
-	"codespell==2.3.0",
-	"flake8==7.0.0",
+	# NB: ensure these remain synced with .pre-commit-config.yaml
+	"codespell==2.3.0", 
+	"flake8==7.1.0",
 ]
 tests = [
 	"pytest",
