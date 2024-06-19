@@ -82,6 +82,9 @@ class SycProxy(SycProxyInterface):
     def get_state(self, path):
         return self.__state.get_state(path)
 
+    def get_property_state(self, path, name):
+        return self.__state.get_parameter(path, name)
+
     def delete(self, path):
         self.__state.delete_object(path)
 
@@ -151,6 +154,41 @@ def test_empty(dm):
 def test_create_library(dm):
     dm.library = {}
     assert dm.get_state() == {"library": {}}
+
+
+def test_create_empty_expression(dm):
+    dm.library.expression["bob"] = {}
+    assert dm.get_state() == {"library": {"expression": {"bob": {}}}}
+
+
+def test_create_empty_properties_expression(dm):
+    dm.library.expression["bob"] = {
+        "expression_name": None,
+        "expression_string": None,
+    }
+    assert dm.get_state() == {
+        "library": {
+            "expression": {
+                "bob": {
+                    "expression_name": None,
+                    "expression_string": None,
+                }
+            }
+        }
+    }
+
+
+def test_query_unset_property(dm):
+    dm.library.expression["bob"] = {}
+    assert dm.library.expression["bob"].expression_name is None
+
+
+def test_query_none_rhs_property(dm):
+    dm.library.expression["bob"] = {
+        "expression_name": None,
+        "expression_string": None,
+    }
+    assert dm.library.expression["bob"].expression_name is None
 
 
 def test_create_expression(dm):

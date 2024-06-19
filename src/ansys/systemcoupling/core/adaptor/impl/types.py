@@ -241,7 +241,7 @@ class SettingsBase(Base, Generic[StateT]):
 
     def get_property_state(self, prop):
         """Get the state of the ``prop`` property ."""
-        return self.sycproxy.get_state(self.syc_path + "/" + self.to_syc_name(prop))
+        return self.sycproxy.get_property_state(self.syc_path, self.to_syc_name(prop))
 
     @staticmethod
     def _print_state_helper(state, out, indent=0, indent_factor=2):
