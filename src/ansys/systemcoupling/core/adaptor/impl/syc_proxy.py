@@ -89,6 +89,9 @@ class SycProxy(SycProxyInterface):
             return adapt_native_named_object_keys(state)
         return state
 
+    def get_property_state(self, path, property):
+        return self.__rpc.GetParameter(ObjectPath=path, Name=property)
+
     def delete(self, path):
         self.__rpc.DeleteObject(ObjectPath=path)
 

@@ -49,6 +49,10 @@ class SycProxyInterface(ABC):  # pragma: no cover
         pass
 
     @abstractmethod
+    def get_property_state(self, path, name):
+        pass
+
+    @abstractmethod
     def delete(self, path):
         pass
 
