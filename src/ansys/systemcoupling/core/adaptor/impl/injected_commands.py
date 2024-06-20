@@ -28,7 +28,12 @@ from typing import Callable, Dict, Optional, Protocol
 
 import ansys.platform.instancemanagement as pypim
 
-from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
+from ansys.systemcoupling.core.charts.plot_functions import (
+    DataTransferSpec,
+    InterfaceSpec,
+    PlotSpec,
+    create_and_show_plot,
+)
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
@@ -99,7 +104,7 @@ def get_injected_cmd_map(
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
-            "show_plot": lambda **kwargs: show_plot(session, rpc, **kwargs),
+            "show_plot": lambda **kwargs: show_plot(session, **kwargs),
         }
 
     if category == "case":
@@ -189,7 +194,7 @@ def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
     return new_name
 
 
-def show_plot(session: SessionProtocol, rpc, **kwargs):
+def show_plot(session: SessionProtocol, **kwargs):
     setup = session.setup
     working_dir = kwargs.pop("working_dir", ".")
     interface_name = kwargs.pop("interface_name", None)
@@ -212,6 +217,10 @@ def show_plot(session: SessionProtocol, rpc, **kwargs):
         interface_object.data_transfer[trans_name].display_name
         for trans_name in transfer_names
     ]
+
+    show_convergence = kwargs.pop("show_convergence", True)
+    show_transfer_values = kwargs.pop("show_transfer_values", True)
+
     # TODO : better way to do this?
     is_transient = setup.solution_control.time_step_size is not None
 
@@ -219,11 +228,20 @@ def show_plot(session: SessionProtocol, rpc, **kwargs):
         session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
     )
 
-    return create_and_show_plot(
-        is_transient,
-        [(interface_name, interface_disp_name, transfer_disp_names)],
-        [file_path],
-    )
+    spec = PlotSpec()
+    intf_spec = InterfaceSpec(interface_name, interface_disp_name)
+    spec.interfaces.append(intf_spec)
+    for transfer in transfer_disp_names:
+        intf_spec.transfers.append(
+            DataTransferSpec(
+                display_name=transfer,
+                show_convergence=show_convergence,
+                show_transfer_values=show_transfer_values,
+            )
+        )
+    spec.plot_time = is_transient
+
+    return create_and_show_plot(spec, [file_path])
 
 
 def get_injected_cmd_data() -> list:

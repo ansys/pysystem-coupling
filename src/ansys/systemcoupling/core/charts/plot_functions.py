@@ -27,45 +27,18 @@ from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.live_csv_datasource import LiveCsvDataSource
 from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
-    DataTransferSpec,
-    InterfaceSpec,
     PlotDefinitionManager,
     PlotSpec,
 )
 from ansys.systemcoupling.core.charts.plotter import Plotter
 
 
-def make_plot_spec(
-    is_transient: bool, interface_list: list[tuple[str, str, list[str]]]
-) -> PlotSpec:
-    # Expand the specification of what we want into in a more structured form
-    spec = PlotSpec()
-    for interface_name, interface_disp_name, transfers in interface_list:
-        intf_spec = InterfaceSpec(interface_name, interface_disp_name)
-        spec.interfaces.append(intf_spec)
-        for transfer in transfers:
-            intf_spec.transfers.append(DataTransferSpec(transfer))
-    spec.plot_time = is_transient
-    return spec
+def create_and_show_plot(spec: PlotSpec, csv_list: list[str]) -> Plotter:
+    assert len(spec.interfaces) == 1, "Plots currently only support one interface"
+    assert len(spec.interfaces) == len(csv_list)
 
-
-def make_plot_data_manager(
-    is_transient: bool, interface_list: list[tuple[str, str, list[str]]]
-) -> PlotDefinitionManager:
-    spec = make_plot_spec(is_transient, interface_list)
-    return PlotDefinitionManager(spec)
-
-
-def create_and_show_plot(
-    is_transient: bool,
-    interface_list: list[tuple[str, str, list[str]]],
-    csv_list: list[str],
-) -> Plotter:
-    assert len(interface_list) == 1, "Plots currently only support one interface"
-    assert len(interface_list) == len(csv_list)
-
-    manager = make_plot_data_manager(is_transient, interface_list)
-    reader = CsvChartDataReader(interface_list[0][0], csv_list[0])
+    manager = PlotDefinitionManager(spec)
+    reader = CsvChartDataReader(spec.interfaces[0].name, csv_list[0])
     plotter = Plotter(manager)
 
     reader.read_metadata()
@@ -84,21 +57,20 @@ def create_and_show_plot(
 
 
 def solve_with_live_plot(
-    is_transient: bool,
-    interface_list: list[tuple[str, str, list[str]]],
+    spec: PlotSpec,
     csv_list: list[str],
     solve_func: Callable[[], None],
 ):
-    assert len(interface_list) == 1, "Plots currently only support one interface"
-    assert len(interface_list) == len(csv_list)
+    assert len(spec.interfaces) == 1, "Plots currently only support one interface"
+    assert len(spec.interfaces) == len(csv_list)
 
-    manager = make_plot_data_manager(is_transient, interface_list)
+    manager = PlotDefinitionManager(spec)
     dispatcher = MessageDispatcher()
     plotter = Plotter(manager, dispatcher.dispatch_messages)
     dispatcher.set_plotter(plotter)
 
     data_source = LiveCsvDataSource(
-        interface_list[0][0], csv_list[0], dispatcher.put_msg
+        spec.interfaces[0].name, csv_list[0], dispatcher.put_msg
     )
     data_thread = threading.Thread(target=data_source.read_data)
 
@@ -121,16 +93,4 @@ def solve_with_live_plot(
     solve_thread.join()
 
     # Show a non-blocking static plot
-    return create_and_show_plot(is_transient, interface_list, csv_list)
-
-
-if __name__ == "__main__":
-
-    # The very basic specification of what we want
-    # interface_list = [("Interface-1", "Interface-1", ["input", "input2"])]
-    # plotter = create_and_show_plot(False, interface_list, ["Interface-1.csv"])
-    interface_list = [("Interface-1", "Interface-1", ["Force", "displacement"])]
-    input("Create plot...")
-    plotter = create_and_show_plot(True, interface_list, ["oscplt_csv/Interface-1.csv"])
-    # plotter2 = create_and_show_plot(manager, reader)
-    input("Quit?")
+    return create_and_show_plot(spec, csv_list)

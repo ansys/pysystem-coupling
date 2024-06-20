@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 from dataclasses import dataclass, field
+from typing import Optional
 
 from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, SeriesType
 
@@ -104,13 +105,19 @@ class PlotDefinitionManager:
 
     def subplot_for_data_index(
         self, interface_name: str, data_index: int
-    ) -> tuple[SubplotDefinition, int]:
+    ) -> tuple[Optional[SubplotDefinition], int]:
         """Return the subplot definition, and the line index within the
         subplot, corresponding to a given `data_index`.
 
         The `data_index` is a "global" line index for the interface.
+
+        If there is no subplot corresponding to the provided index,
+        return a tuple `(None, -1)`
         """
-        return self._data_index_map[interface_name][data_index]
+        try:
+            return self._data_index_map[interface_name][data_index]
+        except KeyError:
+            return (None, -1)
 
     def get_layout(self) -> tuple[int, int]:
         nsubplot = len(self._subplots)

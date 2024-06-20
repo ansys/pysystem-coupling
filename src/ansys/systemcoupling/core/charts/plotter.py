@@ -212,6 +212,9 @@ class Plotter:
         subplot_defn, subplot_line_index = self._mgr.subplot_for_data_index(
             self._metadata.name, trans.data_index + offset
         )
+        if subplot_defn is None:
+            # This can happen if the list of plots being show is filtered.
+            return
 
         subplot_line = self._subplot_lines[subplot_defn.index][subplot_line_index]
 
@@ -308,7 +311,7 @@ class Plotter:
         nrow, ncol = self._mgr.get_layout()
         self._fig.subplots(nrow, ncol, gridspec_kw={"hspace": 0.5})
         subplot_defns = self._mgr.subplots
-        if len(subplot_defns) % 2 == 1:
+        if len(subplot_defns) != 1 and len(subplot_defns) % 2 == 1:
             self._fig.delaxes(self._fig.axes[-1])
 
         # Add labels and legends
