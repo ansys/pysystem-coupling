@@ -35,10 +35,10 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
 def spec():
     transfers = [
         DataTransferSpec(
-            display_name="trans1", show_convergence=True, show_diagnostics=True
+            display_name="trans1", show_convergence=True, show_transfer_values=True
         ),
         DataTransferSpec(
-            display_name="trans2", show_convergence=True, show_diagnostics=True
+            display_name="trans2", show_convergence=True, show_transfer_values=True
         ),
     ]
 

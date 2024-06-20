@@ -178,7 +178,7 @@ class CsvChartDataReader:
                 self._data.series[j - start_index].data.append(row[j])
 
 
-def _extract_diagnostic_type(header: str) -> str:
+def _extract_transfer_value_type(header: str) -> str:
     for diag_type in ("Sum", "Weighted Average"):
         if f" ({diag_type}):" in header:
             return diag_type
@@ -192,7 +192,7 @@ def _parse_header(header: str) -> tuple[SeriesType, str, str]:
         intf_disp_name = header[ipfx + 1 : isep].strip()
         trans_disp_name = header[isep + 3 :].strip()
         return SeriesType.CONVERGENCE, intf_disp_name, trans_disp_name
-    elif diag_type := _extract_diagnostic_type(header):
+    elif diag_type := _extract_transfer_value_type(header):
         trans_disp_name = header[: header.find(f"({diag_type})")].strip()
         part_disp_name = header[header.find(":") + 1 :].strip()
         part_disp_name = _remove_suffix(part_disp_name)

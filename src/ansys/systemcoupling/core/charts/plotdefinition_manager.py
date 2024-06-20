@@ -29,7 +29,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 class DataTransferSpec:
     display_name: str
     show_convergence: bool = True  # Override PlotSpec
-    show_diagnostics: bool = True  #   "
+    show_transfer_values: bool = True  #   "
 
 
 @dataclass
@@ -145,7 +145,7 @@ class PlotDefinitionManager:
                 x_axis_label="Time" if is_time else "Iteration",
                 y_axis_label="RMS Change in target value",
             )
-            # Add this now so that it is before diagnostic plots but we may end
+            # Add this now so that it is before transfer values plots but we may end
             # up removing it if none of the transfers add a convergence line to it
             conv_index = len(subplots)
             subplots.append(conv)
@@ -158,7 +158,7 @@ class PlotDefinitionManager:
                     transfer_disambig[transfer.display_name] = 0
                 if transfer.show_convergence:
                     keep_conv = True
-                if transfer.show_diagnostics:
+                if transfer.show_transfer_values:
                     diag = SubplotDefinition(
                         # NB: <VALUETYPE> is a placeholder - substitute later from metadata info
                         title=f"{interface.display_name} - {transfer.display_name} (<VALUETYPE>)",
@@ -200,7 +200,7 @@ class PlotDefinitionManager:
         interface_name = metadata.name
         iconv = 0
 
-        # Keep a running count of the diagnostics associated with a given
+        # Keep a running count of the transfer values associated with a given
         # transfer. There will be multiple if the transfer variable has vector
         # and or real/imag components. Note that a transfer is uniquely identified by a
         # pair (transfer_name, int) because transfer names are not guaranteed to be unique.
