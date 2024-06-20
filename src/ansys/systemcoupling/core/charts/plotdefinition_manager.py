@@ -115,7 +115,9 @@ class PlotDefinitionManager:
     def get_layout(self) -> tuple[int, int]:
         nsubplot = len(self._subplots)
 
-        if nsubplot < 6:
+        if nsubplot == 1:
+            ncol = 1
+        elif nsubplot < 6:
             ncol = 2
         elif nsubplot < 12:
             ncol = 3

@@ -53,7 +53,6 @@ def make_plot_data_manager(
     is_transient: bool, interface_list: list[tuple[str, str, list[str]]]
 ) -> PlotDefinitionManager:
     spec = make_plot_spec(is_transient, interface_list)
-    # pprint(spec)
     return PlotDefinitionManager(spec)
 
 
