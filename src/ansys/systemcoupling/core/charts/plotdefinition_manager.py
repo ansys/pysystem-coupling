@@ -28,8 +28,8 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 @dataclass
 class DataTransferSpec:
     display_name: str
-    show_convergence: bool = True  # Override PlotSpec
-    show_transfer_values: bool = True  #   "
+    show_convergence: bool = True
+    show_transfer_values: bool = True
 
 
 @dataclass
@@ -57,7 +57,7 @@ Convergence subplot:
     # y-data - we actually want an index
 
 
-Diagnostic subplot:
+Transfer values subplot:
     title - <interface display name> - <transfer display name> (<value type>)
     x-axis label: Iteration/time
     y-axis label: <NOT SET>
@@ -94,7 +94,7 @@ class PlotDefinitionManager:
         self._plot_spec = spec
         self._data_index_map: dict[str, dict[int, tuple[SubplotDefinition, int]]] = {}
         self._conv_subplots: dict[str, SubplotDefinition] = {}
-        self._diag_subplots: dict[tuple[str, str, int], SubplotDefinition] = {}
+        self._transfer_subplots: dict[tuple[str, str, int], SubplotDefinition] = {}
         self._subplots: list[SubplotDefinition] = []
         self._allocate_subplots()
 
@@ -136,7 +136,7 @@ class PlotDefinitionManager:
     def _allocate_subplots(self):
         is_time = self._plot_spec.plot_time
         conv_subplots = {}
-        diag_subplots = {}
+        transfer_subplots = {}
         subplots = []
         for interface in self._plot_spec.interfaces:
             conv = SubplotDefinition(
@@ -159,21 +159,21 @@ class PlotDefinitionManager:
                 if transfer.show_convergence:
                     keep_conv = True
                 if transfer.show_transfer_values:
-                    diag = SubplotDefinition(
+                    transfer_value = SubplotDefinition(
                         # NB: <VALUETYPE> is a placeholder - substitute later from metadata info
                         title=f"{interface.display_name} - {transfer.display_name} (<VALUETYPE>)",
                         is_log_y=False,
                         x_axis_label="Time" if is_time else "Iteration",
                         y_axis_label="",
                     )
-                    diag_subplots[
+                    transfer_subplots[
                         (
                             interface.name,
                             transfer.display_name,
                             transfer_disambig[transfer.display_name],
                         )
-                    ] = diag
-                    subplots.append(diag)
+                    ] = transfer_value
+                    subplots.append(transfer_value)
             if keep_conv:
                 conv_subplots[interface.name] = conv
             else:
@@ -183,8 +183,8 @@ class PlotDefinitionManager:
         for i, subplot in enumerate(self._subplots):
             subplot.index = i
         self._conv_subplots: dict[str, SubplotDefinition] = conv_subplots
-        self._diag_subplots: dict[tuple[str, str, int], SubplotDefinition] = (
-            diag_subplots
+        self._transfer_subplots: dict[tuple[str, str, int], SubplotDefinition] = (
+            transfer_subplots
         )
 
     def set_metadata(self, metadata: InterfaceInfo):
@@ -200,12 +200,12 @@ class PlotDefinitionManager:
         interface_name = metadata.name
         iconv = 0
 
-        # Keep a running count of the transfer values associated with a given
+        # Keep a running count of the transfer value lines associated with a given
         # transfer. There will be multiple if the transfer variable has vector
         # and or real/imag components. Note that a transfer is uniquely identified by a
         # pair (transfer_name, int) because transfer names are not guaranteed to be unique.
         # The integer is the "disambiguation_index" the transfer's TransferSeriesInfo.
-        transfer_diag_count: dict[tuple[str, int], int] = {}
+        transfer_value_line_count: dict[tuple[str, int], int] = {}
 
         for transfer in metadata.transfer_info:
             transfer_key = (
@@ -222,36 +222,39 @@ class PlotDefinitionManager:
                     conv_subplot.y_labels.append(transfer.transfer_display_name)
                     iconv += 1
             else:
-                diag_subplot = self._diag_subplots.get(
+                transfer_value_subplot = self._transfer_subplots.get(
                     (interface_name, transfer_key[0], transfer_key[1])
                 )
-                if diag_subplot:
+                if transfer_value_subplot:
                     value_type = (
                         "Sum"
                         if transfer.series_type == SeriesType.SUM
                         else "Weighted Average"
                     )
-                    diag_subplot.title = diag_subplot.title.replace(
+                    transfer_value_subplot.title = transfer_value_subplot.title.replace(
                         "<VALUETYPE>", value_type
                     )
-                    idiag = transfer_diag_count.get(transfer_key, 0)
+                    itransval = transfer_value_line_count.get(transfer_key, 0)
                     if not transfer.line_suffixes:
-                        data_index_map[transfer.data_index] = (diag_subplot, idiag)
-                        # diag_subplot.y_data.append([])
-                        diag_subplot.y_labels.append(transfer.participant_display_name)
-                        idiag += 1
-                        transfer_diag_count[transfer_key] = idiag
+                        data_index_map[transfer.data_index] = (
+                            transfer_value_subplot,
+                            itransval,
+                        )
+                        transfer_value_subplot.y_labels.append(
+                            transfer.participant_display_name
+                        )
+                        itransval += 1
+                        transfer_value_line_count[transfer_key] = itransval
                     else:
                         for i, suffix in enumerate(transfer.line_suffixes):
                             data_index_map[transfer.data_index + i] = (
-                                diag_subplot,
-                                idiag + i,
+                                transfer_value_subplot,
+                                itransval + i,
                             )
-                            # diag_subplot.y_data.append([])
-                            diag_subplot.y_labels.append(
+                            transfer_value_subplot.y_labels.append(
                                 transfer.participant_display_name + suffix
                             )
-                        transfer_diag_count[transfer_key] = idiag + len(
+                        transfer_value_line_count[transfer_key] = itransval + len(
                             transfer.line_suffixes
                         )
 
