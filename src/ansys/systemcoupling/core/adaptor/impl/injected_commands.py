@@ -28,11 +28,11 @@ from typing import Callable, Dict, Optional, Protocol
 
 import ansys.platform.instancemanagement as pypim
 
-from ansys.systemcoupling.core.charts.plot_functions import (
+from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
+from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
     InterfaceSpec,
     PlotSpec,
-    create_and_show_plot,
 )
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
