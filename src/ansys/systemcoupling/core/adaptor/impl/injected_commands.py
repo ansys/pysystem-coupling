@@ -466,9 +466,13 @@ _cmd_yaml = """
     optionalArgNames:
     - transfer_names
     - working_dir
+    - show_convergence
+    - show_transfer_values
     defaults:
     - []
     - "."
+    - True
+    - True
     args:
     - #!!python/tuple
         - interface_name
@@ -476,19 +480,33 @@ _cmd_yaml = """
             Type: <class 'str'>
             type: String
             doc:  |-
-                Specification of which interface to plot
+                Specification of which interface to plot.
     - #!!python/tuple
         - transfer_names
         -   pyname: transfer_names
             Type: <class 'list'>
             type: String List
             doc:  |-
-                Specification of which data transfers to plot
+                Specification of which data transfers to plot.
     - #!!python/tuple
         - working_dir
         -   pyname: working_dir
             Type: <class 'str'>
             type: String
             doc:  |-
-                Working directory (defaults = ".")
+                Working directory (defaults = ".").
+    - #!!python/tuple
+        - show_convergence
+        -   pyname: show_convergence
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show convergence plots (defaults to ``True``).
+    - #!!python/tuple
+        - show_transfer_values
+        -   pyname: show_transfer_values
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show transfer value plots (defaults to ``True``).
 """
