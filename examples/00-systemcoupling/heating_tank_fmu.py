@@ -105,6 +105,7 @@ fluent_cas_file = examples.download_file(
 
 shutil.copy(fluent_cas_file, "fluent.cas.h5")
 
+fluent_cas_file = "fluent.cas.h5"
 
 # %%
 # Launch Fluent
