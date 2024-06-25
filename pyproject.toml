@@ -20,7 +20,7 @@ dependencies = [
 	"ansys-api-systemcoupling==0.1.0",
         "ansys-platform-instancemanagement~=1.0",
 	"grpcio>=1.30.0",
-	"grpcio-status>=1.30.0,<1.64.1",
+	"grpcio-status>=1.30.0,<1.64.2",
 	"googleapis-common-protos>=1.50.0",
 	"protobuf>=3.20.1,<4.0.0",
 	"psutil>=5.7.0",
@@ -57,7 +57,7 @@ classesgen = [
 	"isort==5.13.2",
 ]
 doc = [
-	"ansys-sphinx-theme==0.16.2",
+	"ansys-sphinx-theme==0.16.6",
 	"jupyter_sphinx==0.5.3",
 	"matplotlib",
 	"numpydoc==1.7.0",
@@ -65,7 +65,7 @@ doc = [
 	"pytest-sphinx==0.6.3",
 	"Sphinx==7.3.7",
 	"sphinx-autobuild==2024.4.16",
-	"sphinx-autodoc-typehints==2.1.0",
+	"sphinx-autodoc-typehints==2.2.0",
 	"sphinx-copybutton==0.5.2",
 	"sphinx-gallery==0.16.0",
 	"sphinx-notfound-page==1.0.2",
@@ -77,8 +77,9 @@ doc = [
 	"ansys-dpf-core",
 ]
 style = [
-	"codespell==2.3.0",
-	"flake8==7.0.0",
+	# NB: ensure these remain synced with .pre-commit-config.yaml
+	"codespell==2.3.0", 
+	"flake8==7.1.0",
 ]
 tests = [
 	"pytest",

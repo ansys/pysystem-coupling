@@ -37,6 +37,7 @@ Python
 scp
 SCP
 solution_control
+THIRDPARTY
 Windows
 Windows Subsystem
 Windows Subsystem for Linux
