@@ -45,7 +45,7 @@ such as the variables it exposes and the regions on which they are available.
 
 The name of the created ``coupling_participant`` object is returned in each case.
 
-This code shows how you can capture the name in a variable to facilitate subsequent access
+This code shows how you can capture the name in a variable to provide subsequent access
 to the object:
 
 .. code-block:: python
@@ -57,7 +57,7 @@ to the object:
 The ``add_participant`` command not only creates a participant object but also helps
 to initialize other aspects of the data model state. After the preceding code
 adds Fluent and MAPDL participants, the ``analysis_control``, ``solution_control``, and
-``output_control`` objects are created with reasonable default values. For more information,
+``output_control`` objects are created with default values. For more information,
 see the following output from the ``print_state`` command. Ellipses (``...``) appear where
 details are omitted from the output.
 
@@ -145,7 +145,7 @@ A value of ``<None>`` indicates an *unset* (missing) value.
 .. note::
    For some settings in the data model, the string ``"None"`` is a legitimate value.
    For example, the default for the ``analysis_control.global_stabilization.option``
-   setting is ``"None"``. Thus, to avoid ambiguity, the ``print_state`` output
+   setting is ``"None"``. To avoid ambiguity, the ``print_state`` output
    displays ``<None>`` for unset values.
 
    If queried in Python, an unset value holds the Python ``None`` object or an empty list

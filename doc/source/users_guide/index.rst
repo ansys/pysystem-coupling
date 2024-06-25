@@ -6,8 +6,8 @@ User guide
 This section provides an overview of PySystemCoupling and how to use it.
 
 Although this section describes some main System Coupling concepts, it is
-not intended to be an introduction to cosimulation and the use of System Coupling.
-The focus here is on guiding the use of PySystemCoupling to access System Coupling features.
+not intended to be an introduction to co-simulation and the use of System Coupling.
+The focus here is the use of PySystemCoupling to access System Coupling features.
 
 .. note::
    If you are licensed to use System Coupling, you can consult the System Coupling
@@ -86,7 +86,7 @@ You can turn off output streaming using this code to call the ``end_output()`` m
 
 Exiting
 -------
-When you are finished with a PySystemCoupling session, it is advisable to end it cleanly using the
+When you are finished with a PySystemCoupling session, we recommend ending it cleanly using the
 ``exit()`` method. If you do not do this, PySystemCoupling will still attempt to clean up any active server sessions
 when the Python environment is exited, but this is naturally less reliable than a directed exit.
 

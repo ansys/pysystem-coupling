@@ -150,7 +150,7 @@ def set_inlet_velocity(working_dir, inlet_velocity):
 # setting is modified in the Fluent file prior to this function being called.
 #
 # .. note::
-#    System Coupling is launched anew for each call of
+#    A new System Coupling instance is launched for each call of
 #    this function.
 #
 #    The ``with pysyc.launch(...)`` syntax ensures

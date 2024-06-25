@@ -17,8 +17,8 @@ data model assignment to fine tune the setup.
 The API implementation is built on a number of generic objects. Subsequent
 sections provide brief descriptions of these objects.
 
-Relationship with the "native" System Coupling API
---------------------------------------------------
+Relationship with the native System Coupling API
+------------------------------------------------
 
 The API exposed in PySystemCoupling is mainly an *adaptation* of the API that exists
 natively in Ansys System Coupling.

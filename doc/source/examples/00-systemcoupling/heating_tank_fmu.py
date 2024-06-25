@@ -112,7 +112,7 @@ fluent_cas_file = examples.download_file(
 #    Fluent version greater than 24.1 is required.
 #    To specify Fluent version explicitly when launching Fluent,
 #    use ``product_version`` argument to the ``launch_fluent``
-#    function, e.g. ``pyfluent.launch_fluent(product_version="24.2.0")``
+#    function, for example``pyfluent.launch_fluent(product_version="24.2.0")``
 
 fluent_session = pyfluent.launch_fluent(start_transcript=False)
 fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
