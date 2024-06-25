@@ -97,6 +97,8 @@ fmu_file = examples.download_file(
     "thermostat.fmu", "pysystem-coupling/heating_tank_fmu/FMU"
 )
 
+shutil.copy(fmu_file, "thermostat.fmu")
+
 fmu_file = "thermostat.fmu"
 
 fluent_cas_file = examples.download_file(
