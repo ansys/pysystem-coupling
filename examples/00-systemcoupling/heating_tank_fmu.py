@@ -77,12 +77,12 @@ Two data transfers :
 
 # sphinx_gallery_thumbnail_path = '_static/heating_tank_fmu.png'
 
+import shutil
+
 import ansys.fluent.core as pyfluent
 
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
-
-import shutil
 
 # %%
 #
