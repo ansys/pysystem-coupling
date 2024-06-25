@@ -82,6 +82,8 @@ import ansys.fluent.core as pyfluent
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
 
+import shutil
+
 # %%
 #
 # Download input files
@@ -101,7 +103,7 @@ fluent_cas_file = examples.download_file(
     "fluent.cas.h5", "pysystem-coupling/heating_tank_fmu/Fluent"
 )
 
-fluent_cas_file = "fluent.cas.h5"
+shutil.copy(fluent_cas_file, "fluent.cas.h5")
 
 
 # %%
