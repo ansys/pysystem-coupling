@@ -45,7 +45,7 @@ such as the variables it exposes and the regions on which they are available.
 
 The name of the created ``coupling_participant`` object is returned in each case.
 
-This code shows how you can capture the name in a variable to provide subsequent access
+This code shows how you can capture the name in a variable to assist with subsequent access
 to the object:
 
 .. code-block:: python
