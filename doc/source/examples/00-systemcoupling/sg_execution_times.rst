@@ -35,9 +35,3 @@ Computation times
    * - :ref:`sphx_glr_examples_00-systemcoupling_heating_tank_fmu.py` (``heating_tank_fmu.py``)
      - 12:45.145
      - 0.0
-   * - :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py` (``oscillating_plate.py``)
-     - 00:00.000
-     - 0.0
-   * - :ref:`sphx_glr_examples_00-systemcoupling_parametric_sweep_vel.py` (``parametric_sweep_vel.py``)
-     - 00:00.000
-     - 0.0
