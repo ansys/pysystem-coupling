@@ -28,6 +28,8 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 
 @dataclass
 class DataTransferSpec:
+    # It's not ideal, but we have to work in terms of display names for transfers,
+    # as that is all we have in the data (the CSV data, at least).
     display_name: str
     show_convergence: bool = True
     show_transfer_values: bool = True
@@ -202,6 +204,20 @@ class PlotDefinitionManager:
         being generated.
         """
 
+        # If a subset of transfers was specified in the plot spec, this is already
+        # implicitly accounted for in self._tranfer_subplots, which will contain only
+        # the active ones. However, some additional work has to be done to filter the
+        # transfers shown on the convergence subplot and we have to go back to the plot
+        # spec to get a list of active transfers.
+        active_transfers = []
+        for intf in self._plot_spec.interfaces:
+            if intf.name == metadata.name:
+                active_transfers = [trans.display_name for trans in intf.transfers]
+                break
+        if not active_transfers:
+            # TODO: should this be an exception?
+            return
+
         # map from source data index to corresponding (subplot, line index within subplot)
         data_index_map: dict[int, tuple[SubplotDefinition, int]] = {}
         interface_name = metadata.name
@@ -220,8 +236,17 @@ class PlotDefinitionManager:
                 transfer.disambiguation_index,
             )
             if transfer.series_type == SeriesType.CONVERGENCE:
-                conv_subplot = self._conv_subplots.get(interface_name)
-                if conv_subplot:
+                if transfer.transfer_display_name not in active_transfers:
+                    # We don't want this transfer on the convergence plot
+                    continue
+                # Clear the entry in case transfer names are not unique. (If another transfer
+                # with the same name needs plotting, then it should appear as a second entry
+                # in active_transfers.)
+                active_transfers[
+                    active_transfers.index(transfer.transfer_display_name)
+                ] = ""
+
+                if conv_subplot := self._conv_subplots.get(interface_name):
                     data_index_map[transfer.data_index] = (conv_subplot, iconv)
                     # Add a new series list to y_data, and label to y_labels
                     # Both will be at position iconv of respective lists

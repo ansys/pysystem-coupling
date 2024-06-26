@@ -210,9 +210,12 @@ def show_plot(session: SessionProtocol, **kwargs):
     interface_object = setup.coupling_interface[interface_name]
     interface_disp_name = interface_object.display_name
 
-    transfer_names = kwargs.pop("transfer_names", [])
-    if not transfer_names:
+    if (transfer_names := kwargs.pop("transfer_names", None)) is None:
         transfer_names = interface_object.data_transfer.get_object_names()
+
+    if len(transfer_names) == 0:
+        return None
+
     transfer_disp_names = [
         interface_object.data_transfer[trans_name].display_name
         for trans_name in transfer_names
