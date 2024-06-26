@@ -86,8 +86,8 @@ You can turn off output streaming using this code to call the ``end_output()`` m
 
 Exiting
 -------
-When you are finished with a PySystemCoupling session, we recommend ending it cleanly using the
-``exit()`` method. If you do not do this, PySystemCoupling will still attempt to clean up any active server sessions
+When you are finished with a PySystemCoupling session, you should end it cleanly using the
+``exit()`` method. If you do not do this, PySystemCoupling still attempts to clean up any active server sessions
 when the Python environment is exited, but this is naturally less reliable than a directed exit.
 
 Once you use the following code to call the ``exit()`` method on a session object, the object
