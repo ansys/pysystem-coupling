@@ -248,7 +248,7 @@ def _show_plot(session: SessionProtocol, **kwargs):
 
 
 def get_injected_cmd_data() -> list:
-    """Gets a list of injected command data in the right form to insert
+    """Get a list of injected command data in the right form to insert
     at a convenient point in the current processing.
 
     Because the data returned data is always a new copy, it can be manipulated at will.
@@ -458,11 +458,8 @@ _cmd_yaml = """
     isQuery: false
     retType: <class 'NoneType'>
     doc: |-
-        Shows plots.
-
-        .. note::
-           This functionality is unstable **work in progress** and is not yet
-           suitable for general use
+        Shows plots of transfer values and convergence for data transfers
+        of a coupling interface.
 
     essentialArgNames:
     - interface_name
@@ -472,7 +469,7 @@ _cmd_yaml = """
     - show_convergence
     - show_transfer_values
     defaults:
-    - []
+    - None
     - "."
     - True
     - True
@@ -490,7 +487,8 @@ _cmd_yaml = """
             Type: <class 'list'>
             type: String List
             doc:  |-
-                Specification of which data transfers to plot.
+                Specification of which data transfers to plot. Defaults
+                to ``None``, which means plot all data transfers.
     - #!!python/tuple
         - working_dir
         -   pyname: working_dir
