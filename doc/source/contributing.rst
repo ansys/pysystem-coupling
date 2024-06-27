@@ -41,16 +41,16 @@ after the preceding steps for cloning and installing the package.
 
 The generated code is written to the directory ``src/ansys/systemcoupling/core/adaptor/api_<version>``,
 where ``<version>`` is the version of the System Coupling instance that was run in the background
-by the generation script. For example, the version ``24_1`` corresponds to the System Coupling 2024 R1.
-The default is ``24_1``, which means that this release of System Coupling is expected to be at the
-installation location given by the ``AWP_ROOT241`` environment variable.
+by the generation script. For example, the version ``24_2`` corresponds to the System Coupling 2024 R2.
+The default is ``24_2``, which means that this release of System Coupling is expected to be at the
+installation location given by the ``AWP_ROOT242`` environment variable.
 
 You can override the default behavior and run a different version, and generate the API classes for
 this different version, by setting either the ``SYSC_ROOT`` environment variable to point to the
 root directory of your System Coupling installation or the ``AWP_ROOT`` environment variable to
 point to the root of an Ansys installation. If ``SYSC_ROOT`` and ``AWP_ROOT`` environment variables
 are both set, the former takes priority. Additionally, both of these environment variables take priority
-over the ``AWP_ROOT241`` environment variable.
+over the ``AWP_ROOT242`` environment variable.
 
 
 Build documentation
