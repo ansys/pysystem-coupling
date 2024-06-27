@@ -60,7 +60,7 @@ attributes of the ``setup`` attribute. For example, this code accesses the ``ana
 
 As noted, the data model objects hold basic settings of different value types.
 For example, the ``analysis_control`` object contains an ``analysis_type`` setting having a
-``string`` value type. Valid values are ``Steady`` and ``Transient``. Thus, this setting
+``string`` value type. Valid values are ``Steady`` and ``Transient``. This setting
 defines the type of analysis to be performed.
 
 This code shows how you set and query the ``analysis_type`` setting:
