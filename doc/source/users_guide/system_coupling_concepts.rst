@@ -4,7 +4,7 @@ System Coupling concepts
 ========================
 
 A coupled analysis involves two or more *participant* solvers. System Coupling is responsible for
-coordinating the progress of each solution and for transferring variable data between the solver
+coordinating the progress of each solution and for transferring variable data between the solvers
 at appropriate points during the solution.
 
 For example, in a Fluid-Structure Interaction (FSI) case, pressure data is transferred from the

@@ -16,7 +16,7 @@ The ``solve`` command
 If you have set up an analysis and it has no errors, you may attempt to solve it by calling ``solve``.
 
 .. tip::
-    Before beginning the solve, you may wish to enable output streaming so you can use the solver transcript output to track the solution's progress.
+    Before beginning the solve, you can enable output streaming to use the solver transcript output to track the solution's progress.
 
 .. code-block:: python
 
