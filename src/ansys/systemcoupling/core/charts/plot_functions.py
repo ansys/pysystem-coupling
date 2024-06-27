@@ -75,11 +75,7 @@ def solve_with_live_plot(
     data_thread = threading.Thread(target=data_source.read_data)
 
     def solve():
-        # print("solving...")
         solve_func()
-        # print("sleeping after solve...")
-        # time.sleep(30)
-        # print("cancel live plot")
         data_source.cancel()
 
     solve_thread = threading.Thread(target=solve)

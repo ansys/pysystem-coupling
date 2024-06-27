@@ -104,7 +104,7 @@ def get_injected_cmd_map(
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
-            "show_plot": lambda **kwargs: show_plot(session, **kwargs),
+            "show_plot": lambda **kwargs: _show_plot(session, **kwargs),
         }
 
     if category == "case":
@@ -194,7 +194,7 @@ def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
     return new_name
 
 
-def show_plot(session: SessionProtocol, **kwargs):
+def _show_plot(session: SessionProtocol, **kwargs):
     setup = session.setup
     working_dir = kwargs.pop("working_dir", ".")
     interface_name = kwargs.pop("interface_name", None)

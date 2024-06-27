@@ -20,7 +20,6 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from pprint import pprint
 import threading
 import time
 from typing import Callable, TextIO, Union
@@ -51,16 +50,10 @@ class LiveCsvDataSource:
             if not self._csv_reader.read_metadata():
                 time.sleep(0.5)
             else:
-                print("METADATA=")
-                pprint(self._csv_reader.metadata)
                 self._put_msg(
                     Message(type=MsgType.METADATA, data=self._csv_reader.metadata)
                 )
                 break
-
-        # if self._is_cancelled.is_set():
-        #     self._put_msg(Message(type=MsgType.END_OF_DATA))
-        #     return
 
         last_round = False
         while True:

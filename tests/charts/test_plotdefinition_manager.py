@@ -85,7 +85,7 @@ def test_init_from_spec(spec):
     )
 
     for sp in pdm.subplots:
-        assert sp.y_labels == []
+        assert sp.series_labels == []
 
 
 def test_set_metadata(spec, metadata):
@@ -97,6 +97,6 @@ def test_set_metadata(spec, metadata):
     assert pdm.subplots[1].title == "Intf-1 - trans1 (Weighted Average)"
     assert pdm.subplots[2].title == "Intf-1 - trans2 (Weighted Average)"
 
-    assert pdm.subplots[0].y_labels == ["trans1", "trans2"]
-    assert pdm.subplots[1].y_labels == ["rootFind", "rootFind 2"]
-    assert pdm.subplots[2].y_labels == ["rootFind 2", "rootFind"]
+    assert pdm.subplots[0].series_labels == ["trans1", "trans2"]
+    assert pdm.subplots[1].series_labels == ["rootFind", "rootFind 2"]
+    assert pdm.subplots[2].series_labels == ["rootFind 2", "rootFind"]

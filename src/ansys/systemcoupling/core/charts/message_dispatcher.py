@@ -64,21 +64,6 @@ class MessageDispatcher:
     def put_msg(self, msg: Message):
         self._q.put(msg)
 
-    # def wait_for_metadata(self) -> Optional[InterfaceInfo]:
-    #     # Alternative approach - supports waiting for metadata and
-    #     # initialising figure before creating the animation
-    #     while True:
-    #         try:
-    #             msg: Message = self._q.get(timeout=0.001)
-    #             msg_t = msg.type
-    #             if msg_t == MsgType.METADATA:
-    #                 return msg.data
-    #             elif msg_t == MsgType.END_OF_DATA:
-    #                 return None
-    #         except queue.Empty:
-    #             pass
-    #         time.sleep(0.2)
-
     def dispatch_messages(self):
         while True:
             try:

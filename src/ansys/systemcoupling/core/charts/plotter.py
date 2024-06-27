@@ -45,18 +45,18 @@ def _process_timestep_data(
     if not timestep_data.timestep:
         return [], []
 
-    # NB: for dynamically updating case, should be possible to do partial update
+    # TODO: for a dynamically updating case, it should be possible to do a partial update.
     time_indexes = [0]
     times = [None]
     curr_step = timestep_data.timestep[0]
     for i, step in enumerate(timestep_data.timestep):
         time = timestep_data.time[i]
         if step == curr_step:
-            # Still in the same step, update
+            # Still in the same step, so update
             times[-1] = time
             time_indexes[-1] = i
         else:
-            # new step
+            # New step
             times.append(time)
             time_indexes.append(i)
             curr_step = step
@@ -134,9 +134,9 @@ def _update_xy_data(
     if time_info:
         time_indexes, time_values = time_info
         # IMPORTANT: Assume that time data is updated ahead of any series data
-        # This means that new_data_len - 1 should always be <= maximum known
+        # This means that (new_data_len - 1) should always be <= maximum known
         # time index.
-        # _time_indexes[-1] is the latest known 0-based iteration index that belongs
+        # time_indexes[-1] is the latest known 0-based iteration index that belongs
         # to the latest timestep.
         for i, time_iter in enumerate(time_indexes):
             # Straight copy if not overlapping with new data yet
@@ -322,7 +322,7 @@ class Plotter:
             axes.set_xlabel(subplot_defn.x_axis_label, fontsize=8)
             axes.set_ylabel(subplot_defn.y_axis_label, fontsize=8)
             lines = []
-            for label in subplot_defn.y_labels:
+            for label in subplot_defn.series_labels:
                 (ln,) = axes.plot([], [], label=label)
                 lines.append(ln)
             axes.legend(fontsize=6)

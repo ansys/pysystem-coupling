@@ -62,6 +62,14 @@ class CsvReader:
             print(e)
             return False
 
+    @property
+    def headers(self) -> HeaderList:
+        return self._headers
+
+    @property
+    def data(self) -> ChartData:
+        return self._data
+
     def _read_data_initial(self):
         f = None
         try:
@@ -106,17 +114,13 @@ class CsvReader:
         if f and isinstance(self._file_or_filename, str):
             f.close()
 
-    @property
-    def headers(self) -> HeaderList:
-        return self._headers
-
-    @property
-    def data(self) -> ChartData:
-        return self._data
-
 
 class CsvChartDataReader:
-    """Read data from a single CSV file"""
+    """Reader of chart data and metadata from a single CSV file, which
+    contains data for a single coupling interface.
+
+    The metadata is derived from the column headings in the file.
+    """
 
     def __init__(self, interface_name: str, csvfile: Union[str, TextIO]) -> None:
         self._interface_name = interface_name

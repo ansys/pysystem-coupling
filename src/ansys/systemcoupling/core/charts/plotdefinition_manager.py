@@ -72,24 +72,33 @@ Transfer values subplot:
 
 @dataclass
 class SubplotDefinition:
+    """Various data - mainly title and label strings - used in the rendering of
+    a subplot.
+
+    Attributes
+    ----------
+    title: str
+        The title of the subplot.
+    is_log_y: bool
+        Whether the y-axis is logarithmic.
+    x_axis_label: str
+        The label shown on the x-axis.
+    y_axis_label: str
+        The label shown on the y-axis. This is an empty string for convergence plots.
+    index: int = -1
+        The index of this subplot within the list of subplots in the current figure.
+        (In `matplotlib` terms it also indexes the corresponding ``Axes`` item in
+        the figure.)
+    series_labels: list[str] = field(default_factory=list)
+        Labels for each series of the subplot.
+    """
+
     title: str
     is_log_y: bool
     x_axis_label: str
     y_axis_label: str
-
-    # This is defined to be the index of this subplot in the list of
-    # subplots of the current figure. This will correspond with the
-    # actual subplots (Axes) list of the current figure, allowing one
-    # to navigate from one to the other.
     index: int = -1
-
-    y_labels: list[str] = field(default_factory=list)
-
-    # At one point, considered storing data here. Doesn't make much sense though?
-    # x_data: list[float] = field(default_factory=list)
-    # y_data: list[list[float]] = field(default_factory=list)
-    # x_range: tuple[float | int, float | int] = (0, 5)
-    # y_range: tuple[float, float] = (0.0, 1.0)
+    series_labels: list[str] = field(default_factory=list)
 
 
 class PlotDefinitionManager:
@@ -109,12 +118,12 @@ class PlotDefinitionManager:
         self, interface_name: str, data_index: int
     ) -> tuple[Optional[SubplotDefinition], int]:
         """Return the subplot definition, and the line index within the
-        subplot, corresponding to a given `data_index`.
+        subplot, corresponding to a given ``data_index``.
 
-        The `data_index` is a "global" line index for the interface.
+        The ``data_index`` is a "global" line index for the interface.
 
         If there is no subplot corresponding to the provided index,
-        return a tuple `(None, -1)`
+        return a tuple ``(None, -1)``
         """
         try:
             return self._data_index_map[interface_name][data_index]
@@ -248,10 +257,10 @@ class PlotDefinitionManager:
 
                 if conv_subplot := self._conv_subplots.get(interface_name):
                     data_index_map[transfer.data_index] = (conv_subplot, iconv)
-                    # Add a new series list to y_data, and label to y_labels
+                    # Add a new series list to y_data, and label to series_labels
                     # Both will be at position iconv of respective lists
                     # conv_subplot.y_data.append([])
-                    conv_subplot.y_labels.append(transfer.transfer_display_name)
+                    conv_subplot.series_labels.append(transfer.transfer_display_name)
                     iconv += 1
             else:
                 transfer_value_subplot = self._transfer_subplots.get(
@@ -272,7 +281,7 @@ class PlotDefinitionManager:
                             transfer_value_subplot,
                             itransval,
                         )
-                        transfer_value_subplot.y_labels.append(
+                        transfer_value_subplot.series_labels.append(
                             transfer.participant_display_name
                         )
                         itransval += 1
@@ -283,7 +292,7 @@ class PlotDefinitionManager:
                                 transfer_value_subplot,
                                 itransval + i,
                             )
-                            transfer_value_subplot.y_labels.append(
+                            transfer_value_subplot.series_labels.append(
                                 transfer.participant_display_name + suffix
                             )
                         transfer_value_line_count[transfer_key] = itransval + len(
