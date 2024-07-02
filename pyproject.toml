@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "ansys-systemcoupling-core"
-version = "0.6.dev0"
+version = "0.6"
 description = "A Python wrapper for Ansys System Coupling."
 readme = "README.rst"
 requires-python = ">=3.9,<3.13"
@@ -79,7 +79,7 @@ doc = [
 ]
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
-	"codespell==2.3.0", 
+	"codespell==2.3.0",
 	"flake8==7.1.0",
 ]
 tests = [
