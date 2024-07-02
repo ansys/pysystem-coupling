@@ -20,7 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import time
+
 import ansys.systemcoupling.core as pysystemcoupling
+from ansys.systemcoupling.core.charts.plotter import Plotter
 
 
 def test_partlib_cosim_volume_simple() -> None:
@@ -87,11 +90,16 @@ def test_partlib_cosim_volume_simple() -> None:
             side_two_variable="p2_to_p1",
         )
 
+        setup.output_control.generate_csv_chart_output = True
+
         output_handler = _OutputHandler()
         syc.start_output(handle_output=output_handler.on_line)
 
         solution = syc.solution
         solution.solve()
+        plotter: Plotter = solution.show_plot()
+        time.sleep(5)
+        plotter.close()
 
         syc._native_api.PrintState(ObjectPath="/SystemCoupling/OutputControl")
         syc.end_output()
