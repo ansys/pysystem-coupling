@@ -1,0 +1,6 @@
+solution
+========
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. autoproperty:: Session.solution
