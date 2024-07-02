@@ -18,6 +18,9 @@ Jupyter notebooks and run them locally.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 
@@ -35,6 +38,7 @@ interrogation of the data model, and running the System Coupling solver to perfo
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -86,6 +90,8 @@ interrogation of the data model, and running the System Coupling solver to perfo
       <div class="sphx-glr-thumbnail-title">Parametric sweep</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

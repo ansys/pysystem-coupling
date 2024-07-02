@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**12:45.145** total execution time for 3 files **from examples\00-systemcoupling**:
+**10:16.874** total execution time for 3 files **from examples\00-systemcoupling**:
 
 .. container::
 
@@ -33,7 +33,7 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_00-systemcoupling_heating_tank_fmu.py` (``heating_tank_fmu.py``)
-     - 12:45.145
+     - 10:16.874
      - 0.0
    * - :ref:`sphx_glr_examples_00-systemcoupling_oscillating_plate.py` (``oscillating_plate.py``)
      - 00:00.000
