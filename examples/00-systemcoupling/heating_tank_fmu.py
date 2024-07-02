@@ -112,13 +112,13 @@ fluent_cas_file = examples.download_file(
 #    Fluent version greater than 24.1 is required.
 #    To specify Fluent version explicitly when launching Fluent,
 #    use ``product_version`` argument to the ``launch_fluent``
-#    function, e.g. ``pyfluent.launch_fluent(product_version="24.2.0")``
+#    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 
 fluent_session = pyfluent.launch_fluent(start_transcript=False)
-fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
-assert fluent_session.get_fluent_version() >= fluent_v241
+fluent_v242 = pyfluent.utils.fluent_version.FluentVersion.v242
+assert fluent_session.get_fluent_version() >= fluent_v242
 
-fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
+fluent_session.settings.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
 # Launch System Coupling
@@ -264,10 +264,12 @@ fluent_session.tui.preferences.graphics.graphics_effects.simple_shadows_enabled(
 # %%
 # Method to save png images
 def save_png(fluent_session, png_name):
-    fluent_session.results.graphics.picture.driver_options.hardcopy_format = "png"
-    fluent_session.results.graphics.picture.use_window_resolution = False
-    fluent_session.results.graphics.picture.x_resolution = 1920
-    fluent_session.results.graphics.picture.y_resolution = 1080
+    fluent_session.settings.results.graphics.picture.driver_options.hardcopy_format = (
+        "png"
+    )
+    fluent_session.settings.results.graphics.picture.use_window_resolution = False
+    fluent_session.settings.results.graphics.picture.x_resolution = 1920
+    fluent_session.settings.results.graphics.picture.y_resolution = 1080
     fluent_session.tui.display.save_picture(png_name)
 
 
@@ -276,11 +278,11 @@ def save_png(fluent_session, png_name):
 normal_plane = "zx"
 position = 0.0
 plane_name = "plane" + "-" + normal_plane + "-" + str(position)
-fluent_session.results.surfaces.plane_surface.create(plane_name)
-fluent_session.results.surfaces.plane_surface[plane_name].method = (
+fluent_session.settings.results.surfaces.plane_surface.create(plane_name)
+fluent_session.settings.results.surfaces.plane_surface[plane_name].method = (
     normal_plane + "-plane"
 )
-fluent_session.results.surfaces.plane_surface[plane_name].y = position
+fluent_session.settings.results.surfaces.plane_surface[plane_name].y = position
 
 # %%
 # Create a mutli-plane
@@ -291,11 +293,11 @@ height = 0.14
 step = height / (number_of_planes + 2)
 for i in range(0, number_of_planes):
     multiplane_name = "plane" + "-" + normal_multiplane + "-" + str(i)
-    fluent_session.results.surfaces.plane_surface.create(multiplane_name)
-    fluent_session.results.surfaces.plane_surface[multiplane_name].method = (
+    fluent_session.settings.results.surfaces.plane_surface.create(multiplane_name)
+    fluent_session.settings.results.surfaces.plane_surface[multiplane_name].method = (
         normal_multiplane + "-plane"
     )
-    fluent_session.results.surfaces.plane_surface[multiplane_name].z = (
+    fluent_session.settings.results.surfaces.plane_surface[multiplane_name].z = (
         float(i) * step + step
     )
     mutliplane_list.append(multiplane_name)
@@ -305,9 +307,9 @@ for i in range(0, number_of_planes):
 # Method to create a contour
 def contour(fluent_session, surface_list, surface_name, field, color):
     contour_name = "contour-" + field + "-" + surface_name
-    fluent_session.results.graphics.contour.create(contour_name)
-    fluent_session.results.graphics.contours.render_mesh = True
-    fluent_session.results.graphics.contour[contour_name] = {
+    fluent_session.settings.results.graphics.contour.create(contour_name)
+    fluent_session.settings.results.graphics.contours.render_mesh = True
+    fluent_session.settings.results.graphics.contour[contour_name] = {
         "name": contour_name,
         "field": field,
         "filled": True,
@@ -337,7 +339,7 @@ def contour(fluent_session, surface_list, surface_name, field, color):
         },
         "display_state_name": "None",
     }
-    fluent_session.results.graphics.contour[contour_name].display()
+    fluent_session.settings.results.graphics.contour[contour_name].display()
     scene(fluent_session, contour_name)
 
 
@@ -345,12 +347,14 @@ def contour(fluent_session, surface_list, surface_name, field, color):
 # Method to create a vector
 def vector(fluent_session, surfaces_list, surface_name, field):
     vector_name = "vectors-" + field + "-" + surface_name
-    fluent_session.results.graphics.vector.create(vector_name)
-    fluent_session.results.graphics.vector[vector_name].style = "arrow"
-    fluent_session.results.graphics.vector[vector_name].scale.scale_f = 0.6
-    fluent_session.results.graphics.vector[vector_name].field = field
-    fluent_session.results.graphics.vector[vector_name].surfaces_list = surfaces_list
-    fluent_session.results.graphics.vector[vector_name] = {
+    fluent_session.settings.results.graphics.vector.create(vector_name)
+    fluent_session.settings.results.graphics.vector[vector_name].style = "arrow"
+    fluent_session.settings.results.graphics.vector[vector_name].scale.scale_f = 0.6
+    fluent_session.settings.results.graphics.vector[vector_name].field = field
+    fluent_session.settings.results.graphics.vector[vector_name].surfaces_list = (
+        surfaces_list
+    )
+    fluent_session.settings.results.graphics.vector[vector_name] = {
         "color_map": {
             "visible": True,
             "size": 100,
@@ -367,39 +371,41 @@ def vector(fluent_session, surfaces_list, surface_name, field):
             "width": 6.0,
         }
     }
-    fluent_session.results.graphics.vector[vector_name].display()
+    fluent_session.settings.results.graphics.vector[vector_name].display()
     scene(fluent_session, vector_name)
 
 
 # %%
 # Method to define the outline of an object
 def outline(fluent_session):
-    fluent_session.results.graphics.mesh.create("outline")
-    fluent_session.results.graphics.mesh["outline"].coloring.option = "manual"
-    fluent_session.results.graphics.mesh["outline"].surfaces_list = [
+    fluent_session.settings.results.graphics.mesh.create("outline")
+    fluent_session.settings.results.graphics.mesh["outline"].coloring.option = "manual"
+    fluent_session.settings.results.graphics.mesh["outline"].surfaces_list = [
         "wall",
         "heat_source",
         "top",
         "sensor",
     ]
-    fluent_session.results.graphics.mesh["outline"].coloring.manual.faces = "light gray"
+    fluent_session.settings.results.graphics.mesh["outline"].coloring.manual.faces = (
+        "light gray"
+    )
 
 
 # %%
 # Method to create a scene
 def scene(fluent_session, object_name):
     scene_name = "scene-" + object_name
-    fluent_session.results.scene.create(scene_name)
-    fluent_session.results.scene[scene_name] = {}
-    fluent_session.results.scene[scene_name].graphics_objects["outline"] = {}
-    fluent_session.results.scene[scene_name].graphics_objects[
+    fluent_session.settings.results.scene.create(scene_name)
+    fluent_session.settings.results.scene[scene_name] = {}
+    fluent_session.settings.results.scene[scene_name].graphics_objects["outline"] = {}
+    fluent_session.settings.results.scene[scene_name].graphics_objects[
         "outline"
     ].transparency = 90
-    fluent_session.results.scene[scene_name].graphics_objects[object_name] = {}
-    fluent_session.results.scene[scene_name].display()
-    fluent_session.results.graphics.views.restore_view(view_name="top")
-    fluent_session.results.graphics.views.camera.orbit(right=140, up=20)
-    fluent_session.results.graphics.views.camera.zoom(factor=1.1)
+    fluent_session.settings.results.scene[scene_name].graphics_objects[object_name] = {}
+    fluent_session.settings.results.scene[scene_name].display()
+    fluent_session.settings.results.graphics.views.restore_view(view_name="top")
+    fluent_session.settings.results.graphics.views.camera.orbit(right=140, up=20)
+    fluent_session.settings.results.graphics.views.camera.zoom(factor=1.1)
     save_png(fluent_session, scene_name)
 
 

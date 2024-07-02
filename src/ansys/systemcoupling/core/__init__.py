@@ -68,11 +68,11 @@ def launch(
         ``None``, in which case the System Coupling server uses its own default.
     version : str, optional
         String specifying the version of System Coupling to use. For example,
-        to use System Coupling from the Ansys "2023 R1" release, specify ``"231"``.
-        (The forms ``"23.1"`` and ``"23_1"`` are also acceptable.)
+        to use System Coupling from the Ansys "2024 R1" release, specify ``"241"``.
+        (The forms ``"24.1"`` and ``"24_1"`` are also acceptable.)
         The version will be sought in the standard installation location. The
         default is ``None``, which is equivalent to specifying
-        ``"241"`` ("2024 R1" release), unless either of the environment
+        ``"242"`` ("2024 R2" release), unless either of the environment
         variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
         to be an error if either these is set *and* ``version`` is provided.
     start_output: bool, optional

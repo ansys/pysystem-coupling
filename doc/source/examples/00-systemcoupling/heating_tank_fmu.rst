@@ -11,7 +11,7 @@
         :class: sphx-glr-download-link-note
 
         :ref:`Go to the end <sphx_glr_download_examples_00-systemcoupling_heating_tank_fmu.py>`
-        to download the full example code
+        to download the full example code.
 
 .. rst-class:: sphx-glr-example-title
 
@@ -144,7 +144,7 @@ Read in the Fluent case file.
    Fluent version greater than 24.1 is required.
    To specify Fluent version explicitly when launching Fluent,
    use ``product_version`` argument to the ``launch_fluent``
-   function, e.g. ``pyfluent.launch_fluent(product_version="24.2.0")``
+   function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 
 .. GENERATED FROM PYTHON SOURCE LINES 116-123
 
@@ -152,10 +152,10 @@ Read in the Fluent case file.
 
 
     fluent_session = pyfluent.launch_fluent(start_transcript=False)
-    fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
-    assert fluent_session.get_fluent_version() >= fluent_v241
+    fluent_v242 = pyfluent.utils.fluent_version.FluentVersion.v242
+    assert fluent_session.get_fluent_version() >= fluent_v242
 
-    fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
+    fluent_session.settings.file.read(file_type="case", file_name=fluent_cas_file)
 
 
 
@@ -609,16 +609,15 @@ Access the ``solve`` command via the ``solution`` API.
     |       Execution Control                                                     |
     |          Option :                                         ExternallyManaged |
     +-----------------------------------------------------------------------------+
-    |    testHeater                                                               |
+    |    tutorialHeater                                                           |
     +-----------------------------------------------------------------------------+
     |       Internal Name :                                                 FMU-2 |
     |       Participant Type :                                                FMU |
-    |       Participant Display Name :                                 testHeater |
+    |       Participant Display Name :                             tutorialHeater |
     |       Input Variables :                                            [Real_0] |
     |       Output Variables :                                           [Real_1] |
-    |       Participant File Loaded : C:\Users\user0000\AppData\Local\Ansys\ansys |
-    |                                 _systemcoupling_core\examples\thermostat.fm |
-    |                                 u                                           |
+    |       Participant File Loaded : C:\Users\user0000\AppData\Local\Ansys\ansys_s |
+    |                                 ystemcoupling_core\examples\thermostat.fmu  |
     |       Logging On :                                                    False |
     |       Can Serialize Fmu State :                                        True |
     |       Can Get And Set Fmu State :                                      True |
@@ -746,7 +745,7 @@ Access the ``solve`` command via the ``solution`` API.
     | Warning: Participant FLUENT-1 (CouplingParticipant:FLUENT-1) has the        |
     |     ExecutionControl 'Option' set to 'ExternallyManaged'. System Coupling   |
     |     will not control the startup/shutdown behavior of this participant.     |
-    | Warning: Participant testHeater (CouplingParticipant:FMU-2)                 |
+    | Warning: Participant tutorialHeater (CouplingParticipant:FMU-2)             |
     |     ParticipantFileLoaded should be relative paths, otherwise the case may  |
     |     not be portable across machines.                                        |
     | Warning: FMU(s) detected in the Datamodel. FMUs are not currently           |
@@ -767,16 +766,16 @@ Access the ``solve`` command via the ``solution`` API.
     |                                                                             |
     | System Coupling                                                             |
     |   Command Line Arguments:                                                   |
-    |     -m cosimgui --grpcport 127.0.0.1:59781                                  |
+    |     -m cosimgui --grpcport 127.0.0.1:57777                                  |
     |   Working Directory:                                                        |
-    |     D:\ANSYSDev\GitHub\ansys\pysystemcoupling\examples\00-systemcoupling    |
+    |     D:\pyansys\pysystem-coupling\examples\00-systemcoupling                 |
     |                                                                             |
     | FLUENT-1                                                                    |
     |   Not started by System Coupling                                            |
     |                                                                             |
-    | testHeater                                                                  |
-    |   C:\Users\user0000\AppData\Local\Ansys\ansys_systemcoupling_core\examples\ |
-    |   thermostat.fmu                                                            |
+    | tutorialHeater                                                              |
+    |   C:\Users\user0000\AppData\Local\Ansys\ansys_systemcoupling_core\examples\th |
+    |   ermostat.fmu                                                              |
     |                                                                             |
     +=============================================================================+
     Awaiting connections from coupling participants... done.
@@ -785,12 +784,17 @@ Access the ``solve`` command via the ``solution`` API.
     |                              Build Information                              |
     +-----------------------------------------------------------------------------+
     | System Coupling                                                             |
-    |   2024 R2: Build ID: baab662 Build Date: 2024-04-16T06:32                   |
+    |   2024 R2: Build ID: 189107b Build Date: 2024-05-08T16:26                   |
     | FLUENT-1                                                                    |
-    |   ANSYS Fluent 24.0 2.0 0.0 Build Time: Apr 11 2024 12:34:33 EST  Build Id: |
-    |   163                                                                       |
-    | testHeater                                                                  |
-    |   No build information available                                            |
+    |   ANSYS Fluent 25.0 1.0 0.0 Build Time: Jun 12 2024 13:23:05 EST  Build Id: |
+    |   63                                                                        |
+    | tutorialHeater                                                              |
+    |   Author: ANSYS Inc                                                         |
+    |   Version: 1.0                                                              |
+    |   Copyright: ANSYS Inc                                                      |
+    |   License: None                                                             |
+    |   Generation Time: 2019-02-08T09:52:33z                                     |
+    |   Description: Thermostat FMU for Tutorial                                  |
     +=============================================================================+
 
     ===============================================================================
@@ -830,7 +834,7 @@ Access the ``solve`` command via the ``solution`` API.
     |     heatflow                        |                                       |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |                                       |
     |       Value                         |     3.00E+02          3.00E+02        |
@@ -862,7 +866,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E+00          1.00E+00        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     1.00E+00          1.00E+00        |
@@ -870,7 +874,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -880,7 +884,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.78E-06          2.39E-06        |
@@ -888,7 +892,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -908,7 +912,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.26E-04          1.60E-04        |
@@ -916,7 +920,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -926,7 +930,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.20E-06          5.98E-07        |
@@ -934,7 +938,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -954,7 +958,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.00E-04          1.98E-04        |
@@ -962,7 +966,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -972,7 +976,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.91E-07          2.95E-07        |
@@ -980,7 +984,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1000,7 +1004,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.79E-04          1.88E-04        |
@@ -1008,7 +1012,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1018,7 +1022,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.62E-07          1.31E-07        |
@@ -1026,7 +1030,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1046,7 +1050,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.00E-04          1.49E-04        |
@@ -1054,7 +1058,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1064,7 +1068,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.72E-08          2.36E-08        |
@@ -1072,7 +1076,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1092,7 +1096,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.83E-04          8.95E-05        |
@@ -1100,7 +1104,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1120,7 +1124,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.57E-05          1.28E-05        |
@@ -1128,7 +1132,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1148,7 +1152,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.65E-04          7.98E-05        |
@@ -1156,7 +1160,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1176,7 +1180,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.77E-04          1.87E-04        |
@@ -1184,7 +1188,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1204,7 +1208,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     6.18E-04          3.08E-04        |
@@ -1212,7 +1216,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1232,7 +1236,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     8.82E-04          4.41E-04        |
@@ -1240,7 +1244,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1260,7 +1264,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.17E-03          5.83E-04        |
@@ -1268,7 +1272,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1288,7 +1292,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.47E-03          7.33E-04        |
@@ -1296,7 +1300,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1316,7 +1320,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.78E-03          8.91E-04        |
@@ -1324,7 +1328,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1344,7 +1348,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.11E-03          1.06E-03        |
@@ -1352,7 +1356,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1372,7 +1376,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.45E-03          1.23E-03        |
@@ -1380,7 +1384,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1400,7 +1404,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.83E-03          1.42E-03        |
@@ -1408,7 +1412,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1428,7 +1432,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.28E-03          1.64E-03        |
@@ -1436,7 +1440,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1456,7 +1460,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.87E-03          1.94E-03        |
@@ -1464,7 +1468,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1474,7 +1478,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.55E-06          1.27E-06        |
@@ -1482,7 +1486,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1502,7 +1506,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.80E-03          2.41E-03        |
@@ -1510,7 +1514,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1520,7 +1524,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.02E-05          5.11E-06        |
@@ -1528,7 +1532,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1548,7 +1552,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     6.49E-03          3.25E-03        |
@@ -1556,7 +1560,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1566,7 +1570,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.37E-05          1.18E-05        |
@@ -1574,7 +1578,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1594,7 +1598,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     9.75E-03          4.89E-03        |
@@ -1602,7 +1606,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1612,7 +1616,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.06E-05          2.04E-05        |
@@ -1620,7 +1624,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1640,7 +1644,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.57E-02          7.87E-03        |
@@ -1648,7 +1652,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1658,7 +1662,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.94E-05          1.98E-05        |
@@ -1666,7 +1670,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1686,7 +1690,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     2.41E-02          1.21E-02        |
@@ -1694,7 +1698,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |         Not yet converged             |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1704,7 +1708,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.90E-05          9.56E-06        |
@@ -1712,7 +1716,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1732,7 +1736,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     3.22E-02          1.62E-02        |
@@ -1740,7 +1744,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1750,7 +1754,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.64E-06          1.34E-06        |
@@ -1758,7 +1762,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1778,7 +1782,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     3.62E-02          1.83E-02        |
@@ -1786,7 +1790,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1796,7 +1800,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.35E-06          1.70E-06        |
@@ -1804,7 +1808,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1824,7 +1828,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     3.49E-02          1.77E-02        |
@@ -1832,7 +1836,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1842,7 +1846,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.56E-06          1.30E-06        |
@@ -1850,7 +1854,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1870,7 +1874,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     2.98E-02          1.51E-02        |
@@ -1878,7 +1882,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1888,7 +1892,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     6.55E-07          3.31E-07        |
@@ -1896,7 +1900,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1916,7 +1920,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |         Not yet converged             |
     |       RMS Change                    |     2.32E-02          1.18E-02        |
@@ -1924,7 +1928,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -1934,7 +1938,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.38E-06          7.00E-07        |
@@ -1942,7 +1946,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1962,7 +1966,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.70E-02          8.60E-03        |
@@ -1970,7 +1974,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -1990,7 +1994,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.20E-02          6.05E-03        |
@@ -1998,7 +2002,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2018,7 +2022,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     8.34E-03          4.20E-03        |
@@ -2026,7 +2030,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2046,7 +2050,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     1.00E+01          1.00E+01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.86E-03          2.95E-03        |
@@ -2054,7 +2058,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2074,7 +2078,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.84E-01          1.74E-01        |
     |       Value                         |     8.45E+00          8.45E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.21E-03          2.12E-03        |
@@ -2082,7 +2086,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2092,7 +2096,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.10E-01          1.99E-01        |
     |       Value                         |     6.98E+00          6.98E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     9.81E-05          4.90E-05        |
@@ -2100,7 +2104,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2110,7 +2114,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.85E-03          4.58E-03        |
     |       Value                         |     7.01E+00          7.01E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.06E-07          4.45E-08        |
@@ -2118,7 +2122,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2138,7 +2142,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.39E-06          4.15E-06        |
     |       Value                         |     7.01E+00          7.01E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.11E-03          1.56E-03        |
@@ -2146,7 +2150,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2166,7 +2170,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.83E-01          1.73E-01        |
     |       Value                         |     5.93E+00          5.93E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.38E-03          1.19E-03        |
@@ -2174,7 +2178,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2184,7 +2188,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.63E-01          1.54E-01        |
     |       Value                         |     5.10E+00          5.10E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.11E-05          2.55E-05        |
@@ -2192,7 +2196,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2202,7 +2206,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.47E-03          3.27E-03        |
     |       Value                         |     5.11E+00          5.11E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.89E-07          1.43E-07        |
@@ -2210,7 +2214,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2230,7 +2234,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.94E-05          1.83E-05        |
     |       Value                         |     5.11E+00          5.11E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.77E-03          8.89E-04        |
@@ -2238,7 +2242,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2258,7 +2262,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.38E-01          1.30E-01        |
     |       Value                         |     4.49E+00          4.49E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.24E-03          6.21E-04        |
@@ -2266,7 +2270,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2276,7 +2280,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.06E-01          1.00E-01        |
     |       Value                         |     4.06E+00          4.06E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.64E-05          1.32E-05        |
@@ -2284,7 +2288,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2294,7 +2298,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.25E-03          2.13E-03        |
     |       Value                         |     4.07E+00          4.07E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.25E-07          2.13E-07        |
@@ -2302,7 +2306,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2322,7 +2326,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.64E-05          3.44E-05        |
     |       Value                         |     4.07E+00          4.07E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     7.24E-04          3.63E-04        |
@@ -2330,7 +2334,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2350,7 +2354,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.61E-02          6.24E-02        |
     |       Value                         |     3.82E+00          3.82E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.55E-04          1.24E-04        |
@@ -2358,7 +2362,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2368,7 +2372,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.31E-02          2.18E-02        |
     |       Value                         |     3.73E+00          3.73E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     8.55E-06          4.28E-06        |
@@ -2376,7 +2380,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2386,7 +2390,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.98E-04          7.54E-04        |
     |       Value                         |     3.74E+00          3.74E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.24E-07          2.64E-07        |
@@ -2394,7 +2398,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2414,7 +2418,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.92E-05          4.64E-05        |
     |       Value                         |     3.74E+00          3.74E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.89E-04          9.03E-05        |
@@ -2422,7 +2426,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2442,7 +2446,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.65E-02          1.56E-02        |
     |       Value                         |     3.80E+00          3.80E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.38E-04          2.69E-04        |
@@ -2450,7 +2454,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2460,7 +2464,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.70E-02          4.44E-02        |
     |       Value                         |     3.99E+00          3.99E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.32E-06          2.37E-07        |
@@ -2468,7 +2472,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2478,7 +2482,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.14E-05          3.91E-05        |
     |       Value                         |     3.99E+00          3.99E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.38E-07          1.70E-07        |
@@ -2486,7 +2490,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2506,7 +2510,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.96E-05          2.79E-05        |
     |       Value                         |     3.99E+00          3.99E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     8.03E-04          4.04E-04        |
@@ -2514,7 +2518,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2534,7 +2538,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.58E-02          6.21E-02        |
     |       Value                         |     4.27E+00          4.27E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     9.78E-04          4.92E-04        |
@@ -2542,7 +2546,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2552,7 +2556,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.42E-02          7.01E-02        |
     |       Value                         |     4.61E+00          4.61E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.86E-06          2.17E-06        |
@@ -2560,7 +2564,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2570,7 +2574,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.28E-04          3.10E-04        |
     |       Value                         |     4.61E+00          4.61E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.30E-07          1.64E-07        |
@@ -2578,7 +2582,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2598,7 +2602,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.48E-05          2.34E-05        |
     |       Value                         |     4.61E+00          4.61E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.05E-03          5.28E-04        |
@@ -2606,7 +2610,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2626,7 +2630,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.37E-02          6.96E-02        |
     |       Value                         |     4.98E+00          4.98E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.02E-03          5.14E-04        |
@@ -2634,7 +2638,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2644,7 +2648,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.70E-02          6.32E-02        |
     |       Value                         |     5.33E+00          5.33E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     4.04E-06          1.69E-06        |
@@ -2652,7 +2656,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2662,7 +2666,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.20E-04          2.08E-04        |
     |       Value                         |     5.33E+00          5.33E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.95E-07          1.97E-07        |
@@ -2670,7 +2674,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2690,7 +2694,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.57E-05          2.42E-05        |
     |       Value                         |     5.33E+00          5.33E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     8.92E-04          4.49E-04        |
@@ -2698,7 +2702,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2718,7 +2722,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.52E-02          5.21E-02        |
     |       Value                         |     5.64E+00          5.64E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     6.70E-04          3.37E-04        |
@@ -2726,7 +2730,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2736,7 +2740,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.98E-02          3.76E-02        |
     |       Value                         |     5.88E+00          5.88E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.88E-06          6.31E-07        |
@@ -2744,7 +2748,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2754,7 +2758,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.45E-05          7.03E-05        |
     |       Value                         |     5.88E+00          5.88E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.79E-07          1.89E-07        |
@@ -2762,7 +2766,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2782,7 +2786,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.23E-05          2.11E-05        |
     |       Value                         |     5.88E+00          5.88E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.63E-04          1.82E-04        |
@@ -2790,7 +2794,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2810,7 +2814,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.11E-02          1.99E-02        |
     |       Value                         |     6.00E+00          6.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.55E-05          1.55E-05        |
@@ -2818,7 +2822,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2828,7 +2832,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.79E-03          1.69E-03        |
     |       Value                         |     5.99E+00          5.99E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.61E-07          1.81E-07        |
@@ -2836,7 +2840,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2856,7 +2860,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.09E-05          1.98E-05        |
     |       Value                         |     5.99E+00          5.99E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.05E-04          2.53E-04        |
@@ -2864,7 +2868,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2884,7 +2888,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.01E-02          2.85E-02        |
     |       Value                         |     5.82E+00          5.82E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.03E-03          5.19E-04        |
@@ -2892,7 +2896,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2902,7 +2906,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     6.61E-02          6.24E-02        |
     |       Value                         |     5.46E+00          5.46E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     7.27E-06          3.43E-06        |
@@ -2910,7 +2914,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -2920,7 +2924,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.37E-04          4.12E-04        |
     |       Value                         |     5.46E+00          5.46E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.47E-07          1.73E-07        |
@@ -2928,7 +2932,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2948,7 +2952,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.20E-05          2.08E-05        |
     |       Value                         |     5.46E+00          5.46E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.59E-03          7.99E-04        |
@@ -2956,7 +2960,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -2976,7 +2980,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.13E-01          1.07E-01        |
     |       Value                         |     4.90E+00          4.90E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.13E-03          1.07E-03        |
@@ -2984,7 +2988,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -2994,7 +2998,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.79E-01          1.69E-01        |
     |       Value                         |     4.16E+00          4.16E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.24E-05          1.09E-05        |
@@ -3002,7 +3006,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3012,7 +3016,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.83E-03          1.72E-03        |
     |       Value                         |     4.16E+00          4.16E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.42E-07          1.70E-07        |
@@ -3020,7 +3024,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3040,7 +3044,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.83E-05          2.67E-05        |
     |       Value                         |     4.16E+00          4.16E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.59E-03          1.31E-03        |
@@ -3048,7 +3052,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3068,7 +3072,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.80E-01          2.64E-01        |
     |       Value                         |     3.25E+00          3.25E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.94E-03          1.48E-03        |
@@ -3076,7 +3080,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3086,7 +3090,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.65E-01          4.39E-01        |
     |       Value                         |     2.22E+00          2.22E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.77E-05          1.86E-05        |
@@ -3094,7 +3098,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3104,7 +3108,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.80E-03          5.48E-03        |
     |       Value                         |     2.23E+00          2.23E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.07E-07          1.50E-07        |
@@ -3112,7 +3116,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3132,7 +3136,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.69E-05          4.42E-05        |
     |       Value                         |     2.23E+00          2.23E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.09E-03          1.55E-03        |
@@ -3140,7 +3144,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3160,7 +3164,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     9.47E-01          8.94E-01        |
     |       Value                         |     1.15E+00          1.15E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.02E-03          1.52E-03        |
@@ -3168,7 +3172,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3178,7 +3182,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.29E+01          1.22E+01        |
     |       Value                         |     8.24E-02          8.24E-02        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.20E-05          2.58E-05        |
@@ -3186,7 +3190,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3196,7 +3200,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.80E-01          1.70E-01        |
     |       Value                         |     1.01E-01          1.01E-01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     7.68E-08          1.45E-08        |
@@ -3204,7 +3208,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 4                            |
     +-----------------------------------------------------------------------------+
@@ -3214,7 +3218,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.01E-04          9.54E-05        |
     |       Value                         |     1.01E-01          1.01E-01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.97E-07          1.44E-07        |
@@ -3222,7 +3226,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3242,7 +3246,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.01E-03          9.49E-04        |
     |       Value                         |     1.01E-01          1.01E-01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.69E-03          1.35E-03        |
@@ -3250,7 +3254,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3270,7 +3274,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.01E+13          5.20E+09        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.18E-03          1.10E-03        |
@@ -3278,7 +3282,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3288,7 +3292,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     7.43E-07          3.74E-07        |
@@ -3296,7 +3300,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3316,7 +3320,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.51E-03          7.58E-04        |
@@ -3324,7 +3328,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3344,7 +3348,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     7.43E-04          3.72E-04        |
@@ -3352,7 +3356,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3372,7 +3376,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.05E-04          2.27E-05        |
@@ -3380,7 +3384,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3400,7 +3404,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     7.91E-04          3.95E-04        |
@@ -3408,7 +3412,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3428,7 +3432,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.44E-03          7.26E-04        |
@@ -3436,7 +3440,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3456,7 +3460,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.00E-03          1.01E-03        |
@@ -3464,7 +3468,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3484,7 +3488,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.45E-03          1.23E-03        |
@@ -3492,7 +3496,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3512,7 +3516,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E-14          1.00E-14        |
     |       Value                         |     0.00E+00          0.00E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.81E-03          1.41E-03        |
@@ -3520,7 +3524,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3540,7 +3544,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.00E+00          9.44E-01        |
     |       Value                         |     9.49E-01          9.49E-01        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.05E-03          1.53E-03        |
@@ -3548,7 +3552,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3558,7 +3562,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.30E-01          5.00E-01        |
     |       Value                         |     2.02E+00          2.02E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.28E-05          1.10E-05        |
@@ -3566,7 +3570,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3576,7 +3580,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.82E-03          3.61E-03        |
     |       Value                         |     2.01E+00          2.01E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.49E-07          1.19E-07        |
@@ -3584,7 +3588,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3604,7 +3608,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.14E-05          3.91E-05        |
     |       Value                         |     2.01E+00          2.01E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.19E-03          1.60E-03        |
@@ -3612,7 +3616,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3632,7 +3636,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     3.57E-01          3.37E-01        |
     |       Value                         |     3.13E+00          3.13E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.25E-03          1.63E-03        |
@@ -3640,7 +3644,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3650,7 +3654,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.66E-01          2.52E-01        |
     |       Value                         |     4.26E+00          4.26E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.28E-05          1.09E-05        |
@@ -3658,7 +3662,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3668,7 +3672,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.79E-03          1.69E-03        |
     |       Value                         |     4.26E+00          4.26E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.05E-07          9.89E-08        |
@@ -3676,7 +3680,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3696,7 +3700,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.62E-05          1.53E-05        |
     |       Value                         |     4.26E+00          4.26E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.21E-03          1.61E-03        |
@@ -3704,7 +3708,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3724,7 +3728,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.08E-01          1.97E-01        |
     |       Value                         |     5.38E+00          5.38E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.09E-03          1.55E-03        |
@@ -3732,7 +3736,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3742,7 +3746,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.67E-01          1.57E-01        |
     |       Value                         |     6.45E+00          6.45E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.26E-05          1.09E-05        |
@@ -3750,7 +3754,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3760,7 +3764,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.18E-03          1.11E-03        |
     |       Value                         |     6.44E+00          6.44E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.63E-07          7.85E-08        |
@@ -3768,7 +3772,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3788,7 +3792,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     8.45E-06          7.98E-06        |
     |       Value                         |     6.44E+00          6.44E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.86E-03          1.44E-03        |
@@ -3796,7 +3800,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3816,7 +3820,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.34E-01          1.26E-01        |
     |       Value                         |     7.44E+00          7.44E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.52E-03          1.27E-03        |
@@ -3824,7 +3828,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3834,7 +3838,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.05E-01          9.95E-02        |
     |       Value                         |     8.32E+00          8.32E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.68E-05          1.32E-05        |
@@ -3842,7 +3846,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3852,7 +3856,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.10E-03          1.04E-03        |
     |       Value                         |     8.31E+00          8.31E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.11E-07          5.16E-08        |
@@ -3860,7 +3864,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3880,7 +3884,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     4.29E-06          4.05E-06        |
     |       Value                         |     8.31E+00          8.31E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.04E-03          1.03E-03        |
@@ -3888,7 +3892,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3908,7 +3912,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.87E-02          7.43E-02        |
     |       Value                         |     9.02E+00          9.02E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.41E-03          7.10E-04        |
@@ -3916,7 +3920,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -3926,7 +3930,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     5.16E-02          4.87E-02        |
     |       Value                         |     9.51E+00          9.51E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.14E-05          1.06E-05        |
@@ -3934,7 +3938,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -3944,7 +3948,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     7.71E-04          7.28E-04        |
     |       Value                         |     9.50E+00          9.50E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     2.96E-07          1.48E-07        |
@@ -3952,7 +3956,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -3972,7 +3976,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.08E-05          1.02E-05        |
     |       Value                         |     9.50E+00          9.50E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.80E-04          2.88E-04        |
@@ -3980,7 +3984,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -4000,7 +4004,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     2.05E-02          1.94E-02        |
     |       Value                         |     9.70E+00          9.70E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     5.27E-04          2.57E-04        |
@@ -4008,7 +4012,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 2                            |
     +-----------------------------------------------------------------------------+
@@ -4018,7 +4022,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.86E-02          1.76E-02        |
     |       Value                         |     9.52E+00          9.52E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.13E-06          1.88E-07        |
@@ -4026,7 +4030,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +-----------------------------------------------------------------------------+
     |                           COUPLING ITERATION = 3                            |
     +-----------------------------------------------------------------------------+
@@ -4036,7 +4040,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.36E-05          1.28E-05        |
     |       Value                         |     9.52E+00          9.52E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     3.77E-07          1.89E-07        |
@@ -4044,7 +4048,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     +=============================================================================+
@@ -4064,7 +4068,7 @@ Access the ``solve`` command via the ``solution`` API.
     |       RMS Change                    |     1.37E-05          1.29E-05        |
     |       Value                         |     9.52E+00          9.52E+00        |
     +-----------------------------------------------------------------------------+
-    | testHeater                          |                                       |
+    | tutorialHeater                      |                                       |
     |   Interface: Interface-1            |                                       |
     |     Temperature                     |             Converged                 |
     |       RMS Change                    |     1.92E-03          9.61E-04        |
@@ -4072,7 +4076,7 @@ Access the ``solve`` command via the ``solution`` API.
     +-----------------------------------------------------------------------------+
     | Participant solution status         |                                       |
     |   FLUENT-1                          |             Converged                 |
-    |   testHeater                        |     Convergence not evaluated         |
+    |   tutorialHeater                    |     Convergence not evaluated         |
     +=============================================================================+
 
     ===============================================================================
@@ -4094,19 +4098,19 @@ Access the ``solve`` command via the ``solution`` API.
     +=============================================================================+
     |                             Timing Summary [s]                              |
     +=============================================================================+
-    | Total Time :                                                    6.92371E+02 |
+    | Total Time :                                                    5.17969E+02 |
     | Coupling Participant Time                                                   |
-    |    FLUENT-1 :                                                   6.32549E+02 |
-    |    testHeater :                                                 1.80438E+00 |
-    |    Total :                                                      6.34353E+02 |
+    |    FLUENT-1 :                                                   4.55712E+02 |
+    |    tutorialHeater :                                             5.79715E-01 |
+    |    Total :                                                      4.56292E+02 |
     | Coupling Engine Time                                                        |
-    |    Solution Control :                                           1.08790E+01 |
-    |    Mesh Import :                                                2.53418E-02 |
-    |    Mapping Setup :                                              1.60270E-03 |
-    |    Mapping :                                                    4.69890E-03 |
-    |    Numerics :                                                   1.84676E-02 |
-    |    Misc. :                                                      4.70882E+01 |
-    |    Total :                                                      5.80173E+01 |
+    |    Solution Control :                                           9.50071E+00 |
+    |    Mesh Import :                                                3.19313E-02 |
+    |    Mapping Setup :                                              1.39310E-03 |
+    |    Mapping :                                                    3.02510E-03 |
+    |    Numerics :                                                   1.49969E-02 |
+    |    Misc. :                                                      5.21254E+01 |
+    |    Total :                                                      6.16774E+01 |
     +=============================================================================+
 
     +=============================================================================+
@@ -4164,15 +4168,17 @@ Set some graphics preferences
 
 Method to save png images
 
-.. GENERATED FROM PYTHON SOURCE LINES 266-274
+.. GENERATED FROM PYTHON SOURCE LINES 266-276
 
 .. code-block:: Python
 
     def save_png(fluent_session, png_name):
-        fluent_session.results.graphics.picture.driver_options.hardcopy_format = "png"
-        fluent_session.results.graphics.picture.use_window_resolution = False
-        fluent_session.results.graphics.picture.x_resolution = 1920
-        fluent_session.results.graphics.picture.y_resolution = 1080
+        fluent_session.settings.results.graphics.picture.driver_options.hardcopy_format = (
+            "png"
+        )
+        fluent_session.settings.results.graphics.picture.use_window_resolution = False
+        fluent_session.settings.results.graphics.picture.x_resolution = 1920
+        fluent_session.settings.results.graphics.picture.y_resolution = 1080
         fluent_session.tui.display.save_picture(png_name)
 
 
@@ -4183,22 +4189,22 @@ Method to save png images
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 275-276
+.. GENERATED FROM PYTHON SOURCE LINES 277-278
 
 Create a plane
 
-.. GENERATED FROM PYTHON SOURCE LINES 276-285
+.. GENERATED FROM PYTHON SOURCE LINES 278-287
 
 .. code-block:: Python
 
     normal_plane = "zx"
     position = 0.0
     plane_name = "plane" + "-" + normal_plane + "-" + str(position)
-    fluent_session.results.surfaces.plane_surface.create(plane_name)
-    fluent_session.results.surfaces.plane_surface[plane_name].method = (
+    fluent_session.settings.results.surfaces.plane_surface.create(plane_name)
+    fluent_session.settings.results.surfaces.plane_surface[plane_name].method = (
         normal_plane + "-plane"
     )
-    fluent_session.results.surfaces.plane_surface[plane_name].y = position
+    fluent_session.settings.results.surfaces.plane_surface[plane_name].y = position
 
 
 
@@ -4207,11 +4213,11 @@ Create a plane
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 286-287
+.. GENERATED FROM PYTHON SOURCE LINES 288-289
 
 Create a mutli-plane
 
-.. GENERATED FROM PYTHON SOURCE LINES 287-304
+.. GENERATED FROM PYTHON SOURCE LINES 289-306
 
 .. code-block:: Python
 
@@ -4222,11 +4228,11 @@ Create a mutli-plane
     step = height / (number_of_planes + 2)
     for i in range(0, number_of_planes):
         multiplane_name = "plane" + "-" + normal_multiplane + "-" + str(i)
-        fluent_session.results.surfaces.plane_surface.create(multiplane_name)
-        fluent_session.results.surfaces.plane_surface[multiplane_name].method = (
+        fluent_session.settings.results.surfaces.plane_surface.create(multiplane_name)
+        fluent_session.settings.results.surfaces.plane_surface[multiplane_name].method = (
             normal_multiplane + "-plane"
         )
-        fluent_session.results.surfaces.plane_surface[multiplane_name].z = (
+        fluent_session.settings.results.surfaces.plane_surface[multiplane_name].z = (
             float(i) * step + step
         )
         mutliplane_list.append(multiplane_name)
@@ -4239,19 +4245,19 @@ Create a mutli-plane
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 305-306
+.. GENERATED FROM PYTHON SOURCE LINES 307-308
 
 Method to create a contour
 
-.. GENERATED FROM PYTHON SOURCE LINES 306-344
+.. GENERATED FROM PYTHON SOURCE LINES 308-346
 
 .. code-block:: Python
 
     def contour(fluent_session, surface_list, surface_name, field, color):
         contour_name = "contour-" + field + "-" + surface_name
-        fluent_session.results.graphics.contour.create(contour_name)
-        fluent_session.results.graphics.contours.render_mesh = True
-        fluent_session.results.graphics.contour[contour_name] = {
+        fluent_session.settings.results.graphics.contour.create(contour_name)
+        fluent_session.settings.results.graphics.contours.render_mesh = True
+        fluent_session.settings.results.graphics.contour[contour_name] = {
             "name": contour_name,
             "field": field,
             "filled": True,
@@ -4292,22 +4298,24 @@ Method to create a contour
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 345-346
+.. GENERATED FROM PYTHON SOURCE LINES 347-348
 
 Method to create a vector
 
-.. GENERATED FROM PYTHON SOURCE LINES 346-374
+.. GENERATED FROM PYTHON SOURCE LINES 348-378
 
 .. code-block:: Python
 
     def vector(fluent_session, surfaces_list, surface_name, field):
         vector_name = "vectors-" + field + "-" + surface_name
-        fluent_session.results.graphics.vector.create(vector_name)
-        fluent_session.results.graphics.vector[vector_name].style = "arrow"
-        fluent_session.results.graphics.vector[vector_name].scale.scale_f = 0.6
-        fluent_session.results.graphics.vector[vector_name].field = field
-        fluent_session.results.graphics.vector[vector_name].surfaces_list = surfaces_list
-        fluent_session.results.graphics.vector[vector_name] = {
+        fluent_session.settings.results.graphics.vector.create(vector_name)
+        fluent_session.settings.results.graphics.vector[vector_name].style = "arrow"
+        fluent_session.settings.results.graphics.vector[vector_name].scale.scale_f = 0.6
+        fluent_session.settings.results.graphics.vector[vector_name].field = field
+        fluent_session.settings.results.graphics.vector[vector_name].surfaces_list = (
+            surfaces_list
+        )
+        fluent_session.settings.results.graphics.vector[vector_name] = {
             "color_map": {
                 "visible": True,
                 "size": 100,
@@ -4324,7 +4332,7 @@ Method to create a vector
                 "width": 6.0,
             }
         }
-        fluent_session.results.graphics.vector[vector_name].display()
+        fluent_session.settings.results.graphics.vector[vector_name].display()
         scene(fluent_session, vector_name)
 
 
@@ -4335,24 +4343,26 @@ Method to create a vector
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 375-376
+.. GENERATED FROM PYTHON SOURCE LINES 379-380
 
 Method to define the outline of an object
 
-.. GENERATED FROM PYTHON SOURCE LINES 376-388
+.. GENERATED FROM PYTHON SOURCE LINES 380-394
 
 .. code-block:: Python
 
     def outline(fluent_session):
-        fluent_session.results.graphics.mesh.create("outline")
-        fluent_session.results.graphics.mesh["outline"].coloring.option = "manual"
-        fluent_session.results.graphics.mesh["outline"].surfaces_list = [
+        fluent_session.settings.results.graphics.mesh.create("outline")
+        fluent_session.settings.results.graphics.mesh["outline"].coloring.option = "manual"
+        fluent_session.settings.results.graphics.mesh["outline"].surfaces_list = [
             "wall",
             "heat_source",
             "top",
             "sensor",
         ]
-        fluent_session.results.graphics.mesh["outline"].coloring.manual.faces = "light gray"
+        fluent_session.settings.results.graphics.mesh["outline"].coloring.manual.faces = (
+            "light gray"
+        )
 
 
 
@@ -4362,27 +4372,27 @@ Method to define the outline of an object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 389-390
+.. GENERATED FROM PYTHON SOURCE LINES 395-396
 
 Method to create a scene
 
-.. GENERATED FROM PYTHON SOURCE LINES 390-406
+.. GENERATED FROM PYTHON SOURCE LINES 396-412
 
 .. code-block:: Python
 
     def scene(fluent_session, object_name):
         scene_name = "scene-" + object_name
-        fluent_session.results.scene.create(scene_name)
-        fluent_session.results.scene[scene_name] = {}
-        fluent_session.results.scene[scene_name].graphics_objects["outline"] = {}
-        fluent_session.results.scene[scene_name].graphics_objects[
+        fluent_session.settings.results.scene.create(scene_name)
+        fluent_session.settings.results.scene[scene_name] = {}
+        fluent_session.settings.results.scene[scene_name].graphics_objects["outline"] = {}
+        fluent_session.settings.results.scene[scene_name].graphics_objects[
             "outline"
         ].transparency = 90
-        fluent_session.results.scene[scene_name].graphics_objects[object_name] = {}
-        fluent_session.results.scene[scene_name].display()
-        fluent_session.results.graphics.views.restore_view(view_name="top")
-        fluent_session.results.graphics.views.camera.orbit(right=140, up=20)
-        fluent_session.results.graphics.views.camera.zoom(factor=1.1)
+        fluent_session.settings.results.scene[scene_name].graphics_objects[object_name] = {}
+        fluent_session.settings.results.scene[scene_name].display()
+        fluent_session.settings.results.graphics.views.restore_view(view_name="top")
+        fluent_session.settings.results.graphics.views.camera.orbit(right=140, up=20)
+        fluent_session.settings.results.graphics.views.camera.zoom(factor=1.1)
         save_png(fluent_session, scene_name)
 
 
@@ -4393,11 +4403,11 @@ Method to create a scene
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 407-408
+.. GENERATED FROM PYTHON SOURCE LINES 413-414
 
 Create the outline of the object
 
-.. GENERATED FROM PYTHON SOURCE LINES 408-410
+.. GENERATED FROM PYTHON SOURCE LINES 414-416
 
 .. code-block:: Python
 
@@ -4410,11 +4420,11 @@ Create the outline of the object
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 411-412
+.. GENERATED FROM PYTHON SOURCE LINES 417-418
 
 Create contours and vectors
 
-.. GENERATED FROM PYTHON SOURCE LINES 412-447
+.. GENERATED FROM PYTHON SOURCE LINES 418-453
 
 .. code-block:: Python
 
@@ -4460,7 +4470,8 @@ Create contours and vectors
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 448-479
+
+.. GENERATED FROM PYTHON SOURCE LINES 454-485
 
 Results
 ------------
@@ -4497,7 +4508,7 @@ Total temperature on velocity vectors on zx plane at y = 0
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (12 minutes 45.145 seconds)
+   **Total running time of the script:** (10 minutes 16.874 seconds)
 
 
 .. _sphx_glr_download_examples_00-systemcoupling_heating_tank_fmu.py:
