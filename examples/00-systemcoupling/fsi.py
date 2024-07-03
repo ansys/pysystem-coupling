@@ -20,6 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+""".. _ref_fsi_example:
+
+fsi.py Example
+-------------------------------------------------
+
+This example demonstrates a simple fluid-structure interaction (FSI) simulation
+
+"""
+
 # import required modules
 import shutil
 
