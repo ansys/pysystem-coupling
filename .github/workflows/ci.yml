@@ -17,6 +17,7 @@ env:
   DOC_BUILD_SYC_VERSION: 24_1
   FLUENT_IMAGE_VERSION: "v24.2.0"
   SYC_IMAGE_VERSION: "latest"
+  MAPDL_IMAGE_VERSION: "v24.2-ubuntu"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -274,6 +275,9 @@ jobs:
         working-directory: examples/00-systemcoupling
         run: |
           docker compose up -d
+        env:
+          DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
       - name: Build HTML
         run: |
