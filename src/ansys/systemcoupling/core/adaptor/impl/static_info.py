@@ -23,6 +23,7 @@
 from copy import deepcopy
 from typing import Dict, List, Tuple
 
+from ansys.systemcoupling.core.adaptor.impl.get_syc_version import get_syc_version
 from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
     get_injected_cmd_data,
 )
@@ -310,6 +311,21 @@ def get_extended_cmd_metadata(api) -> list:
         Object providing access to the System Coupling *native API*.
     """
 
+    def fix_up_doc(cmd_metadata):
+        if get_syc_version(api) != "24.2":
+            return cmd_metadata
+
+        # There is a bug in doc text queried from 24.2 SyC. The "*" need
+        # to be escaped to avoid issues in Sphinx. This can be a surgical
+        # fix because 24.2 is frozen now.
+        for cmd in cmd_metadata:
+            if cmd["pyname"] == "add_participant":
+                add_part_cmd = cmd
+                for arg_name, arg_info in add_part_cmd["args"]:
+                    if arg_name == "InputFile":
+                        arg_info["doc"] = arg_info["doc"].replace("*", r"\*")
+        return cmd_metadata
+
     def find_item_by_name(items: List[Dict], name: str) -> dict:
         for item in items:
             if item["name"] == name:
@@ -400,4 +416,5 @@ def get_extended_cmd_metadata(api) -> list:
     cmd_metadata = get_cmd_metadata(api)
     injected_data = get_injected_cmd_data()
     merge_data(cmd_metadata, injected_data)
+    cmd_metadata = fix_up_doc(cmd_metadata)
     return cmd_metadata

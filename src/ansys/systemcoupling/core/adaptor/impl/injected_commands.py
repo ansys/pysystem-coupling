@@ -21,8 +21,19 @@
 # SOFTWARE.
 
 from copy import deepcopy
+import os
+import random
+import time
 from typing import Callable, Dict, Optional, Protocol
 
+import ansys.platform.instancemanagement as pypim
+
+from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
+from ansys.systemcoupling.core.charts.plotdefinition_manager import (
+    DataTransferSpec,
+    InterfaceSpec,
+    PlotSpec,
+)
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
@@ -32,7 +43,7 @@ from .get_status_messages import get_status_messages
 from .types import Container
 
 
-# We cannot import Session directly, so define a protocol for typing
+# We cannot import Session directly, so define a protocol for typing.
 # We mainly use it as a means of accessing the "API roots".
 class SessionProtocol(Protocol):
     case: Container
@@ -66,7 +77,6 @@ def get_injected_cmd_map(
     "injected commands" that are returned from here are either *additional* commands
     that have no counterpart in System Coupling or *overrides* to existing commands
     that provide modified or extended behavior.
-
     """
     ret = {}
 
@@ -94,6 +104,7 @@ def get_injected_cmd_map(
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
+            "show_plot": lambda **kwargs: _show_plot(session, **kwargs),
         }
 
     if category == "case":
@@ -154,8 +165,90 @@ def _wrap_solve(solution: Container, part_mgr: ParticipantManager) -> None:
         part_mgr.solve()
 
 
+def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
+    """If we are in a "PIM" session, copies the file specified by ``filepath``
+    into the working directory, so that it is available for download.
+
+    A suffix is added to the name of the copy to make the name unique, and
+    the new name is returned.
+    """
+    # Note: it is a general issue with files in a PIM session that they can
+    # only be uploaded to/downloaded from the root working directory. We
+    # might want to consider integrating something like this directly into
+    # the file_transfer module later so that it is more seamless.
+
+    if not pypim.is_configured():
+        return filepath
+
+    # Copy file to a unique name in the working directory
+    file_name = os.path.basename(filepath)
+    root_name, _, ext = file_name.rpartition(".")
+    ext = f".{ext}" if ext else ""
+    new_name = f"{root_name}_{int(time.time())}_{random.randint(1, 10000000)}{ext}"
+
+    session._native_api.ExecPythonString(
+        PythonString=f"import shutil\nshutil.copy('{filepath}', '{new_name}')"
+    )
+
+    session.download_file(new_name, ".")
+    return new_name
+
+
+def _show_plot(session: SessionProtocol, **kwargs):
+    setup = session.setup
+    working_dir = kwargs.pop("working_dir", ".")
+    interface_name = kwargs.pop("interface_name", None)
+    if interface_name is None:
+        interfaces = setup.coupling_interface.get_object_names()
+        if len(interfaces) == 0:
+            return
+        if len(interfaces) > 1:
+            raise RuntimeError(
+                "show_plot() currently only supports a single interface."
+            )
+        interface_name = interfaces[0]
+    interface_object = setup.coupling_interface[interface_name]
+    interface_disp_name = interface_object.display_name
+
+    if (transfer_names := kwargs.pop("transfer_names", None)) is None:
+        transfer_names = interface_object.data_transfer.get_object_names()
+
+    if len(transfer_names) == 0:
+        return None
+
+    transfer_disp_names = [
+        interface_object.data_transfer[trans_name].display_name
+        for trans_name in transfer_names
+    ]
+
+    show_convergence = kwargs.pop("show_convergence", True)
+    show_transfer_values = kwargs.pop("show_transfer_values", True)
+
+    # TODO : better way to do this?
+    is_transient = setup.solution_control.time_step_size is not None
+
+    file_path = _ensure_file_available(
+        session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+    )
+
+    spec = PlotSpec()
+    intf_spec = InterfaceSpec(interface_name, interface_disp_name)
+    spec.interfaces.append(intf_spec)
+    for transfer in transfer_disp_names:
+        intf_spec.transfers.append(
+            DataTransferSpec(
+                display_name=transfer,
+                show_convergence=show_convergence,
+                show_transfer_values=show_transfer_values,
+            )
+        )
+    spec.plot_time = is_transient
+
+    return create_and_show_plot(spec, [file_path])
+
+
 def get_injected_cmd_data() -> list:
-    """Gets a list of injected command data in the right form to insert
+    """Get a list of injected command data in the right form to insert
     at a convenient point in the current processing.
 
     Because the data returned data is always a new copy, it can be manipulated at will.
@@ -358,4 +451,63 @@ _cmd_yaml = """
     pyname: clear_state
     isInjected: true
     pysyc_internal_name: _clear_state
+-   name: show_plot
+    pyname: show_plot
+    exposure: solution
+    isInjected: true
+    isQuery: false
+    retType: <class 'NoneType'>
+    doc: |-
+        Shows plots of transfer values and convergence for data transfers
+        of a coupling interface.
+
+    essentialArgNames:
+    - interface_name
+    optionalArgNames:
+    - transfer_names
+    - working_dir
+    - show_convergence
+    - show_transfer_values
+    defaults:
+    - None
+    - "."
+    - True
+    - True
+    args:
+    - #!!python/tuple
+        - interface_name
+        -   pyname: interface_name
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Specification of which interface to plot.
+    - #!!python/tuple
+        - transfer_names
+        -   pyname: transfer_names
+            Type: <class 'list'>
+            type: String List
+            doc:  |-
+                Specification of which data transfers to plot. Defaults
+                to ``None``, which means plot all data transfers.
+    - #!!python/tuple
+        - working_dir
+        -   pyname: working_dir
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Working directory (defaults = ".").
+    - #!!python/tuple
+        - show_convergence
+        -   pyname: show_convergence
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show convergence plots (defaults to ``True``).
+    - #!!python/tuple
+        - show_transfer_values
+        -   pyname: show_transfer_values
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show transfer value plots (defaults to ``True``).
 """

@@ -27,6 +27,7 @@ dependencies = [
 	"pyyaml",
 	"appdirs>=1.4.0",
 	"importlib-metadata>=4.0",
+	"matplotlib>=3.8.2",
 ]
 classifiers = [
     "Development Status :: 4 - Beta",

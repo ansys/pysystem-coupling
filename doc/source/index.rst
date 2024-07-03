@@ -13,7 +13,7 @@ PySystemCoupling documentation |version|
 
 What is Ansys System Coupling?
 ==============================
-The Ansys portfolio of simulation software facilitates the creation of multidisciplinary physics analyses,
+The Ansys portfolio of simulation software allows you to create multidisciplinary physics analyses,
 not only within the context of a single product but also through the use of Ansys System Coupling.
 
 System Coupling is software for solving multiphysics problems by connecting independent physics
