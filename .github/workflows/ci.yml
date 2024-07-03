@@ -270,6 +270,11 @@ jobs:
           SYC_IMAGE_VERSION: ${{ env.SYC_IMAGE_VERSION }}
           FLUENT_IMAGE_VERSION: ${{ env.FLUENT_IMAGE_VERSION }}
 
+      - name: Start MAPDL Container
+        working-directory: examples/00-systemcoupling
+        run: |
+          docker compose up -d
+
       - name: Build HTML
         run: |
           make -C doc clean
