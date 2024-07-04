@@ -265,8 +265,8 @@ jobs:
 
       - name: Pull Required Docker Images
         run: |
-          chmod +x .ci/pull_syc_fluent_images.sh
-          .ci/pull_syc_fluent_images.sh
+          chmod +x .ci/pull_gallery_images.sh
+          .ci/pull_gallery_images.sh
         env:
           SYC_IMAGE_VERSION: ${{ env.SYC_IMAGE_VERSION }}
           FLUENT_IMAGE_VERSION: ${{ env.FLUENT_IMAGE_VERSION }}
