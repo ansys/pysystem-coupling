@@ -59,10 +59,6 @@ print("Launching Fluent Container")
 fluent = pyfluent.launch_fluent(start_transcript=False, container_dict=custom_config)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
-import time
-
-time.sleep(60)
-
 # ================================
 
 # launch System Coupling
