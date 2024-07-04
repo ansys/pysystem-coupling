@@ -144,8 +144,6 @@ syc.setup.solution_control.end_time = (
 
 syc.setup.output_control.option = "EveryStep"
 
-syc.setup.solution_control.use_ip_address_when_possible = False
-
 # solve the coupled analysis
 syc.solution.solve()
 
