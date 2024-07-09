@@ -144,6 +144,8 @@ syc.setup.solution_control.end_time = (
 
 syc.setup.output_control.option = "EveryStep"
 
+print(f"SyC server info: {syc._native_api.GetServerInfo()}")
+
 # solve the coupled analysis
 syc.solution.solve()
 
