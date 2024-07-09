@@ -112,7 +112,7 @@ mapdl.timint("on")
 
 # ================================
 
-syc.start_output()
+# syc.start_output()
 
 syc.setup.activate_hidden.beta_features = True
 syc.setup.activate_hidden.alpha_features = True
