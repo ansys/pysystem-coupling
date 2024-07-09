@@ -56,7 +56,7 @@ fluent_cas_file = "plate.cas.gz"
 
 custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
 print("Launching Fluent Container")
-fluent = pyfluent.launch_fluent(start_transcript=False, container_dict=custom_config)
+fluent = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
 # ================================
