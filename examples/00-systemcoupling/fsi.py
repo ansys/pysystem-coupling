@@ -40,7 +40,7 @@ from ansys.systemcoupling.core import examples
 
 # Connect to mapdl container
 print("Connecting to MAPDL")
-mapdl = pymapdl.launch_mapdl()
+mapdl = pymapdl.Mapdl()
 
 # ================================
 
