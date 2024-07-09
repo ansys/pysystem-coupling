@@ -59,6 +59,8 @@ print("Launching Fluent Container")
 fluent = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
+fluent2 = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
+fluent2.file.read(file_type="case", file_name=fluent_cas_file)
 # ================================
 
 # launch System Coupling
@@ -120,6 +122,7 @@ syc.setup.activate_hidden.lenient_validation = True
 
 # add participants
 fluid_name = syc.setup.add_participant(participant_session=fluent)
+fluid_name2 = syc.setup.add_participant(participant_session=fluent2)
 # solid_name = syc.setup.add_participant(participant_session=mapdl)
 
 syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
@@ -176,4 +179,5 @@ mapdl.result.animate_nodal_displacement(
 # exit
 syc.exit()
 fluent.exit()
+fluent2.exit()
 mapdl.exit()
