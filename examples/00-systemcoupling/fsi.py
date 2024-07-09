@@ -40,7 +40,7 @@ from ansys.systemcoupling.core import examples
 
 # Connect to mapdl container
 print("Connecting to MAPDL")
-mapdl = pymapdl.Mapdl()
+mapdl = pymapdl.launch_mapdl()
 
 # ================================
 
@@ -59,13 +59,11 @@ print("Launching Fluent Container")
 fluent = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
-fluent2 = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
-fluent2.file.read(file_type="case", file_name=fluent_cas_file)
 # ================================
 
 # launch System Coupling
 print("Launching System Coupling Container")
-syc = pysyc.launch()
+syc = pysyc.launch(extra_args=["--connectiontimeout 45"])
 
 # ================================
 
@@ -122,36 +120,33 @@ syc.setup.activate_hidden.lenient_validation = True
 
 # add participants
 fluid_name = syc.setup.add_participant(participant_session=fluent)
-fluid_name2 = syc.setup.add_participant(participant_session=fluent2)
-# solid_name = syc.setup.add_participant(participant_session=mapdl)
+solid_name = syc.setup.add_participant(participant_session=mapdl)
 
 syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
-# syc.setup.coupling_participant[solid_name].display_name = "Solid"
+syc.setup.coupling_participant[solid_name].display_name = "Solid"
 
 # add a coupling interface
-"""
 interface_name = syc.setup.add_interface(
     side_one_participant=fluid_name,
     side_one_regions=["wall_deforming"],
     side_two_participant=solid_name,
     side_two_regions=["FSIN_1"],
 )
-"""
 
 # set up 2-way FSI coupling - add force & displacement data transfers
-# dt_names = syc.setup.add_fsi_data_transfers(interface=interface_name)
+dt_names = syc.setup.add_fsi_data_transfers(interface=interface_name)
 
 # modify force transfer to apply constant initial loading for the first 0.5 [s]
-# force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
-# force_transfer.option = "UsingExpression"
-# force_transfer.value = "vector(5.0 [N], 0.0 [N], 0.0 [N]) if Time < 0.5 [s] else force"
+force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
+force_transfer.option = "UsingExpression"
+force_transfer.value = "vector(5.0 [N], 0.0 [N], 0.0 [N]) if Time < 0.5 [s] else force"
 
 syc.setup.solution_control.time_step_size = 0.1
 syc.setup.solution_control.end_time = (
     3.0  # shorten the run a bit, full run is 10 seconds
 )
 
-# syc.setup.output_control.option = "EveryStep"
+syc.setup.output_control.option = "EveryStep"
 
 print(f"SyC server info: {syc._native_api.GetServerInfo()}")
 
@@ -179,5 +174,4 @@ mapdl.result.animate_nodal_displacement(
 # exit
 syc.exit()
 fluent.exit()
-fluent2.exit()
 mapdl.exit()
