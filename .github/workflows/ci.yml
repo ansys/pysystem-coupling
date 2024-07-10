@@ -252,10 +252,6 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
 
-      - name: DEBUG - Check Package Versions
-        run: |
-          pip freeze
-
       - name: Docker Login
         uses: docker/login-action@v3
         with:

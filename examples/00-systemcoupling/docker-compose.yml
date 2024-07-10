@@ -13,3 +13,4 @@ services:
       - '50055:50055'
     image: ${DOCKER_IMAGE}
     entrypoint: "/bin/bash ansys -grpc"
+    network_mode: bridge

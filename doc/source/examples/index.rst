@@ -42,6 +42,23 @@ interrogation of the data model, and running the System Coupling solver to perfo
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates a simple fluid-structure interaction (FSI) simulation">
+
+.. only:: html
+
+  .. image:: /examples/00-systemcoupling/images/thumb/sphx_glr_fsi_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_00-systemcoupling_fsi.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">fsi.py Example</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This demo illustrates a transient coupled simulation of convection heating of a fluid in a cyli...">
 
 .. only:: html
