@@ -56,14 +56,14 @@ fluent_cas_file = "plate.cas.gz"
 
 custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
 print("Launching Fluent Container")
-fluent = pyfluent.launch_fluent(start_transcript=False, container_dict=custom_config)
+fluent = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
 # ================================
 
 # launch System Coupling
 print("Launching System Coupling Container")
-syc = pysyc.launch()
+syc = pysyc.launch(extra_args=["--connectiontimeout 45"])
 
 # ================================
 
@@ -112,7 +112,11 @@ mapdl.timint("on")
 
 # ================================
 
-syc.start_output()
+# syc.start_output()
+
+syc.setup.activate_hidden.beta_features = True
+syc.setup.activate_hidden.alpha_features = True
+syc.setup.activate_hidden.lenient_validation = True
 
 # add participants
 fluid_name = syc.setup.add_participant(participant_session=fluent)
@@ -143,6 +147,8 @@ syc.setup.solution_control.end_time = (
 )
 
 syc.setup.output_control.option = "EveryStep"
+
+print(f"SyC server info: {syc._native_api.GetServerInfo()}")
 
 # solve the coupled analysis
 syc.solution.solve()
