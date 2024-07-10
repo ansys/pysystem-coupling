@@ -63,7 +63,7 @@ fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
 # launch System Coupling
 print("Launching System Coupling Container")
-syc = pysyc.launch(extra_args=["--connectiontimeout 45"])
+syc = pysyc.launch()
 
 # ================================
 
