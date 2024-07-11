@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""".. _ref_heating_tank_fmu_example:
+""".. _ref_heating_tank_fmu_fmu_example:
 
 FMU-FMU cosimulation of a heating tank & heater
 -------------------------------------------------

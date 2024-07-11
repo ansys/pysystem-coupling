@@ -17,7 +17,7 @@
 
 .. _sphx_glr_examples_00-systemcoupling_heating_tank_fmu_fmu.py:
 
-.. _ref_heating_tank_fmu_example:
+.. _ref_heating_tank_fmu_fmu_example:
 
 FMU-FMU cosimulation of a heating tank & heater
 -------------------------------------------------
