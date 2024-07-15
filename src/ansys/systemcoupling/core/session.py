@@ -138,12 +138,22 @@ class Session:
         self.__rpc.start_output(handle_output)
 
     def end_output(self) -> None:
-        """Cancels output streaming previously started by the ``start_output`` method."""
+        """Cancel output streaming previously started by the ``start_output`` method."""
         self.__rpc.end_output()
 
     def ping(self) -> bool:
         """Simple test that the server is alive and responding."""
         return self.__rpc.ping()
+
+    @property
+    def version(self) -> str:
+        """Return the server version as a string.
+
+        The version string is in the form of dot-separated major and minor
+        version numbers. For example, "24.2".
+        """
+        # Internal version string is in '_'-separated form as that is what is used elsewhere.
+        return self._get_version().replace("_", ".")
 
     @property
     def case(self) -> case_root:
@@ -168,14 +178,18 @@ class Session:
             )
         return self.__solution_root
 
+    def _get_version(self):
+        if self.__syc_version is None:
+            proxy = SycProxy(self.__rpc)
+            version = proxy.get_version()
+            self.__syc_version = version.replace(".", "_")
+        return self.__syc_version
+
     def _get_api_root(self, category):
         if isinstance(self.__rpc, _DefunctRpcImpl):
             self.__rpc.trigger_error
         sycproxy = SycProxy(self.__rpc)
-        if self.__syc_version is None:
-            version = sycproxy.get_version()
-            self.__syc_version = version.replace(".", "_")
-        root = get_root(sycproxy, category=category, version=self.__syc_version)
+        root = get_root(sycproxy, category=category, version=self._get_version())
         if self.__part_mgr is None:
             self.__part_mgr = ParticipantManager(self, self.__syc_version)
         sycproxy.set_injected_commands(
