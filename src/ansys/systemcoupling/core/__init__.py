@@ -93,7 +93,6 @@ def launch(
         Session object, providing access to a set up and solve API controlling a
         remote System Coupling instance.
     """
-    print("LAUNCH")  ## TODO delete this!!!!!!!!!!!!!!!!
     rpc = SycGrpc()
     if pypim.is_configured():
         LOG.info(

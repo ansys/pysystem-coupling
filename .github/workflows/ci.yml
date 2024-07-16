@@ -264,11 +264,11 @@ jobs:
           echo "Pulling pysystem-coupling Image Version ${SYC_IMAGE_VERSION}"
           echo "Pulling pyfluent Image Version ${FLUENT_IMAGE_VERSION}"
           echo "Pulling mapdl Image Version ${MAPDL_IMAGE_VERSION}"
-
+          
           docker pull ghcr.io/ansys/pysystem-coupling:${SYC_IMAGE_VERSION} &
           docker pull ghcr.io/ansys/pyfluent:${FLUENT_IMAGE_VERSION} &
           docker pull ghcr.io/ansys/mapdl:${MAPDL_IMAGE_VERSION} &
-
+          
           # Wait for the background processes to finish
           wait
         env:
@@ -293,10 +293,8 @@ jobs:
           PYSYC_BUILD_SPHINX_GALLERY: 1
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
-          FLUENT_LAUNCH_CONTAINER: 1
-          FLUENT_IMAGE_TAG: ${{ env.FLUENT_IMAGE_VERSION }}
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
-
+  
   # upload_dev_docs:
   #   name: Upload dev documentation
   #   if: github.ref == 'refs/heads/main'
