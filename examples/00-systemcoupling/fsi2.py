@@ -34,6 +34,7 @@ import shutil
 
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
+from ansys.mapdl.core import LOG as MAPDL_LOG
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
@@ -41,6 +42,7 @@ from ansys.systemcoupling.core import examples
 # Connect to mapdl container
 print("Connecting to MAPDL")
 mapdl = pymapdl.Mapdl()
+MAPDL_LOG.log_to_stdout("INFO")
 
 # ================================
 

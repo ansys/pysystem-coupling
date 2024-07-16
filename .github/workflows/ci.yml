@@ -253,6 +253,7 @@ jobs:
           PYFLUENT_LAUNCH_CONTAINER: 1
           FLUENT_IMAGE_TAG: ${{ env.FLUENT_IMAGE_VERSION }}
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+          PYMAPDL_START_INSTANCE: FALSE
 
       #- name: Build PDF Documentation
       #  run: |
