@@ -123,10 +123,11 @@ fluent_cas_file = "fluent.cas.h5"
 #    use ``product_version`` argument to the ``launch_fluent``
 #    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 
-custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
+# custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
 print("Launching Fluent Container")
 fluent_session = pyfluent.launch_fluent(
-    start_transcript=False, container_dict=custom_config
+    start_transcript=False
+    # start_transcript=False, container_dict=custom_config
 )
 fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
 assert fluent_session.get_fluent_version() >= fluent_v241
