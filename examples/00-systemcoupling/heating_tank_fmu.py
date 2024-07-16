@@ -77,6 +77,8 @@ Two data transfers :
 
 # sphinx_gallery_thumbnail_path = '_static/heating_tank_fmu.png'
 
+import shutil
+
 import ansys.fluent.core as pyfluent
 
 import ansys.systemcoupling.core as pysystemcoupling
@@ -95,10 +97,17 @@ fmu_file = examples.download_file(
     "thermostat.fmu", "pysystem-coupling/heating_tank_fmu/FMU"
 )
 
+shutil.copy(fmu_file, "thermostat.fmu")
+
+fmu_file = "thermostat.fmu"
+
 fluent_cas_file = examples.download_file(
     "fluent.cas.h5", "pysystem-coupling/heating_tank_fmu/Fluent"
 )
 
+shutil.copy(fluent_cas_file, "fluent.cas.h5")
+
+fluent_cas_file = "fluent.cas.h5"
 
 # %%
 # Launch Fluent
@@ -114,11 +123,16 @@ fluent_cas_file = examples.download_file(
 #    use ``product_version`` argument to the ``launch_fluent``
 #    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 
-fluent_session = pyfluent.launch_fluent(start_transcript=False)
-fluent_v242 = pyfluent.utils.fluent_version.FluentVersion.v242
-assert fluent_session.get_fluent_version() >= fluent_v242
-
-fluent_session.settings.file.read(file_type="case", file_name=fluent_cas_file)
+# custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
+print("Launching Fluent Container")
+fluent_session = pyfluent.launch_fluent(
+    start_transcript=False
+    # start_transcript=False, container_dict=custom_config
+)
+fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
+assert fluent_session.get_fluent_version() >= fluent_v241
+print("Reading Fluent case file")
+fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
 # Launch System Coupling
@@ -126,6 +140,7 @@ fluent_session.settings.file.read(file_type="case", file_name=fluent_cas_file)
 # Launch a remote System Coupling instance and return a *client* object
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
+print("Launching System Coupling Container")
 syc = pysystemcoupling.launch()
 
 # %%
@@ -248,237 +263,3 @@ solution.solve()
 # %%
 # Terminate the system coupling session with ``exit``.
 syc.exit()
-
-# %%
-# Post-process the results
-# ----------------------------
-
-# %%
-# Set some graphics preferences
-fluent_session.tui.display.set.lights.lights_on("yes")
-fluent_session.tui.preferences.graphics.graphics_effects.grid_plane_enabled("no")
-fluent_session.tui.preferences.graphics.graphics_effects.reflections_enabled("no")
-fluent_session.tui.preferences.graphics.graphics_effects.simple_shadows_enabled("no")
-
-
-# %%
-# Method to save png images
-def save_png(fluent_session, png_name):
-    fluent_session.settings.results.graphics.picture.driver_options.hardcopy_format = (
-        "png"
-    )
-    fluent_session.settings.results.graphics.picture.use_window_resolution = False
-    fluent_session.settings.results.graphics.picture.x_resolution = 1920
-    fluent_session.settings.results.graphics.picture.y_resolution = 1080
-    fluent_session.tui.display.save_picture(png_name)
-
-
-# %%
-# Create a plane
-normal_plane = "zx"
-position = 0.0
-plane_name = "plane" + "-" + normal_plane + "-" + str(position)
-fluent_session.settings.results.surfaces.plane_surface.create(plane_name)
-fluent_session.settings.results.surfaces.plane_surface[plane_name].method = (
-    normal_plane + "-plane"
-)
-fluent_session.settings.results.surfaces.plane_surface[plane_name].y = position
-
-# %%
-# Create a mutli-plane
-normal_multiplane = "xy"
-mutliplane_list = []
-number_of_planes = 8
-height = 0.14
-step = height / (number_of_planes + 2)
-for i in range(0, number_of_planes):
-    multiplane_name = "plane" + "-" + normal_multiplane + "-" + str(i)
-    fluent_session.settings.results.surfaces.plane_surface.create(multiplane_name)
-    fluent_session.settings.results.surfaces.plane_surface[multiplane_name].method = (
-        normal_multiplane + "-plane"
-    )
-    fluent_session.settings.results.surfaces.plane_surface[multiplane_name].z = (
-        float(i) * step + step
-    )
-    mutliplane_list.append(multiplane_name)
-
-
-# %%
-# Method to create a contour
-def contour(fluent_session, surface_list, surface_name, field, color):
-    contour_name = "contour-" + field + "-" + surface_name
-    fluent_session.settings.results.graphics.contour.create(contour_name)
-    fluent_session.settings.results.graphics.contours.render_mesh = True
-    fluent_session.settings.results.graphics.contour[contour_name] = {
-        "name": contour_name,
-        "field": field,
-        "filled": True,
-        "boundary_values": True,
-        "contour_lines": False,
-        "node_values": True,
-        "surfaces_list": surface_list,
-        "range_option": {
-            "option": "auto-range-on",
-            "auto_range_on": {"global_range": True},
-        },
-        "coloring": {"option": "smooth", "smooth": False},
-        "color_map": {
-            "visible": True,
-            "size": 100,
-            "color": color,
-            "log_scale": False,
-            "format": "%0.4g",
-            "user_skip": 20,
-            "show_all": True,
-            "position": 1,
-            "font_name": "Helvetica",
-            "font_automatic": True,
-            "font_size": 0.032,
-            "length": 0.54,
-            "width": 6.0,
-        },
-        "display_state_name": "None",
-    }
-    fluent_session.settings.results.graphics.contour[contour_name].display()
-    scene(fluent_session, contour_name)
-
-
-# %%
-# Method to create a vector
-def vector(fluent_session, surfaces_list, surface_name, field):
-    vector_name = "vectors-" + field + "-" + surface_name
-    fluent_session.settings.results.graphics.vector.create(vector_name)
-    fluent_session.settings.results.graphics.vector[vector_name].style = "arrow"
-    fluent_session.settings.results.graphics.vector[vector_name].scale.scale_f = 0.6
-    fluent_session.settings.results.graphics.vector[vector_name].field = field
-    fluent_session.settings.results.graphics.vector[vector_name].surfaces_list = (
-        surfaces_list
-    )
-    fluent_session.settings.results.graphics.vector[vector_name] = {
-        "color_map": {
-            "visible": True,
-            "size": 100,
-            "color": "field-temperature",
-            "log_scale": False,
-            "format": "%0.4g",
-            "user_skip": 20,
-            "show_all": True,
-            "position": 1,
-            "font_name": "Helvetica",
-            "font_automatic": True,
-            "font_size": 0.032,
-            "length": 0.54,
-            "width": 6.0,
-        }
-    }
-    fluent_session.settings.results.graphics.vector[vector_name].display()
-    scene(fluent_session, vector_name)
-
-
-# %%
-# Method to define the outline of an object
-def outline(fluent_session):
-    fluent_session.settings.results.graphics.mesh.create("outline")
-    fluent_session.settings.results.graphics.mesh["outline"].coloring.option = "manual"
-    fluent_session.settings.results.graphics.mesh["outline"].surfaces_list = [
-        "wall",
-        "heat_source",
-        "top",
-        "sensor",
-    ]
-    fluent_session.settings.results.graphics.mesh["outline"].coloring.manual.faces = (
-        "light gray"
-    )
-
-
-# %%
-# Method to create a scene
-def scene(fluent_session, object_name):
-    scene_name = "scene-" + object_name
-    fluent_session.settings.results.scene.create(scene_name)
-    fluent_session.settings.results.scene[scene_name] = {}
-    fluent_session.settings.results.scene[scene_name].graphics_objects["outline"] = {}
-    fluent_session.settings.results.scene[scene_name].graphics_objects[
-        "outline"
-    ].transparency = 90
-    fluent_session.settings.results.scene[scene_name].graphics_objects[object_name] = {}
-    fluent_session.settings.results.scene[scene_name].display()
-    fluent_session.settings.results.graphics.views.restore_view(view_name="top")
-    fluent_session.settings.results.graphics.views.camera.orbit(right=140, up=20)
-    fluent_session.settings.results.graphics.views.camera.zoom(factor=1.1)
-    save_png(fluent_session, scene_name)
-
-
-# %%
-# Create the outline of the object
-outline(fluent_session)
-
-# %%
-# Create contours and vectors
-contour(
-    fluent_session,
-    surface_list=["plane-zx-0.0"],
-    surface_name="plane-zx-0.0",
-    field="total-temperature",
-    color="field-temperature",
-)
-contour(
-    fluent_session,
-    surface_list=["plane-zx-0.0"],
-    surface_name="plane-zx-0.0",
-    field="velocity-magnitude",
-    color="field-velocity",
-)
-contour(
-    fluent_session,
-    surface_list=mutliplane_list,
-    surface_name="multiplane-xy",
-    field="total-temperature",
-    color="field-temperature",
-)
-contour(
-    fluent_session,
-    surface_list=mutliplane_list,
-    surface_name="multiplane-xy",
-    field="velocity-magnitude",
-    color="field-velocity",
-)
-vector(
-    fluent_session,
-    surfaces_list=["plane-zx-0.0"],
-    surface_name="plane-zx-0.0",
-    field="total-temperature",
-)
-
-# %%
-# Results
-# ------------
-# Total temperature on zx plane at y = 0
-#
-# .. image:: /_static/images/heating_tank_fmu/scene-contour-total-temperature-plane-zx-0.png
-#   :width: 500pt
-#   :align: center
-#
-# Velocity magnitude on zx plane at y = 0
-#
-# .. image:: /_static/images/heating_tank_fmu/scene-contour-velocity-magnitude-plane-zx-0.png
-#   :width: 500pt
-#   :align: center
-#
-# Total temperature on multi-xy plane
-#
-# .. image:: /_static/images/heating_tank_fmu/scene-contour-total-temperature-multiplane-xy.png
-#   :width: 500pt
-#   :align: center
-#
-# Velocity magnitude on multi-xy plane
-#
-# .. image:: /_static/images/heating_tank_fmu/scene-contour-velocity-magnitude-multiplane-xy.png
-#   :width: 500pt
-#   :align: center
-#
-# Total temperature on velocity vectors on zx plane at y = 0
-#
-# .. image:: /_static/images/heating_tank_fmu/scene-vectors-total-temperature-plane-zx-0.png
-#   :width: 500pt
-#   :align: center

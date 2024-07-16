@@ -1,0 +1,16 @@
+services:
+  mapdl:
+    restart: always
+    shm_size: '8gb'
+    container_name: mapdl
+    mem_reservation: 8g
+    environment:
+      - ANSYSLMD_LICENSE_FILE=${ANSYSLMD_LICENSE_FILE}
+      - ANSYS_LOCK=OFF
+      - ${AWP_ROOT:-AWP_ROOT222}=${AWP_ROOT_VALUE:-/ansys_inc}
+    ports:
+      - '50052:50052'
+      - '50055:50055'
+    image: ${DOCKER_IMAGE}
+    entrypoint: "/bin/bash ansys -grpc"
+    network_mode: bridge
