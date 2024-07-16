@@ -24,6 +24,7 @@ import time
 
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core.charts.plotter import Plotter
+from ansys.systemcoupling.core.syc_version import compare_versions
 
 
 def test_partlib_cosim_volume_simple() -> None:
@@ -36,12 +37,24 @@ def test_partlib_cosim_volume_simple() -> None:
         assert syc.ping()
 
         setup = syc.setup
-        p1 = setup.add_participant(
-            executable=_get_mocksolve_executable(), additional_arguments="--p1"
-        )
-        p2 = setup.add_participant(
-            executable=_get_mocksolve_executable(), additional_arguments="--p2"
-        )
+
+        if compare_versions(syc.version, "24.2") > 0:
+            p1 = setup.add_participant(
+                python_script=_get_mocksolve_executable(get_python_script=True),
+                additional_arguments="--p1",
+            )
+            p2 = setup.add_participant(
+                python_script=_get_mocksolve_executable(get_python_script=True),
+                additional_arguments="--p2",
+            )
+        else:
+            p1 = setup.add_participant(
+                executable=_get_mocksolve_executable(), additional_arguments="--p1"
+            )
+            p2 = setup.add_participant(
+                executable=_get_mocksolve_executable(), additional_arguments="--p2"
+            )
+
         interface = setup.add_interface(
             side_one_participant=p1,
             side_one_regions=["volume"],
@@ -109,12 +122,14 @@ def test_partlib_cosim_volume_simple() -> None:
         )
 
 
-def _get_mocksolve_executable():
+def _get_mocksolve_executable(get_python_script: bool = False):
     # System Coupling is packaged under /syc in the image
 
     # Note that we don't use os.path.join here because it
     # would give us a Windows path on Windows and we always
     # want a unix-style path.
+
+    suffix = "py" if get_python_script else "sh"
 
     return "/" + "/".join(
         (
@@ -124,7 +139,7 @@ def _get_mocksolve_executable():
             "SystemCouplingParticipant",
             "TestSolvers",
             "Python",
-            "VolumeCosimTester.sh",
+            f"VolumeCosimTester.{suffix}",
         )
     )
 

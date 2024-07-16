@@ -76,6 +76,12 @@ def start_container(
         f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
     ] + args
 
+    license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
+    if license_server:
+        idx = run_args.index("-e")
+        run_args.insert(idx, f"ANSYSLMD_LICENSE_FILE={license_server}")
+        run_args.insert(idx, "-e")
+
     if network:
         idx = run_args.index("-p")
         run_args.insert(idx, network)

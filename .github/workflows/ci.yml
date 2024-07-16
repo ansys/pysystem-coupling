@@ -104,6 +104,11 @@ jobs:
         with:
           image-tag: v24.2.0
 
+      - name: Generate API for latest
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: latest
+
       - name: Clean out dist
         run: rm -rf dist
 
@@ -173,6 +178,13 @@ jobs:
   #         image-tag: latest
   #         upload-coverage: false
 
+      - name: Unit Test latest
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: latest
+          upload-coverage: true
+        env:
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
   docs:
     name: Build Documentation
