@@ -40,9 +40,10 @@ import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
 
 # Connect to mapdl container
+MAPDL_LOG.log_to_stdout("DEBUG")
 print("Connecting to MAPDL")
-mapdl = pymapdl.Mapdl()
-MAPDL_LOG.log_to_stdout("INFO")
+# mapdl = pymapdl.Mapdl()
+mapdl = pymapdl.launch_mapdl()
 # ================================
 
 # read in the pre-created Fluent case file and launch Fluent
