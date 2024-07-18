@@ -65,7 +65,7 @@ doc = [
 	"pytest-sphinx==0.6.3",
 	"Sphinx==7.4.4",
 	"sphinx-autobuild==2024.4.16",
-	"sphinx-autodoc-typehints==2.2.2",
+	"sphinx-autodoc-typehints==2.2.3",
 	"sphinx-copybutton==0.5.2",
 	"sphinx-gallery==0.16.0",
 	"sphinx-notfound-page==1.0.2",
