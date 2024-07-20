@@ -30,7 +30,6 @@ This example demonstrates a simple fluid-structure interaction (FSI) simulation
 """
 
 # import required modules
-import shutil
 
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
@@ -43,21 +42,23 @@ from ansys.systemcoupling.core import examples
 MAPDL_LOG.log_to_stdout("DEBUG")
 print("Connecting to MAPDL")
 # mapdl = pymapdl.Mapdl()
-mapdl = pymapdl.launch_mapdl()
+mapdl = pymapdl.launch_mapdl(version=242)
 # ================================
 
 # read in the pre-created Fluent case file and launch Fluent
 
+# print(f"Sleeping - PID = {os.getpid()}")
+# time.sleep(30)
 fluent_cas_file = examples.download_file(
     "plate.cas.gz", "pysystem-coupling/oscillating_plate/Fluent"
 )
 
-shutil.copy(fluent_cas_file, "plate.cas.gz")
+# shutil.copy(fluent_cas_file, "plate.cas.gz")
 
-fluent_cas_file = "plate.cas.gz"
+# fluent_cas_file = "plate.cas.gz"
 
 print("Launching Fluent Container")
-fluent = pyfluent.launch_fluent(start_transcript=True)
+fluent = pyfluent.launch_fluent(start_transcript=True, product_version="242")
 # custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
 # fluent = pyfluent.launch_fluent(start_transcript=True, container_dict=custom_config)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)

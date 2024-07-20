@@ -77,8 +77,6 @@ Two data transfers :
 
 # sphinx_gallery_thumbnail_path = '_static/heating_tank_fmu.png'
 
-import shutil
-
 import ansys.fluent.core as pyfluent
 
 import ansys.systemcoupling.core as pysystemcoupling
@@ -97,17 +95,17 @@ fmu_file = examples.download_file(
     "thermostat.fmu", "pysystem-coupling/heating_tank_fmu/FMU"
 )
 
-shutil.copy(fmu_file, "thermostat.fmu")
+# shutil.copy(fmu_file, "thermostat.fmu")
 
-fmu_file = "thermostat.fmu"
+# fmu_file = "thermostat.fmu"
 
 fluent_cas_file = examples.download_file(
     "fluent.cas.h5", "pysystem-coupling/heating_tank_fmu/Fluent"
 )
 
-shutil.copy(fluent_cas_file, "fluent.cas.h5")
+# shutil.copy(fluent_cas_file, "fluent.cas.h5")
 
-fluent_cas_file = "fluent.cas.h5"
+# fluent_cas_file = "fluent.cas.h5"
 
 # %%
 # Launch Fluent

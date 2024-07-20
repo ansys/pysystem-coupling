@@ -233,13 +233,13 @@ jobs:
           FLUENT_IMAGE_VERSION: ${{ env.FLUENT_IMAGE_VERSION }}
           MAPDL_IMAGE_VESRION: ${{ env.MAPDL_IMAGE_VERSION }}
 
-      - name: Start MAPDL Container
-        working-directory: examples/00-systemcoupling
-        run: |
-          docker compose up -d
-        env:
-          DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      # - name: Start MAPDL Container
+      #   working-directory: examples/00-systemcoupling
+      #   run: |
+      #     docker compose up -d
+      #   env:
+      #     DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
+      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
       - name: Build HTML
         run: |
