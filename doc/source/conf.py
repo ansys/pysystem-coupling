@@ -212,6 +212,17 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
     print("...git clean has run")
     print("AFTER git clean")
     print(f"'ls -l ../examples/{gallery_folder_name}:")
+    ls_result = subprocess.run(
+        ["ls", "-lR", f"../examples/{gallery_folder_name}"],
+        capture_output=True,
+        text=True,
+    )
+    print("stdout:")
+    lines = ls_result.stdout.split("\n")
+    for line in lines:
+        print(line)
+    print("stderr:")
+    lines = ls_result.stderr.split("\n")
     for line in lines:
         print(line)
     print()
