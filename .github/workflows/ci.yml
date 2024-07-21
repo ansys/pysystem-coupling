@@ -248,12 +248,13 @@ jobs:
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
           PYFLUENT_LAUNCH_CONTAINER: 1
           FLUENT_IMAGE_TAG: ${{ env.FLUENT_IMAGE_VERSION }}
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           PYMAPDL_START_INSTANCE: FALSE
+          DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
 
       #- name: Build PDF Documentation
       #  run: |
