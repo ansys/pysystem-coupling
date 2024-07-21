@@ -191,14 +191,24 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
 
     time.sleep(10)
     ls_result = subprocess.run(
-        ["ls", "-l", f"../examples/{gallery_folder_name}"],
+        ["ls", "-lR", f"../examples/{gallery_folder_name}"],
         capture_output=True,
         text=True,
     )
-    print(f"'ls -l ../examples/{gallery_folder_name}:\n{ls_result}")
-    subprocess.run(
+    lines = ls_result.stdout.split("\n")
+    print(f"'ls -l ../examples/{gallery_folder_name}:")
+    for line in lines:
+        print(line)
+    print()
+    print("Running git clean...")
+    git_result = subprocess.run(
         ["git", "clean", "-d", "-f", "--", f"../examples/{gallery_folder_name}"]
     )
+    print("stdout:")
+    print(git_result.stdout)
+    print("stderr:")
+    print(git_result.stderr)
+    print("...git clean has run")
 
 
 def _reset_example(gallery_conf, fname: str, when: str):
