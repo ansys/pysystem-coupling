@@ -209,6 +209,8 @@ def _reset_example(gallery_conf, fname: str, when: str):
         and "mapdl" in os.environ.get("DOCKER_IMAGE", "")
     )
 
+    print(f"WHEN = {when} - using MAPDL container? {using_mapdl_container}")
+
     if when == "before":
         # We only have one gallery folder at the moment. If this changes, we
         # will have to use fname to figure out the correct one. This implies
@@ -219,12 +221,14 @@ def _reset_example(gallery_conf, fname: str, when: str):
             subprocess.run(
                 ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
             )
+            print("MAPDL container launched")
             time.sleep(10)
     else:
         if using_mapdl_container:
             subprocess.run(
                 ["docker", "compose", "-f", "mapdl-docker-compose.yml", "down"]
             )
+            print("MAPDL container removed")
 
 
 rst_epilog = make_replacements_for_versioned_class_refs(("CASE", "SETUP", "SOLUTION"))
