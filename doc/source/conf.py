@@ -205,14 +205,16 @@ def _reset_example(gallery_conf, fname: str, when: str):
     # if we attempt to reuse the container across multiple examples.
     using_mapdl_container = (
         example_name in using_mapdl_examples
-        and os.environ["PYMAPDL_START_INSTANCE"] == "FALSE"
+        and os.environ.get("PYMAPDL_START_INSTANCE", "").lower() == "false"
         and "mapdl" in os.environ.get("DOCKER_IMAGE", "")
     )
     print(
         f"example name ({example_name}) in {using_mapdl_examples}? "
         f"{example_name in using_mapdl_examples} "
     )
-    print(f"PYMAPDL_START_INSTANCE: {os.environ['PYMAPDL_START_INSTANCE']}")
+    print(
+        f"PYMAPDL_START_INSTANCE: {os.environ.get('PYMAPDL_START_INSTANCE', '').lower()}"
+    )
     print(f"DOCKER_IMAGE: {os.environ['DOCKER_IMAGE']}")
     print(f"'mapdl' in 'DOCKER_IMAGE'? {'mapdl' in os.environ.get('DOCKER_IMAGE', '')}")
     print(f"WHEN = {when} - using MAPDL container? {using_mapdl_container}")
