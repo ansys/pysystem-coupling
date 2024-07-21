@@ -208,7 +208,13 @@ def _reset_example(gallery_conf, fname: str, when: str):
         and os.environ["PYMAPDL_START_INSTANCE"] == "FALSE"
         and "mapdl" in os.environ.get("DOCKER_IMAGE", "")
     )
-
+    print(
+        f"example name ({example_name}) in {using_mapdl_examples}? "
+        f"{example_name in using_mapdl_examples} "
+    )
+    print(f"PYMAPDL_START_INSTANCE: {os.environ['PYMAPDL_START_INSTANCE']}")
+    print(f"DOCKER_IMAGE: {os.environ['DOCKER_IMAGE']}")
+    print(f"'mapdl' in 'DOCKER_IMAGE'? {'mapdl' in os.environ.get('DOCKER_IMAGE', '')}")
     print(f"WHEN = {when} - using MAPDL container? {using_mapdl_container}")
 
     if when == "before":
