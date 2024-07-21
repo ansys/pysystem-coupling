@@ -196,6 +196,7 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
         text=True,
     )
     lines = ls_result.stdout.split("\n")
+    print("BEFORE git clean")
     print(f"'ls -l ../examples/{gallery_folder_name}:")
     for line in lines:
         print(line)
@@ -209,6 +210,11 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
     print("stderr:")
     print(git_result.stderr)
     print("...git clean has run")
+    print("AFTER git clean")
+    print(f"'ls -l ../examples/{gallery_folder_name}:")
+    for line in lines:
+        print(line)
+    print()
 
 
 def _reset_example(gallery_conf, fname: str, when: str):
