@@ -190,7 +190,15 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
     shutil.make_archive(backup_path.replace(".zip", ""), "zip", gallery_folder_path)
 
     time.sleep(10)
-    subprocess.run(["git", "clean", "-f", "--", f"../examples/{gallery_folder_name}"])
+    ls_result = subprocess.run(
+        ["ls", "-l", f"../examples/{gallery_folder_name}"],
+        capture_output=True,
+        text=True,
+    )
+    print(f"'ls -l ../examples/{gallery_folder_name}:\n{ls_result}")
+    subprocess.run(
+        ["git", "clean", "-d", "-f", "--", f"../examples/{gallery_folder_name}"]
+    )
 
 
 def _reset_example(gallery_conf, fname: str, when: str):
