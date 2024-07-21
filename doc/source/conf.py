@@ -222,7 +222,7 @@ def _reset_example(gallery_conf, fname: str, when: str):
     if when == "before":
         # We only have one gallery folder at the moment. If this changes, we
         # will have to use fname to figure out the correct one. This implies
-        # script names have to be unique across gallery folders.
+        # script names will have to be unique across gallery folders.
         _clean_up_example_folder("00-systemcoupling", example_name)
 
         if using_mapdl_container:
