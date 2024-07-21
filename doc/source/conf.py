@@ -4,6 +4,7 @@ from datetime import datetime
 import os
 import shutil
 import subprocess
+import time
 
 from ansys_sphinx_theme import (
     ansys_favicon,
@@ -188,6 +189,7 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
     )
     shutil.make_archive(backup_path.replace(".zip", ""), "zip", gallery_folder_path)
 
+    time.sleep(10)
     subprocess.run(["git", "clean", "-f", "--", f"../examples/{gallery_folder_name}"])
 
 
@@ -217,6 +219,7 @@ def _reset_example(gallery_conf, fname: str, when: str):
             subprocess.run(
                 ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
             )
+            time.sleep(10)
     else:
         if using_mapdl_container:
             subprocess.run(
