@@ -243,6 +243,7 @@ jobs:
 
       - name: Build HTML
         run: |
+          export SYC_CONTAINER_USER=$(id -u):$(id -g)
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
         env:

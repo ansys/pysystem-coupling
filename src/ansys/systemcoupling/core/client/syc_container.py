@@ -76,6 +76,12 @@ def start_container(
         f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
     ] + args
 
+    container_user = os.getenv("SYC_CONTAINER_USER")
+    if container_user:
+        idx = run_args.index("-p")
+        run_args.insert(idx, container_user)
+        run_args.insert(idx, "--user")
+
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
         idx = run_args.index("-e")
