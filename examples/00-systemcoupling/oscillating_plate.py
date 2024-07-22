@@ -94,7 +94,7 @@ syc = pysyc.launch()
 
 # %%
 # Launch and connect to Fluent
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Use the created ``fluent`` session object to read the case file.
 fluent = pyfluent.launch_fluent(start_transcript=True, product_version="242")
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
