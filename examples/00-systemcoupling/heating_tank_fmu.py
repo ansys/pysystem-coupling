@@ -121,15 +121,9 @@ fluent_cas_file = examples.download_file(
 #    use ``product_version`` argument to the ``launch_fluent``
 #    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 
-# custom_config = {"fluent_image": "ghcr.io/ansys/pyfluent:v24.2.0"}
-print("Launching Fluent Container")
-fluent_session = pyfluent.launch_fluent(
-    start_transcript=False
-    # start_transcript=False, container_dict=custom_config
-)
+fluent_session = pyfluent.launch_fluent(start_transcript=False)
 fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
 assert fluent_session.get_fluent_version() >= fluent_v241
-print("Reading Fluent case file")
 fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
@@ -138,7 +132,6 @@ fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
 # Launch a remote System Coupling instance and return a *client* object
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
-print("Launching System Coupling Container")
 syc = pysystemcoupling.launch()
 
 # %%

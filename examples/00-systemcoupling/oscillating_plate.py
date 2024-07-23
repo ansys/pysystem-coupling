@@ -96,7 +96,7 @@ syc = pysyc.launch()
 # Launch and connect to Fluent
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Use the created ``fluent`` session object to read the case file.
-fluent = pyfluent.launch_fluent(start_transcript=True, product_version="242")
+fluent = pyfluent.launch_fluent(start_transcript=True)
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
@@ -104,7 +104,7 @@ fluent.file.read(file_type="case", file_name=fluent_cas_file)
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Use the ``mapdl`` session object to set up the structural side of the FSI
 # case.
-mapdl = pymapdl.launch_mapdl(version=242)
+mapdl = pymapdl.launch_mapdl()
 mapdl.prep7()
 
 # %%

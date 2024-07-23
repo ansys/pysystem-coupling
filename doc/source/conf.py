@@ -166,66 +166,45 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
     # Uses "git clean" to clean out output files from the the last example
     # run. This removes everything except tracked files but will retain
     # modifications to tracked files.
-    #
-    # A potential issue is that if the gallery is being run locally and a new
-    # example is under development and has not yet been committed to git, this
-    # will be deleted by the cleanup. Therefore, as a safety measure, zip up
-    # folder contents to a backup location in a sibling directory, "backup",
-    # of the EXAMPLES_PATH directory.
 
-    # Zip up current contents in case there are local changes
-    backup_dir = os.path.join(EXAMPLES_PATH, "..", "backup")
-    if not os.path.exists(backup_dir):
-        os.makedirs(backup_dir)
+    def ls_print(when: str, enabled: bool = True):
+        if not enabled:
+            return
+        cmd = ["ls", "-lR", f"../examples/{gallery_folder_name}"]
+        print(f"{when}: {cmd}:")
+        output = subprocess.run(cmd, capture_output=True, text=True).stdout
+        print(f"{output}\n")
 
-    backup_path = os.path.join(backup_dir, f"before_{example_name}.zip")
-    count = 0
-    while os.path.exists(backup_path):
-        count += 1
-        backup_path = os.path.join(backup_dir, f"before_{example_name}_{count}.zip")
+    def backup_folder():
+        # A potential issue is that if the gallery is being run locally and a new
+        # example is under development and has not yet been committed to git, this
+        # will be deleted by the cleanup. Therefore, as a safety measure, zip up
+        # folder contents to a backup location in a sibling directory, "backup",
+        # of the EXAMPLES_PATH directory.
 
-    gallery_folder_path = os.path.join(
-        os.getcwd(), "..", "examples", gallery_folder_name
-    )
-    shutil.make_archive(backup_path.replace(".zip", ""), "zip", gallery_folder_path)
+        backup_dir = os.path.join(EXAMPLES_PATH, "..", "backup")
+        if not os.path.exists(backup_dir):
+            os.makedirs(backup_dir)
 
-    time.sleep(10)
-    ls_result = subprocess.run(
-        ["ls", "-lR", f"../examples/{gallery_folder_name}"],
-        capture_output=True,
-        text=True,
-    )
-    lines = ls_result.stdout.split("\n")
-    print("BEFORE git clean")
-    print(f"'ls -l ../examples/{gallery_folder_name}:")
-    for line in lines:
-        print(line)
-    print()
-    print("Running git clean...")
-    git_result = subprocess.run(
+        backup_path = os.path.join(backup_dir, f"before_{example_name}.zip")
+        count = 0
+        while os.path.exists(backup_path):
+            count += 1
+            backup_path = os.path.join(backup_dir, f"before_{example_name}_{count}.zip")
+
+        gallery_folder_path = os.path.join(
+            os.getcwd(), "..", "examples", gallery_folder_name
+        )
+        shutil.make_archive(backup_path.replace(".zip", ""), "zip", gallery_folder_path)
+
+    backup_folder()
+
+    time.sleep(5)  # Allow a few seconds to be sure everything shut down
+    ls_print("BEFORE git clean", enabled=False)
+    subprocess.run(
         ["git", "clean", "-d", "-f", "--", f"../examples/{gallery_folder_name}"]
     )
-    print("stdout:")
-    print(git_result.stdout)
-    print("stderr:")
-    print(git_result.stderr)
-    print("...git clean has run")
-    print("AFTER git clean")
-    print(f"'ls -l ../examples/{gallery_folder_name}:")
-    ls_result = subprocess.run(
-        ["ls", "-lR", f"../examples/{gallery_folder_name}"],
-        capture_output=True,
-        text=True,
-    )
-    print("stdout:")
-    lines = ls_result.stdout.split("\n")
-    for line in lines:
-        print(line)
-    print("stderr:")
-    lines = ls_result.stderr.split("\n")
-    for line in lines:
-        print(line)
-    print()
+    ls_print("AFTER git clean", enabled=False)
 
 
 def _reset_example(gallery_conf, fname: str, when: str):
@@ -243,16 +222,6 @@ def _reset_example(gallery_conf, fname: str, when: str):
         and os.environ.get("PYMAPDL_START_INSTANCE", "").lower() == "false"
         and "mapdl" in os.environ.get("DOCKER_IMAGE", "")
     )
-    print(
-        f"example name ({example_name}) in {using_mapdl_examples}? "
-        f"{example_name in using_mapdl_examples} "
-    )
-    print(
-        f"PYMAPDL_START_INSTANCE: {os.environ.get('PYMAPDL_START_INSTANCE', '').lower()}"
-    )
-    print(f"DOCKER_IMAGE: {os.environ['DOCKER_IMAGE']}")
-    print(f"'mapdl' in 'DOCKER_IMAGE'? {'mapdl' in os.environ.get('DOCKER_IMAGE', '')}")
-    print(f"WHEN = {when} - using MAPDL container? {using_mapdl_container}")
 
     if when == "before":
         # We only have one gallery folder at the moment. If this changes, we
@@ -265,7 +234,6 @@ def _reset_example(gallery_conf, fname: str, when: str):
                 ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
             )
             print("MAPDL container launched")
-            time.sleep(10)
     else:
         if using_mapdl_container:
             subprocess.run(

@@ -233,14 +233,6 @@ jobs:
           FLUENT_IMAGE_VERSION: ${{ env.FLUENT_IMAGE_VERSION }}
           MAPDL_IMAGE_VESRION: ${{ env.MAPDL_IMAGE_VERSION }}
 
-      # - name: Start MAPDL Container
-      #   working-directory: examples/00-systemcoupling
-      #   run: |
-      #     docker compose up -d
-      #   env:
-      #     DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
-      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
-
       - name: Build HTML
         run: |
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
@@ -257,16 +249,15 @@ jobs:
           PYMAPDL_START_INSTANCE: FALSE
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
 
-      #- name: Build PDF Documentation
-      #  run: |
-      #    sudo apt update
-      #    sudo apt-get install -y texlive-latex-extra latexmk
-      #    make -C doc pdf SPHINXERRWARN=""
-      #  env:
-      #    PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
-      #    extra_mem_bot: 20000000
-      #    extra_mem_top: 30000000
-
+      - name: Build PDF Documentation
+        run: |
+          sudo apt update
+          sudo apt-get install -y texlive-latex-extra latexmk
+          make -C doc pdf SPHINXERRWARN=""
+        env:
+          PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
+          extra_mem_bot: 20000000
+          extra_mem_top: 30000000
 
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v4
