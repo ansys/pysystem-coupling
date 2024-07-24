@@ -26,14 +26,14 @@ Oscillating plate
 -----------------
 
 This example is a version of the *Oscillating Plate* case that is
-often used as a tutorial for System Coupling. This two-way, fluid-structural
+often used as a tutorial for System Coupling. This two-way, fluid-structure
 interaction (FSI) case is based on co-simulation of a transient oscillating
-plate with 2D data transfers.
+plate with surface data transfers.
 
 - Ansys Mechanical APDL (MAPDL) is used to perform a transient structural analysis.
 - Ansys Fluent is used to perform a transient fluid-flow analysis.
-- System Coupling coordinates the simultaneous execution of the solvers for
-  these Ansys products and the data transfers between their coupled surface regions.
+- System Coupling coordinates the coupled solution involving the above products to
+  solve the multiphysics problem via co-simulation.
 
 **Problem description**
 
@@ -45,8 +45,8 @@ anchored to the bottom of a closed cavity filled with fluid (air):
    :align: center
 
 There is no friction between the plate and the side of the cavity. An
-initial pressure of 100 Pa is applied to one side of the thin plate
-for 0.5 seconds to distort it. Once this pressure is released, the plate
+initial constant force in x-direction is applied to one side of the thin plate
+for the first 0.5 seconds to distort it. Once this pressure is released, the plate
 oscillates back and forth to regain its equilibrium, and the
 surrounding air damps this oscillation. The plate and surrounding
 air are simulated for a few oscillations to allow an examination of the
@@ -54,10 +54,10 @@ motion of the plate as it is damped.
 
 """
 # %%
-# Set up example
-# --------------
+# Import modules, download files, launch products
+# -------------------------------------
 # Setting up this example consists of performing imports, downloading
-# input files, preparing the directory structure, and launching System Coupling.
+# the input file, and launching the required products.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -74,37 +74,35 @@ from ansys.systemcoupling.core import examples
 
 # %%
 #
-# Download input file
+# Download the input file
 # ~~~~~~~~~~~~~~~~~~~
 # This example uses one pre-created file - a Fluent input file that contains
 # the fluids setup.
 #
 fluent_cas_file = examples.download_file(
-    "plate.cas.gz", "pysystem-coupling/oscillating_plate/Fluent"
+    "oscillating_plate.cas.h5", "pysystem-coupling/oscillating_plate"
 )
 
 # %%
-# Launch and connect to System Coupling
+# Launch products
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Launch a remote System Coupling instance and return a *client* object
-# (a ``Session`` object) that allows you to interact with System Coupling
-# via an API exposed into the current Python environment.
-syc = pysyc.launch()
-
-
-# %%
-# Launch and connect to Fluent
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Use the created ``fluent`` session object to read the case file.
-fluent = pyfluent.launch_fluent(start_transcript=True)
-fluent.file.read(file_type="case", file_name=fluent_cas_file)
-
-# %%
-# Launch and connect to MAPDL
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Use the ``mapdl`` session object to set up the structural side of the FSI
-# case.
+# Launch instances of the Mechanical APDL, Fluent, and System Coupling
+# and return *client* (session) objects that allow you to interact with
+# these products via APIs exposed into the current Python environment.
 mapdl = pymapdl.launch_mapdl()
+fluent = pyfluent.launch_fluent(start_transcript=False)
+syc = pysyc.launch(start_transcript=True)
+
+# %%
+# Set up the coupled analysis
+# -------------------------------------
+
+# %%
+# Set up the structural analysis.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# %%
+# Enter Mechancal APDL setup
 mapdl.prep7()
 
 # %%
@@ -131,20 +129,17 @@ mapdl.d("all", "all")
 
 # %%
 # Add the FSI interface.
-mapdl.run("NSEL,S,LOC,X,9.99,10.01")
-mapdl.run("NSEL,A,LOC,Y,0.99,1.01")
-mapdl.run("NSEL,A,LOC,X,10.05,10.07")
+mapdl.nsel("S", "LOC", "X", 9.99, 10.01)
+mapdl.nsel("A", "LOC", "Y", 0.99, 1.01)
+mapdl.nsel("A", "LOC", "X", 10.05, 10.07)
 mapdl.cm("FSIN_1", "NODE")
 mapdl.sf("FSIN_1", "FSIN", 1)
 
-mapdl.allsel()
-
-mapdl.run("/SOLU")
-
 # %%
-# Set analysis type to steady.
-mapdl.antype(4)
-
+# Set up the rest of the transient analysis
+mapdl.allsel()
+mapdl.run("/SOLU")
+mapdl.antype(4)  # transient analysis
 mapdl.nlgeom("ON")  # large deformations
 mapdl.kbc(1)
 mapdl.trnopt("full", "", "", "", "", "hht")
@@ -155,32 +150,32 @@ mapdl.run("time,10.0")
 mapdl.timint("on")
 
 # %%
-# Create the coupled analysis
-# ---------------------------
-# Creating the analysis consists of accessing the ``setup`` API,
-# adding the participants, creating and verifying both interfaces and
-# data transfers, querying for setup errors, and modifying settings.
-#
-# Access the ``setup`` API
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-setup = syc.setup
-
-syc.setup.activate_hidden.beta_features = True
-syc.setup.activate_hidden.alpha_features = True
-syc.setup.activate_hidden.lenient_validation = True
+# Set up the fluid analysis.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
-# Add participants
-# ~~~~~~~~~~~~~~~~
-# Add the ``fluent`` and ``mapdl`` sessions as participants in the
-# analysis.
-fluid_name = syc.setup.add_participant(participant_session=fluent)
+# Read the pre-created case file.
+fluent.file.read(file_type="case", file_name=fluent_cas_file)
+
+
+# %%
+# Set up the coupled analysis
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Setup of the coupled analysis consists of adding the participants,
+# adding coupled interfaces and data transfers, and setting other
+# coupled analysis properties.
+#
+
+# %%
+# Add participants by passing session handles to System Coupling.
 solid_name = syc.setup.add_participant(participant_session=mapdl)
+fluid_name = syc.setup.add_participant(participant_session=fluent)
 
-syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
 syc.setup.coupling_participant[solid_name].display_name = "Solid"
+syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
 
-# add a coupling interface
+# %%
+# Add a coupling interface and data transfers.
 interface_name = syc.setup.add_interface(
     side_one_participant=fluid_name,
     side_one_regions=["wall_deforming"],
@@ -196,37 +191,72 @@ force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FOR
 force_transfer.option = "UsingExpression"
 force_transfer.value = "vector(5.0 [N], 0.0 [N], 0.0 [N]) if Time < 0.5 [s] else force"
 
-syc.setup.solution_control.time_step_size = 0.1
-syc.setup.solution_control.end_time = (
-    3.0  # shorten the run a bit, full run is 10 seconds
-)
+# %%
+# Time step size, end time, output controls
+syc.setup.solution_control.time_step_size = "0.1 [s]"  # time step is 0.1 [s]
+syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
 
 syc.setup.output_control.option = "EveryStep"
+syc.setup.output_control.generate_csv_chart_output = True
 
-print(f"SyC server info: {syc._native_api.GetServerInfo()}")
-
-# solve the coupled analysis
+# %%
+# Solve the coupled analysis
+# -------------------------------------
 syc.solution.solve()
 
+
+# %%
+# Post-process the coupled analysis
+# -------------------------------------
+
+# %%
+# Post-process the structural results
 mapdl.finish()
-
-# post-process structural results
 mapdl.post1()
-
-"""
-mapdl.result.animate_nodal_displacement(
-    rnum = 0,
-    loop=True,
-    add_text=False,
-    displacement_factor=1.0,
+mapdl.result.plot_nodal_displacement(
+    rnum=0,
+    show_displacement=True,
     show_edges=True,
-    cpos="xy")
-"""
+)
 
-# post-process fluid results
-# ...
+# %%
+# Post-process the fluids results
 
-# exit
+# use_window_resolution option not active inside containers or Ansys Lab environment
+if fluent.results.graphics.picture.use_window_resolution.is_active():
+    fluent.results.graphics.picture.use_window_resolution = False
+
+fluent.results.graphics.picture.x_resolution = 1920
+fluent.results.graphics.picture.y_resolution = 1440
+
+fluent.results.graphics.vector["velocity_vector_symmetry"] = {}
+velocity_symmetry = fluent.results.graphics.vector["velocity_vector_symmetry"]
+velocity_symmetry.field = "velocity-magnitude"
+velocity_symmetry.surfaces_list = ["symmetry1"]
+velocity_symmetry.scale.scale_f = 4
+velocity_symmetry.style = "arrow"
+velocity_symmetry.display()
+
+fluent.results.graphics.views.restore_view(view_name="isometric")
+fluent.results.graphics.views.auto_scale()
+fluent.results.graphics.picture.save_picture(file_name="oscplate_velocity_vector.png")
+
+###############################################################################
+# .. image:: /_static/oscplate_velocity_vector.png
+#   :width: 500pt
+#   :align: center
+
+
+# %%
+# Post-process the System Coupling results.
+# Display the charts.
+syc.solution.show_plot()
+
+
+# %%
+# Exit
+# -------------------------------------
+
 syc.exit()
 fluent.exit()
 mapdl.exit()
