@@ -91,7 +91,7 @@ fluent_cas_file = examples.download_file(
 # these products via APIs exposed into the current Python environment.
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False)
-syc = pysyc.launch(start_transcript=True)
+syc = pysyc.launch(start_output=True)
 
 # %%
 # Set up the coupled analysis
@@ -229,20 +229,22 @@ if fluent.results.graphics.picture.use_window_resolution.is_active():
 fluent.results.graphics.picture.x_resolution = 1920
 fluent.results.graphics.picture.y_resolution = 1440
 
-fluent.results.graphics.vector["velocity_vector_symmetry"] = {}
-velocity_symmetry = fluent.results.graphics.vector["velocity_vector_symmetry"]
-velocity_symmetry.field = "velocity-magnitude"
-velocity_symmetry.surfaces_list = ["symmetry1"]
-velocity_symmetry.scale.scale_f = 4
-velocity_symmetry.style = "arrow"
-velocity_symmetry.display()
+fluent.results.graphics.contour["contour_static_pressure"] = {}
+contour = fluent.results.graphics.contour["contour_static_pressure"]
 
-fluent.results.graphics.views.restore_view(view_name="isometric")
+contour.coloring.option = "banded"
+contour.field = "pressure"
+contour.filled = True
+
+contour.surfaces_list = ["symmetry1", "wall_deforming"]
+contour.display()
+
+fluent.results.graphics.views.restore_view(view_name="front")
 fluent.results.graphics.views.auto_scale()
-fluent.results.graphics.picture.save_picture(file_name="oscplate_velocity_vector.png")
+fluent.results.graphics.picture.save_picture(file_name="oscplate_pressure_contour.png")
 
 ###############################################################################
-# .. image:: /_static/oscplate_velocity_vector.png
+# .. image:: /_static/oscplate_pressure_contour.png
 #   :width: 500pt
 #   :align: center
 
