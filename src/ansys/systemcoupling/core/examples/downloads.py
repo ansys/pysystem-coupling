@@ -32,6 +32,7 @@ Examples
 """
 
 import os
+import pathlib
 import shutil
 from typing import Optional
 import urllib.request
@@ -67,12 +68,19 @@ def _get_file_url(filename: str, directory: Optional[str] = None) -> str:
     return f"{root_url}/{filename}"
 
 
-def _retrieve_file(url: str, filename: str):
+def _retrieve_file(url: str, filename: str, download_to_cwd: bool = False):
+
+    name_to_return = lambda local_path: (
+        local_path if not download_to_cwd else pathlib.Path(local_path).name
+    )
+
+    download_target_dir = "." if download_to_cwd else pysyc.EXAMPLES_PATH
+
     # First check if file has already been downloaded
-    local_path = os.path.join(pysyc.EXAMPLES_PATH, os.path.basename(filename))
+    local_path = os.path.join(download_target_dir, os.path.basename(filename))
     local_path_no_zip = local_path.replace(".zip", "")
     if os.path.isfile(local_path_no_zip) or os.path.isdir(local_path_no_zip):
-        return local_path_no_zip, None
+        return name_to_return(local_path_no_zip), None
 
     # grab the correct url retriever
     urlretrieve = urllib.request.urlretrieve
@@ -83,30 +91,13 @@ def _retrieve_file(url: str, filename: str):
     if get_ext(local_path) in [".zip"]:
         _decompress(local_path)
         local_path = local_path[:-4]
-    return local_path, resp
-
-
-def _temp_get_file(filename: str, directory: Optional[str] = None):
-    example_dir = os.environ.get("PYSYC_EXAMPLE_DIR")
-    if example_dir is None:
-        raise Exception(
-            "PYSYC_EXAMPLE_DIR is not set. "
-            "(This is a temporary requirement during development.)"
-        )
-    local_path = os.path.join(pysyc.EXAMPLES_PATH, os.path.basename(filename))
-    local_path_no_zip = local_path.replace(".zip", "")
-    if os.path.isfile(local_path_no_zip) or os.path.isdir(local_path_no_zip):
-        return local_path_no_zip
-
-    file_path = os.path.join(example_dir, directory, filename)
-    shutil.copy(file_path, local_path)
-    if get_ext(local_path) in [".zip"]:
-        _decompress(local_path)
-        local_path = local_path[:-4]
-    return local_path
+    return name_to_return(local_path), resp
 
 
 def download_file(filename: str, directory: Optional[str] = None):
     url = _get_file_url(filename, directory)
-    return _retrieve_file(url, filename)[0]
-    # return _temp_get_file(filename, directory)
+    download_to_cwd = (
+        os.getenv("PYSYC_BUILD_SPHINX_GALLERY") == "1"
+        and os.getenv("SYC_LAUNCH_CONTAINER") == "1"
+    )
+    return _retrieve_file(url, filename, download_to_cwd)[0]

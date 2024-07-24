@@ -53,7 +53,6 @@ air are simulated for a few oscillations to allow an examination of the
 motion of the plate as it is damped.
 
 """
-
 # %%
 # Set up example
 # --------------
@@ -62,299 +61,172 @@ motion of the plate as it is damped.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
-# Import the ``ansys-systemcoupling-core`` package and other required packages.
+# Import ``ansys-systemcoupling-core``, ``ansys-fluent-core`` and
+# ``ansys-mapdl-core`` and other required packages.
 
 # sphinx_gallery_thumbnail_path = '_static/oscplate_displacement.png'
-import os
-from pprint import pprint
 
-import ansys.systemcoupling.core as pysystemcoupling
+import ansys.fluent.core as pyfluent
+import ansys.mapdl.core as pymapdl
+
+import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
 
 # %%
 #
-# Download input files
-# ~~~~~~~~~~~~~~~~~~~~
-# Clear the downloads target directory (which is to be used as the
-# working directory). Download the SCP files for Fluent and MAPDL, which
-# provide solver-specific information to System Coupling and the respective
-# solver input files for each solver run.
+# Download input file
+# ~~~~~~~~~~~~~~~~~~~
+# This example uses one pre-created file - a Fluent input file that contains
+# the fluids setup.
 #
-
-examples.delete_downloads()
-
-mapdl_scp_file = examples.download_file(
-    "mapdl.scp", "pysystem-coupling/oscillating_plate"
-)
-
-fluent_scp_file = examples.download_file(
-    "fluent.scp", "pysystem-coupling/oscillating_plate"
-)
-
-mapdl_dat_file = examples.download_file(
-    "mapdl.dat", "pysystem-coupling/oscillating_plate/MAPDL"
-)
-
 fluent_cas_file = examples.download_file(
     "plate.cas.gz", "pysystem-coupling/oscillating_plate/Fluent"
 )
 
 # %%
-#
-# Prepare expected directory structure
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# The target download directory is used as the working directory.
-# The SCP files are defined such that there is expected to be a Fluent
-# subdirectory in which Fluent runs and an MAPDL subdirectory in
-# which MAPDL runs. These directories should contain their respective
-# case and input files.
-
-working_dir = os.path.dirname(mapdl_scp_file)
-
-fluent_working_dir = os.path.join(working_dir, "Fluent")
-os.mkdir(fluent_working_dir)
-mapdl_working_dir = os.path.join(working_dir, "MAPDL")
-os.mkdir(mapdl_working_dir)
-
-os.rename(fluent_cas_file, os.path.join(fluent_working_dir, "plate.cas.gz"))
-os.rename(mapdl_dat_file, os.path.join(mapdl_working_dir, "mapdl.dat"))
-
-# %%
-#
-# Launch System Coupling
-# ~~~~~~~~~~~~~~~~~~~~~~
+# Launch and connect to System Coupling
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Launch a remote System Coupling instance and return a *client* object
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
+syc = pysyc.launch()
 
-syc = pysystemcoupling.launch(working_dir=working_dir)
 
 # %%
-# Create analysis
-# ---------------
+# Launch and connect to Fluent
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Use the created ``fluent`` session object to read the case file.
+fluent = pyfluent.launch_fluent(start_transcript=True)
+fluent.file.read(file_type="case", file_name=fluent_cas_file)
+
+# %%
+# Launch and connect to MAPDL
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Use the ``mapdl`` session object to set up the structural side of the FSI
+# case.
+mapdl = pymapdl.launch_mapdl()
+mapdl.prep7()
+
+# %%
+# Define material properties.
+mapdl.mp("DENS", 1, 2550)  # density
+mapdl.mp("ALPX", 1, 1.2e-05)  # thermal expansion coefficient
+mapdl.mp("EX", 1, 2500000)  # Young's modulus
+mapdl.mp("NUXY", 1, 0.35)  # Poisson's ratio
+
+# %%
+# Set element types to SOLID186.
+mapdl.et(1, 186)
+mapdl.keyopt(1, 2, 1)
+
+# %%
+# Make geometry.
+mapdl.block(10.00, 10.06, 0.0, 1.0, 0.0, 0.4)
+mapdl.vsweep(1)
+
+# %%
+# Add fixed support at y=0.
+mapdl.run("NSEL,S,LOC,Y,0")
+mapdl.d("all", "all")
+
+# %%
+# Add the FSI interface.
+mapdl.run("NSEL,S,LOC,X,9.99,10.01")
+mapdl.run("NSEL,A,LOC,Y,0.99,1.01")
+mapdl.run("NSEL,A,LOC,X,10.05,10.07")
+mapdl.cm("FSIN_1", "NODE")
+mapdl.sf("FSIN_1", "FSIN", 1)
+
+mapdl.allsel()
+
+mapdl.run("/SOLU")
+
+# %%
+# Set analysis type to steady.
+mapdl.antype(4)
+
+mapdl.nlgeom("ON")  # large deformations
+mapdl.kbc(1)
+mapdl.trnopt("full", "", "", "", "", "hht")
+mapdl.tintp(0.1)
+mapdl.autots("off")
+mapdl.run("nsub,1,1,1")
+mapdl.run("time,10.0")
+mapdl.timint("on")
+
+# %%
+# Create the coupled analysis
+# ---------------------------
 # Creating the analysis consists of accessing the ``setup`` API,
-# loading participants, creating and verifying both interfaces and
+# adding the participants, creating and verifying both interfaces and
 # data transfers, querying for setup errors, and modifying settings.
 #
 # Access the ``setup`` API
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 setup = syc.setup
 
+syc.setup.activate_hidden.beta_features = True
+syc.setup.activate_hidden.alpha_features = True
+syc.setup.activate_hidden.lenient_validation = True
 
 # %%
-# Load participants
-# ~~~~~~~~~~~~~~~~~
-# Use ``add_participant`` to create ``coupling_participant`` objects
-# representing the Fluent and MAPDL participants, based on the data
-# in the `scp` files that were previously exported by the respective
-# products.
-mapdl_part_name = setup.add_participant(input_file="mapdl.scp")
-fluent_part_name = setup.add_participant(input_file="fluent.scp")
+# Add participants
+# ~~~~~~~~~~~~~~~~
+# Add the ``fluent`` and ``mapdl`` sessions as participants in the
+# analysis.
+fluid_name = syc.setup.add_participant(participant_session=fluent)
+solid_name = syc.setup.add_participant(participant_session=mapdl)
 
-# %%
-# Verify ``coupling_participant`` objects exist:
-setup.coupling_participant.keys()
+syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
+syc.setup.coupling_participant[solid_name].display_name = "Solid"
 
-# %%
-# Create interfaces and data transfers
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Create interfaces and data transfers by specifying participant regions.
-# This consists of calling the appropriate commands to create an interface
-# and both force and displacement data transfers.
-
-interface_name = setup.add_interface(
-    side_one_participant=mapdl_part_name,
-    side_one_regions=["FSIN_1"],
-    side_two_participant=fluent_part_name,
-    side_two_regions=["wall_deforming"],
+# add a coupling interface
+interface_name = syc.setup.add_interface(
+    side_one_participant=fluid_name,
+    side_one_regions=["wall_deforming"],
+    side_two_participant=solid_name,
+    side_two_regions=["FSIN_1"],
 )
 
-force_transfer_name = setup.add_data_transfer(
-    interface=interface_name,
-    target_side="One",
-    side_one_variable="FORC",
-    side_two_variable="force",
+# set up 2-way FSI coupling - add force & displacement data transfers
+dt_names = syc.setup.add_fsi_data_transfers(interface=interface_name)
+
+# modify force transfer to apply constant initial loading for the first 0.5 [s]
+force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
+force_transfer.option = "UsingExpression"
+force_transfer.value = "vector(5.0 [N], 0.0 [N], 0.0 [N]) if Time < 0.5 [s] else force"
+
+syc.setup.solution_control.time_step_size = 0.1
+syc.setup.solution_control.end_time = (
+    3.0  # shorten the run a bit, full run is 10 seconds
 )
 
-disp_transfer_name = setup.add_data_transfer(
-    interface=interface_name,
-    target_side="Two",
-    side_one_variable="INCD",
-    side_two_variable="displacement",
-)
+syc.setup.output_control.option = "EveryStep"
 
-# %%
-# Verify creation of interfaces and data transfers
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Confirm the coupling interface exists.
-setup.coupling_interface.keys()
+print(f"SyC server info: {syc._native_api.GetServerInfo()}")
 
-# %%
-# Examine the coupling interface state. Note that
-# ``data_transfer`` child objects exist for ``"displacement"``
-# and ``"FORC"``.
-setup.coupling_interface[interface_name].print_state()
+# solve the coupled analysis
+syc.solution.solve()
 
+mapdl.finish()
 
-# %%
-# Query for setup errors
-# ~~~~~~~~~~~~~~~~~~~~~~
-# A coupled analysis setup cannot be solved if errors
-# exist. Errors are indicated by messages with
-# the ``level`` field set to ``Error``. Here, there are
-# two missing settings that must be corrected.
-# There is also an ``Information`` level message that
-# advises that, once the current setup is solved, it is
-# not possible to restart it from any point except the
-# last step.
+# post-process structural results
+mapdl.post1()
 
-pprint(setup.get_status_messages())
+"""
+mapdl.result.animate_nodal_displacement(
+    rnum = 0,
+    loop=True,
+    add_text=False,
+    displacement_factor=1.0,
+    show_edges=True,
+    cpos="xy")
+"""
 
-# %%
-#   .. note::
-#      In the current release of PySystemCoupling, the ``get_status_messages``
-#      class provides messages generated by System Coupling using its native
-#      terminology. This means that any identifiers for settings that are
-#      mentioned in messages are in System Coupling's usual *camel case* format.
-#
-#      In most cases, it should be obvious how to translate to the
-#      *snake case* format for the corresponding PySystemCoupling setting.
-#      For example, the ``EndTime`` setting in System Coupling's
-#      ``OutputControl`` object corresponds to the ``output_control.end_time``
-#      setting in PySystemCoupling.
+# post-process fluid results
+# ...
 
-# %%
-# Modify settings
-# ~~~~~~~~~~~~~~~
-# View contents of the ``solution_control`` object. Notice that
-# the ``time_step_size`` and ``end_time`` settings are unset,
-# consistent with what was shown in the status messages.
-# Values shown in the ``print_state`` output as ``<None>``
-# have Python values of ``None``.
-setup.solution_control.print_state()
-
-
-# %%
-# Change the ``time_step_size`` setting.
-setup.solution_control.time_step_size = "0.1 [s]"
-
-# %%
-# Verify the ``time_step_size`` setting.
-setup.solution_control.time_step_size
-
-# %%
-# Change the ``end_time`` setting.
-setup.solution_control.end_time = "1.0 [s]"
-
-# %%
-# View the ``output_control`` object.
-setup.output_control.print_state()
-
-# %%
-# View the valid values for the ``option`` setting.
-setup.output_control.get_property_options("option")
-
-# %%
-# Set the ``option`` setting.
-setup.output_control.option = "StepInterval"
-
-# %%
-# Change the ``output_frequency`` frequency setting.
-setup.output_control.output_frequency = 2
-
-# %%
-# View the ``output_control`` object again:
-setup.output_control.print_state()
-
-# %%
-# Review setup
-# ------------
-# Verify that there are no longer any setup errors.
-pprint(setup.get_status_messages())
-
-
-# %%
-# Use the ``get_setup_summary`` class to return a string showing a summary of
-# the coupled analysis setup. This summary is also shown in the
-# transcript output when the solve is started, but it can
-# be useful to review this before starting the solve.
-print(setup.get_setup_summary())
-
-
-# %%
-# Run solution
-# ------------
-# The System Coupling server's ``stdout`` and ``stderr`` output is not shown
-# in PySystemCoupling by default. To see it, turn output streaming on.
-syc.start_output()
-# %%
-# Access the ``solve`` command via the ``solution`` API.
-solution = syc.solution
-solution.solve()
-
-# %%
-# Extend analysis end time
-# ------------------------
-# Extend the analysis end time for a restarted run.
-# Access the ``case`` attribute for file handling and persistence.
-# Use this attribute to completely clear the current case and reload
-# from the case saved during the solve.
-case = syc.case
-case.clear_state()
-case.open()
-
-
-# %%
-# Extend analysis
-# ~~~~~~~~~~~~~~~
-#
-# View the ``solution_control`` object, change the ``end-time`` setting,
-# and verify the setting change.
-# This code extends the analysis to 1.5 seconds.
-setup.solution_control.print_state()
-setup.solution_control.end_time = "1.5 [s]"
-setup.solution_control.print_state()
-
-# %%
-# Change additional settings
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Examine ``"Force"`` data transfer.
-force_transfer = setup.coupling_interface[interface_name].data_transfer[
-    force_transfer_name
-]
-force_transfer.print_state()
-
-# %%
-# Change a setting in the ``"Force"`` data transfer and increase the
-# minimum iterations value in the ``solutions_control`` object from its default
-# value of 1 to 2.
-force_transfer.convergence_target = 0.001
-
-setup.solution_control.minimum_iterations = 2
-
-# %%
-# Review setup
-# ~~~~~~~~~~~~
-# To review the setup again, use the ``get_setup_summary`` class to return a string
-# showing a summary.
-print(setup.get_setup_summary())
-
-# %%
-# Restart solution
-# ----------------
-# To restart the solution, access the ``solve`` command via the ``solution`` API.
-solution.solve()
-
-# %%
-# Stop streaming output and shut down the server instance
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Stop streaming output from the server and shut down the server instance.
-syc.end_output()
+# exit
 syc.exit()
-
-# %%
-# .. note::
-#    This ``syc`` object is now *defunct*. Any attempt to
-#    use it to perform a further action yields an error. To do
-#    more in the current Python session, you must create a new ``syc`` instance
-#    using ``syc = pysystemcoupling.launch()``.
+fluent.exit()
+mapdl.exit()

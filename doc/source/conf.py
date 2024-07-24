@@ -2,6 +2,9 @@
 
 from datetime import datetime
 import os
+import shutil
+import subprocess
+import time
 
 from ansys_sphinx_theme import (
     ansys_favicon,
@@ -15,7 +18,7 @@ from ansys_sphinx_theme import (
 import sphinx_gallery
 import sphinx_gallery.gen_rst
 
-from ansys.systemcoupling.core import __version__
+from ansys.systemcoupling.core import EXAMPLES_PATH, __version__
 
 # Project information
 project = "ansys-systemcoupling-core"
@@ -158,6 +161,87 @@ def make_replacements_for_versioned_class_refs(names):
     return "\n".join(make_subst(n) for n in names)
 
 
+def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
+
+    # Uses "git clean" to clean out output files from the the last example
+    # run. This removes everything except tracked files but will retain
+    # modifications to tracked files.
+
+    def ls_print(when: str, enabled: bool = True):
+        if not enabled:
+            return
+        cmd = ["ls", "-lR", f"../examples/{gallery_folder_name}"]
+        print(f"{when}: {cmd}:")
+        output = subprocess.run(cmd, capture_output=True, text=True).stdout
+        print(f"{output}\n")
+
+    def backup_folder():
+        # A potential issue is that if the gallery is being run locally and a new
+        # example is under development and has not yet been committed to git, this
+        # will be deleted by the cleanup. Therefore, as a safety measure, zip up
+        # folder contents to a backup location in a sibling directory, "backup",
+        # of the EXAMPLES_PATH directory.
+
+        backup_dir = os.path.join(EXAMPLES_PATH, "..", "backup")
+        if not os.path.exists(backup_dir):
+            os.makedirs(backup_dir)
+
+        backup_path = os.path.join(backup_dir, f"before_{example_name}.zip")
+        count = 0
+        while os.path.exists(backup_path):
+            count += 1
+            backup_path = os.path.join(backup_dir, f"before_{example_name}_{count}.zip")
+
+        gallery_folder_path = os.path.join(
+            os.getcwd(), "..", "examples", gallery_folder_name
+        )
+        shutil.make_archive(backup_path.replace(".zip", ""), "zip", gallery_folder_path)
+
+    backup_folder()
+
+    time.sleep(5)  # Allow a few seconds to be sure everything shut down
+    ls_print("BEFORE git clean", enabled=False)
+    subprocess.run(
+        ["git", "clean", "-d", "-f", "--", f"../examples/{gallery_folder_name}"]
+    )
+    ls_print("AFTER git clean", enabled=False)
+
+
+def _reset_example(gallery_conf, fname: str, when: str):
+    example_name = fname.replace(".py", "")
+
+    # Add any examples that need MAPDL to this list
+    using_mapdl_examples = ["oscillating_plate"]
+
+    # If the examples needs to run MAPDL in a container, launch it before
+    # the example and remove it after. This is because it has been found
+    # that connections between MAPDL and SystemCoupling cannot be established
+    # if we attempt to reuse the container across multiple examples.
+    using_mapdl_container = (
+        example_name in using_mapdl_examples
+        and os.environ.get("PYMAPDL_START_INSTANCE", "").lower() == "false"
+        and "mapdl" in os.environ.get("DOCKER_IMAGE", "")
+    )
+
+    if when == "before":
+        # We only have one gallery folder at the moment. If this changes, we
+        # will have to use fname to figure out the correct one. This implies
+        # script names will have to be unique across gallery folders.
+        _clean_up_example_folder("00-systemcoupling", example_name)
+
+        if using_mapdl_container:
+            subprocess.run(
+                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
+            )
+            print("MAPDL container launched")
+    else:
+        if using_mapdl_container:
+            subprocess.run(
+                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "down"]
+            )
+            print("MAPDL container removed")
+
+
 rst_epilog = make_replacements_for_versioned_class_refs(("CASE", "SETUP", "SOLUTION"))
 
 # -- Sphinx Gallery Options ---------------------------------------------------
@@ -178,12 +262,19 @@ sphinx_gallery_conf = {
     "doc_module": "ansys-systemcoupling-core",
     "ignore_pattern": "flycheck*",
     "thumbnail_size": (350, 350),
-    # "reset_modules_order": "after",
-    # "reset_modules": (_stop_fluent_container),
+    "reset_modules_order": "both",
+    "reset_modules": (_reset_example),
     # "plot_gallery": False,
     # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
     "remove_config_comments": True,
+    "abort_on_example_error": True,
 }
+
+# -- Options for warning control ---------------------------------------------
+
+# Suppress warning about unpickleable function (reset_modules) element in sphinx_gallery_conf
+suppress_warnings = ["config.cache"]
+
 
 # -- Options for HTML output -------------------------------------------------
 html_short_title = html_title = "PySystemCoupling"

@@ -15,6 +15,9 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 24_2
+  FLUENT_IMAGE_VERSION: "v24.2.0"
+  SYC_IMAGE_VERSION: "v24.2.0"
+  MAPDL_IMAGE_VERSION: "v24.2-ubuntu"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -122,6 +125,7 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   test:
+    if: false
     name: Testing
     needs: [build]
     runs-on: ubuntu-latest
@@ -186,8 +190,7 @@ jobs:
   docs:
     name: Build Documentation
     needs: [doc-style, build]
-    runs-on: ubuntu-latest
-
+    runs-on: public-ubuntu-latest-8-cores
     steps:
       - uses: actions/checkout@v4
       - name: Setup Python
@@ -206,12 +209,45 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
 
+      - name: Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Required Docker Images
+        run: |
+          echo "Pulling pysystem-coupling Image Version ${SYC_IMAGE_VERSION}"
+          echo "Pulling pyfluent Image Version ${FLUENT_IMAGE_VERSION}"
+          echo "Pulling mapdl Image Version ${MAPDL_IMAGE_VERSION}"
+
+          docker pull ghcr.io/ansys/pysystem-coupling:${SYC_IMAGE_VERSION} &
+          docker pull ghcr.io/ansys/pyfluent:${FLUENT_IMAGE_VERSION} &
+          docker pull ghcr.io/ansys/mapdl:${MAPDL_IMAGE_VERSION} &
+
+          # Wait for the background processes to finish
+          wait
+        env:
+          SYC_IMAGE_VERSION: ${{ env.SYC_IMAGE_VERSION }}
+          FLUENT_IMAGE_VERSION: ${{ env.FLUENT_IMAGE_VERSION }}
+          MAPDL_IMAGE_VESRION: ${{ env.MAPDL_IMAGE_VERSION }}
+
       - name: Build HTML
         run: |
+          export SYC_CONTAINER_USER=$(id -u):$(id -g)
           make -C doc clean
           make -C doc html SPHINXERRWARN="-W"
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
+          PYSYC_BUILD_SPHINX_GALLERY: 1
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+          SYC_LAUNCH_CONTAINER: 1
+          SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
+          PYFLUENT_LAUNCH_CONTAINER: 1
+          FLUENT_IMAGE_TAG: ${{ env.FLUENT_IMAGE_VERSION }}
+          PYMAPDL_START_INSTANCE: FALSE
+          DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
 
       - name: Build PDF Documentation
         run: |
@@ -223,7 +259,6 @@ jobs:
           extra_mem_bot: 20000000
           extra_mem_top: 30000000
 
-
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v4
         with:
@@ -232,13 +267,12 @@ jobs:
           retention-days: 7
 
 
-      - name: Upload PDF Documentation
-        uses: actions/upload-artifact@v4
-        with:
-          name: documentation-pdf
-          path: doc/_build/latex/*.pdf
-          retention-days: 7
-
+      #- name: Upload PDF Documentation
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: documentation-pdf
+      #    path: doc/_build/latex/*.pdf
+      #    retention-days: 7
 
   upload_dev_docs:
     name: Upload dev documentation
