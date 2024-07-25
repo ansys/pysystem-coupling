@@ -213,11 +213,9 @@ syc.solution.solve()
 # Post-process the structural results
 mapdl.finish()
 mapdl.post1()
-mapdl.result.plot_nodal_displacement(
-    rnum=0,
-    show_displacement=True,
-    show_edges=True,
-)
+node_ids, node_coords = mapdl_session.result.nodal_displacement(0)
+max_dx = max([value[0] for value in node_coords])
+print(f"There are {len(node_ids)}. Maximum x-displacement is {max_dx}")
 
 # %%
 # Post-process the fluids results

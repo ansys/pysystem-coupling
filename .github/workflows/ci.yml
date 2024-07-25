@@ -203,11 +203,6 @@ jobs:
         with:
           name: ${{ env.PACKAGE_NAME }}-artifacts
           path: dist
-
-      - name: Install OS packages
-        run: |
-          sudo apt update 
-          sudo apt install zip pandoc libgl1-mesa-glx xvfb texlive-latex-extra latexmk graphviz texlive-xetex texlive-fonts-extra qpdf xindy
  
       - name: Install pysystemcoupling with doc dependencies
         run: |
@@ -242,7 +237,7 @@ jobs:
         run: |
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
           make -C doc clean
-          xvfb-run make -C doc html SPHINXERRWARN="-W"
+          make -C doc html SPHINXERRWARN="-W"
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
