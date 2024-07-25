@@ -94,12 +94,14 @@ fluent = pyfluent.launch_fluent(start_transcript=False)
 syc = pysyc.launch(start_output=True)
 
 # %%
-# Set up the coupled analysis
-# ---------------------------
+# Setup
+# -----
+# The setup consists of setting up the structural analysis,
+# the fluids analysis, and the coupled analysis.
 
 # %%
-# Set up the structural analysis.
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Set up the structural analysis
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
 # Enter Mechancal APDL setup
@@ -150,21 +152,20 @@ mapdl.run("time,10.0")
 mapdl.timint("on")
 
 # %%
-# Set up the fluid analysis.
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Set up the fluid analysis
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
-# Read the pre-created case file.
+# Read the pre-created case file
 fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
 
 # %%
 # Set up the coupled analysis
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Setup of the coupled analysis consists of adding the participants,
-# adding coupled interfaces and data transfers, and setting other
-# coupled analysis properties.
-#
+# System Coupling setup involves adding the structural and fluid
+# participants, adding coupled interfaces and data transfers,
+# and setting other coupled analysis properties.
 
 # %%
 # Add participants by passing session handles to System Coupling.
@@ -200,14 +201,14 @@ syc.setup.output_control.option = "EveryStep"
 syc.setup.output_control.generate_csv_chart_output = True
 
 # %%
-# Solve the coupled analysis
-# --------------------------
+# Solution
+# --------
 syc.solution.solve()
 
 
 # %%
-# Post-process the coupled analysis
-# ---------------------------------
+# Post-processing
+# ---------------
 
 # %%
 # Post-process the structural results
@@ -215,7 +216,7 @@ mapdl.finish()
 mapdl.post1()
 node_ids, node_coords = mapdl.result.nodal_displacement(0)
 max_dx = max([value[0] for value in node_coords])
-print(f"There are {len(node_ids)}. Maximum x-displacement is {max_dx}")
+print(f"There are {len(node_ids)} nodes. Maximum x-displacement is {max_dx}")
 
 # %%
 # Post-process the fluids results
@@ -248,9 +249,9 @@ fluent.results.graphics.picture.save_picture(file_name="oscplate_pressure_contou
 
 
 # %%
-# Post-process the System Coupling results.
-# Display the charts.
-syc.solution.show_plot()
+# Post-process the System Coupling results - display the charts
+# showing displacement and force values during the simulation
+syc.solution.show_plot(show_convergence=False)
 
 
 # %%
