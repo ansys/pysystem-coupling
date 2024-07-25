@@ -213,7 +213,7 @@ syc.solution.solve()
 # Post-process the structural results
 mapdl.finish()
 mapdl.post1()
-node_ids, node_coords = mapdl_session.result.nodal_displacement(0)
+node_ids, node_coords = mapdl.result.nodal_displacement(0)
 max_dx = max([value[0] for value in node_coords])
 print(f"There are {len(node_ids)}. Maximum x-displacement is {max_dx}")
 
