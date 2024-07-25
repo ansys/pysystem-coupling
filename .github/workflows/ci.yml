@@ -249,16 +249,6 @@ jobs:
           PYMAPDL_START_INSTANCE: FALSE
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
 
-      - name: Build PDF Documentation
-        run: |
-          sudo apt update
-          sudo apt-get install -y texlive-latex-extra latexmk
-          make -C doc pdf SPHINXERRWARN=""
-        env:
-          PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
-          extra_mem_bot: 20000000
-          extra_mem_top: 30000000
-
       - name: Upload HTML Documentation
         uses: actions/upload-artifact@v4
         with:
