@@ -55,7 +55,7 @@ motion of the plate as it is damped.
 """
 # %%
 # Import modules, download files, launch products
-# -------------------------------------
+# -----------------------------------------------
 # Setting up this example consists of performing imports, downloading
 # the input file, and launching the required products.
 #
@@ -75,7 +75,7 @@ from ansys.systemcoupling.core import examples
 # %%
 #
 # Download the input file
-# ~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~
 # This example uses one pre-created file - a Fluent input file that contains
 # the fluids setup.
 #
@@ -85,7 +85,7 @@ fluent_cas_file = examples.download_file(
 
 # %%
 # Launch products
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~
 # Launch instances of the Mechanical APDL, Fluent, and System Coupling
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
@@ -95,11 +95,11 @@ syc = pysyc.launch(start_output=True)
 
 # %%
 # Set up the coupled analysis
-# -------------------------------------
+# ---------------------------
 
 # %%
 # Set up the structural analysis.
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
 # Enter Mechancal APDL setup
@@ -151,7 +151,7 @@ mapdl.timint("on")
 
 # %%
 # Set up the fluid analysis.
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
 # Read the pre-created case file.
@@ -160,7 +160,7 @@ fluent.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
 # Set up the coupled analysis
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Setup of the coupled analysis consists of adding the participants,
 # adding coupled interfaces and data transfers, and setting other
 # coupled analysis properties.
@@ -201,13 +201,13 @@ syc.setup.output_control.generate_csv_chart_output = True
 
 # %%
 # Solve the coupled analysis
-# -------------------------------------
+# --------------------------
 syc.solution.solve()
 
 
 # %%
 # Post-process the coupled analysis
-# -------------------------------------
+# ---------------------------------
 
 # %%
 # Post-process the structural results
@@ -257,7 +257,7 @@ syc.solution.show_plot()
 
 # %%
 # Exit
-# -------------------------------------
+# ----
 
 syc.exit()
 fluent.exit()

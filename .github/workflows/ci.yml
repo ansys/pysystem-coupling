@@ -237,7 +237,7 @@ jobs:
         run: |
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
           make -C doc clean
-          make -C doc html SPHINXERRWARN="-W"
+          xvfb-run make -C doc html SPHINXERRWARN="-W"
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
