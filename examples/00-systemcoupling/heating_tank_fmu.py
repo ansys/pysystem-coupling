@@ -66,10 +66,10 @@ Two data transfers :
 # Tags: FMU, Fluent, transient
 
 # %%
-# Set up example
-# --------------
+# Import modules, download files, launch products
+# -----------------------------------------------
 # Setting up this example consists of performing imports, downloading
-# input files, and launching System Coupling.
+# the input file, and launching the required products.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -86,171 +86,145 @@ from ansys.systemcoupling.core import examples
 #
 # Download input files
 # ~~~~~~~~~~~~~~~~~~~~
-# Clear the downloads target directory (which is to be used as the
-# working directory). Download the case file for Fluent and the FMU file, which
-# define the participant-specific setup information.
+# Download the case file for Fluent and the FMU file.
 
-examples.delete_downloads()
 fmu_file = examples.download_file(
     "thermostat.fmu", "pysystem-coupling/heating_tank_fmu/FMU"
 )
-
-# shutil.copy(fmu_file, "thermostat.fmu")
-
-# fmu_file = "thermostat.fmu"
 
 fluent_cas_file = examples.download_file(
     "fluent.cas.h5", "pysystem-coupling/heating_tank_fmu/Fluent"
 )
 
-# shutil.copy(fluent_cas_file, "fluent.cas.h5")
-
-# fluent_cas_file = "fluent.cas.h5"
 
 # %%
-# Launch Fluent
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Launch a remote Fluent instance and return a *client* object
-# (a ``Session`` object) that allows you to interact with Fluent
-# via an API exposed into the current Python environment.
-# Read in the Fluent case file.
+# Launch products
+# ~~~~~~~~~~~~~~~
+# Launch a remote Fluent and System Coupling instances and
+# return *client* objects that allows you to interact with
+# these products via an API exposed into the current Python
+# environment.
 #
 # .. note::
 #    Fluent version greater than 24.1 is required.
 #    To specify Fluent version explicitly when launching Fluent,
 #    use ``product_version`` argument to the ``launch_fluent``
 #    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
-
-fluent_session = pyfluent.launch_fluent(start_transcript=False)
-fluent_v241 = pyfluent.utils.fluent_version.FluentVersion.v241
-assert fluent_session.get_fluent_version() >= fluent_v241
-fluent_session.file.read(file_type="case", file_name=fluent_cas_file)
+fluent = pyfluent.launch_fluent(start_transcript=False)
+syc = pysystemcoupling.launch(start_output=True)
 
 # %%
-# Launch System Coupling
-# ~~~~~~~~~~~~~~~~~~~~~~
-# Launch a remote System Coupling instance and return a *client* object
-# (a ``Session`` object) that allows you to interact with System Coupling
-# via an API exposed into the current Python environment.
-syc = pysystemcoupling.launch()
+# Setup
+# -----
+# The setup consists of setting up the the fluids analysis
+# and the coupled analysis.
 
 # %%
-# Create analysis
-# ---------------
-# Creating the analysis consists of accessing the ``setup`` API,
-# loading participants, creating and verifying both interfaces and
-# data transfers, querying for setup errors, and modifying settings.
-#
-# Access the ``setup`` API
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-setup = syc.setup
+# Set up the fluid analysis
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# %%
+# Read the pre-created case file.
+fluent.file.read(file_type="case", file_name=fluent_cas_file)
+
+# %%
+# Set up the coupled analysis
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# System Coupling setup involves adding the fluid and FMU
+# participants, adding coupled interfaces and data transfers,
+# and setting other coupled analysis properties.
 
 # %%
 # Add participants
-# ~~~~~~~~~~~~~~~~~
-# Use ``add_participant`` to create ``coupling_participant`` objects
-# representing the Fluent and FMU participants, based on the setup
-# information that was previously defined in the respective
-# products.
-fluent_part_name = setup.add_participant(participant_session=fluent_session)
-fmu_part_name = setup.add_participant(input_file=fmu_file)
-
+fluid_name = syc.setup.add_participant(participant_session=fluent)
+fmu_name = syc.setup.add_participant(input_file=fmu_file)
 
 # %%
-# FMU settings
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Change FMU parameters by accessing ``fmu_parameter``
+# Set FMU settings
+
+fmu_participant = syc.setup.coupling_participant[fmu_name]
 
 # Change the "maximum heat output" settings
-setup.coupling_participant[fmu_part_name].fmu_parameter["Real_2"].real_value = 10.0
-setup.coupling_participant[fmu_part_name].fmu_parameter[
-    "Real_2"
-].display_name = "Maximum Heat Output"
-# %%
+max_heat_output_param = fmu_participant.fmu_parameter["Real_2"]
+max_heat_output_param.real_value = 10.0
+max_heat_output_param.display_name = "Maximum_Heat_Output"
+
 # Change the "target temperature" settings
-setup.coupling_participant[fmu_part_name].fmu_parameter["Real_3"].real_value = 350
-setup.coupling_participant[fmu_part_name].fmu_parameter[
-    "Real_3"
-].display_name = "Target_Temperature"
+target_temperature_param = fmu_participant.fmu_parameter["Real_3"]
+target_temperature_param.real_value = 350
+target_temperature_param.display_name = "Target_Temperature"
 
-# %%
 # Change the "heat scale factor" settings
-setup.coupling_participant[fmu_part_name].fmu_parameter["Real_4"].real_value = 2.0
-setup.coupling_participant[fmu_part_name].fmu_parameter[
-    "Real_4"
-].display_name = "Heat_Scale_Factor"
+heat_scale_factor_param = fmu_participant.fmu_parameter["Real_4"]
+heat_scale_factor_param.real_value = 2.0
+heat_scale_factor_param.display_name = "Heat_Scale_Factor"
 
 # %%
-# Create interfaces and data transfers
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Create interfaces and data transfers by specifying participant regions.
-# This consists of calling the appropriate commands to create an interface
-# and both force and displacement data transfers.
+# Add a coupling interface and data transfers
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Create a coupling interface for Fluent -> FMU (sensor to FMU)
-sensor_interface = setup.add_interface(
-    side_one_participant=fluent_part_name,
+# Add a coupling interface for Fluent sensor region -> FMU
+sensor_interface_name = syc.setup.add_interface(
+    side_one_participant=fluid_name,
     side_one_regions=["sensor"],
-    side_two_participant=fmu_part_name,
+    side_two_participant=fmu_name,
 )
 
-# Create a coupling interface for FMU -> Fluent (FMU to heat source)
-heatSourceInterface = setup.add_interface(
-    side_one_participant=fmu_part_name,
-    side_two_participant=fluent_part_name,
-    side_two_regions=["heat_source"],
-)
-
-# Create data transfer for "temperature"
-temperatureDataTransfer = setup.add_data_transfer(
-    interface=sensor_interface,
+# Add temperature data transfer
+temperature_transfer_name = syc.setup.add_data_transfer(
+    interface=sensor_interface_name,
     target_side="Two",
     source_variable="temperature",
     target_variable="Real_0",
 )
 
-# Create data transfer for "heatflow"
-heatFlowDataTransfer = setup.add_data_transfer(
-    interface=heatSourceInterface,
+# Add a coupling interface for FMU -> Fluent heat source region
+heat_source_interface_name = syc.setup.add_interface(
+    side_one_participant=fmu_name,
+    side_two_participant=fluid_name,
+    side_two_regions=["heat_source"],
+)
+
+# Create heat flow data transfer
+heatFlowDataTransfer = syc.setup.add_data_transfer(
+    interface=heat_source_interface_name,
     target_side="Two",
     source_variable="Real_1",
     target_variable="heatflow",
 )
 
 # %%
-# Change the ``time_step_size`` setting.
-setup.solution_control.time_step_size = "0.5 [s]"
+# Other controls
+
+# Set time step size
+syc.setup.solution_control.time_step_size = "0.5 [s]"
+
+# Set the simulation end time
+syc.setup.solution_control.end_time = "40.0 [s]"
+
+# Set minimum and maximum iterations per time step
+syc.setup.solution_control.minimum_iterations = 1
+syc.setup.solution_control.maximum_iterations = 5
+
+# Turn on chart output
+syc.setup.output_control.generate_csv_chart_output = True
 
 # %%
-# Change the ``end_time`` setting.
-setup.solution_control.end_time = "40.0 [s]"
+# Solution
+# --------
+syc.solution.solve()
 
 # %%
-# Change the ``minimum_iterations`` and ``maximum_iterations`` settings.
-setup.solution_control.minimum_iterations = 1
-setup.solution_control.maximum_iterations = 5
+# Post-processing
+# ---------------
+# Print the chart displaying sensor temperature over time
+syc.solution.show_plot(
+    interface_name=sensor_interface_name,
+    show_convergence=False,
+)
 
 # %%
-# Set the ``option`` setting.
-setup.output_control.option = "StepInterval"
+# Exit
+# ----
 
-# %%
-# Change the ``output_frequency`` frequency setting.
-setup.output_control.output_frequency = 2
-
-# %%
-# Run solution
-# ------------
-# The System Coupling server's ``stdout`` and ``stderr`` output is not shown
-# in PySystemCoupling by default. To see it, turn output streaming on.
-syc.start_output()
-
-# %%
-# Access the ``solve`` command via the ``solution`` API.
-solution = syc.solution
-solution.solve()
-
-# %%
-# Terminate the system coupling session with ``exit``.
 syc.exit()
