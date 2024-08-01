@@ -211,7 +211,7 @@ def _reset_example(gallery_conf, fname: str, when: str):
     example_name = fname.replace(".py", "")
 
     # Add any examples that need MAPDL to this list
-    using_mapdl_examples = ["oscillating_plate"]
+    using_mapdl_examples = ["oscillating_plate", "parametric_sweep"]
 
     # If the examples needs to run MAPDL in a container, launch it before
     # the example and remove it after. This is because it has been found
