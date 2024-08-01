@@ -90,7 +90,7 @@ fluent_cas_file = examples.download_file(
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
 mapdl = pymapdl.launch_mapdl()
-fluent = pyfluent.launch_fluent(start_transcript=False)
+fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 syc = pysyc.launch(start_output=True)
 
 # %%

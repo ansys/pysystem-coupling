@@ -83,7 +83,7 @@ fluent_cas_file = examples.download_file(
 # these products via APIs exposed into the current Python environment.
 # Note that instance(s) of Mechanical APDL will be launched
 # later in the script.
-fluent = pyfluent.launch_fluent(start_transcript=False)
+fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 syc = pysyc.launch(start_output=False)
 
 # %%
@@ -161,8 +161,10 @@ def solve_coupled_analysis(syc, fluent, mapdl):
     syc.setup.add_fsi_data_transfers(interface=fsi_name, use_force_density=True)
     syc.setup.solution_control.maximum_iterations = 10
     print("Solving the coupled analysis. This may take a while....")
+    start_time = time.time()
     syc.solution.solve()
-    print("...finished solving coupled analysis.")
+    solve_time = time.time() - start_time
+    print(f"...finished solving coupled analysis in {solve_time} [s].")
 
 
 def extract_max_displacement(mapdl):
