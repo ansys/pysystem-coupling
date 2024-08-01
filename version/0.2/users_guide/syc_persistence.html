@@ -1,0 +1,628 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Analysis persistence &#8212; PySystemCoupling</title>
+    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=e353d410970836974a52" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=e353d410970836974a52" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=e353d410970836974a52" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=e353d410970836974a52" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52" />
+
+    
+        <link href="../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/js/table.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'users_guide/syc_persistence';</script>
+    <link rel="icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Solving an analysis" href="syc_solution.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <link rel="canonical" href="https://systemcoupling.docs.pyansys.com/version/stable/users_guide/syc_persistence.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container"><!-- Debugging: html_theme_options =  -->
+
+  <!-- If there is no MiliSearch enabled, use the PyData search -->
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+</div>
+  </div>
+  
+    
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  <div class="navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pyansys-logo-black-cropped.png" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="../_static/pyansys-logo-black-cropped.png" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/index.html">
+                        Getting started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples/index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../contributing.html">
+                        Contribute
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+  </button>
+`);
+</script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+
+    
+
+    
+    <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://docs.pyansys.com/">PyAnsys</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../index.html">PySystemCoupling</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User guide</a> » </li>
+        <li class="nav-item nav-item-this"><a href="">Analysis persistence</a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started/index.html">
+                        Getting started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../examples/index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../contributing.html">
+                        Contribute
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="system_coupling_concepts.html">System Coupling concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syc_datamodel.html">System Coupling data model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="analysis_setup.html">Analysis setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syc_solution.html">Solving an analysis</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Analysis persistence</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="analysis-persistence">
+<span id="ref-syc-persistence"></span><h1>Analysis persistence<a class="headerlink" href="#analysis-persistence" title="Permalink to this heading">#</a></h1>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">case</span></code> attribute of <code class="docutils literal notranslate"><span class="pre">Session</span></code> to access commands relating to the persistence and overall state of an analysis case:</p>
+<ul class="simple">
+<li><p>Saving and opening a case</p></li>
+<li><p>Saving a case snapshot</p></li>
+<li><p>Clearing/resetting the entire state</p></li>
+</ul>
+<p>In the code snippets that follow, the <code class="docutils literal notranslate"><span class="pre">case</span></code> variable is assumed to have been assigned as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">case</span> <span class="o">=</span> <span class="n">syc_session</span><span class="o">.</span><span class="n">case</span>
+</pre></div>
+</div>
+<section id="saving-and-opening-a-case">
+<h2>Saving and opening a case<a class="headerlink" href="#saving-and-opening-a-case" title="Permalink to this heading">#</a></h2>
+<p>Files defining the state of an analysis case are always saved and loaded from a <code class="docutils literal notranslate"><span class="pre">SyC/</span></code> subdirectory which exists, by default, in the working directory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open a case from sub-directory SyC of current working directory:</span>
+<span class="k">case</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Opening a case restores the analysis settings at the time of saving, and
+loads results data if it exists.</p>
+<p>Similarly for saving the current state of a case:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save a case to sub-directory SyC of current working directory:</span>
+<span class="k">case</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>When saving a case, the <cite>SyC</cite> directory is created if it does not already exist.
+Settings data is saved in a file called <cite>settings.h5</cite>.</p>
+<p>If the case has been successfully solved, <cite>restart</cite> files exist (these are files with names of the form
+<em>Restart_step&lt;n&gt;</em> or <em>Restart_iter&lt;n&gt;</em>), depending on whether the analysis
+is a transient or steady cases. The restart files allow the
+results to be loaded at any point partway through the analysis for which a restart
+file exists. For example, if results were saved at the end of step 2, then the <code class="docutils literal notranslate"><span class="pre">coupling_step</span></code>
+option may be provided to <code class="docutils literal notranslate"><span class="pre">open</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open at step 2</span>
+<span class="k">case</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">coupling_step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The frequency with which restart files are written during a solution is controlled by
+the setting <code class="docutils literal notranslate"><span class="pre">setup.output_control.option</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Opening a case at a restart point that is not the final step/iteration causes
+<em>later</em> restart files to be deleted. Typically, the reason for opening at an
+earlier point is to re-run the analysis from that point. If it is important to
+save all of the results, the <a class="reference internal" href="#ref-snapshots"><span class="std std-ref">Case snapshots</span></a> facility may be used.</p>
+</div>
+<p>The results data itself is stored in the <cite>Results</cite> subdirectory of <cite>SyC</cite>.</p>
+</section>
+<section id="case-snapshots">
+<span id="ref-snapshots"></span><h2>Case snapshots<a class="headerlink" href="#case-snapshots" title="Permalink to this heading">#</a></h2>
+<p>Snapshot capabilities allow you to capture the current state of a coupled
+analysis as a whole and then later restore the analysis to that state.</p>
+<p>Snapshots give you the ability to save and return to a specific point in a coupled analysis.</p>
+<p>A snapshot captures the current state of the coupled analysis as a whole (rather than just of the data model).
+It includes all the files and directories contained in System Coupling’s working directory that are necessary
+to restore the coupled analysis to its current state — specifically, the <cite>SyC</cite> subdirectory and the coupling
+working directories of all loaded coupling participants.</p>
+<p>The snapshot facility relies on the <cite>SyC</cite> directory and the participants’ working directories being
+subdirectories of the System Coupling working directory.</p>
+<p>Snapshots are saved in a subdirectory <cite>SyCSnapshots</cite> that exists in the working directory alongside
+the <cite>SyC</cite> directory. Each snapshot is saved as a <cite>zip</cite> file. A snapshot named <cite>Initial.zip</cite> is
+created automatically when a solve is started (if it does not already exist); otherwise,
+snapshots are managed on demand using the API commands as discussed below.</p>
+<p>The basic operations supported are:</p>
+<ul class="simple">
+<li><p>Saving a snapshot</p></li>
+<li><p>Loading a snapshot</p></li>
+<li><p>Deleting a snapshot</p></li>
+<li><p>Querying available snapshots</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># solve the current case</span>
+<span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="o">...</span>
+
+<span class="c1"># Save the solution as a snapshot</span>
+<span class="k">case</span><span class="o">.</span><span class="n">save_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Solution1&#39;</span><span class="p">)</span>
+
+<span class="c1"># Restore the the Initial snapshot from before solve</span>
+<span class="k">case</span><span class="o">.</span><span class="n">open_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Initial&#39;</span><span class="p">)</span>
+<span class="c1"># Make some changes and solve again</span>
+<span class="o">...</span>
+<span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="c1"># Save this solution to a snapshot</span>
+<span class="k">case</span><span class="o">.</span><span class="n">save_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Solution2&#39;</span><span class="p">)</span>
+
+<span class="c1"># Query snapshots..</span>
+<span class="k">case</span><span class="o">.</span><span class="n">get_snapshots</span><span class="p">()</span>
+<span class="c1"># Returns a dict, snapshot name=&gt;file name</span>
+<span class="c1">#</span>
+<span class="c1"># { &#39;Initial&#39;: &#39;Initial.zip&#39;,</span>
+<span class="c1">#   &#39;Solution1&#39;: &#39;Solution1.zip&#39;,</span>
+<span class="c1">#   &#39;Solution2&#39;: &#39;Solution2.zip&#39; }</span>
+<span class="c1">#</span>
+
+<span class="c1"># Delete Solution1</span>
+<span class="k">case</span><span class="o">.</span><span class="n">delete_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Solution1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="clearing-the-current-state">
+<h2>Clearing the current state<a class="headerlink" href="#clearing-the-current-state" title="Permalink to this heading">#</a></h2>
+<p>Occasionally, it might be useful to be able to clear the entire state of the settings and
+results that are loaded in the current System Coupling session.</p>
+<p>To do this, call the <code class="docutils literal notranslate"><span class="pre">clear_state</span></code> command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="o">.</span><span class="n">clear_state</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Another option for achieving the same result is to exit the current session and create a new one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">syc_session</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="n">syc_session</span> <span class="o">=</span> <span class="n">pysystemcoupling</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-and-opening-a-case">Saving and opening a case</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-snapshots">Case snapshots</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#clearing-the-current-state">Clearing the current state</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/users_guide/syc_persistence.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=e353d410970836974a52"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=e353d410970836974a52"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright (c) 2023 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.0.1.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+    Built with the <a href="https://sphinxdocs.ansys.com/version/stable/index.html">Ansys Sphinx Theme</a> 0.9.9.
+    <br>Last updated on <span id="date"></span></br>
+</p>
+<script>
+  var options = { day: 'numeric', month: 'long', year: 'numeric' };
+  var lastModifiedDate = new Date(document.lastModified);
+  var date = lastModifiedDate.toLocaleDateString('en-US', options);
+  document.getElementById("date").innerHTML = date;
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
