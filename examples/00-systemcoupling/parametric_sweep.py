@@ -84,7 +84,7 @@ fluent_cas_file = examples.download_file(
 # Note that instance(s) of Mechanical APDL will be launched
 # later in the script.
 fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
-syc = pysyc.launch(start_output=False)
+syc = pysyc.launch(start_output=True)
 
 # %%
 # Define functions
