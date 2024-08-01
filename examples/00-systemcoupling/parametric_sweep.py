@@ -83,8 +83,7 @@ fluent_cas_file = examples.download_file(
 # these products via APIs exposed into the current Python environment.
 # Note that instance(s) of Mechanical APDL will be launched
 # later in the script.
-fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
-syc = pysyc.launch(start_output=True)
+
 
 # %%
 # Define functions
@@ -159,7 +158,7 @@ def solve_coupled_analysis(syc, fluent, mapdl):
         side_two_regions=["FSIN_1"],
     )
     syc.setup.add_fsi_data_transfers(interface=fsi_name, use_force_density=True)
-    syc.setup.solution_control.maximum_iterations = 10
+    syc.setup.solution_control.maximum_iterations = 6
     print("Solving the coupled analysis. This may take a while....")
     start_time = time.time()
     syc.solution.solve()
@@ -219,9 +218,13 @@ x = np.array([2e6, 3e6, 4e6, 5e6, 6e6])
 y = np.array([0.0] * len(x))
 
 for index, youngs_modulus in enumerate(x):
+    fluent = pyfluent.launch_fluent(start_transcript=True, processor_count=4)
     mapdl = pymapdl.launch_mapdl()
+    syc = pysyc.launch(start_output=False)
     y[index] = get_max_displacement(fluent, mapdl, syc, youngs_modulus)
+    fluent.exit()
     mapdl.exit()
+    syc.exit()
     print("Waiting for 1 second until next design point...")
     time.sleep(1)
 
@@ -230,5 +233,5 @@ plot(x, y)
 # %%
 # Exit
 # ----
-syc.exit()
-fluent.exit()
+##syc.exit()
+##fluent.exit()
