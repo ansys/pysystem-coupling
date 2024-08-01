@@ -188,7 +188,7 @@ interface_name = syc.setup.add_interface(
 # System Coupling will automatically convert force density
 # values on the source (defined in [N/m^3]) to force
 # values on the target (defined in [N]).
-transfer_name = syc.setup.add_data_transfer(
+syc.setup.add_data_transfer(
     interface=interface_name,
     target_side="Two",
     target_variable="lorentz-force",
