@@ -72,27 +72,26 @@ Two data transfers :
 # Tags: FMU, transient
 
 # %%
-# Set up example
-# --------------
-# Setting up this example consists of performing imports, downloading
-# input files, and launching System Coupling.
+# Import modules, download files, launch products
+# -----------------------------------------------
+# Setting up this example consists of importing required modueles,
+# downloading the input files, and launching the required products.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
-# Import the ``ansys-systemcoupling-core`` package and other required packages.
+# Import ``ansys-systemcoupling-core``.
 
-# sphinx_gallery_thumbnail_path = '_static/heating_tank_fmu.png'
+# sphinx_gallery_thumbnail_path = '_static/fmu_fmu.png'
 
 import ansys.systemcoupling.core as pysystemcoupling
 from ansys.systemcoupling.core import examples
 
 # %%
 #
-# Download input files
-# ~~~~~~~~~~~~~~~~~~~~
-# Clear the downloads target directory (which is to be used as the
-# working directory). Download the FMU files, which define the
-# participant-specific setup information.
+# Download the input files
+# ~~~~~~~~~~~~~~~~~~~~~~~~
+# This example requires the two FMU files to be downloaded.
+#
 
 examples.delete_downloads()
 fmu_file_heater = examples.download_file(
@@ -109,118 +108,99 @@ fmu_file_tank = examples.download_file(
 # Launch a remote System Coupling instance and return a *client* object
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
-syc = pysystemcoupling.launch()
+syc = pysystemcoupling.launch(start_output=True)
 
 # %%
-# Create analysis
-# ---------------
-# Creating the analysis consists of accessing the ``setup`` API,
-# loading participants, creating and verifying both interfaces and
-# data transfers, querying for setup errors, and modifying settings.
+# Set up the coupled analysis
+# ---------------------------
+# System Coupling setup involves adding the two FMU participants,
+# adding coupled interfaces and data transfers,
+# and setting other coupled analysis properties.
 #
-# Access the ``setup`` API
-# ~~~~~~~~~~~~~~~~~~~~~~~~
-setup = syc.setup
+
+# %%
+# Add participants by passing session handles to System Coupling.
+heater_part_name = syc.setup.add_participant(input_file=fmu_file_heater)
+tank_part_name = syc.setup.add_participant(input_file=fmu_file_tank)
 
 
 # %%
-# Add participants
-# ~~~~~~~~~~~~~~~~~
-# Use ``add_participant`` to create ``coupling_participant`` objects
-# representing the FMU participants, based on the previously defined
-# setup information.
-heater_part_name = setup.add_participant(input_file=fmu_file_heater)
-tank_part_name = setup.add_participant(input_file=fmu_file_tank)
+# Set FMU settings
+# ~~~~~~~~~~~~~~~~
 
-
-# %%
-# FMU settings
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Change FMU parameters by accessing ``fmu_parameter``
+# Access the heater participant object
+heater_participant = syc.setup.coupling_participant[heater_part_name]
 
 # Change the "maximum heat output" settings
-setup.coupling_participant[heater_part_name].fmu_parameter["Real_2"].real_value = 10.0
+max_heat_output_param = heater_participant.fmu_parameter["Real_2"]
+max_heat_output_param.real_value = 10.0
+max_heat_output_param.display_name = "Maximum_Heat_Output"
 
-# %%
 # Change the "target temperature" settings
-setup.coupling_participant[heater_part_name].fmu_parameter["Real_3"].real_value = 350.0
+target_temperature_param = heater_participant.fmu_parameter["Real_3"]
+target_temperature_param.real_value = 350
+target_temperature_param.display_name = "Target_Temperature"
 
-# %%
 # Change the "heat scale factor" settings
-setup.coupling_participant[heater_part_name].fmu_parameter["Real_4"].real_value = 2.0
+heat_scale_factor_param = heater_participant.fmu_parameter["Real_4"]
+heat_scale_factor_param.real_value = 2.0
+heat_scale_factor_param.display_name = "Heat_Scale_Factor"
 
 # %%
-# Create interfaces and data transfers
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Create interfaces and data transfers by specifying participant variables
-# to map to one another. This consists of calling the appropriate commands
-# to create an interface and both temperature and heat flow data transfers.
+# Add a coupling interface and data transfers
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Create a coupling interface for tank <-> heater (sensor, heat source)
-interface = setup.add_interface(
+# Add a coupling interface for tank <-> heater (sensor, heat source)
+fmu_interface_name = syc.setup.add_interface(
     side_one_participant=tank_part_name, side_two_participant=heater_part_name
 )
 
-# Create data transfer for "temperature"
-temperatureDataTransfer = setup.add_data_transfer(
-    interface=interface,
+# Add the temperature data transfer
+temperature_transfer_name = syc.setup.add_data_transfer(
+    interface=fmu_interface_name,
     target_side="Two",
     source_variable="Real_0",
     target_variable="Real_0",
 )
 
-# Create data transfer for "heatflow"
-heatFlowDataTransfer = setup.add_data_transfer(
-    interface=interface,
+# Add the heat flow data transfer
+heatflow_transfer_name = syc.setup.add_data_transfer(
+    interface=fmu_interface_name,
     target_side="One",
     source_variable="Real_1",
     target_variable="Real_1",
 )
 
 # %%
-# Change the ``time_step_size`` setting.
-setup.solution_control.time_step_size = "1 [s]"
+# Other controls
 
-# %%
-# Change the ``end_time`` setting.
-setup.solution_control.end_time = "50 [s]"
+# Set time step size
+syc.setup.solution_control.time_step_size = "1 [s]"
 
-# %%
-# Change the ``minimum_iterations`` and ``maximum_iterations`` settings.
-setup.solution_control.minimum_iterations = 1
-setup.solution_control.maximum_iterations = 5
+# Set the simulation end time
+syc.setup.solution_control.end_time = "50 [s]"
 
-# %%
-# Set the ``option`` setting.
-setup.output_control.option = "StepInterval"
+# Set minimum and maximum iterations per time step
+syc.setup.solution_control.minimum_iterations = 1
+syc.setup.solution_control.maximum_iterations = 5
 
-# %%
-# Change the ``output_frequency`` frequency setting.
-setup.output_control.output_frequency = 2
-
-# %%
-# Change the ``generate_csv_chart_output`` setting to record the temperature
-# and heat rate values over time in a ``.csv`` file. This step is necessary
+# Turn on chart output. This step is necessary
 # to chart the data after solving.
-setup.output_control.generate_csv_chart_output = True
+syc.setup.output_control.generate_csv_chart_output = True
 
 # %%
-# Run solution
-# ------------
-# The System Coupling server's ``stdout`` and ``stderr`` output is not shown
-# in PySystemCoupling by default. To see it, turn output streaming on.
-syc.start_output()
+# Solution
+# --------
+syc.solution.solve()
 
 # %%
-# Access the ``solve`` command via the ``solution`` API.
-solution = syc.solution
-solution.solve()
-
-# %%
+# Post-processing
+# ---------------
 # Plot graphs of temperature and heat rate over time using System Coupling's
 # charting command.
-syc.solution.show_plot(interface_name=interface, show_convergence=False)
+syc.solution.show_plot(interface_name=fmu_interface_name, show_convergence=False)
 
 # %%
-# Terminate the system coupling session with ``exit``.
+# Exit
+# ----
 syc.exit()

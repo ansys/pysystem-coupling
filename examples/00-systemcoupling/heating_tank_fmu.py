@@ -170,7 +170,7 @@ sensor_interface_name = syc.setup.add_interface(
     side_two_participant=fmu_name,
 )
 
-# Add temperature data transfer
+# Add the temperature data transfer
 temperature_transfer_name = syc.setup.add_data_transfer(
     interface=sensor_interface_name,
     target_side="Two",
@@ -185,8 +185,8 @@ heat_source_interface_name = syc.setup.add_interface(
     side_two_regions=["heat_source"],
 )
 
-# Create heat flow data transfer
-heatFlowDataTransfer = syc.setup.add_data_transfer(
+# Add the heat flow data transfer
+heatflow_transfer_name = syc.setup.add_data_transfer(
     interface=heat_source_interface_name,
     target_side="Two",
     source_variable="Real_1",
