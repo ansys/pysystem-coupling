@@ -20,15 +20,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""".. _ref_oscillating_plate_example:
+""".. _ref_turek_hron_fsi2_example:
 
-Oscillating plate
------------------
+Turek-Hron example
+------------------
 
-This example is a version of the *Oscillating Plate* case that is
-often used as a tutorial for System Coupling. This two-way, fluid-structure
+This example is a version of the *Turek-Hron FSI2* case that is
+often used as a benchmark case for System Coupling. This two-way, fluid-structure
 interaction (FSI) case is based on co-simulation of a transient oscillating
-plate with surface data transfers.
+beam with surface data transfers.
 
 - Ansys Mechanical APDL (MAPDL) is used to perform a transient structural analysis.
 - Ansys Fluent is used to perform a transient fluid-flow analysis.
@@ -37,20 +37,20 @@ plate with surface data transfers.
 
 **Problem description**
 
-An oscillating plate resides within a fluid-filled cavity. A thin plate is
-anchored to the bottom of a closed cavity filled with fluid (air):
+An elastic beam strucutre is attached to a rigid rigid cylinder. The system
+resides within a fluid filled channel:
 
-.. image:: /_static/img_oscplate_case.png
+.. image:: /_static/turek_hron_case.png
    :width: 400pt
    :align: center
 
-There is no friction between the plate and the side of the cavity. An
-initial constant force in x-direction is applied to one side of the thin plate
-for the first 0.5 seconds to distort it. Once this pressure is released, the plate
-oscillates back and forth to regain its equilibrium, and the
-surrounding air damps this oscillation. The plate and surrounding
-air are simulated for a few oscillations to allow an examination of the
-motion of the plate as it is damped.
+The flow is laminar with a Reynolds number of $Re = 100$. The inlet velocity
+has a parabolic profile with a maximum value of $1.5\bar{U}$, where $\bar{U}$
+is the average inlet velocity. The cylinder sits at an offset of $0.05~m$ to the
+incoming flow, causing an imbalance of surface forces on the elastic beam. 
+The beam and the surrounding fluid are simulated for a few time setps to 
+allow an examination of the motion of the beam as it starts vibrating due to
+vortices shedded by the rigid cylinder. 
 
 """
 # %%
@@ -64,8 +64,9 @@ motion of the plate as it is damped.
 # Import ``ansys-systemcoupling-core``, ``ansys-fluent-core`` and
 # ``ansys-mapdl-core`` and other required packages.
 
-# sphinx_gallery_thumbnail_path = '_static/oscplate_displacement.png'
+# sphinx_gallery_thumbnail_path = '_static/turek_hron_velocity.jpeg'
 
+import matplotlib.pyplot as plt
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
 
@@ -76,11 +77,11 @@ from ansys.systemcoupling.core import examples
 #
 # Download the input file
 # ~~~~~~~~~~~~~~~~~~~~~~~
-# This example uses one pre-created file - a Fluent input file that contains
-# the fluids setup.
+# This example uses one pre-created file - a Fluent mesh file that contains
+# the fluids mesh and named zones.
 #
-fluent_cas_file = examples.download_file(
-    "oscillating_plate.cas.h5", "pysystem-coupling/oscillating_plate"
+fluent_msh_file = examples.download_file(
+    "turek_hron_fluid.msh", "pysystem-coupling/oscillating_plate"
 )
 
 # %%
@@ -89,9 +90,16 @@ fluent_cas_file = examples.download_file(
 # Launch instances of the Mechanical APDL, Fluent, and System Coupling
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
-mapdl = pymapdl.launch_mapdl()
-fluent = pyfluent.launch_fluent(start_transcript=False)
-syc = pysyc.launch(start_output=True)
+mapdl = pymapdl.launch_mapdl(
+    nproc=1
+)
+fluent = pyfluent.launch_fluent(
+    start_transcript=False,
+    processor_count=4
+)
+syc = pysyc.launch(
+    start_output=True
+)
 
 # %%
 # Setup
@@ -109,10 +117,10 @@ mapdl.prep7()
 
 # %%
 # Define material properties.
-mapdl.mp("DENS", 1, 2550)  # density
-mapdl.mp("ALPX", 1, 1.2e-05)  # thermal expansion coefficient
-mapdl.mp("EX", 1, 2500000)  # Young's modulus
-mapdl.mp("NUXY", 1, 0.35)  # Poisson's ratio
+mapdl.mp("DENS", 1, 10000)  # density
+mapdl.mp("EX", 1, 1400000)  # Young's modulus
+mapdl.mp("NUXY", 1, 0.4)  # Poisson's ratio
+mapdl.mp("GXY", 1, 500000) # Shear modulus
 
 # %%
 # Set element types to SOLID186.
@@ -121,44 +129,128 @@ mapdl.keyopt(1, 2, 1)
 
 # %%
 # Make geometry.
-mapdl.block(10.00, 10.06, 0.0, 1.0, 0.0, 0.4)
+mapdl.block(0.25, 0.6, 0.19, 0.21, 0.0, 0.01)
+mapdl.lsel("s", "length", vmin=0.35)
+mapdl.lesize("all", ndiv=60)
+mapdl.lsel("s", "tan1", "y", 1)
+mapdl.lsel("a", "tan2", "y", 1)
+mapdl.lesize("all", ndiv=5)
+mapdl.lsel("s", "tan1", "z", 1)
+mapdl.lsel("a", "tan2", "z", 1)
+mapdl.lesize("all", ndiv=1)
 mapdl.vsweep(1)
 
 # %%
-# Add fixed support at y=0.
-mapdl.run("NSEL,S,LOC,Y,0")
+# Add fixed support at x=0.25
+mapdl.nsel("s", "loc", "x", 0.25)
 mapdl.d("all", "all")
 
 # %%
 # Add the FSI interface.
-mapdl.nsel("S", "LOC", "X", 9.99, 10.01)
-mapdl.nsel("A", "LOC", "Y", 0.99, 1.01)
-mapdl.nsel("A", "LOC", "X", 10.05, 10.07)
-mapdl.cm("FSIN_1", "NODE")
+mapdl.nsel("s", "loc", "x",  0.60)
+mapdl.nsel("a", "loc", "y",  0.19)
+mapdl.nsel("a", "loc", "y",  0.21)
+mapdl.cm("FSIN_1", "node")
 mapdl.sf("FSIN_1", "FSIN", 1)
 
 # %%
 # Set up the rest of the transient analysis
 mapdl.allsel()
-mapdl.run("/SOLU")
+mapdl.slashsolu()
 mapdl.antype(4)  # transient analysis
-mapdl.nlgeom("ON")  # large deformations
+mapdl.nlgeom("on")  # large deformations
 mapdl.kbc(1)
-mapdl.trnopt("full", "", "", "", "", "hht")
-mapdl.tintp(0.1)
-mapdl.autots("off")
-mapdl.run("nsub,1,1,1")
-mapdl.run("time,10.0")
+mapdl.eqslv("sparse")
+mapdl.trnopt(tintopt="hht")
+mapdl.tintp("mosp")
+mapdl.autots("on")
+mapdl.nsubst(1, 1, 1, "off")
+mapdl.time(20.)
 mapdl.timint("on")
+mapdl.outres("all", "all")
 
 # %%
 # Set up the fluid analysis
 # ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
-# Read the pre-created case file
-fluent.file.read(file_type="case", file_name=fluent_cas_file)
+# Read the pre-created mesh file
+fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
 
+# %%
+# Define the fluid material
+fluent.setup.models.viscous.model = "laminar"
+fluent.setup.materials.fluid["fsi2"] = {
+    "density": {
+        "option": "constant",
+        "value": 1000,
+    },
+    "viscosity": {
+        "option": "constant",
+        "value": 1.0
+    },
+}
+fluent.setup.cell_zone_conditions.fluid["*fluid*"].general.material = "fsi2"
+
+# %%
+# Create the parabolic inlet profile as a named expression
+fluent.setup.named_expressions["u_bar"] = { # average velocity
+    "definition": "1.0 [m/s]"
+}
+fluent.setup.named_expressions["t_bar"] = {
+    "definition": "1.0 [s]"
+}
+fluent.setup.named_expressions["y_bar"] = {
+    "definition": "1.0 [m]"
+}
+fluent.setup.named_expressions["u_y"] = {
+    "definition": "(6.0 * u_bar / 0.1681 * ( y/y_bar ) * ( 0.41 - y/y_bar )"
+}
+
+# %%
+# Update the inlet field
+inlet_fluid = fluent.setup.boundary_conditions.velocity_inlet["inlet"]
+inlet_fluid.momentum.initial_gauge_pressure.value = 0
+inlet_fluid.momentum.velocity.value = "u_y"
+
+# %%
+# First, a steady simulation is conducted to initilize the
+# flow field with the parabolic inlet flow.
+fluent.solution.initialization.hybrid_initialize()
+fluent.solution.run_calculation.iterate(iter_count=200)
+
+# %%
+# Switch to transient mode and prepare for coupling
+fluent.setup.general.solver.time = "unsteady-1st-order"
+
+# %%
+# Define dynamic meshing for deforming symmetry planes. 
+# Currently, dynamic_mesh is not exposed to the fluent root 
+# session directly. We need to use the `tui` framework to create 
+# dynamic zones.
+fluent.tui.define.dynamic_mesh.dynamic_mesh()
+fluent.tui.define.dynamic_mesh.zones.create('fsi', 'system-coupling')
+fluent.tui.define.dynamic_mesh.zones.create(
+    'symmetry_bot', 
+    'deforming', 
+    'plane', 
+    '0.', '0.', '0.', # point
+    '0', '0', '1' # normal
+)
+fluent.tui.define.dynamic_mesh.zones.create(
+    'symmetry_top', 
+    'deforming', 
+    'plane', 
+    '0.', '0.', '0.01', # point
+    '0', '0', '1' # normal
+)
+
+# %%
+# Define number of sub-steps fluent iterates for each coupling step. 
+# Maximum intergration time and total steps are controlled by 
+# system coupling.
+transient_controls = fluent.solution.run_calculation.transient_controls
+transient_controls.max_iter_per_time_step = 20
 
 # %%
 # Set up the coupled analysis
@@ -179,7 +271,7 @@ syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
 # Add a coupling interface and data transfers.
 interface_name = syc.setup.add_interface(
     side_one_participant=fluid_name,
-    side_one_regions=["wall_deforming"],
+    side_one_regions=["fsi"],
     side_two_participant=solid_name,
     side_two_regions=["FSIN_1"],
 )
@@ -187,17 +279,25 @@ interface_name = syc.setup.add_interface(
 # set up 2-way FSI coupling - add force & displacement data transfers
 dt_names = syc.setup.add_fsi_data_transfers(interface=interface_name)
 
-# modify force transfer to apply constant initial loading for the first 0.5 [s]
+# modify force transfer to specify the under relaxation factor
 force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
-force_transfer.option = "UsingExpression"
-force_transfer.value = "vector(5.0 [N], 0.0 [N], 0.0 [N]) if Time < 0.5 [s] else force"
+force_transfer.relaxation_factor = 0.5 # required for stablizing the flow.
+
+# %%
+# Purely due to the scale of the mesh on the fluid side, 
+# it is generally better to run fluent on multiple cores and 
+# mapdl on a single core.
+
+syc.setup.coupling_participant[solid_name].execution_control.parallel_fraction = 1.0
+syc.setup.coupling_participant[fluid_name].execution_control.parallel_fraction = 4.0
 
 # %%
 # Time step size, end time, output controls
-syc.setup.solution_control.time_step_size = "0.1 [s]"  # time step is 0.1 [s]
-syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
+syc.setup.solution_control.time_step_size = "0.01 [s]"  # time step is 0.01 [s]
+syc.setup.solution_control.end_time = 5  # end time is 5.0 [s]
 
-syc.setup.output_control.option = "EveryStep"
+syc.setup.output_control.option = "StepInterval"
+syc.setup.output_control.output_frequency = 50
 syc.setup.output_control.generate_csv_chart_output = True
 
 # %%
@@ -212,11 +312,34 @@ syc.solution.solve()
 
 # %%
 # Post-process the structural results
+# %%
+# Post-process the structural results
 mapdl.finish()
 mapdl.post1()
-node_ids, node_coords = mapdl.result.nodal_displacement(0)
-max_dx = max([value[0] for value in node_coords])
-print(f"There are {len(node_ids)} nodes. Maximum x-displacement is {max_dx}")
+mapdl.nsel("s", "loc", "x", 0.60)
+mapdl.nsel("r", "loc", "y", 0.20)
+tip_node = mapdl.nsel("r", "loc", "z", 0.00)[0]
+tip_y_0  = mapdl.get_value("node", tip_node, "loc", "y")
+tip_y    = []
+nsets = mapdl.post_processing.nsets
+for i in range(1, nsets + 1):
+    mapdl.set(i, 1)
+    u_y = mapdl.get_value("node", tip_node, "u", "y")
+    tip_y.append(
+        tip_y_0 + u_y
+    )
+
+time_values = mapdl.post_processing.time_values
+plt.plot(time_values, tip_y)
+plt.xlabel("t (s)")
+plt.ylabel(r"$x_{tip}$ (m)")
+plt.savefig("fsi2_tip_disp.png")
+
+###############################################################################
+# .. image:: /_static/fsi2_tip_disp.png
+#   :width: 500pt
+#   :align: center
+
 
 # %%
 # Post-process the fluids results
@@ -235,15 +358,15 @@ contour.coloring.option = "banded"
 contour.field = "pressure"
 contour.filled = True
 
-contour.surfaces_list = ["symmetry1", "wall_deforming"]
+contour.surfaces_list = ["symmetry_bot"]
 contour.display()
 
 fluent.results.graphics.views.restore_view(view_name="front")
 fluent.results.graphics.views.auto_scale()
-fluent.results.graphics.picture.save_picture(file_name="oscplate_pressure_contour.png")
+fluent.results.graphics.picture.save_picture(file_name="fsi2_pressure_contour.png")
 
 ###############################################################################
-# .. image:: /_static/oscplate_pressure_contour.png
+# .. image:: /_static/fsi2_pressure_contour.png
 #   :width: 500pt
 #   :align: center
 
@@ -251,7 +374,7 @@ fluent.results.graphics.picture.save_picture(file_name="oscplate_pressure_contou
 # %%
 # Post-process the System Coupling results - display the charts
 # showing displacement and force values during the simulation
-syc.solution.show_plot(show_convergence=False)
+# syc.solution.show_plot(show_convergence=False)
 
 
 # %%
