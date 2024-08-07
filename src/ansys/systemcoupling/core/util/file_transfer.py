@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import os
+import shutil
 from typing import Any, Optional, Protocol
 
 
@@ -89,9 +90,15 @@ class PimFileTransferService:  # pragma: no cover
         if os.path.isfile(file_name):
             remote_file_name = remote_file_name or os.path.basename(file_name)
             if os.path.dirname(file_name):
-                raise IsADirectoryError(
-                    f"{remote_file_name} is not in the current working directory"
-                )
+                base_filename = os.path.basename(file_name)
+                dst_dir = os.getcwd()
+                dst_file = os.path.join(dst_dir, base_filename)
+                dst_file_footer = 0
+                while os.path.exists(dst_file):
+                    dst_file_footer += 1
+                    dst_file = f"{dst_file}_{dst_file_footer}"
+                shutil.copy2(file_name, dst_file)
+                file_name = os.path.basename(dst_file)
             if not overwrite and self.file_service.file_exist(remote_file_name):
                 raise FileExistsError(f"{remote_file_name} already exists remotely.")
             self.file_service.upload_file(file_name, remote_file_name)
