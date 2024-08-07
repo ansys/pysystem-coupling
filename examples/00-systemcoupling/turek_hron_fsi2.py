@@ -228,7 +228,7 @@ fluent.setup.general.solver.time = "unsteady-1st-order"
 # Currently, dynamic_mesh is not exposed to the fluent root 
 # session directly. We need to use the `tui` framework to create 
 # dynamic zones.
-fluent.tui.define.dynamic_mesh.dynamic_mesh()
+fluent.tui.define.dynamic_mesh.dynamic_mesh('yes', 'no', 'no', 'no', 'no')
 fluent.tui.define.dynamic_mesh.zones.create('fsi', 'system-coupling')
 fluent.tui.define.dynamic_mesh.zones.create(
     'symmetry_bot', 
