@@ -149,6 +149,8 @@ def _wrap_add_participant(
 
     if input_file := kwargs.get("input_file", None):
         session.upload_file(input_file)
+        if os.path.dirname(input_file):
+            kwargs["input_file"] = os.path.basename(input_file)
 
     return setup._add_participant(**kwargs)
 

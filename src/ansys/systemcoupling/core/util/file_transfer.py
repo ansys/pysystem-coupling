@@ -89,6 +89,7 @@ class PimFileTransferService:  # pragma: no cover
         """
         if os.path.isfile(file_name):
             remote_file_name = remote_file_name or os.path.basename(file_name)
+            delete_copy = False
             if os.path.dirname(file_name):
                 base_filename = os.path.basename(file_name)
                 dst_dir = os.getcwd()
@@ -98,10 +99,13 @@ class PimFileTransferService:  # pragma: no cover
                     dst_file_footer += 1
                     dst_file = f"{dst_file}_{dst_file_footer}"
                 shutil.copy2(file_name, dst_file)
+                delete_copy = True
                 file_name = os.path.basename(dst_file)
             if not overwrite and self.file_service.file_exist(remote_file_name):
                 raise FileExistsError(f"{remote_file_name} already exists remotely.")
             self.file_service.upload_file(file_name, remote_file_name)
+            if delete_copy:
+                os.remove(file_name)
         else:
             raise FileNotFoundError(f"Local file {file_name} does not exist.")
 
