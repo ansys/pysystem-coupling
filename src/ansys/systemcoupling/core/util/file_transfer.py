@@ -97,7 +97,7 @@ class PimFileTransferService:  # pragma: no cover
                 dst_file_footer = 0
                 while os.path.exists(dst_file):
                     dst_file_footer += 1
-                    dst_file = f"{dst_file}_{dst_file_footer}"
+                    dst_file = f"{base_filename}_{dst_file_footer}"
                 shutil.copy2(file_name, dst_file)
                 delete_copy = True
                 file_name = os.path.basename(dst_file)
