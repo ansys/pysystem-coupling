@@ -59,7 +59,7 @@ doc = [
 	"ansys-sphinx-theme==0.16.6",
 	"jupyter_sphinx==0.5.3",
 	"matplotlib",
-	"numpydoc==1.7.0",
+	"numpydoc==1.8.0",
 	"pypandoc==1.13",
 	"pytest-sphinx==0.6.3",
 	"Sphinx==8.0.2",
