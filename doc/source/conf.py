@@ -12,7 +12,6 @@ from ansys_sphinx_theme import (
     ansys_logo_white_cropped,
     get_version_match,
     latex,
-    pyansys_logo_black,
     watermark,
 )
 import sphinx_gallery
@@ -279,8 +278,8 @@ suppress_warnings = ["config.cache"]
 # -- Options for HTML output -------------------------------------------------
 html_short_title = html_title = "PySystemCoupling"
 html_theme = "ansys_sphinx_theme"
-html_logo = pyansys_logo_black
 html_theme_options = {
+    "logo": "pyansys",
     "github_url": "https://github.com/ansys/pysystem-coupling",
     "show_prev_next": False,
     "show_breadcrumbs": True,
