@@ -8,7 +8,7 @@ name = "ansys-systemcoupling-core"
 version = "0.7.dev0"
 description = "A Python wrapper for Ansys System Coupling."
 readme = "README.rst"
-requires-python = ">=3.9,<3.13"
+requires-python = ">=3.10,<3.13"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
@@ -20,7 +20,7 @@ dependencies = [
     "ansys-api-systemcoupling==0.2.0",
     "ansys-platform-instancemanagement~=1.0",
     "grpcio>=1.30.0",
-    "grpcio-status>=1.30.0,<1.65.2",
+    "grpcio-status>=1.30.0,<1.65.6",
     "googleapis-common-protos>=1.50.0",
     "psutil>=5.7.0",
     "pyyaml",
@@ -36,7 +36,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
     "Operating System :: MacOS",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -53,34 +52,34 @@ classesgen = [
 	# black and isort are called programmatically to keep generated code
 	# consistent with style elsewhere. We need to keep these versions in
 	# sync with the precommit dependencies.
-	"black==24.4.2",
+	"black==24.8.0",
 	"isort==5.13.2",
 ]
 doc = [
-	"ansys-sphinx-theme==0.16.6",
+	"ansys-sphinx-theme==1.0.5",
 	"jupyter_sphinx==0.5.3",
 	"matplotlib",
-	"numpydoc==1.7.0",
+	"numpydoc==1.8.0",
 	"pypandoc==1.13",
 	"pytest-sphinx==0.6.3",
-	"Sphinx==7.4.7",
+	"Sphinx==8.0.2",
 	"sphinx-autobuild==2024.4.16",
 	"sphinx-autodoc-typehints==2.2.3",
 	"sphinx-copybutton==0.5.2",
-	"sphinx-gallery==0.17.0",
-	"sphinx-notfound-page==1.0.2",
-	"sphinxcontrib-websupport==1.2.7",
+	"sphinx-gallery==0.17.1",
+	"sphinx-notfound-page==1.0.4",
+	"sphinxcontrib-websupport==2.0.0",
 	"sphinxemoji==0.3.1",
 
 	# pyansys dependencies for sphinx gallery examples
-	"ansys-fluent-core==0.21.0",
-	"ansys-dpf-core==0.12.2",
+	"ansys-fluent-core==0.24.1",
+	"ansys-dpf-core==0.13.0",
 	"ansys-mapdl-core==0.68.4",
 ]
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
 	"codespell==2.3.0",
-	"flake8==7.1.0",
+	"flake8==7.1.1",
 ]
 tests = [
 	"pytest",

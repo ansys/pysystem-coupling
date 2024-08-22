@@ -4,7 +4,7 @@ exclude: ^(doc/source/examples)
 # initially copied from pymapdl
 repos:
 - repo: https://github.com/psf/black
-  rev: 24.4.2  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY -  ALSO: check pyproject.toml
+  rev: 24.8.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY -  ALSO: check pyproject.toml
   hooks:
   - id: black
 
@@ -12,7 +12,7 @@ repos:
   rev: 1.16.0
   hooks:
   -   id: blacken-docs
-      additional_dependencies: [black==24.4.2] # Ensure synced with black version above
+      additional_dependencies: [black==24.8.0] # Ensure synced with black version above
 
 - repo: https://github.com/pycqa/isort
   rev: 5.13.2 # Should be in sync with version in pyproject.toml
@@ -20,7 +20,7 @@ repos:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.1.0 # ensure in sync with pyproject.toml
+  rev: 7.1.1 # ensure in sync with pyproject.toml
   hooks:
   - id: flake8
 
