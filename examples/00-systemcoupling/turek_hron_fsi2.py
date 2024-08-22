@@ -37,7 +37,7 @@ beam with surface data transfers.
 
 **Problem description**
 
-An elastic beam strucutre is attached to a rigid rigid cylinder. The system
+An elastic beam structure is attached to a rigid rigid cylinder. The system
 resides within a fluid filled channel:
 
 .. image:: /_static/turek_hron_case.png
@@ -47,11 +47,10 @@ resides within a fluid filled channel:
 The flow is laminar with a Reynolds number of $Re = 100$. The inlet velocity
 has a parabolic profile with a maximum value of $1.5\bar{U}$, where $\bar{U}$
 is the average inlet velocity. The cylinder sits at an offset of $0.05~m$ to the
-incoming flow, causing an imbalance of surface forces on the elastic beam. 
-The beam and the surrounding fluid are simulated for a few time setps to 
+incoming flow, causing an imbalance of surface forces on the elastic beam.
+The beam and the surrounding fluid are simulated for a few time setps to
 allow an examination of the motion of the beam as it starts vibrating due to
-vortices shedded by the rigid cylinder. 
-
+vortices shedded by the rigid cylinder.
 """
 # %%
 # Import modules, download files, launch products
@@ -66,9 +65,9 @@ vortices shedded by the rigid cylinder.
 
 # sphinx_gallery_thumbnail_path = '_static/turek_hron_velocity.jpeg'
 
-import matplotlib.pyplot as plt
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
+import matplotlib.pyplot as plt
 
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
@@ -90,16 +89,9 @@ fluent_msh_file = examples.download_file(
 # Launch instances of the Mechanical APDL, Fluent, and System Coupling
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
-mapdl = pymapdl.launch_mapdl(
-    nproc=1
-)
-fluent = pyfluent.launch_fluent(
-    start_transcript=False,
-    processor_count=4
-)
-syc = pysyc.launch(
-    start_output=True
-)
+mapdl = pymapdl.launch_mapdl(nproc=1)
+fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
+syc = pysyc.launch(start_output=True)
 
 # %%
 # Setup
@@ -120,7 +112,7 @@ mapdl.prep7()
 mapdl.mp("DENS", 1, 10000)  # density
 mapdl.mp("EX", 1, 1400000)  # Young's modulus
 mapdl.mp("NUXY", 1, 0.4)  # Poisson's ratio
-mapdl.mp("GXY", 1, 500000) # Shear modulus
+mapdl.mp("GXY", 1, 500000)  # Shear modulus
 
 # %%
 # Set element types to SOLID186.
@@ -147,9 +139,9 @@ mapdl.d("all", "all")
 
 # %%
 # Add the FSI interface.
-mapdl.nsel("s", "loc", "x",  0.60)
-mapdl.nsel("a", "loc", "y",  0.19)
-mapdl.nsel("a", "loc", "y",  0.21)
+mapdl.nsel("s", "loc", "x", 0.60)
+mapdl.nsel("a", "loc", "y", 0.19)
+mapdl.nsel("a", "loc", "y", 0.21)
 mapdl.cm("FSIN_1", "node")
 mapdl.sf("FSIN_1", "FSIN", 1)
 
@@ -165,7 +157,7 @@ mapdl.trnopt(tintopt="hht")
 mapdl.tintp("mosp")
 mapdl.autots("on")
 mapdl.nsubst(1, 1, 1, "off")
-mapdl.time(20.)
+mapdl.time(20.0)
 mapdl.timint("on")
 mapdl.outres("all", "all")
 
@@ -181,28 +173,18 @@ fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
 # Define the fluid material
 fluent.setup.models.viscous.model = "laminar"
 fluent.setup.materials.fluid["fsi2"] = {
-    "density": {
-        "option": "constant",
-        "value": 1000,
-    },
-    "viscosity": {
-        "option": "constant",
-        "value": 1.0
-    },
+    "density": {"option": "constant", "value": 1000},
+    "viscosity": {"option": "constant", "value": 1.0},
 }
 fluent.setup.cell_zone_conditions.fluid["*fluid*"].general.material = "fsi2"
 
 # %%
 # Create the parabolic inlet profile as a named expression
-fluent.setup.named_expressions["u_bar"] = { # average velocity
+fluent.setup.named_expressions["u_bar"] = {  # average velocity
     "definition": "1.0 [m/s]"
 }
-fluent.setup.named_expressions["t_bar"] = {
-    "definition": "1.0 [s]"
-}
-fluent.setup.named_expressions["y_bar"] = {
-    "definition": "1.0 [m]"
-}
+fluent.setup.named_expressions["t_bar"] = {"definition": "1.0 [s]"}
+fluent.setup.named_expressions["y_bar"] = {"definition": "1.0 [m]"}
 fluent.setup.named_expressions["u_y"] = {
     "definition": "(6.0 * u_bar / 0.1681 * ( y/y_bar ) * ( 0.41 - y/y_bar )"
 }
@@ -214,7 +196,7 @@ inlet_fluid.momentum.initial_gauge_pressure.value = 0
 inlet_fluid.momentum.velocity.value = "u_y"
 
 # %%
-# First, a steady simulation is conducted to initilize the
+# First, a steady simulation is conducted to initialize the
 # flow field with the parabolic inlet flow.
 fluent.solution.initialization.hybrid_initialize()
 fluent.solution.run_calculation.iterate(iter_count=200)
@@ -224,30 +206,22 @@ fluent.solution.run_calculation.iterate(iter_count=200)
 fluent.setup.general.solver.time = "unsteady-1st-order"
 
 # %%
-# Define dynamic meshing for deforming symmetry planes. 
-# Currently, dynamic_mesh is not exposed to the fluent root 
-# session directly. We need to use the `tui` framework to create 
+# Define dynamic meshing for deforming symmetry planes.
+# Currently, dynamic_mesh is not exposed to the fluent root
+# session directly. We need to use the `tui` framework to create
 # dynamic zones.
-fluent.tui.define.dynamic_mesh.dynamic_mesh('yes', 'no', 'no', 'no', 'no')
-fluent.tui.define.dynamic_mesh.zones.create('fsi', 'system-coupling')
+fluent.tui.define.dynamic_mesh.dynamic_mesh("yes", "no", "no", "no", "no")
+fluent.tui.define.dynamic_mesh.zones.create("fsi", "system-coupling")
 fluent.tui.define.dynamic_mesh.zones.create(
-    'symmetry_bot', 
-    'deforming', 
-    'plane', 
-    '0.', '0.', '0.', # point
-    '0', '0', '1' # normal
+    "symmetry_bot", "deforming", "plane", "0.", "0.", "0.", "0", "0", "1"
 )
 fluent.tui.define.dynamic_mesh.zones.create(
-    'symmetry_top', 
-    'deforming', 
-    'plane', 
-    '0.', '0.', '0.01', # point
-    '0', '0', '1' # normal
+    "symmetry_top", "deforming", "plane", "0.", "0.", "0.01", "0", "0", "1"
 )
 
 # %%
-# Define number of sub-steps fluent iterates for each coupling step. 
-# Maximum intergration time and total steps are controlled by 
+# Define number of sub-steps fluent iterates for each coupling step.
+# Maximum integration time and total steps are controlled by
 # system coupling.
 transient_controls = fluent.solution.run_calculation.transient_controls
 transient_controls.max_iter_per_time_step = 20
@@ -281,11 +255,11 @@ dt_names = syc.setup.add_fsi_data_transfers(interface=interface_name)
 
 # modify force transfer to specify the under relaxation factor
 force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
-force_transfer.relaxation_factor = 0.5 # required for stablizing the flow.
+force_transfer.relaxation_factor = 0.5  # required for stabilizing the flow.
 
 # %%
-# Purely due to the scale of the mesh on the fluid side, 
-# it is generally better to run fluent on multiple cores and 
+# Purely due to the scale of the mesh on the fluid side,
+# it is generally better to run fluent on multiple cores and
 # mapdl on a single core.
 
 syc.setup.coupling_participant[solid_name].execution_control.parallel_fraction = 1.0
@@ -294,6 +268,8 @@ syc.setup.coupling_participant[fluid_name].execution_control.parallel_fraction =
 # %%
 # Time step size, end time, output controls
 syc.setup.solution_control.time_step_size = "0.01 [s]"  # time step is 0.01 [s]
+# To generate the results shown in the documents increase
+# this parameter to 20.0 s.
 syc.setup.solution_control.end_time = 5  # end time is 5.0 [s]
 
 syc.setup.output_control.option = "StepInterval"
@@ -319,15 +295,13 @@ mapdl.post1()
 mapdl.nsel("s", "loc", "x", 0.60)
 mapdl.nsel("r", "loc", "y", 0.20)
 tip_node = mapdl.nsel("r", "loc", "z", 0.00)[0]
-tip_y_0  = mapdl.get_value("node", tip_node, "loc", "y")
-tip_y    = []
+tip_y_0 = mapdl.get_value("node", tip_node, "loc", "y")
+tip_y = []
 nsets = mapdl.post_processing.nsets
 for i in range(1, nsets + 1):
     mapdl.set(i, 1)
     u_y = mapdl.get_value("node", tip_node, "u", "y")
-    tip_y.append(
-        tip_y_0 + u_y
-    )
+    tip_y.append(tip_y_0 + u_y)
 
 time_values = mapdl.post_processing.time_values
 plt.plot(time_values, tip_y)
