@@ -44,17 +44,19 @@ Heating tank with FMU:
    :align: center
 
 The thermostat receives a temperature from the Fluent sensor
-and outputs a heat-rate. The FMU has three parameters that
-can be set:
+and outputs a heat-rate. The FMU uses PID (proprtional-integral-derivative) control
+to determine the heat output and has five parameters that can be set:
 
     - Target temperature [K]
     - Maximum heat output [W]
-    - Heat scale factor [W/K].
+    - Heat scale proportional factor [W/K]
+    - Heat scale integral factor [W/Ks]
+    - Heat scale derivative factor [Ws/K]
 
 Two coupling interfaces :
 
-    - sensor-FMU coupling interface
-    - heat source- FMU coupling interface
+    - sensor - FMU coupling interface
+    - heat source - FMU coupling interface
 
 Two data transfers :
 
@@ -146,7 +148,7 @@ fmu_participant = syc.setup.coupling_participant[fmu_name]
 
 # Change the "maximum heat output" settings
 max_heat_output_param = fmu_participant.fmu_parameter["Real_2"]
-max_heat_output_param.real_value = 10.0
+max_heat_output_param.real_value = 1000
 max_heat_output_param.display_name = "Maximum_Heat_Output"
 
 # Change the "target temperature" settings
@@ -154,10 +156,20 @@ target_temperature_param = fmu_participant.fmu_parameter["Real_3"]
 target_temperature_param.real_value = 350
 target_temperature_param.display_name = "Target_Temperature"
 
-# Change the "heat scale factor" settings
-heat_scale_factor_param = fmu_participant.fmu_parameter["Real_4"]
-heat_scale_factor_param.real_value = 2.0
-heat_scale_factor_param.display_name = "Heat_Scale_Factor"
+# Change the "heat scale proportional factor" settings
+heat_p_factor_param = fmu_participant.fmu_parameter["Real_4"]
+heat_p_factor_param.real_value = 400
+heat_p_factor_param.display_name = "Heat_Scale_Proportional_Factor"
+
+# Change the "heat scale integral factor" settings
+heat_i_factor_param = fmu_participant.fmu_parameter["Real_5"]
+heat_i_factor_param.real_value = 0
+heat_i_factor_param.display_name = "Heat_Scale_Integral_Factor"
+
+# Change the "heat scale derivative factor" settings
+heat_d_factor_param = fmu_participant.fmu_parameter["Real_6"]
+heat_d_factor_param.real_value = 0
+heat_d_factor_param.display_name = "Heat_Scale_Derivative_Factor"
 
 # %%
 # Add a coupling interface and data transfers
@@ -197,10 +209,10 @@ heatflow_transfer_name = syc.setup.add_data_transfer(
 # Other controls
 
 # Set time step size
-syc.setup.solution_control.time_step_size = "0.5 [s]"
+syc.setup.solution_control.time_step_size = "8 [s]"
 
 # Set the simulation end time
-syc.setup.solution_control.end_time = "40.0 [s]"
+syc.setup.solution_control.end_time = "400 [s]"
 
 # Set minimum and maximum iterations per time step
 syc.setup.solution_control.minimum_iterations = 1
