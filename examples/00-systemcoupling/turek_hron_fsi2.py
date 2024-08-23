@@ -80,7 +80,7 @@ from ansys.systemcoupling.core import examples
 # the fluids mesh and named zones.
 #
 fluent_msh_file = examples.download_file(
-    "turek_hron_fluid.msh", "pysystem-coupling/oscillating_plate"
+    "turek_hron_fluid.msh", "pysystem-coupling/turek-horn-benchmark"
 )
 
 # %%
