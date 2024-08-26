@@ -89,11 +89,7 @@ fluent_msh_file = examples.download_file(
 # Launch instances of the Mechanical APDL, Fluent, and System Coupling
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
-mapdl = pymapdl.launch_mapdl(version="24.2",
-                             run_location=MAPDL_DIR, 
-                             nproc=1, 
-                             start_timeout=120, 
-                             override=True)
+mapdl = pymapdl.launch_mapdl(version="24.2", nproc=1, start_timeout=120, override=True)
 fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 syc = pysyc.launch(start_output=True)
 
