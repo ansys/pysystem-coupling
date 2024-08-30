@@ -190,7 +190,7 @@ fluent.setup.named_expressions["u_bar"] = {  # average velocity
 fluent.setup.named_expressions["t_bar"] = {"definition": "1.0 [s]"}
 fluent.setup.named_expressions["y_bar"] = {"definition": "1.0 [m]"}
 fluent.setup.named_expressions["u_y"] = {
-    "definition": "(6.0 * u_bar / 0.1681 * ( y/y_bar ) * ( 0.41 - y/y_bar )"
+    "definition": "(6.0 * u_bar / 0.1681 * ( y/y_bar ) * ( 0.41 - y/y_bar ) )"
 }
 
 # %%
