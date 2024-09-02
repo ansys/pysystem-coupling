@@ -65,6 +65,8 @@ vortices shedded by the rigid cylinder.
 
 # sphinx_gallery_thumbnail_path = '_static/turek_hron_velocity.jpeg'
 
+import os
+
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
 import matplotlib.pyplot as plt
@@ -83,6 +85,11 @@ fluent_msh_file = examples.download_file(
     "turek_hron_fluid.msh", "pysystem-coupling/turek-horn-benchmark"
 )
 
+mapdl_cdb_file = examples.download_file(
+    "turek_hron_solid_model.cdb", "pysystem-coupling/turek-horn-benchmark"
+)
+
+
 # %%
 # Launch products
 # ~~~~~~~~~~~~~~~
@@ -92,8 +99,8 @@ fluent_msh_file = examples.download_file(
 # mapdl = pymapdl.launch_mapdl(version="24.2", nproc=1, start_timeout=120, override=True)
 # fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 
-mapdl = pymapdl.launch_mapdl()
-fluent = pyfluent.launch_fluent(start_transcript=False)
+mapdl = pymapdl.launch_mapdl(nproc=1)
+fluent = pyfluent.launch_fluent(start_transcript=False, ui_mode="gui")
 
 syc = pysyc.launch(start_output=True)
 
@@ -104,12 +111,19 @@ syc = pysyc.launch(start_output=True)
 # the fluids analysis, and the coupled analysis.
 
 # %%
-# Set up the structural analysis
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Clear cache
+# ~~~~~~~~~~~
+mapdl.clear()
 
 # %%
 # Enter Mechancal APDL setup
 mapdl.prep7()
+
+# %%
+# Read the CDB file
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+mapdl.cdread(option="DB", fname=mapdl_cdb_file, ext="cdb")
+
 
 # %%
 # Define material properties.
@@ -119,50 +133,29 @@ mapdl.mp("NUXY", 1, 0.4)  # Poisson's ratio
 mapdl.mp("GXY", 1, 500000)  # Shear modulus
 
 # %%
-# Set element types to SOLID186.
-mapdl.et(1, 186)
-mapdl.keyopt(1, 2, 1)
-
-# %%
-# Make geometry.
-mapdl.block(0.25, 0.6, 0.19, 0.21, 0.0, 0.01)
-mapdl.lsel("s", "length", vmin=0.35)
-mapdl.lesize("all", ndiv=60)
-mapdl.lsel("s", "tan1", "y", 1)
-mapdl.lsel("a", "tan2", "y", 1)
-mapdl.lesize("all", ndiv=5)
-mapdl.lsel("s", "tan1", "z", 1)
-mapdl.lsel("a", "tan2", "z", 1)
-mapdl.lesize("all", ndiv=1)
-mapdl.vsweep(1)
-
-# %%
-# Add fixed support at x=0.25
-mapdl.nsel("s", "loc", "x", 0.25)
-mapdl.d("all", "all")
-
-# %%
-# Add the FSI interface.
-mapdl.nsel("s", "loc", "x", 0.60)
-mapdl.nsel("a", "loc", "y", 0.19)
-mapdl.nsel("a", "loc", "y", 0.21)
-mapdl.cm("FSIN_1", "node")
-mapdl.sf("FSIN_1", "FSIN", 1)
-
-# %%
-# Set up the rest of the transient analysis
-mapdl.allsel()
+# Mechanical solver setup
+# ~~~~~~~~~~~~~~~~~~~~~~~~~
 mapdl.slashsolu()
-mapdl.antype(4)  # transient analysis
-mapdl.nlgeom("on")  # large deformations
+mapdl.antype(4)
+mapdl.nlgeom("on")
 mapdl.kbc(1)
+
 mapdl.eqslv("sparse")
+mapdl.run("rstsuppress,none")  # don't suppress anything due to presence of FSI loading
+mapdl.dmpoption("emat", "no")
+mapdl.dmpoption("esav", "no")
+
+mapdl.cmwrite()  # Export components due to presence of FSI loading
 mapdl.trnopt(tintopt="hht")
-mapdl.tintp("mosp")
-mapdl.autots("on")
-mapdl.nsubst(1, 1, 1, "off")
-mapdl.time(20.0)
+mapdl.tintp("mosp")  # No such option in docs
+mapdl.nldiag("cont", "iter")
+mapdl.scopt("NO")
+
+mapdl.autots("on")  # User turned on automatic time stepping
+mapdl.nsubst(1, 1, 1, "OFF")
+mapdl.time(20.0)  # Max time set to any high value; will be controlled by syc
 mapdl.timint("on")
+
 mapdl.outres("all", "all")
 
 # %%
@@ -172,15 +165,25 @@ mapdl.outres("all", "all")
 # %%
 # Read the pre-created mesh file
 fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
+fluent.mesh.check()
+
+# %%
+# Define fluids general solver settings
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+fluent.setup.general.solver.type = "pressure-based"
+fluent.solution.methods.high_order_term_relaxation.enable = True
 
 # %%
 # Define the fluid material
 fluent.setup.models.viscous.model = "laminar"
-fluent.setup.materials.fluid["fsi2"] = {
+fluent.setup.materials.fluid["water"] = {
     "density": {"option": "constant", "value": 1000},
     "viscosity": {"option": "constant", "value": 1.0},
 }
-fluent.setup.cell_zone_conditions.fluid["*fluid*"].general.material = "fsi2"
+
+fluent.setup.cell_zone_conditions.fluid["*fluid*"].general.material = "water"
+fluent.setup.materials.print_state()
+
 
 # %%
 # Create the parabolic inlet profile as a named expression
@@ -198,12 +201,20 @@ fluent.setup.named_expressions["u_y"] = {
 inlet_fluid = fluent.setup.boundary_conditions.velocity_inlet["inlet"]
 inlet_fluid.momentum.initial_gauge_pressure.value = 0
 inlet_fluid.momentum.velocity.value = "u_y"
+fluent.setup.named_expressions.print_state()
+
+# %%
+# Setup any relevant solution controls
+fluent.solution.methods.discretization_scheme = {
+    "mom": "second-order-upwind",
+    "pressure": "second-order",
+}
 
 # %%
 # First, a steady simulation is conducted to initialize the
 # flow field with the parabolic inlet flow.
 fluent.solution.initialization.hybrid_initialize()
-fluent.solution.run_calculation.iterate(iter_count=200)
+fluent.solution.run_calculation.iterate(iter_count=500)
 
 # %%
 # Switch to transient mode and prepare for coupling
@@ -217,18 +228,54 @@ fluent.setup.general.solver.time = "unsteady-1st-order"
 fluent.tui.define.dynamic_mesh.dynamic_mesh("yes", "no", "no", "no", "no")
 fluent.tui.define.dynamic_mesh.zones.create("fsi", "system-coupling")
 fluent.tui.define.dynamic_mesh.zones.create(
-    "symmetry_bot", "deforming", "plane", "0.", "0.", "0.", "0", "0", "1"
+    "symmetry_bot",
+    "deforming",
+    "plane",
+    "0.",
+    "0.",
+    "0.00",
+    "0",
+    "0",
+    "1",
+    "no",
+    "yes",
+    "yes",
+    "yes",
+    "no",
+    "yes",
+    "no",
+    "yes",
 )
 fluent.tui.define.dynamic_mesh.zones.create(
-    "symmetry_top", "deforming", "plane", "0.", "0.", "0.01", "0", "0", "1"
+    "symmetry_top",
+    "deforming",
+    "plane",
+    "0.",
+    "0.",
+    "0.01",
+    "0",
+    "0",
+    "1",
+    "no",
+    "yes",
+    "yes",
+    "yes",
+    "no",
+    "yes",
+    "no",
+    "yes",
 )
 
 # %%
 # Define number of sub-steps fluent iterates for each coupling step.
 # Maximum integration time and total steps are controlled by
 # system coupling.
-transient_controls = fluent.solution.run_calculation.transient_controls
-transient_controls.max_iter_per_time_step = 20
+fluent.solution.run_calculation.transient_controls.max_iter_per_time_step = 20
+
+
+fluent.file.auto_save.save_data_file_every.frequency_type = "time-step"
+fluent.file.auto_save.data_frequency = 10
+fluent.file.auto_save.root_name = os.path.join(os.getcwd(), "turek_hron_fluid_resolved")
 
 # %%
 # Set up the coupled analysis
@@ -239,46 +286,60 @@ transient_controls.max_iter_per_time_step = 20
 
 # %%
 # Add participants by passing session handles to System Coupling.
-solid_name = syc.setup.add_participant(participant_session=mapdl)
-fluid_name = syc.setup.add_participant(participant_session=fluent)
+solid = syc.setup.add_participant(participant_session=mapdl)
+fluid = syc.setup.add_participant(participant_session=fluent)
 
-syc.setup.coupling_participant[solid_name].display_name = "Solid"
-syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
+syc.setup.coupling_participant[solid].display_name = "Solid"
+syc.setup.coupling_participant[fluid].display_name = "Fluid"
 
 # %%
 # Add a coupling interface and data transfers.
 interface_name = syc.setup.add_interface(
-    side_one_participant=fluid_name,
+    side_one_participant=fluid,
     side_one_regions=["fsi"],
-    side_two_participant=solid_name,
+    side_two_participant=solid,
     side_two_regions=["FSIN_1"],
 )
 
 # set up 2-way FSI coupling - add force & displacement data transfers
-dt_names = syc.setup.add_fsi_data_transfers(interface=interface_name)
+disp_transfer = syc.setup.add_data_transfer(
+    interface=interface_name,
+    target_side="One",
+    source_variable="INCD",
+    target_variable="displacement",
+)
 
-# modify force transfer to specify the under relaxation factor
-force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
-force_transfer.relaxation_factor = 0.5  # required for stabilizing the flow.
+forc_transfer = syc.setup.add_data_transfer(
+    interface=interface_name,
+    target_side="Two",
+    source_variable="force",
+    target_variable="FORC",
+)
+
+syc.setup.coupling_interface[interface_name].data_transfer[
+    forc_transfer
+].relaxation_factor = 0.5
 
 # %%
 # Purely due to the scale of the mesh on the fluid side,
 # it is generally better to run fluent on multiple cores and
 # mapdl on a single core.
 
-syc.setup.coupling_participant[solid_name].execution_control.parallel_fraction = 1.0
-syc.setup.coupling_participant[fluid_name].execution_control.parallel_fraction = 4.0
+syc.setup.coupling_participant[solid].execution_control.parallel_fraction = 1.0
+syc.setup.coupling_participant[fluid].execution_control.parallel_fraction = 4.0
 
 # %%
 # Time step size, end time, output controls
 syc.setup.solution_control.time_step_size = "0.01 [s]"  # time step is 0.01 [s]
 # To generate the results shown in the documents increase
 # this parameter to 20.0 s.
-syc.setup.solution_control.end_time = 5  # end time is 5.0 [s]
+syc.setup.solution_control.end_time = "5.0 [s]"  # end time is 5.0 [s]
 
 syc.setup.output_control.option = "StepInterval"
-syc.setup.output_control.output_frequency = 50
+syc.setup.output_control.output_frequency = 250
 syc.setup.output_control.generate_csv_chart_output = True
+
+print(syc.setup.get_setup_summary())
 
 # %%
 # Solution
