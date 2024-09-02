@@ -99,7 +99,7 @@ mapdl_cdb_file = examples.download_file(
 # mapdl = pymapdl.launch_mapdl(version="24.2", nproc=1, start_timeout=120, override=True)
 # fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 
-mapdl = pymapdl.launch_mapdl(nproc=1)
+mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False, ui_mode="gui")
 
 syc = pysyc.launch(start_output=True)
@@ -122,7 +122,7 @@ mapdl.prep7()
 # %%
 # Read the CDB file
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mapdl.cdread(option="DB", fname=mapdl_cdb_file, ext="cdb")
+mapdl.cdread(option="DB", fname=mapdl_cdb_file[:-4], ext="cdb")
 
 
 # %%
