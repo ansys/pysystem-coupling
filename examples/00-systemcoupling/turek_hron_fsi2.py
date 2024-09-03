@@ -350,7 +350,7 @@ syc.setup.solution_control.end_time = "5.0 [s]"  # end time is 5.0 [s]
 
 syc.setup.output_control.option = "StepInterval"
 syc.setup.output_control.output_frequency = 250
-print(syc.setup.get_setup_summary())
+# print(syc.setup.get_setup_summary())
 
 # %%
 # Solution
