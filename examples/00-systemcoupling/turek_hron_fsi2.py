@@ -209,7 +209,7 @@ fluent.setup.named_expressions["t_bar"] = {"definition": "1.0 [s]"}
 fluent.setup.named_expressions["y_bar"] = {"definition": "1.0 [m]"}
 fluent.setup.named_expressions["u_y"] = {
     "definition": f"(6 * u_bar / ( ( 4.1 * {CYLINDER_DIA} ) ** 2 )) \
-    * ( y/y_bar + 0.2 ) * ( 0.21 - y/y_bar )"
+* ( y/y_bar + 0.2 ) * ( 0.21 - y/y_bar )"
 }
 
 # %%
