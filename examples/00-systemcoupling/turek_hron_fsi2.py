@@ -99,10 +99,22 @@ mapdl_cdb_file = examples.download_file(
 # mapdl = pymapdl.launch_mapdl(version="24.2", nproc=1, start_timeout=120, override=True)
 # fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 
-mapdl = pymapdl.launch_mapdl()
-fluent = pyfluent.launch_fluent(start_transcript=False, ui_mode="gui")
+mapdl = pymapdl.launch_mapdl(version="24.2")
+fluent = pyfluent.launch_fluent(start_transcript=False, product_version="24.2")
 
 syc = pysyc.launch(start_output=True)
+
+# %%
+# Constants
+# ---------
+CYLINDER_DIA = 0.1
+RE = 100
+U_BAR = 1
+FLUID_DENS = 1000
+SOLID_DENS = 10000
+NU = 0.4  # Poisson's ratio
+G = 500000  # Shear modulus
+E = 2 * G * (1 + NU)  # Youngs modulus
 
 # %%
 # Setup
@@ -122,15 +134,15 @@ mapdl.prep7()
 # %%
 # Read the CDB file
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mapdl.cdread(option="DB", fname=mapdl_cdb_file[:-4], ext="cdb")
+mapdl.cdread(option="DB", fname=mapdl_cdb_file)
 
 
 # %%
 # Define material properties.
-mapdl.mp("DENS", 1, 10000)  # density
-mapdl.mp("EX", 1, 1400000)  # Young's modulus
-mapdl.mp("NUXY", 1, 0.4)  # Poisson's ratio
-mapdl.mp("GXY", 1, 500000)  # Shear modulus
+mapdl.mp("DENS", 1, SOLID_DENS)  # density
+mapdl.mp("EX", 1, E)  # Young's modulus
+mapdl.mp("NUXY", 1, NU)  # Poisson's ratio
+mapdl.mp("GXY", 1, G)  # Shear modulus
 
 # %%
 # Mechanical solver setup
@@ -164,7 +176,7 @@ mapdl.outres("all", "all")
 
 # %%
 # Read the pre-created mesh file
-fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
+fluent.file.read_mesh(file_name=fluent_msh_file)
 fluent.mesh.check()
 
 # %%
@@ -175,10 +187,13 @@ fluent.solution.methods.high_order_term_relaxation.enable = True
 
 # %%
 # Define the fluid material
+
+viscosity = (FLUID_DENS * U_BAR * CYLINDER_DIA) / RE
+
 fluent.setup.models.viscous.model = "laminar"
 fluent.setup.materials.fluid["water"] = {
-    "density": {"option": "constant", "value": 1000},
-    "viscosity": {"option": "constant", "value": 1.0},
+    "density": {"option": "constant", "value": FLUID_DENS},
+    "viscosity": {"option": "constant", "value": viscosity},
 }
 
 fluent.setup.cell_zone_conditions.fluid["*fluid*"].general.material = "water"
@@ -188,12 +203,13 @@ fluent.setup.materials.print_state()
 # %%
 # Create the parabolic inlet profile as a named expression
 fluent.setup.named_expressions["u_bar"] = {  # average velocity
-    "definition": "1.0 [m/s]"
+    "definition": f"{U_BAR} [m/s]"
 }
 fluent.setup.named_expressions["t_bar"] = {"definition": "1.0 [s]"}
 fluent.setup.named_expressions["y_bar"] = {"definition": "1.0 [m]"}
 fluent.setup.named_expressions["u_y"] = {
-    "definition": "(6.0 * u_bar / 0.1681 * ( y/y_bar ) * ( 0.41 - y/y_bar ) )"
+    "definition": f"(6 * u_bar / ( ( 4.1 * {CYLINDER_DIA} ) ** 2 )) \
+    * ( y/y_bar + 0.2 ) * ( 0.21 - y/y_bar )"
 }
 
 # %%
@@ -286,11 +302,8 @@ fluent.file.auto_save.root_name = os.path.join(os.getcwd(), "turek_hron_fluid_re
 
 # %%
 # Add participants by passing session handles to System Coupling.
-solid = syc.setup.add_participant(participant_session=mapdl)
 fluid = syc.setup.add_participant(participant_session=fluent)
-
-syc.setup.coupling_participant[solid].display_name = "Solid"
-syc.setup.coupling_participant[fluid].display_name = "Fluid"
+solid = syc.setup.add_participant(participant_session=mapdl)
 
 # %%
 # Add a coupling interface and data transfers.
@@ -337,13 +350,12 @@ syc.setup.solution_control.end_time = "5.0 [s]"  # end time is 5.0 [s]
 
 syc.setup.output_control.option = "StepInterval"
 syc.setup.output_control.output_frequency = 250
-syc.setup.output_control.generate_csv_chart_output = True
-
 print(syc.setup.get_setup_summary())
 
 # %%
 # Solution
 # --------
+syc.start_output()
 syc.solution.solve()
 
 
@@ -357,9 +369,9 @@ syc.solution.solve()
 # Post-process the structural results
 mapdl.finish()
 mapdl.post1()
-mapdl.nsel("s", "loc", "x", 0.60)
-mapdl.nsel("r", "loc", "y", 0.20)
-tip_node = mapdl.nsel("r", "loc", "z", 0.00)[0]
+mapdl.nsel("s", "loc", "x", 0.45)  # select the right side of the beam
+mapdl.nsel("r", "loc", "y", 0.00)  # select the top of the beam
+tip_node = mapdl.nsel("r", "loc", "z", 0.005)[0]  # select the tip node
 tip_y_0 = mapdl.get_value("node", tip_node, "loc", "y")
 tip_y = []
 nsets = mapdl.post_processing.nsets
