@@ -87,7 +87,7 @@ from ansys.systemcoupling.core import examples
 # Download input files
 # ~~~~~~~~~~~~~~~~~~~~
 # Download the case file for Fluent and the FMU file.
-
+input("cont...")
 fmu_file = examples.download_file(
     "thermostat.fmu", "pysystem-coupling/heating_tank_fmu/FMU"
 )
