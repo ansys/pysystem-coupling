@@ -100,9 +100,9 @@ mapdl_cdb_file = examples.download_file(
 # fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 
 mapdl = pymapdl.launch_mapdl(version="24.2")
-fluent = pyfluent.launch_fluent(start_transcript=False, product_version="24.2")
+fluent = pyfluent.launch_fluent(start_transcript=True, product_version="24.2")
 
-syc = pysyc.launch(start_output=True)
+syc = pysyc.launch(start_output=False)
 
 # %%
 # Constants
