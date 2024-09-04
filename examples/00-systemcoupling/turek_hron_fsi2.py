@@ -383,10 +383,10 @@ time_values = mapdl.post_processing.time_values
 plt.plot(time_values, tip_y)
 plt.xlabel("t (s)")
 plt.ylabel(r"$x_{tip}$ (m)")
-plt.savefig("fsi2_tip_disp.png")
+plt.savefig("turek_horn_fsi2_tip_disp.png")
 
 ###############################################################################
-# .. image:: /_static/fsi2_tip_disp.png
+# .. image:: /_static/turek_horn_fsi2_tip_disp.png
 #   :width: 500pt
 #   :align: center
 
@@ -413,10 +413,12 @@ contour.display()
 
 fluent.results.graphics.views.restore_view(view_name="front")
 fluent.results.graphics.views.auto_scale()
-fluent.results.graphics.picture.save_picture(file_name="fsi2_pressure_contour.png")
+fluent.results.graphics.picture.save_picture(
+    file_name="turek_horn_fsi2_pressure_contour.png"
+)
 
 ###############################################################################
-# .. image:: /_static/fsi2_pressure_contour.png
+# .. image:: /_static/turek_horn_fsi2_pressure_contour.png
 #   :width: 500pt
 #   :align: center
 
