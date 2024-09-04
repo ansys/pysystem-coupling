@@ -65,7 +65,6 @@ vortices shedded by the rigid cylinder.
 
 # sphinx_gallery_thumbnail_path = '_static/turek_hron_velocity.jpeg'
 
-import os
 
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
@@ -291,7 +290,7 @@ fluent.solution.run_calculation.transient_controls.max_iter_per_time_step = 20
 
 fluent.file.auto_save.save_data_file_every.frequency_type = "time-step"
 fluent.file.auto_save.data_frequency = 10
-fluent.file.auto_save.root_name = os.path.join(os.getcwd(), "turek_hron_fluid_resolved")
+fluent.file.auto_save.root_name = "turek_hron_fluid_resolved"
 
 # %%
 # Set up the coupled analysis
