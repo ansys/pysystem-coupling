@@ -22,8 +22,8 @@
 
 """.. _ref_turek_hron_fsi2_example:
 
-Turek-Hron example
-------------------
+Turek-Hron FSI2 Benchmark Example
+---------------------------------
 
 This example is a version of the *Turek-Hron FSI2* case that is
 often used as a benchmark case for System Coupling. This two-way, fluid-structure
@@ -37,16 +37,16 @@ beam with surface data transfers.
 
 **Problem description**
 
-An elastic beam structure is attached to a rigid rigid cylinder. The system
+An elastic beam structure is attached to a rigid cylinder. The system
 resides within a fluid filled channel:
 
 .. image:: /_static/turek_hron_case.png
    :width: 400pt
    :align: center
 
-The flow is laminar with a Reynolds number of $Re = 100$. The inlet velocity
-has a parabolic profile with a maximum value of $1.5\bar{U}$, where $\bar{U}$
-is the average inlet velocity. The cylinder sits at an offset of $0.05~m$ to the
+The flow is laminar with a Reynolds number of :math:`Re = 100`. The inlet velocity
+has a parabolic profile with a maximum value of :math:`1.5\bar{U}`, where :math:'\bar{U}'
+is the average inlet velocity. The cylinder sits at an offset of :math:`0.05~m` to the
 incoming flow, causing an imbalance of surface forces on the elastic beam.
 The beam and the surrounding fluid are simulated for a few time setps to
 allow an examination of the motion of the beam as it starts vibrating due to
@@ -95,22 +95,20 @@ mapdl_cdb_file = examples.download_file(
 # Launch instances of the Mechanical APDL, Fluent, and System Coupling
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
-# mapdl = pymapdl.launch_mapdl(version="24.2", nproc=1, start_timeout=120, override=True)
-# fluent = pyfluent.launch_fluent(start_transcript=False, processor_count=4)
 
 mapdl = pymapdl.launch_mapdl(version="24.2")
-fluent = pyfluent.launch_fluent(start_transcript=True, product_version="24.2")
+fluent = pyfluent.launch_fluent(product_version="24.2")
 
-syc = pysyc.launch(start_output=False)
+syc = pysyc.launch(start_output=True)
 
 # %%
-# Constants
-# ---------
-CYLINDER_DIA = 0.1
-RE = 100
-U_BAR = 1
-FLUID_DENS = 1000
-SOLID_DENS = 10000
+# Define constants
+# ----------------
+CYLINDER_DIA = 0.1  # Diameter of the cylinder
+RE = 100  # Reynolds number
+U_BAR = 1  # Average velocity
+FLUID_DENS = 1000  # Fluid density
+SOLID_DENS = 10000  # Solid density
 NU = 0.4  # Poisson's ratio
 G = 500000  # Shear modulus
 E = 2 * G * (1 + NU)  # Youngs modulus
@@ -128,16 +126,18 @@ mapdl.clear()
 
 # %%
 # Enter Mechancal APDL setup
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mapdl.prep7()
 
 # %%
 # Read the CDB file
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~~~
 mapdl.cdread(option="DB", fname=mapdl_cdb_file)
 
 
 # %%
 # Define material properties.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mapdl.mp("DENS", 1, SOLID_DENS)  # density
 mapdl.mp("EX", 1, E)  # Young's modulus
 mapdl.mp("NUXY", 1, NU)  # Poisson's ratio
@@ -185,7 +185,8 @@ fluent.setup.general.solver.type = "pressure-based"
 fluent.solution.methods.high_order_term_relaxation.enable = True
 
 # %%
-# Define the fluid material
+# Define the fluid and update the material properties
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 viscosity = (FLUID_DENS * U_BAR * CYLINDER_DIA) / RE
 
@@ -201,6 +202,7 @@ fluent.setup.materials.print_state()
 
 # %%
 # Create the parabolic inlet profile as a named expression
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 fluent.setup.named_expressions["u_bar"] = {  # average velocity
     "definition": f"{U_BAR} [m/s]"
 }
@@ -213,6 +215,7 @@ fluent.setup.named_expressions["u_y"] = {
 
 # %%
 # Update the inlet field
+# ~~~~~~~~~~~~~~~~~~~~~~
 inlet_fluid = fluent.setup.boundary_conditions.velocity_inlet["inlet"]
 inlet_fluid.momentum.initial_gauge_pressure.value = 0
 inlet_fluid.momentum.velocity.value = "u_y"
@@ -220,12 +223,15 @@ fluent.setup.named_expressions.print_state()
 
 # %%
 # Setup any relevant solution controls
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 fluent.solution.methods.discretization_scheme = {
     "mom": "second-order-upwind",
     "pressure": "second-order",
 }
 
 # %%
+# Initialize the flow field & run a steady simulation
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # First, a steady simulation is conducted to initialize the
 # flow field with the parabolic inlet flow.
 fluent.solution.initialization.hybrid_initialize()
@@ -233,9 +239,12 @@ fluent.solution.run_calculation.iterate(iter_count=500)
 
 # %%
 # Switch to transient mode and prepare for coupling
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 fluent.setup.general.solver.time = "unsteady-1st-order"
 
 # %%
+# Define dynamic meshing
+# ~~~~~~~~~~~~~~~~~~~~~~
 # Define dynamic meshing for deforming symmetry planes.
 # Currently, dynamic_mesh is not exposed to the fluent root
 # session directly. We need to use the `tui` framework to create
@@ -282,6 +291,8 @@ fluent.tui.define.dynamic_mesh.zones.create(
 )
 
 # %%
+# Results and output controls
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Define number of sub-steps fluent iterates for each coupling step.
 # Maximum integration time and total steps are controlled by
 # system coupling.
@@ -300,11 +311,15 @@ fluent.file.auto_save.root_name = "turek_hron_fluid_resolved"
 # and setting other coupled analysis properties.
 
 # %%
+# Add participants
+# ~~~~~~~~~~~~~~~~
 # Add participants by passing session handles to System Coupling.
 fluid = syc.setup.add_participant(participant_session=fluent)
 solid = syc.setup.add_participant(participant_session=mapdl)
 
 # %%
+# Setup the interface and data transfers
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Add a coupling interface and data transfers.
 interface_name = syc.setup.add_interface(
     side_one_participant=fluid,
@@ -352,8 +367,8 @@ syc.setup.output_control.output_frequency = 250
 # print(syc.setup.get_setup_summary())
 
 # %%
-# Solution
-# --------
+# Solve the coupled system
+# ------------------------
 syc.start_output()
 syc.solution.solve()
 
@@ -364,8 +379,7 @@ syc.solution.solve()
 
 # %%
 # Post-process the structural results
-# %%
-# Post-process the structural results
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mapdl.finish()
 mapdl.post1()
 mapdl.nsel("s", "loc", "x", 0.45)  # select the right side of the beam
@@ -393,8 +407,9 @@ plt.savefig("turek_horn_fsi2_tip_disp.png")
 
 # %%
 # Post-process the fluids results
-
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_window_resolution option not active inside containers or Ansys Lab environment
+
 if fluent.results.graphics.picture.use_window_resolution.is_active():
     fluent.results.graphics.picture.use_window_resolution = False
 
@@ -426,7 +441,7 @@ fluent.results.graphics.picture.save_picture(
 # %%
 # Post-process the System Coupling results - display the charts
 # showing displacement and force values during the simulation
-# syc.solution.show_plot(show_convergence=False)
+syc.solution.show_plot(show_convergence=False)
 
 
 # %%
