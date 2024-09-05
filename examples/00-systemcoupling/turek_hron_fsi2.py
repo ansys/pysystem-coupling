@@ -99,7 +99,7 @@ mapdl_cdb_file = examples.download_file(
 mapdl = pymapdl.launch_mapdl(version="24.2")
 fluent = pyfluent.launch_fluent(product_version="24.2")
 
-syc = pysyc.launch(start_output=True)
+syc = pysyc.launch()
 
 # %%
 # Define constants
@@ -436,12 +436,6 @@ fluent.results.graphics.picture.save_picture(
 # .. image:: /_static/turek_horn_fsi2_pressure_contour.png
 #   :width: 500pt
 #   :align: center
-
-
-# %%
-# Post-process the System Coupling results - display the charts
-# showing displacement and force values during the simulation
-syc.solution.show_plot(show_convergence=False)
 
 
 # %%
