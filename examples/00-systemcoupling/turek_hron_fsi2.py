@@ -97,8 +97,8 @@ mapdl_cdb_file = examples.download_file(
 # and return *client* (session) objects that allow you to interact with
 # these products via APIs exposed into the current Python environment.
 
-mapdl = pymapdl.launch_mapdl(version="24.2")
-fluent = pyfluent.launch_fluent(product_version="24.2", processor_count=4)
+mapdl = pymapdl.launch_mapdl()
+fluent = pyfluent.launch_fluent()
 
 syc = pysyc.launch(start_output=True)
 
@@ -343,7 +343,7 @@ syc.setup.solution_control.time_step_size = "0.01 [s]"  # time step is 0.01 [s]
 
 # To generate the results shown in the documents increase
 # this parameter to 20.0 s.
-syc.setup.solution_control.end_time = "15.0 [s]"  # end time is 5.0 [s]
+syc.setup.solution_control.end_time = "0.1 [s]"  # end time
 
 syc.setup.output_control.option = "StepInterval"
 syc.setup.output_control.output_frequency = 250
@@ -439,7 +439,7 @@ mapdl.exit()
 # Velocity field at 15 [sec]
 
 ###############################################################################
-# .. image:: /_static/turek_hron_velocity_at_15_sec.png
+# .. image:: /_static/turek_hron_velocity_field_at_15_sec.png
 #   :width: 500pt
 #   :align: center
 
