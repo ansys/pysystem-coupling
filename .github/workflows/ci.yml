@@ -125,7 +125,6 @@ jobs:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
 
   test:
-    if: false
     name: Testing
     needs: [build]
     runs-on: ubuntu-latest
