@@ -380,7 +380,8 @@ plt.plot(time_values, tip_y)
 plt.xlabel("t (s)")
 plt.ylabel(r"$x_{tip}$ (m)")
 plt.savefig("turek_horn_fsi2_tip_disp.png")
-plt.close()
+# If you want to see the in-line plot, comment following line.
+plt.close()  # close the plot to avoid showing it in the docs.
 
 ###############################################################################
 # .. image:: /_static/turek_horn_fsi2_tip_disp.png
