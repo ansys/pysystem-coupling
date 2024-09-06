@@ -45,12 +45,13 @@ resides within a fluid filled channel:
    :align: center
 
 The flow is laminar with a Reynolds number of :math:`Re = 100`. The inlet velocity
-has a parabolic profile with a maximum value of :math:`1.5\bar{U}`, where :math:'\bar{U}'
+has a parabolic profile with a maximum value of :math:`1.5 \cdot \\bar{U}`, where :math:'\\bar{U}'
 is the average inlet velocity. The cylinder sits at an offset of :math:`0.05~m` to the
 incoming flow, causing an imbalance of surface forces on the elastic beam.
 The beam and the surrounding fluid are simulated for a few time setps to
 allow an examination of the motion of the beam as it starts vibrating due to
 vortices shedded by the rigid cylinder.
+
 """
 # %%
 # Import modules, download files, launch products
@@ -97,13 +98,20 @@ mapdl_cdb_file = examples.download_file(
 # these products via APIs exposed into the current Python environment.
 
 mapdl = pymapdl.launch_mapdl(version="24.2")
-fluent = pyfluent.launch_fluent(product_version="24.2")
+fluent = pyfluent.launch_fluent(product_version="24.2", processor_count=4)
 
-syc = pysyc.launch()
+syc = pysyc.launch(start_output=True)
+
+
+# %%
+# Setup Mechanical APDL, Fluent, and System Coupling analyses
+# -----------------------------------------------------------
+# The setup consists of setting up the structural analysis,
+# the fluids analysis, and the coupled analysis.
 
 # %%
 # Define constants
-# ----------------
+# ~~~~~~~~~~~~~~~~
 CYLINDER_DIA = 0.1  # Diameter of the cylinder
 RE = 100  # Reynolds number
 U_BAR = 1  # Average velocity
@@ -112,12 +120,6 @@ SOLID_DENS = 10000  # Solid density
 NU = 0.4  # Poisson's ratio
 G = 500000  # Shear modulus
 E = 2 * G * (1 + NU)  # Youngs modulus
-
-# %%
-# Setup
-# -----
-# The setup consists of setting up the structural analysis,
-# the fluids analysis, and the coupled analysis.
 
 # %%
 # Clear cache
@@ -328,39 +330,20 @@ interface_name = syc.setup.add_interface(
     side_two_regions=["FSIN_1"],
 )
 
+
 # set up 2-way FSI coupling - add force & displacement data transfers
-disp_transfer = syc.setup.add_data_transfer(
-    interface=interface_name,
-    target_side="One",
-    source_variable="INCD",
-    target_variable="displacement",
-)
+data_transfer = syc.setup.add_fsi_data_transfers(interface=interface_name)
+force_transfer = syc.setup.coupling_interface[interface_name].data_transfer["FORC"]
+force_transfer.relaxation_factor = 0.5
 
-forc_transfer = syc.setup.add_data_transfer(
-    interface=interface_name,
-    target_side="Two",
-    source_variable="force",
-    target_variable="FORC",
-)
-
-syc.setup.coupling_interface[interface_name].data_transfer[
-    forc_transfer
-].relaxation_factor = 0.5
-
-# %%
-# Purely due to the scale of the mesh on the fluid side,
-# it is generally better to run fluent on multiple cores and
-# mapdl on a single core.
-
-syc.setup.coupling_participant[solid].execution_control.parallel_fraction = 1.0
-syc.setup.coupling_participant[fluid].execution_control.parallel_fraction = 4.0
 
 # %%
 # Time step size, end time, output controls
 syc.setup.solution_control.time_step_size = "0.01 [s]"  # time step is 0.01 [s]
+
 # To generate the results shown in the documents increase
 # this parameter to 20.0 s.
-syc.setup.solution_control.end_time = "5.0 [s]"  # end time is 5.0 [s]
+syc.setup.solution_control.end_time = "15.0 [s]"  # end time is 5.0 [s]
 
 syc.setup.output_control.option = "StepInterval"
 syc.setup.output_control.output_frequency = 250
@@ -369,16 +352,15 @@ syc.setup.output_control.output_frequency = 250
 # %%
 # Solve the coupled system
 # ------------------------
-syc.start_output()
 syc.solution.solve()
 
 
 # %%
-# Post-processing
+# Postprocessing
 # ---------------
 
 # %%
-# Post-process the structural results
+# Postprocess the structural results
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mapdl.finish()
 mapdl.post1()
@@ -406,7 +388,7 @@ plt.savefig("turek_horn_fsi2_tip_disp.png")
 
 
 # %%
-# Post-process the fluids results
+# Postprocess the fluids results
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_window_resolution option not active inside containers or Ansys Lab environment
 
@@ -445,3 +427,34 @@ fluent.results.graphics.picture.save_picture(
 syc.exit()
 fluent.exit()
 mapdl.exit()
+
+# %%
+# Note
+# ----
+# The results shown in this example are for illustrative purposes only.
+# To get accurate results, you may need to run the simulation for a till 15 [sec].
+# Refer to the section time step size, end time, output controls section to increase the end time.
+# The results shown below are at 15 [sec] as end time.
+
+# Velocity field at 15 [sec]
+
+###############################################################################
+# .. image:: /_static/turek_hron_velocity_at_15_sec.png
+#   :width: 500pt
+#   :align: center
+
+
+# Pressure field at 15 [sec]
+
+###############################################################################
+# .. image:: /_static/turek_hron_pressure_field_at_15_sec.png
+#   :width: 500pt
+#   :align: center
+
+# %%
+# References
+# ----------
+#
+# [1]. Turek, S., & Hron, J. (2006). Proposal for numerical benchmarking of fluid-structure
+# interaction between an elastic object and laminar incompressible flow (pp. 371-385).
+# Springer Berlin Heidelberg.
