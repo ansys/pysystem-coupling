@@ -341,8 +341,8 @@ force_transfer.relaxation_factor = 0.5
 # Time step size, end time, output controls
 syc.setup.solution_control.time_step_size = "0.01 [s]"  # time step is 0.01 [s]
 
-# To generate the results shown in the documents increase
-# this parameter to 20.0 s.
+# To generate similar results shown in this example documentation, increase an end_time
+# parameter to 15 [s].
 syc.setup.solution_control.end_time = "0.1 [s]"  # end time
 
 syc.setup.output_control.option = "StepInterval"
@@ -434,9 +434,12 @@ mapdl.exit()
 # Note
 # ----
 # The results shown in this example are for illustrative purposes only.
-# To get accurate results, you may need to run the simulation for a till 15 [sec].
-# Refer to the section time step size, end time, output controls section to increase the end time.
-# The results shown below are at 15 [sec] as end time.
+# To get similar results, you may need to run the simulation with an end_time equal to 15[s].
+# Refer to the section time step size, end time, output controls section to update the end time.
+
+# The results shown below are at end_time as 15 [s] and it took approx. 2 hrs based on
+# the compute resource used.Please note that the runtime may vary depending on the
+# compute resources used.
 
 # Velocity field at 15 [sec]
 
