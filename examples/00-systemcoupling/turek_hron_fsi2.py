@@ -45,7 +45,7 @@ resides within a fluid filled channel:
    :align: center
 
 The flow is laminar with a Reynolds number of :math:`Re = 100`. The inlet velocity
-has a parabolic profile with a maximum value of :math:`1.5 \cdot \\bar{U}`, where :math:'\\bar{U}'
+has a parabolic profile with a maximum value of :math:`1.5 \cdot \\bar{U}`, where :math:`\\bar{U}`
 is the average inlet velocity. The cylinder sits at an offset of :math:`0.05~m` to the
 incoming flow, causing an imbalance of surface forces on the elastic beam.
 The beam and the surrounding fluid are simulated for a few time setps to
