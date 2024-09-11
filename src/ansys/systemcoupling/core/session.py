@@ -233,7 +233,8 @@ class Session:
 
         Reduces to a no-op if the System Coupling instance is not managed by PIM.
 
-        The remote file may optionally be given a different name from the local one.
+        The remote file may optionally be given a different name from the local one
+        and, if not, any directory prefix is stripped in the PIM case.
 
         Unless ``overwrite`` is ``True``, a ``FileExistsError`` will be raised if
         the remote file already exists.
@@ -246,8 +247,14 @@ class Session:
             remote file name - default is None
         overwrite: bool, optional
             whether to overwrite the remote file if it already exists - default is False
+
+        Returns
+        -------
+        str
+            The remote file name, excluding any directory prefix that might have been
+            present in ``file_name``.
         """
-        self.__rpc.upload_file(file_name, remote_file_name, overwrite)
+        return self.__rpc.upload_file(file_name, remote_file_name, overwrite)
 
     def download_file(
         self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
