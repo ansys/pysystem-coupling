@@ -29,15 +29,22 @@ from typing import Any, Optional, Protocol
 class FileTransferService(Protocol):  # pragma: no cover
     def upload_file(
         self, file_name: str, remote_file_name: Optional[str], overwrite: bool
-    ): ...
+    ) -> str: ...
 
     def download_file(self, file_name: str, local_file_dir: str, overwrite: bool): ...
 
 
 class NullFileTransferService(FileTransferService):  # pragma: no cover
-    """A do-nothing implementation of file upload/download service."""
+    """An essentially do-nothing implementation of file upload/download
+    service (with a minimal ``upload_file`` implementation)."""
 
-    ...
+    def upload_file(
+        self, file_name: str, remote_file_name: Optional[str], overwrite: bool
+    ) -> str:
+        # TODO - what should the behaviour be if remote_file_name is not None?
+        # It is not obvious that it would even make sense to call the Null
+        # implementation in that case.
+        return file_name
 
 
 class PimFileTransferService:  # pragma: no cover
@@ -70,10 +77,13 @@ class PimFileTransferService:  # pragma: no cover
 
     def upload_file(
         self, file_name: str, remote_file_name: Optional[str], overwrite: bool
-    ):
+    ) -> str:
         """Upload a file to the PIM-managed instance.
 
         The remote file may optionally be given a different name from the local one.
+
+        If the local file name includes a directory path, this is stripped and the
+        remote file is always placed in the "working directory" of the container.
 
         Unless ``overwrite`` is ``True``, a ``FileExistsError`` will be raised if
         the remote file already exists.
@@ -86,6 +96,12 @@ class PimFileTransferService:  # pragma: no cover
             remote file name (or use local file name if None)
         overwrite: bool
             whether to overwrite the remote file if it already exists
+
+        Returns
+        -------
+        str
+            The name assigned to the remote file name. If ``file_name`` included
+            a directory prefix, this is stripped from the returned name.
         """
         if os.path.isfile(file_name):
             remote_file_name = remote_file_name or os.path.basename(file_name)
@@ -105,6 +121,7 @@ class PimFileTransferService:  # pragma: no cover
             self.file_service.upload_file(file_name, remote_file_name)
             if delete_copy:
                 os.remove(file_name)
+            return remote_file_name
         else:
             raise FileNotFoundError(f"Local file {file_name} does not exist.")
 

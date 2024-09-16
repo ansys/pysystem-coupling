@@ -177,12 +177,12 @@ class SycGrpc(object):
         if start_output:
             self.start_output()
 
-    def upload_file(self, *args, **kwargs):
+    def upload_file(self, *args, **kwargs) -> str:
         """Supports file upload to remote instance.
 
         Currently for internal use only.
         """
-        file_transfer_service(self.__pim_instance).upload_file(*args, **kwargs)
+        return file_transfer_service(self.__pim_instance).upload_file(*args, **kwargs)
 
     def download_file(self, *args, **kwargs):
         """Supports file download from remote instance.

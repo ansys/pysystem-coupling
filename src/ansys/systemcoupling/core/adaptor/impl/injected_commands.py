@@ -148,9 +148,10 @@ def _wrap_add_participant(
         )
 
     if input_file := kwargs.get("input_file", None):
-        session.upload_file(input_file)
-        if os.path.dirname(input_file):
-            kwargs["input_file"] = os.path.basename(input_file)
+        # In PIM-like scenario, the returned file name is what
+        # the container sees. Otherwise input_file should be
+        # unchanged by the upload call.
+        kwargs["input_file"] = session.upload_file(input_file)
 
     return setup._add_participant(**kwargs)
 
