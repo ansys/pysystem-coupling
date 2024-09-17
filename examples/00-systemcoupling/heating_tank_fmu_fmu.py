@@ -57,8 +57,8 @@ to determine the heat output and has five parameters that can be set:
     - Target temperature [K]
     - Maximum heat output [W]
     - Heat scale proportional factor [W/K]
-    - Heat scale integral factor [W/Ks]
-    - Heat scale derivative factor [Ws/K]
+    - Heat scale integral factor [W K^-1 s^-1]
+    - Heat scale derivative factor [W s K^-1]
 
 One coupling interface between the FMUs with two data transfers :
 
@@ -221,9 +221,12 @@ syc.setup.solution_control.time_step_size = "8 [s]"
 # Set the simulation end time
 syc.setup.solution_control.end_time = "400 [s]"
 
-# Set minimum and maximum iterations per time step
+# Set minimum number of iterations to 2
 syc.setup.solution_control.minimum_iterations = 2
-syc.setup.solution_control.maximum_iterations = 2
+
+# Set maximum number of iterations to 30 to allow the simulation
+# to converge at each time step
+syc.setup.solution_control.maximum_iterations = 30
 
 # Turn on chart output. This step is necessary
 # to chart the data after solving.
