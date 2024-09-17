@@ -132,27 +132,22 @@ heater_participant = syc.setup.coupling_participant[heater_part_name]
 # Change the "maximum heat output" settings
 max_heat_output_param = heater_participant.fmu_parameter["Real_2"]
 max_heat_output_param.real_value = 1000
-max_heat_output_param.display_name = "Maximum_Heat_Output"
 
 # Change the "target temperature" settings
 target_temperature_param = heater_participant.fmu_parameter["Real_3"]
 target_temperature_param.real_value = 350
-target_temperature_param.display_name = "Target_Temperature"
 
 # Change the "heat scale proportional factor" settings
 heat_p_factor_param = heater_participant.fmu_parameter["Real_4"]
 heat_p_factor_param.real_value = 400
-heat_p_factor_param.display_name = "Heat_Scale_Proportional_Factor"
 
 # Change the "heat scale integral factor" settings
 heat_i_factor_param = heater_participant.fmu_parameter["Real_5"]
 heat_i_factor_param.real_value = 0
-heat_i_factor_param.display_name = "Heat_Scale_Integral_Factor"
 
 # Change the "heat scale derivative factor" settings
 heat_d_factor_param = heater_participant.fmu_parameter["Real_6"]
 heat_d_factor_param.real_value = 0
-heat_d_factor_param.display_name = "Heat_Scale_Derivative_Factor"
 
 # Access the heating tank participant object
 tank_participant = syc.setup.coupling_participant[tank_part_name]
@@ -160,32 +155,26 @@ tank_participant = syc.setup.coupling_participant[tank_part_name]
 # Change the "tank height" settings
 tank_height_param = tank_participant.fmu_parameter["Real_2"]
 tank_height_param.real_value = 0.14
-tank_height_param.display_name = "Tank_Height"
 
 # Change the "tank radius" settings
 tank_radius_param = tank_participant.fmu_parameter["Real_3"]
 tank_radius_param.real_value = 0.05
-tank_radius_param.display_name = "Tank_Radius"
 
 # Change the "fluid density" settings
 fluid_density_param = tank_participant.fmu_parameter["Real_4"]
 fluid_density_param.real_value = 998.2
-fluid_density_param.display_name = "Fluid_Density"
 
 # Change the "fluid heat capacity" settings
 fluid_heat_capacity_param = tank_participant.fmu_parameter["Real_5"]
 fluid_heat_capacity_param.real_value = 4182
-fluid_heat_capacity_param.display_name = "Fluid_Specific_Heat"
 
 # Change the "convection heat transfer coefficient" settings
 convection_coeff_param = tank_participant.fmu_parameter["Real_6"]
 convection_coeff_param.real_value = 10
-convection_coeff_param.display_name = "Convection_Coefficient"
 
 # Change the "surrounding temperature" settings
 surrounding_temp = tank_participant.fmu_parameter["Real_7"]
 surrounding_temp.real_value = 295
-surrounding_temp.display_name = "Surrounding_Temperature"
 
 # %%
 # Add a coupling interface and data transfers
