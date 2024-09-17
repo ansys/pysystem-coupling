@@ -44,10 +44,10 @@ temperature of the fluid is available as an output, modelling a sensor
 in the tank. The FMU has six parameters that can be set:
 
     - Height and base radius of the cylindrical tank [m]
-    - Density [kg/m\ :sup:`3`\ ] and specific heat [W/kgK] of the fluid
+    - Density [kg m\ :sup:`-3`\ ] and specific heat [W kg\ :sup:`-1`\ K\ :sup:`-1`\] of the fluid
       (by default, set to the properties of water)
     - Convection heat transfer coefficient between the fluid and its
-      surroundings [W/m\ :sup:`2`\ K]
+      surroundings [W m\ :sup:`-2`\ K\ :sup:`-1`\]
     - Temperature of the tank's surroundings [K].
 
 The thermostat receives a temperature from the tank sensor and outputs
@@ -57,8 +57,8 @@ to determine the heat output and has five parameters that can be set:
     - Target temperature [K]
     - Maximum heat output [W]
     - Heat scale proportional factor [W/K]
-    - Heat scale integral factor [W K^-1 s^-1]
-    - Heat scale derivative factor [W s K^-1]
+    - Heat scale integral factor [W K\ :sup:`-1`\ s\ :sup:`-1`\]
+    - Heat scale derivative factor [W s K\ :sup:`-1`\]
 
 One coupling interface between the FMUs with two data transfers :
 
@@ -216,17 +216,15 @@ heatflow_transfer_name = syc.setup.add_data_transfer(
 # Other controls
 
 # Set time step size
-syc.setup.solution_control.time_step_size = "8 [s]"
+syc.setup.solution_control.time_step_size = "4 [s]"
 
 # Set the simulation end time
 syc.setup.solution_control.end_time = "400 [s]"
 
-# Set minimum number of iterations to 2
-syc.setup.solution_control.minimum_iterations = 2
-
-# Set maximum number of iterations to 30 to allow the simulation
-# to converge at each time step
-syc.setup.solution_control.maximum_iterations = 30
+# Set minimum and maximum number of iterations to 1
+# to emulate explicit update.
+syc.setup.solution_control.minimum_iterations = 1
+syc.setup.solution_control.maximum_iterations = 1
 
 # Turn on chart output. This step is necessary
 # to chart the data after solving.
