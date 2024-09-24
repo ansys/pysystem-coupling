@@ -85,12 +85,8 @@ You can clear all HTML files from the ``_builds/html`` directory with:
 
 Run Sphinx Gallery examples
 ---------------------------
-The *Sphinx Gallery* examples are *not* run as part of a documentation build by default.
-This is because realistic runs of System Coupling, involving both System Coupling itself
-*and* the participant solvers, are not currently possible on the build runners that are
-available for PySystemCoupling's GitHub repository. Therefore, examples have to be run
-manually from time to time in a local development environment, and the resulting `Sphinx`
-files committed to the repository.
+The *Sphinx Gallery* examples are *not* run as part of a local documentation build by
+default.
 
 To override the default behavior and rebuild the entire documentation, including
 regeneration of the Sphinx Gallery examples, set the ``PYSYC_BUILD_SPHINX_GALLERY``
