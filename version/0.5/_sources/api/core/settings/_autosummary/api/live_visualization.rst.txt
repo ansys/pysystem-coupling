@@ -1,0 +1,28 @@
+:orphan:
+
+.. _live_visualization:
+
+live_visualization
+==================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.live_visualization
+
+.. autoclass:: live_visualization
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`live_visualization_child <live_visualization_child>`
+
+
+.. rubric:: Included in:
+
+======================================   ==============================
+
+Parent                                                          Summary
+
+======================================   ==============================
+:ref:`output_control <output_control>`       Configure output controls.
+
+======================================   ==============================
+
