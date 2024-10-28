@@ -62,7 +62,7 @@ doc = [
 	"numpydoc==1.8.0",
 	"pypandoc==1.14",
 	"pytest-sphinx==0.6.3",
-	"Sphinx==8.0.2",
+	"Sphinx==8.1.3",
 	"sphinx-autobuild==2024.10.3",
 	"sphinx-autodoc-typehints==2.4.4",
 	"sphinx-copybutton==0.5.2",
