@@ -72,8 +72,8 @@ doc = [
 	"sphinxemoji==0.3.1",
 
 	# pyansys dependencies for sphinx gallery examples
-	"ansys-fluent-core==0.26.1",
-	"ansys-dpf-core==0.13.2",
+	"ansys-fluent-core==0.27.0",
+	"ansys-dpf-core==0.13.3",
 	"ansys-mapdl-core==0.68.6",
 ]
 style = [
