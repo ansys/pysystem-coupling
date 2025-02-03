@@ -6,9 +6,11 @@ inputs:
   image-tag:
     description: 'Docker image tag for version'
     required: true
+    type: string
   upload-coverage:
     description: 'Whether to upload coverage data to Codecov'
     required: true
+    type: boolean
 
 runs:
   using: "composite"
