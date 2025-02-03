@@ -32,7 +32,7 @@ runs:
 
     - name: Upload test coverage
       if: ${{ inputs.upload-coverage }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HTML-coverage-syc
         path: cov_html
