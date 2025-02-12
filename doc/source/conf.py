@@ -239,6 +239,9 @@ def _reset_example(gallery_conf, fname: str, when: str):
                 ["docker", "compose", "-f", "mapdl-docker-compose.yml", "down"]
             )
             print("MAPDL container removed")
+        # Add sleep after example to see if it helps with grpcs errors seen after everything
+        # should have finished.
+        time.sleep(10)
 
 
 rst_epilog = make_replacements_for_versioned_class_refs(("CASE", "SETUP", "SOLUTION"))
