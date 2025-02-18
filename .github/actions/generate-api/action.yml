@@ -6,6 +6,7 @@ inputs:
   image-tag:
     description: 'Docker image tag for version'
     required: true
+    type: string
 
 runs:
   using: "composite"
