@@ -73,7 +73,7 @@ doc = [
 
 	# pyansys dependencies for sphinx gallery examples
 	"ansys-fluent-core==0.28.2",
-	"ansys-dpf-core==0.13.3",
+	"ansys-dpf-core==0.13.4",
 	"ansys-mapdl-core==0.68.6",
 ]
 style = [
