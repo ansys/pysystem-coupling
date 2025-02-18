@@ -78,7 +78,7 @@ doc = [
 ]
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
-	"codespell==2.3.0",
+	"codespell==2.4.1",
 	"flake8==7.1.1",
 ]
 tests = [

@@ -25,7 +25,7 @@ repos:
   - id: flake8
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.3.0 # ensure in sync with pyproject.toml
+  rev: v2.4.1 # ensure in sync with pyproject.toml
   hooks:
   - id: codespell
     args: ["--ignore-words", "doc/styles/config/vocabularies/ANSYS/accept.txt"]
