@@ -6,9 +6,11 @@ inputs:
   image-tag:
     description: 'Docker image tag for version'
     required: true
+    type: string
   upload-coverage:
     description: 'Whether to upload coverage data to Codecov'
     required: true
+    type: boolean
 
 runs:
   using: "composite"
@@ -32,8 +34,9 @@ runs:
 
     - name: Upload test coverage
       if: ${{ inputs.upload-coverage }}
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: HTML-coverage-syc
         path: cov_html
         retention-days: 7
+        overwrite: true
