@@ -66,7 +66,7 @@ doc = [
 	"sphinx-autobuild==2024.10.3",
 	"sphinx-autodoc-typehints==3.0.1",
 	"sphinx-copybutton==0.5.2",
-	"sphinx-gallery==0.18.0",
+	"sphinx-gallery==0.19.0",
 	"sphinx-notfound-page==1.1.0",
 	"sphinxcontrib-websupport==2.0.0",
 	"sphinxemoji==0.3.1",
