@@ -1,0 +1,121 @@
+:orphan:
+
+.. _coupling_participant_child:
+
+coupling_participant_child
+==========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.coupling_participant_child
+
+.. autoclass:: coupling_participant_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+participant_type : `str`
+    Coupling participant type.
+    
+    Allowed values:
+    - "DEFAULT"
+    - "CFX"
+    - "FLUENT"
+    - "MAPDL"
+    - "AEDT"
+    - "FMU"
+    - "FMU-PROXY"
+    - "EXTERNALDATA"
+    - "FORTE"
+    - "DEFAULT-SRV"
+    - "MECH-SRV"
+    - "CFD-SRV"
+    - "SCDT-SRV"
+    - "THERMAL-DESKTOP"
+    - "LS-DYNA" 
+
+participant_display_name : `str`
+    Participant's display name as defined by the participant solver (as
+    opposed to System Coupling's ``display_name`` for the participant).
+
+display_name : `str`
+    Participant's display name as defined in System Coupling.
+
+dimension : `str`
+    Dimension of the participant ("2D" or "3D").
+
+input_variables : :ref:`StringListType<string_list_type>`
+    Input variables for the region or FMU.
+
+output_variables : :ref:`StringListType<string_list_type>`
+    Output variables for the region or FMU.
+
+input_parameters : :ref:`StringListType<string_list_type>`
+    Input parameters for the solver.
+
+output_parameters : :ref:`StringListType<string_list_type>`
+    Output parameters for the solver.
+
+participant_file_loaded : `str`
+    File used to generate the participant.
+
+logging_on : `bool`
+    Specifies whether logging is activated for the participant.
+
+participant_analysis_type : `str`
+    Coupling participant analysis type ("Steady" or "Transient").
+
+use_new_apis : `bool`
+    Controls whether Fluent/MAPDL/AEDT/CFX participant should communicate using new APIs.
+
+restarts_supported : `bool`
+    Indicates whether the participant supports restarts.
+
+can_serialize_fmu_state : `bool`
+    Indicates whether the FMU can state can be serialized.
+
+can_get_and_set_fmu_state : `bool`
+    Indicates whether the FMU can get and set its state.
+
+free_fmu_state : `bool`
+    Optionally Frees the FMU state prior to calling CanGetAndSetFmuState
+
+instancing : `str`
+    Set instancing on the participant.
+
+.. rubric:: Children
+
+================================================   ======================================================================================================================================
+
+Child                                                                                                                                                                             Summary
+
+================================================   ======================================================================================================================================
+:ref:`variable <variable>`                                                                                                             Configure a variable for the coupling participant.
+
+:ref:`parameter <parameter>`                                                                                                          Configure a parameter for the coupling participant.
+
+:ref:`region <region>`                                                                                                                   Configure a region for the coupling participant.
+
+:ref:`properties <properties>`                                                                                                                                               UNDOCUMENTED
+
+:ref:`update_control <update_control>`                                                                                                                         Configure update controls.
+
+:ref:`fmu_parameter <fmu_parameter>`                                                                                               Configure a parameter for an FMU coupling participant.
+
+:ref:`execution_control <execution_control>`                                                                                      Configure execution control for a coupling participant.
+
+:ref:`external_data_file <external_data_file>`                                                                                                   Participant external data file settings.
+
+:ref:`record_interactions <record_interactions>`       "Controls whether the System Coupling Participant library will record the setup and solution data files for testing and debugging.
+
+================================================   ======================================================================================================================================
+
+.. rubric:: Included in:
+
+==================================================   =====================================
+
+Parent                                                                             Summary
+
+==================================================   =====================================
+:ref:`coupling_participant <coupling_participant>`       Configure a coupling participant.
+
+==================================================   =====================================
+

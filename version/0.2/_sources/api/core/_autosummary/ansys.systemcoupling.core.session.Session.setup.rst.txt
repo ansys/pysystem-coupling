@@ -1,0 +1,6 @@
+setup
+=====
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. autoproperty:: Session.setup
