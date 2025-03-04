@@ -16,7 +16,7 @@ env:
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 25_1
   FLUENT_IMAGE_VERSION: "v24.2.0"
-  SYC_IMAGE_VERSION: "v24.2.0"
+  SYC_IMAGE_VERSION: "v25.1.0"
   MAPDL_IMAGE_VERSION: "v24.2-ubuntu"
 
 concurrency:
@@ -177,6 +177,14 @@ jobs:
         with:
           image-tag: v24.2.0
           upload-coverage: false
+
+      - name: Unit Test v25.1.0
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: v25.1.0
+          upload-coverage: true
+        env:
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
       - name: Unit Test latest
         uses: ./.github/actions/unit-test
