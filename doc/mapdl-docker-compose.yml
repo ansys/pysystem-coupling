@@ -9,7 +9,7 @@ services:
       - ANSYS_LOCK=OFF
       - ${AWP_ROOT:-AWP_ROOT222}=${AWP_ROOT_VALUE:-/ansys_inc}
     ports:
-      - '50052:50052'
+      - '50053:50052'
       - '50055:50055'
     image: ${DOCKER_IMAGE}
     entrypoint: "/bin/bash ansys -grpc"
