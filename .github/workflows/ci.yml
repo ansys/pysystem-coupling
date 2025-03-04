@@ -246,6 +246,7 @@ jobs:
           PYFLUENT_LAUNCH_CONTAINER: 1
           FLUENT_IMAGE_TAG: ${{ env.FLUENT_IMAGE_VERSION }}
           PYMAPDL_START_INSTANCE: FALSE
+          PYMAPDL_PORT: "50053"
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:v24.2-ubuntu
 
       #- name: Build PDF Documentation
