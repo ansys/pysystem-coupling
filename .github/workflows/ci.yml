@@ -195,7 +195,7 @@ jobs:
         uses: ./.github/actions/unit-test
         with:
           image-tag: latest
-          upload-coverage: true
+          upload-coverage: false
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
