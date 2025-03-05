@@ -24,8 +24,8 @@ from typing import Tuple
 
 # Define constants relating to the default/current version of System Coupling
 
-SYC_MAJOR_VERSION = 24
-SYC_MINOR_VERSION = 2
+SYC_MAJOR_VERSION = 25
+SYC_MINOR_VERSION = 1
 
 SYC_VERSION_CONCAT = f"{SYC_MAJOR_VERSION}{SYC_MINOR_VERSION}"
 SYC_VERSION_DOT = f"{SYC_MAJOR_VERSION}.{SYC_MINOR_VERSION}"

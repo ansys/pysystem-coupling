@@ -224,6 +224,7 @@ class ParticipantManager:
         except Exception as e:
             self.__solve_exception = e
             LOG.error(f"Solve terminated with exception: {e}.")
+            raise
 
 
 def _start_threads(threads: List[threading.Thread]) -> None:
