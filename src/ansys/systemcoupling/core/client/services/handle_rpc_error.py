@@ -54,6 +54,10 @@ def handle_rpc_error(rpc_error: grpc.RpcError):
     print(f"Current directory: {os.getcwd()}")
     print(f"Files in current directory: {files}")
 
+    if "invoke.log" in files:
+        with open("invoke.log", "r") as f:
+            print(f.read())
+
     # --- ==============================================
     msg = _check_for_syc_exception(rpc_error)
     if msg is not None:
