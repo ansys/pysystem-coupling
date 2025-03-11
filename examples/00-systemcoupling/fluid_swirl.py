@@ -201,6 +201,10 @@ syc.setup.add_data_transfer(
 # %%
 # Solution
 # --------
+status = syc.solution.get_status_messages()
+import pprint
+
+pprint.pprint(status)
 syc.solution.solve()
 
 # %%
