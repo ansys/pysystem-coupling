@@ -53,6 +53,15 @@ def handle_rpc_error(rpc_error: grpc.RpcError):
 
     status = from_call(rpc_error)
     if status is None:
+        # +++ TEMP ========================================
+        import os
+
+        files = [f for f in os.listdir(".") if os.path.isfile(f)]
+        print(f"Current directory: {os.getcwd()}")
+        print(f"Files in current directory: {files}")
+
+        # --- ==============================================
+
         return "Command or query execution failed. No details available."
 
     msg = f"Command execution failed: {status.message} (code={status.code})"
