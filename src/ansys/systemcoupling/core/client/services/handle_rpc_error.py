@@ -61,6 +61,12 @@ def handle_rpc_error(rpc_error: grpc.RpcError):
 
     for filepath in allfiles:
         if filepath.endswith("invoke.log"):
+            print("\n***\ninvoke.log\n***")
+            with open(filepath, "r") as f:
+                print(f.read())
+
+        if "SyC_Log_Controller_" in filepath:
+            print(f"\n***\n{filepath}\n***")
             with open(filepath, "r") as f:
                 print(f.read())
 

@@ -49,7 +49,7 @@ def start_container(
     port : int
         gPRC server local port, mapped to the same port in container.
     """
-    args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
+    args = ["-m", "cosimgui", "--logLevel=1", f"--grpcport=0.0.0.0:{port}"]
 
     if version:
         image_tag = _image_tag(version)
