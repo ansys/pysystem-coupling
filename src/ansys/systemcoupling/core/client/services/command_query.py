@@ -21,48 +21,9 @@
 # SOFTWARE.
 
 import ansys.api.systemcoupling.v0.command_pb2_grpc as command_pb2_grpc
-import ansys.api.systemcoupling.v0.error_pb2 as syc_error_pb2
 import grpc
-from grpc_status.rpc_status import from_call
 
-
-def _error_details_msg(error_details: syc_error_pb2) -> str:
-    return (
-        f"Command or query execution failed with error: {error_details.exception_classname}"
-        f"\n\nServer stacktrace:\n{error_details.stack_trace}"
-    )
-
-
-def _check_for_syc_exception(rpc_error):
-    # grpc_status is not available in some server versions so
-    # check for bespoke method of returning error details via
-    # trailing metadata.
-    meta = rpc_error.trailing_metadata()
-    if meta is not None:
-        for key, value in meta:
-            if key == "syc-exception-bin":
-                error_details = syc_error_pb2.ErrorDetails()
-                error_details.ParseFromString(value)
-                return _error_details_msg(error_details)
-    return None
-
-
-def _handle_rpc_error(rpc_error: grpc.RpcError):
-    msg = _check_for_syc_exception(rpc_error)
-    if msg is not None:
-        return msg
-
-    status = from_call(rpc_error)
-    if status is None:
-        return "Command or query execution failed. No details available."
-
-    msg = f"Command execution failed: {status.message} (code={status.code})"
-    for detail in status.details:
-        if detail.Is(syc_error_pb2.ErrorDetails.DESCRIPTOR):
-            error_details = syc_error_pb2.ErrorDetails()
-            detail.Unpack(error_details)
-            msg += _error_details_msg(error_details)
-    return msg
+from ansys.systemcoupling.core.client.services.handle_rpc_error import handle_rpc_error
 
 
 class CommandQueryService:
@@ -74,5 +35,5 @@ class CommandQueryService:
             response, call = self.__stub.InvokeCommand.with_call(request)
             return response, call.trailing_metadata()
         except grpc.RpcError as rpc_error:
-            msg = _handle_rpc_error(rpc_error)
+            msg = handle_rpc_error(rpc_error)
             raise RuntimeError(msg) from None
