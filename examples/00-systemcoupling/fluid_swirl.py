@@ -201,7 +201,7 @@ syc.setup.add_data_transfer(
 # %%
 # Solution
 # --------
-status = syc.solution.get_status_messages()
+status = syc.setup.get_status_messages()
 import pprint
 
 pprint.pprint(status)
