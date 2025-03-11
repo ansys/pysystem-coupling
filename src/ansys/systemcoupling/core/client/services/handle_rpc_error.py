@@ -47,21 +47,20 @@ def _check_for_syc_exception(rpc_error):
 
 
 def handle_rpc_error(rpc_error: grpc.RpcError):
+    # +++ TEMP ========================================
+    import os
+
+    files = [f for f in os.listdir(".") if os.path.isfile(f)]
+    print(f"Current directory: {os.getcwd()}")
+    print(f"Files in current directory: {files}")
+
+    # --- ==============================================
     msg = _check_for_syc_exception(rpc_error)
     if msg is not None:
         return msg
 
     status = from_call(rpc_error)
     if status is None:
-        # +++ TEMP ========================================
-        import os
-
-        files = [f for f in os.listdir(".") if os.path.isfile(f)]
-        print(f"Current directory: {os.getcwd()}")
-        print(f"Files in current directory: {files}")
-
-        # --- ==============================================
-
         return "Command or query execution failed. No details available."
 
     msg = f"Command execution failed: {status.message} (code={status.code})"
