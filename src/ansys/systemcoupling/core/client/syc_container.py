@@ -101,6 +101,10 @@ def start_container(
         run_args.insert(idx, network)
         run_args.insert(idx, "--network")
 
+    import pprint
+
+    print(f"Running container with args: {pprint.pformat(run_args)}")
+
     subprocess.run(run_args)
     return port
 
