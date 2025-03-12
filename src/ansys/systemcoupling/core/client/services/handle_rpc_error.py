@@ -65,7 +65,11 @@ def handle_rpc_error(rpc_error: grpc.RpcError):
             with open(filepath, "r") as f:
                 print(f.read())
 
-        if "SyC_Log_Controller_" in filepath:
+        if (
+            "SyC_Log_Controller_" in filepath
+            or "licdebug" in filepath
+            or "ansyscl" in filepath
+        ):
             print(f"\n***\n{filepath}\n***")
             with open(filepath, "r") as f:
                 print(f.read())
