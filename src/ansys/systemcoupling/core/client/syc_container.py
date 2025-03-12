@@ -88,6 +88,12 @@ def start_container(
         run_args.insert(idx, f"ANSYSLMD_LICENSE_FILE={license_server}")
         run_args.insert(idx, "-e")
 
+    disable_license_check = os.getenv("SYC_DISABLE_LICENSE_CHECK")
+    if disable_license_check:
+        idx = run_args.index("-e")
+        run_args.insert(idx, f"SYC_DISABLE_LICENSE_CHECK=1")
+        run_args.insert(idx, "-e")
+
     if network:
         idx = run_args.index("-p")
         run_args.insert(idx, network)
