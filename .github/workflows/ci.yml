@@ -261,7 +261,6 @@ jobs:
           PYMAPDL_START_INSTANCE: FALSE
           PYMAPDL_PORT: "50053"
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:${{ env.MAPDL_IMAGE_VERSION }}
-          #SYC_DISABLE_LICENSE_CHECK: 1
 
       #- name: Build PDF Documentation
       #  run: |

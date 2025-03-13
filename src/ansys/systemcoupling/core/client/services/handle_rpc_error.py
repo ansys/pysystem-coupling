@@ -47,35 +47,6 @@ def _check_for_syc_exception(rpc_error):
 
 
 def handle_rpc_error(rpc_error: grpc.RpcError):
-    # +++ TEMP ========================================
-    import os
-    import pprint
-
-    allfiles = []
-    for dirpath, _, files in os.walk("."):
-        for f in files:
-            allfiles.append(os.path.join(dirpath, f))
-
-    print(f"Current directory: {os.getcwd()}")
-    print(f"Files in and below current directory: {pprint.pformat(allfiles)}")
-
-    for filepath in allfiles:
-        if filepath.endswith("invoke.log"):
-            print("\n***\ninvoke.log\n***")
-            with open(filepath, "r") as f:
-                print(f.read())
-
-        if (
-            "SyC_Log_Controller_" in filepath
-            or "licdebug" in filepath
-            or "ansyscl" in filepath
-        ):
-            print(f"\n***\n{filepath}\n***")
-            with open(filepath, "r") as f:
-                print(f.read())
-
-    # --- ==============================================
-
     msg = _check_for_syc_exception(rpc_error)
     if msg is not None:
         return msg

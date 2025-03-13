@@ -49,7 +49,7 @@ def start_container(
     port : int
         gPRC server local port, mapped to the same port in container.
     """
-    args = ["-m", "cosimgui", "--logLevel=1", f"--grpcport=0.0.0.0:{port}"]
+    args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
 
     if version:
         image_tag = _image_tag(version)
@@ -81,29 +81,20 @@ def start_container(
         idx = run_args.index("-p")
         run_args.insert(idx, container_user)
         run_args.insert(idx, "--user")
+        # Licensing can't log to default location if user is not the default 'root'
+        run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
+        run_args.insert(idx, "-e")
 
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
         idx = run_args.index("-e")
         run_args.insert(idx, f"ANSYSLMD_LICENSE_FILE={license_server}")
         run_args.insert(idx, "-e")
-        run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
-        run_args.insert(idx, "-e")
-
-    disable_license_check = os.getenv("SYC_DISABLE_LICENSE_CHECK")
-    if disable_license_check:
-        idx = run_args.index("-e")
-        run_args.insert(idx, f"SYC_DISABLE_LICENSE_CHECK=1")
-        run_args.insert(idx, "-e")
 
     if network:
         idx = run_args.index("-p")
         run_args.insert(idx, network)
         run_args.insert(idx, "--network")
-
-    import pprint
-
-    print(f"Running container with args: {pprint.pformat(run_args)}")
 
     subprocess.run(run_args)
     return port
