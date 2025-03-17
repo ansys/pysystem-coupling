@@ -245,6 +245,17 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
         series_type, intf_or_part_disp_name, trans_disp_name = _parse_header(header)
         if series_type == SeriesType.CONVERGENCE:
             prev_part_name = ""
+
+            # If there are no convergence headings, transfer_disambig will
+            # remain unpopulated. In this case, assume for now that there
+            # is no ambiguity. Although not strictly correct, this is a
+            # reasonable assumption for the majority of cases.
+            # TODO: look for alternative method to determine a
+            # disambiguation index in the case of no convergence headers.
+            # If this is not possible, look for a way to detect that
+            # data transfers are ambiguous and raise an exception or
+            # warn and skip plotting.
+
             if trans_disp_name in transfer_disambig:
                 transfer_disambig[trans_disp_name] += 1
             else:
@@ -258,7 +269,8 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                 data_index,
                 series_type,
                 transfer_display_name=trans_disp_name,
-                disambiguation_index=transfer_disambig[trans_disp_name],
+                # get(..., 0) for case where transfer_disambig empty (see note above)
+                disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
             )
             intf_info.transfer_info.append(series_info)
         else:
@@ -276,7 +288,9 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                             data_index,
                             series_type,
                             transfer_display_name=trans_disp_name,
-                            disambiguation_index=transfer_disambig[trans_disp_name],
+                            disambiguation_index=transfer_disambig.get(
+                                trans_disp_name, 0
+                            ),
                             participant_display_name=part_disp_name,
                             line_suffixes=[suffix],
                         )
@@ -292,7 +306,7 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                         data_index,
                         series_type,
                         transfer_display_name=trans_disp_name,
-                        disambiguation_index=transfer_disambig[trans_disp_name],
+                        disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
                         participant_display_name=part_disp_name,
                     )
                 )
