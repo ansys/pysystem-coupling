@@ -312,14 +312,21 @@ def get_extended_cmd_metadata(api) -> list:
     """
 
     def fix_up_doc(cmd_metadata):
-        if get_syc_version(api) != "24.2":
+        version = get_syc_version(api)
+        if version not in ("24.2", "25.1"):
             return cmd_metadata
 
-        # There is a bug in doc text queried from 24.2 SyC. The "*" need
-        # to be escaped to avoid issues in Sphinx. This can be a surgical
-        # fix because 24.2 is frozen now.
+        command_to_fix = None
+        if version == "24.2":
+            command_to_fix = "add_participant"
+        elif version == "25.1":
+            command_to_fix = "update_participant"
+
+        # There are bugs in doc text queried from 24.2 and 25.1 SyC.
+        # The "*" need to be escaped to avoid issues in Sphinx. This
+        # can be a surgical fix because these versions are frozen now.
         for cmd in cmd_metadata:
-            if cmd["pyname"] == "add_participant":
+            if cmd["pyname"] == command_to_fix:
                 add_part_cmd = cmd
                 for arg_name, arg_info in add_part_cmd["args"]:
                     if arg_name == "InputFile":
