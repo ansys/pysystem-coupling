@@ -50,6 +50,10 @@ class SycProcess:  # pragma: no cover
             host, port, working_dir, version, **kwargs
         )
 
+    @property
+    def path_to_system_coupling(self) -> str:
+        return self.__process.args[0]
+
     def end(self):
         if self.__process and self.__process.poll() is None:
             pid = self.__process.pid

@@ -137,7 +137,16 @@ class SycGrpc(object):
                 _LOCALHOST_IP, port, working_dir, version, **kwargs
             )
             LOG.debug("...started")
-            self._connect(_LOCALHOST_IP, port)
+            try:
+                self._connect(_LOCALHOST_IP, port)
+            except Exception as e:
+                if "v251" in self.__process.path_to_system_coupling:
+                    e.args += (
+                        "Failure to connect might be because you are running an "
+                        "unpatched version of System Coupling 25 R1. ",
+                    )
+                raise
+
         if start_output:
             self.start_output()
 
