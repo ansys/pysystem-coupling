@@ -142,7 +142,7 @@ class SycGrpc(object):
             except Exception as e:
                 if "v251" in self.__process.path_to_system_coupling:
                     e.args += (
-                        "Failure to connect might be because you are running an "
+                        "Connection will fail if you are running an "
                         "unpatched version of System Coupling 25 R1. ",
                     )
                 raise
