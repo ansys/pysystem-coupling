@@ -13,7 +13,7 @@ startup in the gRPC server mode that is used by PySystemCoupling. The patches
 replace various Python files in the installation that are concerned with
 supporting PySystemCoupling.
 
-PySystemCoupling releases 0.8 and greater are compatible with this patch. Earlier
+PySystemCoupling releases 0.9 and greater are compatible with this patch. Earlier
 releases of PySystemCoupling will not work with the 25 R1 release even if the patch
 has been applied to it.
 
