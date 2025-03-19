@@ -87,11 +87,13 @@ function. This will affect which ``AWP_ROOT<version>`` environment variable is e
 
    There is an issue with the 25 R1 release of Ansys System Coupling that prevents it from
    working in the gRPC server mode that is needed to support PySystemCoupling. A small patch
-   may be applied to some of the Python files in the System Coupling installation to allow
-   it to work with the current release of PySystemCoupling. This is provided in the `patches/`
-   directory of this repository. Otherwise, PySystemCoupling should be used with an earlier
-   release of System Coupling by setting the environment variable ``AWP_ROOT`` or specifying
-   the version number as an argument to the ``launch()`` function.
+   is available that may be applied to some of the Python files in the System Coupling
+   installation. This is provided in the `patches/` directory of this repository and will
+   allow System Coupling to work with the current release of PySystemCoupling.
+
+   Otherwise, PySystemCoupling should be used with an earlier release of System Coupling by
+   setting the environment variable ``AWP_ROOT`` or specifying the version number as an
+   argument to the ``launch()`` function.
 
 
 The System Coupling API is exposed to PySystemCoupling in two forms:
