@@ -86,7 +86,7 @@ function. This will affect which ``AWP_ROOT<version>`` environment variable is e
    **WARNING**
 
    There is an issue with the 25 R1 release of Ansys System Coupling that prevents it from
-   working in the gRPC server mode that is needed to support PySystemCoupling. A small patch
+   working in the gRPC server mode on which PySystemCoupling depends. A small patch
    is available that may be applied to some of the Python files in the System Coupling
    installation. This is provided in the `patches/` directory of this repository and will
    allow System Coupling to work with the current release of PySystemCoupling.
