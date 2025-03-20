@@ -1,0 +1,82 @@
+:orphan:
+
+.. _setup_root:
+
+setup_root
+==========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.setup_root
+
+.. autoclass:: setup_root
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Children
+
+==================================================   =============================================================================
+
+Child                                                                                                                      Summary
+
+==================================================   =============================================================================
+:ref:`activate_hidden <activate_hidden>`                                 Contains settings to control exposure of hidden features.
+
+:ref:`library <library>`                                 Contains objects that can be referenced from elsewhere in the data model.
+
+:ref:`coupling_participant <coupling_participant>`                                               Configure a coupling participant.
+
+:ref:`analysis_control <analysis_control>`                                                            Configure coupling controls.
+
+:ref:`coupling_interface <coupling_interface>`                                                     Configure a coupling interface.
+
+:ref:`solution_control <solution_control>`                                                            Configure solution controls.
+
+:ref:`output_control <output_control>`                                                                  Configure output controls.
+
+==================================================   =============================================================================
+
+.. rubric:: Commands
+
+==============================================================================   =================================================================================
+
+Command                                                                                                                                                    Summary
+
+==============================================================================   =================================================================================
+:ref:`add_interface <add_interface>`                                                         Adds an interface based on the participant and region names specified
+
+:ref:`add_interface_by_display_names <add_interface_by_display_names>`               Adds an interface based on the participant and region display names specified
+
+:ref:`add_data_transfer <add_data_transfer>`                                              Adds data transfer based on arguments that specify the interface, target
+
+:ref:`add_data_transfer_by_display_names <add_data_transfer_by_display_names>`            Adds data transfer based on arguments that specify the interface, target
+
+:ref:`get_region_names_for_participant <get_region_names_for_participant>`                                        Gets all of the specified participant's regions.
+
+:ref:`add_reference_frame <add_reference_frame>`                                                                            Add a reference frame to the datamodel
+
+:ref:`add_transformation <add_transformation>`                                                  Add a transformation to a reference frame defined in the datamodel
+
+:ref:`delete_transformation <delete_transformation>`                                                                Delete a transformation from a reference frame
+
+:ref:`add_participant <add_participant>`                                                                            Adds a coupling participant to the data model.
+
+:ref:`update_participant <update_participant>`                                       Given the name of a server participant, updates the state of the participant.
+
+:ref:`get_execution_command <get_execution_command>`                                          Gets the execution command needed to start the specified participant
+
+:ref:`generate_input_file <generate_input_file>`                                                  Generates the input journal file for a given Fluent participant.
+
+:ref:`import_system_coupling_input_file <import_system_coupling_input_file>`               Reads the specified System Coupling SCI file and pushes its information
+
+:ref:`add_named_expression <add_named_expression>`                                                            Creates a named expression object in the data model.
+
+:ref:`add_expression_function <add_expression_function>`                                        Creates an expression function object in the data model that makes
+
+:ref:`reload_expression_function_modules <reload_expression_function_modules>`                 This may be called to force a reload of expression function modules
+
+:ref:`has_input_file_changed <has_input_file_changed>`                                 Given the name of a participant, checks whether the input file has changed.
+
+:ref:`get_setup_summary <get_setup_summary>`                                                                Returns a string containing a formatted summary of the
+
+:ref:`get_status_messages <get_status_messages>`                                         Provides information relating to the current state of the analysis setup.
+
+==============================================================================   =================================================================================
+
