@@ -83,6 +83,19 @@ In a standard user installation, the expectation is that only ``AWP_ROOT251`` is
 (It is also possible to provide a different version number as an argument to the ``launch()``
 function. This will affect which ``AWP_ROOT<version>`` environment variable is examined.)
 
+   **WARNING**
+
+   There is an issue with the 25 R1 release of Ansys System Coupling that prevents it from
+   working in the gRPC server mode on which PySystemCoupling depends. A small patch
+   is available that may be applied to some of the Python files in the System Coupling
+   installation. This is provided in the ``patches/`` directory of this repository and will
+   allow System Coupling to work with the current release of PySystemCoupling.
+
+   Otherwise, PySystemCoupling should be used with an earlier release of System Coupling by
+   setting the environment variable ``AWP_ROOT`` or specifying the version number as an
+   argument to the ``launch()`` function.
+
+
 The System Coupling API is exposed to PySystemCoupling in two forms:
 
 * A documented interface based on concrete Python classes, following Pythonic conventions
@@ -94,7 +107,7 @@ familiar with System Coupling, adjusting to this form, which is the recommended 
 However, if you are transitioning existing scripts, the native System Coupling API is made available
 as a convenience.
 
-.. note::
+   **Note**
 
    While most commands should work as expected via the native System Coupling API,
    no guarantees can be given because of the nature of how it is exposed.

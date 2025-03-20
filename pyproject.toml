@@ -5,10 +5,10 @@ build-backend = "flit_core.buildapi"
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "ansys-systemcoupling-core"
-version = "0.9.dev0"
+version = "0.10.dev0"
 description = "A Python wrapper for Ansys System Coupling."
 readme = "README.rst"
-requires-python = ">=3.10,<3.13"
+requires-python = ">=3.10,<3.14"
 license = {file = "LICENSE"}
 authors = [
     {name = "ANSYS, Inc.", email = "pyansys.support@ansys.com"},
@@ -39,6 +39,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 
 [project.optional-dependencies]
@@ -73,7 +74,6 @@ doc = [
 
 	# pyansys dependencies for sphinx gallery examples
 	"ansys-fluent-core==0.29.0",
-	"ansys-dpf-core==0.13.4",
 	"ansys-mapdl-core==0.69.3",
 ]
 style = [
