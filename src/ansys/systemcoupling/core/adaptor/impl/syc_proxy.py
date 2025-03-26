@@ -28,7 +28,10 @@ from ansys.systemcoupling.core.adaptor.impl.static_info import (
     make_combined_metadata,
 )
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
-from ansys.systemcoupling.core.util.state_keys import adapt_native_named_object_keys
+from ansys.systemcoupling.core.util.state_keys import (
+    adapt_client_named_object_keys,
+    adapt_native_named_object_keys,
+)
 
 
 class SycProxy(SycProxyInterface):
@@ -37,13 +40,16 @@ class SycProxy(SycProxyInterface):
         self.__injected_cmds = {}
         self.__version = None
         self.__defunct = False
+        self.__named_obj_level_map: Dict = {}
+        self.__datamodel_metadata = None
 
     def reset_rpc(self, rpc):
         """Reset the original ``rpc`` instance with a new one if the remote connection is lost.
 
         When a remote connection is lost, this method is called, providing an
         ``rpc`` instance that replaces the original one from the initializer.
-        A sensible error is raised if any attempt is made to use this method.
+        The intent is that a sensible error will be raised if any attempt is
+        made to access any attributes on the replacement rpc.
 
         The motivating use case is to catch attempted uses of stale
         objects after the current session has ended.
@@ -66,8 +72,9 @@ class SycProxy(SycProxyInterface):
         if category == "setup":
             cmd_metadata = get_extended_cmd_metadata(self.__rpc)
             root_type = "SystemCoupling"
-            dm_metadata = get_dm_metadata(self.__rpc, root_type)
-            metadata = make_combined_metadata(dm_metadata, cmd_metadata, category)
+            metadata = make_combined_metadata(
+                self._get_datamodel_metadata(root_type), cmd_metadata, category
+            )
         elif category in ("case", "solution"):
             cmd_metadata = get_extended_cmd_metadata(self.__rpc)
             metadata, root_type = make_cmdonly_metadata(cmd_metadata, category)
@@ -81,6 +88,9 @@ class SycProxy(SycProxyInterface):
         return self.__version
 
     def set_state(self, path, state):
+        state = adapt_client_named_object_keys(
+            state, self._get_named_object_level_map(), path.count("/") - 1
+        )
         self.__rpc.SetState(ObjectPath=path, State=state)
 
     def get_state(self, path):
@@ -116,3 +126,23 @@ class SycProxy(SycProxyInterface):
         cmd_name = args[1]
         cmd = self.__injected_cmds.get(cmd_name, None)
         return cmd(**kwargs)
+
+    def _get_datamodel_metadata(self, root_type):
+        if self.__datamodel_metadata is None:
+            self.__datamodel_metadata = get_dm_metadata(self.__rpc, root_type)
+        return self.__datamodel_metadata
+
+    def _get_named_object_level_map(self):
+        if not self.__named_obj_level_map:
+            self._make_named_object_level_map(root_type="SystemCoupling")
+        return self.__named_obj_level_map
+
+    def _make_named_object_level_map(self, root_type):
+        def visit_children(metadata, level):
+            for k, v in metadata["__children"].items():
+                if v["isNamed"]:
+                    self.__named_obj_level_map.setdefault(level, set()).add(k)
+                visit_children(v, level + 1)
+
+        dm_metadata = self._get_datamodel_metadata(root_type)
+        visit_children(dm_metadata[root_type], 0)

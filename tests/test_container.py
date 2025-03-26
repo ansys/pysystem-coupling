@@ -79,6 +79,34 @@ def test_set_and_get() -> None:
         assert setup.library.expression.get_object_names() == ["expr1"]
 
 
+def test_set_and_get_state() -> None:
+    with pysystemcoupling.launch_container() as syc:
+        assert syc.ping()
+
+        # This is a variation on test_get_and_set that focuses on
+        # get_state and set_state. An issue had been found with the
+        # handling of named objects in the submitted state
+        # dictionary, which this test is designed to exercise.
+        setup = syc.setup
+        expr1 = setup.library.expression.create("expr1")
+
+        state = setup.get_state()
+        assert "library" in state
+
+        state["library"]["expression"]["expr1"]["expression_name"] = "expr_1"
+        setup.set_state(state)
+
+        assert expr1.expression_name == "expr_1"
+
+        state = setup.library.get_state()
+        assert "expression" in state
+
+        state["expression"]["expr1"]["expression_string"] = "2 * x"
+        setup.library.set_state(state)
+
+        assert expr1.expression_string == "2 * x"
+
+
 def test_more_datamodel_operations() -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
