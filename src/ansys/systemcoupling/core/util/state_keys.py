@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import copy
+from typing import Any, Dict, Set
 
 
 def adapt_native_named_object_keys(state):
@@ -74,7 +75,9 @@ def adapt_native_named_object_keys_in_place(state):
         del state[k]
 
 
-def adapt_client_named_object_keys(state, level_type_map):
+def adapt_client_named_object_keys(
+    state: Dict[str, Any], level_type_map: Dict[int, Set[str]], start_level: int = 0
+) -> Dict[str, Any]:
     """Transform a System Coupling client-style nested state dictionary
     to an equivalent native format.
 
@@ -89,12 +92,18 @@ def adapt_client_named_object_keys(state, level_type_map):
 
     Parameters
     ----------
+    state: dict
+        The nested state dictionary to transform to the native format.
     level_type_map: dict
         Dictionary from the integer nest level (0-based) to sets of
         named object types at this level. Note that the level is
         the data model level. This means it does not include the extra
         levels introduced by the client-side format but more closely
         aligns with the target native format.
+    start_level: int, optional
+        If state is a sub-state of a larger state, and the level_type_map
+        is for the larger state, then this parameter can be used to
+        provide a starting level for the transformation.
     """
 
     def do_adapt(s, level=0):
@@ -110,4 +119,4 @@ def adapt_client_named_object_keys(state, level_type_map):
                 state_out[id] = copy.copy(sub_state)
         return state_out
 
-    return do_adapt(state)
+    return do_adapt(state, level=start_level)
