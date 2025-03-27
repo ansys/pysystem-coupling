@@ -1,0 +1,28 @@
+:orphan:
+
+.. _instancing:
+
+instancing
+==========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.instancing
+
+.. autoclass:: instancing
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`instancing_child <instancing_child>`
+
+
+.. rubric:: Included in:
+
+========================   =============================================================================
+
+Parent                                                                                           Summary
+
+========================   =============================================================================
+:ref:`library <library>`       Contains objects that can be referenced from elsewhere in the data model.
+
+========================   =============================================================================
+
