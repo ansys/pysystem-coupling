@@ -79,7 +79,7 @@ doc = [
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
 	"codespell==2.4.1",
-	"flake8==7.1.2",
+	"flake8==7.2.0",
 ]
 tests = [
 	"pytest",
