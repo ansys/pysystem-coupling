@@ -90,7 +90,10 @@ def test_partlib_cosim_volume_simple() -> None:
         messages = [
             msg for msg in setup.get_status_messages() if msg["level"] == "Information"
         ]
-        assert len(messages) == 1
+        if compare_versions(syc.version, "25.1") > 0:
+            assert len(messages) == 3
+        else:
+            assert len(messages) == 1
         assert messages[0]["path"] == "analysis_control"
         assert messages[0]["message"].startswith(
             "The data transfers define an optimized one-way workflow."
