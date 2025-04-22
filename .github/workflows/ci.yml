@@ -15,9 +15,9 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 25_1
-  FLUENT_IMAGE_VERSION: "v24.2.0"
+  FLUENT_IMAGE_VERSION: "v25.1.0"
   SYC_IMAGE_VERSION: "v25.1.0"
-  MAPDL_IMAGE_VERSION: "v24.2-ubuntu"
+  MAPDL_IMAGE_VERSION: "v25.1-ubuntu"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
