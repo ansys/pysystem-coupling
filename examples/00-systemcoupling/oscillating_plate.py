@@ -231,7 +231,7 @@ fluent.results.graphics.picture.y_resolution = 1440
 fluent.results.graphics.contour["contour_static_pressure"] = {}
 contour = fluent.results.graphics.contour["contour_static_pressure"]
 
-contour.coloring.option = "banded"
+contour.colorings.banded = True
 contour.field = "pressure"
 contour.filled = True
 
