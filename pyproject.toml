@@ -57,7 +57,7 @@ classesgen = [
 	"isort==6.0.1",
 ]
 doc = [
-	"ansys-sphinx-theme==1.4.2",
+	"ansys-sphinx-theme==1.5.0",
 	"jupyter_sphinx==0.5.3",
 	"matplotlib",
 	"numpydoc==1.8.0",
@@ -73,8 +73,8 @@ doc = [
 	"sphinxemoji==0.3.1",
 
 	# pyansys dependencies for sphinx gallery examples
-	"ansys-fluent-core==0.30.5",
-	"ansys-mapdl-core==0.69.3",
+	"ansys-fluent-core==0.32.1",
+	"ansys-mapdl-core==0.70.1",
 ]
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
