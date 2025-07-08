@@ -20,7 +20,7 @@ repos:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.2.0 # ensure in sync with pyproject.toml
+  rev: 7.3.0 # ensure in sync with pyproject.toml
   hooks:
   - id: flake8
 
