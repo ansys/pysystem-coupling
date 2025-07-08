@@ -187,7 +187,7 @@ jobs:
         uses: ./.github/actions/unit-test
         with:
           image-tag: v25.1.0
-          upload-coverage: true
+          upload-coverage: false # Disable for now as upload is rate limited
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
