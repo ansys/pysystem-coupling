@@ -17,7 +17,7 @@ env:
   DOC_BUILD_SYC_VERSION: 25_2
   FLUENT_IMAGE_VERSION: "v25.2.0"
   SYC_IMAGE_VERSION: "v25.2.0"
-  MAPDL_IMAGE_VERSION: "v25.2-ubuntu"
+  MAPDL_IMAGE_VERSION: "v25.1-ubuntu"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
