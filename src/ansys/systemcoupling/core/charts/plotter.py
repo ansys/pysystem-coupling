@@ -37,6 +37,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import (
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     PlotDefinitionManager,
 )
+from ansys.systemcoupling.core.util.assertion import assert_
 
 
 def _process_timestep_data(
@@ -282,13 +283,13 @@ class Plotter:
         # this (assume the wait function is stored as an
         # attribute):
         #
-        # assert self._wait_for_metadata is not None
+        # assert_(self._wait_for_metadata is not None)
         # metadata = self._wait_for_metadata()
         # if metadata is not None:
         #     self.set_metadata(metadata)
         # else:
         #     return
-        assert self._request_update is not None
+        assert_(self._request_update is not None)
 
         self.ani = FuncAnimation(
             self._fig,

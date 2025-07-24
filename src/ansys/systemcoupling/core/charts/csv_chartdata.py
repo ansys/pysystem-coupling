@@ -32,6 +32,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import (
     TimestepData,
     TransferSeriesInfo,
 )
+from ansys.systemcoupling.core.util.assertion import assert_
 
 HeaderList = list[str]
 ChartData = list[list[float]]
@@ -231,8 +232,8 @@ def _parse_suffix(header: str, part_disp_name: str) -> str:
 
 def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo:
     intf_info = InterfaceInfo(name=interface_name)
-    assert headers[0] == "Iteration"
-    assert headers[1] == "Step"
+    assert_(headers[0] == "Iteration", 'Header expected to be "Iteration"')
+    assert_(headers[1] == "Step", 'Header expected to be "Iteration"')
     intf_info.is_transient = headers[2] == "Time"
 
     start_index = 3 if intf_info.is_transient else 2
@@ -263,7 +264,7 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
 
             intf_disp_name = intf_or_part_disp_name
             if data_index == 0:
-                assert intf_info.display_name == ""
+                assert_(intf_info.display_name == "", "display_name should be empty")
                 intf_info.display_name = intf_disp_name
             series_info = TransferSeriesInfo(
                 data_index,

@@ -69,7 +69,8 @@ class PimFileTransferService:  # pragma: no cover
             # This import is available in the Ansys Lab environment
             from simple_upload_server.client import Client
 
-            self.file_service = Client(
+            # Exclude Bandit check. Hardcoded token only used in constrained Ansys Lab environment.
+            self.file_service = Client(  # nosec B106
                 token="token",
                 url=upload_server.uri,
                 headers=upload_server.headers,
