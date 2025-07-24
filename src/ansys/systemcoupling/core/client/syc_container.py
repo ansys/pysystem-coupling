@@ -26,10 +26,6 @@ from pathlib import Path
 from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT, normalize_version
 from ansys.systemcoupling.core.util.logging import LOG
 
-# Exclude Bandit check. Subprocess is needed to start the container.
-# import subprocess  # nosec B404
-
-
 _MPI_VERSION_VAR = "FLUENT_INTEL_MPI_VERSION"
 _MPI_VERSION = "2021"
 
