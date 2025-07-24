@@ -233,7 +233,7 @@ def _parse_suffix(header: str, part_disp_name: str) -> str:
 def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo:
     intf_info = InterfaceInfo(name=interface_name)
     assert_(headers[0] == "Iteration", 'Header expected to be "Iteration"')
-    assert_(headers[1] == "Step", 'Header expected to be "Iteration"')
+    assert_(headers[1] == "Step", 'Header expected to be "Step"')
     intf_info.is_transient = headers[2] == "Time"
 
     start_index = 3 if intf_info.is_transient else 2

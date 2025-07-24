@@ -41,13 +41,18 @@ def _image_tag(version: str) -> str:
 
 def start_container(
     mounted_from: str, mounted_to: str, network: str, port: int, version: str
-) -> None:
+) -> object:
     """Start a System Coupling container.
 
     Parameters
     ----------
     port : int
         gPRC server local port, mapped to the same port in container.
+
+    Returns
+    -------
+    object
+        The container instance (``Container`` object from Python docker library).
     """
     import docker
 
@@ -93,9 +98,7 @@ def start_container(
         run_args["network"] = network
 
     docker_client = docker.from_env()
-    docker_client.containers.run(**run_args)
-
-    return port
+    return docker_client.containers.run(**run_args)
 
 
 def create_network(name):
