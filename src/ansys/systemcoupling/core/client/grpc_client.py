@@ -101,6 +101,7 @@ class SycGrpc(object):
         self.__output_thread = None
         self.__pim_instance = None
         self.__skip_exit = False
+        self.__container = None
 
     @classmethod
     def _cleanup(cls):
@@ -161,7 +162,9 @@ class SycGrpc(object):
         """Start the System Coupling container and establish a connection."""
         LOG.debug("Starting container...")
         port = port if port is not None else _find_port()
-        start_container(mounted_from, mounted_to, network, port, version)
+        self.__container = start_container(
+            mounted_from, mounted_to, network, port, version
+        )
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
@@ -307,12 +310,18 @@ class SycGrpc(object):
             try:
                 self.__ostream_service.end_streaming()
             except Exception as e:
-                LOG.debug("Exception on OutputStreamService.end_straming(): " + str(e))
+                LOG.debug(f"Exception on OutputStreamService.end_straming(): {e}")
             self.__process_service.quit()
             self.__channel = None
         if self.__process:
             self.__process.end()
             self.__process = None
+        if self.__container:
+            try:
+                self.__container.stop()
+            except Exception as e:
+                LOG.debug(f"Exception from container.stop(): {e}")
+            self.__container = None
         if self.__pim_instance is not None:
             self.__pim_instance.delete()
             self.__pim_instance = None

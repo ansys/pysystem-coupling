@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from ansys.systemcoupling.core.util.assertion import assert_
 from ansys.systemcoupling.core.util.pathstr import join_path_strs
 
 
@@ -81,7 +82,7 @@ class ObjectPath(str):
 
     def get_name(self):
         left, sep, right = self.rpartition("/")
-        assert ":" in right
+        assert_(":" in right)
         type, sep, name = right.partition(":")
         return name
 

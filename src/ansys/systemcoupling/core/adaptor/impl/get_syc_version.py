@@ -44,11 +44,14 @@ def get_syc_version(api) -> str:
     def clean_version_string(version_in: str) -> str:
         year, _, release = version_in.partition(" ")
         if len(year) == 4 and year.startswith("20") and release.startswith("R"):
+            # Exclude Bandit check. The try-except-pass is only used to simplify logic.
+            # An exception will be thrown in any case, but it *also* gets thrown for
+            # input that does not match the above 'if' condition.
             try:
                 year = int(year[2:])
                 release = int(release[1:])
                 return f"{year}.{release}"
-            except:
+            except:  # nosec B110
                 pass
         raise RuntimeError(
             f"Version string {version_in} has invalid format (expect '20yy Rn')."

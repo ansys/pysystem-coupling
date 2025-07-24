@@ -23,7 +23,9 @@
 from copy import deepcopy
 import os
 import platform
-import subprocess
+
+# Exclude Bandit check. Subprocess is needed to start the System Coupling.
+import subprocess  # nosec B404
 
 import psutil
 
@@ -99,7 +101,8 @@ def _start_system_coupling(
         args += extra_args
 
     LOG.info(f"Starting System Coupling: {args[0]}")
-    return subprocess.Popen(
+    # Exclude Bandit check. No untrusted input to arguments.
+    return subprocess.Popen(  # nosec B603
         args,
         env=env,
         cwd=working_dir,

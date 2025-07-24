@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from ansys.systemcoupling.core.util.assertion import assert_
 from ansys.systemcoupling.core.util.pathstr import to_typelist
 
 
@@ -39,7 +40,7 @@ class Node:
 
 class Container(Node):
     def __init__(self, id, category, parent=None):
-        assert category != Node.Parameter
+        assert_(category != Node.Parameter)
         super().__init__(id, category, parent)
         self.children = []
 
@@ -52,7 +53,7 @@ class Container(Node):
 
 class Parameter(Node):
     def __init__(self, name, data_type, parent):
-        assert parent is not None
+        assert_(parent is not None)
         super().__init__(name, Node.Parameter, parent)
         self.data_type = data_type
         self.options = None

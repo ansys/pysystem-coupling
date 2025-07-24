@@ -187,7 +187,9 @@ def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
     file_name = os.path.basename(filepath)
     root_name, _, ext = file_name.rpartition(".")
     ext = f".{ext}" if ext else ""
-    new_name = f"{root_name}_{int(time.time())}_{random.randint(1, 10000000)}{ext}"
+    # Exclude Bandit check as random number is simply being used to create a unique
+    # file name, not for security/cryptographic purposes.
+    new_name = f"{root_name}_{int(time.time())}_{random.randint(1, 10000000)}{ext}"  # nosec B311
 
     session._native_api.ExecPythonString(
         PythonString=f"import shutil\nshutil.copy('{filepath}', '{new_name}')"

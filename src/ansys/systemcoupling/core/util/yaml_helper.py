@@ -27,10 +27,10 @@ import yaml
 
 """Simple utility wrappers for common YAML functionality."""
 
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
+# try:
+#    from yaml import CLoader as Loader
+# except ImportError:
+#    from yaml import Loader
 
 # Define and add a "representer" so that we get the "|" format
 # for multiline strings.
@@ -75,7 +75,7 @@ def _yaml_dump_to_stream(data: Any, stream: TextIO, sort_keys: bool) -> None:
 def yaml_load_from_file(filepath: str) -> Any:  # pragma: no cover
     """Load the content in a specified YAML file."""
     with open(filepath, "r") as f:
-        return yaml.load(stream=f, Loader=Loader)
+        return yaml.safe_load(stream=f)
 
 
 def yaml_load_from_string(strdata: str) -> Any:

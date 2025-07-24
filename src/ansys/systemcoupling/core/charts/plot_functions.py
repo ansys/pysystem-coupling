@@ -34,8 +34,12 @@ from ansys.systemcoupling.core.charts.plotter import Plotter
 
 
 def create_and_show_plot(spec: PlotSpec, csv_list: list[str]) -> Plotter:
-    assert len(spec.interfaces) == 1, "Plots currently only support one interface"
-    assert len(spec.interfaces) == len(csv_list)
+    if len(spec.interfaces) != 1:
+        raise ValueError("Plots currently only support one interface")
+    if len(spec.interfaces) != len(csv_list):
+        raise ValueError(
+            "'csv_list' should have length equal to the number of interfaces"
+        )
 
     manager = PlotDefinitionManager(spec)
     reader = CsvChartDataReader(spec.interfaces[0].name, csv_list[0])
@@ -61,8 +65,12 @@ def solve_with_live_plot(
     csv_list: list[str],
     solve_func: Callable[[], None],
 ):
-    assert len(spec.interfaces) == 1, "Plots currently only support one interface"
-    assert len(spec.interfaces) == len(csv_list)
+    if len(spec.interfaces) != 1:
+        raise ValueError("Plots currently only support one interface")
+    if len(spec.interfaces) != len(csv_list):
+        raise ValueError(
+            "'csv_list' should have length equal to the number of interfaces"
+        )
 
     manager = PlotDefinitionManager(spec)
     dispatcher = MessageDispatcher()
