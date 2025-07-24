@@ -15,8 +15,8 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 25_2
-  FLUENT_IMAGE_VERSION: "v25.1.0"
-  SYC_IMAGE_VERSION: "latest"
+  FLUENT_IMAGE_VERSION: "v25.2.0"
+  SYC_IMAGE_VERSION: "v25.2.0"
   MAPDL_IMAGE_VERSION: "v25.1-ubuntu"
 
 concurrency:
@@ -122,10 +122,15 @@ jobs:
         with:
           image-tag: v25.1.0
 
-      - name: Generate API for latest
+      - name: Generate API for v252
         uses: ./.github/actions/generate-api
         with:
-          image-tag: latest
+          image-tag: v25.2.0
+
+      #- name: Generate API for latest
+      #  uses: ./.github/actions/generate-api
+      #  with:
+      #    image-tag: latest
 
       - name: Clean out dist
         run: rm -rf dist
@@ -200,17 +205,25 @@ jobs:
         uses: ./.github/actions/unit-test
         with:
           image-tag: v25.1.0
+          upload-coverage: false
+        env:
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+
+      - name: Unit Test v25.2.0
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: v25.2.0
           upload-coverage: true
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
-      - name: Unit Test latest
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: latest
-          upload-coverage: false
-        env:
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      #- name: Unit Test latest
+      #  uses: ./.github/actions/unit-test
+      #  with:
+      #    image-tag: latest
+      #    upload-coverage: false
+      #  env:
+      #    ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
   docs:
     name: Build Documentation
