@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 # Check https://flit.readthedocs.io/en/latest/pyproject_toml.html for all available sections
 name = "ansys-systemcoupling-core"
-version = "0.10.0"
+version = "0.10.1"
 description = "A Python wrapper for Ansys System Coupling."
 readme = "README.rst"
 requires-python = ">=3.10,<3.14"
