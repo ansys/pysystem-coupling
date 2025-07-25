@@ -1,0 +1,46 @@
+.. _dm_ParticipantSession:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.ParticipantSession
+===============================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: ParticipantSession
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~ParticipantSession.__init__
+      ~ParticipantSession.get_property_state
+      ~ParticipantSession.get_state
+      ~ParticipantSession.print_state
+      ~ParticipantSession.set_property_state
+      ~ParticipantSession.set_state
+      ~ParticipantSession.set_sycproxy
+      ~ParticipantSession.to_python_keys
+      ~ParticipantSession.to_python_name
+      ~ParticipantSession.to_syc_keys
+      ~ParticipantSession.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ParticipantSession.obj_name
+      ~ParticipantSession.path
+      ~ParticipantSession.syc_name
+      ~ParticipantSession.syc_path
+      ~ParticipantSession.sycproxy
+   
+   
