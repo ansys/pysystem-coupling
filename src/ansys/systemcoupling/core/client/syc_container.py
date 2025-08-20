@@ -82,7 +82,13 @@ def start_container(
 
     run_args = dict(
         image=image_name,
-        command=["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}", "--ptrace"],
+        command=[
+            "-m",
+            "cosimgui",
+            f"--grpcport=0.0.0.0:{port}",
+            "--ptrace",
+            "--mpi=openmpi",
+        ],
         detach=True,
         environment=environment,
         remove=True,
