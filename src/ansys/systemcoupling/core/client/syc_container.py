@@ -87,7 +87,6 @@ def start_container(
             "cosimgui",
             f"--grpcport=0.0.0.0:{port}",
             "--ptrace",
-            "--mpi=openmpi",
         ],
         detach=True,
         environment=environment,
