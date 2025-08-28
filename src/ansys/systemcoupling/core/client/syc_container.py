@@ -105,5 +105,8 @@ def start_container(
 
 
 def create_network(name):
-    # Exclude Bandit check. No untrusted input to arguments.
-    subprocess.run(["docker", "network", "create", name])  # nosec B603
+    # Exclude Bandit checks:
+    # No untrusted input to arguments.
+    # Start process with partial path. (Python 'docker' package would be better
+    # but doc runs become very unreliable when we try to use it.)
+    subprocess.run(["docker", "network", "create", name])  # nosec B603, B607
