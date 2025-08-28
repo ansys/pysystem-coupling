@@ -22,6 +22,7 @@
 
 import os
 from pathlib import Path
+import subprocess  # nosec B404
 
 from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT, normalize_version
 from ansys.systemcoupling.core.util.logging import LOG
@@ -41,20 +42,15 @@ def _image_tag(version: str) -> str:
 
 def start_container(
     mounted_from: str, mounted_to: str, network: str, port: int, version: str
-) -> object:
+) -> None:
     """Start a System Coupling container.
 
     Parameters
     ----------
     port : int
         gPRC server local port, mapped to the same port in container.
-
-    Returns
-    -------
-    object
-        The container instance (``Container`` object from Python docker library).
     """
-    import docker
+    args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"]
 
     LOG.debug("Starting System Coupling docker container...")
 
@@ -65,45 +61,52 @@ def start_container(
 
     mounted_from = str(Path(mounted_from).absolute())
 
-    image_name = f"ghcr.io/ansys/pysystem-coupling:{image_tag}"
-
-    environment = [f"{_MPI_VERSION_VAR}={_MPI_VERSION}", f"AWP_ROOT=/ansys_inc"]
+    run_args = [
+        "docker",
+        "run",
+        "-d",
+        "--rm",
+        "-p",
+        f"{port}:{port}",
+        "-v",
+        f"{mounted_from}:{mounted_to}",
+        "-w",
+        mounted_to,
+        "-e",
+        f"{_MPI_VERSION_VAR}={_MPI_VERSION}",
+        "-e",
+        f"AWP_ROOT=/ansys_inc",
+        f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
+    ] + args
 
     # Additional environment
     container_user = os.getenv("SYC_CONTAINER_USER")
     if container_user:
+        idx = run_args.index("-p")
+        run_args.insert(idx, container_user)
+        run_args.insert(idx, "--user")
         # Licensing can't log to default location if user is not the default 'root'
-        environment.append(f"ANSYSLC_APPLOGDIR={mounted_to}")
-        # See also "user" argument added to args below
+        run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
+        run_args.insert(idx, "-e")
 
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
-        environment.append(f"ANSYSLMD_LICENSE_FILE={license_server}")
+        idx = run_args.index("-e")
+        run_args.insert(idx, f"ANSYSLMD_LICENSE_FILE={license_server}")
+        run_args.insert(idx, "-e")
 
-    run_args = dict(
-        image=image_name,
-        command=["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}"],
-        detach=True,
-        environment=environment,
-        remove=True,
-        ports={f"{port}/tcp": f"{port}"},
-        volumes=[f"{mounted_from}:{mounted_to}"],
-        working_dir=f"{mounted_to}",
-    )
-
-    # Additional args
-    if container_user:
-        run_args["user"] = container_user
     if network:
-        run_args["network"] = network
+        idx = run_args.index("-p")
+        run_args.insert(idx, network)
+        run_args.insert(idx, "--network")
 
-    docker_client = docker.from_env()
-    return docker_client.containers.run(**run_args)
+    # Exclude Bandit check. No untrusted input to arguments.
+    subprocess.run(run_args)  # nosec B603
 
 
 def create_network(name):
-    import docker
-
-    LOG.debug(f"Creating docker network '{name}'")
-    docker_client = docker.from_env()
-    docker_client.networks.create(name)
+    # Exclude Bandit checks:
+    # No untrusted input to arguments.
+    # Start process with partial path. (Python 'docker' package would be better
+    # but doc runs become very unreliable when we try to use it.)
+    subprocess.run(["docker", "network", "create", name])  # nosec B603, B607
