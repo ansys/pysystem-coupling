@@ -75,7 +75,7 @@ doc = [
 
 	# pyansys dependencies for sphinx gallery examples
 	"ansys-fluent-core==0.34.2",
-	"ansys-mapdl-core==0.70.2",
+	"ansys-mapdl-core==0.71.0",
 ]
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
