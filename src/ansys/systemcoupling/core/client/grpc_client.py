@@ -162,9 +162,8 @@ class SycGrpc(object):
         """Start the System Coupling container and establish a connection."""
         LOG.debug("Starting container...")
         port = port if port is not None else _find_port()
-        self.__container = start_container(
-            mounted_from, mounted_to, network, port, version
-        )
+        # TODO: assign self.__container here if we switch back to Python docker API
+        start_container(mounted_from, mounted_to, network, port, version)
         LOG.debug("...started")
         self._connect(_LOCALHOST_IP, port)
 
