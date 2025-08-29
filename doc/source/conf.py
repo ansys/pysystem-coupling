@@ -317,11 +317,7 @@ html_context = {
     "github_version": "main",
     "doc_path": "doc/source",
     "source_path": "src",
-    "pyansys_tags": [
-        "Fluids",
-        "Multiphysics",
-        "Structures"
-    ]
+    "pyansys_tags": ["Fluids", "Multiphysics", "Structures"],
 }
 
 # additional logos for the latex coverpage
