@@ -310,13 +310,15 @@ html_theme_options = {
     },
 }
 
+
 html_context = {
-    "display_github": True,  # Integrate GitHub
+    "display_github": True,
     "github_user": "pyansys",
     "github_repo": "pysystem-coupling",
     "github_version": "main",
     "doc_path": "doc/source",
     "source_path": "src",
+    "pyansys_tags": ["Fluids", "Multiphysics", "Structures"],
 }
 
 # additional logos for the latex coverpage
