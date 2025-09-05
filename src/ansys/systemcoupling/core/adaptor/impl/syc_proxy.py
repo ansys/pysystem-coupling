@@ -26,6 +26,7 @@ from ansys.systemcoupling.core.adaptor.impl.static_info import (
     get_extended_cmd_metadata,
     make_cmdonly_metadata,
     make_combined_metadata,
+    make_named_object_level_map,
 )
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
 from ansys.systemcoupling.core.util.state_keys import (
@@ -134,15 +135,11 @@ class SycProxy(SycProxyInterface):
 
     def _get_named_object_level_map(self):
         if not self.__named_obj_level_map:
-            self._make_named_object_level_map(root_type="SystemCoupling")
+            self.__named_obj_level_map = self._make_named_object_level_map(
+                root_type="SystemCoupling"
+            )
         return self.__named_obj_level_map
 
     def _make_named_object_level_map(self, root_type):
-        def visit_children(metadata, level):
-            for k, v in metadata["__children"].items():
-                if v["isNamed"]:
-                    self.__named_obj_level_map.setdefault(level, set()).add(k)
-                visit_children(v, level + 1)
-
         dm_metadata = self._get_datamodel_metadata(root_type)
-        visit_children(dm_metadata[root_type], 0)
+        return make_named_object_level_map(dm_metadata, root_type)
