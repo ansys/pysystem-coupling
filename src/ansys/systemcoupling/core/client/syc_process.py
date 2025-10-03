@@ -22,46 +22,48 @@
 
 from copy import deepcopy
 import os
-import platform
 
 # Exclude Bandit check. Subprocess is needed to start the System Coupling.
 import subprocess  # nosec B404
+import threading
+import time
 
 import psutil
 
-from ansys.systemcoupling.core.syc_version import SYC_VERSION_CONCAT, normalize_version
 from ansys.systemcoupling.core.util.logging import LOG
-
-_isWindows = any(platform.win32_ver())
-
-_CURR_VER = SYC_VERSION_CONCAT
-_INSTALL_ROOT_ENV = "AWP_ROOT"
-_INSTALL_ROOT_VER_ENV = _INSTALL_ROOT_ENV + _CURR_VER
-_SC_ROOT_ENV = "SYSC_ROOT"
-
-_SCRIPT_EXT = ".bat" if _isWindows else ""
-_SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 
 # NB: Coverage disabled in this file as coverage is obtained in context of
 #     GitHub CI where we are restricted to launching SyC in container mode.
 
 
 class SycProcess:  # pragma: no cover
-    def __init__(self, host, port, working_dir, version=None, **kwargs):
-        self.__process = _start_system_coupling(
-            host, port, working_dir, version, **kwargs
+    def __init__(
+        self,
+        exe_path: str,
+        grpc_args: list[str],
+        grpc_args_fallback: list[str],
+        working_dir: str,
+        **kwargs,
+    ):
+        # self.__process = _start_system_coupling(
+        #    exe_path, grpc_args, working_dir, **kwargs
+        # )
+        self.__starter = _ProcessStarter(
+            exe_path, grpc_args, grpc_args_fallback, working_dir, **kwargs
         )
 
-    @property
-    def path_to_system_coupling(self) -> str:
-        return self.__process.args[0]
+    def is_running(self) -> bool:
+        return self.__starter.get_running_process() is not None
 
     def end(self):
-        if self.__process and self.__process.poll() is None:
-            pid = self.__process.pid
+        if not self.__starter:
+            return
+        process = self.__starter.get_running_process()
+        if process and process.poll() is None:
+            pid = process.pid
             try:
                 LOG.info("Waiting for process to exit...")
-                self.__process.wait(5)
+                process.wait(5)
                 LOG.info("...process exited.")
             except subprocess.TimeoutExpired:
                 LOG.warning(
@@ -69,21 +71,89 @@ class SycProcess:  # pragma: no cover
                     "process and children will be attempted."
                 )
                 _kill_process_tree(pid, timeout=0.5)
-            self.__process = None
+        self.__starter = None
+
+
+class _ProcessStarter:
+    def __init__(
+        self,
+        exe_path: str,
+        grpc_args: list[str],
+        grpc_args_fallback: list[str],
+        working_dir: str,
+        **kwargs,
+    ):
+        self.__default_process: subprocess.Popen | None = None
+        self.__fallback_process: subprocess.Popen | None = None
+
+        self.__default_process = _start_system_coupling(
+            exe_path, grpc_args, working_dir, **deepcopy(kwargs)
+        )
+
+        self.__fallback_thread = None
+        if grpc_args_fallback:
+            self.__fallback_thread = threading.Thread(
+                target=self._fallback_starter,
+                args=(exe_path, grpc_args_fallback, working_dir),
+                kwargs=deepcopy(kwargs),
+            )
+            self.__fallback_thread.run()
+
+    def get_running_process(self):
+        # We should not normally need to access the process during the
+        # period that the fallback thread runs, so the following is likely
+        # to execute quickly.
+        if self.__fallback_thread and self.__fallback_thread.is_alive():
+            self.__fallback_thread.join()
+
+        # Fallback thread is finished so no need for locks
+        if self.__default_process.poll() is None:
+            return self.__default_process
+        if self.__fallback_process and self.__fallback_process.poll() is None:
+            return self.__fallback_process
+
+        return None
+
+    def _fallback_starter(
+        self,
+        exe_path: str,
+        grpc_args: list[str],
+        working_dir: str,
+        **kwargs,
+    ):
+        try_fallback = False
+        for _ in range(10):
+            time.sleep(0.1)
+            if self.__default_process.poll() is not None:
+                # Process has died within the first second or so
+                try_fallback = True
+                break
+
+        if not try_fallback:
+            return
+
+        LOG.warning(
+            "System Coupling process exited early. Trying "
+            "relaunch with old-style command line arguments"
+        )
+        # Not accessed until thread joined so no locking needed
+        self.__fallback_process = _start_system_coupling(
+            exe_path, grpc_args, working_dir, **kwargs
+        )
 
 
 def _start_system_coupling(
-    host, port, working_dir, version, **kwargs
-):  # pragma: no cover
+    exe_path: str, grpc_args: list[str], working_dir: str, **kwargs
+) -> subprocess.Popen:  # pragma: no cover
+
     env = deepcopy(os.environ)
     env["PYTHONUNBUFFERED"] = "1"
     env["SYC_GUI_SILENT_SERVER"] = "1"
     args = [
-        _path_to_system_coupling(version),
+        exe_path,
         "-m",
         "cosimgui",
-        f"--grpcport={host}:{port}",
-    ]
+    ] + grpc_args
 
     # Extract arguments that we currently recognize - scope to extend in future
     nprocs = kwargs.pop("nprocs", None)
@@ -96,9 +166,7 @@ def _start_system_coupling(
 
     # "extra_args" gives us the option to pass though any arguments that we want to.
     # However, it's user beware.
-    extra_args = kwargs.pop("extra_args", [])
-    if extra_args:
-        args += extra_args
+    args += kwargs.pop("extra_args", [])
 
     LOG.info(f"Starting System Coupling: {args[0]}")
     # Exclude Bandit check. No untrusted input to arguments.
@@ -109,43 +177,6 @@ def _start_system_coupling(
         stdout=subprocess.DEVNULL,
         stderr=subprocess.STDOUT,
     )
-
-
-def _path_to_system_coupling(version):  # pragma: no cover
-    if version is not None:
-        if os.environ.get(_SC_ROOT_ENV, None) or os.environ.get(
-            _INSTALL_ROOT_ENV, None
-        ):
-            raise ValueError(
-                f"An explicit version, {version}, has been specified for "
-                "launching System Coupling, while at least one of the "
-                f"environment variables {_SC_ROOT_ENV} and {_INSTALL_ROOT_ENV} "
-                "is set. To remove the ambiguity, either unset the environment "
-                "variable(s) or do not provide the version argument."
-            )
-
-    scroot = os.environ.get(_SC_ROOT_ENV, None)
-
-    if not scroot:
-        scroot = os.environ.get(_INSTALL_ROOT_ENV, None)
-        if scroot is None:
-            if version is None:
-                scroot = os.environ.get(_INSTALL_ROOT_VER_ENV, None)
-            else:
-                ver_maj, ver_min = normalize_version(version)
-                scroot = os.environ.get(f"{_INSTALL_ROOT_ENV}{ver_maj}{ver_min}", None)
-        if scroot:
-            scroot = os.path.join(scroot, "SystemCoupling")
-
-    if scroot is None:
-        raise RuntimeError("Failed to locate System Coupling from environment.")
-
-    script_path = os.path.join(scroot, "bin", _SCRIPT_NAME)
-
-    if not os.path.isfile(script_path):
-        raise RuntimeError(f"System Coupling script does not exist at {script_path}.")
-
-    return script_path
 
 
 def _kill_process_tree(pid, timeout):  # pragma: no cover

@@ -25,7 +25,7 @@ from typing import List
 
 import appdirs
 
-from ansys.systemcoupling.core.client.grpc_client import SycGrpc
+from ansys.systemcoupling.core.client.grpc_client import SycGrpc, ConnectionType
 from ansys.systemcoupling.core.session import Session
 from ansys.systemcoupling.core.util.logging import LOG
 
@@ -41,6 +41,7 @@ __version__ = importlib_metadata.version(__name__.replace(".", "-"))
 
 def launch(
     *,
+    connection_type: ConnectionType = ConnectionType.SECURE_LOCAL,
     port: int = None,
     working_dir: str = None,
     nprocs: int = None,
@@ -53,6 +54,11 @@ def launch(
 
     Parameters
     ----------
+    connection_type: ConnectionType, optional
+        Specifies the type of connection to make with the launched server.
+        Not all options are currently supported. The default is a secure
+        local connection. This will not work with some older versions or
+        older versions that have not been updated with service pack releases.
     port : int, optional
         Port on which to connect to System Coupling. The default is
         ``None``, in which case an available port is found and used.
@@ -73,8 +79,10 @@ def launch(
         The version will be sought in the standard installation location. The
         default is ``None``, which is equivalent to specifying
         ``"252"`` ("2025 R2" release), unless either of the environment
-        variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. It is considered
-        to be an error if either these is set *and* ``version`` is provided.
+        variables ``SYSC_ROOT`` or ``AWP_ROOT`` has been set. In that case,
+        the environment variable will be used to locate System Coupling.
+        If ``version`` is also provided, it will not be used to locate System
+        Coupling but it might still be used to infer some information about it.
     start_output: bool, optional
         Boolean to specify if the user wants to stream system coupling output.
         The default is ``False``, in which case the output stream is kept hidden.
@@ -102,6 +110,7 @@ def launch(
         rpc.start_pim_and_connect(version, start_output)
     else:
         rpc.start_and_connect(
+            connection_type=connection_type,
             port=port,
             working_dir=working_dir,
             nprocs=nprocs,
@@ -163,7 +172,9 @@ def launch_remote(
     return Session(rpc)
 
 
-def connect(host: str, port: int) -> Session:  # pragma: no cover
+def connect(
+    host: str, port: int, connection_type: ConnectionType = ConnectionType.SECURE_LOCAL
+) -> Session:  # pragma: no cover
     """Connect to an instance of System Coupling already running in server mode.
 
     Parameters
@@ -172,6 +183,13 @@ def connect(host: str, port: int) -> Session:  # pragma: no cover
         IP address of the system running the System Coupling instance.
     port : int
         Port on which to connect to System Coupling.
+    connection_type: ConnectionType, optional
+        Specifies the type of connection to make with System Coupling.
+        This must be compatible with the mode in which the server was
+        started. The default is a secure local connection. This will
+        not work with some older versions of System Coupling or versions
+        that have not been updated with service pack releases. In these
+        cases, an insecure connection type must be specified.
 
     Returns
     -------
@@ -180,7 +198,7 @@ def connect(host: str, port: int) -> Session:  # pragma: no cover
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    rpc.connect(host, port)
+    rpc.connect(host, port, connection_type)
     syc = Session(rpc)
     return syc
 

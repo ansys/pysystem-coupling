@@ -30,14 +30,37 @@ from ansys.systemcoupling.core.util.logging import LOG
 _MPI_VERSION_VAR = "FLUENT_INTEL_MPI_VERSION"
 _MPI_VERSION = "2021"
 
-_DEFAULT_IMAGE_TAG = f"v{SYC_VERSION_DOT}.0"
+_FORCE_SERVICE_PACK_SUFFIX = True
+_USE_NEW_TRANSPORT_ARGS = _FORCE_SERVICE_PACK_SUFFIX
 
 
 def _image_tag(version: str) -> str:
     if version == "latest":
         return version
+    version, sep, service_pack = version.partition("-sp")
+    if version.startswith("v"):
+        version = version[1:]
+    if version.endswith(".0"):
+        version = version[:-2]
     major, minor = normalize_version(version)
-    return f"v{major}.{minor}.0"
+
+    # We are tolerant of whether the suffix is actually included, but
+    # maybe force the use of latest service pack images where applicable.
+
+    sp_suffix = f"{sep}{service_pack}"
+    if _FORCE_SERVICE_PACK_SUFFIX and not sp_suffix:
+        if (major, minor) == (24, 2):
+            sp_suffix = "-sp05"
+        elif (major, minor) == (25, 1):
+            sp_suffix = "-sp04"
+        elif (major, minor) == (25, 2):
+            sp_suffix = "-sp03"
+
+    return f"v{major}.{minor}.0{sp_suffix}"
+
+
+def _default_image_tag() -> str:
+    return _image_tag(SYC_VERSION_DOT)
 
 
 def start_container(
@@ -50,14 +73,27 @@ def start_container(
     port : int
         gPRC server local port, mapped to the same port in container.
     """
-    args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}", "--ptrace"]
+
+    if _USE_NEW_TRANSPORT_ARGS:
+        args = [
+            "-m",
+            "cosimgui",
+            "--grpc",
+            "--host=0.0.0.0",
+            f"--port={port}",
+            "--transport-mode=insecure",
+            "--allow-remote",
+            "--ptrace",
+        ]
+    else:
+        args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}", "--ptrace"]
 
     LOG.debug("Starting System Coupling docker container...")
 
     if version:
         image_tag = _image_tag(version)
     else:
-        image_tag = os.getenv("SYC_IMAGE_TAG", _DEFAULT_IMAGE_TAG)
+        image_tag = os.getenv("SYC_IMAGE_TAG", _default_image_tag())
 
     mounted_from = str(Path(mounted_from).absolute())
 
