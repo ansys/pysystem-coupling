@@ -161,6 +161,37 @@ def test_adapt_native_named_object_keys_in_place(state_in, expected):
                 },
             },
         ),
+        (
+            # Test potentially ambiguous case
+            {
+                "A": {
+                    "a1": {
+                        "B": {"C": {"c1": {"p": 1, "q": 2}, "c2": {"p": 2, "s": "bob"}}}
+                    },
+                    "a2": {
+                        "B": {
+                            "C": {  # C is a named object here at level 2
+                                "c1": {"p": 666, "q": 42},
+                                "c3": {"p": 2, "s": "fred"},
+                            }
+                        },
+                        "D": {
+                            "C": 3,  # note that C is at level 2 here but is a parameter
+                        },
+                    },
+                }
+            },
+            {
+                "A:a1": {"B": {"C:c1": {"p": 1, "q": 2}, "C:c2": {"p": 2, "s": "bob"}}},
+                "A:a2": {
+                    "B": {
+                        "C:c1": {"p": 666, "q": 42},
+                        "C:c3": {"p": 2, "s": "fred"},
+                    },
+                    "D": {"C": 3},
+                },
+            },
+        ),
     ],
 )
 def test_adapt_client_named_object_keys(state_in, expected):

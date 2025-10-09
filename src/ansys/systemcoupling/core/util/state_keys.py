@@ -110,13 +110,13 @@ def adapt_client_named_object_keys(
         state_out = {}
         named_types = level_type_map.get(level, set())
         for id, sub_state in s.items():
-            if id in named_types:
+            if not isinstance(sub_state, dict):
+                state_out[id] = copy.copy(sub_state)
+            elif id in named_types:
                 for name, named_obj_state in sub_state.items():
                     state_out[f"{id}:{name}"] = do_adapt(named_obj_state, level + 1)
-            elif isinstance(sub_state, dict):
-                state_out[id] = do_adapt(sub_state, level + 1)
             else:
-                state_out[id] = copy.copy(sub_state)
+                state_out[id] = do_adapt(sub_state, level + 1)
         return state_out
 
     return do_adapt(state, level=start_level)
