@@ -425,3 +425,17 @@ def get_extended_cmd_metadata(api) -> list:
     merge_data(cmd_metadata, injected_data)
     cmd_metadata = fix_up_doc(cmd_metadata)
     return cmd_metadata
+
+
+def make_named_object_level_map(dm_metadata, root_type) -> dict[int, str]:
+    level_map = {}
+
+    def visit_children(metadata, level):
+        for k, v in metadata["__children"].items():
+            if v["isNamed"]:
+                level_map.setdefault(level, set()).add(k)
+            visit_children(v, level + 1)
+
+    visit_children(dm_metadata[root_type], 0)
+
+    return level_map
