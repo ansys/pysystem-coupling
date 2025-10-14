@@ -15,7 +15,7 @@ repos:
       additional_dependencies: [black==25.9.0] # Ensure synced with black version above
 
 - repo: https://github.com/pycqa/isort
-  rev: 6.1.0 # Should be in sync with version in pyproject.toml
+  rev: 7.0.0 # Should be in sync with version in pyproject.toml
   hooks:
   - id: isort
 
