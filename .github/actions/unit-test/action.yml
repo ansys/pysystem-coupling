@@ -30,11 +30,11 @@ runs:
 
     - name: Upload coverage to Codecov
       if: ${{ inputs.upload-coverage }}
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@ab904c41d6ece82784817410c45d8b8c02684457 # v3.1.6
 
     - name: Upload test coverage
       if: ${{ inputs.upload-coverage }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: HTML-coverage-syc
         path: cov_html

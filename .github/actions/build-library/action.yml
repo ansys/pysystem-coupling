@@ -13,7 +13,7 @@ description: |
       was provided up to v3 of the ansys/actions action.
 
       pysystem-coupling relies on this because API modules are generated in-place
-      in the checkout area in the preceding build ready for packaging, and a 
+      in the checkout area in the preceding build ready for packaging, and a
       re-checkout blows this away.
 
   .. note::
@@ -65,8 +65,11 @@ runs:
   steps:
 
     - name: "Install Git and clone project"
-      uses: actions/checkout@v4
+      uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
       if: inputs.checkout == 'true'
+      with:
+        persist-credentials: false
+
 
     - name: "Set up Python"
       uses: ansys/actions/_setup-python@main
@@ -85,7 +88,7 @@ runs:
         python -m build && python -m twine check dist/*
 
     - name: "Upload distribution artifacts to GitHub artifacts"
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: ${{ inputs.library-name }}-artifacts
         path: dist/
