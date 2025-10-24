@@ -25,6 +25,17 @@ concurrency:
 
 jobs:
 
+  actions-security:
+    name: "Check actions security"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ansys/actions/check-actions-security@v10.1
+        with:
+          generate-summary: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          auditing-level: 'high'
+          trust-ansys-actions: true
+
   doc-style:
     name: "Documentation style check"
     runs-on: ubuntu-latest
@@ -62,6 +73,7 @@ jobs:
           operating-system: ${{ matrix.os }}
           python-version: ${{ matrix.python-version }}
 
+
   check-vulnerabilities:
     name: "Check library vulnerabilities"
     runs-on: ubuntu-latest
@@ -74,6 +86,7 @@ jobs:
           dev-mode: ${{ github.ref != 'refs/heads/main' }}
           #upload-reports: True
           #hide-log: false
+
 
   build:
     name: Build package, incl. API generation
