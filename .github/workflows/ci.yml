@@ -19,7 +19,7 @@ env:
   SYC_IMAGE_VERSION: "v25.2.0"
   MAPDL_IMAGE_VERSION: "v25.1-ubuntu"
 
-# permissions: {} # Zero permissions can be granted at the workflow level if not all jobs require permissions.
+permissions: {} # Zero permissions can be granted at the workflow level if not all jobs require permissions.
                 # As a good rule of thumb, this normally includes jobs that don't use secrets.
 
 concurrency:
@@ -250,8 +250,8 @@ jobs:
     name: Build Documentation
     needs: [doc-style, build]
     runs-on: public-ubuntu-latest-8-cores
-    # permissions:
-    #   contents: write
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
@@ -343,8 +343,8 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: [docs]
-    #permissions:
-    #  contents: write
+    permissions:
+      contents: write
     steps:
       - name: Deploy the latest documentation
         uses: ansys/actions/doc-deploy-dev@c2fa7c93f6883114e0e643599431b33d29f0b13f # v10.1.4
