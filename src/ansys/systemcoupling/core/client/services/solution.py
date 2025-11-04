@@ -34,8 +34,10 @@ class SolutionService:
     def solve(self):
         request = solution_pb2.SolveRequest()
         try:
+            print("about to call solve")
             self.__stub.Solve(request)
         except grpc.RpcError as rpc_error:
+            print("caught rpc error")
             msg = handle_rpc_error(rpc_error)
 
             if "License check" in msg:

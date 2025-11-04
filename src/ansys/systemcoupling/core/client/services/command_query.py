@@ -32,8 +32,25 @@ class CommandQueryService:
 
     def execute_command(self, request):
         try:
+            print("about to call execute_command")
             response, call = self.__stub.InvokeCommand.with_call(request)
             return response, call.trailing_metadata()
         except grpc.RpcError as rpc_error:
+            print("caught rpc error")
             msg = handle_rpc_error(rpc_error)
+            if "License check" in msg:
+                # Look in current directory for files named licdebug.* and ansyscl*
+                import glob
+
+                licdebug_files = glob.glob("licdebug.*")
+                ansyscl_files = glob.glob("ansyscl*")
+                if licdebug_files or ansyscl_files:
+                    msg += "\n\nLicense debug files found in current directory:\n"
+                    for f in licdebug_files + ansyscl_files:
+                        # Print file contents to the console
+                        msg += f"\nContents of {f}:\n"
+                        with open(f, "r") as file:
+                            msg += file.read()
+                else:
+                    msg += "\n\nNo license debug files found in current directory."
             raise RuntimeError(msg) from None
