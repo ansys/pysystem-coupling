@@ -116,25 +116,25 @@ jobs:
           username: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Generate API for v231
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v23.1.0
+      # - name: Generate API for v231
+      #   uses: ./.github/actions/generate-api
+      #   with:
+      #     image-tag: v23.1.0
 
-      - name: Generate API for v232
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v23.2.0
+      # - name: Generate API for v232
+      #   uses: ./.github/actions/generate-api
+      #   with:
+      #     image-tag: v23.2.0
 
-      - name: Generate API for v241
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v24.1.0
+      # - name: Generate API for v241
+      #   uses: ./.github/actions/generate-api
+      #   with:
+      #     image-tag: v24.1.0
 
-      - name: Generate API for v242
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v24.2.0
+      # - name: Generate API for v242
+      #   uses: ./.github/actions/generate-api
+      #   with:
+      #     image-tag: v24.2.0
 
       - name: Generate API for v251
         uses: ./.github/actions/generate-api
@@ -250,6 +250,7 @@ jobs:
     name: Build Documentation
     needs: [doc-style, build]
     runs-on: public-ubuntu-latest-8-cores
+    if: false #temp disable docs build
     permissions:
       contents: write
       packages: read
