@@ -42,10 +42,15 @@ class CommandQueryService:
                 import glob
                 import os
 
-                # Print out a directory listing
+                # Print out a recursive directory listing, indicating which entries are directories
+
                 msg += "\n\nCurrent directory listing:\n"
-                for item in os.listdir("."):
-                    msg += f" - {item}\n"
+                for root, dirs, files in os.walk("."):
+                    msg += f"\nContents of directory: {root}\n"
+                    for name in files:
+                        msg += f" - {os.path.join(root, name)}\n"
+                    for name in dirs:
+                        msg += f" - {os.path.join(root, name)}/\n"
 
                 # Look in current directory for files named licdebug.* and ansyscl*
                 licdebug_files = glob.glob("licdebug.*")
