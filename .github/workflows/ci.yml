@@ -198,37 +198,37 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Unit Test v23.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v23.1.0
-          upload-coverage: false
+      # - name: Unit Test v23.1.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v23.1.0
+      #     upload-coverage: false
 
-      - name: Unit Test v23.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v23.2.0
-          upload-coverage: false
+      # - name: Unit Test v23.2.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v23.2.0
+      #     upload-coverage: false
 
-      - name: Unit Test v24.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.1.0
-          upload-coverage: false
+      # - name: Unit Test v24.1.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v24.1.0
+      #     upload-coverage: false
 
-      - name: Unit Test v24.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.2.0
-          upload-coverage: false
+      # - name: Unit Test v24.2.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v24.2.0
+      #     upload-coverage: false
 
-      - name: Unit Test v25.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v25.1.0
-          upload-coverage: false
-        env:
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      # - name: Unit Test v25.1.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v25.1.0
+      #     upload-coverage: false
+      #   env:
+      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
       - name: Unit Test v25.2.0
         uses: ./.github/actions/unit-test

@@ -27,11 +27,6 @@ from ansys.systemcoupling.core.charts.plotter import Plotter
 from ansys.systemcoupling.core.syc_version import compare_versions
 
 
-def test_always_fails() -> None:
-    """Not for merge. Need to force pipeline failure so that tests can be rerun efficiently."""
-    assert False
-
-
 def test_partlib_cosim_volume_simple() -> None:
     """Equivalent of SyC test partlib-cosim-volume-simple.
 
@@ -128,6 +123,9 @@ def test_partlib_cosim_volume_simple() -> None:
         assert any(
             "        Shut Down         " in line for line in output_handler.lines
         )
+
+    # NOT FOR MERGE: make it fail to allow easy rerun
+    assert False
 
 
 def _get_mocksolve_executable(get_python_script: bool = False):
