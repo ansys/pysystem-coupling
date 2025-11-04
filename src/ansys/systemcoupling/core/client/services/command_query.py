@@ -39,9 +39,15 @@ class CommandQueryService:
             print("caught rpc error")
             msg = handle_rpc_error(rpc_error)
             if "License check" in msg:
-                # Look in current directory for files named licdebug.* and ansyscl*
                 import glob
+                import os
 
+                # Print out a directory listing
+                msg += "\n\nCurrent directory listing:\n"
+                for item in os.listdir("."):
+                    msg += f" - {item}\n"
+
+                # Look in current directory for files named licdebug.* and ansyscl*
                 licdebug_files = glob.glob("licdebug.*")
                 ansyscl_files = glob.glob("ansyscl*")
                 if licdebug_files or ansyscl_files:
