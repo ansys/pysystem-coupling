@@ -42,12 +42,6 @@ class SolutionService:
 
             if "License check" in msg:
                 import glob
-                import os
-
-                # Print out a directory listing
-                msg += "\n\nCurrent directory listing:\n"
-                for item in os.listdir("."):
-                    msg += f" - {item}\n"
 
                 # Look in current directory for files named licdebug.* and ansyscl*
 
