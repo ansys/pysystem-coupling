@@ -85,9 +85,14 @@ def start_container(
         idx = run_args.index("-p")
         run_args.insert(idx, container_user)
         run_args.insert(idx, "--user")
-        # Licensing can't log to default location if user is not the default 'root'
-        run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
-        run_args.insert(idx, "-e")
+
+    # This was always definitely necessary in the SYC_CONTAINER_USER case
+    # because licensing can't log to the default location if user is
+    # not the default 'root'. However it seems that logging might be an
+    # issue in other cases too so set the log dir to working dir always.
+    idx = run_args.index("-p")
+    run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
+    run_args.insert(idx, "-e")
 
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
