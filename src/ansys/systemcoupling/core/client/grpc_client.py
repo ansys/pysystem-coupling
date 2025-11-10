@@ -395,9 +395,31 @@ class SycGrpc(object):
             to_variant(val, arg.val)
             return arg
 
+        def print_license_debug_files():
+            import glob
+
+            # Look in current directory for files named licdebug.* and ansyscl*
+            licdebug_files = glob.glob("licdebug.*")
+            ansyscl_files = glob.glob("ansyscl*")
+            if licdebug_files or ansyscl_files:
+                msg = "\n\nLicense debug files found in current directory:\n"
+                for f in licdebug_files + ansyscl_files:
+                    # Print file contents to the console
+                    msg += f"\nContents of {f}:\n"
+                    with open(f, "r") as file:
+                        msg += file.read()
+            else:
+                msg = "\n\nNo license debug files found in current directory."
+
+            print(msg)
+
         request = command_pb2.CommandRequest(command=cmd_name)
         request.args.extend([make_arg(name, val) for name, val in kwargs.items()])
         response, meta = self.__command_service.execute_command(request)
+
+        if cmd_name == "Solve":
+            print("After successful Solve command")
+            print_license_debug_files()
 
         # The second element of the above tuple (which is actually gRPC
         # trailing metadata) is currently unused, but it comprises a 1-tuple
