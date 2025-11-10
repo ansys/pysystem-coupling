@@ -124,6 +124,9 @@ def test_partlib_cosim_volume_simple() -> None:
             "        Shut Down         " in line for line in output_handler.lines
         )
 
+    # NOT FOR MERGE: make it fail to allow easy rerun
+    assert False
+
 
 def _get_mocksolve_executable(get_python_script: bool = False):
     # System Coupling is packaged under /syc in the image

@@ -250,7 +250,7 @@ jobs:
     name: Build Documentation
     needs: [doc-style, build]
     runs-on: public-ubuntu-latest-8-cores
-    #if: false #temp disable docs build
+    if: false #temp disable docs build
     permissions:
       contents: write
       packages: read
