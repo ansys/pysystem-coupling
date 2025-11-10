@@ -32,7 +32,7 @@ class CommandQueryService:
 
     def execute_command(self, request):
         try:
-            print("about to call execute_command")
+            print("about to call execute_command in CommandQueryService")
             response, call = self.__stub.InvokeCommand.with_call(request)
             return response, call.trailing_metadata()
         except grpc.RpcError as rpc_error:

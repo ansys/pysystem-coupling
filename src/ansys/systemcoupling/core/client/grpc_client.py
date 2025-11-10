@@ -387,6 +387,7 @@ class SycGrpc(object):
 
         See also ``__getattr__``.
         """
+        print(f"about to execute command {cmd_name} with args {kwargs}")
 
         def make_arg(name, val):
             arg = command_pb2.CommandRequest.Argument()
