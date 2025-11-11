@@ -98,6 +98,10 @@ def start_container(
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
         idx = run_args.index("-e")
+        run_args.insert(idx, "ANSYSCL_TIMEOUT_RESPONSE=300")
+        run_args.insert(idx, "-e")
+        run_args.insert(idx, "ANSYSLI_TIMEOUT_FLEXLM=60")
+        run_args.insert(idx, "-e")
         run_args.insert(idx, f"ANSYSLMD_LICENSE_FILE={license_server}")
         run_args.insert(idx, "-e")
 
