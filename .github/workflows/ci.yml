@@ -17,7 +17,7 @@ env:
   DOC_BUILD_SYC_VERSION: 25_2
   FLUENT_IMAGE_VERSION: "v25.2.0"
   SYC_IMAGE_VERSION: "v25.2.0"
-  MAPDL_IMAGE_VERSION: "v25.1-ubuntu"
+  MAPDL_IMAGE_VERSION: "v25.1-ubuntu-cicd"
 
 permissions: {} # Zero permissions can be granted at the workflow level if not all jobs require permissions.
                 # As a good rule of thumb, this normally includes jobs that don't use secrets.
