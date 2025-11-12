@@ -230,7 +230,7 @@ def _reset_example(gallery_conf, fname: str, when: str):
 
         if using_mapdl_container:
             subprocess.run(
-                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up"]
+                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
             )
             print("MAPDL container launched")
     else:
