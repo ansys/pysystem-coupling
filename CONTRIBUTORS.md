@@ -16,6 +16,7 @@
 * [Konstantinos Giannokostas](https://github.com/giannoko)
 * [licui7](https://github.com/licui7)
 * [Maxime Rey](https://github.com/MaxJPRey)
+* [Muhammed Adedigba](https://github.com/moe-ad)
 * [Nick Marnik](https://github.com/nick-marnik)
 * [Oleg Chernukhin](https://github.com/ochernuk)
 * [radnarkhed](https://github.com/radnarkhed)
