@@ -4,7 +4,7 @@ exclude: ^(doc/source/examples)
 # initially copied from pymapdl
 repos:
 - repo: https://github.com/psf/black
-  rev: 25.9.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY -  ALSO: check pyproject.toml
+  rev: 25.11.0  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY -  ALSO: check pyproject.toml
   hooks:
   - id: black
 
