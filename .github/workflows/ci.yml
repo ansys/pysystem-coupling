@@ -362,6 +362,10 @@ jobs:
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     needs: [test, docs]
     runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+      contents: write
     steps:
 
       - name: "Download the library artifacts from build-library step"
@@ -369,7 +373,6 @@ jobs:
         with:
           name: ${{ env.PACKAGE_NAME }}-artifacts
           path: ${{ env.PACKAGE_NAME }}-artifacts
-
 
       - name: Display structure of downloaded files
         run: ls -R
@@ -379,7 +382,7 @@ jobs:
         with:
           repository-url: "https://upload.pypi.org/legacy/"
           print-hash: true
-          packages-dir: ${{ env.PACKAGE_NAMEt }}-artifacts
+          packages-dir: ${{ env.PACKAGE_NAME }}-artifacts
           skip-existing: false
 
       - name: "Release to GitHub"
