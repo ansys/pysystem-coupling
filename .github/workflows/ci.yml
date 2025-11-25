@@ -216,24 +216,24 @@ jobs:
       #     image-tag: v24.1.0
       #     upload-coverage: false
 
-      - name: Unit Test v24.2.0
+      - name: Unit Test v24.2.0 (SP5)
         uses: ./.github/actions/unit-test
         with:
-          image-tag: v24.2.0
+          image-tag: v24.2.0-sp05
           upload-coverage: false
 
-      - name: Unit Test v25.1.0
+      - name: Unit Test v25.1.0 (SP4)
         uses: ./.github/actions/unit-test
         with:
-          image-tag: v25.1.0
+          image-tag: v25.1.0-sp04
           upload-coverage: false
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
-      - name: Unit Test v25.2.0
+      - name: Unit Test v25.2.0 (SP3)
         uses: ./.github/actions/unit-test
         with:
-          image-tag: v25.2.0
+          image-tag: v25.2.0-sp03
           upload-coverage: true
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
