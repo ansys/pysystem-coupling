@@ -16,7 +16,7 @@ env:
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 25_2
   FLUENT_IMAGE_VERSION: "v25.2.0"
-  SYC_IMAGE_VERSION: "v25.2.0-sp3"
+  SYC_IMAGE_VERSION: "v25.2.0-sp03"
   MAPDL_IMAGE_VERSION: "v25.2-ubuntu-cicd"
 
 permissions: {} # Zero permissions can be granted at the workflow level if not all jobs require permissions.
