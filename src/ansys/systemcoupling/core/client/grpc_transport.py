@@ -171,8 +171,9 @@ class StartupAndConnectionInfo:
         port = self._get_port()
         match opt.transport_mode:
             case _TransportMode.UDS:
-                if opt.uds_dir:
-                    args.append(f"--uds-dir={opt.uds_dir}")
+                # Always send uds-dir as some older versions might be
+                # inconsistent with us about the default location.
+                args.append(f"--uds-dir={self._get_uds_folder()}")
                 if opt.uds_id:
                     args.append(f"--uds-id={opt.uds_id}")
             case _TransportMode.WNUA:
@@ -362,7 +363,7 @@ class StartupAndConnectionInfo:
             return pathlib.Path(os.environ["USERPROFILE"], ".conn")
         else:
             # Linux/POSIX
-            return pathlib.Path("/tmp")
+            return pathlib.Path(os.environ["HOME"], ".conn")
 
     def _get_certs_folder(self, specified_folder: str | None) -> str:
         # Explicit setting overrides other options
