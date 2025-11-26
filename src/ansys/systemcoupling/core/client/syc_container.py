@@ -30,25 +30,27 @@ from ansys.systemcoupling.core.util.logging import LOG
 _MPI_VERSION_VAR = "FLUENT_INTEL_MPI_VERSION"
 _MPI_VERSION = "2021"
 
-_FORCE_SERVICE_PACK_SUFFIX = True
-_USE_NEW_TRANSPORT_ARGS = _FORCE_SERVICE_PACK_SUFFIX
 
-
-def _image_tag(version: str) -> str:
-    if version == "latest":
-        return version
+def _major_minor_sp_from_version(version: str) -> tuple[int, int, str]:
+    """Extract major, minor, and service pack suffix from version string."""
     version, sep, service_pack = version.partition("-sp")
     if version.startswith("v"):
         version = version[1:]
     if version.endswith(".0"):
         version = version[:-2]
     major, minor = normalize_version(version)
+    return major, minor, f"{sep}{service_pack}"
+
+
+def _image_tag(version: str) -> str:
+    if version == "latest":
+        return version
+    major, minor, sp_suffix = _major_minor_sp_from_version(version)
 
     # We are tolerant of whether the suffix is actually included, but
-    # maybe force the use of latest service pack images where applicable.
+    # force the use of latest service pack images where applicable.
 
-    sp_suffix = f"{sep}{service_pack}"
-    if _FORCE_SERVICE_PACK_SUFFIX and not sp_suffix:
+    if not sp_suffix:
         if (major, minor) == (24, 2):
             sp_suffix = "-sp05"
         elif (major, minor) == (25, 1):
@@ -74,7 +76,18 @@ def start_container(
         gPRC server local port, mapped to the same port in container.
     """
 
-    if _USE_NEW_TRANSPORT_ARGS:
+    if version:
+        image_tag = _image_tag(version)
+    else:
+        image_tag = os.getenv("SYC_IMAGE_TAG", _default_image_tag())
+
+    # Now use the image tag as definitive source of version info to
+    # decide on transport args.
+    if not (use_new_transport_args := image_tag == "latest"):
+        major, minor, sp_suffix = _major_minor_sp_from_version(image_tag)
+        use_new_transport_args = sp_suffix or (major, minor) > (25, 2)
+
+    if use_new_transport_args:
         args = [
             "-m",
             "cosimgui",
@@ -89,11 +102,6 @@ def start_container(
         args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}", "--ptrace"]
 
     LOG.debug("Starting System Coupling docker container...")
-
-    if version:
-        image_tag = _image_tag(version)
-    else:
-        image_tag = os.getenv("SYC_IMAGE_TAG", _default_image_tag())
 
     mounted_from = str(Path(mounted_from).absolute())
 

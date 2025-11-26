@@ -337,7 +337,7 @@ class SycGrpc(object):
                     check_process()
 
         raise RuntimeError(
-            "Stopping attempt to connect to gRPC channel after {total_time} seconds."
+            f"Stopping attempt to connect to gRPC channel after {total_time} seconds."
         )
 
     @property
