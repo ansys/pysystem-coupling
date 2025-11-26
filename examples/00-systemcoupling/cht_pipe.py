@@ -25,21 +25,21 @@
 Conjugate Heat transfer- Pipe flow
 -----------------------------------
 
-Conjugate heat transfer (CHT) simualtions often exhibit numerical sensitivity at the fluid-solid 
-interface. This example demonstrates how users can appropriately select interface conditiions 
-and stabilization schemes for a typical pipe-flow configuration. It highlights best practices 
-for setting up a robust CHT workflow in System Coupling, including managing temperature and 
+Conjugate heat transfer (CHT) simualtions often exhibit numerical sensitivity at the fluid-solid
+interface. This example demonstrates how users can appropriately select interface conditiions
+and stabilization schemes for a typical pipe-flow configuration. It highlights best practices
+for setting up a robust CHT workflow in System Coupling, including managing temperature and
 heat-flux exchange, controlling relaxation, ensuring consistent mesh-to-mesh interpolation.
 
 - Ansys Fluent is used to model the thermal fluid flow in the pipe.
 - Ansys Mechanical APDL (MAPDL) is used to model thermal transfer in the pipe wall.
-- System Coupling coordinates the coupled solution to the conjugate heat transfer problem, 
+- System Coupling coordinates the coupled solution to the conjugate heat transfer problem,
 including numerical stabilization if needed.
 
 **Problem description**
 
 A fluid at a certain temperature flows into a pipe of known diameter and length. As it flows,
-the heated outer wall of the pipe conducts heat to the inner wall, which in turns heats the 
+the heated outer wall of the pipe conducts heat to the inner wall, which in turns heats the
 fluid and cools down the walls of the pipe.
 
 
@@ -175,8 +175,12 @@ fluent.setup.cell_zone_conditions.fluid["fff_fluiddomain"].material = "water-liq
 
 # %%
 # Define boundary conditions
-fluent.setup.boundary_conditions.velocity_inlet["inlet"].momentum.velocity = 0.1 # units: m/s
-fluent.setup.boundary_conditions.velocity_inlet["inlet"].thermal.temperature = 300 # Units: Kelvin
+fluent.setup.boundary_conditions.velocity_inlet["inlet"].momentum.velocity = (
+    0.1  # units: m/s
+)
+fluent.setup.boundary_conditions.velocity_inlet["inlet"].thermal.temperature = (
+    300  # Units: Kelvin
+)
 fluent.setup.boundary_conditions.wall["inner_wall"].thermal.thermal_bc = (
     "via System Coupling"
 )
@@ -211,20 +215,21 @@ interface_name = syc.setup.add_interface(
 # %%
 # Set up 2-way thermal FSI coupling
 # ----Temp from solid to fluid----
-temp_transfer= syc.setup.add_data_transfer(
+temp_transfer = syc.setup.add_data_transfer(
     interface=interface_name,
     target_side="One",
-    source_variable='TEMP',
-    target_variable='temperature'
+    source_variable="TEMP",
+    target_variable="temperature",
 )
 
-#----Heat flux from fluid to solid----
-hf_transfer= syc.setup.add_data_transfer(
+# ----Heat flux from fluid to solid----
+hf_transfer = syc.setup.add_data_transfer(
     interface=interface_name,
     target_side="Two",
     source_variable="heatflow",
-    target_variable="HFLW"
+    target_variable="HFLW",
 )
+
 
 # %%
 # Biot number prediction
@@ -237,11 +242,13 @@ hf_transfer= syc.setup.add_data_transfer(
 # L_c: characteristic length
 # U: velocity of flow
 def biot_number(rho=1000, mu=1e-3, cp=4180, k_f=0.6, k_s=237, L_c=r_out - r_in, U=0.1):
-    Re = (rho * U * L_c) / mu # Reynolds number calculation from the flow properties
-    Pr = (mu * cp) / k_f # Prandtl number calculation from fluid properties
-    Nu = 0.023 * Re**0.8 * Pr**0.4 # Nusselt number calculation from Dittus-Boelter equation
-    h = Nu * k_f / L_c # Calculate heat transfer coefficient from Nu=(h*L_c)/k_f
-    Bi = h * L_c / k_s # Calculate Biot number from Bi=(h*L_c)/k_s
+    Re = (rho * U * L_c) / mu  # Reynolds number calculation from the flow properties
+    Pr = (mu * cp) / k_f  # Prandtl number calculation from fluid properties
+    Nu = (
+        0.023 * Re**0.8 * Pr**0.4
+    )  # Nusselt number calculation from Dittus-Boelter equation
+    h = Nu * k_f / L_c  # Calculate heat transfer coefficient from Nu=(h*L_c)/k_f
+    Bi = h * L_c / k_s  # Calculate Biot number from Bi=(h*L_c)/k_s
     return Bi
 
 
@@ -250,9 +257,9 @@ print("The Biot number is ", Bi)
 
 # %%
 # Apply stabilization if Biot number exceeds 10
-if Bi>10:
+if Bi > 10:
     syc.setup.analysis_control.global_stabilization.option = "Quasi-Newton"
-    
+
 
 syc.setup.solution_control.time_step_size = "0.1 [s]"  # time step is 0.1 [s]
 syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
@@ -281,10 +288,10 @@ fluent.settings.results.graphics.picture.x_resolution = 1920
 fluent.settings.results.graphics.picture.y_resolution = 1440
 
 fluent.settings.results.surfaces.plane_surface.create(name="mid_plane")
-fluent.settings.results.surfaces.plane_surface["mid_plane"].method= "zx-plane"
+fluent.settings.results.surfaces.plane_surface["mid_plane"].method = "zx-plane"
 
-fluent.settings.results.graphics.contour.create(name= "contour_temperature")
-fluent.settings.results.graphics.contour["contour_temperature"]= {
+fluent.settings.results.graphics.contour.create(name="contour_temperature")
+fluent.settings.results.graphics.contour["contour_temperature"] = {
     "field": "temperature",
     "surfaces_list": ["mid_plane"],
 }
