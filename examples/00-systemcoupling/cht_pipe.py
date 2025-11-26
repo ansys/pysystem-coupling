@@ -25,8 +25,8 @@
 Conjugate Heat transfer- Pipe flow
 -----------------------------------
 
-Conjugate heat transfer (CHT) simualtions often exhibit numerical sensitivity at the fluid-solid
-interface. This example demonstrates how users can appropriately select interface conditiions
+Conjugate heat transfer (CHT) simulations often exhibit numerical sensitivity at the fluid-solid
+interface. This example demonstrates how users can appropriately select interface conditions
 and stabilization schemes for a typical pipe-flow configuration. It highlights best practices
 for setting up a robust CHT workflow in System Coupling, including managing temperature and
 heat-flux exchange, controlling relaxation, ensuring consistent mesh-to-mesh interpolation.
@@ -105,7 +105,7 @@ mapdl.esize(0.002)
 mapdl.vsweep(1)
 
 # %%
-# Visualizing the meshed gemoetry
+# Visualizing the meshed geometry
 mapdl.eplot()
 
 # %%
@@ -133,7 +133,7 @@ mapdl.cm("Inlet", "AREA")
 mapdl.allsel()
 
 # %%
-# Boundary conditions in degrees Cesius
+# Boundary conditions in degrees Celsius
 mapdl.cmsel("S", "Outer_wall")
 mapdl.d("Outer_wall", "TEMP", 77)
 mapdl.allsel()
