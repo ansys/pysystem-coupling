@@ -50,7 +50,9 @@ from ansys.systemcoupling.core.util.logging import LOG
 
 _CHANNEL_READY_TIMEOUT_SEC = int(os.environ.get("PYSYC_GRPC_INITIAL_TIMEOUT_SEC", 5))
 _CHANNEL_READY_RETRIES = int(os.environ.get("PYSYC_GRPC_N_TIMEOUT_RETRY", 3))
-_CHANNEL_READY_TIMEOUT_FACTOR = float(os.environ.get("PYSYC_GRPC_TIMEOUT_RETRY_FACTOR", 1.5))
+_CHANNEL_READY_TIMEOUT_FACTOR = float(
+    os.environ.get("PYSYC_GRPC_TIMEOUT_RETRY_FACTOR", 1.5)
+)
 
 _LOCALHOST_IP = "127.0.0.1"
 
