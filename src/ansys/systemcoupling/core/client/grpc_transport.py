@@ -116,12 +116,6 @@ class _ConnectionOptions:
     uds_id: str | None = None
 
 
-class _TransportMode(str, Enum):
-    """Enum containing the different modes of connection."""
-
-    (INSECURE, UDS, MTLS, WNUA) = ("insecure", "uds", "mtls", "wnua")
-
-
 class StartupAndConnectionInfo:
     """Encapsulates most of the considerations relating to choice of
     connection type."""
