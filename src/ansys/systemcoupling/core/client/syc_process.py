@@ -97,7 +97,7 @@ class _ProcessStarter:
                 args=(exe_path, grpc_args_fallback, working_dir),
                 kwargs=deepcopy(kwargs),
             )
-            self.__fallback_thread.run()
+            self.__fallback_thread.start()
 
     def get_running_process(self):
         # We should not normally need to access the process during the

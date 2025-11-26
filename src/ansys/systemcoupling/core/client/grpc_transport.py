@@ -210,7 +210,7 @@ class StartupAndConnectionInfo:
         if self._version_category == StartupArgumentCategory.NEW_ARGUMENTS:
             raise RuntimeError(
                 f"The assumed version of the System Coupling server"
-                " {opt._version[0]}.{opt.version[1]} does not accept the old"
+                f" {self._version[0]}.{self._version[1]} does not accept the old"
                 " command line format."
             )
         if opt.transport_mode != _TransportMode.INSECURE:
