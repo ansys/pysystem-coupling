@@ -25,27 +25,27 @@
 Conjugate Heat transfer- Pipe flow
 -----------------------------------
 
-This example illustrates a two way conjugate heat transfer case for
-*flow in a pipe* that is used as a tutorial for System Coupling. This Fluid-Structure
-interaction (FSI) is based on a steady case fluid flow in a pipe with surface data transfers.
+Conjugate heat transfer (CHT) simualtions often exhibit numerical sensitivity at the fluid-solid 
+interface. This example demonstrates how users can appropriately select interface conditiions 
+and stabilization schemes for a typical pipe-flow configuration. It highlights best practices 
+for setting up a robust CHT workflow in System Coupling, including managing temperature and 
+heat-flux exchange, controlling relaxation, ensuring consistent mesh-to-mesh interpolation.
 
-- Ansys Mechanical APDL (MAPDL) is used to perform a structural analysis.
-- Ansys Fluent is used to perform a steady fluid-flow analysis.
-- System Coupling coordinates the coupled sloution involving the above products to
-  solve the multiphysics problem via co-simulation.
+- Ansys Fluent is used to model the thermal fluid flow in the pipe.
+- Ansys Mechanical APDL (MAPDL) is used to model thermal transfer in the pipe wall.
+- System Coupling coordinates the coupled solution to the conjugate heat transfer problem, 
+including numerical stabilization if needed.
 
 **Problem description**
 
 A fluid at a certain temperature flows into a pipe of known diameter and length. As it flows,
-the heated wall of the pipe conducts heat to the inner wall, which in turns heats the fluid and
-cools down the walls of the pipe.
-
+the heated outer wall of the pipe conducts heat to the inner wall, which in turns heats the 
+fluid and cools down the walls of the pipe.
 
 
 The flow is smooth inside the pipe and the outer wall of the pipe is adiabatic. Fluid enters
-at an initial temperature of 300K while the outside pipe of the wall is at 400K.
-The setup is simulated for a few iterations to allow the examination
-of the temperature field in the pipe.
+at an initial temperature of 300K while the outside pipe of the wall is at 350K.
+
 
 """
 # %%
@@ -56,7 +56,7 @@ of the temperature field in the pipe.
 #
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
-# Import ``ansys-systemcoupling-core``, ``ansys-fluent-core``
+# Import ``ansys-systemcoupling-core``, ``ansys-fluent-core``, ``ansys-mapdl-core``
 
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
@@ -70,6 +70,8 @@ fluent_msh_file = examples.download_file(
     "fluid_domain.msh", "pysystem-coupling/cht_pipe"
 )
 
+# %%
+# Launch MAPDL
 mapdl = pymapdl.launch_mapdl()
 mapdl.clear()
 mapdl.prep7()
@@ -89,6 +91,7 @@ mapdl.et(1, 279)
 mapdl.keyopt(1, 2, 1)
 print(mapdl)
 
+
 # %%
 # Parameter of the pipe
 r_in = 0.025
@@ -96,52 +99,41 @@ r_out = 0.035
 l = 0.2
 
 # %%
-# Create hollow pipe
+# Create a simple hollow pipe
 mapdl.cyl4(0, 0, rad1=r_in, rad2=r_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
-print(mapdl.geometry.anum)
-
 
 # %%
-# Biot number prediction
-def biot_number(rho=1000, mu=1e-3, cp=4180, k_f=0.6, k_s=237, L_c=r_out - r_in, U=0.1):
-    Re = (rho * U * L_c) / mu
-    Pr = (mu * cp) / k_f
-    Nu = 0.023 * Re**0.8 * Pr**0.4
-    h = Nu * k_f / L_c
-    Bi = h * L_c / k_s
-    return Bi
-
-
-Bi = biot_number()
-print("The Biot number is ", Bi)
+# Visualizing the meshed gemoetry
+mapdl.eplot()
 
 # %%
 # Creating the regions from the geometry for named selections
-# Inner wall NS
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Inner wall Named Selection
 mapdl.asel("S", "AREA", "", 5, 6)
 mapdl.nsla("S", 1)
 mapdl.cm("FSIN_1", "NODE")
 mapdl.allsel()
 
-# Outer wall NS
+# Outer wall Named Selection
 mapdl.asel("S", "AREA", "", 3, 4)
 mapdl.cm("Outer_wall", "AREA")
 mapdl.allsel()
 
-# Outlet NS
+# Outlet Named Selection
 mapdl.asel("S", "AREA", "", 2)
 mapdl.cm("Outlet", "AREA")
 mapdl.allsel()
 
-# Inlet NS
+# Inlet Named Selection
 mapdl.asel("S", "AREA", "", 1)
 mapdl.cm("Inlet", "AREA")
 mapdl.allsel()
 
 # %%
-# Boundary conditions
+# Boundary conditions in degrees Cesius
 mapdl.cmsel("S", "Outer_wall")
 mapdl.d("Outer_wall", "TEMP", 77)
 mapdl.allsel()
@@ -163,12 +155,10 @@ mapdl.allsel()
 mapdl.run("/SOLU")
 mapdl.antype(0)
 
-# %%
-# Set up the fluid analysis
-# ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # %%
-# Read the pre-created mesh file
+# Set up the fluid analysis and read the pre-created mesh file
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 fluent = pyfluent.launch_fluent(start_transcript=False)
 fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
@@ -185,8 +175,8 @@ fluent.setup.cell_zone_conditions.fluid["fff_fluiddomain"].material = "water-liq
 
 # %%
 # Define boundary conditions
-fluent.setup.boundary_conditions.velocity_inlet["inlet"].momentum.velocity = 0.1
-fluent.setup.boundary_conditions.velocity_inlet["inlet"].thermal.temperature = 300
+fluent.setup.boundary_conditions.velocity_inlet["inlet"].momentum.velocity = 0.1 # units: m/s
+fluent.setup.boundary_conditions.velocity_inlet["inlet"].thermal.temperature = 300 # Units: Kelvin
 fluent.setup.boundary_conditions.wall["inner_wall"].thermal.thermal_bc = (
     "via System Coupling"
 )
@@ -220,10 +210,50 @@ interface_name = syc.setup.add_interface(
 
 # %%
 # Set up 2-way thermal FSI coupling
-syc.setup.add_thermal_data_transfers(interface=interface_name)
+# ----Temp from solid to fluid----
+temp_transfer= syc.setup.add_data_transfer(
+    interface=interface_name,
+    target_side="One",
+    source_variable='TEMP',
+    target_variable='temperature'
+)
+
+#----Heat flux from fluid to solid----
+hf_transfer= syc.setup.add_data_transfer(
+    interface=interface_name,
+    target_side="Two",
+    source_variable="heatflow",
+    target_variable="HFLW"
+)
 
 # %%
-# Time step size, end time, output controls
+# Biot number prediction
+# ~~~~~~~~~~~~~~~~~~~~~~
+# rho: density
+# mu: dynamic viscosity
+# cp: specific heat capacity
+# k_f: thermal conductivity of fluid
+# k_s: thermal conductivity of solid
+# L_c: characteristic length
+# U: velocity of flow
+def biot_number(rho=1000, mu=1e-3, cp=4180, k_f=0.6, k_s=237, L_c=r_out - r_in, U=0.1):
+    Re = (rho * U * L_c) / mu # Reynolds number calculation from the flow properties
+    Pr = (mu * cp) / k_f # Prandtl number calculation from fluid properties
+    Nu = 0.023 * Re**0.8 * Pr**0.4 # Nusselt number calculation from Dittus-Boelter equation
+    h = Nu * k_f / L_c # Calculate heat transfer coefficient from Nu=(h*L_c)/k_f
+    Bi = h * L_c / k_s # Calculate Biot number from Bi=(h*L_c)/k_s
+    return Bi
+
+
+Bi = biot_number()
+print("The Biot number is ", Bi)
+
+# %%
+# Apply stabilization if Biot number exceeds 10
+if Bi>10:
+    syc.setup.analysis_control.global_stabilization.option = "Quasi-Newton"
+    
+
 syc.setup.solution_control.time_step_size = "0.1 [s]"  # time step is 0.1 [s]
 syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
 
@@ -239,3 +269,32 @@ syc.solution.solve()
 # ----
 syc.end_output()
 syc.exit()
+
+# %%
+# Post processing
+# ~~~~~~~~~~~~~~~
+# Post process the fluid results in fluent
+if fluent.settings.results.graphics.picture.use_window_resolution.is_active():
+    fluent.settings.results.graphics.picture.use_window_resolution = False
+
+fluent.settings.results.graphics.picture.x_resolution = 1920
+fluent.settings.results.graphics.picture.y_resolution = 1440
+
+fluent.settings.results.surfaces.plane_surface.create(name="mid_plane")
+fluent.settings.results.surfaces.plane_surface["mid_plane"].method= "zx-plane"
+
+fluent.settings.results.graphics.contour.create(name= "contour_temperature")
+fluent.settings.results.graphics.contour["contour_temperature"]= {
+    "field": "temperature",
+    "surfaces_list": ["mid_plane"],
+}
+fluent.settings.results.graphics.contour.display(object_name="contour_temperature")
+
+fluent.settings.results.graphics.views.restore_view(view_name="top")
+fluent.settings.results.graphics.views.auto_scale()
+fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contour.png")
+
+#######################################################################################
+# .. image:: /_static/cht_temp_contour.png
+#   :width: 500pt
+#   :align: center
