@@ -104,9 +104,6 @@ mapdl.cyl4(0, 0, rad1=r_in, rad2=r_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
 
-# %%
-# Visualizing the meshed geometry
-mapdl.eplot()
 
 # %%
 # Creating the regions from the geometry for named selections
