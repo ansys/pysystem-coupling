@@ -45,9 +45,6 @@ class SycProcess:  # pragma: no cover
         working_dir: str,
         **kwargs,
     ):
-        # self.__process = _start_system_coupling(
-        #    exe_path, grpc_args, working_dir, **kwargs
-        # )
         self.__starter = _ProcessStarter(
             exe_path, grpc_args, grpc_args_fallback, working_dir, **kwargs
         )
@@ -83,6 +80,25 @@ class _ProcessStarter:
         working_dir: str,
         **kwargs,
     ):
+        # This class handles the complication of trying to start a version of
+        # System Coupling that, by default, we assume has been patched and has
+        # the new form of command line arguments, `grpc_args`, but in fact might
+        # be an older, unpatched version that needs the old-style arguments,
+        # `grpc_args_fallback`.
+        # As we don't know which version we have until we try to start it, we
+        # start the default version first, and immediately start another thread
+        # that will look out for the default process dying within a short period.
+        # If it does, we will try to start the fallback version.
+        # We use a separate thread for this because the main thread will be busy
+        # waiting for the gRPC channer to become ready, and it is only when this
+        # times out that it would be able to check whether the process is still
+        # alive. By using a separate thread, we can start the fallback
+        # process as soon as we detect that the default process has died. Moreover,
+        # the main thread doesn't care which process it ends up using, as long as
+        # it can connect to one of them so, if the fallback process starts
+        # successfully, the connection will probably happen within the initial
+        # connection timeout period.
+
         self.__default_process: subprocess.Popen | None = None
         self.__fallback_process: subprocess.Popen | None = None
 
