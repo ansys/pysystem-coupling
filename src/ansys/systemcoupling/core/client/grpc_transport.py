@@ -54,15 +54,15 @@ class ConnectionType(Enum):
     are supported.
 
     Note that not all options are supported in all contexts. For
-    example, in the case of calling `launch()` to launch a process
-    and connect to it, a local host connection is always assumed.
+    example, in the case of calling ``launch()`` to launch a process
+    and connect to it, only local host connections are currently supported.
     """
 
     SECURE_LOCAL = 1
     """The usual default. This selects a supported secure local
     connection type appropriate for the platform and server version.
     In practice, this is ``UNIX_DOMAIN_SOCKETS`` or
-    `WINDOWS_NAMED_USER_AUTHENTICATION``."""
+    ``WINDOWS_NAMED_USER_AUTHENTICATION``."""
     UNIX_DOMAIN_SOCKETS = 2
     """Use a standard Unix domain socket to connect. This is the
     default on Linux and may be supported on Windows in some cases."""

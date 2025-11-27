@@ -56,6 +56,7 @@ def launch(
     ----------
     connection_type: ConnectionType, optional
         Specifies the type of connection to make with the launched server.
+        See :class:`ConnectionType` for available options.
         Not all options are currently supported. The default is a secure
         local connection. This will not work with some older versions or
         older versions that have not been updated with service pack releases.
@@ -185,6 +186,7 @@ def connect(
         Port on which to connect to System Coupling.
     connection_type: ConnectionType, optional
         Specifies the type of connection to make with System Coupling.
+        See :class:`ConnectionType` for available options.
         This must be compatible with the mode in which the server was
         started. The default is a secure local connection. This will
         not work with some older versions of System Coupling or versions
