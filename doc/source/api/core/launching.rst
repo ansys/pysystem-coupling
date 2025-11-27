@@ -13,3 +13,11 @@ of System Coupling.
 
     launch
     connect
+
+Connection types
+================
+
+.. autosummary::
+    :toctree: _autosummary
+
+    ConnectionType

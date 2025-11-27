@@ -31,29 +31,30 @@ from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
 #     'SYC_VERSION_DOT' container is not yet available.
 
 
-def test_start_and_connect() -> None:
+def test_start_and_connect(image_tag_env) -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
 
 
-def test_start_and_connect_explicit_version() -> None:
+def test_start_and_connect_explicit_version(image_tag_env) -> None:
     # Expect SYC_IMAGE_TAG to be set in GH workflow; otherwise default to current
-    current_tag = os.getenv("SYC_IMAGE_TAG", f"v{SYC_VERSION_DOT}.0")
-    if current_tag == "latest":
-        version_str = current_tag
-    else:
-        assert current_tag.startswith("v") and current_tag.endswith(".0")
-        version_str = current_tag[1:-2]
-    with pysystemcoupling.launch_container(version=version_str) as syc:
+    image_tag = os.getenv("SYC_IMAGE_TAG", f"v{SYC_VERSION_DOT}.0")
+    if image_tag != "latest":
+        assert image_tag.startswith("v") and (
+            image_tag.endswith(".0") or "-sp" in image_tag
+        )
+    with pysystemcoupling.launch_container(version=image_tag) as syc:
         assert syc.ping()
 
 
-def test_start_and_connect_container_env_var(with_launching_container) -> None:
+def test_start_and_connect_container_env_var(
+    with_launching_container, image_tag_env
+) -> None:
     with pysystemcoupling.launch() as syc:
         assert syc.ping()
 
 
-def test_set_and_get() -> None:
+def test_set_and_get(image_tag_env) -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
 
@@ -79,7 +80,7 @@ def test_set_and_get() -> None:
         assert setup.library.expression.get_object_names() == ["expr1"]
 
 
-def test_set_and_get_state() -> None:
+def test_set_and_get_state(image_tag_env) -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
 
@@ -107,7 +108,7 @@ def test_set_and_get_state() -> None:
         assert expr1.expression_string == "2 * x"
 
 
-def test_more_datamodel_operations() -> None:
+def test_more_datamodel_operations(image_tag_env) -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
 
@@ -126,7 +127,7 @@ def test_more_datamodel_operations() -> None:
         assert "activate_hidden" in state and "library" in state
 
 
-def test_streaming() -> None:
+def test_streaming(image_tag_env) -> None:
     with pysystemcoupling.launch_container() as syc:
         assert syc.ping()
 
@@ -164,7 +165,7 @@ def test_streaming() -> None:
         assert handle_output.buf == ""
 
 
-def test_misc_items_for_coverage() -> None:
+def test_misc_items_for_coverage(image_tag_env) -> None:
     # Mop up some coverage items that are
     # relatively difficult to probe.
     with pysystemcoupling.launch_container() as syc:
@@ -192,7 +193,7 @@ def test_misc_items_for_coverage() -> None:
             pass
 
 
-def test_defunct_session():
+def test_defunct_session(image_tag_env):
     session = pysystemcoupling.launch_container()
     setup = session.setup
     case = session.case
