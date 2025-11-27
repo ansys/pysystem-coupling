@@ -235,20 +235,20 @@ class StartupAndConnectionInfo:
                     "your installed product for additional information."
                 )
                 channel = grpc.insecure_channel(target)
-                print("Connection using insecure channel established.")
+                LOG.info("Connection using insecure channel established.")
 
             case _TransportMode.UDS:
                 # If using UDS transport, set default authority to localhost
                 # see https://github.com/grpc/grpc/issues/34305
                 channel_options = (("grpc.default_authority", "localhost"),)
                 channel = grpc.insecure_channel(target, options=channel_options)
-                print(f"Connection using UDS-based channel {target} established.")
+                LOG.info(f"Connection using UDS-based channel {target} established.")
 
             case _TransportMode.MTLS:
                 credentials, cert_file, key_file, ca_file = self._get_tls_credentials()
                 channel = grpc.secure_channel(target, credentials)
-                print("Connection using secure channel over TLS established.")
-                print(
+                LOG.info("Connection using secure channel over TLS established.")
+                LOG.info(
                     f"Using gRPC+mTLS on {target} (cert: {cert_file}, "
                     f"key: {key_file}, server CA: {ca_file})"
                 )
@@ -257,7 +257,7 @@ class StartupAndConnectionInfo:
                 # Windows Named User Authentication: TCP localhost with special options
                 channel_options = (("grpc.default_authority", "localhost"),)
                 channel = grpc.insecure_channel(target, options=channel_options)
-                print(
+                LOG.info(
                     "Connection using Windows Named User Authentication (WNUA) channel established."
                 )
 
@@ -380,7 +380,6 @@ class StartupAndConnectionInfo:
         # All three files are required for mutual TLS
         missing = [f for f in (cert_file, key_file, ca_file) if not os.path.exists(f)]
         if missing:
-            print(f"Current directory: {os.getcwd()}")
             raise RuntimeError(
                 f"Missing required TLS file(s) for mutual TLS: {', '.join(missing)}"
             )
@@ -467,7 +466,7 @@ def _check_grpc_version():
     try:
         return _version_tuple(current_version) >= _version_tuple(min_version)
     except ValueError:
-        print("Warning: Unable to parse gRPC version.")
+        LOG.warning("Unable to parse gRPC version.")
         return False
 
 

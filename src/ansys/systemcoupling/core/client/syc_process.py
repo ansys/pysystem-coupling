@@ -122,7 +122,7 @@ class _ProcessStarter:
         **kwargs,
     ):
         try_fallback = False
-        for _ in range(10):
+        for _ in range(15):
             time.sleep(0.1)
             if self.__default_process.poll() is not None:
                 # Process has died within the first second or so
