@@ -1,0 +1,34 @@
+:orphan:
+
+.. _record_interactions:
+
+record_interactions
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.record_interactions
+
+.. autoclass:: record_interactions
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+record_setup : `bool`
+    Flag indicating whether participant record scp file.
+
+record_solution : `bool`
+    Flag indicating whether participant record solution files.
+
+record_precision : `int`
+    Set the digital precision of solution variable,1 <= N <= 16..
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

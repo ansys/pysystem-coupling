@@ -1,0 +1,1036 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Parametric sweep &#8212; PySystemCoupling</title>
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/ansys_sphinx_theme.css?v=35e44410" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+ 
+<link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+
+    <script src="../../_static/documentation_options.js?v=70f82a29"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="../../_static/js/table.js?v=b64f5182"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/00-systemcoupling/parametric_sweep_vel';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://systemcoupling.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API reference" href="../../api/index.html" />
+    <link rel="prev" title="Oscillating plate" href="oscillating_plate.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <link rel="canonical" href="https://systemcoupling.docs.pyansys.com/version/stable/examples/00-systemcoupling/parametric_sweep_vel.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container"><!-- Debugging: html_theme_options =  -->
+
+<!-- If there is no MiliSearch enabled, use the PyData search -->
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+   
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys-logo-black-cropped.png" class="logo__image only-light" alt="PySystemCoupling - Home"/>
+    <script>document.write(`<img src="../../_static/pyansys-logo-black-cropped.png" class="logo__image only-dark" alt="PySystemCoupling - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../users_guide/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../contributing.html">
+                        Contribute
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa fa-wrench fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Contribute</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(
+      (text) => (document.getElementById("announcement_msg").innerHTML = text),
+    )
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../getting_started/index.html">
+                        Getting started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../users_guide/index.html">
+                        User guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../api/index.html">
+                        API reference
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../contributing.html">
+                        Contribute
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa fa-wrench fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Contribute</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Coupled analysis examples</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="heating_tank_fmu.html">Heating tank with a Functional Mock-up Unit (FMU)</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="oscillating_plate.html">Oscillating plate</a></li>
+
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Parametric sweep</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">Examples</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Coupled analysis examples</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page">Parametric sweep</li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-00-systemcoupling-parametric-sweep-vel-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="parametric-sweep">
+<span id="parametric-sweep-example"></span><span id="sphx-glr-examples-00-systemcoupling-parametric-sweep-vel-py"></span><h1>Parametric sweep<a class="headerlink" href="#parametric-sweep" title="Link to this heading">#</a></h1>
+<p>This example is based on a steady FSI case where the fluid is flowing over a flexible plate.
+It shows how you use PySystemCoupling with some other PyAnsys libraries.</p>
+<p>The case is run a number of times, with varying fluid inlet velocity. The goal is to extract
+the maximum plate deflection from each solution and examine how it responds to the
+changing velocity value.</p>
+<a class="reference internal image-reference" href="../../_images/param_sweep_flow.png"><img alt="../../_images/param_sweep_flow.png" class="align-center" src="../../_images/param_sweep_flow.png" style="width: 400pt;" /></a>
+<a class="reference internal image-reference" href="../../_images/param_sweep_result.png"><img alt="../../_images/param_sweep_result.png" class="align-center" src="../../_images/param_sweep_result.png" style="width: 400pt;" /></a>
+<section id="perform-required-imports">
+<h2>Perform required imports<a class="headerlink" href="#perform-required-imports" title="Link to this heading">#</a></h2>
+<p>This example imports these PyAnsys libraries: PySystemCoupling,
+PyFluent, and PyDPF. It also imports Matplotlib and NumPy to
+produce a simple plot of the results.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">import</span> <span class="nn">ansys.dpf.core</span> <span class="k">as</span> <span class="nn">pydpf</span>
+<span class="kn">import</span> <span class="nn">ansys.fluent.core</span> <span class="k">as</span> <span class="nn">pyfluent</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">ansys.systemcoupling.core</span> <span class="k">as</span> <span class="nn">pysyc</span>
+<span class="kn">from</span> <span class="nn">ansys.systemcoupling.core</span> <span class="kn">import</span> <span class="n">examples</span>
+<span class="kn">from</span> <span class="nn">ansys.systemcoupling.core.syc_version</span> <span class="kn">import</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SYC_VERSION_DOT</span></a>
+</pre></div>
+</div>
+</section>
+<section id="define-functions">
+<h2>Define functions<a class="headerlink" href="#define-functions" title="Link to this heading">#</a></h2>
+<p>This example is broken into functions that define the main steps that
+must be performed. It makes particular sense to do this for the
+main task of running a coupled analysis because this task must be repeated
+for multiple values of a single input parameter. This is encapsulated
+in the <code class="docutils literal notranslate"><span class="pre">get_max_displacement</span></code> function. In turn, this function is broken
+into further functions that represent its main steps. Also, functions are
+defined to prepare the working directory (<code class="docutils literal notranslate"><span class="pre">setup_working_directory</span></code>)
+and plot the final results (<code class="docutils literal notranslate"><span class="pre">plot</span></code>).</p>
+<section id="set-up-working-directory">
+<h3>Set up working directory<a class="headerlink" href="#set-up-working-directory" title="Link to this heading">#</a></h3>
+<p>To set up the working directory with the downloaded data files for this
+example, use the <code class="docutils literal notranslate"><span class="pre">setup_working_directory()</span></code> function. In the working
+directory, the MAPDL files are placed in a <code class="docutils literal notranslate"><span class="pre">Mapdl</span></code> subdirectory, and
+the Fluent files are placed in a <code class="docutils literal notranslate"><span class="pre">Fluent</span></code> subdirectory. The
+<code class="docutils literal notranslate"><span class="pre">setup_working_directory()</span></code> function returns the path of the
+working directory for later use.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">setup_working_directory</span><span class="p">():</span>
+    <span class="n">examples</span><span class="o">.</span><span class="n">delete_downloads</span><span class="p">()</span>
+
+    <span class="n">mapdl_scp_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+        <span class="s2">&quot;mapdl.scp&quot;</span><span class="p">,</span> <span class="s2">&quot;pysystem-coupling/parametric_sweep_vel/Mapdl&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">fluent_scp_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+        <span class="s2">&quot;fluent.scp&quot;</span><span class="p">,</span> <span class="s2">&quot;pysystem-coupling/parametric_sweep_vel/Fluent&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">mapdl_dat_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+        <span class="s2">&quot;ds.dat&quot;</span><span class="p">,</span> <span class="s2">&quot;pysystem-coupling/parametric_sweep_vel/Mapdl&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">fluent_cas_file</span> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+        <span class="s2">&quot;case.cas.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;pysystem-coupling/parametric_sweep_vel/Fluent&quot;</span>
+    <span class="p">)</span>
+
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.dirname" title="os.path.dirname" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span></a><span class="p">(</span><span class="n">mapdl_scp_file</span><span class="p">)</span>
+
+    <span class="n">fluent_working_dir</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="s2">&quot;Fluent&quot;</span><span class="p">)</span>
+    <a href="https://docs.python.org/3/library/os.html#os.mkdir" title="os.mkdir" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span></a><span class="p">(</span><span class="n">fluent_working_dir</span><span class="p">)</span>
+    <span class="n">mapdl_working_dir</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="s2">&quot;Mapdl&quot;</span><span class="p">)</span>
+    <a href="https://docs.python.org/3/library/os.html#os.mkdir" title="os.mkdir" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">mkdir</span></a><span class="p">(</span><span class="n">mapdl_working_dir</span><span class="p">)</span>
+
+    <a href="https://docs.python.org/3/library/os.html#os.rename" title="os.rename" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">rename</span></a><span class="p">(</span><span class="n">fluent_cas_file</span><span class="p">,</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">fluent_working_dir</span><span class="p">,</span> <span class="s2">&quot;case.cas.h5&quot;</span><span class="p">))</span>
+    <a href="https://docs.python.org/3/library/os.html#os.rename" title="os.rename" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">rename</span></a><span class="p">(</span><span class="n">mapdl_dat_file</span><span class="p">,</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">mapdl_working_dir</span><span class="p">,</span> <span class="s2">&quot;ds.dat&quot;</span><span class="p">))</span>
+    <a href="https://docs.python.org/3/library/os.html#os.rename" title="os.rename" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">rename</span></a><span class="p">(</span><span class="n">fluent_scp_file</span><span class="p">,</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">fluent_working_dir</span><span class="p">,</span> <span class="s2">&quot;fluent.scp&quot;</span><span class="p">))</span>
+    <a href="https://docs.python.org/3/library/os.html#os.rename" title="os.rename" class="sphx-glr-backref-module-os sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">rename</span></a><span class="p">(</span><span class="n">mapdl_scp_file</span><span class="p">,</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="n">mapdl_working_dir</span><span class="p">,</span> <span class="s2">&quot;mapdl.scp&quot;</span><span class="p">))</span>
+
+    <span class="k">return</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a>
+</pre></div>
+</div>
+</section>
+<section id="set-inlet-velocity">
+<h3>Set inlet velocity<a class="headerlink" href="#set-inlet-velocity" title="Link to this heading">#</a></h3>
+<p>To modify the Fluent case to adjust the inlet velocity on the
+<code class="docutils literal notranslate"><span class="pre">&quot;wall_inlet&quot;</span></code> velocity inlet boundary condition, use the
+<code class="docutils literal notranslate"><span class="pre">set_inlet_velocity()</span></code> function. This function is called
+with a varying <code class="docutils literal notranslate"><span class="pre">inlet_velocity``value</span> <span class="pre">before</span> <span class="pre">each</span> <span class="pre">call</span> <span class="pre">of</span>
+<span class="pre">the</span> <span class="pre">``solve_coupled_analysis</span></code> command in a sequence of analyses.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">set_inlet_velocity</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="n">inlet_velocity</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">pyfluent</span><span class="o">.</span><span class="n">launch_fluent</span><span class="p">(</span>
+        <span class="n">product_version</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">SYC_VERSION_DOT</span></a><span class="si">}</span><span class="s2">.0&quot;</span><span class="p">,</span> <span class="n">precision</span><span class="o">=</span><span class="s2">&quot;double&quot;</span><span class="p">,</span> <span class="n">processor_count</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+        <span class="n">case_file</span> <span class="o">=</span> <a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="s2">&quot;Fluent&quot;</span><span class="p">,</span> <span class="s2">&quot;case.cas.h5&quot;</span><span class="p">)</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">case_file</span><span class="p">)</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">velocity_inlet</span><span class="p">[</span>
+            <span class="s2">&quot;wall_inlet&quot;</span>
+        <span class="p">]</span><span class="o">.</span><span class="n">momentum</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">inlet_velocity</span>
+        <span class="n">session</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="n">case_file</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inlet velocity is set to </span><span class="si">{</span><span class="n">inlet_velocity</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="solve-coupled-analysis">
+<h3>Solve coupled analysis<a class="headerlink" href="#solve-coupled-analysis" title="Link to this heading">#</a></h3>
+<p>Perform a single coupled analysis. In this example, the only change
+between successive calls to this function is in the content of the
+Fluent input file that is used. The value for the <code class="docutils literal notranslate"><span class="pre">inlet_velocity</span></code>
+setting is modified in the Fluent file prior to this function being called.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>System Coupling is launched anew for each call of
+this function.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">with</span> <span class="pre">pysyc.launch(...)</span></code> syntax ensures
+that the System Coupling session is properly exited at the
+end of the scope defined by the <code class="docutils literal notranslate"><span class="pre">with</span></code> block.</p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">solve_coupled_analysis</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">):</span>
+    <span class="k">with</span> <span class="n">pysyc</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">)</span> <span class="k">as</span> <span class="n">syc</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Setting up the coupled analysis.&quot;</span><span class="p">)</span>
+
+        <span class="n">fluent_name</span> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span>
+            <span class="n">input_file</span><span class="o">=</span><a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="s2">&quot;Fluent&quot;</span><span class="p">,</span> <span class="s2">&quot;fluent.scp&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">mapdl_name</span> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span>
+            <span class="n">input_file</span><span class="o">=</span><a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><span class="s2">&quot;Mapdl&quot;</span><span class="p">,</span> <span class="s2">&quot;mapdl.scp&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">fsi_name</span> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_interface</span><span class="p">(</span>
+            <span class="n">side_one_participant</span><span class="o">=</span><span class="n">fluent_name</span><span class="p">,</span>
+            <span class="n">side_one_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;wall_deforming&quot;</span><span class="p">],</span>
+            <span class="n">side_two_participant</span><span class="o">=</span><span class="n">mapdl_name</span><span class="p">,</span>
+            <span class="n">side_two_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;FSIN_1&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+            <span class="n">interface</span><span class="o">=</span><span class="n">fsi_name</span><span class="p">,</span>
+            <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;One&quot;</span><span class="p">,</span>
+            <span class="n">source_variable</span><span class="o">=</span><span class="s2">&quot;INCD&quot;</span><span class="p">,</span>
+            <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+            <span class="n">interface</span><span class="o">=</span><span class="n">fsi_name</span><span class="p">,</span>
+            <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;Two&quot;</span><span class="p">,</span>
+            <span class="n">source_variable</span><span class="o">=</span><span class="s2">&quot;force&quot;</span><span class="p">,</span>
+            <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;FORC&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">solution_control</span><span class="o">.</span><span class="n">maximum_iterations</span> <span class="o">=</span> <span class="mi">7</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Solving the coupled analysis. This may take a while....&quot;</span><span class="p">)</span>
+        <span class="n">syc</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;...done.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="extract-maximum-displacement-value">
+<h3>Extract maximum displacement value<a class="headerlink" href="#extract-maximum-displacement-value" title="Link to this heading">#</a></h3>
+<p>Use PyDPF to query the MAPDL results for the extract the
+maximum displacement value in the solution.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">extract_max_displacement</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Extracting max displacement value&quot;</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">pydpf</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="s2">&quot;Mapdl&quot;</span><span class="p">,</span> <span class="s2">&quot;file.rst&quot;</span><span class="p">))</span>
+    <span class="n">displacements</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">displacement</span><span class="p">()</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">displacements</span><span class="o">.</span><span class="n">outputs</span><span class="o">.</span><span class="n">fields_container</span><span class="p">()</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Max displacement value = </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+</div>
+</section>
+<section id="get-maximum-displacement">
+<h3>Get maximum displacement<a class="headerlink" href="#get-maximum-displacement" title="Link to this heading">#</a></h3>
+<p>Use the previously defined functions to:</p>
+<ul class="simple">
+<li><p>Modify the Fluent input file to apply the provided <code class="docutils literal notranslate"><span class="pre">inlet_velocity</span></code> setting.</p></li>
+<li><p>Run the coupled analysis based on this setting.</p></li>
+<li><p>Extract and return the maximum displacement value from the MAPDL results.</p></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">get_max_displacement</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="n">inlet_velocity</span><span class="p">):</span>
+    <span class="n">set_inlet_velocity</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="n">inlet_velocity</span><span class="p">)</span>
+    <span class="n">solve_coupled_analysis</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">)</span>
+    <span class="k">return</span> <span class="n">extract_max_displacement</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="plot-results">
+<h3>Plot results<a class="headerlink" href="#plot-results" title="Link to this heading">#</a></h3>
+<p>Generate an <code class="docutils literal notranslate"><span class="pre">x-y</span></code> plot of the results, showing the maximum
+displacement of the plate versus the inlet velocity.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">&quot;-o&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+        <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Inlet velocity [m/s]&quot;</span><span class="p">,</span>
+        <span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Max Displacement [m]&quot;</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Plate max displacement vs. inlet velocity&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><a href="https://docs.python.org/3/library/os.path.html#os.path.join" title="os.path.join" class="sphx-glr-backref-module-os-path sphx-glr-backref-type-py-function"><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="s2">&quot;displacement&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="run-analyses">
+<h2>Run analyses<a class="headerlink" href="#run-analyses" title="Link to this heading">#</a></h2>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">get_max_displacement()</span></code> function sequentially, with input
+velocity values provided by an initialized <code class="docutils literal notranslate"><span class="pre">x</span></code> array.
+The results of the calls to the <code class="docutils literal notranslate"><span class="pre">get_max_displacement()</span></code> function
+are used to fill in the corresponding values of the <code class="docutils literal notranslate"><span class="pre">y</span></code> array.
+Finally, call the <code class="docutils literal notranslate"><span class="pre">plot()</span></code> function to generate a plot from the arrays.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">15.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">])</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a> <span class="o">=</span> <span class="n">setup_working_directory</span><span class="p">()</span>
+
+<span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="p">,</span> <span class="n">inlet_velocity</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">y</span><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">index</span></a><span class="p">]</span> <span class="o">=</span> <span class="n">get_max_displacement</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="n">inlet_velocity</span><span class="p">)</span>
+
+<span class="n">plot</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">working_dir</span></a><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_parametric_sweep_vel_001.png" srcset="../../_images/sphx_glr_parametric_sweep_vel_001.png" alt="Plate max displacement vs. inlet velocity" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Fast-loading &quot;C:\ANSYSDev\ANSYSI~1\v241\fluent\fluent24.1.0\\addons\afd\lib\hdfio.bin&quot;
+Done.
+Note: Rank = 0: Process affinity not being set (6).
+Note: Rank = 1: Process affinity not being set (6).
+
+Reading from HOSTNAME_1:&quot;C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5&quot; in NODE0 mode ...
+  Reading mesh ...
+       58065 cells,     1 cell zone  ...
+          58065 hexahedral cells,  zone id: 2
+      187138 faces,     8 face zones ...
+         161252 quadrilateral interior faces,  zone id: 1
+            295 quadrilateral velocity-inlet faces,  zone id: 5
+            295 quadrilateral pressure-outlet faces,  zone id: 6
+            980 quadrilateral wall faces,  zone id: 7
+            985 quadrilateral wall faces,  zone id: 8
+            105 quadrilateral wall faces,  zone id: 9
+          11613 quadrilateral symmetry faces,  zone id: 10
+          11613 quadrilateral symmetry faces,  zone id: 11
+       71280 nodes,     1 node zone  ...
+Warning: reading 4 partition grid onto 2 compute node machine.
+         Combining every 2 partitions.
+  Done.
+
+
+Building...
+     mesh
+        distributing mesh
+                parts..,
+                faces..,
+                nodes..,
+                cells..,
+        bandwidth reduction using Reverse Cuthill-McKee: 16512/278 = 59.3957
+     materials,
+     interface,
+     domains,
+        mixture
+     zones,
+        symmetry2
+        symmetry1
+        wall_deforming
+        wall_top
+        wall_bottom
+        interior-part-fluid
+        wall_inlet
+        wall_outlet
+        part-fluid
+     parallel,
+     dynamic zones,
+        wall_deforming
+        wall_top
+        wall_bottom
+        symmetry2
+        symmetry1
+Done.
+
+Writing to HOSTNAME_1:&quot;C:\Users\user00\AppData\Local\Ansys\ansys_systemcoupling_core\examples\Fluent\case.cas.h5&quot; in NODE0 mode and compression level 1 ...
+Grouping cells for Laplace smoothing ...
+       58065 cells,     1 zone  ...
+      187138 faces,     8 zones ...
+       71280 nodes,     1 zone  ...
+  Done.
+Done.
+Inlet velocity is set to 5.0
+Setting up the coupled analysis.
+Solving the coupled analysis. This may take a while....
+...done.
+Extracting max displacement value
+Max displacement value = 0.05236548596272902
+Inlet velocity is set to 10.0
+Setting up the coupled analysis.
+Solving the coupled analysis. This may take a while....
+...done.
+Extracting max displacement value
+Max displacement value = 0.19232826991977978
+Inlet velocity is set to 15.0
+Setting up the coupled analysis.
+Solving the coupled analysis. This may take a while....
+...done.
+Extracting max displacement value
+Max displacement value = 0.37276751735981967
+Inlet velocity is set to 20.0
+Setting up the coupled analysis.
+Solving the coupled analysis. This may take a while....
+...done.
+Extracting max displacement value
+Max displacement value = 0.5624418880813694
+Inlet velocity is set to 25.0
+Setting up the coupled analysis.
+Solving the coupled analysis. This may take a while....
+...done.
+Extracting max displacement value
+Max displacement value = 0.721266826019441
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (11 minutes 27.899 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-00-systemcoupling-parametric-sweep-vel-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/181bc438349dd6d3dc45fbfb8f324a80/parametric_sweep_vel.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">parametric_sweep_vel.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/c3474fc761871fcfd060e74c51dfa149/parametric_sweep_vel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">parametric_sweep_vel.py</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-required-imports">Perform required imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-functions">Define functions</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-working-directory">Set up working directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#set-inlet-velocity">Set inlet velocity</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#solve-coupled-analysis">Solve coupled analysis</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#extract-maximum-displacement-value">Extract maximum displacement value</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#get-maximum-displacement">Get maximum displacement</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-results">Plot results</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-analyses">Run analyses</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item"> 
+<div class="tocsection editthispage">
+  <a href="https://github.com/pyansys/pysystem-coupling/edit/main/doc/source/examples/00-systemcoupling/parametric_sweep_vel.rst">
+    <i class="fa-solid fa-pencil"></i>
+       Edit
+    on GitHub  
+  </a>
+</div>
+
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/examples/00-systemcoupling/parametric_sweep_vel.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2024 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://sphinxdocs.ansys.com/version/stable/index.html"
+    >Ansys Sphinx Theme</a
+  >
+  0.15.2. <br />Last updated on
+  <span id="date"></span>
+</p>
+<script>
+  var options = { day: "numeric", month: "long", year: "numeric" };
+  var lastModifiedDate = new Date(document.lastModified);
+  var date = lastModifiedDate.toLocaleDateString("en-US", options);
+  document.getElementById("date").innerHTML = date;
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

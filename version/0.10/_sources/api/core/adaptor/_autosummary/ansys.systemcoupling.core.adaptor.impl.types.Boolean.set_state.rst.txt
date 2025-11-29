@@ -1,0 +1,6 @@
+set\_state
+==========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: Boolean.set_state
