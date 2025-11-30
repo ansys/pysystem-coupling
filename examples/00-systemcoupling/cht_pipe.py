@@ -227,30 +227,55 @@ hf_transfer = syc.setup.add_data_transfer(
     target_variable="HFLW",
 )
 
-
 # %%
-# Biot number prediction
-# ~~~~~~~~~~~~~~~~~~~~~~
-# rho: density
-# mu: dynamic viscosity
-# cp: specific heat capacity
-# k_f: thermal conductivity of fluid
-# k_s: thermal conductivity of solid
-# L_c: characteristic length
-# U: velocity of flow
-def biot_number(rho=1000, mu=1e-3, cp=4180, k_f=0.6, k_s=237, L_c=r_out - r_in, U=0.1):
-    Re = (rho * U * L_c) / mu  # Reynolds number calculation from the flow properties
-    Pr = (mu * cp) / k_f  # Prandtl number calculation from fluid properties
-    Nu = (
-        0.023 * Re**0.8 * Pr**0.4
-    )  # Nusselt number calculation from Dittus-Boelter equation
-    h = Nu * k_f / L_c  # Calculate heat transfer coefficient from Nu=(h*L_c)/k_f
-    Bi = h * L_c / k_s  # Calculate Biot number from Bi=(h*L_c)/k_s
-    return Bi
+# Calculating biot number
+fluent = pyfluent.launch_fluent(start_transcript=False)
+solid_props = fluent.settings.setup.materials.database.get_database_material_properties(
+    name="aluminum")
+fluid_props = fluent.settings.setup.materials.database.get_database_material_properties(
+    name="water-liquid")
+
+fluid_rho = fluid_props["density"]["compressible-liquid"][1] # Density of fluid
+mu_fluid = fluid_props["viscosity"]["constant"] # Viscosity of fluid
+cp_fluid = fluid_props["specific-heat"]["constant"] #Specific heat capacity of fluid
+k_fluid = fluid_props["thermal-conductivity"]["constant"] # Thermal conductivity of fluid
+k_solid = solid_props["thermal-conductivity"]["constant"] # Thermal conductivity of solid
+L_c = r_out - r_in # Characteristic length of the pipe (thickness)
+U = 0.1
 
 
-Bi = biot_number()
-print("The Biot number is ", Bi)
+def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, L_c, n=0.4):
+    """Compute Reynolds, Nusselt, h, and Biot numbers."""
+
+    def reynolds_number(rho, mu, velocity, D_h):
+        """Reynolds number."""
+        return (rho * velocity * D_h) / mu
+
+    def nusselt_number(Re, Pr, n):
+        """Dittus–Boelter Nusselt number."""
+        return 0.023 * (Re**0.8) * (Pr**n)
+
+    def biot_number(h, L_c, k_solid):
+        """Biot number."""
+        return h * L_c / k_solid
+
+    Pr = (cp * mu) / k_fluid
+    Re = reynolds_number(rho, mu, velocity, L_c)
+    Nu = nusselt_number(Re, Pr, n)
+    h = Nu * k_fluid / L_c
+    Bi = biot_number(h, L_c, k_solid)
+
+    return Re, Nu, h, Bi
+
+Re, Nu, h, Bi = compute_thermo_numbers(
+    fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid, U, L_c
+)
+
+print("Reynolds Number =", Re)
+print("Nusselt Number =", Nu)
+print("heat transfer coefficient =", h)
+print("Biot Number =", Bi)
+
 
 # %%
 # Apply stabilization if Biot number exceeds 10
