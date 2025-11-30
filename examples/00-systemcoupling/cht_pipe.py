@@ -231,16 +231,22 @@ hf_transfer = syc.setup.add_data_transfer(
 # Calculating biot number
 fluent = pyfluent.launch_fluent(start_transcript=False)
 solid_props = fluent.settings.setup.materials.database.get_database_material_properties(
-    name="aluminum")
+    name="aluminum"
+)
 fluid_props = fluent.settings.setup.materials.database.get_database_material_properties(
-    name="water-liquid")
+    name="water-liquid"
+)
 
-fluid_rho = fluid_props["density"]["compressible-liquid"][1] # Density of fluid
-mu_fluid = fluid_props["viscosity"]["constant"] # Viscosity of fluid
-cp_fluid = fluid_props["specific-heat"]["constant"] #Specific heat capacity of fluid
-k_fluid = fluid_props["thermal-conductivity"]["constant"] # Thermal conductivity of fluid
-k_solid = solid_props["thermal-conductivity"]["constant"] # Thermal conductivity of solid
-L_c = r_out - r_in # Characteristic length of the pipe (thickness)
+fluid_rho = fluid_props["density"]["compressible-liquid"][1]  # Density of fluid
+mu_fluid = fluid_props["viscosity"]["constant"]  # Viscosity of fluid
+cp_fluid = fluid_props["specific-heat"]["constant"]  # Specific heat capacity of fluid
+k_fluid = fluid_props["thermal-conductivity"][
+    "constant"
+]  # Thermal conductivity of fluid
+k_solid = solid_props["thermal-conductivity"][
+    "constant"
+]  # Thermal conductivity of solid
+L_c = r_out - r_in  # Characteristic length of the pipe (thickness)
 U = 0.1
 
 
@@ -266,6 +272,7 @@ def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, L_c, n=0.4):
     Bi = biot_number(h, L_c, k_solid)
 
     return Re, Nu, h, Bi
+
 
 Re, Nu, h, Bi = compute_thermo_numbers(
     fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid, U, L_c
