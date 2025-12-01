@@ -83,22 +83,28 @@ In a standard user installation, the expectation is that only ``AWP_ROOT252`` is
 (It is also possible to provide a different version number as an argument to the ``launch()``
 function. This will affect which ``AWP_ROOT<version>`` environment variable is examined.)
 
-   **WARNING**
+   **NOTE**
 
-   Note that the following applies only to the 25 R1 release of Ansys System Coupling.
+   Releases of 0.11.0 and later of PySystemCoupling define the ``launch()`` function so that
+   its *default* behavior is consistent with service pack releases of Ansys as follows:
 
-   There is an issue with the 25 R1 release of Ansys System Coupling that prevents it from
-   working in the gRPC server mode on which PySystemCoupling depends. A small patch
-   is available that may be applied to some of the Python files in the System Coupling
-   installation. This is provided in the ``patches/`` directory of this repository and will
-   allow System Coupling 25 R1 to work with PySystemCoupling releases 0.9 and later.
+   * **24 R2** - Service Pack 5 and later
+   * **25 R1** - Service Pack 4 and later
+   * **25 R2** - Service Pack 3 and later
 
-   This issue is not present in later releases of System Coupling. If a later release
-   is available, you are recommended to use that.
+   You can still use earlier releases and service packs of Ansys System Coupling, but
+   to do so you must specify a new ``connection_type`` argument to the ``launch()``
+   function with value ``ConnectionType.LOCAL_INSECURE``. See the API documentation
+   for more information.
 
-   Alternatively, PySystemCoupling can be used with an earlier release of System Coupling by
-   setting the environment variable ``AWP_ROOT`` or specifying the version number as an
-   argument to the ``launch()`` function.
+   Note that the following applies only to the **25 R1** release of Ansys System Coupling.
+
+   There was an issue with 25 R1, earlier than the Service Pack 3 release,
+   that prevented it from working in the gRPC server mode on which PySystemCoupling
+   depends. A small patch was made available in this repository to address this issue.
+   As this issue has now been officially fixed in the Service Pack 3 release of 25 R1,
+   the patch has been removed and you are recommended to install Service Pack 3 of
+   25 R1 or the latest service pack of a later release.
 
 
 The System Coupling API is exposed to PySystemCoupling in two forms:
