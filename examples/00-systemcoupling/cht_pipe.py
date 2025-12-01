@@ -229,7 +229,6 @@ hf_transfer = syc.setup.add_data_transfer(
 
 # %%
 # Calculating biot number
-fluent = pyfluent.launch_fluent(start_transcript=False)
 solid_props = fluent.settings.setup.materials.database.get_database_material_properties(
     name="aluminum"
 )
