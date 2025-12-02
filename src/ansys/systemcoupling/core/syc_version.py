@@ -49,6 +49,9 @@ def normalize_version(version: str) -> Tuple[int, int]:
         Given any of these example strings, the return value would be (23, 1).
     """
 
+    if version.startswith("v"):
+        version = version[1:]
+
     def raise_error():
         raise ValueError(f"Version string {version} in unsupported format.")
 

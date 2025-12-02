@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+
 import pytest
 
 pytest_plugins = []
@@ -28,3 +30,11 @@ pytest_plugins = []
 @pytest.fixture
 def with_launching_container(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("SYC_LAUNCH_CONTAINER", "1")
+
+
+@pytest.fixture
+def image_tag_env(monkeypatch: pytest.MonkeyPatch) -> None:
+    # Expect env var to be set to different values in GH pipelines
+    # but this provides a convenient place to default for local runs
+    if "SYC_IMAGE_TAG" not in os.environ:
+        monkeypatch.setenv("SYC_IMAGE_TAG", "v25.2.0-sp03")

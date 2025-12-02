@@ -11,6 +11,13 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - name: Free up disk space
+      run: |
+        echo "Cleaning up disk space"
+        sudo apt-get clean
+        docker system prune --all --volumes --force
+      shell: bash
+
     - name: Pull docker image
       run: make docker-pull
       shell: bash

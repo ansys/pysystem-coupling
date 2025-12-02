@@ -32,6 +32,11 @@ import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
 import ansys.platform.instancemanagement as pypim
 import grpc
 
+from ansys.systemcoupling.core.client.grpc_transport import (
+    ConnectionType,
+    StartupAndConnectionInfo,
+    StartupArgumentCategory,
+)
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
 from ansys.systemcoupling.core.client.services.process import SycProcessService
@@ -43,7 +48,12 @@ from ansys.systemcoupling.core.syc_version import normalize_version
 from ansys.systemcoupling.core.util.file_transfer import file_transfer_service
 from ansys.systemcoupling.core.util.logging import LOG
 
-_CHANNEL_READY_TIMEOUT_SEC = 15
+_CHANNEL_READY_TIMEOUT_SEC = int(os.environ.get("PYSYC_GRPC_INITIAL_TIMEOUT_SEC", 5))
+_CHANNEL_READY_RETRIES = int(os.environ.get("PYSYC_GRPC_N_TIMEOUT_RETRY", 3))
+_CHANNEL_READY_TIMEOUT_FACTOR = float(
+    os.environ.get("PYSYC_GRPC_TIMEOUT_RETRY_FACTOR", 1.5)
+)
+
 _LOCALHOST_IP = "127.0.0.1"
 
 
@@ -84,8 +94,7 @@ class SycGrpc(object):
     TODO:
 
     - All calls are synchronous at the moment. We might want to do something
-    different with the Solve() command. For example, you might want to
-    do something like this:
+    different with the Solve() command.
     """
 
     _id_iter = itertools.count()
@@ -117,6 +126,7 @@ class SycGrpc(object):
         # You could still switch to the container locally by setting the
         # environment variable.
 
+        connection_type = kwargs.pop("connection_type")
         working_dir = kwargs.pop("working_dir", None)
         port = kwargs.pop("port", None)
         version = kwargs.pop("version", None)
@@ -129,24 +139,68 @@ class SycGrpc(object):
                 mounted_from, mounted_to, port=port, version=version
             )
         else:  # pragma: no cover
-            if port is None:
-                port = _find_port()
             if working_dir is None:
                 working_dir = "."
+
+            connection_info = StartupAndConnectionInfo(
+                launching=True,
+                connection_type=connection_type,
+                port=port,
+                host=_LOCALHOST_IP,
+                version=version,
+                **kwargs,
+            )
+
+            args = []
+            fallback_args = []
+            match connection_info.startup_argument_category:
+                case StartupArgumentCategory.OLD_ARGUMENTS:
+                    args = connection_info.old_command_line_arguments()
+                case StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS:
+                    args = connection_info.command_line_arguments()
+                    if connection_info.is_insecure_connection_requested:
+                        fallback_args = connection_info.old_command_line_arguments()
+                case StartupArgumentCategory.NEW_ARGUMENTS:
+                    args = connection_info.command_line_arguments()
+
             LOG.debug("Starting process...")
             self.__process = SycProcess(
-                _LOCALHOST_IP, port, working_dir, version, **kwargs
+                connection_info.executable_path(),
+                args,
+                fallback_args,
+                working_dir,
+                **kwargs,
             )
-            LOG.debug("...started")
-            try:
-                self._connect(_LOCALHOST_IP, port)
-            except Exception as e:
-                if "v251" in self.__process.path_to_system_coupling:
-                    e.args += (
-                        "Connection will fail if you are running an "
-                        "unpatched version of System Coupling 25 R1. ",
+
+            def check_process_running():
+                if self.__process.is_running():
+                    return
+
+                if (
+                    connection_info.startup_argument_category
+                    == StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS
+                    and not connection_info.is_insecure_connection_requested
+                ):
+                    raise RuntimeError(
+                        "Connection failed because the System Coupling process "
+                        "has unexpectedly exited. If you are using an Ansys "
+                        "release 24.2, 25.1 or 25.2 with service pack version "
+                        "less than 5, 4 or 3 respectively, you must specify an "
+                        "insecure 'connection_type' argument to the launch() "
+                        "function."
                     )
-                raise
+
+                else:
+                    raise RuntimeError(
+                        "Connection failed because the System Coupling "
+                        "process has unexpectedly exited."
+                    )
+
+            LOG.debug("...started")
+            self._connect(
+                connection_info=connection_info,
+                check_process=check_process_running,
+            )
 
         if start_output:
             self.start_output()
@@ -165,7 +219,23 @@ class SycGrpc(object):
         # TODO: assign self.__container here if we switch back to Python docker API
         start_container(mounted_from, mounted_to, network, port, version)
         LOG.debug("...started")
-        self._connect(_LOCALHOST_IP, port)
+
+        # Extract product version from container version
+        if version:
+            if "-sp" in version:
+                version, _, __ = version.partition("-sp")
+            # Container version has three components eg 25.2.0
+            items = version.split(".")
+            version = ".".join(items[0:2])
+
+        connection_info = StartupAndConnectionInfo(
+            launching=False,
+            connection_type=ConnectionType.INSECURE_REMOTE,
+            port=port,
+            host=_LOCALHOST_IP,
+            version=version,
+        )
+        self._connect(connection_info=connection_info)
 
     def start_pim_and_connect(self, version: str = None, start_output: bool = False):
         """Start PIM-managed instance.
@@ -202,11 +272,14 @@ class SycGrpc(object):
         """
         file_transfer_service(self.__pim_instance).download_file(*args, **kwargs)
 
-    def connect(self, host, port):
+    def connect(self, host, port, connection_type: ConnectionType):
         """Connect to an already running System Coupling server running on a known
         host and port.
         """
-        self._connect(host, port)
+        connection_info = StartupAndConnectionInfo(
+            launching=False, connection_type=connection_type, host=host, port=port
+        )
+        self._connect(connection_info=connection_info)
 
     def _register_for_cleanup(self):
         SycGrpc._instances[self.__id] = self
@@ -218,30 +291,24 @@ class SycGrpc(object):
 
     def _connect(
         self,
-        host: Optional[str] = None,
-        port: Optional[int] = None,
+        connection_info: StartupAndConnectionInfo = None,
         channel: Optional[grpc.Channel] = None,
+        check_process=None,
     ):
-        if (channel is None and (host is None or port is None)) or (
-            channel is not None and (host is not None or port is not None)
+        if (channel is None and connection_info is None) or (
+            channel is not None and connection_info is not None
         ):
-            raise ValueError("Internal error: _connect needs host and port OR channel")
+            raise ValueError(
+                "Internal error: _connect needs connection info OR channel"
+            )
+
+        self.__process_service = None
 
         LOG.debug("Connecting...")
         self._register_for_cleanup()
         if channel is None:
-            self.__channel = grpc.insecure_channel(f"{host}:{port}")
-
-            # Wait for server to be ready
-            timeout = _CHANNEL_READY_TIMEOUT_SEC
-            try:
-                grpc.channel_ready_future(self.__channel).result(timeout=timeout)
-            except grpc.FutureTimeoutError:
-                raise RuntimeError(
-                    "Stopping attempt to connect to gRPC channel "
-                    f"after {timeout} seconds."
-                )
-
+            self.__channel = connection_info.get_server_channel()
+            self._wait_for_grpc(check_process=check_process)
         else:
             self.__channel = channel
 
@@ -251,6 +318,29 @@ class SycGrpc(object):
         self.__ostream_service = OutputStreamService(self.__channel)
         self.__process_service = SycProcessService(self.__channel)
         self.__solution_service = SolutionService(self.__channel)
+
+    def _wait_for_grpc(self, check_process=None):
+        total_time = 0
+        timeout = _CHANNEL_READY_TIMEOUT_SEC
+        for attempt in range(_CHANNEL_READY_RETRIES):
+            try:
+                grpc.channel_ready_future(self.__channel).result(timeout=timeout)
+                # OK
+                return
+            except grpc.FutureTimeoutError:
+                total_time += timeout
+                LOG.warning(
+                    f"Failed to connect to gRPC channel after {timeout} secs. "
+                    f"(Attempt number {attempt}.)"
+                )
+                timeout *= _CHANNEL_READY_TIMEOUT_FACTOR
+
+                if check_process:
+                    check_process()
+
+        raise RuntimeError(
+            f"Stopping attempt to connect to gRPC channel after {total_time} seconds."
+        )
 
     @property
     def _channel_str(self):
@@ -310,7 +400,8 @@ class SycGrpc(object):
                 self.__ostream_service.end_streaming()
             except Exception as e:
                 LOG.debug(f"Exception on OutputStreamService.end_straming(): {e}")
-            self.__process_service.quit()
+            if self.__process_service:
+                self.__process_service.quit()
             self.__channel = None
         if self.__process:
             self.__process.end()

@@ -27,7 +27,7 @@ from ansys.systemcoupling.core.charts.plotter import Plotter
 from ansys.systemcoupling.core.syc_version import compare_versions
 
 
-def test_partlib_cosim_volume_simple() -> None:
+def test_partlib_cosim_volume_simple(image_tag_env) -> None:
     """Equivalent of SyC test partlib-cosim-volume-simple.
 
     One of the simplest examples using a mock solver.

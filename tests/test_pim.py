@@ -28,7 +28,7 @@ import grpc
 import ansys.systemcoupling.core as pysystemcoupling
 
 
-def test_pim(monkeypatch, with_launching_container):
+def test_pim(monkeypatch, with_launching_container, image_tag_env):
     # Launch the product "normally" - this will stand in for the container launched by PIM
     syc = pysystemcoupling.launch()
 
