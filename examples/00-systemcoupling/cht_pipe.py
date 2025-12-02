@@ -34,14 +34,13 @@ heat-flux exchange, controlling relaxation, ensuring consistent mesh-to-mesh int
 - Ansys Fluent is used to model the thermal fluid flow in the pipe.
 - Ansys Mechanical APDL (MAPDL) is used to model thermal transfer in the pipe wall.
 - System Coupling coordinates the coupled solution to the conjugate heat transfer problem,
-including numerical stabilization if needed.
+  including numerical stabilization if needed.
 
 **Problem description**
 
 A fluid at a certain temperature flows into a pipe of known diameter and length. As it flows,
 the heated outer wall of the pipe conducts heat to the inner wall, which in turns heats the
 fluid and cools down the walls of the pipe.
-
 
 The flow is smooth inside the pipe and the outer wall of the pipe is adiabatic. Fluid enters
 at an initial temperature of 300K while the outside pipe of the wall is at 350K.
@@ -231,10 +230,9 @@ hf_transfer = syc.setup.add_data_transfer(
 # Calculating biot number (querying the properties from fluent will be included in a future
 # release of fluent)
 # solid_props = fluent.settings.setup.materials.database.get_database_material_properties(
-#    name="aluminum")
-#
+# name="aluminum")
 # fluid_props = fluent.settings.setup.materials.database.get_database_material_properties(
-#    name="water-liquid")
+# name="water-liquid")
 # fluid_rho = fluid_props["density"]["compressible-liquid"][1]  # Density of fluid
 # mu_fluid = fluid_props["viscosity"]["constant"]  # Viscosity of fluid
 # cp_fluid = fluid_props["specific-heat"]["constant"]  # Specific heat capacity of fluid
@@ -284,12 +282,10 @@ print("Nusselt Number =", Nu)
 print("heat transfer coefficient =", h)
 print("Biot Number =", Bi)
 
-
 # %%
 # Apply stabilization if Biot number exceeds 10
 if Bi > 10:
     syc.setup.analysis_control.global_stabilization.option = "Quasi-Newton"
-
 
 syc.setup.solution_control.time_step_size = "0.1 [s]"  # time step is 0.1 [s]
 syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
@@ -336,6 +332,6 @@ fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contou
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # .. image:: /_static/cht_temp_contour.png
-#    :width: 800px
-#    :align: center
-#    :alt: Temperature contour after coupled CHT simulation
+#   :width: 800px
+#   :align: center
+#   :alt: Temperature contour after coupled CHT simulation
