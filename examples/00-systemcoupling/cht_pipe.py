@@ -331,7 +331,11 @@ fluent.settings.results.graphics.views.restore_view(view_name="top")
 fluent.settings.results.graphics.views.auto_scale()
 fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contour.png")
 
-#######################################################################################
+# %%
+# Temperature distribution in the fluid domain
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # .. image:: /_static/cht_temp_contour.png
-#   :width: 500pt
-#   :align: center
+#    :width: 800px
+#    :align: center
+#    :alt: Temperature contour after coupled CHT simulation
