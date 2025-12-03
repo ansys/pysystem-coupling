@@ -30,8 +30,8 @@ jobs:
     name: Set labels
     needs: [label-syncer]
     permissions:
-      contents: read
-      pull-requests: write
+      contents: read       # Required to read packages
+      pull-requests: write # Required to allow PR to be amended 
     runs-on: ubuntu-latest
     steps:
 
