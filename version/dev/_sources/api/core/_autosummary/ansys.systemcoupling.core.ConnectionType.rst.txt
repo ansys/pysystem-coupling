@@ -1,0 +1,28 @@
+﻿ConnectionType
+==============
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoclass:: ConnectionType
+
+   
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      ConnectionType.SECURE_LOCAL
+      ConnectionType.UNIX_DOMAIN_SOCKETS
+      ConnectionType.WINDOWS_NAMED_USER_AUTHENTICATION
+      ConnectionType.MTLS_LOCAL
+      ConnectionType.MTLS_REMOTE
+      ConnectionType.INSECURE_LOCAL
+      ConnectionType.INSECURE_REMOTE
+   
+   
