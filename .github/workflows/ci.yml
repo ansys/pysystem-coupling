@@ -251,8 +251,8 @@ jobs:
     needs: [doc-style, build]
     runs-on: public-ubuntu-latest-8-cores
     permissions:
-      contents: write
-      packages: read
+      contents: write  # Required for package upload
+      packages: read   # Required for package download
 
     steps:
       - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6.0.0
@@ -346,7 +346,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [docs]
     permissions:
-      contents: write
+      contents: write # Required for package upload
     steps:
       - name: Deploy the latest documentation
         uses: ansys/actions/doc-deploy-dev@46957117ba42d3d075c6cca0f6bbdc1ac2a9af04 # v10.2.0
@@ -364,8 +364,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     permissions:
-      id-token: write
-      contents: write
+      id-token: write # Required for release authorisation
+      contents: write # Required for package upload
     steps:
 
       - name: "Download the library artifacts from build-library step"
@@ -399,8 +399,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release]
     permissions:
-      id-token: write
-      contents: write
+      id-token: write # Required for deployment authorisation
+      contents: write # Required for package upload
     steps:
       - name: Deploy the stable documentation
         uses: ansys/actions/doc-deploy-stable@46957117ba42d3d075c6cca0f6bbdc1ac2a9af04 # v10.2.0
