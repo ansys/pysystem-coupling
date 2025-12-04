@@ -22,7 +22,7 @@
 
 """.. _ref_CHT_pipe_example:
 
-Conjugate Heat transfer- Pipe flow
+Conjugate Heat transfer- Pipe Flow
 -----------------------------------
 
 Conjugate heat transfer (CHT) simulations often exhibit numerical sensitivity at the fluid-solid
@@ -39,15 +39,19 @@ heat-flux exchange, controlling relaxation, ensuring consistent mesh-to-mesh int
 **Problem description**
 
 A fluid at a certain temperature flows into a pipe of known diameter and length. As it flows,
-the heated outer wall of the pipe conducts heat to the inner wall, which in turns heats the
+the heated outer wall of the pipe conducts heat to the inner wall, which in turn heats the
 fluid and cools down the walls of the pipe.
 
+.. image:: /_static/pipe_schematic.png
+   :width: 400pt
+   :align: center
+
 The flow is smooth inside the pipe and the outer wall of the pipe is adiabatic. Fluid enters
-at an initial temperature of 300K while the outside pipe of the wall is at 350K.
+at an initial temperature of 300K while the outer wall of the pipe is at 350K.
 
 
 """
-# %%
+# %%z
 # Import modules, download files, launch products
 # -----------------------------------------------
 # Setting up this example consists of performing imports, downloading
@@ -56,6 +60,8 @@ at an initial temperature of 300K while the outside pipe of the wall is at 350K.
 # Perform required imports
 # ~~~~~~~~~~~~~~~~~~~~~~~~
 # Import ``ansys-systemcoupling-core``, ``ansys-fluent-core``, ``ansys-mapdl-core``
+
+# sphinx_gallery_thumbnail_path = '_static/title_image.png'
 
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
@@ -76,7 +82,7 @@ mapdl.clear()
 mapdl.prep7()
 
 # %%
-# Define material properties
+# Set material properties of the pipe
 mapdl.mp("EX", 1, 69e9)
 mapdl.mp("NUXY", 1, 0.33)
 mapdl.mp("DENS", 1, 2700)
@@ -92,7 +98,7 @@ print(mapdl)
 
 
 # %%
-# Parameter of the pipe
+# Set the pipe inner and outer radius and length
 r_in = 0.025
 r_out = 0.035
 l = 0.2
@@ -102,34 +108,36 @@ l = 0.2
 mapdl.cyl4(0, 0, rad1=r_in, rad2=r_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
-
+# .. image:: /_static/pipe_elements.png
+#   :width: 700px
+#   :align: center
 
 # %%
 # Creating the regions from the geometry for named selections
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Inner wall Named Selection
+# Creating a named selection for Inner wall
 mapdl.asel("S", "AREA", "", 5, 6)
 mapdl.nsla("S", 1)
 mapdl.cm("FSIN_1", "NODE")
 mapdl.allsel()
 
-# Outer wall Named Selection
+# Creating a named selection for Outer wall
 mapdl.asel("S", "AREA", "", 3, 4)
 mapdl.cm("Outer_wall", "AREA")
 mapdl.allsel()
 
-# Outlet Named Selection
+# Creating a named selection for Outlet
 mapdl.asel("S", "AREA", "", 2)
 mapdl.cm("Outlet", "AREA")
 mapdl.allsel()
 
-# Inlet Named Selection
+# Creating a named selection for Inlet
 mapdl.asel("S", "AREA", "", 1)
 mapdl.cm("Inlet", "AREA")
 mapdl.allsel()
 
 # %%
-# Boundary conditions in degrees Celsius
+# Set the boundary conditions for the structure. Temperature is in degrees Celsius
 mapdl.cmsel("S", "Outer_wall")
 mapdl.d("Outer_wall", "TEMP", 77)
 mapdl.allsel()
@@ -188,7 +196,7 @@ fluent.solution.run_calculation.iter_count = 20
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # System Coupling setup involves adding the structural and fluid
 # participants, adding coupled interfaces and data transfers,
-# and setting other coupled analysis properties.
+# and setting other coupled analysis settings.
 syc = pysyc.launch(start_output=True)
 
 # %%
@@ -210,7 +218,7 @@ interface_name = syc.setup.add_interface(
 
 # %%
 # Set up 2-way thermal FSI coupling
-# ----Temp from solid to fluid----
+# ----Temperature from solid to fluid----
 temp_transfer = syc.setup.add_data_transfer(
     interface=interface_name,
     target_side="One",
@@ -227,19 +235,7 @@ hf_transfer = syc.setup.add_data_transfer(
 )
 
 # %%
-# Calculating biot number (querying the properties from fluent will be included in a future
-# release of fluent)
-# solid_props = fluent.settings.setup.materials.database.get_database_material_properties(
-# name="aluminum")
-# fluid_props = fluent.settings.setup.materials.database.get_database_material_properties(
-# name="water-liquid")
-# fluid_rho = fluid_props["density"]["compressible-liquid"][1]  # Density of fluid
-# mu_fluid = fluid_props["viscosity"]["constant"]  # Viscosity of fluid
-# cp_fluid = fluid_props["specific-heat"]["constant"]  # Specific heat capacity of fluid
-# k_fluid = fluid_props["thermal-conductivity"]["constant"]  # Thermal conductivity of fluid
-# k_solid = solid_props["thermal-conductivity"]["constant"]# Thermal conductivity of solid
-
-
+# Calculating biot number
 L_c = r_out - r_in  # Characteristic length of the pipe (thickness)
 U = 0.1
 fluid_rho = 998.3
@@ -298,12 +294,6 @@ syc.setup.solution_control.maximum_iterations = 100
 syc.solution.solve()
 
 # %%
-# Exit
-# ----
-syc.end_output()
-syc.exit()
-
-# %%
 # Post processing
 # ~~~~~~~~~~~~~~~
 # Post process the fluid results in fluent
@@ -329,9 +319,18 @@ fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contou
 
 # %%
 # Temperature distribution in the fluid domain
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#
 # .. image:: /_static/cht_temp_contour.png
 #   :width: 800px
 #   :align: center
 #   :alt: Temperature contour after coupled CHT simulation
+
+# %%
+# Post-process the system coupling results - display the charts showing the convergence plot
+syc.solution.show_plot(show_convergence=True)
+
+# %%
+# Exit
+# ----
+syc.exit()
+fluent.exit()
+mapdl.exit()
