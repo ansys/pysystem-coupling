@@ -286,7 +286,8 @@ if Bi > 10:
 syc.setup.solution_control.time_step_size = "0.1 [s]"  # time step is 0.1 [s]
 syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
 
-syc.setup.solution_control.maximum_iterations = 100
+syc.setup.output_control.option = "EveryStep"
+syc.setup.output_control.generate_csv_chart_output = True
 
 # %%
 # Solution
