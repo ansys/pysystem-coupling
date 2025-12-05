@@ -109,7 +109,7 @@ mapdl.cyl4(0, 0, rad1=r_in, rad2=r_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
 # .. image:: /_static/pipe_elements.png
-#   :width: 700px
+#   :width: 700pt
 #   :align: center
 
 # %%
