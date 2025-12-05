@@ -98,14 +98,14 @@ print(mapdl)
 
 
 # %%
-# Set the pipe inner and outer radius and length
-r_in = 0.025
-r_out = 0.035
+# Set the pipe inner and outer diameter and length
+d_in = 0.025
+d_out = 0.035
 l = 0.2
 
 # %%
 # Create a simple hollow pipe
-mapdl.cyl4(0, 0, rad1=r_in, rad2=r_out, depth=l)
+mapdl.cyl4(0, 0, rad1=d_in, rad2=d_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
 # .. image:: /_static/pipe_elements.png
@@ -236,7 +236,7 @@ hf_transfer = syc.setup.add_data_transfer(
 
 # %%
 # Calculating biot number
-L_c = r_out - r_in  # Characteristic length of the pipe (thickness)
+L_c = (d_out - d_in)/2  # Characteristic length of the pipe (thickness)
 U = 0.1
 fluid_rho = 998.3
 mu_fluid = 0.001
@@ -321,9 +321,8 @@ fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contou
 # %%
 # Temperature distribution in the fluid domain
 # .. image:: /_static/cht_temp_contour.png
-#   :width: 800px
+#   :width: 800pt
 #   :align: center
-#   :alt: Temperature contour after coupled CHT simulation
 
 # %%
 # Post-process the system coupling results - display the charts showing the convergence plot
