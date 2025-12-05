@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-""".. _ref_CHT_pipe_example:
+""".. _ref_cht_pipe_example:
 
 Conjugate Heat transfer- Pipe Flow
 -----------------------------------
@@ -51,7 +51,7 @@ at an initial temperature of 300K while the outer wall of the pipe is at 350K.
 
 
 """
-# %%z
+# %%
 # Import modules, download files, launch products
 # -----------------------------------------------
 # Setting up this example consists of performing imports, downloading
