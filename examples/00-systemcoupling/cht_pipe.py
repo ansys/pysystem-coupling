@@ -236,7 +236,7 @@ hf_transfer = syc.setup.add_data_transfer(
 
 # %%
 # Calculating biot number
-L_c = (d_out - d_in)/2  # Characteristic length of the pipe (thickness)
+L_c = (d_out - d_in) / 2  # Characteristic length of the pipe (thickness)
 U = 0.1
 fluid_rho = 998.3
 mu_fluid = 0.001
