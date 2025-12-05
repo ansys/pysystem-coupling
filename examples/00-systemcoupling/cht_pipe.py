@@ -109,8 +109,8 @@ mapdl.cyl4(0, 0, rad1=d_in, rad2=d_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
 # .. image:: /_static/pipe_elements.png
-#   :width: 700pt
-#   :align: center
+#    :width: 700pt
+#    :align: center
 
 # %%
 # Creating the regions from the geometry for named selections
@@ -321,8 +321,8 @@ fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contou
 # %%
 # Temperature distribution in the fluid domain
 # .. image:: /_static/cht_temp_contour.png
-#   :width: 800pt
-#   :align: center
+#    :width: 800pt
+#    :align: center
 
 # %%
 # Post-process the system coupling results - display the charts showing the convergence plot
