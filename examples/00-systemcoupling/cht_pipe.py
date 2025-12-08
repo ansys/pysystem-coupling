@@ -108,9 +108,11 @@ l = 0.2
 mapdl.cyl4(0, 0, rad1=d_in, rad2=d_out, depth=l)
 mapdl.esize(0.002)
 mapdl.vsweep(1)
+
+###############################################################################
 # .. image:: /_static/pipe_elements.png
-#    :width: 700pt
-#    :align: center
+#   :width: 700pt
+#   :align: center
 
 # %%
 # Creating the regions from the geometry for named selections
@@ -235,14 +237,14 @@ hf_transfer = syc.setup.add_data_transfer(
 )
 
 # %%
-# Calculating biot number
+# Define constants and calculate biot number
 L_c = (d_out - d_in) / 2  # Characteristic length of the pipe (thickness)
 U = 0.1
-fluid_rho = 998.3
-mu_fluid = 0.001
-cp_fluid = 4182
-k_fluid = 0.6
-k_solid = 1.2
+fluid_rho = 998.3 # Density of fluid
+mu_fluid = 0.001 # Dynamic viscosity of fluid
+cp_fluid = 4182 # Specific heat capacity of fluid
+k_fluid = 0.6 # Thermal conductivity of fluid
+k_solid = 1.2 # Thermal conductivity of solid
 
 
 def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, L_c, n=0.4):
@@ -318,11 +320,10 @@ fluent.settings.results.graphics.views.restore_view(view_name="top")
 fluent.settings.results.graphics.views.auto_scale()
 fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contour.png")
 
-# %%
-# Temperature distribution in the fluid domain
+###############################################################################
 # .. image:: /_static/cht_temp_contour.png
-#    :width: 800pt
-#    :align: center
+#   :width: 800pt
+#   :align: center
 
 # %%
 # Post-process the system coupling results - display the charts showing the convergence plot
