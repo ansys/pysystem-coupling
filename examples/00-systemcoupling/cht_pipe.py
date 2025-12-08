@@ -240,11 +240,11 @@ hf_transfer = syc.setup.add_data_transfer(
 # Define constants and calculate biot number
 L_c = (d_out - d_in) / 2  # Characteristic length of the pipe (thickness)
 U = 0.1
-fluid_rho = 998.3 # Density of fluid
-mu_fluid = 0.001 # Dynamic viscosity of fluid
-cp_fluid = 4182 # Specific heat capacity of fluid
-k_fluid = 0.6 # Thermal conductivity of fluid
-k_solid = 1.2 # Thermal conductivity of solid
+fluid_rho = 998.3  # Density of fluid
+mu_fluid = 0.001  # Dynamic viscosity of fluid
+cp_fluid = 4182  # Specific heat capacity of fluid
+k_fluid = 0.6  # Thermal conductivity of fluid
+k_solid = 1.2  # Thermal conductivity of solid
 
 
 def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, L_c, n=0.4):
