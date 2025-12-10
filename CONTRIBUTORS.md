@@ -24,3 +24,4 @@
 * [Revathy Venugopal](https://github.com/Revathyvenugopal162)
 * [Roberto Pastor Muela](https://github.com/RobPasMue)
 * [SeunSomefun](https://github.com/SeunSomefun)
+* [Sébastien Morais](https://github.com/SMoraisAnsys)
