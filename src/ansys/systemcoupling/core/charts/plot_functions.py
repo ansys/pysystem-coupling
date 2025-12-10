@@ -21,8 +21,13 @@
 # SOFTWARE.
 
 import threading
-from typing import Callable
+from typing import Callable, Protocol
 
+from ansys.systemcoupling.core.charts.chart_datatypes import (
+    InterfaceInfo,
+    InterfaceSeriesData,
+    TimestepData,
+)
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.live_csv_datasource import LiveCsvDataSource
 from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
@@ -33,16 +38,31 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
 from ansys.systemcoupling.core.charts.plotter import Plotter
 
 
-def create_and_show_plot(spec: PlotSpec, csv_list: list[str]) -> Plotter:
+class ChartDataReader(Protocol):
+    def read_metadata(self) -> bool: ...
+    def read_new_data(self) -> None: ...
+    @property
+    def metadata(self) -> InterfaceInfo: ...
+    @property
+    def data(self) -> InterfaceSeriesData: ...
+    @property
+    def timestep_data(self) -> TimestepData: ...
+
+
+class LiveDataSource(Protocol):
+    def cancel(self) -> None: ...
+    def read_data(self) -> None: ...
+
+
+def _make_csv_data_reader(interface_name: str) -> ChartDataReader:
+    return CsvChartDataReader(interface_name)
+
+
+def _create_and_show_impl(spec: PlotSpec, reader: ChartDataReader) -> Plotter:
     if len(spec.interfaces) != 1:
         raise ValueError("Plots currently only support one interface")
-    if len(spec.interfaces) != len(csv_list):
-        raise ValueError(
-            "'csv_list' should have length equal to the number of interfaces"
-        )
 
     manager = PlotDefinitionManager(spec)
-    reader = CsvChartDataReader(spec.interfaces[0].name, csv_list[0])
     plotter = Plotter(manager)
 
     reader.read_metadata()
@@ -60,26 +80,31 @@ def create_and_show_plot(spec: PlotSpec, csv_list: list[str]) -> Plotter:
     return plotter
 
 
-def solve_with_live_plot(
-    spec: PlotSpec,
-    csv_list: list[str],
-    solve_func: Callable[[], None],
-):
+def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
+    """Create and show a plot based on System Coupling CSV chart data."""
     if len(spec.interfaces) != 1:
         raise ValueError("Plots currently only support one interface")
     if len(spec.interfaces) != len(csv_list):
         raise ValueError(
             "'csv_list' should have length equal to the number of interfaces"
         )
+    reader = _make_csv_data_reader(spec.interfaces[0].name)
+    return _create_and_show_impl(spec, reader)
 
+
+def _solve_with_live_plot_impl(
+    spec,
+    make_live_data_source: Callable[[str, Callable], LiveDataSource],
+    solve_func: Callable[[], None],
+):
+    if len(spec.interfaces) != 1:
+        raise ValueError("Plots currently only support one interface")
     manager = PlotDefinitionManager(spec)
     dispatcher = MessageDispatcher()
-    plotter = Plotter(manager, dispatcher.dispatch_messages)
+    plotter = Plotter(manager, request_update=dispatcher.dispatch_messages)
     dispatcher.set_plotter(plotter)
 
-    data_source = LiveCsvDataSource(
-        spec.interfaces[0].name, csv_list[0], dispatcher.put_msg
-    )
+    data_source = make_live_data_source(spec.interfaces[0].name, dispatcher.put_msg)
     data_thread = threading.Thread(target=data_source.read_data)
 
     def solve():
@@ -96,5 +121,26 @@ def solve_with_live_plot(
     data_thread.join()
     solve_thread.join()
 
+
+def solve_with_live_plot_csv(
+    spec: PlotSpec,
+    csv_list: list[str],
+    solve_func: Callable[[], None],
+):
+    if len(spec.interfaces) != 1:
+        raise ValueError("Plots currently only support one interface")
+    if len(spec.interfaces) != len(csv_list):
+        raise ValueError(
+            "'csv_list' should have length equal to the number of interfaces"
+        )
+
+    _solve_with_live_plot_impl(
+        spec,
+        lambda interface_name, put_msg: LiveCsvDataSource(
+            interface_name, csv_list[0], put_msg
+        ),
+        solve_func,
+    )
+
     # Show a non-blocking static plot
-    return create_and_show_plot(spec, csv_list)
+    return create_and_show_plot_csv(spec, csv_list)
