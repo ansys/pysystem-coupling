@@ -28,7 +28,7 @@ from typing import Callable, Dict, Optional, Protocol
 
 import ansys.platform.instancemanagement as pypim
 
-from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
+from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot_csv
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
     InterfaceSpec,
@@ -249,7 +249,7 @@ def _show_plot(session: SessionProtocol, **kwargs):
         )
     spec.plot_time = is_transient
 
-    return create_and_show_plot(spec, [file_path])
+    return create_and_show_plot_csv(spec, [file_path])
 
 
 def get_injected_cmd_data() -> list:
