@@ -22,7 +22,7 @@
 
 """.. _ref_cht_pipe_example:
 
-Conjugate Heat transfer- Pipe Flow
+Conjugate Heat Transfer- Pipe Flow
 -----------------------------------
 
 Conjugate heat transfer (CHT) simulations often exhibit numerical sensitivity at the fluid-solid
@@ -70,19 +70,22 @@ import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
 
 # %%
-# Download the mesh file
+# Download the Fluent mesh file.
 fluent_msh_file = examples.download_file(
     "fluid_domain.msh", "pysystem-coupling/cht_pipe"
 )
 
 # %%
-# Launch MAPDL
+# Launch MAPDL to create the solid domain.
+# ----------------------------------------
+
+# Launch MAPDL.
 mapdl = pymapdl.launch_mapdl()
 mapdl.clear()
 mapdl.prep7()
 
 # %%
-# Set material properties of the pipe
+# Set material properties of the pipe.
 mapdl.mp("EX", 1, 69e9)
 mapdl.mp("NUXY", 1, 0.33)
 mapdl.mp("DENS", 1, 2700)
@@ -91,14 +94,14 @@ mapdl.mp("KXX", 1, 237)
 mapdl.mp("C", 1, 900)
 
 # %%
-# Set element type to SOLID279
+# Set element type to SOLID279.
 mapdl.et(1, 279)
 mapdl.keyopt(1, 2, 1)
 print(mapdl)
 
 
 # %%
-# Set the pipe inner and outer diameter and length
+# Set the pipe inner and outer diameter and length.
 d_in = 0.025
 d_out = 0.035
 l = 0.2
@@ -117,29 +120,30 @@ mapdl.vsweep(1)
 # %%
 # Creating the regions from the geometry for named selections
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Creating a named selection for Inner wall
+
+# Creating a named selection for Inner wall.
 mapdl.asel("S", "AREA", "", 5, 6)
 mapdl.nsla("S", 1)
 mapdl.cm("FSIN_1", "NODE")
 mapdl.allsel()
 
-# Creating a named selection for Outer wall
+# Creating a named selection for Outer wall.
 mapdl.asel("S", "AREA", "", 3, 4)
 mapdl.cm("Outer_wall", "AREA")
 mapdl.allsel()
 
-# Creating a named selection for Outlet
+# Creating a named selection for Outlet.
 mapdl.asel("S", "AREA", "", 2)
 mapdl.cm("Outlet", "AREA")
 mapdl.allsel()
 
-# Creating a named selection for Inlet
+# Creating a named selection for Inlet.
 mapdl.asel("S", "AREA", "", 1)
 mapdl.cm("Inlet", "AREA")
 mapdl.allsel()
 
 # %%
-# Set the boundary conditions for the structure. Temperature is in degrees Celsius
+# Set the boundary conditions for the structure. Temperature is in degrees Celsius.
 mapdl.cmsel("S", "Outer_wall")
 mapdl.d("Outer_wall", "TEMP", 77)
 mapdl.allsel()
@@ -157,30 +161,30 @@ mapdl.sf("FSIN_1", "FSIN", 1)
 mapdl.allsel()
 
 # %%
-# Setup the rest of the analysis
+# Setup the rest of the analysis.
 mapdl.run("/SOLU")
 mapdl.antype(0)
 
 
 # %%
 # Set up the fluid analysis and read the pre-created mesh file
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ------------------------------------------------------------
 
 fluent = pyfluent.launch_fluent(start_transcript=False)
 fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
 
 # %%
-# Define the fluid solver settings
+# Define the fluid solver settings.
 fluent.setup.models.energy.enabled = True
 
 # %%
-# Add the material
+# Add the material.
 fluent.setup.materials.database.copy_by_name(type="fluid", name="water-liquid")
 
 fluent.setup.cell_zone_conditions.fluid["fff_fluiddomain"].material = "water-liquid"
 
 # %%
-# Define boundary conditions
+# Define boundary conditions.
 fluent.setup.boundary_conditions.velocity_inlet["inlet"].momentum.velocity = (
     0.1  # units: m/s
 )
@@ -195,7 +199,7 @@ fluent.solution.run_calculation.iter_count = 20
 
 # %%
 # Set up the coupled analysis
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ---------------------------
 # System Coupling setup involves adding the structural and fluid
 # participants, adding coupled interfaces and data transfers,
 # and setting other coupled analysis settings.
@@ -210,7 +214,7 @@ syc.setup.coupling_participant[fluid_name].display_name = "Fluid"
 syc.setup.coupling_participant[solid_name].display_name = "Solid"
 
 # %%
-# Add coupling face and data transfers
+# Add coupling interface.
 interface_name = syc.setup.add_interface(
     side_one_participant=fluid_name,
     side_one_regions=["inner_wall"],
@@ -219,8 +223,9 @@ interface_name = syc.setup.add_interface(
 )
 
 # %%
-# Set up 2-way thermal FSI coupling
-# ----Temperature from solid to fluid----
+# Set up 2-way thermal FSI coupling.
+
+# Temperature from solid to fluid
 temp_transfer = syc.setup.add_data_transfer(
     interface=interface_name,
     target_side="One",
@@ -228,7 +233,7 @@ temp_transfer = syc.setup.add_data_transfer(
     target_variable="temperature",
 )
 
-# ----Heat flux from fluid to solid----
+# Heat flux from fluid to solid
 hf_transfer = syc.setup.add_data_transfer(
     interface=interface_name,
     target_side="Two",
@@ -237,7 +242,9 @@ hf_transfer = syc.setup.add_data_transfer(
 )
 
 # %%
-# Define constants and calculate biot number
+# Define constants and calculate Biot number
+# ------------------------------------------
+
 L_c = (d_out - d_in) / 2  # Characteristic length of the pipe (thickness)
 U = 0.1
 fluid_rho = 998.3  # Density of fluid
@@ -277,11 +284,11 @@ Re, Nu, h, Bi = compute_thermo_numbers(
 
 print("Reynolds Number =", Re)
 print("Nusselt Number =", Nu)
-print("heat transfer coefficient =", h)
+print("Heat Transfer Coefficient =", h)
 print("Biot Number =", Bi)
 
 # %%
-# Apply stabilization if Biot number exceeds 10
+# Apply stabilization if Biot number exceeds 10.
 if Bi > 10:
     syc.setup.analysis_control.global_stabilization.option = "Quasi-Newton"
 
@@ -298,8 +305,8 @@ syc.solution.solve()
 
 # %%
 # Post processing
-# ~~~~~~~~~~~~~~~
-# Post process the fluid results in fluent
+# ---------------
+# Post process the fluid results in Fluent.
 if fluent.settings.results.graphics.picture.use_window_resolution.is_active():
     fluent.settings.results.graphics.picture.use_window_resolution = False
 
@@ -326,7 +333,7 @@ fluent.settings.results.graphics.picture.save_picture(file_name="cht_temp_contou
 #   :align: center
 
 # %%
-# Post-process the system coupling results - display the charts showing the convergence plot
+# Post-process the system coupling results - display the charts showing the convergence plot.
 syc.solution.show_plot(show_convergence=True)
 
 # %%
