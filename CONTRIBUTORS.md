@@ -14,6 +14,7 @@
 * [Kathy Pippert](https://github.com/PipKat)
 * [Kelly Fletcher](https://github.com/anskfletcher)
 * [Konstantinos Giannokostas](https://github.com/giannoko)
+* [krishnatejas12](https://github.com/krishnatejas12)
 * [licui7](https://github.com/licui7)
 * [Maxime Rey](https://github.com/MaxJPRey)
 * [Muhammed Adedigba](https://github.com/moe-ad)
