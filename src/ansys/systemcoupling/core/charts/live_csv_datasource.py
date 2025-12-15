@@ -70,7 +70,6 @@ class LiveCsvDataSource:
 
                 line_series_incr = SeriesData(
                     line_series.transfer_index,
-                    line_series.component_index,
                     start_index=start_index,
                     data=line_series.data[start_index:],
                 )

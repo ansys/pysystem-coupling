@@ -204,14 +204,8 @@ class Plotter:
                 "Attempt to add series data to plot before metadata provided."
             )
 
-        trans = self._metadata.transfer_info[series_data.transfer_index]
-        offset = (
-            series_data.component_index
-            if series_data.component_index is not None
-            else 0
-        )
         subplot_defn, subplot_line_index = self._mgr.subplot_for_data_index(
-            self._metadata.name, trans.data_index + offset
+            self._metadata.name, series_data.transfer_index
         )
         if subplot_defn is None:
             # This can happen if the list of plots being show is filtered.
