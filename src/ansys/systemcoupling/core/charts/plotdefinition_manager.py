@@ -30,6 +30,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 class DataTransferSpec:
     # It's not ideal, but we have to work in terms of display names for transfers,
     # as that is all we have in the data (the CSV data, at least).
+    # TODO: add optional internal name field which we will use if provided.
     display_name: str
     show_convergence: bool = True
     show_transfer_values: bool = True
@@ -48,26 +49,26 @@ class PlotSpec:
     plot_time: bool = False
 
 
-"""
-Convergence subplot:
-    title - Data Transfer Convergence for <interface disp name>
-    x-axis label - Iteration/Time
-    y-axis label - RMS Change in Target Value
-
-    # x-data: []
-    y-data: [([], <label=transfer disp name>)]
-
-    # y-data - we actually want an index
-
-
-Transfer values subplot:
-    title - <interface display name> - <transfer display name> (<value type>)
-    x-axis label: Iteration/time
-    y-axis label: <NOT SET>
-
-    y-data: [([], <label=source|tgt disp name + suffix)]
-
-"""
+#
+# TODO: is this useful? clean it up if so
+#
+# Convergence subplot:
+#     title - Data Transfer Convergence for <interface disp name>
+#     x-axis label - Iteration/Time
+#     y-axis label - RMS Change in Target Value
+#
+#     # x-data: []
+#     y-data: [([], <label=transfer disp name>)]
+#
+#     # y-data - we actually want an index
+#
+#
+# Transfer values subplot:
+#     title - <interface display name> - <transfer display name> (<value type>)
+#     x-axis label: Iteration/time
+#     y-axis label: <NOT SET>
+#
+#     y-data: [([], <label=source|tgt disp name + suffix)]
 
 
 @dataclass
