@@ -45,10 +45,6 @@ class TransferSeriesInfo:
 
     Attributes
     ----------
-    data_index : int
-        This is used by the data source processor to associate this information (likely
-        obtained from heading or other metadata) with the correct data series.
-        It indexes into the full list of series associated with a given interface.
     series_type : SeriesType
         The type of line series.
     transfer_display_name : str
@@ -62,22 +58,20 @@ class TransferSeriesInfo:
     participant_display_name : str, optional
         The display name of the participant. This is required for transfer value series
         but not for convergence series.
-    line_suffixes: list[str]
-        This should always be empty for convergence series. For transfer value series,
-        it should contain the suffixes for any component series that exist. That is,
-        suffixes for complex components, "real" or "imag", and suffixes for vector
-        components, "x", "y", "z", or a combination of complex and vector component
-        types. The data indexes for individual components of the transfer are assumed
-        to be contiguous from ``data_index``.
+    component_suffix: str, optional
+        The suffix for this component series, if applicable. This is only needed for
+        transfer value series that have multiple components, such as complex or vector
+        values, and is otherwise None. Suffixes for complex components are "real" and
+        "imag", and suffixes for vector components are "x", "y", and "z". A combination
+        of complex and vector suffixes is possible, such as "y real" and "x imag".
     """
 
-    data_index: int
     series_type: SeriesType
     transfer_display_name: str
     disambiguation_index: int
     # Remainder for non-CONVERGENCE series only
     participant_display_name: Optional[str] = None
-    line_suffixes: list[str] = field(default_factory=list)
+    component_suffix: Optional[str] = None
 
 
 @dataclass
@@ -115,9 +109,6 @@ class SeriesData:
     transfer_index : int
         Index of the ``TransferSeriesInfo`` metadata for this series within the
         ``InterfaceInfo`` for the interface this series is associated with.
-    component_index : int, optional
-        The component index if this series is one of a set of complex and/or
-        vector components of the transfer. Otherwise is ``None``.
     start_index : int, optional
         The starting iteration of the ``data`` field. This defaults to 0 and
         only needs to be set to a different value if incremental data, such
@@ -128,10 +119,7 @@ class SeriesData:
     """
 
     transfer_index: int  # Index into transfer_info of associated InterfaceInfo
-    component_index: Optional[int] = None  # Component index if applicable
-
     start_index: int = 0  # Use when providing incremental data
-
     data: list[float] = field(default_factory=list)
 
 
