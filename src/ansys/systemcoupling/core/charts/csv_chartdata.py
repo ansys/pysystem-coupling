@@ -267,8 +267,8 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                 assert_(intf_info.display_name == "", "display_name should be empty")
                 intf_info.display_name = intf_disp_name
             series_info = TransferSeriesInfo(
-                data_index,
-                series_type,
+                data_index=data_index,
+                series_type=series_type,
                 transfer_display_name=trans_disp_name,
                 # get(..., 0) for case where transfer_disambig empty (see note above)
                 disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
@@ -286,8 +286,8 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                     # have index data_index+3.
                     intf_info.transfer_info.append(
                         TransferSeriesInfo(
-                            data_index,
-                            series_type,
+                            data_index=data_index,
+                            series_type=series_type,
                             transfer_display_name=trans_disp_name,
                             disambiguation_index=transfer_disambig.get(
                                 trans_disp_name, 0
@@ -304,8 +304,8 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                 prev_part_name = ""
                 intf_info.transfer_info.append(
                     TransferSeriesInfo(
-                        data_index,
-                        series_type,
+                        data_index=data_index,
+                        series_type=series_type,
                         transfer_display_name=trans_disp_name,
                         disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
                         participant_display_name=part_disp_name,
