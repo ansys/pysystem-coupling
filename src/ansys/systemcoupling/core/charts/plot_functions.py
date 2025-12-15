@@ -54,10 +54,6 @@ class LiveDataSource(Protocol):
     def read_data(self) -> None: ...
 
 
-def _make_csv_data_reader(interface_name: str) -> ChartDataReader:
-    return CsvChartDataReader(interface_name)
-
-
 def _create_and_show_impl(spec: PlotSpec, reader: ChartDataReader) -> Plotter:
     if len(spec.interfaces) != 1:
         raise ValueError("Plots currently only support one interface")
@@ -88,7 +84,7 @@ def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
         raise ValueError(
             "'csv_list' should have length equal to the number of interfaces"
         )
-    reader = _make_csv_data_reader(spec.interfaces[0].name)
+    reader = CsvChartDataReader(spec.interfaces[0].name, csv_list[0])
     return _create_and_show_impl(spec, reader)
 
 
