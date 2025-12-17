@@ -50,18 +50,14 @@ class PlotSpec:
 
 
 #
-# TODO: is this useful? clean it up if so
+# Plots are labelled as follows:
 #
 # Convergence subplot:
 #     title - Data Transfer Convergence for <interface disp name>
 #     x-axis label - Iteration/Time
 #     y-axis label - RMS Change in Target Value
 #
-#     # x-data: []
 #     y-data: [([], <label=transfer disp name>)]
-#
-#     # y-data - we actually want an index
-#
 #
 # Transfer values subplot:
 #     title - <interface display name> - <transfer display name> (<value type>)
@@ -69,6 +65,7 @@ class PlotSpec:
 #     y-axis label: <NOT SET>
 #
 #     y-data: [([], <label=source|tgt disp name + suffix)]
+#
 
 
 @dataclass
