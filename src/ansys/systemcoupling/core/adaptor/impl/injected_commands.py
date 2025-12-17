@@ -28,7 +28,10 @@ from typing import Callable, Dict, Optional, Protocol
 
 import ansys.platform.instancemanagement as pypim
 
-from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot_csv
+from ansys.systemcoupling.core.charts.plot_functions import (
+    create_and_show_plot_csv,
+    solve_with_live_plot_csv,
+)
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
     InterfaceSpec,
@@ -101,6 +104,11 @@ def get_injected_cmd_map(
         ret = {
             "solve": lambda **kwargs: _wrap_solve(
                 get_solution_root_object(), part_mgr, **kwargs
+            ),
+            "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
+                session,
+                lambda: _wrap_solve(get_solution_root_object(), part_mgr, **kwargs),
+                **kwargs,
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
@@ -199,19 +207,10 @@ def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
     return new_name
 
 
-def _show_plot(session: SessionProtocol, **kwargs):
+def _create_plot_spec(
+    session: SessionProtocol, interface_name: str, **kwargs
+) -> PlotSpec:
     setup = session.setup
-    working_dir = kwargs.pop("working_dir", ".")
-    interface_name = kwargs.pop("interface_name", None)
-    if interface_name is None:
-        interfaces = setup.coupling_interface.get_object_names()
-        if len(interfaces) == 0:
-            return
-        if len(interfaces) > 1:
-            raise RuntimeError(
-                "show_plot() currently only supports a single interface."
-            )
-        interface_name = interfaces[0]
     interface_object = setup.coupling_interface[interface_name]
     interface_disp_name = interface_object.display_name
 
@@ -232,10 +231,6 @@ def _show_plot(session: SessionProtocol, **kwargs):
     # TODO : better way to do this?
     is_transient = setup.solution_control.time_step_size is not None
 
-    file_path = _ensure_file_available(
-        session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
-    )
-
     spec = PlotSpec()
     intf_spec = InterfaceSpec(interface_name, interface_disp_name)
     spec.interfaces.append(intf_spec)
@@ -248,8 +243,48 @@ def _show_plot(session: SessionProtocol, **kwargs):
             )
         )
     spec.plot_time = is_transient
+    return spec
 
+
+def _get_interface_name(
+    session: SessionProtocol, interface_name: str | None = None
+) -> str:
+    if interface_name is None:
+        setup = session.setup
+        interfaces = setup.coupling_interface.get_object_names()
+        if len(interfaces) == 0:
+            return
+        if len(interfaces) > 1:
+            raise RuntimeError("plots currently only support a single interface.")
+        interface_name = interfaces[0]
+    return interface_name
+
+
+def _show_plot(session: SessionProtocol, **kwargs):
+    working_dir = kwargs.pop("working_dir", ".")
+    interface_name = kwargs.pop("interface_name", None)
+    interface_name = _get_interface_name(session, interface_name)
+    file_path = _ensure_file_available(
+        session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+    )
+
+    spec = _create_plot_spec(session, interface_name, **kwargs)
     return create_and_show_plot_csv(spec, [file_path])
+
+
+def _solve_with_live_plot(
+    session: SessionProtocol, solve_func: Callable[[], None], **kwargs
+):
+    working_dir = kwargs.pop("working_dir", ".")
+    interface_name = kwargs.pop("interface_name", None)
+    interface_name = _get_interface_name(session, interface_name)
+    file_path = os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+    spec = _create_plot_spec(session, interface_name, **kwargs)
+    solve_with_live_plot_csv(
+        spec,
+        [file_path],
+        solve_func,
+    )
 
 
 def get_injected_cmd_data() -> list:
@@ -465,6 +500,67 @@ _cmd_yaml = """
     doc: |-
         Shows plots of transfer values and convergence for data transfers
         of a coupling interface.
+
+    essentialArgNames:
+    - interface_name
+    optionalArgNames:
+    - transfer_names
+    - working_dir
+    - show_convergence
+    - show_transfer_values
+    defaults:
+    - None
+    - "."
+    - True
+    - True
+    args:
+    - #!!python/tuple
+        - interface_name
+        -   pyname: interface_name
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Specification of which interface to plot.
+    - #!!python/tuple
+        - transfer_names
+        -   pyname: transfer_names
+            Type: <class 'list'>
+            type: String List
+            doc:  |-
+                Specification of which data transfers to plot. Defaults
+                to ``None``, which means plot all data transfers.
+    - #!!python/tuple
+        - working_dir
+        -   pyname: working_dir
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Working directory (defaults = ".").
+    - #!!python/tuple
+        - show_convergence
+        -   pyname: show_convergence
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show convergence plots (defaults to ``True``).
+    - #!!python/tuple
+        - show_transfer_values
+        -   pyname: show_transfer_values
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show transfer value plots (defaults to ``True``).
+-   name: solve_with_plot
+    pyname: solve_with_plot
+    exposure: solution
+    isInjected: true
+    isQuery: false
+    retType: <class 'NoneType'>
+    doc: |-
+        Solves, showing a live plot of transfer values and convergence for data transfers
+        of a coupling interface.
+
+        (This functionality is experimental and incomplete.)
 
     essentialArgNames:
     - interface_name
