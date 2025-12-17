@@ -58,6 +58,9 @@ class LiveCsvDataSource:
         last_round = False
         while True:
             self._csv_reader.read_new_data()
+            timestep_data = self._csv_reader.timestep_data
+            if timestep_data.time:
+                self._put_msg(Message(type=MsgType.TIMESTEP_DATA, data=timestep_data))
             data = self._csv_reader.data
             if not self._last_data_len:
                 self._last_data_len = [0] * len(data.series)
