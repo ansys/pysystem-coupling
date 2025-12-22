@@ -54,23 +54,26 @@ class LiveDataSource(Protocol):
     def read_data(self) -> None: ...
 
 
-def _create_and_show_impl(spec: PlotSpec, reader: ChartDataReader) -> Plotter:
-    if len(spec.interfaces) != 1:
-        raise ValueError("Plots currently only support one interface")
-
+def _create_and_show_impl(spec: PlotSpec, readers: list[ChartDataReader]) -> Plotter:
     manager = PlotDefinitionManager(spec)
     plotter = Plotter(manager)
 
-    reader.read_metadata()
-    plotter.set_metadata(reader.metadata)
+    for ireader, reader in enumerate(readers):
+        reader.read_metadata()
+        plotter.set_metadata(reader.metadata)
 
-    reader.read_new_data()
-    data = reader.data
-    if reader.metadata.is_transient:
-        plotter.set_timestep_data(reader.timestep_data)
+        reader.read_new_data()
+        data = reader.data
 
-    for line_series in data.series:
-        plotter.update_line_series(line_series)
+        # Each reader has own timestep data but they should be consistent
+        # so we only use the first one.
+        # This is an artifact of using the CSV files as the data source.
+        # (A streaming data source would only have one timestep data.)
+        if ireader == 0 and reader.metadata.is_transient:
+            plotter.set_timestep_data(reader.timestep_data)
+
+        for line_series in data.series:
+            plotter.update_line_series(line_series)
 
     plotter.show_plot(noblock=True)
     return plotter
@@ -78,14 +81,15 @@ def _create_and_show_impl(spec: PlotSpec, reader: ChartDataReader) -> Plotter:
 
 def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
     """Create and show a plot based on System Coupling CSV chart data."""
-    if len(spec.interfaces) != 1:
-        raise ValueError("Plots currently only support one interface")
     if len(spec.interfaces) != len(csv_list):
         raise ValueError(
             "'csv_list' should have length equal to the number of interfaces"
         )
-    reader = CsvChartDataReader(spec.interfaces[0].name, csv_list[0])
-    return _create_and_show_impl(spec, reader)
+    readers = [
+        CsvChartDataReader(intf.name, csvfile)
+        for intf, csvfile in zip(spec.interfaces, csv_list)
+    ]
+    return _create_and_show_impl(spec, readers)
 
 
 def _solve_with_live_plot_impl(
