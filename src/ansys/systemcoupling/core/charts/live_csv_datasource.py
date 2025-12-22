@@ -72,7 +72,8 @@ class LiveCsvDataSource:
                     continue
 
                 line_series_incr = SeriesData(
-                    line_series.transfer_index,
+                    interface_name=line_series.interface_name,
+                    transfer_index=line_series.transfer_index,
                     start_index=start_index,
                     data=line_series.data[start_index:],
                 )

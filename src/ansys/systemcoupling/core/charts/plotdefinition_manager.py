@@ -99,13 +99,15 @@ class SubplotDefinition:
     series_labels: list[str] = field(default_factory=list)
 
 
-class PlotDefinitionManager:
-    def __init__(self, spec: PlotSpec):
-        self._plot_spec = spec
-        self._data_index_map: dict[str, dict[int, tuple[SubplotDefinition, int]]] = {}
-        self._conv_subplots: dict[str, SubplotDefinition] = {}
-        self._transfer_subplots: dict[tuple[str, str, int], SubplotDefinition] = {}
+class SubplotManager:
+    def __init__(self, is_transient: bool, intf_spec: InterfaceSpec):
+        self._is_time: bool = is_transient
+        self._intf_spec = intf_spec
+
+        self._conv_subplot: SubplotDefinition | None = None
+        self._transfer_subplots: dict[tuple[str, int], SubplotDefinition] = {}
         self._subplots: list[SubplotDefinition] = []
+        self._data_index_map: dict[int, tuple[SubplotDefinition, int]] = {}
         self._allocate_subplots()
 
     @property
@@ -113,7 +115,7 @@ class PlotDefinitionManager:
         return self._subplots
 
     def subplot_for_data_index(
-        self, interface_name: str, data_index: int
+        self, data_index: int
     ) -> tuple[Optional[SubplotDefinition], int]:
         """Return the subplot definition, and the line index within the
         subplot, corresponding to a given ``data_index``.
@@ -124,7 +126,7 @@ class PlotDefinitionManager:
         return a tuple ``(None, -1)``
         """
         try:
-            return self._data_index_map[interface_name][data_index]
+            return self._data_index_map[data_index]
         except KeyError:
             return (None, -1)
 
@@ -150,56 +152,49 @@ class PlotDefinitionManager:
         return (nrow, ncol)
 
     def _allocate_subplots(self):
-        is_time = self._plot_spec.plot_time
-        conv_subplots = {}
         transfer_subplots = {}
         subplots = []
-        for interface in self._plot_spec.interfaces:
-            conv = SubplotDefinition(
-                title=f"Data transfer convergence on {interface.display_name}",
-                is_log_y=True,
-                x_axis_label="Time" if is_time else "Iteration",
-                y_axis_label="RMS Change in target value",
-            )
-            # Add this now so that it is before transfer values plots but we may end
-            # up removing it if none of the transfers add a convergence line to it
-            conv_index = len(subplots)
-            subplots.append(conv)
-            keep_conv = False
-            transfer_disambig: dict[str, int] = {}
-            for transfer in interface.transfers:
-                if transfer.display_name in transfer_disambig:
-                    transfer_disambig[transfer.display_name] += 1
-                else:
-                    transfer_disambig[transfer.display_name] = 0
-                if transfer.show_convergence:
-                    keep_conv = True
-                if transfer.show_transfer_values:
-                    transfer_value = SubplotDefinition(
-                        # NB: <VALUETYPE> is a placeholder - substitute later from metadata info
-                        title=f"{interface.display_name} - {transfer.display_name} (<VALUETYPE>)",
-                        is_log_y=False,
-                        x_axis_label="Time" if is_time else "Iteration",
-                        y_axis_label="",
-                    )
-                    transfer_subplots[
-                        (
-                            interface.name,
-                            transfer.display_name,
-                            transfer_disambig[transfer.display_name],
-                        )
-                    ] = transfer_value
-                    subplots.append(transfer_value)
-            if keep_conv:
-                conv_subplots[interface.name] = conv
+        conv = SubplotDefinition(
+            title=f"Data transfer convergence on {self._intf_spec.display_name}",
+            is_log_y=True,
+            x_axis_label="Time" if self._is_time else "Iteration",
+            y_axis_label="RMS Change in target value",
+        )
+        # Add this now so that it is before transfer values plots but we may end
+        # up removing it if none of the transfers add a convergence line to it
+        subplots.append(conv)
+        keep_conv = False
+        transfer_disambig: dict[str, int] = {}
+        for transfer in self._intf_spec.transfers:
+            if transfer.display_name in transfer_disambig:
+                transfer_disambig[transfer.display_name] += 1
             else:
-                subplots[conv_index] = None
+                transfer_disambig[transfer.display_name] = 0
+            if transfer.show_convergence:
+                keep_conv = True
+            if transfer.show_transfer_values:
+                transfer_value = SubplotDefinition(
+                    # NB: <VALUETYPE> is a placeholder - substitute later from metadata info
+                    title=f"{self._intf_spec.display_name} - {transfer.display_name} (<VALUETYPE>)",
+                    is_log_y=False,
+                    x_axis_label="Time" if self._is_time else "Iteration",
+                    y_axis_label="",
+                )
+                transfer_subplots[
+                    (
+                        transfer.display_name,
+                        transfer_disambig[transfer.display_name],
+                    )
+                ] = transfer_value
+                subplots.append(transfer_value)
+        if keep_conv:
+            self._conv_subplot = conv
+
         # Clean out inactive convergence plots
         self._subplots = [subplot for subplot in subplots if subplot is not None]
         for i, subplot in enumerate(self._subplots):
             subplot.index = i
-        self._conv_subplots: dict[str, SubplotDefinition] = conv_subplots
-        self._transfer_subplots: dict[tuple[str, str, int], SubplotDefinition] = (
+        self._transfer_subplots: dict[tuple[str, int], SubplotDefinition] = (
             transfer_subplots
         )
 
@@ -216,18 +211,16 @@ class PlotDefinitionManager:
         # the active ones. However, some additional work has to be done to filter the
         # transfers shown on the convergence subplot and we have to go back to the plot
         # spec to get a list of active transfers.
-        active_transfers = []
-        for intf in self._plot_spec.interfaces:
-            if intf.name == metadata.name:
-                active_transfers = [trans.display_name for trans in intf.transfers]
-                break
-        if not active_transfers:
+        if self._intf_spec.name == metadata.name:
+            active_transfers = [
+                trans.display_name for trans in self._intf_spec.transfers
+            ]
+        else:
             # TODO: should this be an exception?
             return
 
         # map from source data index to corresponding (subplot, line index within subplot)
         data_index_map: dict[int, tuple[SubplotDefinition, int]] = {}
-        interface_name = metadata.name
         iconv = 0
 
         # Keep a running count of the transfer value lines associated with a given
@@ -253,16 +246,14 @@ class PlotDefinitionManager:
                     active_transfers.index(transfer.transfer_display_name)
                 ] = ""
 
-                if conv_subplot := self._conv_subplots.get(interface_name):
-                    data_index_map[data_index] = (conv_subplot, iconv)
-                    # Add a new series list to y_data, and label to series_labels
-                    # Both will be at position iconv of respective lists
-                    # conv_subplot.y_data.append([])
-                    conv_subplot.series_labels.append(transfer.transfer_display_name)
-                    iconv += 1
+                data_index_map[data_index] = (self._conv_subplot, iconv)
+                # Add a new series list to y_data, and label to series_labels
+                # Both will be at position iconv of respective lists
+                self._conv_subplot.series_labels.append(transfer.transfer_display_name)
+                iconv += 1
             else:
                 transfer_value_subplot = self._transfer_subplots.get(
-                    (interface_name, transfer_key[0], transfer_key[1])
+                    (transfer_key[0], transfer_key[1])
                 )
                 if transfer_value_subplot:
                     value_type = (
@@ -287,4 +278,18 @@ class PlotDefinitionManager:
                     transfer_value_line_count[transfer_key] = itransval
 
         # This will be what allows us to update subplot data as new data received
-        self._data_index_map[interface_name] = data_index_map
+        self._data_index_map = data_index_map
+
+
+class PlotDefinitionManager:
+    def __init__(self, spec: PlotSpec):
+        self._subplot_mgrs: dict[str, SubplotManager] = {}
+        self._init(spec)
+
+    def _init(self, spec: PlotSpec):
+        is_time = spec.plot_time
+        for interface in spec.interfaces:
+            self._subplot_mgrs[interface.name] = SubplotManager(is_time, interface)
+
+    def subplot_mgr(self, interface_name: str) -> SubplotManager:
+        return self._subplot_mgrs[interface_name]

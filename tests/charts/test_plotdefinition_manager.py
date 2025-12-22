@@ -47,6 +47,30 @@ def spec():
 
 
 @pytest.fixture
+def spec2():
+    transfers1 = [
+        DataTransferSpec(
+            display_name="trans1", show_convergence=True, show_transfer_values=True
+        ),
+        DataTransferSpec(
+            display_name="trans2", show_convergence=True, show_transfer_values=True
+        ),
+    ]
+    transfers2 = [
+        DataTransferSpec(
+            display_name="Trans1", show_convergence=True, show_transfer_values=False
+        ),
+        DataTransferSpec(
+            display_name="Trans2", show_convergence=False, show_transfer_values=True
+        ),
+    ]
+
+    intf1 = InterfaceSpec(name="intf1", display_name="Intf-1", transfers=transfers1)
+    intf2 = InterfaceSpec(name="intf2", display_name="Intf-2", transfers=transfers2)
+    return PlotSpec([intf1, intf2], plot_time=True)
+
+
+@pytest.fixture
 def metadata():
     headers = [
         "Iteration",
@@ -62,41 +86,86 @@ def metadata():
     return parse_csv_metadata("intf1", headers)
 
 
+@pytest.fixture
+def metadata2():
+    headers = [
+        "Iteration",
+        "Step",
+        "Time",
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-2 - Trans1",
+        "Trans1 (Weighted Average): rootFind",
+        "Trans1 (Weighted Average): rootFind 2",
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-2 - Trans2",
+        "Trans2 (Weighted Average): rootFind 2",
+        "Trans2 (Weighted Average): rootFind",
+    ]
+    return parse_csv_metadata("intf2", headers)
+
+
 def test_init_from_spec(spec):
 
     pdm = PlotDefinitionManager(spec)
 
-    assert len(pdm.subplots) == 3
-    assert pdm.get_layout() == (2, 2)
+    try:
+        mgr = pdm.subplot_mgr("intf1")
+    except KeyError:
+        pytest.fail("Subplot manager for interface 'intf1' not found")
 
-    assert pdm.subplots[0].is_log_y
-    assert not pdm.subplots[1].is_log_y
-    assert not pdm.subplots[2].is_log_y
+    assert len(mgr.subplots) == 3
+    assert mgr.get_layout() == (2, 2)
 
-    assert pdm.subplots[0].title == "Data transfer convergence on Intf-1"
-    assert pdm.subplots[0].y_axis_label == "RMS Change in target value"
-    assert pdm.subplots[1].title == "Intf-1 - trans1 (<VALUETYPE>)"
-    assert pdm.subplots[2].title == "Intf-1 - trans2 (<VALUETYPE>)"
+    assert mgr.subplots[0].is_log_y
+    assert not mgr.subplots[1].is_log_y
+    assert not mgr.subplots[2].is_log_y
+
+    assert mgr.subplots[0].title == "Data transfer convergence on Intf-1"
+    assert mgr.subplots[0].y_axis_label == "RMS Change in target value"
+    assert mgr.subplots[1].title == "Intf-1 - trans1 (<VALUETYPE>)"
+    assert mgr.subplots[2].title == "Intf-1 - trans2 (<VALUETYPE>)"
     assert (
-        pdm.subplots[0].x_axis_label
-        == pdm.subplots[1].x_axis_label
-        == pdm.subplots[2].x_axis_label
+        mgr.subplots[0].x_axis_label
+        == mgr.subplots[1].x_axis_label
+        == mgr.subplots[2].x_axis_label
         == "Time"
     )
 
-    for sp in pdm.subplots:
+    for sp in mgr.subplots:
         assert sp.series_labels == []
 
 
 def test_set_metadata(spec, metadata):
     pdm = PlotDefinitionManager(spec)
-    pdm.set_metadata(metadata)
+    mgr = pdm.subplot_mgr(metadata.name)
+    mgr.set_metadata(metadata)
 
-    assert len(pdm.subplots) == 3
+    assert len(mgr.subplots) == 3
 
-    assert pdm.subplots[1].title == "Intf-1 - trans1 (Weighted Average)"
-    assert pdm.subplots[2].title == "Intf-1 - trans2 (Weighted Average)"
+    assert mgr.subplots[1].title == "Intf-1 - trans1 (Weighted Average)"
+    assert mgr.subplots[2].title == "Intf-1 - trans2 (Weighted Average)"
 
-    assert pdm.subplots[0].series_labels == ["trans1", "trans2"]
-    assert pdm.subplots[1].series_labels == ["rootFind", "rootFind 2"]
-    assert pdm.subplots[2].series_labels == ["rootFind 2", "rootFind"]
+    assert mgr.subplots[0].series_labels == ["trans1", "trans2"]
+    assert mgr.subplots[1].series_labels == ["rootFind", "rootFind 2"]
+    assert mgr.subplots[2].series_labels == ["rootFind 2", "rootFind"]
+
+
+def test_set_metadata_two_interfaces(spec2, metadata, metadata2):
+    pdm = PlotDefinitionManager(spec2)
+    mgr1 = pdm.subplot_mgr(metadata.name)
+    mgr2 = pdm.subplot_mgr(metadata2.name)
+
+    mgr1.set_metadata(metadata)
+    mgr2.set_metadata(metadata2)
+
+    assert len(mgr1.subplots) == 3
+    assert len(mgr2.subplots) == 2
+
+    assert mgr1.subplots[1].title == "Intf-1 - trans1 (Weighted Average)"
+    assert mgr1.subplots[2].title == "Intf-1 - trans2 (Weighted Average)"
+    assert mgr2.subplots[0].title == "Data transfer convergence on Intf-2"
+    assert mgr2.subplots[1].title == "Intf-2 - Trans2 (Weighted Average)"
+
+    assert mgr1.subplots[0].series_labels == ["trans1", "trans2"]
+    assert mgr1.subplots[1].series_labels == ["rootFind", "rootFind 2"]
+    assert mgr1.subplots[2].series_labels == ["rootFind 2", "rootFind"]
+    assert mgr2.subplots[0].series_labels == ["Trans1", "Trans2"]
+    assert mgr2.subplots[1].series_labels == ["rootFind 2", "rootFind"]
