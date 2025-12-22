@@ -158,7 +158,9 @@ class CsvChartDataReader:
     def _init_data(self):
         series_data_list: list[SeriesData] = []
         for i in range(len(self._metadata.transfer_info)):
-            series_data_list.append(SeriesData(transfer_index=i))
+            series_data_list.append(
+                SeriesData(interface_name=self._metadata.name, transfer_index=i)
+            )
         self._data = InterfaceSeriesData(self._metadata, series=series_data_list)
 
     def _process_curr_data(self):

@@ -106,6 +106,8 @@ class SeriesData:
 
     Attributes
     ----------
+    interface_name: str
+        The name of the interface this series is associated with.
     transfer_index : int
         Index of the ``TransferSeriesInfo`` metadata for this series within the
         ``InterfaceInfo`` for the interface this series is associated with.
@@ -118,6 +120,7 @@ class SeriesData:
         step-based data by using a time step to iteration mapping.
     """
 
+    interface_name: str
     transfer_index: int  # Index into transfer_info of associated InterfaceInfo
     start_index: int = 0  # Use when providing incremental data
     data: list[float] = field(default_factory=list)

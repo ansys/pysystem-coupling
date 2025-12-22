@@ -36,6 +36,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import (
 )
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     PlotDefinitionManager,
+    SubplotManager,
 )
 from ansys.systemcoupling.core.util.assertion import assert_
 
@@ -161,16 +162,17 @@ def _update_xy_data(
 
 
 # TODO: Only handles one interface at the moment! Generalise to multiple
-class Plotter:
+class FigurePlotter:
     def __init__(
         self,
-        mgr: PlotDefinitionManager,
+        plot_number: int,
+        mgr: SubplotManager,
         request_update: Optional[Callable[[], None]] = None,
     ):
         self._mgr = mgr
         self._request_update = request_update
 
-        self._fig: Figure = plt.figure()
+        self._fig: Figure = plt.figure(plot_number)
         self._subplot_lines: list[list[Line2D]] = []
         self._subplot_limits_set: list[bool] = []
         self._metadata: Optional[InterfaceInfo] = None
@@ -184,6 +186,7 @@ class Plotter:
         self._mgr.set_metadata(metadata)
         # We now have enough information to create the (empty) plots
         self._init_plots()
+        self._fig.suptitle(f"Interface: {metadata.name}", fontsize=10)
 
     def set_timestep_data(self, timestep_data: TimestepData):
 
@@ -205,7 +208,7 @@ class Plotter:
             )
 
         subplot_defn, subplot_line_index = self._mgr.subplot_for_data_index(
-            self._metadata.name, series_data.transfer_index
+            series_data.transfer_index
         )
         if subplot_defn is None:
             # This can happen if the list of plots being show is filtered.
@@ -229,10 +232,10 @@ class Plotter:
             series_data.start_index,
         )
 
-        self.update_limits(subplot_defn.index, subplot_defn.is_log_y, x_new, y_new)
+        self._update_limits(subplot_defn.index, subplot_defn.is_log_y, x_new, y_new)
         subplot_line.set_data(x_new, y_new)
 
-    def update_limits(self, subplot_index, is_log_y, x_new, y_new):
+    def _update_limits(self, subplot_index, is_log_y, x_new, y_new):
         axes = self._fig.axes[subplot_index]
 
         are_limits_initialised = self._subplot_limits_set[subplot_index]
@@ -336,3 +339,111 @@ class Plotter:
             self._subplot_lines.append(lines)
             # The limits on this subplot are essentially unset until we start getting data
             self._subplot_limits_set.append(False)
+
+
+class Plotter:
+    def __init__(
+        self,
+        mgr: PlotDefinitionManager,
+        request_update: Optional[Callable[[], None]] = None,
+    ):
+        self._mgr = mgr
+        self._request_update = request_update
+
+        self._figures: list[FigurePlotter] = []
+        self._interface_to_figure_index: dict[str, int] = {}
+
+        self._is_transient: bool | None = None
+
+        # Empty if not transient:
+        self._times: list[float] = []  # Time value at each time step
+        self._time_indexes: list[int] = []  # Iteration to take value at time i from
+
+    def set_metadata(self, metadata: InterfaceInfo):
+        if self._is_transient is None:
+            self._is_transient = metadata.is_transient
+        elif self._is_transient != metadata.is_transient:
+            raise RuntimeError(
+                "Attempt to set metadata with inconsistent transient setting."
+            )
+
+        ifig = len(self._figures)
+        self._interface_to_figure_index[metadata.name] = ifig
+        self._figures.append(
+            FigurePlotter(
+                ifig + 1, self._mgr.subplot_mgr(metadata.name), self._request_update
+            )
+        )
+        # TODO: move this into constructor of FigurePlotter?
+        self._figures[ifig].set_metadata(metadata)
+
+    def set_timestep_data(self, timestep_data: TimestepData):
+
+        if timestep_data.timestep and not self._is_transient:
+            raise RuntimeError("Attempt to set timestep data on non-transient case")
+
+        self._time_indexes, self._times = _process_timestep_data(timestep_data)
+
+    def update_line_series(self, series_data: SeriesData):
+        """Update the line series determined by the provided ``series_data`` with the
+        incremental data that it contains.
+
+        The ``series_data`` contains the "start index" in the full series, the index
+        to start writing the new data.
+        """
+        ifig = self._fig_index(series_data.interface_name)
+        self._figures[ifig].update_line_series(series_data)
+
+    def close(self):
+        if self._fig:
+            plt.close(self._fig)
+
+    def show_plot(self, noblock=False):
+        if noblock:
+            with plt.ion():
+                self._show_plots()
+        else:
+            self._show_plots()
+
+    def _show_plots(self):
+        for fig in self._figures:
+            fig.show_plot()
+        plt.show()
+
+    def show_animated(self):
+        # NB: if using the wait_for_metadata() approach
+        # supported by MessageDispatcher, do it here like
+        # this (assume the wait function is stored as an
+        # attribute):
+        #
+        # assert_(self._wait_for_metadata is not None)
+        # metadata = self._wait_for_metadata()
+        # if metadata is not None:
+        #     self.set_metadata(metadata)
+        # else:
+        #     return
+        assert_(self._request_update is not None)
+
+        self.ani = FuncAnimation(
+            self._fig,
+            self._update_animation,
+            # frames=x_axis_pts,
+            save_count=sys.maxsize,
+            # init_func=self._init_plots,
+            blit=False,
+            interval=200,
+            repeat=False,
+        )
+        plt.show()
+
+    def _fig_index(self, interface_name: str) -> int:
+        if interface_name not in self._interface_to_figure_index:
+            raise RuntimeError(
+                f"Attempt to set or update plot data for unknown interface "
+                f"'{interface_name}'."
+            )
+        return self._interface_to_figure_index[interface_name]
+
+    def _update_animation(self, frame: int):
+        # print("calling update animation")
+        return self._request_update()

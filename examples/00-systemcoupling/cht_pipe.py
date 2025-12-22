@@ -80,7 +80,7 @@ fluent_msh_file = examples.download_file(
 # ----------------------------------------
 
 # Launch MAPDL.
-mapdl = pymapdl.launch_mapdl()
+mapdl = pymapdl.launch_mapdl(version=252)
 mapdl.clear()
 mapdl.prep7()
 
@@ -170,7 +170,7 @@ mapdl.antype(0)
 # Set up the fluid analysis and read the pre-created mesh file
 # ------------------------------------------------------------
 
-fluent = pyfluent.launch_fluent(start_transcript=False)
+fluent = pyfluent.launch_fluent(start_transcript=False, product_version=252)
 fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
 
 # %%
