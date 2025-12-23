@@ -30,6 +30,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 class DataTransferSpec:
     # It's not ideal, but we have to work in terms of display names for transfers,
     # as that is all we have in the data (the CSV data, at least).
+    # TODO: add optional internal name field which we will use if provided.
     display_name: str
     show_convergence: bool = True
     show_transfer_values: bool = True
@@ -48,26 +49,23 @@ class PlotSpec:
     plot_time: bool = False
 
 
-"""
-Convergence subplot:
-    title - Data Transfer Convergence for <interface disp name>
-    x-axis label - Iteration/Time
-    y-axis label - RMS Change in Target Value
-
-    # x-data: []
-    y-data: [([], <label=transfer disp name>)]
-
-    # y-data - we actually want an index
-
-
-Transfer values subplot:
-    title - <interface display name> - <transfer display name> (<value type>)
-    x-axis label: Iteration/time
-    y-axis label: <NOT SET>
-
-    y-data: [([], <label=source|tgt disp name + suffix)]
-
-"""
+#
+# Plots are labelled as follows:
+#
+# Convergence subplot:
+#     title - Data Transfer Convergence for <interface disp name>
+#     x-axis label - Iteration/Time
+#     y-axis label - RMS Change in Target Value
+#
+#     y-data: [([], <label=transfer disp name>)]
+#
+# Transfer values subplot:
+#     title - <interface display name> - <transfer display name> (<value type>)
+#     x-axis label: Iteration/time
+#     y-axis label: <NOT SET>
+#
+#     y-data: [([], <label=source|tgt disp name + suffix)]
+#
 
 
 @dataclass
@@ -239,7 +237,7 @@ class PlotDefinitionManager:
         # The integer is the "disambiguation_index" the transfer's TransferSeriesInfo.
         transfer_value_line_count: dict[tuple[str, int], int] = {}
 
-        for transfer in metadata.transfer_info:
+        for data_index, transfer in enumerate(metadata.transfer_info):
             transfer_key = (
                 transfer.transfer_display_name,
                 transfer.disambiguation_index,
@@ -256,7 +254,7 @@ class PlotDefinitionManager:
                 ] = ""
 
                 if conv_subplot := self._conv_subplots.get(interface_name):
-                    data_index_map[transfer.data_index] = (conv_subplot, iconv)
+                    data_index_map[data_index] = (conv_subplot, iconv)
                     # Add a new series list to y_data, and label to series_labels
                     # Both will be at position iconv of respective lists
                     # conv_subplot.y_data.append([])
@@ -276,28 +274,17 @@ class PlotDefinitionManager:
                         "<VALUETYPE>", value_type
                     )
                     itransval = transfer_value_line_count.get(transfer_key, 0)
-                    if not transfer.line_suffixes:
-                        data_index_map[transfer.data_index] = (
-                            transfer_value_subplot,
-                            itransval,
-                        )
-                        transfer_value_subplot.series_labels.append(
-                            transfer.participant_display_name
-                        )
-                        itransval += 1
-                        transfer_value_line_count[transfer_key] = itransval
-                    else:
-                        for i, suffix in enumerate(transfer.line_suffixes):
-                            data_index_map[transfer.data_index + i] = (
-                                transfer_value_subplot,
-                                itransval + i,
-                            )
-                            transfer_value_subplot.series_labels.append(
-                                transfer.participant_display_name + suffix
-                            )
-                        transfer_value_line_count[transfer_key] = itransval + len(
-                            transfer.line_suffixes
-                        )
+                    label = transfer.participant_display_name
+                    if transfer.component_suffix:
+                        label += transfer.component_suffix
+
+                    data_index_map[data_index] = (
+                        transfer_value_subplot,
+                        itransval,
+                    )
+                    transfer_value_subplot.series_labels.append(label)
+                    itransval += 1
+                    transfer_value_line_count[transfer_key] = itransval
 
         # This will be what allows us to update subplot data as new data received
         self._data_index_map[interface_name] = data_index_map
