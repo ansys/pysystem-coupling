@@ -107,7 +107,7 @@ def get_injected_cmd_map(
             ),
             "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
                 session,
-                lambda: _wrap_solve(get_solution_root_object(), part_mgr, **kwargs),
+                lambda: _wrap_solve(get_solution_root_object(), part_mgr),
                 **kwargs,
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
@@ -383,13 +383,17 @@ def _solve_with_live_plot(
     session: SessionProtocol, solve_func: Callable[[], None], **kwargs
 ):
     working_dir = kwargs.pop("working_dir", ".")
-    interface_name = kwargs.pop("interface_name", None)
-    interface_name = _get_interface_name(session, interface_name)
-    file_path = os.path.join(working_dir, "SyC", f"{interface_name}.csv")
-    spec = _create_plot_spec(session, interface_name, **kwargs)
+    # Take copy as in _show_plot
+    kw_dict = dict(kwargs)
+    interface_and_transfer_names = _get_interface_and_transfer_names(session, kw_dict)
+    file_paths = [
+        os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+        for interface_name in interface_and_transfer_names.keys()
+    ]
+    spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
     solve_with_live_plot_csv(
         spec,
-        [file_path],
+        file_paths,
         solve_func,
     )
 
