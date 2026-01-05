@@ -97,14 +97,14 @@ def _solve_with_live_plot_impl(
     make_live_data_source: Callable[[str, Callable], LiveDataSource],
     solve_func: Callable[[], None],
 ):
-    if len(spec.interfaces) != 1:
-        raise ValueError("Plots currently only support one interface")
     manager = PlotDefinitionManager(spec)
     dispatcher = MessageDispatcher()
     plotter = Plotter(manager, request_update=dispatcher.dispatch_messages)
     dispatcher.set_plotter(plotter)
 
-    data_source = make_live_data_source(spec.interfaces[0].name, dispatcher.put_msg)
+    data_source = make_live_data_source(
+        [intf.name for intf in spec.interfaces], dispatcher.put_msg
+    )
     data_thread = threading.Thread(target=data_source.read_data)
 
     def solve():
@@ -117,9 +117,9 @@ def _solve_with_live_plot_impl(
     solve_thread.start()
 
     plotter.show_animated()
+    solve_thread.join()
     data_source.cancel()
     data_thread.join()
-    solve_thread.join()
 
 
 def solve_with_live_plot_csv(
@@ -127,8 +127,6 @@ def solve_with_live_plot_csv(
     csv_list: list[str],
     solve_func: Callable[[], None],
 ):
-    if len(spec.interfaces) != 1:
-        raise ValueError("Plots currently only support one interface")
     if len(spec.interfaces) != len(csv_list):
         raise ValueError(
             "'csv_list' should have length equal to the number of interfaces"
@@ -136,8 +134,8 @@ def solve_with_live_plot_csv(
 
     _solve_with_live_plot_impl(
         spec,
-        lambda interface_name, put_msg: LiveCsvDataSource(
-            interface_name, csv_list[0], put_msg
+        lambda interface_names, put_msg: LiveCsvDataSource(
+            interface_names, csv_list, put_msg
         ),
         solve_func,
     )

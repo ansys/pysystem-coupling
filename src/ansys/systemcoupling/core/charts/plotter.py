@@ -22,6 +22,7 @@
 
 import math
 import sys
+import time
 from typing import Callable, Optional, Union
 
 from matplotlib.animation import FuncAnimation
@@ -39,6 +40,7 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     SubplotManager,
 )
 from ansys.systemcoupling.core.util.assertion import assert_
+from ansys.systemcoupling.core.util.logging import LOG
 
 
 def _process_timestep_data(
@@ -161,12 +163,12 @@ def _update_xy_data(
     return (x_new, y_new)
 
 
-# TODO: Only handles one interface at the moment! Generalise to multiple
 class FigurePlotter:
     def __init__(
         self,
         plot_number: int,
         mgr: SubplotManager,
+        metadata: InterfaceInfo,
         request_update: Optional[Callable[[], None]] = None,
     ):
         self._mgr = mgr
@@ -175,18 +177,21 @@ class FigurePlotter:
         self._fig: Figure = plt.figure(plot_number)
         self._subplot_lines: list[list[Line2D]] = []
         self._subplot_limits_set: list[bool] = []
-        self._metadata: Optional[InterfaceInfo] = None
+        self._metadata = metadata
 
         # Empty if not transient:
         self._times: list[float] = []  # Time value at each time step
         self._time_indexes: list[int] = []  # Iteration to take value at time i from
 
-    def set_metadata(self, metadata: InterfaceInfo):
-        self._metadata = metadata
-        self._mgr.set_metadata(metadata)
+        self._init_from_metadata()
+
+        self._animation: FuncAnimation | None = None
+
+    def _init_from_metadata(self):
+        self._mgr.set_metadata(self._metadata)
         # We now have enough information to create the (empty) plots
         self._init_plots()
-        self._fig.suptitle(f"Interface: {metadata.name}", fontsize=10)
+        self._fig.suptitle(f"Interface: {self._metadata.name}", fontsize=10)
 
     def set_timestep_data(self, timestep_data: TimestepData):
 
@@ -269,11 +274,6 @@ class FigurePlotter:
         if self._fig:
             plt.close(self._fig)
 
-    def show_plot(self, noblock=False):
-        if noblock:
-            plt.ion()
-        plt.show()
-
     def show_animated(self):
         # NB: if using the wait_for_metadata() approach
         # supported by MessageDispatcher, do it here like
@@ -288,7 +288,10 @@ class FigurePlotter:
         #     return
         assert_(self._request_update is not None)
 
-        self.ani = FuncAnimation(
+        if self._animation is not None:
+            return
+
+        self._animation = FuncAnimation(
             self._fig,
             self._update_animation,
             # frames=x_axis_pts,
@@ -298,10 +301,11 @@ class FigurePlotter:
             interval=200,
             repeat=False,
         )
-        plt.show()
+        # plt.show()
 
     def _update_animation(self, frame: int):
         # print("calling update animation")
+        LOG.debug("FigurePlotter updating animation frame: %s", frame)
         return self._request_update()
 
     def _init_plots(self):
@@ -352,6 +356,8 @@ class Plotter:
 
         self._figures: list[FigurePlotter] = []
         self._interface_to_figure_index: dict[str, int] = {}
+        self._is_animated: bool = False
+        self._pending_metadata: bool = False
 
         self._is_transient: bool | None = None
 
@@ -371,11 +377,15 @@ class Plotter:
         self._interface_to_figure_index[metadata.name] = ifig
         self._figures.append(
             FigurePlotter(
-                ifig + 1, self._mgr.subplot_mgr(metadata.name), self._request_update
+                ifig + 1,
+                self._mgr.subplot_mgr(metadata.name),
+                metadata,
+                self._request_update,
             )
         )
-        # TODO: move this into constructor of FigurePlotter?
-        self._figures[ifig].set_metadata(metadata)
+        if self._is_animated:
+            self._pending_metadata = False
+            self._figures[-1].show_animated()
 
     def set_timestep_data(self, timestep_data: TimestepData):
 
@@ -395,20 +405,15 @@ class Plotter:
         self._figures[ifig].update_line_series(series_data)
 
     def close(self):
-        if self._fig:
-            plt.close(self._fig)
+        for fig in self._figures:
+            plt.close(fig)
 
     def show_plot(self, noblock=False):
         if noblock:
             with plt.ion():
-                self._show_plots()
+                plt.show()
         else:
-            self._show_plots()
-
-    def _show_plots(self):
-        for fig in self._figures:
-            fig.show_plot()
-        plt.show()
+            plt.show()
 
     def show_animated(self):
         # NB: if using the wait_for_metadata() approach
@@ -423,17 +428,14 @@ class Plotter:
         # else:
         #     return
         assert_(self._request_update is not None)
+        self._is_animated = True
+        self._pending_metadata = True
+        while self._pending_metadata:
+            self._request_update()
+            time.sleep(0.1)
 
-        self.ani = FuncAnimation(
-            self._fig,
-            self._update_animation,
-            # frames=x_axis_pts,
-            save_count=sys.maxsize,
-            # init_func=self._init_plots,
-            blit=False,
-            interval=200,
-            repeat=False,
-        )
+        for fig in self._figures:
+            fig.show_animated()
         plt.show()
 
     def _fig_index(self, interface_name: str) -> int:
