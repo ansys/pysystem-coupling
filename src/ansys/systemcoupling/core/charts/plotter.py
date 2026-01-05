@@ -22,7 +22,6 @@
 
 import math
 import sys
-import time
 from typing import Callable, Optional, Union
 
 from matplotlib.animation import FuncAnimation
@@ -168,7 +167,7 @@ class FigurePlotter:
         self,
         plot_number: int,
         mgr: SubplotManager,
-        metadata: InterfaceInfo,
+        metadata: InterfaceInfo | None = None,
         request_update: Optional[Callable[[], None]] = None,
     ):
         self._mgr = mgr
@@ -183,9 +182,17 @@ class FigurePlotter:
         self._times: list[float] = []  # Time value at each time step
         self._time_indexes: list[int] = []  # Iteration to take value at time i from
 
-        self._init_from_metadata()
+        if metadata:
+            self._init_from_metadata()
 
         self._animation: FuncAnimation | None = None
+
+    def set_metadata(self, metadata: InterfaceInfo):
+        if self._metadata:
+            raise RuntimeError("Attempt to set metadata more than once per figure.")
+
+        self._metadata = metadata
+        self._init_from_metadata()
 
     def _init_from_metadata(self):
         self._mgr.set_metadata(self._metadata)
@@ -275,17 +282,6 @@ class FigurePlotter:
             plt.close(self._fig)
 
     def show_animated(self):
-        # NB: if using the wait_for_metadata() approach
-        # supported by MessageDispatcher, do it here like
-        # this (assume the wait function is stored as an
-        # attribute):
-        #
-        # assert_(self._wait_for_metadata is not None)
-        # metadata = self._wait_for_metadata()
-        # if metadata is not None:
-        #     self.set_metadata(metadata)
-        # else:
-        #     return
         assert_(self._request_update is not None)
 
         if self._animation is not None:
@@ -356,14 +352,25 @@ class Plotter:
 
         self._figures: list[FigurePlotter] = []
         self._interface_to_figure_index: dict[str, int] = {}
-        self._is_animated: bool = False
-        self._pending_metadata: bool = False
 
         self._is_transient: bool | None = None
 
-        # Empty if not transient:
+        # Will remain empty if not transient:
         self._times: list[float] = []  # Time value at each time step
         self._time_indexes: list[int] = []  # Iteration to take value at time i from
+
+        self._init_figures()
+
+    def _init_figures(self):
+        for ifig, intf_name in enumerate(self._mgr.interface_names):
+            self._interface_to_figure_index[intf_name] = ifig
+            self._figures.append(
+                FigurePlotter(
+                    ifig + 1,
+                    self._mgr.subplot_mgr(intf_name),
+                    request_update=self._request_update,
+                )
+            )
 
     def set_metadata(self, metadata: InterfaceInfo):
         if self._is_transient is None:
@@ -373,19 +380,8 @@ class Plotter:
                 "Attempt to set metadata with inconsistent transient setting."
             )
 
-        ifig = len(self._figures)
-        self._interface_to_figure_index[metadata.name] = ifig
-        self._figures.append(
-            FigurePlotter(
-                ifig + 1,
-                self._mgr.subplot_mgr(metadata.name),
-                metadata,
-                self._request_update,
-            )
-        )
-        if self._is_animated:
-            self._pending_metadata = False
-            self._figures[-1].show_animated()
+        ifig = self._fig_index(metadata.name)
+        self._figures[ifig].set_metadata(metadata)
 
     def set_timestep_data(self, timestep_data: TimestepData):
 
@@ -416,23 +412,7 @@ class Plotter:
             plt.show()
 
     def show_animated(self):
-        # NB: if using the wait_for_metadata() approach
-        # supported by MessageDispatcher, do it here like
-        # this (assume the wait function is stored as an
-        # attribute):
-        #
-        # assert_(self._wait_for_metadata is not None)
-        # metadata = self._wait_for_metadata()
-        # if metadata is not None:
-        #     self.set_metadata(metadata)
-        # else:
-        #     return
         assert_(self._request_update is not None)
-        self._is_animated = True
-        self._pending_metadata = True
-        while self._pending_metadata:
-            self._request_update()
-            time.sleep(0.1)
 
         for fig in self._figures:
             fig.show_animated()
@@ -445,7 +425,3 @@ class Plotter:
                 f"'{interface_name}'."
             )
         return self._interface_to_figure_index[interface_name]
-
-    def _update_animation(self, frame: int):
-        # print("calling update animation")
-        return self._request_update()
