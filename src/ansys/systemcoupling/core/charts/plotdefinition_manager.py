@@ -291,5 +291,9 @@ class PlotDefinitionManager:
         for interface in spec.interfaces:
             self._subplot_mgrs[interface.name] = SubplotManager(is_time, interface)
 
+    @property
+    def interface_names(self) -> list[str]:
+        return list(self._subplot_mgrs.keys())
+
     def subplot_mgr(self, interface_name: str) -> SubplotManager:
         return self._subplot_mgrs[interface_name]

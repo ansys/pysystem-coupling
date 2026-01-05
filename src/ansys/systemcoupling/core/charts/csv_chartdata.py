@@ -164,6 +164,7 @@ class CsvChartDataReader:
         self._data = InterfaceSeriesData(self._metadata, series=series_data_list)
 
     def _process_curr_data(self):
+        assert_(self._data is not None, "Metadata must be read before data")
         raw_data = self._csv_reader.data
         last_data_len = len(self._data.series[0].data)
 
