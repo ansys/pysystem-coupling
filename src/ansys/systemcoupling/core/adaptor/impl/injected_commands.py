@@ -228,14 +228,12 @@ def _create_plot_spec(
             continue
         intf_spec = InterfaceSpec(interface_name, interface_disp_name)
         spec.interfaces.append(intf_spec)
-        transfer_disp_names = [
-            interface_object.data_transfer[trans_name].display_name
-            for trans_name in transfer_names
-        ]
-        for transfer in transfer_disp_names:
+        for trans_name in transfer_names:
+            disp_name = interface_object.data_transfer[trans_name].display_name
             intf_spec.transfers.append(
                 DataTransferSpec(
-                    display_name=transfer,
+                    name=trans_name,
+                    display_name=disp_name,
                     show_convergence=show_convergence,
                     show_transfer_values=show_transfer_values,
                 )
