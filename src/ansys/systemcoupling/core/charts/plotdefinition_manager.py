@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 from dataclasses import dataclass, field
-from typing import Optional
 
 from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, SeriesType
 
@@ -31,6 +30,7 @@ class DataTransferSpec:
     # It's not ideal, but we have to work in terms of display names for transfers,
     # as that is all we have in the data (the CSV data, at least).
     # TODO: add optional internal name field which we will use if provided.
+    name: str
     display_name: str
     show_convergence: bool = True
     show_transfer_values: bool = True
@@ -100,12 +100,15 @@ class SubplotDefinition:
 
 
 class SubplotManager:
-    def __init__(self, is_transient: bool, intf_spec: InterfaceSpec):
+    def __init__(
+        self, is_transient: bool, intf_spec: InterfaceSpec, is_csv_source: bool = False
+    ):
         self._is_time: bool = is_transient
         self._intf_spec = intf_spec
+        self._is_csv_source = is_csv_source
 
         self._conv_subplot: SubplotDefinition | None = None
-        self._transfer_subplots: dict[tuple[str, int], SubplotDefinition] = {}
+        self._transfer_subplots: dict[str, SubplotDefinition] = {}
         self._subplots: list[SubplotDefinition] = []
         self._data_index_map: dict[int, tuple[SubplotDefinition, int]] = {}
         self._allocate_subplots()
@@ -116,7 +119,7 @@ class SubplotManager:
 
     def subplot_for_data_index(
         self, data_index: int
-    ) -> tuple[Optional[SubplotDefinition], int]:
+    ) -> tuple[SubplotDefinition | None, int]:
         """Return the subplot definition, and the line index within the
         subplot, corresponding to a given ``data_index``.
 
@@ -166,10 +169,16 @@ class SubplotManager:
         keep_conv = False
         transfer_disambig: dict[str, int] = {}
         for transfer in self._intf_spec.transfers:
-            if transfer.display_name in transfer_disambig:
-                transfer_disambig[transfer.display_name] += 1
-            else:
-                transfer_disambig[transfer.display_name] = 0
+            if self._is_csv_source:
+                # In the CSV case, we have to create a unique ID for each transfer
+                # based on display name and an integer suffix, because we don't
+                # have internal names in the data. 'transfer_disambig' keeps track of
+                # how many times we've seen a given display name so far and we use that
+                # to create the unique ID.
+                if transfer.display_name in transfer_disambig:
+                    transfer_disambig[transfer.display_name] += 1
+                else:
+                    transfer_disambig[transfer.display_name] = 0
             if transfer.show_convergence:
                 keep_conv = True
             if transfer.show_transfer_values:
@@ -180,12 +189,12 @@ class SubplotManager:
                     x_axis_label="Time" if self._is_time else "Iteration",
                     y_axis_label="",
                 )
-                transfer_subplots[
-                    (
-                        transfer.display_name,
-                        transfer_disambig[transfer.display_name],
-                    )
-                ] = transfer_value
+                if self._is_csv_source:
+                    disambig = transfer_disambig.get(transfer.display_name, 0)
+                    transfer_id = f"{transfer.display_name}:{disambig}"
+                else:
+                    transfer_id = transfer.name
+                transfer_subplots[transfer_id] = transfer_value
                 subplots.append(transfer_value)
         if keep_conv:
             self._conv_subplot = conv
@@ -194,9 +203,7 @@ class SubplotManager:
         self._subplots = [subplot for subplot in subplots if subplot is not None]
         for i, subplot in enumerate(self._subplots):
             subplot.index = i
-        self._transfer_subplots: dict[tuple[str, int], SubplotDefinition] = (
-            transfer_subplots
-        )
+        self._transfer_subplots: dict[str, SubplotDefinition] = transfer_subplots
 
     def set_metadata(self, metadata: InterfaceInfo):
         """Reconcile the metadata for a single interface with the pre-allocated
@@ -231,10 +238,7 @@ class SubplotManager:
         transfer_value_line_count: dict[tuple[str, int], int] = {}
 
         for data_index, transfer in enumerate(metadata.transfer_info):
-            transfer_key = (
-                transfer.transfer_display_name,
-                transfer.disambiguation_index,
-            )
+            transfer_key = transfer.transfer_id
             if transfer.series_type == SeriesType.CONVERGENCE:
                 if transfer.transfer_display_name not in active_transfers:
                     # We don't want this transfer on the convergence plot
@@ -252,9 +256,7 @@ class SubplotManager:
                 self._conv_subplot.series_labels.append(transfer.transfer_display_name)
                 iconv += 1
             else:
-                transfer_value_subplot = self._transfer_subplots.get(
-                    (transfer_key[0], transfer_key[1])
-                )
+                transfer_value_subplot = self._transfer_subplots.get(transfer_key)
                 if transfer_value_subplot:
                     value_type = (
                         "Sum"
@@ -282,14 +284,16 @@ class SubplotManager:
 
 
 class PlotDefinitionManager:
-    def __init__(self, spec: PlotSpec):
+    def __init__(self, spec: PlotSpec, is_csv_source: bool = False):
         self._subplot_mgrs: dict[str, SubplotManager] = {}
-        self._init(spec)
+        self._init(spec, is_csv_source)
 
-    def _init(self, spec: PlotSpec):
+    def _init(self, spec: PlotSpec, is_csv_source: bool):
         is_time = spec.plot_time
         for interface in spec.interfaces:
-            self._subplot_mgrs[interface.name] = SubplotManager(is_time, interface)
+            self._subplot_mgrs[interface.name] = SubplotManager(
+                is_time, interface, is_csv_source
+            )
 
     @property
     def interface_names(self) -> list[str]:

@@ -54,8 +54,10 @@ class LiveDataSource(Protocol):
     def read_data(self) -> None: ...
 
 
-def _create_and_show_impl(spec: PlotSpec, readers: list[ChartDataReader]) -> Plotter:
-    manager = PlotDefinitionManager(spec)
+def _create_and_show_impl(
+    spec: PlotSpec, readers: list[ChartDataReader], is_csv_source: bool = False
+) -> Plotter:
+    manager = PlotDefinitionManager(spec, is_csv_source=is_csv_source)
     plotter = Plotter(manager)
 
     for ireader, reader in enumerate(readers):
@@ -89,15 +91,16 @@ def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
         CsvChartDataReader(intf.name, csvfile)
         for intf, csvfile in zip(spec.interfaces, csv_list)
     ]
-    return _create_and_show_impl(spec, readers)
+    return _create_and_show_impl(spec, readers, is_csv_source=True)
 
 
 def _solve_with_live_plot_impl(
     spec,
     make_live_data_source: Callable[[str, Callable], LiveDataSource],
     solve_func: Callable[[], None],
+    is_csv_source: bool = False,
 ):
-    manager = PlotDefinitionManager(spec)
+    manager = PlotDefinitionManager(spec, is_csv_source=is_csv_source)
     dispatcher = MessageDispatcher()
     plotter = Plotter(manager, request_update=dispatcher.dispatch_messages)
     dispatcher.set_plotter(plotter)
@@ -138,6 +141,7 @@ def solve_with_live_plot_csv(
             interface_names, csv_list, put_msg
         ),
         solve_func,
+        is_csv_source=True,
     )
 
     # Show a non-blocking static plot

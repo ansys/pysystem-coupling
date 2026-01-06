@@ -22,7 +22,6 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 """Common data types for the storage of metadata and data for chart series.
 
@@ -51,10 +50,10 @@ class TransferSeriesInfo:
         The display name of the data transfer. This is a primary identifier for data
         transfers because CSV data sources do not currently include information about
         the underlying data model names of data transfers.
-    disambiguation_index: int
-        This should be set to 0, unless there is more than one data transfer with the
-        same display name. A contiguous range of indexes starting at 0 should be assigned
-        to the list of data transfers with the same display name.
+    transfer_id : str
+        The internal unique identifier of the data transfer. This could be the internal
+        datamodel name. In the CSV case, the internal name cannot be determined from the
+        data, so an ID based on the display name and an integer suffix is used.
     participant_display_name : str, optional
         The display name of the participant. This is required for transfer value series
         but not for convergence series.
@@ -68,10 +67,10 @@ class TransferSeriesInfo:
 
     series_type: SeriesType
     transfer_display_name: str
-    disambiguation_index: int
+    transfer_id: str
     # Remainder for non-CONVERGENCE series only
-    participant_display_name: Optional[str] = None
-    component_suffix: Optional[str] = None
+    participant_display_name: str | None = None
+    component_suffix: str | None = None
 
 
 @dataclass

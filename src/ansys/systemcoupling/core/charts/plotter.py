@@ -39,7 +39,8 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     SubplotManager,
 )
 from ansys.systemcoupling.core.util.assertion import assert_
-from ansys.systemcoupling.core.util.logging import LOG
+
+# from ansys.systemcoupling.core.util.logging import LOG
 
 
 def _process_timestep_data(
@@ -290,18 +291,14 @@ class FigurePlotter:
         self._animation = FuncAnimation(
             self._fig,
             self._update_animation,
-            # frames=x_axis_pts,
             save_count=sys.maxsize,
-            # init_func=self._init_plots,
             blit=False,
             interval=200,
             repeat=False,
         )
-        # plt.show()
 
     def _update_animation(self, frame: int):
-        # print("calling update animation")
-        LOG.debug("FigurePlotter updating animation frame: %s", frame)
+        # LOG.debug("FigurePlotter updating animation frame: %s", frame)
         return self._request_update()
 
     def _init_plots(self):
