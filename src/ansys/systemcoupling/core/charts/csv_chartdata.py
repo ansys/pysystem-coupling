@@ -56,7 +56,7 @@ class CsvReader:
             return True  # File exists - haven't necessarily read anything yet
         except FileNotFoundError:
             # It is expected that the file is not necessarily immediately available
-            print(f"Failed to open {self._file_or_filename}")
+            # print(f"Failed to open {self._file_or_filename}")
             return False
         except Exception as e:
             # Temporary - see if anything else goes wrong
@@ -234,7 +234,6 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
     intf_info.is_transient = headers[2] == "Time"
 
     start_index = 3 if intf_info.is_transient else 2
-    prev_part_name = ""
 
     transfer_disambig: dict[str, int] = {}
     for i in range(start_index, len(headers)):
@@ -265,8 +264,7 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
             series_info = TransferSeriesInfo(
                 series_type=series_type,
                 transfer_display_name=trans_disp_name,
-                # get(..., 0) for case where transfer_disambig empty (see note above)
-                disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
+                transfer_id=f"{trans_disp_name}:{transfer_disambig.get(trans_disp_name, 0)}",
             )
             intf_info.transfer_info.append(series_info)
         else:
@@ -275,7 +273,7 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                 TransferSeriesInfo(
                     series_type=series_type,
                     transfer_display_name=trans_disp_name,
-                    disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
+                    transfer_id=f"{trans_disp_name}:{transfer_disambig.get(trans_disp_name, 0)}",
                     participant_display_name=part_disp_name,
                     component_suffix=_parse_suffix(header, part_disp_name) or None,
                 )
