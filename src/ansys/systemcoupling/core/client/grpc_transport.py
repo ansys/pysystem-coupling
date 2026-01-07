@@ -328,6 +328,10 @@ class StartupAndConnectionInfo:
                 options.transport_mode = _TransportMode.INSECURE
                 options.allow_remote_host = True
 
+        if options.transport_mode == _TransportMode.UDS:
+            if not options.uds_id:
+                options.uds_id = uuid4().hex
+
         return options
 
     def _get_channel_target(self):
