@@ -282,6 +282,7 @@ class StartupAndConnectionInfo:
                     if self._is_uds_supported()
                     else _TransportMode.WNUA
                 )
+                # If UDS, uds_id will be set later if not already set
             case ConnectionType.UNIX_DOMAIN_SOCKETS:
                 if not self._is_uds_supported():
                     raise RuntimeError(
@@ -293,8 +294,7 @@ class StartupAndConnectionInfo:
                         "UDS transport only supports localhost connections."
                     )
                 options.transport_mode = _TransportMode.UDS
-                if not options.uds_id:
-                    options.uds_id = uuid4().hex
+                # uds_id will be set later if not already set
             case ConnectionType.WINDOWS_NAMED_USER_AUTHENTICATION:
                 if not _IS_WINDOWS:
                     raise ValueError(
