@@ -35,10 +35,16 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
 def spec():
     transfers = [
         DataTransferSpec(
-            display_name="trans1", show_convergence=True, show_transfer_values=True
+            name="TRANS-1",
+            display_name="trans1",
+            show_convergence=True,
+            show_transfer_values=True,
         ),
         DataTransferSpec(
-            display_name="trans2", show_convergence=True, show_transfer_values=True
+            name="TRANS-2",
+            display_name="trans2",
+            show_convergence=True,
+            show_transfer_values=True,
         ),
     ]
 
@@ -50,18 +56,30 @@ def spec():
 def spec2():
     transfers1 = [
         DataTransferSpec(
-            display_name="trans1", show_convergence=True, show_transfer_values=True
+            name="TRANS-1",
+            display_name="trans1",
+            show_convergence=True,
+            show_transfer_values=True,
         ),
         DataTransferSpec(
-            display_name="trans2", show_convergence=True, show_transfer_values=True
+            name="TRANS-2",
+            display_name="trans2",
+            show_convergence=True,
+            show_transfer_values=True,
         ),
     ]
     transfers2 = [
         DataTransferSpec(
-            display_name="Trans1", show_convergence=True, show_transfer_values=False
+            name="TRANS-1",
+            display_name="Trans1",
+            show_convergence=True,
+            show_transfer_values=False,
         ),
         DataTransferSpec(
-            display_name="Trans2", show_convergence=False, show_transfer_values=True
+            name="TRANS-2",
+            display_name="Trans2",
+            show_convergence=False,
+            show_transfer_values=True,
         ),
     ]
 
@@ -134,7 +152,7 @@ def test_init_from_spec(spec):
 
 
 def test_set_metadata(spec, metadata):
-    pdm = PlotDefinitionManager(spec)
+    pdm = PlotDefinitionManager(spec, is_csv_source=True)
     mgr = pdm.subplot_mgr(metadata.name)
     mgr.set_metadata(metadata)
 
@@ -149,7 +167,7 @@ def test_set_metadata(spec, metadata):
 
 
 def test_set_metadata_two_interfaces(spec2, metadata, metadata2):
-    pdm = PlotDefinitionManager(spec2)
+    pdm = PlotDefinitionManager(spec2, is_csv_source=True)
     mgr1 = pdm.subplot_mgr(metadata.name)
     mgr2 = pdm.subplot_mgr(metadata2.name)
 
