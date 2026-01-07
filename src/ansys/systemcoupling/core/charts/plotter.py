@@ -352,10 +352,6 @@ class Plotter:
 
         self._is_transient: bool | None = None
 
-        # Will remain empty if not transient:
-        self._times: list[float] = []  # Time value at each time step
-        self._time_indexes: list[int] = []  # Iteration to take value at time i from
-
         self._init_figures()
 
     def _init_figures(self):
@@ -385,7 +381,8 @@ class Plotter:
         if timestep_data.timestep and not self._is_transient:
             raise RuntimeError("Attempt to set timestep data on non-transient case")
 
-        self._time_indexes, self._times = _process_timestep_data(timestep_data)
+        for fig in self._figures:
+            fig.set_timestep_data(timestep_data)
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the
