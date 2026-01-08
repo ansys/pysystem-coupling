@@ -15,7 +15,7 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 25_2
-  FLUENT_IMAGE_VERSION: "v25.2.0"
+  FLUENT_IMAGE_VERSION: "v25.2.3"
   SYC_IMAGE_VERSION: "v25.2.0-sp03"
   MAPDL_IMAGE_VERSION: "v25.2-ubuntu-cicd"
 
