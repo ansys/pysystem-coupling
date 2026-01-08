@@ -69,6 +69,8 @@ import ansys.mapdl.core as pymapdl
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
 
+pyfluent.logger.set_console_logging_level("DEBUG")
+
 # %%
 # Download the Fluent mesh file.
 fluent_msh_file = examples.download_file(
