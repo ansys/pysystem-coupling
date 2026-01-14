@@ -318,8 +318,9 @@ def _get_interface_and_transfer_names(
         interface_names = setup.coupling_interface.get_object_names()
 
     if transfer_names is not None:
-        # There must be a single interface in this case or interface_name must be specified
-        if len(interface_names) != 1 or interface_name is not None:
+        # There must be a single interface in this case.
+        # Either interface_names has length 1 or interface_name must be specified
+        if len(interface_names) != 1 and interface_name is None:
             raise RuntimeError(
                 "'transfer_names' cannot be used when there is more than "
                 "one interface and 'interface_name' is not specified."
