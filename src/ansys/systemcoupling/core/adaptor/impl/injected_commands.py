@@ -242,20 +242,6 @@ def _create_plot_spec(
     return spec
 
 
-def _get_interface_name(
-    session: SessionProtocol, interface_name: str | None = None
-) -> str:
-    if interface_name is None:
-        setup = session.setup
-        interfaces = setup.coupling_interface.get_object_names()
-        if len(interfaces) == 0:
-            return
-        if len(interfaces) > 1:
-            raise RuntimeError("plots currently only support a single interface.")
-        interface_name = interfaces[0]
-    return interface_name
-
-
 def _get_interface_and_transfer_names(
     session: SessionProtocol, arg_dict: Dict[str, Any]
 ) -> dict[str, list]:
