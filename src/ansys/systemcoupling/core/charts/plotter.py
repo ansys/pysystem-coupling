@@ -396,7 +396,7 @@ class Plotter:
 
     def close(self):
         for fig in self._figures:
-            plt.close(fig)
+            fig.close()
 
     def show_plot(self, noblock=False):
         if noblock:

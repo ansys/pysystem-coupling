@@ -243,6 +243,10 @@ class SubplotManager:
                 if transfer.transfer_display_name not in active_transfers:
                     # We don't want this transfer on the convergence plot
                     continue
+                if self._conv_subplot is None:
+                    # This will be the case if the plot spec had `show_convergence=False`
+                    continue
+
                 # Clear the entry in case transfer names are not unique. (If another transfer
                 # with the same name needs plotting, then it should appear as a second entry
                 # in active_transfers.)
