@@ -21,12 +21,15 @@
 # SOFTWARE.
 
 import threading
-from typing import Callable, Protocol
+from typing import Callable, Generator, Protocol
 
 from ansys.systemcoupling.core.charts.chart_datatypes import (
     InterfaceInfo,
     InterfaceSeriesData,
+    SeriesData,
+    TimestepBeginData,
     TimestepData,
+    TimestepEndData,
 )
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.live_csv_datasource import LiveCsvDataSource
@@ -54,16 +57,30 @@ class LiveDataSource(Protocol):
     def read_data(self) -> None: ...
 
 
+# This should be consistent with the gRPC ChartService methods
+# but we don't want a direct dependency here.
+class GrpcDataSourceProtocol(Protocol):
+    def stream_chart_data(
+        self,
+    ) -> Generator[
+        InterfaceInfo | SeriesData | TimestepBeginData | TimestepEndData, None, None
+    ]: ...
+    def get_chart_metadata(self) -> list[InterfaceInfo]: ...
+    def get_chart_series_data(self) -> list[SeriesData]: ...
+    def get_chart_timestep_data(self) -> TimestepData: ...
+
+
 def _create_and_show_impl(
     spec: PlotSpec, readers: list[ChartDataReader], is_csv_source: bool = False
 ) -> Plotter:
     manager = PlotDefinitionManager(spec, is_csv_source=is_csv_source)
     plotter = Plotter(manager)
 
-    for ireader, reader in enumerate(readers):
+    for reader in readers:
         reader.read_metadata()
         plotter.set_metadata(reader.metadata)
 
+    for ireader, reader in enumerate(readers):
         reader.read_new_data()
         data = reader.data
 
@@ -92,6 +109,79 @@ def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
         for intf, csvfile in zip(spec.interfaces, csv_list)
     ]
     return _create_and_show_impl(spec, readers, is_csv_source=True)
+
+
+def create_and_show_plot_grpc(
+    spec: PlotSpec, grpc_source: GrpcDataSourceProtocol
+) -> Plotter:
+    """Create and show a plot based on System Coupling gRPC chart data."""
+
+    # We need to implement the ChartDataReader protocol for the gRPC source.
+    # _create_and_show_impl expects a list of readers, one per interface,
+    # whereas the gRPC source provides a single source for all interfaces.
+
+    # Need to filter all data to the interfaces in the spec
+    active_interfaces = set(intf.name for intf in spec.interfaces)
+    if not (
+        metadata := [
+            m
+            for m in grpc_source.get_chart_metadata()
+            if m.interface_name in active_interfaces
+        ]
+    ):
+        # This is OK; we just won't have any data to plot.
+        return
+
+    data = [
+        d
+        for d in grpc_source.get_chart_series_data()
+        if d.interface_name in active_interfaces
+    ]
+
+    timestep_data = (
+        grpc_source.get_chart_timestep_data()
+        if metadata and metadata[0].is_transient
+        else None
+    )
+
+    # Adapt to ChartDataReader protocol
+    readers = []
+
+    class GrpcChartDataReader:
+        def __init__(
+            self,
+            metadata: InterfaceInfo,
+            data: SeriesData,
+            timestep_data: TimestepData | None,
+        ):
+            self._metadata = metadata
+            self._data = data
+            self._timestep_data = timestep_data
+
+        def read_metadata(self) -> bool:
+            return len(self._metadata) > 0
+
+        def read_new_data(self) -> None:
+            return
+
+        @property
+        def metadata(self) -> InterfaceInfo:
+            return self._metadata
+
+        @property
+        def data(self) -> InterfaceSeriesData:
+            return self._data
+
+        @property
+        def timestep_data(self) -> TimestepData:
+            return self._timestep_data
+
+    for meta in metadata:
+        series = next(
+            (d for d in data if d.interface_name == meta.interface_name), None
+        )
+        readers.append(GrpcChartDataReader(meta, series, timestep_data))
+    return _create_and_show_impl(spec, readers, is_csv_source=False)
 
 
 def _solve_with_live_plot_impl(
