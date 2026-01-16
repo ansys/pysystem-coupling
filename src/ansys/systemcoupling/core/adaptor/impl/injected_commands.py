@@ -29,7 +29,9 @@ from typing import Any, Callable, Dict, Optional, Protocol
 import ansys.platform.instancemanagement as pypim
 
 from ansys.systemcoupling.core.charts.plot_functions import (
+    GrpcDataSourceProtocol,
     create_and_show_plot_csv,
+    create_and_show_plot_grpc,
     solve_with_live_plot_csv,
 )
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
@@ -48,7 +50,7 @@ from .types import Container
 
 # We cannot import Session directly, so define a protocol for typing.
 # We mainly use it as a means of accessing the "API roots".
-class SessionProtocol(Protocol):
+class BaseSessionProtocol(Protocol):
     case: Container
     setup: Container
     solution: Container
@@ -64,6 +66,9 @@ class SessionProtocol(Protocol):
         remote_file_name: Optional[str] = None,
         overwrite: bool = False,
     ) -> None: ...
+
+
+class SessionProtocol(BaseSessionProtocol, GrpcDataSourceProtocol, Protocol): ...
 
 
 def get_injected_cmd_map(
@@ -352,16 +357,21 @@ def _show_plot(session: SessionProtocol, **kwargs):
     # is the desired  behaviour for when we pass it on to
     # _create_plot_spec later.
     kw_dict = dict(kwargs)
+    want_grpc = kw_dict.pop("want_grpc", False)
     interface_and_transfer_names = _get_interface_and_transfer_names(session, kw_dict)
     file_paths = []
-    for interface_name in interface_and_transfer_names.keys():
-        file_path = _ensure_file_available(
-            session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
-        )
-        file_paths.append(file_path)
-
+    if not want_grpc:
+        for interface_name in interface_and_transfer_names.keys():
+            file_path = _ensure_file_available(
+                session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+            )
+            file_paths.append(file_path)
     spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
-    return create_and_show_plot_csv(spec, file_paths)
+    return (
+        create_and_show_plot_grpc(spec, session)
+        if want_grpc
+        else create_and_show_plot_csv(spec, file_paths)
+    )
 
 
 def _solve_with_live_plot(
