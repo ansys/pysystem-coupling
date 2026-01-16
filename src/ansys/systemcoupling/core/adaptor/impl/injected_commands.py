@@ -24,11 +24,14 @@ from copy import deepcopy
 import os
 import random
 import time
-from typing import Callable, Dict, Optional, Protocol
+from typing import Any, Callable, Dict, Optional, Protocol
 
 import ansys.platform.instancemanagement as pypim
 
-from ansys.systemcoupling.core.charts.plot_functions import create_and_show_plot
+from ansys.systemcoupling.core.charts.plot_functions import (
+    create_and_show_plot_csv,
+    solve_with_live_plot_csv,
+)
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
     InterfaceSpec,
@@ -101,6 +104,11 @@ def get_injected_cmd_map(
         ret = {
             "solve": lambda **kwargs: _wrap_solve(
                 get_solution_root_object(), part_mgr, **kwargs
+            ),
+            "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
+                session,
+                lambda: _wrap_solve(get_solution_root_object(), part_mgr),
+                **kwargs,
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
@@ -199,32 +207,12 @@ def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
     return new_name
 
 
-def _show_plot(session: SessionProtocol, **kwargs):
+def _create_plot_spec(
+    session: SessionProtocol,
+    interface_and_transfer_names: dict[str, list[str]],
+    **kwargs,
+) -> PlotSpec:
     setup = session.setup
-    working_dir = kwargs.pop("working_dir", ".")
-    interface_name = kwargs.pop("interface_name", None)
-    if interface_name is None:
-        interfaces = setup.coupling_interface.get_object_names()
-        if len(interfaces) == 0:
-            return
-        if len(interfaces) > 1:
-            raise RuntimeError(
-                "show_plot() currently only supports a single interface."
-            )
-        interface_name = interfaces[0]
-    interface_object = setup.coupling_interface[interface_name]
-    interface_disp_name = interface_object.display_name
-
-    if (transfer_names := kwargs.pop("transfer_names", None)) is None:
-        transfer_names = interface_object.data_transfer.get_object_names()
-
-    if len(transfer_names) == 0:
-        return None
-
-    transfer_disp_names = [
-        interface_object.data_transfer[trans_name].display_name
-        for trans_name in transfer_names
-    ]
 
     show_convergence = kwargs.pop("show_convergence", True)
     show_transfer_values = kwargs.pop("show_transfer_values", True)
@@ -232,24 +220,167 @@ def _show_plot(session: SessionProtocol, **kwargs):
     # TODO : better way to do this?
     is_transient = setup.solution_control.time_step_size is not None
 
-    file_path = _ensure_file_available(
-        session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
-    )
-
     spec = PlotSpec()
-    intf_spec = InterfaceSpec(interface_name, interface_disp_name)
-    spec.interfaces.append(intf_spec)
-    for transfer in transfer_disp_names:
-        intf_spec.transfers.append(
-            DataTransferSpec(
-                display_name=transfer,
-                show_convergence=show_convergence,
-                show_transfer_values=show_transfer_values,
+    for interface_name, transfer_names in interface_and_transfer_names.items():
+        interface_object = setup.coupling_interface[interface_name]
+        interface_disp_name = interface_object.display_name
+        if not transfer_names:
+            continue
+        intf_spec = InterfaceSpec(interface_name, interface_disp_name)
+        spec.interfaces.append(intf_spec)
+        for trans_name in transfer_names:
+            disp_name = interface_object.data_transfer[trans_name].display_name
+            intf_spec.transfers.append(
+                DataTransferSpec(
+                    name=trans_name,
+                    display_name=disp_name,
+                    show_convergence=show_convergence,
+                    show_transfer_values=show_transfer_values,
+                )
             )
-        )
     spec.plot_time = is_transient
+    return spec
 
-    return create_and_show_plot(spec, [file_path])
+
+def _get_interface_and_transfer_names(
+    session: SessionProtocol, arg_dict: Dict[str, Any]
+) -> dict[str, list]:
+
+    # Argument handling is complicated but necessary to provide flexibility
+    #
+    # We want to make the common situation of a single interface easy to use
+    # but we also want to support multiple interfaces.
+    #
+    # If there is a single interface, and charts are needed on all transfers,
+    # then no arguments are needed. The transfer list can be filtered by
+    # optionally providing 'transfer_names'.
+    #
+    # If there are multiple interfaces, then 'interface_name' can be provided
+    # to select one interface, again with optional 'transfer_names' to filter.
+    #
+    # There are no other situations where it is valid to provide 'interface_name'
+    # and/or 'transfer_names'.
+    #
+    # If there are multiple interfaces, and no filtering is required, no arguments
+    # are needed.
+    #
+    # If there are multiple interfaces, and all transfers are needed on some
+    # interfaces, then 'interface_names' may be provided to select those interfaces.
+    # In this case there is no filtering of transfers.
+    #
+    # For full control, 'interface_and_transfer_names' may be provided to specify
+    # exactly which interfaces and which transfers on those interfaces are needed
+    # in the form of a dictionary mapping interface names to lists of transfer names.
+    # Additionally, the list of transfer names may be None to indicate that all
+    # transfers on that interface are needed.
+
+    interface_name = arg_dict.pop("interface_name", None)
+    interface_names = arg_dict.pop("interface_names", None)
+    transfer_names = arg_dict.pop("transfer_names", None)
+    interface_and_transfer_names = arg_dict.pop("interface_and_transfer_names", None)
+
+    if interface_and_transfer_names is not None:
+        if (
+            interface_name is not None
+            or interface_names is not None
+            or transfer_names is not None
+        ):
+            raise RuntimeError(
+                "'interface_and_transfer_names' cannot be used with "
+                "'interface_name', 'interface_names', or 'transfer_names'."
+            )
+
+    setup = session.setup
+    if interface_names is not None:
+        if interface_name is not None or transfer_names is not None:
+            raise RuntimeError(
+                "'interface_names' cannot be used with "
+                "'interface_name' or 'transfer_names'."
+            )
+        interface_and_transfer_names = {
+            intf_name: None for intf_name in interface_names
+        }
+    else:
+        interface_names = setup.coupling_interface.get_object_names()
+
+    if transfer_names is not None:
+        # There must be a single interface in this case.
+        # Either interface_names has length 1 or interface_name must be specified
+        if len(interface_names) != 1 and interface_name is None:
+            raise RuntimeError(
+                "'transfer_names' cannot be used when there is more than "
+                "one interface and 'interface_name' is not specified."
+            )
+        if interface_name is not None and interface_name not in interface_names:
+            raise RuntimeError(f"Interface '{interface_name}' does not exist.")
+        interface_name = interface_name or interface_names[0]
+        interface_and_transfer_names = {interface_name: transfer_names}
+    elif interface_name is not None:
+        interface_and_transfer_names = {interface_name: None}
+    elif not interface_and_transfer_names:
+        # Nothing specified so just generate a full interface and transfer dict
+        interface_and_transfer_names = {
+            intf_name: None for intf_name in interface_names
+        }
+
+    # At this point we have a dictionary of interface names to either None or a list
+    # of transfer names. We need to validate and fill in any None transfer names.
+    validated_interface_transfer_map = {}
+    for intf_name, trans_names in interface_and_transfer_names.items():
+        if intf_name not in interface_names:
+            raise RuntimeError(f"Interface '{intf_name}' does not exist.")
+        actual_transfer_names = setup.coupling_interface[
+            intf_name
+        ].data_transfer.get_object_names()
+        if trans_names:
+            if unknown_transfers := set(trans_names) - set(actual_transfer_names):
+                raise RuntimeError(
+                    f"Data transfers '{unknown_transfers}' do not exist on "
+                    f"interface '{intf_name}'."
+                )
+            validated_interface_transfer_map[intf_name] = trans_names
+        else:
+            validated_interface_transfer_map[intf_name] = actual_transfer_names
+    return validated_interface_transfer_map
+
+
+def _show_plot(session: SessionProtocol, **kwargs):
+    working_dir = kwargs.pop("working_dir", ".")
+
+    # Take copy of arguments as _get_interface_and_transfer_names
+    # potentially pops items from the dictionary. Note that this
+    # is the desired  behaviour for when we pass it on to
+    # _create_plot_spec later.
+    kw_dict = dict(kwargs)
+    interface_and_transfer_names = _get_interface_and_transfer_names(session, kw_dict)
+    file_paths = []
+    for interface_name in interface_and_transfer_names.keys():
+        file_path = _ensure_file_available(
+            session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+        )
+        file_paths.append(file_path)
+
+    spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
+    return create_and_show_plot_csv(spec, file_paths)
+
+
+def _solve_with_live_plot(
+    session: SessionProtocol, solve_func: Callable[[], None], **kwargs
+):
+    working_dir = kwargs.pop("working_dir", ".")
+    # Take copy as in _show_plot
+    kw_dict = dict(kwargs)
+    interface_and_transfer_names = _get_interface_and_transfer_names(session, kw_dict)
+    file_paths = [
+        os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+        for interface_name in interface_and_transfer_names.keys()
+    ]
+    spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
+    solve_with_live_plot_csv(
+        spec,
+        file_paths,
+        solve_func,
+    )
 
 
 def get_injected_cmd_data() -> list:
@@ -465,6 +596,67 @@ _cmd_yaml = """
     doc: |-
         Shows plots of transfer values and convergence for data transfers
         of a coupling interface.
+
+    essentialArgNames:
+    - interface_name
+    optionalArgNames:
+    - transfer_names
+    - working_dir
+    - show_convergence
+    - show_transfer_values
+    defaults:
+    - None
+    - "."
+    - True
+    - True
+    args:
+    - #!!python/tuple
+        - interface_name
+        -   pyname: interface_name
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Specification of which interface to plot.
+    - #!!python/tuple
+        - transfer_names
+        -   pyname: transfer_names
+            Type: <class 'list'>
+            type: String List
+            doc:  |-
+                Specification of which data transfers to plot. Defaults
+                to ``None``, which means plot all data transfers.
+    - #!!python/tuple
+        - working_dir
+        -   pyname: working_dir
+            Type: <class 'str'>
+            type: String
+            doc:  |-
+                Working directory (defaults = ".").
+    - #!!python/tuple
+        - show_convergence
+        -   pyname: show_convergence
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show convergence plots (defaults to ``True``).
+    - #!!python/tuple
+        - show_transfer_values
+        -   pyname: show_transfer_values
+            Type: <class 'bool'>
+            type: Logical
+            doc:  |-
+                Whether to show transfer value plots (defaults to ``True``).
+-   name: solve_with_plot
+    pyname: solve_with_plot
+    exposure: solution
+    isInjected: true
+    isQuery: false
+    retType: <class 'NoneType'>
+    doc: |-
+        Solves, showing a live plot of transfer values and convergence for data transfers
+        of a coupling interface.
+
+        (This functionality is experimental and incomplete.)
 
     essentialArgNames:
     - interface_name
