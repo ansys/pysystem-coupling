@@ -1,4 +1,4 @@
-# Copyright (C) 2023 - 2026 ANSYS, Inc. and/or its affiliates.
+# Copyright (C) 2023 - 2025 ANSYS, Inc. and/or its affiliates.
 # SPDX-License-Identifier: MIT
 #
 #
@@ -251,42 +251,72 @@ fluid_rho = 998.3  # Density of fluid
 mu_fluid = 0.001  # Dynamic viscosity of fluid
 cp_fluid = 4182  # Specific heat capacity of fluid
 k_fluid = 0.6  # Thermal conductivity of fluid
-k_solid = 1.2  # Thermal conductivity of solid
+k_solid = 237  # Thermal conductivity of solid
 
 
-def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, L_c, n=0.4):
+def compute_thermo_numbers(
+    rho,
+    mu,
+    cp,
+    k_fluid,
+    k_solid,
+    velocity,
+    L_c,
+    n=0.4,
+    mu_wall=None,
+):
     """Compute Reynolds, Nusselt, h, and Biot numbers."""
 
     def reynolds_number(rho, mu, velocity, D_h):
-        """Reynolds number."""
         return (rho * velocity * D_h) / mu
 
-    def nusselt_number(Re, Pr, n):
-        """Dittus–Boelter Nusselt number."""
-        return 0.023 * (Re**0.8) * (Pr**n)
+    def nusselt_dittus_boelter(Re, Pr, n):
+        return 0.023 * Re**0.8 * Pr**n
+
+    def hausen(Re, Pr, mu, mu_w):
+        return 3.66 + (0.068*(Re*Pr*d_in/l))/(1+0.04*(Re*Pr*d_in/l)**0.66)
+        # Forumlation used from Fundamentals of heat and mass transfer 8th editions.
 
     def biot_number(h, L_c, k_solid):
-        """Biot number."""
         return h * L_c / k_solid
 
+    # --- Dimensionless numbers ---
     Pr = (cp * mu) / k_fluid
     Re = reynolds_number(rho, mu, velocity, L_c)
-    Nu = nusselt_number(Re, Pr, n)
+
+    # Default wall viscosity assumption
+    if mu_wall is None:
+        mu_wall = mu
+
+    # --- Correlation selection ---
+    if Re > 6000:
+        Nu = hausen(Re, Pr, mu, mu_wall)
+        correlation = "Hausen"
+    else:
+        Nu = nusselt_dittus_boelter(Re, Pr, n)
+        correlation = "Dittus–Boelter"
+
+    # --- Heat transfer coefficient ---
     h = Nu * k_fluid / L_c
     Bi = biot_number(h, L_c, k_solid)
 
-    return Re, Nu, h, Bi
+    return Re, Nu, h, Bi, correlation
 
-
-Re, Nu, h, Bi = compute_thermo_numbers(
-    fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid, U, L_c
+Re, Nu, h, Bi, corr = compute_thermo_numbers(
+    fluid_rho,
+    mu_fluid,
+    cp_fluid,
+    k_fluid,
+    k_solid,
+    U,
+    L_c,
 )
 
 print("Reynolds Number =", Re)
 print("Nusselt Number =", Nu)
 print("Heat Transfer Coefficient =", h)
 print("Biot Number =", Bi)
-
+print("Correlation Used =", corr)
 # %%
 # Apply stabilization if Biot number exceeds 10.
 if Bi > 10:
