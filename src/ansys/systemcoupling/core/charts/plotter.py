@@ -70,31 +70,45 @@ def _process_timestep_data(
 def _calc_new_ylimits_linear(
     ynew: list[float], old_lim: Optional[tuple[float, float]]
 ) -> tuple[float, float]:
-    resize_tol = 0.02
-    resize_delta = 0.1
+
+    resize_factor = 0.1
+    resize_tol = 0.01
 
     min_y = min(ynew)
     max_y = max(ynew)
 
-    # Try to do something reasonable while we still don't have much data.
-    # Try to account for case where we don't have much data and range & value both zero.
-    data_range = min_y if abs(max_y - min_y) < 1.0e-7 else max_y - min_y
-    data_range = abs(data_range)
-    if data_range < 1.0e-7:
-        delta_limits = 1.0e-7
+    data_range = abs(max_y - min_y)
+    if data_range == 0:
+        # NB: min and max are equal - use the value to define the range
+        if abs(min_y) > 0:
+            delta_limits = abs(min_y) * resize_factor
+        else:
+            # Arbitrary value for now (will need to make sure it doesn't "stick")
+            delta_limits = 1e-7
     else:
-        delta_limits = resize_delta * data_range
+        delta_limits = data_range * resize_factor
 
+    delta_tol = resize_tol * data_range
+    force_tol = 2 * delta_tol + 1
     if old_lim is None:
-        # First update - force calculation
-        old_l = min_y + 1
-        old_u = max_y - 1
+        # Force calculation on first update
+        old_l = min_y + force_tol
+        old_u = max_y - force_tol
     else:
         new_l, new_u = old_l, old_u = old_lim
+        # In the case where we guessed limits for zero data and now have
+        # some non-zero data, need to adjust limits downwards if the actual
+        # data range is significantly smaller than current limits range.
+        old_delta = old_u - old_l
+        if data_range < old_delta * resize_factor:
+            # Force recalculation
+            old_l = min_y + force_tol
+            old_u = max_y - force_tol
 
-    if min_y < old_l + resize_tol * data_range:
+    # Only extend the limits if we are getting close to the old ones
+    if min_y < old_l + delta_tol:
         new_l = min_y - delta_limits
-    if max_y > old_u - resize_tol * data_range:
+    if max_y > old_u - delta_tol:
         new_u = max_y + delta_limits
 
     return new_l, new_u
@@ -201,12 +215,8 @@ class FigurePlotter:
         self._init_plots()
         self._fig.suptitle(f"Interface: {self._metadata.name}", fontsize=10)
 
-    def set_timestep_data(self, timestep_data: TimestepData):
-
-        if timestep_data.timestep and not self._metadata.is_transient:
-            raise RuntimeError("Attempt to set timestep data on non-transient case")
-
-        self._time_indexes, self._times = _process_timestep_data(timestep_data)
+    def set_timestep_data(self, timestep_data: tuple[list[int], list[float]]):
+        self._time_indexes, self._times = timestep_data
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the
@@ -381,8 +391,9 @@ class Plotter:
         if timestep_data.timestep and not self._is_transient:
             raise RuntimeError("Attempt to set timestep data on non-transient case")
 
+        processed_timestep_data = _process_timestep_data(timestep_data)
         for fig in self._figures:
-            fig.set_timestep_data(timestep_data)
+            fig.set_timestep_data(processed_timestep_data)
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the

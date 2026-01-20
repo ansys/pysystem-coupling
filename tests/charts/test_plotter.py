@@ -43,10 +43,19 @@ from ansys.systemcoupling.core.charts.plotter import (
             (0.45, 0.55),
         ),
         ([0.0, 0.0], (-1e-7, 1e-7)),
+        ([0.0, 1e-8], (-1e-9, 1.1e-8)),
         ([0.5, 0.5], (0.45, 0.55)),
         ([-0.1, 10.0], (-1.11, 11.01)),
         ([0.1, 0.5, 0.92], (0.018, 1.002)),
         ([0.0, 1.0], (-0.1, 1.1)),
+        (
+            [0.0, 1.0, 0.9],
+            (-0.1, 1.1),
+        ),
+        (
+            [0.0, 1.0, 0.9],
+            (-0.1, 1.1),
+        ),
     ],
 )
 def test_new_linear_limits_uninitialised(ynew, expected):
@@ -86,7 +95,7 @@ def test_new_linear_limits_uninitialised(ynew, expected):
         (
             (0.0, 0.9),
             [1.0],
-            (0.0, 1.1),
+            (0.9, 1.1),
         ),
     ],
 )
