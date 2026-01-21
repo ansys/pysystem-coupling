@@ -258,7 +258,7 @@ def nusselt_number(Re, Pr, d_in, L):
     # From: Bergman, T. L., Lavine, A. S., Incropera, F. P., & DeWitt, D. P. (2017).
     # Fundamentals of Heat and Mass transfer (8th ed.). Wiley.
     if Re >= 6000:
-        Nu = 0.023 * Re**0.8 * Pr**(1/3)
+        Nu = 0.023 * Re**0.8 * Pr ** (1 / 3)
         method = "Colburn"
     else:
         Nu = 3.66 + (0.068 * (Re * Pr * d_in / L)) / (
@@ -268,23 +268,26 @@ def nusselt_number(Re, Pr, d_in, L):
 
     return Nu, method
 
+
 def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, d_in, L, L_c):
     Pr = cp * mu / k_fluid
     Re = rho * velocity * d_in / mu
 
-    #Nusselt number
-    Nu, correlation= nusselt_number(Re, Pr, d_in, L)
+    # Nusselt number
+    Nu, correlation = nusselt_number(Re, Pr, d_in, L)
 
-    #Convective heat transfer coefficient
-    h= Nu * k_fluid / d_in
+    # Convective heat transfer coefficient
+    h = Nu * k_fluid / d_in
 
-    #Biot number
-    Bi= h * L_c / k_solid
+    # Biot number
+    Bi = h * L_c / k_solid
 
     return Re, Pr, h, Bi, correlation
 
-Re, Nu, h, Bi, corr= compute_thermo_numbers(fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid,
-                                             U, d_in, l, L_c)
+
+Re, Nu, h, Bi, corr = compute_thermo_numbers(
+    fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid, U, d_in, l, L_c
+)
 
 print(f"Reynolds number = {Re}")
 print(f"Nusselt number = {Nu}")
