@@ -116,21 +116,6 @@ jobs:
           username: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Generate API for v231
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v23.1.0
-
-      - name: Generate API for v232
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v23.2.0
-
-      - name: Generate API for v241
-        uses: ./.github/actions/generate-api
-        with:
-          image-tag: v24.1.0
-
       - name: Generate API for v242 (SP5)
         uses: ./.github/actions/generate-api
         with:
@@ -145,6 +130,11 @@ jobs:
         uses: ./.github/actions/generate-api
         with:
           image-tag: v25.2.0-sp03
+
+      - name: Generate API for v261
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: v26.1.0
 
       #- name: Generate API for latest
       #  uses: ./.github/actions/generate-api
@@ -198,24 +188,6 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Unit Test v23.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v23.1.0
-          upload-coverage: false
-
-      - name: Unit Test v23.2.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v23.2.0
-          upload-coverage: false
-
-      - name: Unit Test v24.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.1.0
-          upload-coverage: false
-
       - name: Unit Test v24.2.0 (SP5)
         uses: ./.github/actions/unit-test
         with:
@@ -235,6 +207,14 @@ jobs:
         with:
           image-tag: v25.2.0-sp03
           upload-coverage: true
+        env:
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+
+      - name: Unit Test v26.1.0
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: v26.1.0
+          upload-coverage: false
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
