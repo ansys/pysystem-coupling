@@ -254,72 +254,43 @@ k_fluid = 0.6  # Thermal conductivity of fluid
 k_solid = 237  # Thermal conductivity of solid
 
 
-def compute_thermo_numbers(
-    rho,
-    mu,
-    cp,
-    k_fluid,
-    k_solid,
-    velocity,
-    L_c,
-):
-    """Compute Reynolds, Nusselt, h, and Biot numbers."""
-
-    def reynolds_number(rho, mu, velocity, D_h):
-        return (rho * velocity * D_h) / mu
-
-    def nusselt_dittus_boelter(
-        Re,
-        Pr,
-    ):
-        # Formulation from: # Bergman, T. L., Lavine, A. S.,
-        # Incropera, F. P., & DeWitt, D. P. (2017).
-        # Fundamentals of heat and mass transfer (8th ed.). Wiley.
-        return 0.023 * Re**0.8 * Pr ** (1 / 3)
-
-    def hausen(Re, Pr):
-        return 3.66 + (0.068 * (Re * Pr * d_in / l)) / (
-            1 + 0.04 * (Re * Pr * d_in / l) ** (2 / 3)
-        )
-
-    def biot_number(h, L_c, k_solid):
-        return h * L_c / k_solid
-
-    # --- Dimensionless numbers ---
-    Pr = (cp * mu) / k_fluid
-    Re = reynolds_number(rho, mu, velocity, L_c)
-
-    # --- Correlation selection ---
-    if Re < 6000:
-        Nu = hausen(Re, Pr)
-        correlation = "Hausen"
+def nusselt_number(Re, Pr, d_in, L):
+    # From: Bergman, T. L., Lavine, A. S., Incropera, F. P., & DeWitt, D. P. (2017).
+    # Fundamentals of Heat and Mass transfer (8th ed.). Wiley.
+    if Re >= 6000:
+        Nu = 0.023 * Re**0.8 * Pr**(1/3)
+        method = "Colburn"
     else:
-        Nu = nusselt_dittus_boelter(Re, Pr)
-        correlation = "Dittus–Boelter"
+        Nu = 3.66 + (0.068 * (Re * Pr * d_in / L)) / (
+            1 + 0.04 * (Re * Pr * d_in / L) ** (2 / 3)
+        )
+        method = "Hausen"
 
-    # --- Heat transfer coefficient ---
-    h = Nu * k_fluid / L_c
-    Bi = biot_number(h, L_c, k_solid)
+    return Nu, method
 
-    return Re, Nu, h, Bi, correlation
+def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, d_in, L, L_c):
+    Pr = cp * mu / k_fluid
+    Re = rho * velocity * d_in / mu
 
+    #Nusselt number
+    Nu, correlation= nusselt_number(Re, Pr, d_in, L)
 
-Re, Nu, h, Bi, corr = compute_thermo_numbers(
-    fluid_rho,
-    mu_fluid,
-    cp_fluid,
-    k_fluid,
-    k_solid,
-    U,
-    L_c,
-)
+    #Convective heat transfer coefficient
+    h= Nu * k_fluid / d_in
 
-print(f"Reynolds Number ={Re}")
-print(f"Nusselt Number ={Nu}")
-print(f"Heat Transfer Coefficient={h}")
-print(f"Biot number= {Bi}")
-print(f"Nusselt number correlation used= {corr}")
+    #Biot number
+    Bi= h * L_c / k_solid
 
+    return Re, Pr, h, Bi, correlation
+
+Re, Nu, h, Bi, corr= compute_thermo_numbers(fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid,
+                                             U, d_in, l, L_c)
+
+print(f"Reynolds number = {Re}")
+print(f"Nusselt number = {Nu}")
+print(f"Heat transfer coefficient h = {h} W/(m^2·K)")
+print(f"Biot number = {Bi}")
+print(f"Nusselt correlation used = {corr}")
 # %%
 # Apply stabilization if Biot number exceeds 10.
 if Bi > 10:
