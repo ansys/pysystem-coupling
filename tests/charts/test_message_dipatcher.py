@@ -45,7 +45,7 @@ class Plotter(PlotterProtocol):
         self._record.append(f"metadata: {metadata.name}")
 
     def set_timestep_data(self, timestep_data: TimestepData):
-        self._record.append(f"timestep data: {len(timestep_data.timestep)}")
+        self._record.append(f"timestep data: {len(timestep_data.times)}")
 
     def update_line_series(self, series_data: SeriesData):
         self._record.append(f"series data: {len(series_data.data)}")
@@ -67,9 +67,7 @@ def test_message_dispatcher():
     dispatcher.put_msg(
         Message(
             MsgType.TIMESTEP_DATA,
-            TimestepData(
-                timestep=[1, 1, 1, 2, 2, 2], time=[0.1, 0.1, 0.1, 0.2, 0.2, 0.2]
-            ),
+            TimestepData(last_iterations=[2, 5], times=[0.1, 0.2]),
         )
     )
     dispatcher.put_msg(
@@ -86,7 +84,7 @@ def test_message_dispatcher():
     thread.join()
 
     assert plotter._record[0] == "metadata: interface-1"
-    assert plotter._record[1] == "timestep data: 6"
+    assert plotter._record[1] == "timestep data: 2"
     assert plotter._record[2] == "series data: 2"
     assert plotter._record[3] == "series data: 3"
     assert plotter._record[4] == "series data: 1"

@@ -22,11 +22,9 @@
 
 import pytest
 
-from ansys.systemcoupling.core.charts.chart_datatypes import TimestepData
 from ansys.systemcoupling.core.charts.plotter import (
     _calc_new_ylimits_linear,
     _calc_new_ylimits_log,
-    _process_timestep_data,
     _update_xy_data,
 )
 
@@ -163,18 +161,6 @@ def test_update_xy_no_time():
 
     assert new_data[0] == [1, 2, 3, 4, 5, 6]
     assert new_data[1] == pytest.approx([0.1, 0.2, 0.3, 0.3, 0.4, 0.5])
-
-
-def test_process_timestep_data():
-    iter_step = [1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 6]
-    times = [0.1 * istep for istep in iter_step]
-
-    timestep_data = TimestepData(iter_step, times)
-
-    step_iter, step_time = _process_timestep_data(timestep_data)
-
-    assert step_iter == [2, 5, 7, 10, 12, 13]
-    assert step_time == pytest.approx([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
 
 
 def test_update_xy_time():
