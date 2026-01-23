@@ -93,14 +93,16 @@ def _convert_series_data(proto_series: chart_pb2.SeriesData) -> SeriesData:
 
 def _convert_timestep_data(proto_timestep: chart_pb2.TimestepData) -> TimestepData:
     """Convert protobuf TimestepData to native TimestepData dataclass."""
+    # Provided data has 1-based indexing; convert to 0-based.
+    # TODO: Consider changing at the protobuf level instead.
     return TimestepData(
-        timestep=list(proto_timestep.timestep_to_iteration),
-        time=list(proto_timestep.time_values),
+        last_iterations=[i - 1 for i in proto_timestep.timestep_to_iteration],
+        times=list(proto_timestep.time_values),
     )
 
 
 def _convert_timestep_begin_data(
-    proto_timestep_begin: chart_pb2.TimestepBeginData,
+    proto_timestep_begin: chart_pb2.TimestepStart,
 ) -> TimestepBeginData:
     """Convert protobuf TimestepBeginData to native TimestepBeginData dataclass."""
     return TimestepBeginData(
@@ -110,7 +112,7 @@ def _convert_timestep_begin_data(
 
 
 def _convert_timestep_end_data(
-    proto_timestep_end: chart_pb2.TimestepEndData,
+    proto_timestep_end: chart_pb2.TimestepEnd,
 ) -> TimestepEndData:
     """Convert protobuf TimestepEndData to native TimestepEndData dataclass."""
     return TimestepEndData(
