@@ -24,7 +24,7 @@ import threading
 import time
 from typing import Callable, TextIO, Union
 
-from ansys.systemcoupling.core.charts.chart_datatypes import SeriesData
+from ansys.systemcoupling.core.charts.chart_datatypes import SeriesData, TimestepData
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.message_dispatcher import Message, MsgType
 from ansys.systemcoupling.core.util.logging import LOG
@@ -67,8 +67,7 @@ class LiveCsvDataSource:
                 break
             time.sleep(0.1)
 
-        nstep = 0
-        ntime = 0
+        last_step_iter = -1
         last_round = False
         while True:
             for i_intf, csv_reader in enumerate(self._csv_readers):
@@ -77,13 +76,13 @@ class LiveCsvDataSource:
                     i_intf,
                 )
                 csv_reader.read_new_data()
-                timestep_data = csv_reader.timestep_data
+                timestep_data: TimestepData = csv_reader.timestep_data
                 if (
-                    len(timestep_data.time) > ntime
-                    or len(timestep_data.timestep) > nstep
+                    len(timestep_data.times)
+                    and timestep_data.last_iterations[-1] > last_step_iter
                 ):
-                    nstep = len(timestep_data.timestep)
-                    ntime = len(timestep_data.time)
+                    # Time data has advanced
+                    last_step_iter = timestep_data.last_iterations[-1]
                     self._put_msg(
                         Message(type=MsgType.TIMESTEP_DATA, data=timestep_data)
                     )

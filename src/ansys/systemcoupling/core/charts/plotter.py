@@ -43,30 +43,6 @@ from ansys.systemcoupling.core.util.assertion import assert_
 # from ansys.systemcoupling.core.util.logging import LOG
 
 
-def _process_timestep_data(
-    timestep_data: TimestepData,
-) -> tuple[list[int], list[float]]:
-    if not timestep_data.timestep:
-        return [], []
-
-    # TODO: for a dynamically updating case, it should be possible to do a partial update.
-    time_indexes = [0]
-    times = [None]
-    curr_step = timestep_data.timestep[0]
-    for i, step in enumerate(timestep_data.timestep):
-        time = timestep_data.time[i]
-        if step == curr_step:
-            # Still in the same step, so update
-            times[-1] = time
-            time_indexes[-1] = i
-        else:
-            # New step
-            times.append(time)
-            time_indexes.append(i)
-            curr_step = step
-    return (time_indexes, times)
-
-
 def _calc_new_ylimits_linear(
     ynew: list[float], old_lim: Optional[tuple[float, float]]
 ) -> tuple[float, float]:
@@ -215,8 +191,11 @@ class FigurePlotter:
         self._init_plots()
         self._fig.suptitle(f"Interface: {self._metadata.name}", fontsize=10)
 
-    def set_timestep_data(self, timestep_data: tuple[list[int], list[float]]):
-        self._time_indexes, self._times = timestep_data
+    def set_timestep_data(self, timestep_data: TimestepData):
+        self._time_indexes, self._times = (
+            timestep_data.last_iterations,
+            timestep_data.times,
+        )
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the
@@ -388,12 +367,11 @@ class Plotter:
 
     def set_timestep_data(self, timestep_data: TimestepData):
 
-        if timestep_data.timestep and not self._is_transient:
+        if timestep_data.times and not self._is_transient:
             raise RuntimeError("Attempt to set timestep data on non-transient case")
 
-        processed_timestep_data = _process_timestep_data(timestep_data)
         for fig in self._figures:
-            fig.set_timestep_data(processed_timestep_data)
+            fig.set_timestep_data(timestep_data)
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the

@@ -24,9 +24,14 @@ from io import StringIO
 
 import pytest
 
-from ansys.systemcoupling.core.charts.chart_datatypes import SeriesType
+from ansys.systemcoupling.core.charts.chart_datatypes import (
+    SeriesType,
+)
+from ansys.systemcoupling.core.charts.chart_datatypes import TimestepData  # noqa: F401
 from ansys.systemcoupling.core.charts.csv_chartdata import (
     CsvChartDataReader,
+    RawTimestepData,
+    _process_timestep_data,
     parse_csv_metadata,
 )
 
@@ -232,25 +237,14 @@ def test_timestep(data1):
     # pprint(reader.metadata)
 
     reader.read_new_data()
-    assert reader.timestep_data.timestep == [
+    assert reader.timestep_data.last_iterations == [
         1,
-        1,
-        2,
-        2,
         3,
-        3,
-        4,
-        4,
-    ], f"{reader.timestep_data.timestep}"
+        5,
+        7,
+    ], f"{reader.timestep_data.last_iterations}"
 
-    assert all(
-        abs(
-            reader.timestep_data.time[i]
-            - (0.11, 0.11, 0.2, 0.2, 0.31, 0.31, 0.4, 0.4)[i]
-        )
-        < 1e-7
-        for i in range(8)
-    )
+    assert pytest.approx(reader.timestep_data.times) == [0.11, 0.2, 0.31, 0.4]
 
 
 def test_isnt_transient(data2):
@@ -294,3 +288,15 @@ def test_non_unique_transfer_name(data4):
     reader = CsvChartDataReader("intf4", sio)
     reader.read_metadata()
     assert reader.metadata.transfer_info[0].transfer_display_name == "input"
+
+
+def test_process_timestep_data():
+    iter_step = [1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 6]
+    times = [0.1 * istep for istep in iter_step]
+
+    raw_timestep_data = RawTimestepData(iter_step, times)
+
+    timestep_data: TimestepData = _process_timestep_data(raw_timestep_data)
+
+    assert timestep_data.last_iterations == [2, 5, 7, 10, 12, 13]
+    assert timestep_data.times == pytest.approx([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])

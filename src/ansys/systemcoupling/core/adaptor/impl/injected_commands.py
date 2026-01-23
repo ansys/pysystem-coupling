@@ -50,7 +50,7 @@ from .types import Container
 
 # We cannot import Session directly, so define a protocol for typing.
 # We mainly use it as a means of accessing the "API roots".
-class BaseSessionProtocol(Protocol):
+class SessionProtocol(Protocol):
     case: Container
     setup: Container
     solution: Container
@@ -67,8 +67,7 @@ class BaseSessionProtocol(Protocol):
         overwrite: bool = False,
     ) -> None: ...
 
-
-class SessionProtocol(BaseSessionProtocol, GrpcDataSourceProtocol, Protocol): ...
+    def _grpc(self) -> GrpcDataSourceProtocol: ...
 
 
 def get_injected_cmd_map(
@@ -368,7 +367,7 @@ def _show_plot(session: SessionProtocol, **kwargs):
             file_paths.append(file_path)
     spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
     return (
-        create_and_show_plot_grpc(spec, session)
+        create_and_show_plot_grpc(spec, session._grpc)
         if want_grpc
         else create_and_show_plot_csv(spec, file_paths)
     )
