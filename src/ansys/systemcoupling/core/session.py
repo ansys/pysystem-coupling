@@ -220,7 +220,7 @@ class Session:
 
     @property
     def _grpc(self):
-        """The gRPC connection object, exposed for testing purposes only."""
+        """The gRPC connection object, exposed for internal and testing purposes only."""
         return self.__rpc
 
     def upload_file(

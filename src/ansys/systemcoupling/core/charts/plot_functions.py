@@ -76,11 +76,10 @@ def _create_and_show_impl(
     manager = PlotDefinitionManager(spec, is_csv_source=is_csv_source)
     plotter = Plotter(manager)
 
-    for reader in readers:
+    for ireader, reader in enumerate(readers):
         reader.read_metadata()
         plotter.set_metadata(reader.metadata)
 
-    for ireader, reader in enumerate(readers):
         reader.read_new_data()
         data = reader.data
 
@@ -124,9 +123,7 @@ def create_and_show_plot_grpc(
     active_interfaces = set(intf.name for intf in spec.interfaces)
     if not (
         metadata := [
-            m
-            for m in grpc_source.get_chart_metadata()
-            if m.interface_name in active_interfaces
+            m for m in grpc_source.get_chart_metadata() if m.name in active_interfaces
         ]
     ):
         # This is OK; we just won't have any data to plot.
@@ -151,22 +148,21 @@ def create_and_show_plot_grpc(
         def __init__(
             self,
             metadata: InterfaceInfo,
-            data: SeriesData,
+            data: list[SeriesData],
             timestep_data: TimestepData | None,
         ):
-            self._metadata = metadata
-            self._data = data
+            self._data = InterfaceSeriesData(info=metadata, series=data)
             self._timestep_data = timestep_data
 
         def read_metadata(self) -> bool:
-            return len(self._metadata) > 0
+            return self._data is not None and self._data.info is not None
 
         def read_new_data(self) -> None:
-            return
+            pass
 
         @property
         def metadata(self) -> InterfaceInfo:
-            return self._metadata
+            return self._data.info
 
         @property
         def data(self) -> InterfaceSeriesData:
@@ -176,17 +172,15 @@ def create_and_show_plot_grpc(
         def timestep_data(self) -> TimestepData:
             return self._timestep_data
 
-    for meta in metadata:
-        series = next(
-            (d for d in data if d.interface_name == meta.interface_name), None
-        )
-        readers.append(GrpcChartDataReader(meta, series, timestep_data))
+    for intf_meta in metadata:
+        series = [d for d in data if d.interface_name == intf_meta.name]
+        readers.append(GrpcChartDataReader(intf_meta, series, timestep_data))
     return _create_and_show_impl(spec, readers, is_csv_source=False)
 
 
 def _solve_with_live_plot_impl(
     spec,
-    make_live_data_source: Callable[[str, Callable], LiveDataSource],
+    make_live_data_source: Callable[[list[str], Callable], LiveDataSource],
     solve_func: Callable[[], None],
     is_csv_source: bool = False,
 ):
