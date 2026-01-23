@@ -143,28 +143,27 @@ class InterfaceSeriesData:
 
 @dataclass
 class TimestepData:
-    """Mappings from iteration to time step and time.
+    """Mappings from time step to last iteration of timestep and time.
 
     This is more suited to bulk chart data queries where the complete
     data is available following the simulation. For live plotting, see
     TimestepBeginData and TimestepEndData for incremental updates.
 
-    (Note: live plotting does currently support use of this data structure
-    as well as it works better with live CSV plotting. Only one of the two
-    approaches should be used at a time.)
+    (Note: in the CSV case this data structure is currently also used
+    with live plotting but this needs to be migrated to the other
+    approach. In any case, only one of the two approaches should be used
+    at a time.)
 
     Attributes
     ----------
-    timestep : list[int]
-        Timestep indexes, indexed by iteration. Typically, multiple consecutive
-        iteration indexes map to the same timestep index.
-    time: list[float]
-        Time values, indexed by iteration. Typically, multiple consecutive iteration
-        indexes map to the same time value.
+    last_iterations : list[int]
+        The last iteration index for each (zero-based) time step. Iterations are zero-based.
+    times: list[float]
+        Time values, indexed by (zero-based) time step.
     """
 
-    timestep: list[int] = field(default_factory=list)  # iter -> step index
-    time: list[float] = field(default_factory=list)  # iter -> time
+    last_iterations: list[int] = field(default_factory=list)  # step -> iteration
+    times: list[float] = field(default_factory=list)  # step -> time
 
 
 @dataclass
