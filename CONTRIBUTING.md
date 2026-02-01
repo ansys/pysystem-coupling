@@ -10,5 +10,5 @@ PySystemCoupling.
 <!-- Begin content specific to your library here. -->
 
 Additional information can be found in the
-[PySystemCoupling Contributing]: https://systemcoupling.docs.pyansys.com/version/dev/contributing.html
+[PySystemCoupling Contributing](https://systemcoupling.docs.pyansys.com/version/dev/contributing.html)
 documentation.
