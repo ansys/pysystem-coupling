@@ -197,3 +197,47 @@ def test_update_xy_time():
     assert new_data[1][3] == pytest.approx(5.0)
     assert new_data[1][4] == pytest.approx(5.5)
     assert new_data[1][5] == pytest.approx(6.0)
+
+
+def test_update_xy_time_live_incremental():
+
+    x_curr = []
+    y_curr = []
+
+    new_start_index = 0
+    iter = 0
+
+    n_step = 5
+    n_iter_per_step = 3
+    step_size = 0.025
+
+    step_iter = []
+    times = []
+    all_series_data = []
+
+    for step in range(n_step):
+        step_iter.append(-1)  # Placeholder for live incremental
+        times.append(step_size * (step + 1))
+        for i in range(n_iter_per_step):
+            series_data = [0.1 * (iter + 1)]
+            all_series_data += series_data
+            new_data = _update_xy_data(
+                time_info=(step_iter, times),
+                x_curr=x_curr,
+                y_curr=y_curr,
+                series_data=series_data,
+                new_start_index=new_start_index,
+            )
+
+            x_curr = new_data[0]
+            y_curr = new_data[1]
+            new_start_index += 1
+            iter += 1
+        # Update step_iter to final iteration of this time step
+        # bearing in mind that iter has already been incremented
+        step_iter[-1] = iter - 1
+
+    print(f"step_iter: {step_iter}")
+    print(f"all_series_data: {all_series_data}")
+    assert x_curr == pytest.approx([0.025, 0.05, 0.075, 0.1, 0.125])
+    assert y_curr == pytest.approx([0.3, 0.6, 0.9, 1.2, 1.5])
