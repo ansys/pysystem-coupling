@@ -106,7 +106,7 @@ def _convert_timestep_begin_data(
 ) -> TimestepBeginData:
     """Convert protobuf TimestepBeginData to native TimestepBeginData dataclass."""
     return TimestepBeginData(
-        timestep=proto_timestep_begin.timestep,
+        timestep=proto_timestep_begin.timestep_count,
         time=proto_timestep_begin.time,
     )
 
@@ -116,8 +116,8 @@ def _convert_timestep_end_data(
 ) -> TimestepEndData:
     """Convert protobuf TimestepEndData to native TimestepEndData dataclass."""
     return TimestepEndData(
-        timestep=proto_timestep_end.timestep,
-        time=proto_timestep_end.time,
+        timestep=proto_timestep_end.timestep_count,
+        iteration=proto_timestep_end.iteration - 1,
     )
 
 
@@ -142,12 +142,13 @@ class ChartService:
 
     def __init__(self, channel):
         self.__stub = chart_pb2_grpc.ChartDataStub(channel)
+        self.__chart_stream = None
 
     def _stream_chart_data(self) -> Generator[chart_pb2.ChartDataEvent, None, None]:
         """Streams chart data events from System Coupling."""
         request = chart_pb2.ChartDataRequest()
-        chart_stream = self.__stub.StreamChartData(request)
-        for chart_event in chart_stream:
+        self.__chart_stream = self.__stub.StreamChartData(request)
+        for chart_event in self.__chart_stream:
             yield chart_event
 
     def stream_chart_data(
@@ -161,19 +162,31 @@ class ChartService:
         Note: Only metadata and series_data events are yielded as converted objects.
         Timestep start/end events are handled internally but not yielded.
         """
-        for chart_event in self._stream_chart_data():
-            match chart_event.WhichOneof("event_data"):
-                case "metadata":
-                    # Convert metadata and yield each interface info
-                    interface_infos = _convert_interface_info(chart_event.metadata)
-                    for interface_info in interface_infos:
-                        yield interface_info
-                case "series_data":
-                    yield _convert_series_data(chart_event.series_data)
-                case "timestep_start":
-                    yield _convert_timestep_begin_data(chart_event.timestep_start)
-                case "timestep_end":
-                    yield _convert_timestep_end_data(chart_event.timestep_end)
+        if self.__chart_stream is not None:
+            raise RuntimeError("Chart data stream is already active.")
+
+        try:
+            for chart_event in self._stream_chart_data():
+                match chart_event.WhichOneof("event_data"):
+                    case "metadata":
+                        # Convert metadata and yield each interface info
+                        interface_infos = _convert_interface_info(chart_event.metadata)
+                        for interface_info in interface_infos:
+                            yield interface_info
+                    case "series_data":
+                        yield _convert_series_data(chart_event.series_data)
+                    case "timestep_start":
+                        yield _convert_timestep_begin_data(chart_event.timestep_start)
+                    case "timestep_end":
+                        yield _convert_timestep_end_data(chart_event.timestep_end)
+        finally:
+            self.__chart_stream = None
+
+    def cancel_stream(self) -> None:
+        """Cancels the active chart data stream."""
+        if self.__chart_stream is not None:
+            self.__chart_stream.cancel()
+            self.__chart_stream = None
 
     def get_chart_metadata(self) -> list[InterfaceInfo]:
         """Retrieves the chart metadata for all available series."""
