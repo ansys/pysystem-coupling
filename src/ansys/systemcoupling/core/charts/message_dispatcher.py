@@ -30,6 +30,7 @@ from ansys.systemcoupling.core.charts.chart_datatypes import (
     SeriesData,
     TimestepData,
 )
+from ansys.systemcoupling.core.util.logging import LOG
 
 
 class PlotterProtocol(Protocol):
@@ -62,23 +63,25 @@ class MessageDispatcher:
         self._plotter = plotter
 
     def put_msg(self, msg: Message):
+        LOG.debug("put message of type: %s", msg.type.name)
         self._q.put(msg)
 
     def dispatch_messages(self):
         while True:
             try:
                 msg: Message = self._q.get(timeout=0.001)
-                msg_t = msg.type
-                print(f"dispatch message of type: {msg.type.name}")
-                if msg_t == MsgType.METADATA:
-                    self._plotter.set_metadata(msg.data)
-                elif msg_t == MsgType.TIMESTEP_DATA:
-                    self._plotter.set_timestep_data(msg.data)
-                elif msg_t == MsgType.SERIES_DATA:
-                    self._plotter.update_line_series(msg.data)
-                elif msg_t in (MsgType.END_OF_DATA, MsgType.NO_DATA_AVAILABLE):
-                    return
-                elif msg_t == MsgType.CLOSE_PLOT:
-                    self._plotter.close()
+                LOG.debug("dispatch message of type: %s", msg.type.name)
+                match msg.type:
+                    case MsgType.METADATA:
+                        self._plotter.set_metadata(msg.data)
+                    case MsgType.TIMESTEP_DATA:
+                        self._plotter.set_timestep_data(msg.data)
+                    case MsgType.SERIES_DATA:
+                        LOG.debug("  series data has length: %s", len(msg.data.data))
+                        self._plotter.update_line_series(msg.data)
+                    case MsgType.END_OF_DATA | MsgType.NO_DATA_AVAILABLE:
+                        return
+                    case MsgType.CLOSE_PLOT:
+                        self._plotter.close()
             except queue.Empty:
                 return

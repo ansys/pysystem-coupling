@@ -21,8 +21,13 @@
 # SOFTWARE.
 
 import threading
-from typing import Callable
+from typing import Callable, Protocol
 
+from ansys.systemcoupling.core.charts.chart_datatypes import (
+    InterfaceInfo,
+    InterfaceSeriesData,
+    TimestepData,
+)
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.live_csv_datasource import LiveCsvDataSource
 from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
@@ -33,52 +38,75 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
 from ansys.systemcoupling.core.charts.plotter import Plotter
 
 
-def create_and_show_plot(spec: PlotSpec, csv_list: list[str]) -> Plotter:
-    if len(spec.interfaces) != 1:
-        raise ValueError("Plots currently only support one interface")
-    if len(spec.interfaces) != len(csv_list):
-        raise ValueError(
-            "'csv_list' should have length equal to the number of interfaces"
-        )
+class ChartDataReader(Protocol):
+    def read_metadata(self) -> bool: ...
+    def read_new_data(self) -> None: ...
+    @property
+    def metadata(self) -> InterfaceInfo: ...
+    @property
+    def data(self) -> InterfaceSeriesData: ...
+    @property
+    def timestep_data(self) -> TimestepData: ...
 
-    manager = PlotDefinitionManager(spec)
-    reader = CsvChartDataReader(spec.interfaces[0].name, csv_list[0])
+
+class LiveDataSource(Protocol):
+    def cancel(self) -> None: ...
+    def read_data(self) -> None: ...
+
+
+def _create_and_show_impl(
+    spec: PlotSpec, readers: list[ChartDataReader], is_csv_source: bool = False
+) -> Plotter:
+    manager = PlotDefinitionManager(spec, is_csv_source=is_csv_source)
     plotter = Plotter(manager)
 
-    reader.read_metadata()
-    plotter.set_metadata(reader.metadata)
+    for ireader, reader in enumerate(readers):
+        reader.read_metadata()
+        plotter.set_metadata(reader.metadata)
 
-    reader.read_new_data()
-    data = reader.data
-    if reader.metadata.is_transient:
-        plotter.set_timestep_data(reader.timestep_data)
+        reader.read_new_data()
+        data = reader.data
 
-    for line_series in data.series:
-        plotter.update_line_series(line_series)
+        # Each reader has own timestep data but they should be consistent
+        # so we only use the first one.
+        # This is an artifact of using the CSV files as the data source.
+        # (A streaming data source would only have one timestep data.)
+        if ireader == 0 and reader.metadata.is_transient:
+            plotter.set_timestep_data(reader.timestep_data)
+
+        for line_series in data.series:
+            plotter.update_line_series(line_series)
 
     plotter.show_plot(noblock=True)
     return plotter
 
 
-def solve_with_live_plot(
-    spec: PlotSpec,
-    csv_list: list[str],
-    solve_func: Callable[[], None],
-):
-    if len(spec.interfaces) != 1:
-        raise ValueError("Plots currently only support one interface")
+def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
+    """Create and show a plot based on System Coupling CSV chart data."""
     if len(spec.interfaces) != len(csv_list):
         raise ValueError(
             "'csv_list' should have length equal to the number of interfaces"
         )
+    readers = [
+        CsvChartDataReader(intf.name, csvfile)
+        for intf, csvfile in zip(spec.interfaces, csv_list)
+    ]
+    return _create_and_show_impl(spec, readers, is_csv_source=True)
 
-    manager = PlotDefinitionManager(spec)
+
+def _solve_with_live_plot_impl(
+    spec,
+    make_live_data_source: Callable[[str, Callable], LiveDataSource],
+    solve_func: Callable[[], None],
+    is_csv_source: bool = False,
+):
+    manager = PlotDefinitionManager(spec, is_csv_source=is_csv_source)
     dispatcher = MessageDispatcher()
-    plotter = Plotter(manager, dispatcher.dispatch_messages)
+    plotter = Plotter(manager, request_update=dispatcher.dispatch_messages)
     dispatcher.set_plotter(plotter)
 
-    data_source = LiveCsvDataSource(
-        spec.interfaces[0].name, csv_list[0], dispatcher.put_msg
+    data_source = make_live_data_source(
+        [intf.name for intf in spec.interfaces], dispatcher.put_msg
     )
     data_thread = threading.Thread(target=data_source.read_data)
 
@@ -92,9 +120,29 @@ def solve_with_live_plot(
     solve_thread.start()
 
     plotter.show_animated()
+    solve_thread.join()
     data_source.cancel()
     data_thread.join()
-    solve_thread.join()
+
+
+def solve_with_live_plot_csv(
+    spec: PlotSpec,
+    csv_list: list[str],
+    solve_func: Callable[[], None],
+):
+    if len(spec.interfaces) != len(csv_list):
+        raise ValueError(
+            "'csv_list' should have length equal to the number of interfaces"
+        )
+
+    _solve_with_live_plot_impl(
+        spec,
+        lambda interface_names, put_msg: LiveCsvDataSource(
+            interface_names, csv_list, put_msg
+        ),
+        solve_func,
+        is_csv_source=True,
+    )
 
     # Show a non-blocking static plot
-    return create_and_show_plot(spec, csv_list)
+    return create_and_show_plot_csv(spec, csv_list)

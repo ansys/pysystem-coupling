@@ -72,11 +72,15 @@ def test_message_dispatcher():
             ),
         )
     )
-    dispatcher.put_msg(Message(MsgType.SERIES_DATA, SeriesData(0, data=[0.1, 0.5])))
     dispatcher.put_msg(
-        Message(MsgType.SERIES_DATA, SeriesData(0, data=[0.1, 0.5, 0.8]))
+        Message(MsgType.SERIES_DATA, SeriesData("interface-1", 0, data=[0.1, 0.5]))
     )
-    dispatcher.put_msg(Message(MsgType.SERIES_DATA, SeriesData(0, data=[0.1])))
+    dispatcher.put_msg(
+        Message(MsgType.SERIES_DATA, SeriesData("interface-1", 0, data=[0.1, 0.5, 0.8]))
+    )
+    dispatcher.put_msg(
+        Message(MsgType.SERIES_DATA, SeriesData("interface-1", 0, data=[0.1]))
+    )
     dispatcher.put_msg(Message(MsgType.CLOSE_PLOT))
 
     thread.join()

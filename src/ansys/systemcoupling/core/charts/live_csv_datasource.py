@@ -27,61 +27,101 @@ from typing import Callable, TextIO, Union
 from ansys.systemcoupling.core.charts.chart_datatypes import SeriesData
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
 from ansys.systemcoupling.core.charts.message_dispatcher import Message, MsgType
+from ansys.systemcoupling.core.util.logging import LOG
 
 
 class LiveCsvDataSource:
     def __init__(
         self,
-        interface_name: str,
-        csvfile: Union[str, TextIO],
+        interface_names: list[str],
+        csvfiles: list[Union[str, TextIO]],
         put_msg: Callable[[Message], None],
     ):
-        self._csv_reader = CsvChartDataReader(interface_name, csvfile)
+        self._csv_readers = [
+            CsvChartDataReader(name, csvfile)
+            for name, csvfile in zip(interface_names, csvfiles)
+        ]
         self._put_msg = put_msg
         self._is_cancelled = threading.Event()
-        self._last_data_len = []
+        self._last_data_len: list[list[int]] = [[] for _ in range(len(interface_names))]
+        LOG.debug("LiveCsvDataSource initialized for interfaces: %s", interface_names)
+        LOG.debug(
+            "    _last_data_len initialized with length %s", len(self._last_data_len)
+        )
 
     def cancel(self):
         self._is_cancelled.set()
 
     def read_data(self):
 
+        metadata_read = [False] * len(self._csv_readers)
         while not self._is_cancelled.is_set():
-            if not self._csv_reader.read_metadata():
-                time.sleep(0.5)
-            else:
-                self._put_msg(
-                    Message(type=MsgType.METADATA, data=self._csv_reader.metadata)
-                )
+            for i_series, csv_reader in enumerate(self._csv_readers):
+                if not metadata_read[i_series] and csv_reader.read_metadata():
+                    LOG.debug("Read metadata for interface index: %s", i_series)
+                    self._put_msg(
+                        Message(type=MsgType.METADATA, data=csv_reader.metadata)
+                    )
+                    metadata_read[i_series] = True
+            if all(metadata_read):
                 break
+            time.sleep(0.1)
 
+        nstep = 0
+        ntime = 0
         last_round = False
         while True:
-            self._csv_reader.read_new_data()
-            data = self._csv_reader.data
-            if not self._last_data_len:
-                self._last_data_len = [0] * len(data.series)
-            for i, line_series in enumerate(data.series):
-                start_index = self._last_data_len[i]
-                new_data_len = len(line_series.data)
-
-                if new_data_len - start_index == 0:
-                    continue
-
-                line_series_incr = SeriesData(
-                    line_series.transfer_index,
-                    line_series.component_index,
-                    start_index=start_index,
-                    data=line_series.data[start_index:],
+            for i_intf, csv_reader in enumerate(self._csv_readers):
+                LOG.debug(
+                    "LiveCsvDataSource reading new data for interface index: %s",
+                    i_intf,
                 )
-                self._put_msg(Message(type=MsgType.SERIES_DATA, data=line_series_incr))
-                self._last_data_len[i] = new_data_len
+                csv_reader.read_new_data()
+                timestep_data = csv_reader.timestep_data
+                if (
+                    len(timestep_data.time) > ntime
+                    or len(timestep_data.timestep) > nstep
+                ):
+                    nstep = len(timestep_data.timestep)
+                    ntime = len(timestep_data.time)
+                    self._put_msg(
+                        Message(type=MsgType.TIMESTEP_DATA, data=timestep_data)
+                    )
+                data = csv_reader.data
+                if not self._last_data_len[i_intf]:
+                    self._last_data_len[i_intf] = [0] * len(data.series)
+                for i_series, line_series in enumerate(data.series):
+                    start_index = self._last_data_len[i_intf][i_series]
+                    new_data_len = len(line_series.data)
+
+                    if new_data_len - start_index == 0:
+                        continue
+
+                    LOG.debug(
+                        "  interface %s series %s: sending data from index %s to %s",
+                        i_intf,
+                        i_series,
+                        start_index,
+                        new_data_len,
+                    )
+
+                    line_series_incr = SeriesData(
+                        interface_name=line_series.interface_name,
+                        transfer_index=line_series.transfer_index,
+                        start_index=start_index,
+                        data=line_series.data[start_index:],
+                    )
+                    self._put_msg(
+                        Message(type=MsgType.SERIES_DATA, data=line_series_incr)
+                    )
+                    self._last_data_len[i_intf][i_series] = new_data_len
 
             if last_round:
                 self._put_msg(Message(type=MsgType.END_OF_DATA))
                 break
             elif self._is_cancelled.is_set():
+                LOG.debug("LiveCsvDataSource cancellation detected")
                 # Allow opportunity for any trailing updates to file
                 last_round = True
 
-            time.sleep(0.5)
+            time.sleep(0.5 / len(self._csv_readers))
