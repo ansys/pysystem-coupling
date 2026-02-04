@@ -469,15 +469,6 @@ class SycGrpc(object):
         This method is also used for forwarding certain gRPC service methods.
         """
 
-        # Forward the chart service methods directly
-        if name in (
-            "get_chart_metadata",
-            "get_chart_series_data",
-            "get_chart_timestep_data",
-            "stream_chart_data",
-        ):
-            return getattr(self.__chart_service, name)
-
         def f(**kwargs):
             return self.execute_command(name, **kwargs)
 
@@ -527,3 +518,18 @@ class SycGrpc(object):
 
     def ping(self):
         return self.__process_service.ping()
+
+    def get_chart_metadata(self):
+        return self.__chart_service.get_chart_metadata()
+
+    def get_chart_series_data(self):
+        return self.__chart_service.get_chart_series_data()
+
+    def get_chart_timestep_data(self):
+        return self.__chart_service.get_chart_timestep_data()
+
+    def stream_chart_data(self):
+        return self.__chart_service.stream_chart_data()
+
+    def cancel_stream(self):
+        return self.__chart_service.cancel_stream()
