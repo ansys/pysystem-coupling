@@ -117,7 +117,7 @@ def _convert_timestep_end_data(
     """Convert protobuf TimestepEndData to native TimestepEndData dataclass."""
     return TimestepEndData(
         timestep=proto_timestep_end.timestep_count,
-        iteration=proto_timestep_end.iteration - 1,
+        iteration=proto_timestep_end.iteration_count - 1,
     )
 
 
