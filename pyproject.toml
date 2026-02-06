@@ -17,9 +17,8 @@ maintainers = [
     {name = "PyAnsys developers", email = "pyansys.maintainers@ansys.com"},
 ]
 dependencies = [
-    "ansys-api-systemcoupling>0.2.0",
+    "ansys-api-systemcoupling==0.3.1",
     "ansys-platform-instancemanagement~=1.0",
-    "docker>=7.1.0",
     "grpcio>=1.30.0",
     "grpcio-status>=1.30.0",
     "googleapis-common-protos>=1.50.0",
