@@ -21,16 +21,24 @@
 # SOFTWARE.
 
 import threading
-from typing import Callable, Protocol
+from typing import Callable, Protocol, cast
 
 from ansys.systemcoupling.core.charts.chart_datatypes import (
     InterfaceInfo,
     InterfaceSeriesData,
+    SeriesData,
     TimestepData,
 )
 from ansys.systemcoupling.core.charts.csv_chartdata import CsvChartDataReader
+from ansys.systemcoupling.core.charts.grpc_chartdata import (
+    GrpcDataSourceProtocol,
+    LiveGrpcDataSource,
+)
 from ansys.systemcoupling.core.charts.live_csv_datasource import LiveCsvDataSource
-from ansys.systemcoupling.core.charts.message_dispatcher import MessageDispatcher
+from ansys.systemcoupling.core.charts.message_dispatcher import (
+    Message,
+    MessageDispatcher,
+)
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     PlotDefinitionManager,
     PlotSpec,
@@ -94,9 +102,77 @@ def create_and_show_plot_csv(spec: PlotSpec, csv_list: list[str]) -> Plotter:
     return _create_and_show_impl(spec, readers, is_csv_source=True)
 
 
+def create_and_show_plot_grpc(
+    spec: PlotSpec, grpc_source: GrpcDataSourceProtocol
+) -> Plotter:
+    """Create and show a plot based on System Coupling gRPC chart data."""
+
+    # We need to implement the ChartDataReader protocol for the gRPC source.
+    # _create_and_show_impl expects a list of readers, one per interface,
+    # whereas the gRPC source provides a single source for all interfaces.
+
+    # Need to filter all data to the interfaces in the spec
+    active_interfaces = set(intf.name for intf in spec.interfaces)
+    if not (
+        metadata := [
+            m for m in grpc_source.get_chart_metadata() if m.name in active_interfaces
+        ]
+    ):
+        # This is OK; we just won't have any data to plot.
+        return
+
+    data = [
+        d
+        for d in grpc_source.get_chart_series_data()
+        if d.interface_name in active_interfaces
+    ]
+
+    timestep_data = (
+        grpc_source.get_chart_timestep_data()
+        if metadata and metadata[0].is_transient
+        else None
+    )
+
+    # Adapt to ChartDataReader protocol
+    readers = []
+
+    class GrpcChartDataReader:
+        def __init__(
+            self,
+            metadata: InterfaceInfo,
+            data: list[SeriesData],
+            timestep_data: TimestepData | None,
+        ):
+            self._data = InterfaceSeriesData(info=metadata, series=data)
+            self._timestep_data = timestep_data
+
+        def read_metadata(self) -> bool:
+            return self._data is not None and self._data.info is not None
+
+        def read_new_data(self) -> None:
+            pass
+
+        @property
+        def metadata(self) -> InterfaceInfo:
+            return self._data.info
+
+        @property
+        def data(self) -> InterfaceSeriesData:
+            return self._data
+
+        @property
+        def timestep_data(self) -> TimestepData:
+            return self._timestep_data
+
+    for intf_meta in metadata:
+        series = [d for d in data if d.interface_name == intf_meta.name]
+        readers.append(GrpcChartDataReader(intf_meta, series, timestep_data))
+    return _create_and_show_impl(spec, readers, is_csv_source=False)
+
+
 def _solve_with_live_plot_impl(
     spec,
-    make_live_data_source: Callable[[str, Callable], LiveDataSource],
+    make_live_data_source: Callable[[list[str], Callable], LiveDataSource],
     solve_func: Callable[[], None],
     is_csv_source: bool = False,
 ):
@@ -108,11 +184,27 @@ def _solve_with_live_plot_impl(
     data_source = make_live_data_source(
         [intf.name for intf in spec.interfaces], dispatcher.put_msg
     )
-    data_thread = threading.Thread(target=data_source.read_data)
+
+    def read_data():
+        try:
+            data_source.read_data()
+        except Exception as e:
+            import traceback
+
+            traceback.print_exc()
+            print(f"Exception in live data source thread: {e}")
+
+    data_thread = threading.Thread(target=read_data)
 
     def solve():
-        solve_func()
-        data_source.cancel()
+        try:
+            solve_func()
+            data_source.cancel()
+        except Exception as e:
+            import traceback
+
+            traceback.print_exc()
+            print(f"Exception in solve thread: {e}")
 
     solve_thread = threading.Thread(target=solve)
 
@@ -146,3 +238,33 @@ def solve_with_live_plot_csv(
 
     # Show a non-blocking static plot
     return create_and_show_plot_csv(spec, csv_list)
+
+
+def solve_with_live_plot_grpc(
+    spec: PlotSpec,
+    grpc_source: GrpcDataSourceProtocol,
+    solve_func: Callable[[], None],
+):
+
+    def make_grpc_live_data_source(
+        interface_names: list[str],
+        put_msg: Callable[[Message], None],
+    ) -> LiveDataSource:
+        return cast(
+            LiveDataSource,
+            LiveGrpcDataSource(
+                interface_names,
+                grpc_source,
+                put_msg,
+            ),
+        )
+
+    _solve_with_live_plot_impl(
+        spec,
+        make_grpc_live_data_source,
+        solve_func,
+        is_csv_source=False,
+    )
+
+    # Show a non-blocking static plot
+    return create_and_show_plot_grpc(spec, grpc_source)
