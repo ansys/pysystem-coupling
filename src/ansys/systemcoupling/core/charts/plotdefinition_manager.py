@@ -27,9 +27,6 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 
 @dataclass
 class DataTransferSpec:
-    # It's not ideal, but we have to work in terms of display names for transfers,
-    # as that is all we have in the data (the CSV data, at least).
-    # TODO: add optional internal name field which we will use if provided.
     name: str
     display_name: str
     show_convergence: bool = True
