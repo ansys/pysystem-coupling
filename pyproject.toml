@@ -79,7 +79,7 @@ doc = [
 	#   TODO: try removing sometime - perhaps on next update
 	#         of ansys-fluent-core
 	"ansys-units==0.10.1", 
-	"ansys-mapdl-core==0.71.3",
+	"ansys-mapdl-core==0.72.0",
 ]
 style = [
 	# NB: ensure these remain synced with .pre-commit-config.yaml
