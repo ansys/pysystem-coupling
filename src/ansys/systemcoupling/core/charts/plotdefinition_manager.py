@@ -27,9 +27,6 @@ from ansys.systemcoupling.core.charts.chart_datatypes import InterfaceInfo, Seri
 
 @dataclass
 class DataTransferSpec:
-    # It's not ideal, but we have to work in terms of display names for transfers,
-    # as that is all we have in the data (the CSV data, at least).
-    # TODO: add optional internal name field which we will use if provided.
     name: str
     display_name: str
     show_convergence: bool = True
@@ -218,8 +215,14 @@ class SubplotManager:
         # the active ones. However, some additional work has to be done to filter the
         # transfers shown on the convergence subplot and we have to go back to the plot
         # spec to get a list of active transfers.
+
+        # A complication is that CSV data does not have internal transfer names, so we
+        # have to work in terms of possibly not unique display names in that case. In
+        # the gRPC case we can use internal names.
+
         if self._intf_spec.name == metadata.name:
-            active_transfers = [
+            active_trans_int_names = [trans.name for trans in self._intf_spec.transfers]
+            active_trans_disp_names = [
                 trans.display_name for trans in self._intf_spec.transfers
             ]
         else:
@@ -232,27 +235,34 @@ class SubplotManager:
 
         # Keep a running count of the transfer value lines associated with a given
         # transfer. There will be multiple if the transfer variable has vector
-        # and or real/imag components. Note that a transfer is uniquely identified by a
-        # pair (transfer_name, int) because transfer names are not guaranteed to be unique.
-        # The integer is the "disambiguation_index" the transfer's TransferSeriesInfo.
+        # and or real/imag components. A transfer is uniquely identified by the
+        # 'transfer_key' below (special steps have been taken in the CSV case to
+        # ensure this is unique).
         transfer_value_line_count: dict[tuple[str, int], int] = {}
 
         for data_index, transfer in enumerate(metadata.transfer_info):
             transfer_key = transfer.transfer_id
             if transfer.series_type == SeriesType.CONVERGENCE:
-                if transfer.transfer_display_name not in active_transfers:
+                if (
+                    self._is_csv_source
+                    and (transfer.transfer_display_name not in active_trans_disp_names)
+                ) or (
+                    not self._is_csv_source
+                    and (transfer.transfer_id not in active_trans_int_names)
+                ):
                     # We don't want this transfer on the convergence plot
                     continue
                 if self._conv_subplot is None:
                     # This will be the case if the plot spec had `show_convergence=False`
                     continue
 
-                # Clear the entry in case transfer names are not unique. (If another transfer
-                # with the same name needs plotting, then it should appear as a second entry
-                # in active_transfers.)
-                active_transfers[
-                    active_transfers.index(transfer.transfer_display_name)
-                ] = ""
+                if self._is_csv_source:
+                    # Clear entry in case transfer names are not unique. (If another transfer
+                    # with the same name needs plotting, then it should appear as a second entry
+                    # in active_transfer_display_names.)
+                    active_trans_disp_names[
+                        active_trans_disp_names.index(transfer.transfer_display_name)
+                    ] = ""
 
                 data_index_map[data_index] = (self._conv_subplot, iconv)
                 # Add a new series list to y_data, and label to series_labels

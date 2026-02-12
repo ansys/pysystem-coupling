@@ -29,8 +29,11 @@ from typing import Any, Callable, Dict, Optional, Protocol
 import ansys.platform.instancemanagement as pypim
 
 from ansys.systemcoupling.core.charts.plot_functions import (
+    GrpcDataSourceProtocol,
     create_and_show_plot_csv,
+    create_and_show_plot_grpc,
     solve_with_live_plot_csv,
+    solve_with_live_plot_grpc,
 )
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     DataTransferSpec,
@@ -40,6 +43,7 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
+from ansys.systemcoupling.core.syc_version import compare_versions
 from ansys.systemcoupling.core.util.yaml_helper import yaml_load_from_string
 
 from .get_status_messages import get_status_messages
@@ -65,9 +69,12 @@ class SessionProtocol(Protocol):
         overwrite: bool = False,
     ) -> None: ...
 
+    def _grpc(self) -> GrpcDataSourceProtocol: ...
+
 
 def get_injected_cmd_map(
     category: str,
+    version: str,
     session: SessionProtocol,
     part_mgr: ParticipantManager,
     rpc,
@@ -107,12 +114,13 @@ def get_injected_cmd_map(
             ),
             "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
                 session,
+                version,
                 lambda: _wrap_solve(get_solution_root_object(), part_mgr),
                 **kwargs,
             ),
             "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
             "abort": lambda **kwargs: rpc.abort(**kwargs),
-            "show_plot": lambda **kwargs: _show_plot(session, **kwargs),
+            "show_plot": lambda **kwargs: _show_plot(session, version, **kwargs),
         }
 
     if category == "case":
@@ -344,7 +352,11 @@ def _get_interface_and_transfer_names(
     return validated_interface_transfer_map
 
 
-def _show_plot(session: SessionProtocol, **kwargs):
+def _is_grpc_plotting_supported(version: str) -> bool:
+    return compare_versions(version, "27_1") >= 0
+
+
+def _show_plot(session: SessionProtocol, version: str, **kwargs):
     working_dir = kwargs.pop("working_dir", ".")
 
     # Take copy of arguments as _get_interface_and_transfer_names
@@ -352,35 +364,55 @@ def _show_plot(session: SessionProtocol, **kwargs):
     # is the desired  behaviour for when we pass it on to
     # _create_plot_spec later.
     kw_dict = dict(kwargs)
+
+    # NB: 'use_csv_data' will be undocumented for now
+    want_grpc = _is_grpc_plotting_supported(version) and not kw_dict.pop(
+        "use_csv_data", False
+    )
     interface_and_transfer_names = _get_interface_and_transfer_names(session, kw_dict)
     file_paths = []
-    for interface_name in interface_and_transfer_names.keys():
-        file_path = _ensure_file_available(
-            session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
-        )
-        file_paths.append(file_path)
-
+    if not want_grpc:
+        for interface_name in interface_and_transfer_names.keys():
+            file_path = _ensure_file_available(
+                session, os.path.join(working_dir, "SyC", f"{interface_name}.csv")
+            )
+            file_paths.append(file_path)
     spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
-    return create_and_show_plot_csv(spec, file_paths)
+    return (
+        create_and_show_plot_grpc(spec, session._grpc)
+        if want_grpc
+        else create_and_show_plot_csv(spec, file_paths)
+    )
 
 
 def _solve_with_live_plot(
-    session: SessionProtocol, solve_func: Callable[[], None], **kwargs
+    session: SessionProtocol, version: str, solve_func: Callable[[], None], **kwargs
 ):
     working_dir = kwargs.pop("working_dir", ".")
     # Take copy as in _show_plot
     kw_dict = dict(kwargs)
+    want_grpc = _is_grpc_plotting_supported(version) and not kw_dict.pop(
+        "use_csv_data", False
+    )
     interface_and_transfer_names = _get_interface_and_transfer_names(session, kw_dict)
     file_paths = [
         os.path.join(working_dir, "SyC", f"{interface_name}.csv")
         for interface_name in interface_and_transfer_names.keys()
     ]
     spec = _create_plot_spec(session, interface_and_transfer_names, **kw_dict)
-    solve_with_live_plot_csv(
-        spec,
-        file_paths,
-        solve_func,
-    )
+
+    if want_grpc:
+        return solve_with_live_plot_grpc(
+            spec,
+            session._grpc,
+            solve_func,
+        )
+    else:
+        return solve_with_live_plot_csv(
+            spec,
+            file_paths,
+            solve_func,
+        )
 
 
 def get_injected_cmd_data() -> list:
