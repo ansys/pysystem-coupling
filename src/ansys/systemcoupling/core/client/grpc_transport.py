@@ -88,7 +88,7 @@ class ConnectionType(Enum):
 class _TransportMode(str, Enum):
     """Enum containing the different modes of connection."""
 
-    (INSECURE, UDS, MTLS, WNUA) = ("insecure", "uds", "mtls", "wnua")
+    INSECURE, UDS, MTLS, WNUA = ("insecure", "uds", "mtls", "wnua")
 
 
 class StartupArgumentCategory(Enum):

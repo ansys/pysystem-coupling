@@ -53,6 +53,7 @@ air are simulated for a few oscillations to allow an examination of the
 motion of the plate as it is damped.
 
 """
+
 # %%
 # Import modules, download files, launch products
 # -----------------------------------------------
