@@ -53,6 +53,7 @@ allow an examination of the motion of the beam as it starts vibrating due to
 vortices shedded by the rigid cylinder.
 
 """
+
 # %%
 # Import modules, download files, launch products
 # -----------------------------------------------
