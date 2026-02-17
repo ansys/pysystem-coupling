@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 import os
+from pathlib import Path
 
 # from pathlib import Path # only used in patch decorators, not directly in this module
 # from unittest.mock import Mock # not used directly
@@ -45,10 +46,8 @@ class TestPathToSystemCoupling:
 
         result = path_to_system_coupling(None)
 
-        # Use os.path.normpath for cross-platform compatibility
-        expected = os.path.normpath(
-            os.path.join("/opt/ansys/sysc", "bin", _SCRIPT_NAME)
-        )
+        # Use pathlib.Path for cross-platform compatibility
+        expected = str(Path("/opt/ansys/sysc") / "bin" / _SCRIPT_NAME)
         assert result == expected
         # Verify that is_file was called
         mock_is_file.assert_called()
@@ -68,9 +67,7 @@ class TestPathToSystemCoupling:
             ):
                 result = path_to_system_coupling(None)
 
-        expected = os.path.normpath(
-            os.path.join("/opt/ansys/sysc", "bin", "systemcoupling.bat")
-        )
+        expected = str(Path("/opt/ansys/sysc") / "bin" / "systemcoupling.bat")
         assert result == expected
 
     @patch("pathlib.Path.is_file")
@@ -81,8 +78,8 @@ class TestPathToSystemCoupling:
 
         result = path_to_system_coupling(None)
 
-        expected = os.path.normpath(
-            os.path.join("/opt/ansys/v252", "SystemCoupling", "bin", _SCRIPT_NAME)
+        expected = str(
+            Path("/opt/ansys/v252") / "SystemCoupling" / "bin" / _SCRIPT_NAME
         )
         assert result == expected
 
@@ -94,8 +91,8 @@ class TestPathToSystemCoupling:
 
         result = path_to_system_coupling("25.2")
 
-        expected = os.path.normpath(
-            os.path.join("/opt/ansys/v252", "SystemCoupling", "bin", _SCRIPT_NAME)
+        expected = str(
+            Path("/opt/ansys/v252") / "SystemCoupling" / "bin" / _SCRIPT_NAME
         )
         assert result == expected
 
@@ -113,10 +110,10 @@ class TestPathToSystemCoupling:
         result = path_to_system_coupling(None)
 
         # Normalize path separators and use Windows-style paths
-        expected = os.path.normpath(
-            os.path.join("C:/opt/ansys/v271", "SystemCoupling", "bin", _SCRIPT_NAME)
+        expected = str(
+            Path("C:/opt/ansys/v271") / "SystemCoupling" / "bin" / _SCRIPT_NAME
         )
-        actual = os.path.normpath(result)
+        actual = str(Path(result))
         assert actual == expected
 
     @patch.dict(os.environ, {}, clear=True)
@@ -145,8 +142,8 @@ class TestPathToSystemCoupling:
         # This should not raise an error since v251 is consistent with 25.1
         result = path_to_system_coupling("25.1")
 
-        expected = os.path.normpath(
-            os.path.join("/opt/ansys/v251", "SystemCoupling", "bin", _SCRIPT_NAME)
+        expected = str(
+            Path("/opt/ansys/v251") / "SystemCoupling" / "bin" / _SCRIPT_NAME
         )
         assert result == expected
 
@@ -189,8 +186,8 @@ class TestPathToSystemCoupling:
 
         result = path_to_system_coupling("24.2")
 
-        expected = os.path.normpath(
-            os.path.join("/opt/ansys/v242", "SystemCoupling", "bin", _SCRIPT_NAME)
+        expected = str(
+            Path("/opt/ansys/v242") / "SystemCoupling" / "bin" / _SCRIPT_NAME
         )
         assert result == expected
 
@@ -218,10 +215,10 @@ class TestPathToSystemCoupling:
         result = path_to_system_coupling(None)
 
         # Should find v252 (higher version) as it's checked first
-        expected = os.path.normpath(
-            os.path.join("C:/opt/ansys/v252", "SystemCoupling", "bin", _SCRIPT_NAME)
+        expected = str(
+            Path("C:/opt/ansys/v252") / "SystemCoupling" / "bin" / _SCRIPT_NAME
         )
-        actual = os.path.normpath(result)
+        actual = str(Path(result))
         assert actual == expected
 
     def test_normalize_version_integration(self):
@@ -239,9 +236,10 @@ class TestPathToSystemCoupling:
                     os.environ, {"AWP_ROOT252": "/opt/ansys/v252"}, clear=True
                 ):
                     result = path_to_system_coupling(input_version)
-                    expected = os.path.normpath(
-                        os.path.join(
-                            "/opt/ansys/v252", "SystemCoupling", "bin", _SCRIPT_NAME
-                        )
+                    expected = str(
+                        Path("/opt/ansys/v252")
+                        / "SystemCoupling"
+                        / "bin"
+                        / _SCRIPT_NAME
                     )
                     assert result == expected
