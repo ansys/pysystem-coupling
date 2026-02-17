@@ -30,6 +30,7 @@ from uuid import uuid4
 
 import grpc
 
+from ansys.systemcoupling.core.client.syc_launch_script import path_to_system_coupling
 from ansys.systemcoupling.core.syc_version import (
     SYC_VERSION_CONCAT,
     normalize_version,
@@ -37,14 +38,6 @@ from ansys.systemcoupling.core.syc_version import (
 from ansys.systemcoupling.core.util.logging import LOG
 
 _IS_WINDOWS = os.name == "nt"
-
-_CURR_VER = SYC_VERSION_CONCAT
-_INSTALL_ROOT_ENV = "AWP_ROOT"
-_INSTALL_ROOT_VER_ENV = _INSTALL_ROOT_ENV + _CURR_VER
-_SC_ROOT_ENV = "SYSC_ROOT"
-
-_SCRIPT_EXT = ".bat" if _IS_WINDOWS else ""
-_SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 
 _version_re = re.compile(r"\bv[0-9][0-9][0-9]\b")
 
@@ -126,7 +119,7 @@ class StartupAndConnectionInfo:
 
         self._exe_path = None
         if launching:
-            self._exe_path = _path_to_system_coupling(version)
+            self._exe_path = path_to_system_coupling(version)
 
             if version:
                 version_str = version
@@ -406,44 +399,6 @@ class StartupAndConnectionInfo:
         if self._options.port is None:
             self._options.port = _find_port()
         return self._options.port
-
-
-def _path_to_system_coupling(version):  # pragma: no cover
-    if version is not None:
-        if os.environ.get(_SC_ROOT_ENV, None) or os.environ.get(
-            _INSTALL_ROOT_ENV, None
-        ):
-            LOG.warning(
-                f"An explicit version, {version}, has been specified for "
-                "launching System Coupling, while at least one of the "
-                f"environment variables {_SC_ROOT_ENV} and {_INSTALL_ROOT_ENV} "
-                "is set. Only the environment variable will be used to locate "
-                "System Coupling but the version string might still be used "
-                "to determine certain version-dependent behavior."
-            )
-
-    scroot = os.environ.get(_SC_ROOT_ENV, None)
-
-    if not scroot:
-        scroot = os.environ.get(_INSTALL_ROOT_ENV, None)
-        if scroot is None:
-            if version is None:
-                scroot = os.environ.get(_INSTALL_ROOT_VER_ENV, None)
-            else:
-                ver_maj, ver_min = normalize_version(version)
-                scroot = os.environ.get(f"{_INSTALL_ROOT_ENV}{ver_maj}{ver_min}", None)
-        if scroot:
-            scroot = os.path.join(scroot, "SystemCoupling")
-
-    if scroot is None:
-        raise RuntimeError("Failed to locate System Coupling from environment.")
-
-    script_path = os.path.join(scroot, "bin", _SCRIPT_NAME)
-
-    if not os.path.isfile(script_path):
-        raise RuntimeError(f"System Coupling script does not exist at {script_path}.")
-
-    return script_path
 
 
 def _grpc_argument_category(version: tuple[int, int]) -> StartupArgumentCategory:

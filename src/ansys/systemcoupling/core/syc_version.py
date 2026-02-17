@@ -20,6 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from enum import Enum
 from typing import Tuple
 
 # Define constants relating to the default/current version of System Coupling
@@ -45,7 +46,7 @@ def normalize_version(version: str) -> Tuple[int, int]:
     Parameters
     ----------
     version : str
-        Version string in one of the three formats, "23.1", "23_1", or "231".
+        Version string in one of the formats, "23.1", "23_1", "v231" or "231".
         Given any of these example strings, the return value would be (23, 1).
     """
 
@@ -105,3 +106,61 @@ def compare_versions(version_a: str, version_b: str) -> int:
         return va_min - vb_min
     else:
         return va_maj - vb_maj
+
+
+class SycVersion(Enum):
+    """An enumeration over supported System Coupling versions.
+
+    Examples
+    --------
+    SycVersion("25.2") == SycVersion.v252
+
+    SycVersion.v252.number == 252
+
+    SycVersion.v252.awp_var == 'AWP_ROOT252'
+    """
+
+    v271 = "27.1"
+    v261 = "26.1"
+    v252 = "25.2"
+    v251 = "25.1"
+    v242 = "24.2"
+
+    @classmethod
+    def minimum_supported(cls):
+        """Return the version member of the minimum supported version.
+
+        Returns
+        -------
+        SycVersion
+            SycVersion member corresponding to the minimum supported version.
+        """
+        return next(reversed(cls))
+
+    @property
+    def awp_var(self) -> str:
+        """Get the System Coupling version in AWP environment variable format."""
+        return f"AWP_ROOT{self.number}"
+
+    @property
+    def number(self) -> int:
+        """Get the System Coupling version as a plain integer."""
+        return int(self.value.replace(".", ""))
+
+    # Alternative string forms. The default 'value' member provides
+    # the dot-separated version, but sometimes other forms are needed.
+
+    @property
+    def v_string(self) -> str:
+        """Get the System Coupling version as a 'vNNN' string."""
+        return f"v{self.number}"
+
+    @property
+    def uscore_string(self) -> str:
+        """Get the System Coupling version in 'NN_N' format."""
+        return self.value.replace(".", "_")
+
+    @property
+    def major_minor_tuple(self) -> Tuple[int, int]:
+        """Get the System Coupling version as a (major, minor) tuple."""
+        return normalize_version(self.value)
