@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 from enum import Enum
+from typing import Tuple
 
 # Define constants relating to the default/current version of System Coupling
 
@@ -32,7 +33,7 @@ SYC_VERSION_DOT = f"{SYC_MAJOR_VERSION}.{SYC_MINOR_VERSION}"
 SYC_VERSION_UNDERSCORE = f"{SYC_MAJOR_VERSION}_{SYC_MINOR_VERSION}"
 
 
-def normalize_version(version: str) -> tuple[int, int]:
+def normalize_version(version: str) -> Tuple[int, int]:
     """Utility to convert a version string provided in a number of
     possible formats into pair of ints representing the major and minor version
     numbers.
