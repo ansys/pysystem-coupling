@@ -73,12 +73,15 @@ in this order:
 
 * ``SYSC_ROOT``
 * ``AWP_ROOT``
-* ``AWP_ROOT252``
+* ``AWP_ROOT<NNN>``
 
-If a variable is set but does not refer to a valid installation, PySystemCoupling
+where ``<NNN>`` is a version number, such as 252 for Ansys 25 R2.
+
+If ``SYSC_ROOT`` or ``AWP_ROOT`` is set but does not refer to a valid installation, PySystemCoupling
 fails at that point, rather than attempting to use the next variable.
 
-In a standard user installation, the expectation is that only ``AWP_ROOT252`` is set.
+In a standard user installation, the expectation is that only ``AWP_ROOT<NNN>`` is set. If multiple
+such variables are set, the one with the highest recognized version number is used.
 
 (It is also possible to provide a different version number as an argument to the ``launch()``
 function. This will affect which ``AWP_ROOT<version>`` environment variable is examined.)

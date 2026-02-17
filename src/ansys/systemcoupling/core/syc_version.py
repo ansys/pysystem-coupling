@@ -113,7 +113,7 @@ class SycVersion(Enum):
 
     Examples
     --------
-    SycVersion("25.2.0") == SycVersion.v252
+    SycVersion("25.2") == SycVersion.v252
 
     SycVersion.v252.number == 252
 
