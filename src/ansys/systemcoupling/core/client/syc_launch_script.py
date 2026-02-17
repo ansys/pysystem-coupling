@@ -41,14 +41,16 @@ _SCRIPT_NAME = "systemcoupling" + _SCRIPT_EXT
 _version_re = re.compile(r"\bv[0-9][0-9][0-9]\b")
 
 
-def path_to_system_coupling(version: str | None = None):
+def path_to_system_coupling(version: str | None = None) -> str:
     """Find the path to the System Coupling launch script.
 
     Parameters
     ----------
     version : str, optional
-        Specific version string to locate. If None, uses environment variables
-        or default version.
+        Specific version string to locate. If None, System Coupling is located
+        from the environment: first via ``SYSC_ROOT`` if set, otherwise by
+        scanning ``AWP_ROOT*`` variables for the latest installed version. If no
+        installation can be found, a ``RuntimeError`` is raised.
 
     Returns
     -------
@@ -70,7 +72,7 @@ def path_to_system_coupling(version: str | None = None):
                     if normalize_version(implied_version) != normalize_version(version):
                         raise RuntimeError(
                             f"The specified version string '{version}' is "
-                            "is inconsistent with the version implied by the "
+                            "inconsistent with the version implied by the "
                             f"environment variable '{_INSTALL_ROOT_ENV}'. "
                             "To avoid ambiguity, unset the variable or do not "
                             "provide the version, or adjust one or both to "

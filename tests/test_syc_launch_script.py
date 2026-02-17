@@ -22,9 +22,6 @@
 
 import os
 from pathlib import Path
-
-# from pathlib import Path # only used in patch decorators, not directly in this module
-# from unittest.mock import Mock # not used directly
 from unittest.mock import patch
 
 import pytest
@@ -152,7 +149,7 @@ class TestPathToSystemCoupling:
         """Test version consistency check failure."""
         # Should raise error since v252 is inconsistent with requested 25.1
         with pytest.raises(
-            RuntimeError, match="The specified version string '25.1' is is inconsistent"
+            RuntimeError, match="The specified version string '25.1' is inconsistent"
         ):
             path_to_system_coupling("25.1")
 
