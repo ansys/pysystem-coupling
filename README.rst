@@ -68,23 +68,25 @@ Usage
 It is assumed that an Ansys installation is available and that this installation
 includes System Coupling and the participant products needed for the coupled analysis.
 
-The System Coupling installation is found by examining the following environment variables
-in this order:
+For most users, the default behavior of PySystemCoupling is to automatically locate
+System Coupling from a standard Ansys installation by examining the environment. If
+multiple Ansys installations are present, the latest release is used. If you want to
+use an earlier installed release, you can specify the version as an argument to the
+``launch()`` function. See the API documentation for more information.
 
-* ``SYSC_ROOT``
-* ``AWP_ROOT``
-* ``AWP_ROOT<NNN>``
+For more specialized use cases, the above behavior can be overridden by setting
+certain environment variables. The System Coupling installation is found
+by examining the following environment variables in this order:
 
-where ``<NNN>`` is a version number, such as 252 for Ansys 25 R2.
+* ``SYSC_ROOT`` - this is assumed to point directly to a root System Coupling folder.
+* ``AWP_ROOT`` - this is assumed to point to a root Ansys folder, under which a ``SystemCoupling`` folder is present.
+* ``AWP_ROOT<NNN>`` - these are standard environment variables that are automatically
+set by Ansys installations, where ``<NNN>`` is a version number, such as 252 for
+Ansys 25 R2. As noted above, if multiple such variables are set, the one with the
+highest recognized version number is used.
 
 If ``SYSC_ROOT`` or ``AWP_ROOT`` is set but does not refer to a valid installation, PySystemCoupling
 fails at that point, rather than attempting to use the next variable.
-
-In a standard user installation, the expectation is that only ``AWP_ROOT<NNN>`` is set. If multiple
-such variables are set, the one with the highest recognized version number is used.
-
-(It is also possible to provide a different version number as an argument to the ``launch()``
-function. This will affect which ``AWP_ROOT<version>`` environment variable is examined.)
 
    **NOTE**
 
@@ -189,11 +191,6 @@ uses both the ``setup`` and ``solution`` attributes.
   examining the solution.
 * The ``case`` attribute, which is not used in the preceding example, provides all
   commands related to case file management and persistence.
-
-While the preceding example uses the ``pysystemcoupling.launch()`` method to start the
-System Coupling server, alternatively, the server can be started in advance by calling
-command line arguments ``-m cosimgui --grpcport=<host:port>`` and
-``pysystemcoupling.connect(host, port)``.
 
 This next example shows how to set up the same analysis using the native System Coupling
 API. While the code here is less complete than the code shown previously, it should
