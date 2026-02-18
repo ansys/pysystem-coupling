@@ -28,6 +28,16 @@ import re
 import socket
 from uuid import uuid4
 
+# Not used yet:
+# create_insecure_channel,
+# create_mtls_channel,
+# create_uds_channel,
+# create_wnua_channel,
+from ansys.tools.common.cyberchannel import (
+    LOOPBACK_HOSTS,
+    determine_uds_folder,
+    is_uds_supported,
+)
 import grpc
 
 from ansys.systemcoupling.core.client.syc_launch_script import path_to_system_coupling
@@ -282,7 +292,7 @@ class StartupAndConnectionInfo:
                         "Unix Domain Sockets are not supported for "
                         "the version of the server in use."
                     )
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "UDS transport only supports localhost connections."
                     )
@@ -293,13 +303,13 @@ class StartupAndConnectionInfo:
                     raise ValueError(
                         "Windows Named User Authentication (WNUA) is only supported on Windows."
                     )
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "Remote host connections are not supported with WNUA."
                     )
                 options.transport_mode = _TransportMode.WNUA
             case ConnectionType.MTLS_LOCAL:
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "Remote host connections are not supported with"
                         " selected connection type, 'MTLS_Local'."
@@ -311,7 +321,7 @@ class StartupAndConnectionInfo:
                 options.allow_remote_host = True
                 options.certs_folder = self._get_certs_folder(options.certs_folder)
             case ConnectionType.INSECURE_LOCAL:
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "Remote host connections are not supported with"
                         " selected connection type, 'Insecure_Local'."
@@ -337,24 +347,15 @@ class StartupAndConnectionInfo:
         return f"{options.host}:{options.port}"
 
     def _is_uds_supported(self):
-        # UDS always supported on Linux
-        if not _IS_WINDOWS:
-            return True
-        # Formality check as client grpc should always be ok, even on Windows
-        if not _check_grpc_version():
-            return False
-        # NeedsNewArguments is a proxy for supporting UDS as it indicates
-        # a version beyond those which have been patched
-        return self._version_category == StartupArgumentCategory.NEW_ARGUMENTS
+        # NEW_ARGUMENTS is a proxy for supporting UDS on Windows as it
+        # indicates a version where the server side gRPC supports UDS.
+        return (
+            self._version_category == StartupArgumentCategory.NEW_ARGUMENTS
+            or is_uds_supported()
+        )
 
-    def _get_uds_folder(self) -> str:
-        if self._options.uds_dir:
-            return pathlib.Path(self._options.uds_dir)
-        elif _IS_WINDOWS:
-            return pathlib.Path(os.environ["USERPROFILE"], ".conn")
-        else:
-            # Linux/POSIX
-            return pathlib.Path(os.environ["HOME"], ".conn")
+    def _get_uds_folder(self) -> pathlib.Path:
+        return determine_uds_folder(self._options.uds_dir)
 
     def _get_certs_folder(self, specified_folder: str | None) -> str:
         # Explicit setting overrides other options
@@ -409,24 +410,6 @@ def _grpc_argument_category(version: tuple[int, int]) -> StartupArgumentCategory
         return StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS
     else:
         return StartupArgumentCategory.NEW_ARGUMENTS
-
-
-def _version_tuple(version_str):
-    """Convert a version string into a tuple of integers for comparison."""
-    return tuple(int(x) for x in version_str.split("."))
-
-
-# IMPORTANT: UDS support on Windows requires gRPC version 1.63.0 or higher
-def _check_grpc_version():
-    """Check if the installed gRPC version meets the minimum requirement."""
-    min_version = "1.63.0"
-    current_version = grpc.__version__
-
-    try:
-        return _version_tuple(current_version) >= _version_tuple(min_version)
-    except ValueError:
-        LOG.warning("Unable to parse gRPC version.")
-        return False
 
 
 def _find_port() -> int:
