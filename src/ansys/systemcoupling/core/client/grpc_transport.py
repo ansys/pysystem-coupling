@@ -317,7 +317,7 @@ class StartupAndConnectionInfo:
         # NEW_ARGUMENTS is a proxy for supporting UDS on Windows as it
         # indicates a version where the server side gRPC supports UDS.
         # UDS support on Windows also requires client side support, which
-        # depends on the Python gPRC version. In practice, we should always
+        # depends on the Python gRPC version. In practice, we should always
         # be beyond the version where gRPC started supporting UDS on Windows,
         # but we can assume it will be checked in the 'cyberchannel' module.
         return (
