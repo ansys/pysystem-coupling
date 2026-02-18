@@ -32,7 +32,6 @@ from ansys.tools.common.cyberchannel import (
     LOOPBACK_HOSTS,
     create_channel,
     determine_uds_folder,
-    is_uds_supported,
 )
 import grpc
 
@@ -317,9 +316,13 @@ class StartupAndConnectionInfo:
     def _is_uds_supported(self):
         # NEW_ARGUMENTS is a proxy for supporting UDS on Windows as it
         # indicates a version where the server side gRPC supports UDS.
+        # UDS support on Windows also requires client side support, which
+        # depends on the Python gPRC version. In practice, we should always
+        # be beyond the version where gRPC started supporting UDS on Windows,
+        # but we can assume it will be checked in the 'cyberchannel' module.
         return (
-            self._version_category == StartupArgumentCategory.NEW_ARGUMENTS
-            or is_uds_supported()
+            not _IS_WINDOWS
+            or self._version_category == StartupArgumentCategory.NEW_ARGUMENTS
         )
 
     def _get_uds_folder(self) -> pathlib.Path:
