@@ -153,13 +153,10 @@ class TestStartupAndConnectionInfo:
             "ansys.systemcoupling.core.client.grpc_transport.normalize_version"
         )
         self.syc_version_concat_patcher = patch(
-            "ansys.systemcoupling.core.client.grpc_transport.SYC_VERSION_CONCAT", "25.2"
+            "ansys.systemcoupling.core.client.grpc_transport.SYC_VERSION_CONCAT", "26.1"
         )
         self.create_channel_patcher = patch(
             "ansys.systemcoupling.core.client.grpc_transport.create_channel"
-        )
-        self.is_uds_supported_patcher = patch(
-            "ansys.systemcoupling.core.client.grpc_transport.is_uds_supported"
         )
         self.determine_uds_folder_patcher = patch(
             "ansys.systemcoupling.core.client.grpc_transport.determine_uds_folder"
@@ -174,7 +171,6 @@ class TestStartupAndConnectionInfo:
         self.mock_normalize_version = self.normalize_version_patcher.start()
         self.mock_syc_version_concat = self.syc_version_concat_patcher.start()
         self.mock_create_channel = self.create_channel_patcher.start()
-        self.mock_is_uds_supported = self.is_uds_supported_patcher.start()
         self.mock_determine_uds_folder = self.determine_uds_folder_patcher.start()
         self.mock_loopback_hosts = self.loopback_hosts_patcher.start()
 
@@ -182,8 +178,10 @@ class TestStartupAndConnectionInfo:
         self.mock_path_to_system_coupling.return_value = (
             "/opt/ansys/v252/SystemCoupling/bin/systemcoupling"
         )
-        self.mock_normalize_version.return_value = (25, 2)
-        self.mock_is_uds_supported.return_value = True
+        self.mock_normalize_version.return_value = (
+            26,
+            1,
+        )  # NEW_ARGUMENTS - supports UDS on Windows
         self.mock_determine_uds_folder.return_value = Path("/tmp/uds")
         self.mock_create_channel.return_value = Mock()
 
@@ -193,7 +191,6 @@ class TestStartupAndConnectionInfo:
         self.normalize_version_patcher.stop()
         self.syc_version_concat_patcher.stop()
         self.create_channel_patcher.stop()
-        self.is_uds_supported_patcher.stop()
         self.determine_uds_folder_patcher.stop()
         self.loopback_hosts_patcher.stop()
 
@@ -238,7 +235,7 @@ class TestStartupAndConnectionInfo:
         )
 
         # Should fall back to SYC_VERSION_CONCAT
-        self.mock_normalize_version.assert_called_once_with("25.2")
+        self.mock_normalize_version.assert_called_once_with("26.1")
 
     def test_init_not_launching(self):
         """Test initialization when not launching uses provided or default version."""
@@ -252,16 +249,13 @@ class TestStartupAndConnectionInfo:
 
     def test_startup_argument_category_property(self):
         """Test startup_argument_category property returns correct value."""
-        self.mock_normalize_version.return_value = (25, 2)
+        self.mock_normalize_version.return_value = (26, 1)
 
         info = StartupAndConnectionInfo(
             launching=False, connection_type=ConnectionType.SECURE_LOCAL
         )
 
-        assert (
-            info.startup_argument_category
-            == StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS
-        )
+        assert info.startup_argument_category == StartupArgumentCategory.NEW_ARGUMENTS
 
     def test_is_insecure_connection_requested_true(self):
         """Test is_insecure_connection_requested returns True for insecure connections."""
@@ -463,19 +457,19 @@ class TestStartupAndConnectionInfo:
         assert info._options.transport_mode == _TransportMode.UDS
 
     def test_secure_local_fallback_to_wnua_when_uds_not_supported(self):
-        """Test SECURE_LOCAL falls back to WNUA when UDS is truly not supported."""
+        """Test SECURE_LOCAL falls back to WNUA when UDS is not
+        supported on Windows with old version."""
         # Override the setup method's mocks to simulate UDS not supported
         with patch("ansys.systemcoupling.core.client.grpc_transport._IS_WINDOWS", True):
-            # Override the instance method to return False for UDS support
-            with patch.object(
-                StartupAndConnectionInfo, "_is_uds_supported", return_value=False
-            ):
-                info = StartupAndConnectionInfo(
-                    launching=False, connection_type=ConnectionType.SECURE_LOCAL
-                )
+            # Use an old version that results in OLD_ARGUMENTS category
+            self.mock_normalize_version.return_value = (24, 1)
 
-                # Should use WNUA transport mode when UDS not supported on Windows
-                assert info._options.transport_mode == _TransportMode.WNUA
+            info = StartupAndConnectionInfo(
+                launching=False, connection_type=ConnectionType.SECURE_LOCAL
+            )
+
+            # Should use WNUA transport mode when UDS not supported (Windows + old version)
+            assert info._options.transport_mode == _TransportMode.WNUA
 
     def test_uds_connection_with_explicit_uds_selection(self):
         """Test UDS connection works when explicitly requested and supported."""
