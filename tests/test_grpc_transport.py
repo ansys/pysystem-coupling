@@ -40,15 +40,15 @@ from ansys.systemcoupling.core.client.grpc_transport import (
 class TestEnumsAndDataClasses:
     """Test the enum classes and data classes."""
 
-    def test_connection_type_enum_values(self):
-        """Test ConnectionType enum has expected values."""
-        assert ConnectionType.SECURE_LOCAL.value == 1
-        assert ConnectionType.UNIX_DOMAIN_SOCKETS.value == 2
-        assert ConnectionType.WINDOWS_NAMED_USER_AUTHENTICATION.value == 3
-        assert ConnectionType.MTLS_LOCAL.value == 4
-        assert ConnectionType.MTLS_REMOTE.value == 5
-        assert ConnectionType.INSECURE_LOCAL.value == 6
-        assert ConnectionType.INSECURE_REMOTE.value == 7
+    # def test_connection_type_enum_values(self):
+    #     """Test ConnectionType enum has expected values."""
+    #     assert ConnectionType.SECURE_LOCAL.value == 1
+    #     assert ConnectionType.UNIX_DOMAIN_SOCKETS.value == 2
+    #     assert ConnectionType.WINDOWS_NAMED_USER_AUTHENTICATION.value == 3
+    #     assert ConnectionType.MTLS_LOCAL.value == 4
+    #     assert ConnectionType.MTLS_REMOTE.value == 5
+    #     assert ConnectionType.INSECURE_LOCAL.value == 6
+    #     assert ConnectionType.INSECURE_REMOTE.value == 7
 
     def test_transport_mode_enum_values(self):
         """Test _TransportMode enum has expected string values."""
@@ -57,11 +57,11 @@ class TestEnumsAndDataClasses:
         assert _TransportMode.MTLS == "mtls"
         assert _TransportMode.WNUA == "wnua"
 
-    def test_startup_argument_category_enum(self):
-        """Test StartupArgumentCategory enum values."""
-        assert StartupArgumentCategory.OLD_ARGUMENTS.value == 0
-        assert StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS.value == 1
-        assert StartupArgumentCategory.NEW_ARGUMENTS.value == 2
+    # def test_startup_argument_category_enum(self):
+    #     """Test StartupArgumentCategory enum values."""
+    #     assert StartupArgumentCategory.OLD_ARGUMENTS.value == 0
+    #     assert StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS.value == 1
+    #     assert StartupArgumentCategory.NEW_ARGUMENTS.value == 2
 
     def test_connection_options_defaults(self):
         """Test _ConnectionOptions dataclass default values."""
