@@ -1,0 +1,23 @@
+:orphan:
+
+.. _add_data_transfer:
+
+add_data_transfer
+=================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.add_data_transfer
+
+.. autoclass:: add_data_transfer
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

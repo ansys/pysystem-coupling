@@ -1,0 +1,28 @@
+:orphan:
+
+.. _expression_function:
+
+expression_function
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.expression_function
+
+.. autoclass:: expression_function
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`expression_function_child <expression_function_child>`
+
+
+.. rubric:: Included in:
+
+========================   =============================================================================
+
+Parent                                                                                           Summary
+
+========================   =============================================================================
+:ref:`library <library>`       Contains objects that can be referenced from elsewhere in the data model.
+
+========================   =============================================================================
+

@@ -1,0 +1,69 @@
+:orphan:
+
+.. _unmapped_value_options:
+
+unmapped_value_options
+======================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.unmapped_value_options
+
+.. autoclass:: unmapped_value_options
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+matrix_verbosity : `int`
+    Matrix verbosity.
+
+solver_verbosity : `int`
+    Solver verbosity.
+
+solver : `str`
+    Solver ("GMRES" or "FGMRES").
+
+solver_relative_tolerance : :ref:`RealType<real_type>`
+    Solver relative tolerance
+
+solver_max_iterations : `int`
+    Solver maximum iterations.
+
+solver_max_search_directions : `int`
+    Solver maximum search directions.
+
+preconditioner : `str`
+    Preconditioner type ("None" or "ILUT").
+
+ilut_tau : :ref:`RealType<real_type>`
+    Tolerance for ILUT.
+
+ilut_max_fill : `int`
+    Maximum fill level for ILUT.
+
+ilut_pivot_tol : :ref:`RealType<real_type>`
+    Pivot tolerance for ILUT.
+
+face_filter_tolerance : :ref:`RealType<real_type>`
+    Tolerance (angle, in degrees) for which to consider nearby faces to be sufficiently
+    aligned to be included in the algorithm.
+
+rbf_shape_parameter : :ref:`RealType<real_type>`
+    Radial basis function shape parameter for Gaussian shape function.
+
+rbf_linear_correction : `bool`
+    Control whether the radial basis function linear correction is active.
+
+rbf_colinearity_tolerance : :ref:`RealType<real_type>`
+    Tolerance to use for checking colinearity of nearby data when using the radial
+    basis functions for non-overlap extrapolation.
+
+.. rubric:: Included in:
+
+==========================================   ================================
+
+Parent                                                                Summary
+
+==========================================   ================================
+:ref:`analysis_control <analysis_control>`       Configure coupling controls.
+
+==========================================   ================================
+

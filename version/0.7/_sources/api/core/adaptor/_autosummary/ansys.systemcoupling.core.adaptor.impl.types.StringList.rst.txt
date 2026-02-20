@@ -1,0 +1,46 @@
+.. _dm_StringList:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.StringList
+=======================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: StringList
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~StringList.__init__
+      ~StringList.get_property_state
+      ~StringList.get_state
+      ~StringList.print_state
+      ~StringList.set_property_state
+      ~StringList.set_state
+      ~StringList.set_sycproxy
+      ~StringList.to_python_keys
+      ~StringList.to_python_name
+      ~StringList.to_syc_keys
+      ~StringList.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StringList.obj_name
+      ~StringList.path
+      ~StringList.syc_name
+      ~StringList.syc_path
+      ~StringList.sycproxy
+   
+   

@@ -1,0 +1,23 @@
+:orphan:
+
+.. _get_thermal_data_transfer_options:
+
+get_thermal_data_transfer_options
+=================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.get_thermal_data_transfer_options
+
+.. autoclass:: get_thermal_data_transfer_options
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

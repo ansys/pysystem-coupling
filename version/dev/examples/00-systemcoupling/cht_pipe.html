@@ -1,0 +1,1847 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Conjugate Heat Transfer- Pipe Flow &#8212; PySystemCoupling</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=a23b20f3" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=142dd74e"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/00-systemcoupling/cht_pipe';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.16.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://systemcoupling.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Fluid swirl" href="fluid_swirl.html" />
+    <link rel="prev" title="Coupled analysis examples" href="index.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.12.dev0" />
+  <meta property="og:site_name" content="PyAnsys" />
+  <meta name="physics" content="Fluids" />
+  <meta name="physics" content="Multiphysics" />
+  <meta name="physics" content="Structures" />
+  <link rel="canonical" href="https://systemcoupling.docs.pyansys.com/version/stable/examples/00-systemcoupling/cht_pipe.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://docs.pyansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PySystemCoupling - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="PySystemCoupling - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="PySystemCoupling home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../users_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../contributing.html">
+    Contribute
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-wrench fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Contribute</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    
+<!--
+  Announcement Version Loader
+  Dynamically loads the announcement.html content into the announcement_msg div.
+-->
+<div id="announcement_msg" aria-live="polite"></div>
+<script>
+  // Fetch and inject the announcement HTML content
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} Announcement.html file not found, Please ignore this, if you are in dev/stable documentation`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+      var msgDiv = document.getElementById("announcement_msg");
+      if (msgDiv) {
+        msgDiv.innerHTML = text;
+      }
+    })
+    .catch((error) => {
+      // Log only unexpected fetch errors
+      if (!(error.message && error.message.startsWith("HTTP error: 404"))) {
+        console.error(`Fetch problem: ${error.message} Announcement.html could not be loaded.`);
+      }
+    });
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="PySystemCoupling home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../users_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributing.html">
+    Contribute
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-wrench fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Contribute</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Coupled analysis examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Conjugate Heat Transfer- Pipe Flow</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="fluid_swirl.html">Fluid swirl</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="heating_tank_fmu_fmu.html">FMU-FMU cosimulation of a heating tank &amp; heater</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="oscillating_plate.html">Oscillating plate</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="turek_hron_fsi2.html">Turek-Hron FSI2 Benchmark Example</a></li>
+
+
+
+
+
+
+
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">Examples</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Coupled analysis examples</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Conjugate Heat Transfer- Pipe Flow</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-00-systemcoupling-cht-pipe-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="conjugate-heat-transfer-pipe-flow">
+<span id="ref-cht-pipe-example"></span><span id="sphx-glr-examples-00-systemcoupling-cht-pipe-py"></span><h1>Conjugate Heat Transfer- Pipe Flow<a class="headerlink" href="#conjugate-heat-transfer-pipe-flow" title="Link to this heading">#</a></h1>
+<p>Conjugate heat transfer (CHT) simulations often exhibit numerical sensitivity at the fluid-solid
+interface. This example demonstrates how users can appropriately select interface conditions
+and stabilization schemes for a typical pipe-flow configuration. It highlights best practices
+for setting up a robust CHT workflow in System Coupling, including managing temperature and
+heat-flux exchange, controlling relaxation, ensuring consistent mesh-to-mesh interpolation.</p>
+<ul class="simple">
+<li><p>Ansys Fluent is used to model the thermal fluid flow in the pipe.</p></li>
+<li><p>Ansys Mechanical APDL (MAPDL) is used to model thermal transfer in the pipe wall.</p></li>
+<li><p>System Coupling coordinates the coupled solution to the conjugate heat transfer problem,
+including numerical stabilization if needed.</p></li>
+</ul>
+<p><strong>Problem description</strong></p>
+<p>A fluid at a certain temperature flows into a pipe of known diameter and length. As it flows,
+the heated outer wall of the pipe conducts heat to the inner wall, which in turn heats the
+fluid and cools down the walls of the pipe.</p>
+<a class="reference internal image-reference" href="../../_images/pipe_schematic.png"><img alt="../../_images/pipe_schematic.png" class="align-center" src="../../_images/pipe_schematic.png" style="width: 400pt;" />
+</a>
+<p>The flow is smooth inside the pipe and the outer wall of the pipe is adiabatic. Fluid enters
+at an initial temperature of 300K while the outer wall of the pipe is at 350K.</p>
+</section>
+<section id="import-modules-download-files-launch-products">
+<h1>Import modules, download files, launch products<a class="headerlink" href="#import-modules-download-files-launch-products" title="Link to this heading">#</a></h1>
+<p>Setting up this example consists of performing imports, downloading
+the input file, and launching the required products.</p>
+<section id="perform-required-imports">
+<h2>Perform required imports<a class="headerlink" href="#perform-required-imports" title="Link to this heading">#</a></h2>
+<p>Import <code class="docutils literal notranslate"><span class="pre">ansys-systemcoupling-core</span></code>, <code class="docutils literal notranslate"><span class="pre">ansys-fluent-core</span></code>, <code class="docutils literal notranslate"><span class="pre">ansys-mapdl-core</span></code></p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ansys.fluent.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyfluent</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">ansys.mapdl.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pymapdl</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ansys.systemcoupling.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pysyc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.systemcoupling.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">examples</span>
+</pre></div>
+</div>
+<p>Download the Fluent mesh file.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluent_msh_file</span></a> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+    <span class="s2">&quot;fluid_domain.msh&quot;</span><span class="p">,</span> <span class="s2">&quot;pysystem-coupling/cht_pipe&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="launch-mapdl-to-create-the-solid-domain">
+<h1>Launch MAPDL to create the solid domain.<a class="headerlink" href="#launch-mapdl-to-create-the-solid-domain" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Launch MAPDL.</span>
+<span class="n">mapdl</span> <span class="o">=</span> <span class="n">pymapdl</span><span class="o">.</span><span class="n">launch_mapdl</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="mi">252</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">prep7</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>*****MAPDL VERIFICATION RUN ONLY*****
+     DO NOT USE RESULTS FOR PRODUCTION
+
+          ***** MAPDL ANALYSIS DEFINITION (PREP7) *****
+</pre></div>
+</div>
+<p>Set material properties of the pipe.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">mapdl</span><span class="o">.</span><span class="n">mp</span><span class="p">(</span><span class="s2">&quot;EX&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">69e9</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">mp</span><span class="p">(</span><span class="s2">&quot;NUXY&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.33</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">mp</span><span class="p">(</span><span class="s2">&quot;DENS&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2700</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">mp</span><span class="p">(</span><span class="s2">&quot;ALPX&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">23.6e-6</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">mp</span><span class="p">(</span><span class="s2">&quot;KXX&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">237</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">mp</span><span class="p">(</span><span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">900</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>MATERIAL          1     C    =   900.0000
+</pre></div>
+</div>
+<p>Set element type to SOLID279.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">mapdl</span><span class="o">.</span><span class="n">et</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">279</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">keyopt</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">mapdl</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Mapdl
+-----
+PyMAPDL Version:     0.71.3
+Interface:           grpc
+Product:             Ansys Mechanical Enterprise
+MAPDL Version:       25.2
+Running on:          localhost
+                     (127.0.0.1)
+</pre></div>
+</div>
+<p>Set the pipe inner and outer diameter and length.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a> <span class="o">=</span> <span class="mf">0.025</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_out</span></a> <span class="o">=</span> <span class="mf">0.035</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l</span></a> <span class="o">=</span> <span class="mf">0.2</span>
+</pre></div>
+</div>
+<p>Create a simple hollow pipe</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">mapdl</span><span class="o">.</span><span class="n">cyl4</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rad1</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a><span class="p">,</span> <span class="n">rad2</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_out</span></a><span class="p">,</span> <span class="n">depth</span><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l</span></a><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">esize</span><span class="p">(</span><span class="mf">0.002</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">vsweep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>GENERATE NODES AND ELEMENTS IN VOLUME      1
+
+        SWEEPING VOLUME 1 FROM AREA 1 TO AREA 2
+        VOLUME 1 MESHED WITH 63200 HEXAHEDRA AND 0 WEDGES
+
+ Volume Sweeping Complete
+
+ The Following Volumes Were Successfully Swept
+     1
+
+ MAXIMUM NODE NUMBER        =    283688
+ MAXIMUM ELEMENT NUMBER     =     63200
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/pipe_elements.png"><img alt="../../_images/pipe_elements.png" class="align-center" src="../../_images/pipe_elements.png" style="width: 700pt;" />
+</a>
+<section id="creating-the-regions-from-the-geometry-for-named-selections">
+<h2>Creating the regions from the geometry for named selections<a class="headerlink" href="#creating-the-regions-from-the-geometry-for-named-selections" title="Link to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Creating a named selection for Inner wall.</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">asel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">nsla</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cm</span><span class="p">(</span><span class="s2">&quot;FSIN_1&quot;</span><span class="p">,</span> <span class="s2">&quot;NODE&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+
+<span class="c1"># Creating a named selection for Outer wall.</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">asel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cm</span><span class="p">(</span><span class="s2">&quot;Outer_wall&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+
+<span class="c1"># Creating a named selection for Outlet.</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">asel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cm</span><span class="p">(</span><span class="s2">&quot;Outlet&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+
+<span class="c1"># Creating a named selection for Inlet.</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">asel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cm</span><span class="p">(</span><span class="s2">&quot;Inlet&quot;</span><span class="p">,</span> <span class="s2">&quot;AREA&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SELECT ALL ENTITIES OF TYPE= ALL  AND BELOW
+</pre></div>
+</div>
+<p>Set the boundary conditions for the structure. Temperature is in degrees Celsius.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">mapdl</span><span class="o">.</span><span class="n">cmsel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;Outer_wall&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">d</span><span class="p">(</span><span class="s2">&quot;Outer_wall&quot;</span><span class="p">,</span> <span class="s2">&quot;TEMP&quot;</span><span class="p">,</span> <span class="mi">77</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cmsel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;Inlet&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="s2">&quot;ALL&quot;</span><span class="p">,</span> <span class="s2">&quot;HFLUX&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cmsel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;Outlet&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="s2">&quot;ALL&quot;</span><span class="p">,</span> <span class="s2">&quot;HFLUX&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+
+<span class="n">mapdl</span><span class="o">.</span><span class="n">cmsel</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;FSIN_1&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">sf</span><span class="p">(</span><span class="s2">&quot;FSIN_1&quot;</span><span class="p">,</span> <span class="s2">&quot;FSIN&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">allsel</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>SELECT ALL ENTITIES OF TYPE= ALL  AND BELOW
+</pre></div>
+</div>
+<p>Setup the rest of the analysis.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">mapdl</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s2">&quot;/SOLU&quot;</span><span class="p">)</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">antype</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>PERFORM A STATIC ANALYSIS
+  THIS WILL BE A NEW ANALYSIS
+</pre></div>
+</div>
+</section>
+</section>
+<section id="set-up-the-fluid-analysis-and-read-the-pre-created-mesh-file">
+<h1>Set up the fluid analysis and read the pre-created mesh file<a class="headerlink" href="#set-up-the-fluid-analysis-and-read-the-pre-created-mesh-file" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span> <span class="o">=</span> <span class="n">pyfluent</span><span class="o">.</span><span class="n">launch_fluent</span><span class="p">(</span><span class="n">start_transcript</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">product_version</span><span class="o">=</span><span class="mi">252</span><span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;mesh&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluent_msh_file</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>pyfluent.launcher WARNING: Configuring Fluent container to mount to /home/runner/work/pysystem-coupling/pysystem-coupling/examples/00-systemcoupling, with this path available as /home/container/workdir for the Fluent session running inside the container.
+</pre></div>
+</div>
+<p>Define the fluid solver settings.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">energy</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Add the material.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">materials</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">copy_by_name</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;fluid&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;water-liquid&quot;</span><span class="p">)</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">cell_zone_conditions</span><span class="o">.</span><span class="n">fluid</span><span class="p">[</span><span class="s2">&quot;fff_fluiddomain&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">material</span> <span class="o">=</span> <span class="s2">&quot;water-liquid&quot;</span>
+</pre></div>
+</div>
+<p>Define boundary conditions.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">velocity_inlet</span><span class="p">[</span><span class="s2">&quot;inlet&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">momentum</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="mf">0.1</span>  <span class="c1"># units: m/s</span>
+<span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">velocity_inlet</span><span class="p">[</span><span class="s2">&quot;inlet&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">thermal</span><span class="o">.</span><span class="n">temperature</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="mi">300</span>  <span class="c1"># Units: Kelvin</span>
+<span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">boundary_conditions</span><span class="o">.</span><span class="n">wall</span><span class="p">[</span><span class="s2">&quot;inner_wall&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">thermal</span><span class="o">.</span><span class="n">thermal_bc</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;via System Coupling&quot;</span>
+<span class="p">)</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">run_calculation</span><span class="o">.</span><span class="n">iter_count</span> <span class="o">=</span> <span class="mi">20</span>
+</pre></div>
+</div>
+</section>
+<section id="set-up-the-coupled-analysis">
+<h1>Set up the coupled analysis<a class="headerlink" href="#set-up-the-coupled-analysis" title="Link to this heading">#</a></h1>
+<p>System Coupling setup involves adding the structural and fluid
+participants, adding coupled interfaces and data transfers,
+and setting other coupled analysis settings.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">syc</span> <span class="o">=</span> <span class="n">pysyc</span><span class="o">.</span><span class="n">launch</span><span class="p">(</span><span class="n">start_output</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Starting gRPC client without TLS on 127.0.0.1:59519. Modification of these configurations is not recommended. Please see the documentation for your installed product for additional information.
+</pre></div>
+</div>
+<p>Add participants by passing session handles to System Coupling.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_name</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span><span class="n">participant_session</span><span class="o">=</span><span class="n">fluent</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">solid_name</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span><span class="n">participant_session</span><span class="o">=</span><span class="n">mapdl</span><span class="p">)</span>
+
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">coupling_participant</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_name</span></a><span class="p">]</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;Fluid&quot;</span>
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">coupling_participant</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">solid_name</span></a><span class="p">]</span><span class="o">.</span><span class="n">display_name</span> <span class="o">=</span> <span class="s2">&quot;Solid&quot;</span>
+</pre></div>
+</div>
+<p>Add coupling interface.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">interface_name</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_interface</span><span class="p">(</span>
+    <span class="n">side_one_participant</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_name</span></a><span class="p">,</span>
+    <span class="n">side_one_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;inner_wall&quot;</span><span class="p">],</span>
+    <span class="n">side_two_participant</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">solid_name</span></a><span class="p">,</span>
+    <span class="n">side_two_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;FSIN_1&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>Set up 2-way thermal FSI coupling.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Temperature from solid to fluid</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">temp_transfer</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+    <span class="n">interface</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">interface_name</span></a><span class="p">,</span>
+    <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;One&quot;</span><span class="p">,</span>
+    <span class="n">source_variable</span><span class="o">=</span><span class="s2">&quot;TEMP&quot;</span><span class="p">,</span>
+    <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Heat flux from fluid to solid</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hf_transfer</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+    <span class="n">interface</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">interface_name</span></a><span class="p">,</span>
+    <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;Two&quot;</span><span class="p">,</span>
+    <span class="n">source_variable</span><span class="o">=</span><span class="s2">&quot;heatflow&quot;</span><span class="p">,</span>
+    <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;HFLW&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="define-constants-and-calculate-biot-number">
+<h1>Define constants and calculate Biot number<a class="headerlink" href="#define-constants-and-calculate-biot-number" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">L_c</span></a> <span class="o">=</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_out</span></a> <span class="o">-</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>  <span class="c1"># Characteristic length of the pipe (thickness)</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">U</span></a> <span class="o">=</span> <span class="mf">0.1</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_rho</span></a> <span class="o">=</span> <span class="mf">998.3</span>  <span class="c1"># Density of fluid</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_fluid</span></a> <span class="o">=</span> <span class="mf">0.001</span>  <span class="c1"># Dynamic viscosity of fluid</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cp_fluid</span></a> <span class="o">=</span> <span class="mi">4182</span>  <span class="c1"># Specific heat capacity of fluid</span>
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_fluid</span></a> <span class="o">=</span> <span class="mf">0.6</span>  <span class="c1"># Thermal conductivity of fluid</span>
+<a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_solid</span></a> <span class="o">=</span> <span class="mi">237</span>  <span class="c1"># Thermal conductivity of solid</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">nusselt_number</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a><span class="p">,</span> <span class="n">L</span><span class="p">):</span>
+    <span class="c1"># From: Bergman, T. L., Lavine, A. S., Incropera, F. P., &amp; DeWitt, D. P. (2017).</span>
+    <span class="c1"># Fundamentals of Heat and Mass transfer (8th ed.). Wiley.</span>
+    <span class="k">if</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a> <span class="o">&gt;=</span> <span class="mi">6000</span><span class="p">:</span>
+        <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a> <span class="o">=</span> <span class="mf">0.023</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a><span class="o">**</span><span class="mf">0.8</span> <span class="o">*</span> <span class="n">Pr</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;Colburn&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a> <span class="o">=</span> <span class="mf">3.66</span> <span class="o">+</span> <span class="p">(</span><span class="mf">0.068</span> <span class="o">*</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a> <span class="o">*</span> <span class="n">Pr</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a> <span class="o">/</span> <span class="n">L</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
+            <span class="mi">1</span> <span class="o">+</span> <span class="mf">0.04</span> <span class="o">*</span> <span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a> <span class="o">*</span> <span class="n">Pr</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a> <span class="o">/</span> <span class="n">L</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;Hausen&quot;</span>
+
+    <span class="k">return</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a><span class="p">,</span> <span class="n">method</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">compute_thermo_numbers</span><span class="p">(</span><span class="n">rho</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">cp</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_fluid</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_solid</span></a><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">L_c</span></a><span class="p">):</span>
+    <span class="n">Pr</span> <span class="o">=</span> <span class="n">cp</span> <span class="o">*</span> <span class="n">mu</span> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_fluid</span></a>
+    <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a> <span class="o">=</span> <span class="n">rho</span> <span class="o">*</span> <span class="n">velocity</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a> <span class="o">/</span> <span class="n">mu</span>
+
+    <span class="c1"># Nusselt number</span>
+    <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a><span class="p">,</span> <span class="n">correlation</span> <span class="o">=</span> <span class="n">nusselt_number</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a><span class="p">,</span> <span class="n">L</span><span class="p">)</span>
+
+    <span class="c1"># Convective heat transfer coefficient</span>
+    <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">h</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_fluid</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a>
+
+    <span class="c1"># Biot number</span>
+    <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Bi</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">h</span></a> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">L_c</span></a> <span class="o">/</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_solid</span></a>
+
+    <span class="k">return</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">h</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Bi</span></a><span class="p">,</span> <span class="n">correlation</span>
+
+
+<a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">h</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Bi</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">corr</span></a> <span class="o">=</span> <span class="n">compute_thermo_numbers</span><span class="p">(</span>
+    <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_rho</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">mu_fluid</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cp_fluid</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_fluid</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">k_solid</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">U</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">d_in</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">l</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">L_c</span></a>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reynolds number = </span><span class="si">{</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Re</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nusselt number = </span><span class="si">{</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Nu</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Heat transfer coefficient h = </span><span class="si">{</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">h</span></a><span class="si">}</span><span class="s2"> W/(m^2·K)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Biot number = </span><span class="si">{</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Bi</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Nusselt correlation used = </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">corr</span></a><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reynolds number = 2495.75
+Nusselt number = 6.970000000000001
+Heat transfer coefficient h = 547.8915788905118 W/(m^2·K)
+Biot number = 0.011558894069420084
+Nusselt correlation used = Hausen
+</pre></div>
+</div>
+<p>Apply stabilization if Biot number exceeds 10.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">Bi</span></a> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+    <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">analysis_control</span><span class="o">.</span><span class="n">global_stabilization</span><span class="o">.</span><span class="n">option</span> <span class="o">=</span> <span class="s2">&quot;Quasi-Newton&quot;</span>
+
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">solution_control</span><span class="o">.</span><span class="n">time_step_size</span> <span class="o">=</span> <span class="s2">&quot;0.1 [s]&quot;</span>  <span class="c1"># time step is 0.1 [s]</span>
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">solution_control</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># end time is 10.0 [s]</span>
+
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">output_control</span><span class="o">.</span><span class="n">option</span> <span class="o">=</span> <span class="s2">&quot;EveryStep&quot;</span>
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">output_control</span><span class="o">.</span><span class="n">generate_csv_chart_output</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</section>
+<section id="solution">
+<h1>Solution<a class="headerlink" href="#solution" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">syc</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>+=============================================================================+
+|                          Coupling Participants (2)                          |
++=============================================================================+
+|    Fluid                                                                    |
++-----------------------------------------------------------------------------+
+|       Internal Name :                                              FLUENT-1 |
+|       Participant Type :                                             FLUENT |
+|       Participant Display Name :                                   FLUENT-1 |
+|       Dimension :                                                        3D |
+|       Input Parameters :                                                 [] |
+|       Output Parameters :                                                [] |
+|       Participant Analysis Type :                                    Steady |
+|       Use New APIs :                                                   True |
+|       Restarts Supported :                                             True |
+|       Variables (21)                                                        |
+|          Variable : backflow_specific_dissipation_rate                      |
+|             Internal Name :              backflow-specific-dissipation-rate |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :   backflow specific dissipation rate |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : backflow_total_temperature                              |
+|             Internal Name :                      backflow-total-temperature |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :           backflow total temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : backflow_turbulent_dissipation_rate                     |
+|             Internal Name :             backflow-turbulent-dissipation-rate |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :  backflow turbulent dissipation rate |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : backflow_turbulent_kinetic_energy                       |
+|             Internal Name :               backflow-turbulent-kinetic-energy |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :    backflow turbulent kinetic energy |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : components_of_flow_direction                            |
+|             Internal Name :                    components-of-flow-direction |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :         components of flow direction |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Vector |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : electrical_conductivity                                 |
+|             Internal Name :                         electrical-conductivity |
+|             Quantity Type :                         Electrical Conductivity |
+|             Participant Display Name :              electrical conductivity |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : force                                                   |
+|             Internal Name :                                           force |
+|             Quantity Type :                                           Force |
+|             Participant Display Name :                                force |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Vector |
+|             Is Extensive :                                             True |
+|                                                                             |
+|          Variable : heat_transfer_coefficient                               |
+|             Internal Name :                       heat-transfer-coefficient |
+|             Quantity Type :                       Heat Transfer Coefficient |
+|             Participant Display Name :            heat transfer coefficient |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : heatflow                                                |
+|             Internal Name :                                        heatflow |
+|             Quantity Type :                                       Heat Rate |
+|             Participant Display Name :                             heatflow |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                             True |
+|                                                                             |
+|          Variable : heatrate                                                |
+|             Internal Name :                                        heatrate |
+|             Quantity Type :                                       Heat Rate |
+|             Participant Display Name :                             heatrate |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                             True |
+|                                                                             |
+|          Variable : lorentz_force                                           |
+|             Internal Name :                                   lorentz-force |
+|             Quantity Type :                                           Force |
+|             Participant Display Name :                        lorentz force |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Vector |
+|             Is Extensive :                                             True |
+|                                                                             |
+|          Variable : mass_flow_rate                                          |
+|             Internal Name :                                  mass-flow-rate |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :                       mass flow rate |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                             True |
+|                                                                             |
+|          Variable : near_wall_temperature                                   |
+|             Internal Name :                           near-wall-temperature |
+|             Quantity Type :                Convection Reference Temperature |
+|             Participant Display Name :                near wall temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : pressure                                                |
+|             Internal Name :                                        pressure |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :                             pressure |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : specific_dissipation_rate                               |
+|             Internal Name :                       specific-dissipation-rate |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :            specific dissipation rate |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : static_temperature                                      |
+|             Internal Name :                              static-temperature |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :                   static temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : temperature                                             |
+|             Internal Name :                                     temperature |
+|             Quantity Type :                                     Temperature |
+|             Participant Display Name :                          temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : total_temperature                                       |
+|             Internal Name :                               total-temperature |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :                    total temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : turbulent_dissipation_rate                              |
+|             Internal Name :                      turbulent-dissipation-rate |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :           turbulent dissipation rate |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : turbulent_kinetic_energy                                |
+|             Internal Name :                        turbulent-kinetic-energy |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :             turbulent kinetic energy |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : velocity                                                |
+|             Internal Name :                                        velocity |
+|             Quantity Type :                                     Unspecified |
+|             Participant Display Name :                             velocity |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Vector |
+|             Is Extensive :                                            False |
+|       Regions (4)                                                           |
+|          Region : fff_fluiddomain                                           |
+|             Internal Name :                                 fff_fluiddomain |
+|             Topology :                                               Volume |
+|             Input Variables :                     [heatrate, lorentz-force] |
+|             Output Variables :       [temperature, electrical-conductivity] |
+|             Region Discretization Type :                        Mesh Region |
+|                                                                             |
+|          Region : inlet                                                     |
+|             Internal Name :                                           inlet |
+|             Topology :                                              Surface |
+|             Input Variables : [turbulent-kinetic-energy, specific-          |
+|                               dissipation-rate, static-temperature,         |
+|                               velocity]                                     |
+|             Output Variables : [pressure, backflow-total-temperature,       |
+|                                backflow-turbulent-kinetic-energy, backflow- |
+|                                specific-dissipation-rate, backflow-         |
+|                                turbulent-dissipation-rate]                  |
+|             Region Discretization Type :                        Mesh Region |
+|                                                                             |
+|          Region : inner_wall                                                |
+|             Internal Name :                                      inner_wall |
+|             Topology :                                              Surface |
+|             Input Variables :                       [temperature, heatflow] |
+|             Output Variables : [force, temperature, heat-transfer-          |
+|                                coefficient, heatflow, near-wall-            |
+|                                temperature]                                 |
+|             Region Discretization Type :                        Mesh Region |
+|                                                                             |
+|          Region : outlet                                                    |
+|             Internal Name :                                          outlet |
+|             Topology :                                              Surface |
+|             Input Variables : [pressure, backflow-total-temperature,        |
+|                               backflow-turbulent-kinetic-energy, backflow-  |
+|                               specific-dissipation-rate]                    |
+|             Output Variables : [turbulent-kinetic-energy, specific-         |
+|                                dissipation-rate, turbulent-dissipation-     |
+|                                rate, total-temperature, static-temperature, |
+|                                velocity, mass-flow-rate, components-of-     |
+|                                flow-direction]                              |
+|             Region Discretization Type :                        Mesh Region |
+|       Properties                                                            |
+|          Accepts New Inputs :                                         False |
+|       Update Control                                                        |
+|          Option :                                         ProgramControlled |
+|       Execution Control                                                     |
+|          Option :                                         ExternallyManaged |
++-----------------------------------------------------------------------------+
+|    Solid                                                                    |
++-----------------------------------------------------------------------------+
+|       Internal Name :                                               MAPDL-2 |
+|       Participant Type :                                              MAPDL |
+|       Participant Display Name :                                    MAPDL-2 |
+|       Dimension :                                                        3D |
+|       Input Parameters :                                                 [] |
+|       Output Parameters :                                                [] |
+|       Participant Analysis Type :                                    Steady |
+|       Restarts Supported :                                             True |
+|       Variables (6)                                                         |
+|          Variable : Bulk_Temperature                                        |
+|             Internal Name :                                           TBULK |
+|             Quantity Type :                Convection Reference Temperature |
+|             Location :                                                 Node |
+|             Participant Display Name :                     Bulk Temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : Heat_Flow                                               |
+|             Internal Name :                                            HFLW |
+|             Quantity Type :                                       Heat Rate |
+|             Location :                                                 Node |
+|             Participant Display Name :                            Heat Flow |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                             True |
+|                                                                             |
+|          Variable : Heat_Generation                                         |
+|             Internal Name :                                            HGEN |
+|             Quantity Type :                                       Heat Rate |
+|             Location :                                                 Node |
+|             Participant Display Name :                      Heat Generation |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : Heat_Transfer_Coefficient                               |
+|             Internal Name :                                           HCOEF |
+|             Quantity Type :                       Heat Transfer Coefficient |
+|             Location :                                                 Node |
+|             Participant Display Name :            Heat Transfer Coefficient |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : Temperature                                             |
+|             Internal Name :                                            TEMP |
+|             Quantity Type :                                     Temperature |
+|             Location :                                                 Node |
+|             Participant Display Name :                          Temperature |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|                                                                             |
+|          Variable : Temperature_Load                                        |
+|             Internal Name :                                            TPLD |
+|             Quantity Type :                                     Temperature |
+|             Location :                                                 Node |
+|             Participant Display Name :                     Temperature Load |
+|             Data Type :                                                Real |
+|             Tensor Type :                                            Scalar |
+|             Is Extensive :                                            False |
+|       Regions (1)                                                           |
+|          Region : System Coupling (Surface) Region 0                        |
+|             Internal Name :                                          FSIN_1 |
+|             Topology :                                              Surface |
+|             Input Variables :                    [TEMP, TBULK, HCOEF, HFLW] |
+|             Output Variables :                   [TEMP, TBULK, HCOEF, HFLW] |
+|             Region Discretization Type :                        Mesh Region |
+|       Properties                                                            |
+|          Accepts New Inputs :                                         False |
+|       Update Control                                                        |
+|          Option :                                         ProgramControlled |
+|       Execution Control                                                     |
+|          Option :                                         ExternallyManaged |
++=============================================================================+
+|                              Analysis Control                               |
++=============================================================================+
+|    Analysis Type :                                                   Steady |
+|    Optimize If One Way :                                               True |
+|    Allow Simultaneous Update :                                        False |
+|    Partitioning Algorithm :                          SharedAllocateMachines |
+|    Global Stabilization                                                     |
+|       Option :                                                         None |
++=============================================================================+
+|                           Coupling Interfaces (1)                           |
++=============================================================================+
+|    Interface-1                                                              |
++-----------------------------------------------------------------------------+
+|       Internal Name :                                           Interface-1 |
+|       Side                                                                  |
+|          Side: One                                                          |
+|             Coupling Participant :                                 FLUENT-1 |
+|             Region List :                                      [inner_wall] |
+|             Reference Frame :                          GlobalReferenceFrame |
+|             Instancing :                                               None |
+|          Side: Two                                                          |
+|             Coupling Participant :                                  MAPDL-2 |
+|             Region List :                                          [FSIN_1] |
+|             Reference Frame :                          GlobalReferenceFrame |
+|             Instancing :                                               None |
+|       Data Transfers (2)                                                    |
+|          DataTransfer : Heat_Flow                                           |
+|             Internal Name :                                            HFLW |
+|             Suppress :                                                False |
+|             Target Side :                                               Two |
+|             Option :                                          UsingVariable |
+|             Source Variable :                                      heatflow |
+|             Target Variable :                                          HFLW |
+|             Ramping Option :                                           None |
+|             Relaxation Factor :                                    1.00e+00 |
+|             Convergence Target :                                   1.00e-02 |
+|             Mapping Type :                                     Conservative |
+|          DataTransfer : temperature                                         |
+|             Internal Name :                                     temperature |
+|             Suppress :                                                False |
+|             Target Side :                                               One |
+|             Option :                                          UsingVariable |
+|             Source Variable :                                          TEMP |
+|             Target Variable :                                   temperature |
+|             Ramping Option :                                           None |
+|             Relaxation Factor :                                    1.00e+00 |
+|             Convergence Target :                                   1.00e-02 |
+|             Mapping Type :                                ProfilePreserving |
+|             Unmapped Value Option :                       ProgramControlled |
+|       Mapping Control                                                       |
+|          Stop If Poor Intersection :                                   True |
+|          Poor Intersection Threshold :                             5.00e-01 |
+|          Face Alignment :                                 ProgramControlled |
+|          Absolute Gap Tolerance :                                   0.0 [m] |
+|          Relative Gap Tolerance :                                  1.00e+00 |
++=============================================================================+
+|                              Solution Control                               |
++=============================================================================+
+|    Duration Option :                                          NumberOfSteps |
+|    Number Of Steps :                                                      1 |
+|    Minimum Iterations :                                                   1 |
+|    Maximum Iterations :                                                   5 |
+|    Use IP Address When Possible :                         ProgramControlled |
+|    Use Local Host When Possible :                         ProgramControlled |
++=============================================================================+
+|                               Output Control                                |
++=============================================================================+
+|    Option :                                                       EveryStep |
+|    Generate CSV Chart Output :                                         True |
+|    Write Initial Snapshot :                                            True |
+|    Results                                                                  |
+|       Option :                                            ProgramControlled |
+|       Include Instances :                                 ProgramControlled |
+|       Type                                                                  |
+|          Option :                                               EnsightGold |
++=============================================================================+
+
++-----------------------------------------------------------------------------+
+| Warnings were found during data model validation.                           |
++-----------------------------------------------------------------------------+
+| Warning: Participant Solid (MAPDL-2) has the ExecutionControl &#39;Option&#39; set  |
+|     to &#39;ExternallyManaged&#39;. System Coupling will not control the            |
+|     startup/shutdown behavior of this participant.                          |
+| Warning: Participant Fluid (FLUENT-1) has the ExecutionControl &#39;Option&#39; set |
+|     to &#39;ExternallyManaged&#39;. System Coupling will not control the            |
+|     startup/shutdown behavior of this participant.                          |
+| Warning: Unused input variables [&#39;Heat_Transfer_Coefficient&#39;,               |
+|     &#39;Bulk_Temperature&#39;, &#39;Temperature&#39;] (HCOEF, TBULK, TEMP) on region       |
+|     FSIN_1 for Solid (CouplingParticipant:MAPDL-2).                         |
+| Warning: Unused input variables [&#39;backflow_total_temperature&#39;,              |
+|     &#39;backflow_turbulent_kinetic_energy&#39;, &#39;pressure&#39;,                        |
+|     &#39;backflow_specific_dissipation_rate&#39;] (backflow-total-temperature,      |
+|     backflow-turbulent-kinetic-energy, pressure, backflow-specific-         |
+|     dissipation-rate) on region outlet for Fluid                            |
+|     (CouplingParticipant:FLUENT-1).                                         |
+| Warning: Unused input variables [&#39;heatflow&#39;] (heatflow) on region           |
+|     inner_wall for Fluid (CouplingParticipant:FLUENT-1).                    |
+| Warning: Unused input variables [&#39;heatrate&#39;, &#39;lorentz_force&#39;] (heatrate,    |
+|     lorentz-force) on region fff_fluiddomain for Fluid                      |
+|     (CouplingParticipant:FLUENT-1).                                         |
+| Warning: Unused input variables [&#39;turbulent_kinetic_energy&#39;,                |
+|     &#39;specific_dissipation_rate&#39;, &#39;static_temperature&#39;, &#39;velocity&#39;]          |
+|     (turbulent-kinetic-energy, specific-dissipation-rate, static-           |
+|     temperature, velocity) on region inlet for Fluid                        |
+|     (CouplingParticipant:FLUENT-1).                                         |
++-----------------------------------------------------------------------------+
+
++=============================================================================+
+|                            Execution Information                            |
++=============================================================================+
+|                                                                             |
+| System Coupling                                                             |
+|   Command Line Arguments:                                                   |
+|     -m cosimgui --grpc --host=0.0.0.0 --port=59519 --transport-mode=insecur |
+|     e --allow-remote --ptrace                                               |
+|   Working Directory:                                                        |
+|     /working                                                                |
+|                                                                             |
+| Fluid                                                                       |
+|   Not started by System Coupling                                            |
+|                                                                             |
+| Solid                                                                       |
+|   Not started by System Coupling                                            |
+|                                                                             |
++=============================================================================+
+Awaiting connections from coupling participants... done.
+
++=============================================================================+
+|                              Build Information                              |
++-----------------------------------------------------------------------------+
+| System Coupling                                                             |
+|   2025 R2: Build ID: 45b89b3 Build Date: 2025-09-24T09:46                   |
+| Fluid                                                                       |
+|   ANSYS Fluent 25.0 2.0 0.0 Build Time: May 16 2025 12:49:54 EDT  Build Id: |
+|   203                                                                       |
+| Solid                                                                       |
+|   Mechanical APDL Release                  Build 25.2     UP20251010        |
+|   DISTRIBUTED LINUX x64    Version                                          |
++=============================================================================+
++-----------------------------------------------------------------------------+
+|                               MESH STATISTICS                               |
++-----------------------------------------------------------------------------+
+| Participant: FLUENT-1                                                       |
+|   Number of face regions                                                  1 |
+|     Number of faces                                                   8 408 |
+|       Triangular                                                      8 408 |
+|     Area (m2)                                                     3.140e-02 |
+|   Bounding Box (m)                                                          |
+|     Minimum                              [-2.500e-02 -2.500e-02  0.000e+00] |
+|     Maximum                              [ 2.500e-02  2.500e-02  2.000e-01] |
+|                                                                             |
+| Participant: MAPDL-2                                                        |
+|   Number of face regions                                                  1 |
+|     Number of faces                                                   8 000 |
+|       Quadrilateral8                                                  8 000 |
+|     Area (m2)                                                     3.141e-02 |
+|   Bounding Box (m)                                                          |
+|     Minimum                              [-2.500e-02 -2.500e-02  0.000e+00] |
+|     Maximum                              [ 2.500e-02  2.500e-02  2.000e-01] |
+|                                                                             |
+| Total                                                                       |
+|   Number of cells                                                         0 |
+|   Number of faces                                                    16 408 |
+|   Number of nodes                                                    28 416 |
++-----------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------+
+|                               MAPPING SUMMARY                               |
++-----------------------------------------------------------------------------+
+|                                     |      Source            Target         |
++-----------------------------------------------------------------------------+
+| Interface-1                         |                                       |
+|   Heat_Flow                         |                                       |
+|     Mapped Area [%]                 |       100               100           |
+|     Mapped Elements [%]             |       100               100           |
+|     Mapped Nodes [%]                |       100               100           |
+|   temperature                       |                                       |
+|     Mapped Area [%]                 |       100               100           |
+|     Mapped Elements [%]             |       100               100           |
+|     Mapped Nodes [%]                |       100               100           |
++-----------------------------------------------------------------------------+
+
+
++-----------------------------------------------------------------------------+
+|                            Transfer Diagnostics                             |
++-----------------------------------------------------------------------------+
+|                                     |      Source            Target         |
++-----------------------------------------------------------------------------+
+| Fluid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     temperature                     |                                       |
+|       Weighted Average              |     2.73E+02          2.73E+02        |
++-----------------------------------------------------------------------------+
+| Solid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     Heat_Flow                       |                                       |
+|       Sum                           |     0.00E+00          0.00E+00        |
++-----------------------------------------------------------------------------+
+
+===============================================================================
++=============================================================================+
+|                                                                             |
+|                           Analysis Initialization                           |
+|                                                                             |
++=============================================================================+
+===============================================================================
+
+
+===============================================================================
++=============================================================================+
+|                                                                             |
+|                              Coupled Solution                               |
+|                                                                             |
++=============================================================================+
+===============================================================================
+
+
++=============================================================================+
+| COUPLING STEP = 1                                                           |
++=============================================================================+
+
++=============================================================================+
+|                             COUPLING ITERATIONS                             |
++-----------------------------------------------------------------------------+
+|                                     |      Source            Target         |
++-----------------------------------------------------------------------------+
+|                           COUPLING ITERATION = 1                            |
++-----------------------------------------------------------------------------+
+| Fluid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     temperature                     |         Not yet converged             |
+|       RMS Change                    |     1.00E+00          1.00E+00        |
+|       Weighted Average              |     2.73E+02          2.73E+02        |
++-----------------------------------------------------------------------------+
+| Solid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     Heat_Flow                       |         Not yet converged             |
+|       RMS Change                    |     1.00E+00          1.00E+00        |
+|       Sum                           |     6.12E+02          6.12E+02        |
++-----------------------------------------------------------------------------+
+| Participant solution status         |                                       |
+|   Fluid                             |         Not yet converged             |
+|   Solid                             |             Converged                 |
++-----------------------------------------------------------------------------+
+|                           COUPLING ITERATION = 2                            |
++-----------------------------------------------------------------------------+
+| Fluid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     temperature                     |         Not yet converged             |
+|       RMS Change                    |     3.79E-01          3.97E-01        |
+|       Weighted Average              |     3.51E+02          3.51E+02        |
++-----------------------------------------------------------------------------+
+| Solid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     Heat_Flow                       |         Not yet converged             |
+|       RMS Change                    |     6.02E-01          3.73E-01        |
+|       Sum                           |    -1.19E+03         -1.19E+03        |
++-----------------------------------------------------------------------------+
+| Participant solution status         |                                       |
+|   Fluid                             |         Not yet converged             |
+|   Solid                             |             Converged                 |
++-----------------------------------------------------------------------------+
+|                           COUPLING ITERATION = 3                            |
++-----------------------------------------------------------------------------+
+| Fluid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     temperature                     |         Not yet converged             |
+|       RMS Change                    |     1.36E-02          1.34E-02        |
+|       Weighted Average              |     3.49E+02          3.49E+02        |
++-----------------------------------------------------------------------------+
+| Solid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     Heat_Flow                       |         Not yet converged             |
+|       RMS Change                    |     6.23E-02          4.02E-02        |
+|       Sum                           |    -1.08E+03         -1.08E+03        |
++-----------------------------------------------------------------------------+
+| Participant solution status         |                                       |
+|   Fluid                             |         Not yet converged             |
+|   Solid                             |             Converged                 |
++-----------------------------------------------------------------------------+
+|                           COUPLING ITERATION = 4                            |
++-----------------------------------------------------------------------------+
+| Fluid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     temperature                     |             Converged                 |
+|       RMS Change                    |     1.01E-03          9.90E-04        |
+|       Weighted Average              |     3.49E+02          3.49E+02        |
++-----------------------------------------------------------------------------+
+| Solid                               |                                       |
+|   Interface: Interface-1            |                                       |
+|     Heat_Flow                       |             Converged                 |
+|       RMS Change                    |     4.39E-03          3.22E-03        |
+|       Sum                           |    -1.09E+03         -1.09E+03        |
++-----------------------------------------------------------------------------+
+| Participant solution status         |                                       |
+|   Fluid                             |             Converged                 |
+|   Solid                             |             Converged                 |
++=============================================================================+
+
+===============================================================================
++=============================================================================+
+|                                                                             |
+|                                  Shut Down                                  |
+|                                                                             |
++=============================================================================+
+===============================================================================
+
++=============================================================================+
+|                          Available Restart Points                           |
++=============================================================================+
+| Restart Point                        | File Name                            |
++-----------------------------------------------------------------------------+
+| Coupling Step 1                      | Restart_step1.h5                     |
++=============================================================================+
+
++=============================================================================+
+|                             Timing Summary [s]                              |
++=============================================================================+
+| Total Time :                                                    9.31031E+01 |
+| Coupling Participant Time                                                   |
+|    Fluid :                                                      6.69855E+01 |
+|    Solid :                                                      2.40356E+01 |
+|    Total :                                                      9.10211E+01 |
+| Coupling Engine Time                                                        |
+</pre></div>
+</div>
+</section>
+<section id="post-processing">
+<h1>Post processing<a class="headerlink" href="#post-processing" title="Link to this heading">#</a></h1>
+<p>Post process the fluid results in Fluent.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">use_window_resolution</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+    <span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">use_window_resolution</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">x_resolution</span> <span class="o">=</span> <span class="mi">1920</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">y_resolution</span> <span class="o">=</span> <span class="mi">1440</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">surfaces</span><span class="o">.</span><span class="n">plane_surface</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;mid_plane&quot;</span><span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">surfaces</span><span class="o">.</span><span class="n">plane_surface</span><span class="p">[</span><span class="s2">&quot;mid_plane&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;zx-plane&quot;</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;contour_temperature&quot;</span><span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">contour</span><span class="p">[</span><span class="s2">&quot;contour_temperature&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;field&quot;</span><span class="p">:</span> <span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;surfaces_list&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mid_plane&quot;</span><span class="p">],</span>
+<span class="p">}</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">contour</span><span class="o">.</span><span class="n">display</span><span class="p">(</span><span class="n">object_name</span><span class="o">=</span><span class="s2">&quot;contour_temperature&quot;</span><span class="p">)</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">restore_view</span><span class="p">(</span><span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;top&quot;</span><span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">auto_scale</span><span class="p">()</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">save_picture</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;cht_temp_contour.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>|    Solution Control :                                           1.29905E+00 |
+|    Mesh Import :                                                5.56388E-02 |
+|    Mapping Setup :                                              3.99676E-01 |
+|    Mapping :                                                    1.11580E-03 |
+|    Numerics :                                                   3.97944E-03 |
+|    Misc. :                                                      3.22537E-01 |
+|    Total :                                                      2.08200E+00 |
++=============================================================================+
+
++=============================================================================+
+|                 System coupling run completed successfully.                 |
++=============================================================================+
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/cht_temp_contour.png"><img alt="../../_images/cht_temp_contour.png" class="align-center" src="../../_images/cht_temp_contour.png" style="width: 800pt;" />
+</a>
+<p>Post-process the system coupling results - display the charts showing the convergence plot.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">syc</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">show_plot</span><span class="p">(</span><span class="n">show_convergence</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_cht_pipe_001.png" srcset="../../_images/sphx_glr_cht_pipe_001.png" alt="Interface: Interface-1, Data transfer convergence on Interface-1, Interface-1 - temperature (Weighted Average), Interface-1 - Heat_Flow (Sum)" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;ansys.systemcoupling.core.charts.plotter.Plotter object at 0x7ff75cfd2870&gt;
+</pre></div>
+</div>
+</section>
+<section id="exit">
+<h1>Exit<a class="headerlink" href="#exit" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">syc</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="n">mapdl</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (3 minutes 56.837 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-00-systemcoupling-cht-pipe-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/6c2e529a9c16051b7923609115ed1411/cht_pipe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">cht_pipe.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/62c2f2cf8f64c1232df1180568b0aa14/cht_pipe.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">cht_pipe.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/64d6ac42664f26593eedd7ebf794562c/cht_pipe.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">cht_pipe.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Conjugate Heat Transfer- Pipe Flow</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-modules-download-files-launch-products">Import modules, download files, launch products</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-required-imports">Perform required imports</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-mapdl-to-create-the-solid-domain">Launch MAPDL to create the solid domain.</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creating-the-regions-from-the-geometry-for-named-selections">Creating the regions from the geometry for named selections</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-fluid-analysis-and-read-the-pre-created-mesh-file">Set up the fluid analysis and read the pre-created mesh file</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-coupled-analysis">Set up the coupled analysis</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-constants-and-calculate-biot-number">Define constants and calculate Biot number</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#post-processing">Post processing</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exit">Exit</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+
+  
+  <nav class="tocsection editthispage" aria-label="Edit this page">
+    <a href="https://github.com/pyansys/pysystem-coupling/edit/main/doc/source/examples/00-systemcoupling/cht_pipe.rst" rel="noopener noreferrer">
+      <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </nav>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/examples/00-systemcoupling/cht_pipe.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text", "objectID"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2026 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.7.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

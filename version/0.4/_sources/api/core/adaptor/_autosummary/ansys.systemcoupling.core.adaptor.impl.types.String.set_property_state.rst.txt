@@ -1,0 +1,6 @@
+set\_property\_state
+====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: String.set_property_state

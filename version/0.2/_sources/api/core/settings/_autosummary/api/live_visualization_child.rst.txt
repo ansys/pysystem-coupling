@@ -1,0 +1,60 @@
+:orphan:
+
+.. _live_visualization_child:
+
+live_visualization_child
+========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.live_visualization_child
+
+.. autoclass:: live_visualization_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Specifies live visualization working process
+    
+    Allowed values:
+    
+    - "ProgramControlled" - Generation of postprocessing results is disabled for now.
+    
+    -  "Off" - Generation of postprocessing results is disabled.
+    
+    Allowed values for step-based analyses:
+    
+    - "LastStep" - Generate results only for the last coupling step completed.
+    
+    - "EveryStep" - Generate results at the end of every coupling step.
+    
+    - "StepInterval" - Generate results at the end of coupling steps at
+      the interval specified by the output frequency setting.
+    
+    Allowed values for iteration-based analyses:
+    
+    - "LastIteration" - Generate results only for the last coupling
+      iteration completed.
+    
+    - "EveryIteration" - Generate results at the end of every coupling
+      iteration.
+    
+    - "IterationInterval" - Generate results at the end of coupling
+      iterations at the interval specified by the output frequency setting.
+
+write_results : `bool`
+    Write results to files when conducting live visualization.
+
+output_frequency : `int`
+    Specify output frequency.
+
+.. rubric:: Included in:
+
+==============================================   ==================================================
+
+Parent                                                                                      Summary
+
+==============================================   ==================================================
+:ref:`live_visualization <live_visualization>`       Configures live visualization via EnSight DVS.
+
+==============================================   ==================================================
+

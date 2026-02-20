@@ -1,0 +1,34 @@
+:orphan:
+
+.. _expression_function_child:
+
+expression_function_child
+=========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.expression_function_child
+
+.. autoclass:: expression_function_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+module : `str`
+    Name of the Python module that exports the function.
+
+function : `str`
+    Name of the function in the module.
+
+function_name : `str`
+    Name to use when referencing the function in an expression.
+
+.. rubric:: Included in:
+
+================================================   ==================================================================
+
+Parent                                                                                                        Summary
+
+================================================   ==================================================================
+:ref:`expression_function <expression_function>`       Makes an external Python function accessible from expressions.
+
+================================================   ==================================================================
+

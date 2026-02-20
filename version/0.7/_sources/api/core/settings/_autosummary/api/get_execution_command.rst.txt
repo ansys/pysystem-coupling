@@ -1,0 +1,23 @@
+:orphan:
+
+.. _get_execution_command:
+
+get_execution_command
+=====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.get_execution_command
+
+.. autoclass:: get_execution_command
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

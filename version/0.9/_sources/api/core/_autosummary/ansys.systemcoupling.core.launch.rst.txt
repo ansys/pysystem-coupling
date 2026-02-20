@@ -1,0 +1,6 @@
+﻿launch
+======
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autofunction:: launch

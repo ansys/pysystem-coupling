@@ -1,0 +1,82 @@
+:orphan:
+
+.. _stabilization:
+
+stabilization
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.stabilization
+
+.. autoclass:: stabilization
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Allowed values:
+    
+    - "ProgramControlled"
+    - "None"
+    - "Quasi-Newton"
+    - "Aitken" (Alpha only)
+
+couple_with_global_stabilization : `bool`
+    Controls whether the stabilization for this data transfer is coupled with the global stabilization.
+
+initial_iterations : `int`
+    Number of pre-stabilization iterations to perform.
+
+initial_relaxation_factor : :ref:`RealType<real_type>`
+    Relaxation factor applied for pre-stabilization iterations.
+
+maximum_retained_time_steps : `int`
+    Controls the maximum number of timesteps to retain.
+
+maximum_retained_iterations : `int`
+    Controls the maximum number of iterations to retain.
+
+weight_factor : :ref:`RealType<real_type>`
+    Weighting factor to use for this data transfer in IQN-ILS.
+
+diagnostics_level : `int`
+    Controls the maximum number of timesteps to retain.
+    
+    Values are interpreted as:
+    
+    - 0 : none
+    - 1 : basic
+    - 2 : advanced
+    - 3 : write matrix files
+
+weight_option : `str`
+    Weight factor when multiple transfers are stabilized.
+    
+    Allowed values:
+    
+    - "Constant"
+    - "Value"
+    - "Residual"
+    - "ResidualSum"
+    - "InverseResidual"
+    - "InverseResidualSum" 
+
+qr_tol_this_step : :ref:`RealType<real_type>`
+    QR filter tolerance for current step.
+
+qr_tol_old_steps : :ref:`RealType<real_type>`
+    QR filter tolerance for old steps.
+
+time_step_initialization_option : `str`
+    Controls how Aitken relaxation factor is initialized at start of new timestep.
+
+.. rubric:: Included in:
+
+================================================   ======================================================
+
+Parent                                                                                            Summary
+
+================================================   ======================================================
+:ref:`data_transfer_child <data_transfer_child>`       Configure data transfers for a coupling interface.
+
+================================================   ======================================================
+

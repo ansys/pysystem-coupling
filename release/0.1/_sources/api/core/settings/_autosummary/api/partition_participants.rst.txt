@@ -1,0 +1,23 @@
+:orphan:
+
+.. _partition_participants:
+
+partition_participants
+======================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.partition_participants
+
+.. autoclass:: partition_participants
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+====================================   =================
+
+Parent                                           Summary
+
+====================================   =================
+:ref:`solution_root <solution_root>`       'root' object
+
+====================================   =================
+

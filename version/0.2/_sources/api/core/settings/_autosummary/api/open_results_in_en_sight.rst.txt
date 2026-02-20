@@ -1,0 +1,23 @@
+:orphan:
+
+.. _open_results_in_en_sight:
+
+open_results_in_en_sight
+========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.open_results_in_en_sight
+
+.. autoclass:: open_results_in_en_sight
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+====================================   =================
+
+Parent                                           Summary
+
+====================================   =================
+:ref:`solution_root <solution_root>`       'root' object
+
+====================================   =================
+

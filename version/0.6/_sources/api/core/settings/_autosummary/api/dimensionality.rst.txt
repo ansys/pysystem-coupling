@@ -1,0 +1,49 @@
+:orphan:
+
+.. _dimensionality:
+
+dimensionality
+==============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.dimensionality
+
+.. autoclass:: dimensionality
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+length : :ref:`RealType<real_type>`
+    Exponent of length dimension.
+
+time : :ref:`RealType<real_type>`
+    Exponent of time dimension.
+
+mass : :ref:`RealType<real_type>`
+    Exponent of mass dimension.
+
+temperature : :ref:`RealType<real_type>`
+    Exponent of temperature dimension.
+
+amount_of_substance : :ref:`RealType<real_type>`
+    Exponent of amount of substance dimension.
+
+current : :ref:`RealType<real_type>`
+    Exponent of electric current dimension.
+
+luminous_intensity : :ref:`RealType<real_type>`
+    Exponent of luminous intensity dimension.
+
+angle : :ref:`RealType<real_type>`
+    Exponent of angle dimension.
+
+.. rubric:: Included in:
+
+========================================   ======================================
+
+Parent                                                                    Summary
+
+========================================   ======================================
+:ref:`attribute_child <attribute_child>`       Configure a variable's attributes.
+
+========================================   ======================================
+

@@ -1,0 +1,6 @@
+set\_sycproxy
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: BooleanList.set_sycproxy

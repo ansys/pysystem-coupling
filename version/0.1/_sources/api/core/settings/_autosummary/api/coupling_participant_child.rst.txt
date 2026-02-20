@@ -1,0 +1,90 @@
+:orphan:
+
+.. _coupling_participant_child:
+
+coupling_participant_child
+==========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.coupling_participant_child
+
+.. autoclass:: coupling_participant_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+participant_type : `str`
+    Coupling participant type.
+    
+    Allowed values:
+    - "DEFAULT"
+    - "CFX"
+    - "FLUENT"
+    - "MAPDL"
+    - "AEDT"
+    - "FMU"
+    - "EXTERNALDATA"
+    - "FORTE"
+    - "DEFAULT-SRV"
+    - "MECH-SRV"
+    - "CFD-SRV" 
+
+participant_display_name : `str`
+    Participant's display name as defined by the participant solver (as
+    opposed to System Coupling's ``display_name`` for the participant).
+
+display_name : `str`
+    Participant's display name as defined in System Coupling.
+
+dimension : `str`
+    Dimension of the participant ("2D" or "3D").
+
+participant_file_loaded : `str`
+    File used to generate the participant.
+
+logging_on : `bool`
+    Specifies whether logging is activated for the participant.
+
+participant_analysis_type : `str`
+    Coupling participant analysis type ("Steady" or "Transient").
+
+use_new_apis : `bool`
+    Controls whether a Fluent or MAPDL participant should communicate using new APIs.
+
+restarts_supported : `bool`
+    Indicates whether the participant supports restarts.
+
+instancing : `str`
+    Set instancing on the participant.
+
+.. rubric:: Children
+
+==============================================   ===========================================================
+
+Child                                                                                                Summary
+
+==============================================   ===========================================================
+:ref:`variable <variable>`                                Configure a variable for the coupling participant.
+
+:ref:`region <region>`                                      Configure a region for the coupling participant.
+
+:ref:`update_control <update_control>`                                            Configure update controls.
+
+:ref:`fmu_parameter <fmu_parameter>`                  Configure a parameter for an FMU coupling participant.
+
+:ref:`execution_control <execution_control>`         Configure execution control for a coupling participant.
+
+:ref:`external_data_file <external_data_file>`                      Participant external data file settings.
+
+==============================================   ===========================================================
+
+.. rubric:: Included in:
+
+==================================================   =====================================
+
+Parent                                                                             Summary
+
+==================================================   =====================================
+:ref:`coupling_participant <coupling_participant>`       Configure a coupling participant.
+
+==================================================   =====================================
+

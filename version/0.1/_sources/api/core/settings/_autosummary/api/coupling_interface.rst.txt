@@ -1,0 +1,28 @@
+:orphan:
+
+.. _coupling_interface:
+
+coupling_interface
+==================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.coupling_interface
+
+.. autoclass:: coupling_interface
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`coupling_interface_child <coupling_interface_child>`
+
+
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+
