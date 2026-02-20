@@ -19,6 +19,7 @@ maintainers = [
 dependencies = [
     "ansys-api-systemcoupling==0.3.1",
     "ansys-platform-instancemanagement~=1.0",
+    "ansys-tools-common>=0.4.3",
     "docker>=7.1.0",
     "grpcio>=1.30.0",
     "grpcio-status>=1.30.0",
@@ -78,7 +79,7 @@ doc = [
 	#   Explicit units dependency is to fix fluent runtime error
 	#   TODO: try removing sometime - perhaps on next update
 	#         of ansys-fluent-core
-	"ansys-units==0.10.1", 
+	"ansys-units==0.10.1",
 	"ansys-mapdl-core==0.71.3",
 ]
 style = [
