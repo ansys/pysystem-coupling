@@ -143,17 +143,64 @@ class InterfaceSeriesData:
 
 @dataclass
 class TimestepData:
-    """Mappings from iteration to time step and time.
+    """Mappings from time step to last iteration of timestep and time.
+
+    This is more suited to bulk chart data queries where the complete
+    data is available following the simulation. For live plotting, see
+    TimestepBeginData and TimestepEndData for incremental updates.
+
+    (Note: in the CSV case this data structure is currently also used
+    with live plotting but this needs to be migrated to the other
+    approach. In any case, only one of the two approaches should be used
+    at a time.)
 
     Attributes
     ----------
-    timestep : list[int]
-        Timestep indexes, indexed by iteration. Typically, multiple consecutive
-        iteration indexes map to the same timestep index.
-    time: list[float]
-        Time values, indexed by iteration. Typically, multiple consecutive iteration
-        indexes map to the same time value.
+    last_iterations : list[int]
+        The last iteration index for each (zero-based) time step. Iterations are zero-based.
+    times: list[float]
+        Time values, indexed by (zero-based) time step.
     """
 
-    timestep: list[int] = field(default_factory=list)  # iter -> step index
-    time: list[float] = field(default_factory=list)  # iter -> time
+    last_iterations: list[int] = field(default_factory=list)  # step -> iteration
+    times: list[float] = field(default_factory=list)  # step -> time
+
+
+@dataclass
+class TimestepBeginData:
+    """Data pertaining to the beginning of a time step in a transient analysis.
+
+    This is intended for use in live plotting to provide incremental timestep data
+    as the simulation proceeds. See TimestepEndData for data at the end of a time
+    step and TimestepData for the cumulative mapping of iterations to simulation time.
+
+    Attributes
+    ----------
+    timestep : int
+        The time step index.
+    time : float
+        The simulation time value at the beginning of the time step.
+    """
+
+    timestep: int
+    time: float
+
+
+@dataclass
+class TimestepEndData:
+    """Data pertaining to the end of a time step in a transient analysis.
+
+    This is intended for use in live plotting to provide incremental timestep data
+    as the simulation proceeds. See TimestepBeginData for data at the beginning of a
+    time step and TimestepData for the cumulative mapping of iterations to time steps.
+
+    Attributes
+    ----------
+    timestep : int
+        The time step index.
+    iteration : int
+        The iteration index at the end of the time step.
+    """
+
+    timestep: int
+    iteration: int

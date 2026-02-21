@@ -22,11 +22,9 @@
 
 import pytest
 
-from ansys.systemcoupling.core.charts.chart_datatypes import TimestepData
 from ansys.systemcoupling.core.charts.plotter import (
     _calc_new_ylimits_linear,
     _calc_new_ylimits_log,
-    _process_timestep_data,
     _update_xy_data,
 )
 
@@ -165,18 +163,6 @@ def test_update_xy_no_time():
     assert new_data[1] == pytest.approx([0.1, 0.2, 0.3, 0.3, 0.4, 0.5])
 
 
-def test_process_timestep_data():
-    iter_step = [1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 6]
-    times = [0.1 * istep for istep in iter_step]
-
-    timestep_data = TimestepData(iter_step, times)
-
-    step_iter, step_time = _process_timestep_data(timestep_data)
-
-    assert step_iter == [2, 5, 7, 10, 12, 13]
-    assert step_time == pytest.approx([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])
-
-
 def test_update_xy_time():
     x_curr = [0.1 * i for i in range(1, 5)]
     y_curr = [x + 0.1 * x * x for x in x_curr]
@@ -211,3 +197,47 @@ def test_update_xy_time():
     assert new_data[1][3] == pytest.approx(5.0)
     assert new_data[1][4] == pytest.approx(5.5)
     assert new_data[1][5] == pytest.approx(6.0)
+
+
+def test_update_xy_time_live_incremental():
+
+    x_curr = []
+    y_curr = []
+
+    new_start_index = 0
+    iter = 0
+
+    n_step = 5
+    n_iter_per_step = 3
+    step_size = 0.025
+
+    step_iter = []
+    times = []
+    all_series_data = []
+
+    for step in range(n_step):
+        step_iter.append(-1)  # Placeholder for live incremental
+        times.append(step_size * (step + 1))
+        for i in range(n_iter_per_step):
+            series_data = [0.1 * (iter + 1)]
+            all_series_data += series_data
+            new_data = _update_xy_data(
+                time_info=(step_iter, times),
+                x_curr=x_curr,
+                y_curr=y_curr,
+                series_data=series_data,
+                new_start_index=new_start_index,
+            )
+
+            x_curr = new_data[0]
+            y_curr = new_data[1]
+            new_start_index += 1
+            iter += 1
+        # Update step_iter to final iteration of this time step
+        # bearing in mind that iter has already been incremented
+        step_iter[-1] = iter - 1
+
+    print(f"step_iter: {step_iter}")
+    print(f"all_series_data: {all_series_data}")
+    assert x_curr == pytest.approx([0.025, 0.05, 0.075, 0.1, 0.125])
+    assert y_curr == pytest.approx([0.3, 0.6, 0.9, 1.2, 1.5])

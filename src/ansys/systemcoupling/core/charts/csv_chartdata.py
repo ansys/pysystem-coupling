@@ -22,6 +22,7 @@
 
 # from dataclasses import dataclass, field
 import csv
+from dataclasses import dataclass, field
 from typing import TextIO, Union
 
 from ansys.systemcoupling.core.charts.chart_datatypes import (
@@ -36,6 +37,24 @@ from ansys.systemcoupling.core.util.assertion import assert_
 
 HeaderList = list[str]
 ChartData = list[list[float]]
+
+
+@dataclass
+class RawTimestepData:
+    """Mappings from iteration to time step and time.
+
+    Attributes
+    ----------
+    timestep : list[int]
+        Timestep indexes, indexed by iteration. Typically, multiple consecutive
+        iteration indexes map to the same timestep index.
+    time: list[float]
+        Time values, indexed by iteration. Typically, multiple consecutive iteration
+        indexes map to the same time value.
+    """
+
+    timestep: list[int] = field(default_factory=list)  # iter -> step index
+    time: list[float] = field(default_factory=list)  # iter -> time
 
 
 class CsvReader:
@@ -128,7 +147,7 @@ class CsvChartDataReader:
         self._csv_reader = CsvReader(csvfile)
         self._metadata: InterfaceInfo = None
         self._data: InterfaceSeriesData = None
-        self._timestep_data = TimestepData()
+        self._timestep_data = RawTimestepData()
 
     def read_metadata(self) -> bool:
         if not self._csv_reader.read_data():
@@ -149,7 +168,7 @@ class CsvChartDataReader:
 
     @property
     def timestep_data(self) -> TimestepData:
-        return self._timestep_data
+        return _process_timestep_data(self._timestep_data)
 
     def read_new_data(self):
         self._csv_reader.read_data()
@@ -225,6 +244,29 @@ def _parse_suffix(header: str, part_disp_name: str) -> str:
     if idx == -1:
         return ""
     return header[idx + len(part_disp_name) + 3 :].strip()
+
+
+def _process_timestep_data(
+    raw_timestep_data: RawTimestepData,
+) -> TimestepData:
+    if not raw_timestep_data.timestep:
+        return TimestepData()
+
+    curr_step = raw_timestep_data.timestep[0]
+    last_iters = [-1]
+    times = [None]
+    for iter, step in enumerate(raw_timestep_data.timestep):
+        time = raw_timestep_data.time[iter]
+        if step == curr_step:
+            # Still in the same step, so update
+            times[-1] = time
+            last_iters[-1] = iter
+        else:
+            # New step
+            times.append(time)
+            last_iters.append(iter)
+            curr_step = step
+    return TimestepData(last_iterations=last_iters, times=times)
 
 
 def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo:

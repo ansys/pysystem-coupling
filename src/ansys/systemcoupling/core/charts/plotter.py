@@ -32,7 +32,9 @@ import matplotlib.pyplot as plt
 from ansys.systemcoupling.core.charts.chart_datatypes import (
     InterfaceInfo,
     SeriesData,
+    TimestepBeginData,
     TimestepData,
+    TimestepEndData,
 )
 from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     PlotDefinitionManager,
@@ -41,30 +43,6 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
 from ansys.systemcoupling.core.util.assertion import assert_
 
 # from ansys.systemcoupling.core.util.logging import LOG
-
-
-def _process_timestep_data(
-    timestep_data: TimestepData,
-) -> tuple[list[int], list[float]]:
-    if not timestep_data.timestep:
-        return [], []
-
-    # TODO: for a dynamically updating case, it should be possible to do a partial update.
-    time_indexes = [0]
-    times = [None]
-    curr_step = timestep_data.timestep[0]
-    for i, step in enumerate(timestep_data.timestep):
-        time = timestep_data.time[i]
-        if step == curr_step:
-            # Still in the same step, so update
-            times[-1] = time
-            time_indexes[-1] = i
-        else:
-            # New step
-            times.append(time)
-            time_indexes.append(i)
-            curr_step = step
-    return (time_indexes, times)
 
 
 def _calc_new_ylimits_linear(
@@ -156,16 +134,29 @@ def _update_xy_data(
         # time index.
         # time_indexes[-1] is the latest known 0-based iteration index that belongs
         # to the latest timestep.
+
+        # Loop over all known time steps and pick out the right data.
+        # This is suboptimal because we have already done this for earlier time steps,
+        # but it keeps the logic simple.
         for i, time_iter in enumerate(time_indexes):
-            # Straight copy if not overlapping with new data yet
-            if time_iter < new_start_index:
+            if time_iter == -1:
+                # No end iteration known yet for this time step
+                x_new.append(time_values[i])
+                y_new.append(series_data[-1])
+
+            elif time_iter < new_start_index:
+                # End of this timestep is before new data starts - just copy existing data
                 x_new.append(time_values[i])
                 y_new.append(y_curr[i])
 
-            # Don't assume we have data yet for all known timesteps
             elif time_iter < new_total_data_len:
+                # End of this timestep is within new data range - use new data
                 x_new.append(time_values[i])
                 y_new.append(series_data[time_iter - new_start_index])
+            else:
+                # We don't have data for this time step yet
+                pass
+
     else:
         for i in range(new_total_data_len):
             if i < new_start_index:
@@ -215,8 +206,22 @@ class FigurePlotter:
         self._init_plots()
         self._fig.suptitle(f"Interface: {self._metadata.name}", fontsize=10)
 
-    def set_timestep_data(self, timestep_data: tuple[list[int], list[float]]):
-        self._time_indexes, self._times = timestep_data
+    def set_timestep_data(self, timestep_data: TimestepData):
+        self._time_indexes, self._times = (
+            timestep_data.last_iterations,
+            timestep_data.times,
+        )
+
+    # NB: either use set_timestep_data or these two methods; do not mix.
+    def set_timestep_begin_data(self, timestep_begin_data: TimestepBeginData):
+        self._times.append(timestep_begin_data.time)
+        # We don't have an end iteration for this time step.
+        # Logic using self._time_indexes needs to account for this.
+        self._time_indexes.append(-1)
+
+    def set_timestep_end_data(self, timestep_end_data: TimestepEndData):
+        # We can fill in the iteration for the last time step now
+        self._time_indexes[-1] = timestep_end_data.iteration
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the
@@ -247,8 +252,9 @@ class FigurePlotter:
             return
 
         x_curr, y_curr = subplot_line.get_data()
+
         x_new, y_new = _update_xy_data(
-            (self._time_indexes, self._times) if self._times else None,
+            ((self._time_indexes, self._times) if self._times else None),
             x_curr,
             y_curr,
             series_data.data,
@@ -388,12 +394,27 @@ class Plotter:
 
     def set_timestep_data(self, timestep_data: TimestepData):
 
-        if timestep_data.timestep and not self._is_transient:
+        if timestep_data.times and not self._is_transient:
             raise RuntimeError("Attempt to set timestep data on non-transient case")
 
-        processed_timestep_data = _process_timestep_data(timestep_data)
         for fig in self._figures:
-            fig.set_timestep_data(processed_timestep_data)
+            fig.set_timestep_data(timestep_data)
+
+    def set_timestep_begin_data(self, timestep_begin_data: TimestepBeginData):
+
+        if not self._is_transient:
+            raise RuntimeError("Attempt to set timestep data on non-transient case")
+
+        for fig in self._figures:
+            fig.set_timestep_begin_data(timestep_begin_data)
+
+    def set_timestep_end_data(self, timestep_end_data: TimestepEndData):
+
+        if not self._is_transient:
+            raise RuntimeError("Attempt to set timestep data on non-transient case")
+
+        for fig in self._figures:
+            fig.set_timestep_end_data(timestep_end_data)
 
     def update_line_series(self, series_data: SeriesData):
         """Update the line series determined by the provided ``series_data`` with the

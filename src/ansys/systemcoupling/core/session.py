@@ -189,11 +189,12 @@ class Session:
         if isinstance(self.__rpc, _DefunctRpcImpl):
             self.__rpc.trigger_error
         sycproxy = SycProxy(self.__rpc)
-        root = get_root(sycproxy, category=category, version=self._get_version())
+        version = self._get_version()
+        root = get_root(sycproxy, category=category, version=version)
         if self.__part_mgr is None:
-            self.__part_mgr = ParticipantManager(self, self.__syc_version)
+            self.__part_mgr = ParticipantManager(self, version)
         sycproxy.set_injected_commands(
-            get_injected_cmd_map(category, self, self.__part_mgr, self.__rpc)
+            get_injected_cmd_map(category, self, version, self.__part_mgr, self.__rpc)
         )
         return (root, sycproxy)
 
@@ -220,7 +221,7 @@ class Session:
 
     @property
     def _grpc(self):
-        """The gRPC connection object, exposed for testing purposes only."""
+        """The gRPC connection object, exposed for internal and testing purposes only."""
         return self.__rpc
 
     def upload_file(
