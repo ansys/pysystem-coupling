@@ -688,12 +688,44 @@ _cmd_yaml = """
         Solves, showing a live plot of transfer values and convergence for data transfers
         of a coupling interface.
 
-        (This functionality is experimental and incomplete.)
+        .. note::
+            This functionality is experimental and is still being developed. The API
+            and behavior are subject to change.
 
-    essentialArgNames:
-    - interface_name
+        Note that although the optional arguments are somewhat complex to describe, the
+        common use cases are relatively straightforward to use. The complexity exists
+        to provide flexibility for more complex use cases.
+
+        If there is a single interface, and charts are needed on all transfers,
+        then no arguments are needed. The transfer list can be filtered by
+        optionally providing a list of transfers to be included in `transfer_names`.
+
+        If there are multiple interfaces, then `interface_name` can be provided
+        to select a single interface, again with optional `transfer_names` to filter.
+
+        There are no other situations where it is valid to provide `interface_name`
+        and/or `transfer_names`.
+
+        If there are multiple interfaces, and no filtering is required, no arguments
+        are needed.
+
+        If there are multiple interfaces, and all transfers are needed on some
+        interfaces, then `interface_names` may be provided to select those interfaces.
+        In this case there is no filtering of transfers.
+
+        For full control, `interface_and_transfer_names` may be provided to specify
+        exactly which interfaces and which transfers on those interfaces are needed
+        in the form of a dictionary mapping interface names to lists of transfer names.
+        Additionally, the list of transfer names may be None to indicate that all
+        transfers on that interface are needed.
+
+
+    essentialArgNames: []
     optionalArgNames:
+    - interface_name
+    - interface_names
     - transfer_names
+    - interface_and_transfer_names
     - working_dir
     - show_convergence
     - show_transfer_values
@@ -709,7 +741,20 @@ _cmd_yaml = """
             Type: <class 'str'>
             type: String
             doc:  |-
-                Specification of which interface to plot.
+                Specification of which interface to plot. Defaults to ``None``.
+
+                Cannot be used if `interface_names` or `interface_and_transfer_names`
+                is provided.
+    - #!!python/tuple
+        - interface_names
+        -   pyname: interface_names
+            Type: <class 'list'>
+            type: String List
+            doc:  |-
+                Specification of which interfaces to plot. Defaults to ``None``.
+
+                Cannot be used if `interface_name` or `interface_and_transfer_names`
+                is provided.
     - #!!python/tuple
         - transfer_names
         -   pyname: transfer_names
@@ -718,6 +763,24 @@ _cmd_yaml = """
             doc:  |-
                 Specification of which data transfers to plot. Defaults
                 to ``None``, which means plot all data transfers.
+
+                Can only be used if there is a single interface in the analysis, or
+                if a single interface is selected via `interface_name` or `interface_names`.
+    - #!!python/tuple
+        - interface_and_transfer_names
+        -   pyname: interface_and_transfer_names
+            Type: <class 'dict'>
+            type: StringListOrNoneDict
+            doc:  |-
+                Specification of which interfaces and data transfers to plot. Defaults
+                to ``None``.
+
+                Can only be used if `interface_name`, `interface_names`, and
+                `transfer_names` are not provided and allows for full specification
+                of which interfaces and which transfers to plot in the form of a dictionary
+                mapping interface names to lists of transfer names. Additionally, the list
+                of transfer names may be None to indicate that all transfers on that interface
+                are to be plotted.
     - #!!python/tuple
         - working_dir
         -   pyname: working_dir
