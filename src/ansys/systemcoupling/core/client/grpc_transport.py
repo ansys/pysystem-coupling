@@ -28,6 +28,11 @@ import re
 import socket
 from uuid import uuid4
 
+from ansys.tools.common.cyberchannel import (
+    LOOPBACK_HOSTS,
+    create_channel,
+    determine_uds_folder,
+)
 import grpc
 
 from ansys.systemcoupling.core.client.syc_launch_script import path_to_system_coupling
@@ -105,6 +110,7 @@ class _ConnectionOptions:
     port: int | None = None
     host: str = "127.0.0.1"
     certs_folder: str | None = None
+    uds_service: str = "systemcoupling"
     uds_dir: str | None = None
     uds_id: str | None = None
 
@@ -217,44 +223,24 @@ class StartupAndConnectionInfo:
         """Return the gRPC server channel object appropriate for the
         requested connection type.
         """
-        target = self._get_channel_target()
-
         opt = self._options
-        match opt.transport_mode:
-            case _TransportMode.INSECURE:
-                print(
-                    f"Starting gRPC client without TLS on {target}. Modification of "
-                    "these configurations is not recommended. Please see the documentation for "
-                    "your installed product for additional information."
-                )
-                channel = grpc.insecure_channel(target)
-                LOG.info("Connection using insecure channel established.")
+        if opt.transport_mode == _TransportMode.INSECURE:
+            LOG.warning(
+                "The System Coupling session will be connected in insecure gRPC mode. "
+                "This mode is not recommended. Refer to the 'launch()' API "
+                "documentation for secure connection options."
+            )
 
-            case _TransportMode.UDS:
-                # If using UDS transport, set default authority to localhost
-                # see https://github.com/grpc/grpc/issues/34305
-                channel_options = (("grpc.default_authority", "localhost"),)
-                channel = grpc.insecure_channel(target, options=channel_options)
-                LOG.info(f"Connection using UDS-based channel {target} established.")
-
-            case _TransportMode.MTLS:
-                credentials, cert_file, key_file, ca_file = self._get_tls_credentials()
-                channel = grpc.secure_channel(target, credentials)
-                LOG.info("Connection using secure channel over TLS established.")
-                LOG.info(
-                    f"Using gRPC+mTLS on {target} (cert: {cert_file}, "
-                    f"key: {key_file}, server CA: {ca_file})"
-                )
-
-            case _TransportMode.WNUA:
-                # Windows Named User Authentication: TCP localhost with special options
-                channel_options = (("grpc.default_authority", "localhost"),)
-                channel = grpc.insecure_channel(target, options=channel_options)
-                LOG.info(
-                    "Connection using Windows Named User Authentication (WNUA) channel established."
-                )
-
-        return channel
+        LOG.info(f"Creating gRPC channel with transport mode: {opt.transport_mode}")
+        return create_channel(
+            opt.transport_mode.value,
+            host=opt.host,
+            port=opt.port,
+            uds_service=opt.uds_service,
+            uds_dir=opt.uds_dir,
+            uds_id=opt.uds_id,
+            certs_dir=opt.certs_folder,
+        )
 
     def _make_options(
         self, connection_type: ConnectionType, **kwargs
@@ -282,7 +268,7 @@ class StartupAndConnectionInfo:
                         "Unix Domain Sockets are not supported for "
                         "the version of the server in use."
                     )
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "UDS transport only supports localhost connections."
                     )
@@ -293,13 +279,13 @@ class StartupAndConnectionInfo:
                     raise ValueError(
                         "Windows Named User Authentication (WNUA) is only supported on Windows."
                     )
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "Remote host connections are not supported with WNUA."
                     )
                 options.transport_mode = _TransportMode.WNUA
             case ConnectionType.MTLS_LOCAL:
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "Remote host connections are not supported with"
                         " selected connection type, 'MTLS_Local'."
@@ -311,7 +297,7 @@ class StartupAndConnectionInfo:
                 options.allow_remote_host = True
                 options.certs_folder = self._get_certs_folder(options.certs_folder)
             case ConnectionType.INSECURE_LOCAL:
-                if options.host not in ("localhost", "127.0.0.1"):
+                if options.host not in LOOPBACK_HOSTS:
                     raise ValueError(
                         "Remote host connections are not supported with"
                         " selected connection type, 'Insecure_Local'."
@@ -327,34 +313,20 @@ class StartupAndConnectionInfo:
 
         return options
 
-    def _get_channel_target(self):
-        options = self._options
-        if options.transport_mode == _TransportMode.UDS:
-            uds_folder = self._get_uds_folder()
-            socket_filename = f"systemcoupling-{options.uds_id}.sock"
-            return f"unix:{uds_folder / socket_filename}"
-        # Assumption is that options.port is set by now
-        return f"{options.host}:{options.port}"
-
     def _is_uds_supported(self):
-        # UDS always supported on Linux
-        if not _IS_WINDOWS:
-            return True
-        # Formality check as client grpc should always be ok, even on Windows
-        if not _check_grpc_version():
-            return False
-        # NeedsNewArguments is a proxy for supporting UDS as it indicates
-        # a version beyond those which have been patched
-        return self._version_category == StartupArgumentCategory.NEW_ARGUMENTS
+        # NEW_ARGUMENTS is a proxy for supporting UDS on Windows as it
+        # indicates a version where the server side gRPC supports UDS.
+        # UDS support on Windows also requires client side support, which
+        # depends on the Python gRPC version. In practice, we should always
+        # be beyond the version where gRPC started supporting UDS on Windows,
+        # but we can assume it will be checked in the 'cyberchannel' module.
+        return (
+            not _IS_WINDOWS
+            or self._version_category == StartupArgumentCategory.NEW_ARGUMENTS
+        )
 
-    def _get_uds_folder(self) -> str:
-        if self._options.uds_dir:
-            return pathlib.Path(self._options.uds_dir)
-        elif _IS_WINDOWS:
-            return pathlib.Path(os.environ["USERPROFILE"], ".conn")
-        else:
-            # Linux/POSIX
-            return pathlib.Path(os.environ["HOME"], ".conn")
+    def _get_uds_folder(self) -> pathlib.Path:
+        return determine_uds_folder(self._options.uds_dir)
 
     def _get_certs_folder(self, specified_folder: str | None) -> str:
         # Explicit setting overrides other options
@@ -363,37 +335,6 @@ class StartupAndConnectionInfo:
         else:
             # Fall back to default location
             return "certs"
-
-    def _get_tls_credentials(self) -> tuple[grpc.ChannelCredentials, str, str, str]:
-
-        if not (certs_folder := self._options.certs_folder):
-            raise RuntimeError("No certificates folder set for mTLS mode.")
-
-        # TLS configuration
-        cert_file = f"{certs_folder}/client.crt"
-        key_file = f"{certs_folder}/client.key"
-        ca_file = f"{certs_folder}/ca.crt"
-
-        # All three files are required for mutual TLS
-        missing = [f for f in (cert_file, key_file, ca_file) if not os.path.exists(f)]
-        if missing:
-            raise RuntimeError(
-                f"Missing required TLS file(s) for mutual TLS: {', '.join(missing)}"
-            )
-
-        with open(cert_file, "rb") as f:
-            certificate_chain = f.read()
-        with open(key_file, "rb") as f:
-            private_key = f.read()
-        with open(ca_file, "rb") as f:
-            root_certificates = f.read()
-
-        credentials = grpc.ssl_channel_credentials(
-            root_certificates=root_certificates,
-            private_key=private_key,
-            certificate_chain=certificate_chain,
-        )
-        return credentials, cert_file, key_file, ca_file
 
     def _get_port(self) -> int:
         if self._options.port is None:
@@ -409,24 +350,6 @@ def _grpc_argument_category(version: tuple[int, int]) -> StartupArgumentCategory
         return StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS
     else:
         return StartupArgumentCategory.NEW_ARGUMENTS
-
-
-def _version_tuple(version_str):
-    """Convert a version string into a tuple of integers for comparison."""
-    return tuple(int(x) for x in version_str.split("."))
-
-
-# IMPORTANT: UDS support on Windows requires gRPC version 1.63.0 or higher
-def _check_grpc_version():
-    """Check if the installed gRPC version meets the minimum requirement."""
-    min_version = "1.63.0"
-    current_version = grpc.__version__
-
-    try:
-        return _version_tuple(current_version) >= _version_tuple(min_version)
-    except ValueError:
-        LOG.warning("Unable to parse gRPC version.")
-        return False
 
 
 def _find_port() -> int:
