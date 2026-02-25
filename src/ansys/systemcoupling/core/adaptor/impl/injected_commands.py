@@ -254,11 +254,6 @@ def _get_interface_and_transfer_names(
     session: SessionProtocol, arg_dict: Dict[str, Any]
 ) -> dict[str, list]:
 
-    # Argument handling is complicated but necessary to provide flexibility
-    #
-    # We want to make the common situation of a single interface easy to use
-    # but we also want to support multiple interfaces.
-    #
     # If there is a single interface, and charts are needed on all transfers,
     # then no arguments are needed. The transfer list can be filtered by
     # optionally providing 'transfer_names'.
@@ -278,9 +273,8 @@ def _get_interface_and_transfer_names(
     #
     # For full control, 'interface_and_transfer_names' may be provided to specify
     # exactly which interfaces and which transfers on those interfaces are needed
-    # in the form of a dictionary mapping interface names to lists of transfer names.
-    # Additionally, the list of transfer names may be None to indicate that all
-    # transfers on that interface are needed.
+    # in the form of a dictionary mapping interface names to lists of transfer names
+    # or None, where None means all transfers on that interface.
 
     interface_name = arg_dict.pop("interface_name", None)
     interface_names = arg_dict.pop("interface_names", None)
@@ -697,11 +691,12 @@ _cmd_yaml = """
         to provide flexibility for more complex use cases.
 
         If there is a single interface, and charts are needed on all transfers,
-        then no arguments are needed. The transfer list can be filtered by
-        optionally providing a list of transfers to be included in `transfer_names`.
+        then no arguments are needed. The transfer list can be filtered by optionally
+        providing `transfer_names`, to specify a list of transfers to be included.
 
         If there are multiple interfaces, then `interface_name` can be provided
-        to select a single interface, again with optional `transfer_names` to filter.
+        to select a single interface, and again `transfer_names` may be provided as
+        a filter.
 
         There are no other situations where it is valid to provide `interface_name`
         and/or `transfer_names`.
@@ -714,9 +709,9 @@ _cmd_yaml = """
         In this case there is no filtering of transfers.
 
         For full control, `interface_and_transfer_names` may be provided to specify
-        exactly which interfaces and which transfers on those interfaces are needed
-        in the form of a dictionary mapping interface names to lists of transfer names.
-        Additionally, the list of transfer names may be None to indicate that all
+        exactly which interfaces and which transfers on those interfaces are needed.
+        This takes the form of a dictionary, mapping an interface name either to a list of
+        transfer names or to `None`. `None` here is a concise way to indicate that all
         transfers on that interface are needed.
 
 
