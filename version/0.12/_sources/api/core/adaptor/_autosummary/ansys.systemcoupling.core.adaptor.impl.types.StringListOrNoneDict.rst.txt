@@ -1,0 +1,46 @@
+.. _dm_StringListOrNoneDict:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.StringListOrNoneDict
+=================================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: StringListOrNoneDict
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~StringListOrNoneDict.__init__
+      ~StringListOrNoneDict.get_property_state
+      ~StringListOrNoneDict.get_state
+      ~StringListOrNoneDict.print_state
+      ~StringListOrNoneDict.set_property_state
+      ~StringListOrNoneDict.set_state
+      ~StringListOrNoneDict.set_sycproxy
+      ~StringListOrNoneDict.to_python_keys
+      ~StringListOrNoneDict.to_python_name
+      ~StringListOrNoneDict.to_syc_keys
+      ~StringListOrNoneDict.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StringListOrNoneDict.obj_name
+      ~StringListOrNoneDict.path
+      ~StringListOrNoneDict.syc_name
+      ~StringListOrNoneDict.syc_path
+      ~StringListOrNoneDict.sycproxy
+   
+   
