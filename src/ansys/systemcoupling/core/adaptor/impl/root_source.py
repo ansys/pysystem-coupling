@@ -78,6 +78,7 @@ _arg_types = {
     "StrFloatPairList": StrFloatPairList,
     "StrOrIntDictList": StrOrIntDictList,
     "StrOrIntDictListDict": StrOrIntDictListDict,
+    "StringListOrNoneDict": StringListOrNoneDict,
 }
 
 

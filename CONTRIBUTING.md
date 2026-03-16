@@ -5,10 +5,10 @@ Overall guidance on contributing to a PyAnsys library appears in the
 are thoroughly familiar with this guide before attempting to contribute to
 PySystemCoupling.
 
-The following contribution information is specific to PySystemCoupling.
-
 [Contributing]: https://dev.docs.pyansys.com/how-to/contributing.html
 
-See the [Contribute] section for the project.
+<!-- Begin content specific to your library here. -->
 
-[Contribute]: https://systemcoupling.docs.pyansys.com/version/dev/contributing.html
+Additional information can be found in the
+[PySystemCoupling Contributing](https://systemcoupling.docs.pyansys.com/version/dev/contributing.html)
+documentation.

@@ -37,6 +37,7 @@ from ansys.systemcoupling.core.client.grpc_transport import (
     StartupAndConnectionInfo,
     StartupArgumentCategory,
 )
+from ansys.systemcoupling.core.client.services.chart import ChartService
 from ansys.systemcoupling.core.client.services.command_query import CommandQueryService
 from ansys.systemcoupling.core.client.services.output_stream import OutputStreamService
 from ansys.systemcoupling.core.client.services.process import SycProcessService
@@ -318,6 +319,7 @@ class SycGrpc(object):
         self.__ostream_service = OutputStreamService(self.__channel)
         self.__process_service = SycProcessService(self.__channel)
         self.__solution_service = SolutionService(self.__channel)
+        self.__chart_service = ChartService(self.__channel)
 
     def _wait_for_grpc(self, check_process=None):
         total_time = 0
@@ -456,13 +458,15 @@ class SycGrpc(object):
                 break
 
     def __getattr__(self, name):
-        """Support command and query interfaces as method attributes to provide an
+        """Support command and query interfaces as method attributes, mainly to provide an
         alternative to the``execute_command`.
 
         Here is how you use the ``execute_command``:
            ``client.execute_command('CommandName', Arg1='value1', Arg2='value2')``
         Instead, you can use this:
            ``client.CommandName(Arg1='value1', Arg2='value2')``
+
+        This method is also used for forwarding certain gRPC service methods.
         """
 
         def f(**kwargs):
@@ -514,3 +518,18 @@ class SycGrpc(object):
 
     def ping(self):
         return self.__process_service.ping()
+
+    def get_chart_metadata(self):
+        return self.__chart_service.get_chart_metadata()
+
+    def get_chart_series_data(self):
+        return self.__chart_service.get_chart_series_data()
+
+    def get_chart_timestep_data(self):
+        return self.__chart_service.get_chart_timestep_data()
+
+    def stream_chart_data(self):
+        return self.__chart_service.stream_chart_data()
+
+    def cancel_stream(self):
+        return self.__chart_service.cancel_stream()

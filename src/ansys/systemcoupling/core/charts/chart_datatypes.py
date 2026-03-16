@@ -22,7 +22,6 @@
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional
 
 """Common data types for the storage of metadata and data for chart series.
 
@@ -45,39 +44,33 @@ class TransferSeriesInfo:
 
     Attributes
     ----------
-    data_index : int
-        This is used by the data source processor to associate this information (likely
-        obtained from heading or other metadata) with the correct data series.
-        It indexes into the full list of series associated with a given interface.
     series_type : SeriesType
         The type of line series.
     transfer_display_name : str
         The display name of the data transfer. This is a primary identifier for data
         transfers because CSV data sources do not currently include information about
         the underlying data model names of data transfers.
-    disambiguation_index: int
-        This should be set to 0, unless there is more than one data transfer with the
-        same display name. A contiguous range of indexes starting at 0 should be assigned
-        to the list of data transfers with the same display name.
+    transfer_id : str
+        The internal unique identifier of the data transfer. This could be the internal
+        datamodel name. In the CSV case, the internal name cannot be determined from the
+        data, so an ID based on the display name and an integer suffix is used.
     participant_display_name : str, optional
         The display name of the participant. This is required for transfer value series
         but not for convergence series.
-    line_suffixes: list[str]
-        This should always be empty for convergence series. For transfer value series,
-        it should contain the suffixes for any component series that exist. That is,
-        suffixes for complex components, "real" or "imag", and suffixes for vector
-        components, "x", "y", "z", or a combination of complex and vector component
-        types. The data indexes for individual components of the transfer are assumed
-        to be contiguous from ``data_index``.
+    component_suffix: str, optional
+        The suffix for this component series, if applicable. This is only needed for
+        transfer value series that have multiple components, such as complex or vector
+        values, and is otherwise None. Suffixes for complex components are "real" and
+        "imag", and suffixes for vector components are "x", "y", and "z". A combination
+        of complex and vector suffixes is possible, such as "y real" and "x imag".
     """
 
-    data_index: int
     series_type: SeriesType
     transfer_display_name: str
-    disambiguation_index: int
+    transfer_id: str
     # Remainder for non-CONVERGENCE series only
-    participant_display_name: Optional[str] = None
-    line_suffixes: list[str] = field(default_factory=list)
+    participant_display_name: str | None = None
+    component_suffix: str | None = None
 
 
 @dataclass
@@ -112,12 +105,11 @@ class SeriesData:
 
     Attributes
     ----------
+    interface_name: str
+        The name of the interface this series is associated with.
     transfer_index : int
         Index of the ``TransferSeriesInfo`` metadata for this series within the
         ``InterfaceInfo`` for the interface this series is associated with.
-    component_index : int, optional
-        The component index if this series is one of a set of complex and/or
-        vector components of the transfer. Otherwise is ``None``.
     start_index : int, optional
         The starting iteration of the ``data`` field. This defaults to 0 and
         only needs to be set to a different value if incremental data, such
@@ -127,11 +119,9 @@ class SeriesData:
         step-based data by using a time step to iteration mapping.
     """
 
+    interface_name: str
     transfer_index: int  # Index into transfer_info of associated InterfaceInfo
-    component_index: Optional[int] = None  # Component index if applicable
-
     start_index: int = 0  # Use when providing incremental data
-
     data: list[float] = field(default_factory=list)
 
 
@@ -153,17 +143,64 @@ class InterfaceSeriesData:
 
 @dataclass
 class TimestepData:
-    """Mappings from iteration to time step and time.
+    """Mappings from time step to last iteration of timestep and time.
+
+    This is more suited to bulk chart data queries where the complete
+    data is available following the simulation. For live plotting, see
+    TimestepBeginData and TimestepEndData for incremental updates.
+
+    (Note: in the CSV case this data structure is currently also used
+    with live plotting but this needs to be migrated to the other
+    approach. In any case, only one of the two approaches should be used
+    at a time.)
 
     Attributes
     ----------
-    timestep : list[int]
-        Timestep indexes, indexed by iteration. Typically, multiple consecutive
-        iteration indexes map to the same timestep index.
-    time: list[float]
-        Time values, indexed by iteration. Typically, multiple consecutive iteration
-        indexes map to the same time value.
+    last_iterations : list[int]
+        The last iteration index for each (zero-based) time step. Iterations are zero-based.
+    times: list[float]
+        Time values, indexed by (zero-based) time step.
     """
 
-    timestep: list[int] = field(default_factory=list)  # iter -> step index
-    time: list[float] = field(default_factory=list)  # iter -> time
+    last_iterations: list[int] = field(default_factory=list)  # step -> iteration
+    times: list[float] = field(default_factory=list)  # step -> time
+
+
+@dataclass
+class TimestepBeginData:
+    """Data pertaining to the beginning of a time step in a transient analysis.
+
+    This is intended for use in live plotting to provide incremental timestep data
+    as the simulation proceeds. See TimestepEndData for data at the end of a time
+    step and TimestepData for the cumulative mapping of iterations to simulation time.
+
+    Attributes
+    ----------
+    timestep : int
+        The time step index.
+    time : float
+        The simulation time value at the beginning of the time step.
+    """
+
+    timestep: int
+    time: float
+
+
+@dataclass
+class TimestepEndData:
+    """Data pertaining to the end of a time step in a transient analysis.
+
+    This is intended for use in live plotting to provide incremental timestep data
+    as the simulation proceeds. See TimestepBeginData for data at the beginning of a
+    time step and TimestepData for the cumulative mapping of iterations to time steps.
+
+    Attributes
+    ----------
+    timestep : int
+        The time step index.
+    iteration : int
+        The iteration index at the end of the time step.
+    """
+
+    timestep: int
+    iteration: int

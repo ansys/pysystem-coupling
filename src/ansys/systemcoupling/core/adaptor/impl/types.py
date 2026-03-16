@@ -76,6 +76,7 @@ StrOrIntType = Union[str, int]
 StrOrIntDictType = Dict[str, StrOrIntType]
 StrOrIntDictListType = List[StrOrIntDictType]
 StrOrIntDictListDictType = Dict[str, StrOrIntDictListType]
+StringListOrNoneDictType = Dict[str, Union[StringListType, None]]
 
 
 def to_python_name(syc_name: str) -> str:
@@ -367,6 +368,13 @@ class StrOrIntDictListDict(SettingsBase[StrOrIntDictListDictType]):
     ``StrOrIntDictList`` values."""
 
     _state_type = StrOrIntDictListDictType
+
+
+class StringListOrNoneDict(SettingsBase[StringListOrNoneDictType]):
+    """Provides a ``StringListOrNoneDict`` object that represents a dictionary of string keys to
+    ``StringListOrNoneDict`` values."""
+
+    _state_type = StringListOrNoneDictType
 
 
 class Container(SettingsBase[DictStateType]):

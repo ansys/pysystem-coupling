@@ -24,9 +24,14 @@ from io import StringIO
 
 import pytest
 
-from ansys.systemcoupling.core.charts.chart_datatypes import SeriesType
+from ansys.systemcoupling.core.charts.chart_datatypes import (
+    SeriesType,
+)
+from ansys.systemcoupling.core.charts.chart_datatypes import TimestepData  # noqa: F401
 from ansys.systemcoupling.core.charts.csv_chartdata import (
     CsvChartDataReader,
+    RawTimestepData,
+    _process_timestep_data,
     parse_csv_metadata,
 )
 
@@ -105,43 +110,37 @@ def test_parse_header():
     assert info0.transfer_display_name == "input"
     assert info0.series_type == SeriesType.CONVERGENCE
     assert info0.participant_display_name is None
-    assert info0.data_index == 0
-    assert info0.line_suffixes == []
+    assert info0.component_suffix is None
 
     info1 = info.transfer_info[1]
     assert info1.transfer_display_name == "input"
     assert info1.series_type == SeriesType.WEIGHTED_AVERAGE
     assert info1.participant_display_name == "rootFind"
-    assert info1.data_index == 1
-    assert info1.line_suffixes == []
+    assert info1.component_suffix is None
 
     info2 = info.transfer_info[2]
     assert info2.transfer_display_name == "input"
     assert info2.series_type == SeriesType.WEIGHTED_AVERAGE
     assert info2.participant_display_name == "rootFind 2"
-    assert info2.data_index == 2
-    assert info2.line_suffixes == []
+    assert info2.component_suffix is None
 
     info3 = info.transfer_info[3]
     assert info3.transfer_display_name == "input2"
     assert info3.series_type == SeriesType.CONVERGENCE
     assert info3.participant_display_name is None
-    assert info3.data_index == 3
-    assert info3.line_suffixes == []
+    assert info3.component_suffix is None
 
     info4 = info.transfer_info[4]
     assert info4.transfer_display_name == "input2"
     assert info4.series_type == SeriesType.WEIGHTED_AVERAGE
     assert info4.participant_display_name == "rootFind 2"
-    assert info4.data_index == 4
-    assert info4.line_suffixes == []
+    assert info4.component_suffix is None
 
     info5 = info.transfer_info[5]
     assert info5.transfer_display_name == "input2"
     assert info5.series_type == SeriesType.WEIGHTED_AVERAGE
     assert info5.participant_display_name == "rootFind"
-    assert info5.data_index == 5
-    assert info5.line_suffixes == []
+    assert info5.component_suffix is None
 
 
 def test_parse_header_components():
@@ -165,49 +164,67 @@ def test_parse_header_components():
 
     assert info.display_name == "Intf-1"
     assert info.is_transient
-    assert len(info.transfer_info) == 6
+    assert len(info.transfer_info) == 10
 
     info0 = info.transfer_info[0]
     assert info0.transfer_display_name == "input"
     assert info0.series_type == SeriesType.CONVERGENCE
     assert info0.participant_display_name is None
-    assert info0.data_index == 0
-    assert info0.line_suffixes == []
+    assert info0.component_suffix is None
 
     info1 = info.transfer_info[1]
     assert info1.transfer_display_name == "input"
     assert info1.series_type == SeriesType.SUM
     assert info1.participant_display_name == "part1"
-    assert info1.data_index == 1
-    assert info1.line_suffixes == ["x", "y", "z"]
+    assert info1.component_suffix == "x"
 
-    info2 = info.transfer_info[2]
+    info1 = info.transfer_info[2]
+    assert info1.transfer_display_name == "input"
+    assert info1.series_type == SeriesType.SUM
+    assert info1.participant_display_name == "part1"
+    assert info1.component_suffix == "y"
+
+    info1 = info.transfer_info[3]
+    assert info1.transfer_display_name == "input"
+    assert info1.series_type == SeriesType.SUM
+    assert info1.participant_display_name == "part1"
+    assert info1.component_suffix == "z"
+
+    info2 = info.transfer_info[4]
     assert info2.transfer_display_name == "input"
     assert info2.series_type == SeriesType.SUM
     assert info2.participant_display_name == "part2"
-    assert info2.data_index == 4
-    assert info2.line_suffixes == ["x", "y", "z"]
+    assert info2.component_suffix == "x"
 
-    info3 = info.transfer_info[3]
+    info2 = info.transfer_info[5]
+    assert info2.transfer_display_name == "input"
+    assert info2.series_type == SeriesType.SUM
+    assert info2.participant_display_name == "part2"
+    assert info2.component_suffix == "y"
+
+    info2 = info.transfer_info[6]
+    assert info2.transfer_display_name == "input"
+    assert info2.series_type == SeriesType.SUM
+    assert info2.participant_display_name == "part2"
+    assert info2.component_suffix == "z"
+
+    info3 = info.transfer_info[7]
     assert info3.transfer_display_name == "input2"
     assert info3.series_type == SeriesType.CONVERGENCE
     assert info3.participant_display_name is None
-    assert info3.data_index == 7
-    assert info3.line_suffixes == []
+    assert info3.component_suffix is None
 
-    info4 = info.transfer_info[4]
+    info4 = info.transfer_info[8]
     assert info4.transfer_display_name == "input2"
     assert info4.series_type == SeriesType.SUM
     assert info4.participant_display_name == "part2"
-    assert info4.data_index == 8
-    assert info4.line_suffixes == []
+    assert info4.component_suffix is None
 
-    info5 = info.transfer_info[5]
+    info5 = info.transfer_info[9]
     assert info5.transfer_display_name == "input2"
     assert info5.series_type == SeriesType.SUM
     assert info5.participant_display_name == "part1"
-    assert info5.data_index == 9
-    assert info5.line_suffixes == []
+    assert info5.component_suffix is None
 
 
 def test_timestep(data1):
@@ -220,25 +237,14 @@ def test_timestep(data1):
     # pprint(reader.metadata)
 
     reader.read_new_data()
-    assert reader.timestep_data.timestep == [
+    assert reader.timestep_data.last_iterations == [
         1,
-        1,
-        2,
-        2,
         3,
-        3,
-        4,
-        4,
-    ], f"{reader.timestep_data.timestep}"
+        5,
+        7,
+    ], f"{reader.timestep_data.last_iterations}"
 
-    assert all(
-        abs(
-            reader.timestep_data.time[i]
-            - (0.11, 0.11, 0.2, 0.2, 0.31, 0.31, 0.4, 0.4)[i]
-        )
-        < 1e-7
-        for i in range(8)
-    )
+    assert pytest.approx(reader.timestep_data.times) == [0.11, 0.2, 0.31, 0.4]
 
 
 def test_isnt_transient(data2):
@@ -282,3 +288,15 @@ def test_non_unique_transfer_name(data4):
     reader = CsvChartDataReader("intf4", sio)
     reader.read_metadata()
     assert reader.metadata.transfer_info[0].transfer_display_name == "input"
+
+
+def test_process_timestep_data():
+    iter_step = [1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 4, 5, 5, 6]
+    times = [0.1 * istep for istep in iter_step]
+
+    raw_timestep_data = RawTimestepData(iter_step, times)
+
+    timestep_data: TimestepData = _process_timestep_data(raw_timestep_data)
+
+    assert timestep_data.last_iterations == [2, 5, 7, 10, 12, 13]
+    assert timestep_data.times == pytest.approx([0.1, 0.2, 0.3, 0.4, 0.5, 0.6])

@@ -22,6 +22,7 @@
 
 # from dataclasses import dataclass, field
 import csv
+from dataclasses import dataclass, field
 from typing import TextIO, Union
 
 from ansys.systemcoupling.core.charts.chart_datatypes import (
@@ -36,6 +37,24 @@ from ansys.systemcoupling.core.util.assertion import assert_
 
 HeaderList = list[str]
 ChartData = list[list[float]]
+
+
+@dataclass
+class RawTimestepData:
+    """Mappings from iteration to time step and time.
+
+    Attributes
+    ----------
+    timestep : list[int]
+        Timestep indexes, indexed by iteration. Typically, multiple consecutive
+        iteration indexes map to the same timestep index.
+    time: list[float]
+        Time values, indexed by iteration. Typically, multiple consecutive iteration
+        indexes map to the same time value.
+    """
+
+    timestep: list[int] = field(default_factory=list)  # iter -> step index
+    time: list[float] = field(default_factory=list)  # iter -> time
 
 
 class CsvReader:
@@ -56,7 +75,7 @@ class CsvReader:
             return True  # File exists - haven't necessarily read anything yet
         except FileNotFoundError:
             # It is expected that the file is not necessarily immediately available
-            print(f"Failed to open {self._file_or_filename}")
+            # print(f"Failed to open {self._file_or_filename}")
             return False
         except Exception as e:
             # Temporary - see if anything else goes wrong
@@ -128,7 +147,7 @@ class CsvChartDataReader:
         self._csv_reader = CsvReader(csvfile)
         self._metadata: InterfaceInfo = None
         self._data: InterfaceSeriesData = None
-        self._timestep_data = TimestepData()
+        self._timestep_data = RawTimestepData()
 
     def read_metadata(self) -> bool:
         if not self._csv_reader.read_data():
@@ -149,7 +168,7 @@ class CsvChartDataReader:
 
     @property
     def timestep_data(self) -> TimestepData:
-        return self._timestep_data
+        return _process_timestep_data(self._timestep_data)
 
     def read_new_data(self):
         self._csv_reader.read_data()
@@ -157,17 +176,14 @@ class CsvChartDataReader:
 
     def _init_data(self):
         series_data_list: list[SeriesData] = []
-        for i, trans_info in enumerate(self._metadata.transfer_info):
-            if not trans_info.line_suffixes:
-                series_data_list.append(SeriesData(transfer_index=i))
-            else:
-                for j in range(len(trans_info.line_suffixes)):
-                    series_data_list.append(
-                        SeriesData(transfer_index=i, component_index=j)
-                    )
+        for i in range(len(self._metadata.transfer_info)):
+            series_data_list.append(
+                SeriesData(interface_name=self._metadata.name, transfer_index=i)
+            )
         self._data = InterfaceSeriesData(self._metadata, series=series_data_list)
 
     def _process_curr_data(self):
+        assert_(self._data is not None, "Metadata must be read before data")
         raw_data = self._csv_reader.data
         last_data_len = len(self._data.series[0].data)
 
@@ -230,6 +246,29 @@ def _parse_suffix(header: str, part_disp_name: str) -> str:
     return header[idx + len(part_disp_name) + 3 :].strip()
 
 
+def _process_timestep_data(
+    raw_timestep_data: RawTimestepData,
+) -> TimestepData:
+    if not raw_timestep_data.timestep:
+        return TimestepData()
+
+    curr_step = raw_timestep_data.timestep[0]
+    last_iters = [-1]
+    times = [None]
+    for iter, step in enumerate(raw_timestep_data.timestep):
+        time = raw_timestep_data.time[iter]
+        if step == curr_step:
+            # Still in the same step, so update
+            times[-1] = time
+            last_iters[-1] = iter
+        else:
+            # New step
+            times.append(time)
+            last_iters.append(iter)
+            curr_step = step
+    return TimestepData(last_iterations=last_iters, times=times)
+
+
 def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo:
     intf_info = InterfaceInfo(name=interface_name)
     assert_(headers[0] == "Iteration", 'Header expected to be "Iteration"')
@@ -237,7 +276,6 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
     intf_info.is_transient = headers[2] == "Time"
 
     start_index = 3 if intf_info.is_transient else 2
-    prev_part_name = ""
 
     transfer_disambig: dict[str, int] = {}
     for i in range(start_index, len(headers)):
@@ -245,7 +283,6 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
         data_index = i - start_index
         series_type, intf_or_part_disp_name, trans_disp_name = _parse_header(header)
         if series_type == SeriesType.CONVERGENCE:
-            prev_part_name = ""
 
             # If there are no convergence headings, transfer_disambig will
             # remain unpopulated. In this case, assume for now that there
@@ -267,48 +304,20 @@ def parse_csv_metadata(interface_name: str, headers: list[str]) -> InterfaceInfo
                 assert_(intf_info.display_name == "", "display_name should be empty")
                 intf_info.display_name = intf_disp_name
             series_info = TransferSeriesInfo(
-                data_index,
-                series_type,
+                series_type=series_type,
                 transfer_display_name=trans_disp_name,
-                # get(..., 0) for case where transfer_disambig empty (see note above)
-                disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
+                transfer_id=f"{trans_disp_name}:{transfer_disambig.get(trans_disp_name, 0)}",
             )
             intf_info.transfer_info.append(series_info)
         else:
             part_disp_name = intf_or_part_disp_name
-            suffix = _parse_suffix(header, part_disp_name)
-            if suffix:
-                if prev_part_name != part_disp_name:
-                    # Start a new series info for a group of components
-                    # Thus if there are 3 components, say, they will
-                    # implicitly have data indexes, data_index, data_index+1,
-                    # data_index+2, and the next TransferSeriesInfo will
-                    # have index data_index+3.
-                    intf_info.transfer_info.append(
-                        TransferSeriesInfo(
-                            data_index,
-                            series_type,
-                            transfer_display_name=trans_disp_name,
-                            disambiguation_index=transfer_disambig.get(
-                                trans_disp_name, 0
-                            ),
-                            participant_display_name=part_disp_name,
-                            line_suffixes=[suffix],
-                        )
-                    )
-                    prev_part_name = part_disp_name
-                else:
-                    # Append component info to current series info
-                    intf_info.transfer_info[-1].line_suffixes.append(suffix)
-            else:
-                prev_part_name = ""
-                intf_info.transfer_info.append(
-                    TransferSeriesInfo(
-                        data_index,
-                        series_type,
-                        transfer_display_name=trans_disp_name,
-                        disambiguation_index=transfer_disambig.get(trans_disp_name, 0),
-                        participant_display_name=part_disp_name,
-                    )
+            intf_info.transfer_info.append(
+                TransferSeriesInfo(
+                    series_type=series_type,
+                    transfer_display_name=trans_disp_name,
+                    transfer_id=f"{trans_disp_name}:{transfer_disambig.get(trans_disp_name, 0)}",
+                    participant_display_name=part_disp_name,
+                    component_suffix=_parse_suffix(header, part_disp_name) or None,
                 )
+            )
     return intf_info
