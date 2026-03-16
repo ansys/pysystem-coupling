@@ -75,7 +75,7 @@ doc = [
 	"sphinxemoji==0.3.2",
 
 	# pyansys dependencies for sphinx gallery examples
-	"ansys-fluent-core==0.37.1",
+	"ansys-fluent-core==0.38.0",
 	#   Explicit units dependency is to fix fluent runtime error
 	#   TODO: try removing sometime - perhaps on next update
 	#         of ansys-fluent-core
