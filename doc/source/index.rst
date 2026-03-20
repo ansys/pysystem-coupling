@@ -10,6 +10,7 @@ PySystemCoupling documentation |version|
    examples/index
    api/index
    contributing
+   changelog
 
 What is Ansys System Coupling?
 ==============================
