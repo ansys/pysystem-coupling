@@ -70,7 +70,6 @@ import ansys.mapdl.core as pymapdl
 import ansys.systemcoupling.core as pysyc
 from ansys.systemcoupling.core import examples
 
-
 # %%
 # Download the Fluent mesh file.
 fluent_msh_file = examples.download_file(
@@ -82,7 +81,7 @@ fluent_msh_file = examples.download_file(
 # ----------------------------------------
 
 # Launch MAPDL.
-mapdl = pymapdl.launch_mapdl(version= 261)
+mapdl = pymapdl.launch_mapdl(version=261)
 mapdl.clear()
 mapdl.prep7()
 
@@ -252,7 +251,7 @@ L_c = (d_out - d_in) / 2  # pipe wall thickness as characteristic length
 k_solid = 237  # Thermal conductivity of solid (aluminum) [W/(m·K)]
 
 
-def get_fluid_properties_from_fluent(fluent, material_name= "water-liquid"):
+def get_fluid_properties_from_fluent(fluent, material_name="water-liquid"):
     """Extract fluid material properties from Fluent session."""
     materials = fluent.setup.materials.fluid[material_name]
 
