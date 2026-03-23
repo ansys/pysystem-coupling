@@ -23,9 +23,11 @@ from ansys.systemcoupling.core import EXAMPLES_PATH, __version__
 project = "ansys-systemcoupling-core"
 copyright = f"(c) {datetime.now().year} ANSYS, Inc. All rights reserved"
 author = "Ansys Inc."
+
+# The short X.Y version
 release = version = __version__
 cname = os.getenv("DOCUMENTATION_CNAME", "nocname.com")
-
+switcher_version = get_version_match(__version__)
 
 # Sphinx extensions
 extensions = [
@@ -35,6 +37,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
+    "sphinx_design",
     "sphinxemoji.sphinxemoji",
     "sphinx_gallery.gen_gallery",
 ]
@@ -306,7 +309,7 @@ html_theme_options = {
     ],
     "switcher": {
         "json_url": f"https://{cname}/versions.json",
-        "version_match": get_version_match(__version__),
+        "version_match": switcher_version,
     },
 }
 
