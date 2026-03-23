@@ -40,6 +40,20 @@ jobs:
           auditing-level: 'high'
           trust-ansys-actions: true
 
+  update-changelog:
+    name: "Update CHANGELOG (on release)"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write        # Needed to update changelog files
+      pull-requests: write   # Needed to create pull requests with changelog updates
+    steps:
+      - uses: ansys/actions/doc-deploy-changelog@1f4f0896a8e49d3aec2f02ced215b04a32c85f28 # v10.2.7
+        with:
+          bot-user: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          bot-email: ${{ secrets.PYANSYS_CI_BOT_EMAIL }}
+          token: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+
   doc-style:
     name: "Documentation style check"
     runs-on: ubuntu-latest
@@ -361,7 +375,7 @@ jobs:
   release:
     name: Release project
     if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [test, docs]
+    needs: [test, docs, update-changelog]
     runs-on: ubuntu-latest
     environment: release
     permissions:
