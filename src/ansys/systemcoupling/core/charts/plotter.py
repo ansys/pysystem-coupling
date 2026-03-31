@@ -46,50 +46,67 @@ from ansys.systemcoupling.core.util.assertion import assert_
 
 
 def _calc_new_ylimits_linear(
-    ynew: list[float], old_lim: Optional[tuple[float, float]]
+    ynew: list[float], old_lim: Optional[tuple[float, float]], is_complete_data: bool
 ) -> tuple[float, float]:
 
-    resize_factor = 0.1
-    resize_tol = 0.01
+    padding_factor = 0.1
+    default_zero_range = 1e-14
 
     min_y = min(ynew)
     max_y = max(ynew)
-
     data_range = abs(max_y - min_y)
-    if data_range == 0:
-        # NB: min and max are equal - use the value to define the range
-        if abs(min_y) > 0:
-            delta_limits = abs(min_y) * resize_factor
-        else:
-            # Arbitrary value for now (will need to make sure it doesn't "stick")
-            delta_limits = 1e-7
-    else:
-        delta_limits = data_range * resize_factor
 
-    delta_tol = resize_tol * data_range
-    force_tol = 2 * delta_tol + 1
-    if old_lim is None:
-        # Force calculation on first update
-        old_l = min_y + force_tol
-        old_u = max_y - force_tol
+    if is_complete_data:
+        # Static plot case: calculate limits based on the full data provided
+
+        # Add some padding around the data range
+        if data_range > 0:
+            padding = data_range * padding_factor
+        else:
+            padding = padding_factor * abs(min_y) if min_y != 0 else default_zero_range
+        new_l = min_y - padding
+        new_u = max_y + padding
+
+        if old_lim is None:
+            return new_l, new_u
+        else:
+            return min(new_l, old_lim[0]), max(new_u, old_lim[1])
+
     else:
-        new_l, new_u = old_l, old_u = old_lim
-        # In the case where we guessed limits for zero data and now have
-        # some non-zero data, need to adjust limits downwards if the actual
-        # data range is significantly smaller than current limits range.
-        old_delta = old_u - old_l
-        if data_range < old_delta * resize_factor:
-            # Force recalculation
+        # Live plot case: adjust limits dynamically as new data comes in
+
+        resize_tol = 0.01
+
+        if data_range == 0:
+            # NB: min and max are equal - use the value to define the range
+            if abs(min_y) > 0:
+                delta_limits = abs(min_y) * padding_factor
+            else:
+                # Set default small range - should be small enough that it will
+                # be expanded as soon as we have some non-zero data but, for an
+                # unusual case involving _only_ very small numbers, this might be
+                # too large and we would be stuck with this range. Consider a more
+                # sophisiticated approach if this is a concern (TODO).
+                delta_limits = default_zero_range
+        else:
+            delta_limits = data_range * padding_factor
+
+        delta_tol = resize_tol * data_range
+        force_tol = 2 * delta_tol + 1
+        if old_lim is None:
+            # Force calculation on first update
             old_l = min_y + force_tol
             old_u = max_y - force_tol
+        else:
+            new_l, new_u = old_l, old_u = old_lim
 
-    # Only extend the limits if we are getting close to the old ones
-    if min_y < old_l + delta_tol:
-        new_l = min_y - delta_limits
-    if max_y > old_u - delta_tol:
-        new_u = max_y + delta_limits
+        # Only extend the limits if we are getting close to the old ones
+        if min_y < old_l + delta_tol:
+            new_l = min_y - delta_limits
+        if max_y > old_u - delta_tol:
+            new_u = max_y + delta_limits
 
-    return new_l, new_u
+        return new_l, new_u
 
 
 def _calc_new_ylimits_log(
@@ -123,6 +140,7 @@ def _update_xy_data(
     series_data: list[float],
     new_start_index: int,
 ) -> tuple[Union[list[float], list[int]], list[float]]:
+    # NB: Returns the complete new x and y data, not just the latest point.
 
     new_total_data_len = new_start_index + len(series_data)
     x_new = []
@@ -275,10 +293,16 @@ class FigurePlotter:
             old_xlim = axes.get_xlim()
             old_ylim = axes.get_ylim()
 
+        # Need to pass in whether it is a static or live plot.
+        # If it is live, the old limits might be None and we need
+        # to recognise in that case that we are guessing and might need
+        # to readjust the limits once data starts coming in.
         new_ylimits = (
             _calc_new_ylimits_log(y_new, old_ylim)
             if is_log_y
-            else _calc_new_ylimits_linear(y_new, old_ylim)
+            else _calc_new_ylimits_linear(
+                y_new, old_ylim, is_complete_data=self._request_update is None
+            )
         )
 
         new_xlimits = old_xlim
@@ -288,6 +312,11 @@ class FigurePlotter:
         else:
             if len(x_new) >= old_xlim[1] - 1:
                 new_xlimits = (1, len(x_new) + 1)
+
+        with open("plot_limits.txt", "a") as f:
+            f.write(
+                f"subplot {subplot_index} - new limits: x={new_xlimits}, y={new_ylimits}\n"
+            )
 
         axes.set_xlim(new_xlimits)
         axes.set_ylim(new_ylimits)
