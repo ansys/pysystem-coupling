@@ -95,7 +95,7 @@ def test_new_linear_limits_uninitialised(ynew, expected):
         (
             (0.0, 0.9),
             [1.0],
-            (0.9, 1.1),
+            (0.0, 1.1),
         ),
     ],
 )
