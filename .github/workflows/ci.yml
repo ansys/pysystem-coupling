@@ -287,7 +287,7 @@ jobs:
       - name: Install pysystemcoupling with doc dependencies
         run: |
           wheel_name=`echo dist/*.whl`
-          pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
+          pip install -q --force-reinstall ${wheel_name}[doc] #> /dev/null
 
       - name: Docker Login
         uses: docker/login-action@b45d80f862d83dbcd57f89517bcf500b2ab88fb2 # v4.0.0
