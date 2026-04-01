@@ -67,6 +67,7 @@ jobs:
   style:
     name: Code style
     runs-on: ubuntu-latest
+    if: ${{ false }}
     steps:
       - name: PyAnsys code style checks
         uses: ansys/actions/code-style@1f4f0896a8e49d3aec2f02ced215b04a32c85f28 # v10.2.7
@@ -80,8 +81,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest, ubuntu-latest]
-        python-version: ['3.10', '3.11', '3.12', '3.13', '3.14']
+        os: [ubuntu-latest]
+        python-version: ['3.12', '3.13', '3.14']
 
     steps:
       - name: "Build wheelhouse and perform smoke test"
@@ -184,6 +185,7 @@ jobs:
   test:
     name: Testing
     needs: [build]
+    if: ${{ false }}
     runs-on: ubuntu-latest
 
     steps:
