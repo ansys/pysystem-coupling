@@ -103,7 +103,7 @@ def launch(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    version = str(version) if version else None
+    version = str(version) if version is not None else None
     if pypim.is_configured():
         LOG.info(
             "Starting System Coupling remotely. Any launch arguments other "
