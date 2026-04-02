@@ -329,6 +329,7 @@ jobs:
           PYMAPDL_START_INSTANCE: FALSE
           PYMAPDL_PORT: "50053"
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:${{ env.MAPDL_IMAGE_VERSION }}
+          PYMAPDL_GRPC_TRANSPORT: "insecure"
 
       #- name: Build PDF Documentation
       #  run: |
