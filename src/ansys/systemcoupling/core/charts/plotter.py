@@ -86,7 +86,7 @@ def _calc_new_ylimits_linear(
                 # be expanded as soon as we have some non-zero data but, for an
                 # unusual case involving _only_ very small numbers, this might be
                 # too large and we would be stuck with this range. Consider a more
-                # sophisiticated approach if this is a concern (TODO).
+                # sophisticated approach if this is a concern (TODO).
                 delta_limits = default_zero_range
         else:
             delta_limits = data_range * padding_factor
