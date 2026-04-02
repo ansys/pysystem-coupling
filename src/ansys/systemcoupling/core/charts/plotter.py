@@ -313,11 +313,6 @@ class FigurePlotter:
             if len(x_new) >= old_xlim[1] - 1:
                 new_xlimits = (1, len(x_new) + 1)
 
-        with open("plot_limits.txt", "a") as f:
-            f.write(
-                f"subplot {subplot_index} - new limits: x={new_xlimits}, y={new_ylimits}\n"
-            )
-
         axes.set_xlim(new_xlimits)
         axes.set_ylim(new_ylimits)
 
