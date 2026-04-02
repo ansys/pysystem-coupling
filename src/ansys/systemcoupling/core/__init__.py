@@ -143,7 +143,7 @@ def launch_container(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    version = str(version) if version else None
+    version = str(version) if version is not None else None
     rpc.start_container_and_connect(mounted_from, mounted_to, network, version=version)
     return Session(rpc)
 
@@ -171,7 +171,7 @@ def launch_remote(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
-    version = str(version) if version else None
+    version = str(version) if version is not None else None
     rpc.start_pim_and_connect(version)
     return Session(rpc)
 
