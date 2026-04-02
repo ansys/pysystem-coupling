@@ -201,6 +201,16 @@ class SubplotManager:
             self._conv_subplot = None
             self._subplots = subplots[1:]
 
+        # If no subplots are enabled (for example, when there are no transfers
+        # or all transfers have both 'show_convergence' and 'show_transfer_values'
+        # set to False), creating a figure layout does not make sense and would
+        # result in an invalid layout. Fail fast with a clear error.
+        if not self._subplots:
+            raise ValueError(
+                f"No plots requested for interface '{self._intf_spec.display_name}'. "
+                "At least one of 'show_convergence' or 'show_transfer_values' must be "
+                "True for a data transfer."
+            )
         for i, subplot in enumerate(self._subplots):
             subplot.index = i
         self._transfer_subplots: dict[str, SubplotDefinition] = transfer_subplots
