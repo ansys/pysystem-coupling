@@ -195,9 +195,22 @@ class SubplotManager:
                 subplots.append(transfer_value)
         if keep_conv:
             self._conv_subplot = conv
+            self._subplots = subplots
+        else:
+            # convergence plot not needed so exclude it
+            self._conv_subplot = None
+            self._subplots = subplots[1:]
 
-        # Clean out inactive convergence plots
-        self._subplots = [subplot for subplot in subplots if subplot is not None]
+        # If no subplots are enabled (for example, when there are no transfers
+        # or all transfers have both 'show_convergence' and 'show_transfer_values'
+        # set to False), creating a figure layout does not make sense and would
+        # result in an invalid layout. Fail fast with a clear error.
+        if not self._subplots:
+            raise ValueError(
+                f"No plots requested for interface '{self._intf_spec.display_name}'. "
+                "At least one of 'show_convergence' or 'show_transfer_values' must be "
+                "True for a data transfer."
+            )
         for i, subplot in enumerate(self._subplots):
             subplot.index = i
         self._transfer_subplots: dict[str, SubplotDefinition] = transfer_subplots

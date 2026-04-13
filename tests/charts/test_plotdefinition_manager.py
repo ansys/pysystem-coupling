@@ -187,3 +187,97 @@ def test_set_metadata_two_interfaces(spec2, metadata, metadata2):
     assert mgr1.subplots[2].series_labels == ["rootFind 2", "rootFind"]
     assert mgr2.subplots[0].series_labels == ["Trans1", "Trans2"]
     assert mgr2.subplots[1].series_labels == ["rootFind 2", "rootFind"]
+
+
+@pytest.fixture
+def spec_no_convergence():
+    """Fixture with transfers that all have show_convergence=False."""
+    transfers = [
+        DataTransferSpec(
+            name="TRANS-1",
+            display_name="trans1",
+            show_convergence=False,
+            show_transfer_values=True,
+        ),
+        DataTransferSpec(
+            name="TRANS-2",
+            display_name="trans2",
+            show_convergence=False,
+            show_transfer_values=True,
+        ),
+    ]
+    intf = InterfaceSpec(name="intf1", display_name="Intf-1", transfers=transfers)
+    return PlotSpec([intf], plot_time=False)
+
+
+@pytest.fixture
+def metadata_no_convergence():
+    """Metadata fixture with convergence data that should be ignored."""
+    headers = [
+        "Iteration",
+        "Step",
+        "Time",
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-1 - trans1",
+        "trans1 (Weighted Average): rootFind",
+        "trans1 (Weighted Average): rootFind 2",
+        "Data Transfer Convergence (RMS Change in Target Value): Intf-1 - trans2",
+        "trans2 (Weighted Average): rootFind 2",
+        "trans2 (Weighted Average): rootFind",
+    ]
+    return parse_csv_metadata("intf1", headers)
+
+
+def test_no_convergence_subplot(spec_no_convergence):
+    """Test that convergence subplot is excluded when all transfers have show_convergence=False."""
+    pdm = PlotDefinitionManager(spec_no_convergence)
+    mgr = pdm.subplot_mgr("intf1")
+
+    # Should only have transfer value subplots, no convergence subplot
+    assert len(mgr.subplots) == 2
+    assert mgr.get_layout() == (1, 2)
+
+    # Verify that convergence subplot is not present
+    assert mgr._conv_subplot is None
+
+    # All remaining subplots should be transfer value subplots (not log scale)
+    assert not mgr.subplots[0].is_log_y
+    assert not mgr.subplots[1].is_log_y
+
+    # Verify subplot titles and axes labels
+    assert mgr.subplots[0].title == "Intf-1 - trans1 (<VALUETYPE>)"
+    assert mgr.subplots[1].title == "Intf-1 - trans2 (<VALUETYPE>)"
+    assert mgr.subplots[0].x_axis_label == "Iteration"
+    assert mgr.subplots[1].x_axis_label == "Iteration"
+
+    # Verify no convergence-related content
+    for subplot in mgr.subplots:
+        assert "convergence" not in subplot.title.lower()
+        assert subplot.y_axis_label != "RMS Change in target value"
+
+
+def test_no_convergence_subplot_ignores_convergence_data(
+    spec_no_convergence, metadata_no_convergence
+):
+    """Test that convergence data is ignored when no convergence subplot exists."""
+    pdm = PlotDefinitionManager(spec_no_convergence, is_csv_source=True)
+    mgr = pdm.subplot_mgr("intf1")
+    mgr.set_metadata(metadata_no_convergence)
+
+    # Should still only have 2 transfer value subplots
+    assert len(mgr.subplots) == 2
+    assert mgr._conv_subplot is None
+
+    # Verify titles were updated correctly
+    assert mgr.subplots[0].title == "Intf-1 - trans1 (Weighted Average)"
+    assert mgr.subplots[1].title == "Intf-1 - trans2 (Weighted Average)"
+
+    # Verify only transfer value series data, no convergence series
+    assert mgr.subplots[0].series_labels == ["rootFind", "rootFind 2"]
+    assert mgr.subplots[1].series_labels == ["rootFind 2", "rootFind"]
+
+    # Verify that convergence data indices are not mapped
+    conv_data_indices = [0, 3]  # Positions of convergence data in the metadata
+    for conv_idx in conv_data_indices:
+        subplot, line_idx = mgr.subplot_for_data_index(conv_idx)
+        assert subplot is None
+        assert line_idx == -1

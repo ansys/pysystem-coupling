@@ -34,13 +34,13 @@ from ansys.systemcoupling.core.charts.plotter import (
     [
         (
             [0.0],
-            (-1e-7, 1e-7),
+            (-1e-14, 1e-14),
         ),
         (
             [0.5],
             (0.45, 0.55),
         ),
-        ([0.0, 0.0], (-1e-7, 1e-7)),
+        ([0.0, 0.0], (-1e-14, 1e-14)),
         ([0.0, 1e-8], (-1e-9, 1.1e-8)),
         ([0.5, 0.5], (0.45, 0.55)),
         ([-0.1, 10.0], (-1.11, 11.01)),
@@ -58,7 +58,9 @@ from ansys.systemcoupling.core.charts.plotter import (
 )
 def test_new_linear_limits_uninitialised(ynew, expected):
 
-    new_limits = _calc_new_ylimits_linear(ynew=ynew, old_lim=None)
+    new_limits = _calc_new_ylimits_linear(
+        ynew=ynew, old_lim=None, is_complete_data=len(ynew) > 1
+    )
     assert new_limits == pytest.approx(expected)
 
 
@@ -73,7 +75,7 @@ def test_new_linear_limits_uninitialised(ynew, expected):
         (
             (0.018, 1.002),
             [0.1, 0.5, 0.92, 1.1],
-            (0.018, 1.2),
+            (0.0, 1.2),
         ),
         (
             (-0.1, 1.1),
@@ -83,23 +85,25 @@ def test_new_linear_limits_uninitialised(ynew, expected):
         (
             (-0.1, 1.1),
             [0.0, 1.0, 0.9, 1.05],
-            (-0.1, 1.1),
+            (-0.105, 1.155),
         ),
         (
             (-0.1, 1.1),
             [0.0, 1.0, 0.9, 1.09],
-            (-0.1, 1.199),
+            (-0.109, 1.199),
         ),
         (
             (0.0, 0.9),
             [1.0],
-            (0.9, 1.1),
+            (0.0, 1.1),
         ),
     ],
 )
 def test_new_linear_limits_initialised(old_limits, ynew, expected):
 
-    new_limits = _calc_new_ylimits_linear(ynew=ynew, old_lim=old_limits)
+    new_limits = _calc_new_ylimits_linear(
+        ynew=ynew, old_lim=old_limits, is_complete_data=True
+    )
     assert new_limits == pytest.approx(expected)
 
 

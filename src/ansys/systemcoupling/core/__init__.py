@@ -46,7 +46,7 @@ def launch(
     working_dir: str = None,
     nprocs: int = None,
     sycnprocs: int = None,
-    version: str = None,
+    version: str | int | None = None,
     start_output: bool = False,
     extra_args: List[str] = [],
 ) -> Session:
@@ -73,9 +73,9 @@ def launch(
     sycnprocs : int, optional
         Number of processes for the System Coupling engine. The default is
         ``None``, in which case the System Coupling server uses its own default.
-    version : str, optional
-        String specifying the version of System Coupling to use. For example,
-        to use System Coupling from the Ansys "2024 R1" release, specify ``"241"``.
+    version : str or int, optional
+        String or integer specifying the version of System Coupling to use. For example,
+        to use System Coupling from the Ansys "2024 R1" release, specify ``"241"`` or ``241``.
         (The forms ``"24.1"`` and ``"24_1"`` are also acceptable.)
         The version will be sought in the standard installation location. The
         default is ``None``, which is equivalent to specifying
@@ -103,6 +103,7 @@ def launch(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
+    version = str(version) if version is not None else None
     if pypim.is_configured():
         LOG.info(
             "Starting System Coupling remotely. Any launch arguments other "
@@ -127,7 +128,7 @@ def launch_container(
     mounted_from: str = "./",
     mounted_to: str = "/working",
     network: str = None,
-    version: str = None,
+    version: str | int | None = None,
 ) -> Session:
     """Start a System Coupling container instance and connect to it.
 
@@ -142,12 +143,13 @@ def launch_container(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
+    version = str(version) if version is not None else None
     rpc.start_container_and_connect(mounted_from, mounted_to, network, version=version)
     return Session(rpc)
 
 
 def launch_remote(
-    version: str = None,
+    version: str | int | None = None,
 ) -> Session:
     """Launch System Coupling remotely using `PyPIM <https://pypim.docs.pyansys.com>`.
 
@@ -158,7 +160,7 @@ def launch_remote(
 
     Parameters
     ----------
-    version : str, optional
+    version : str or int, optional
         The System Coupling product version. See :func:`launch<core.launch>`
         for details of supported version strings.
 
@@ -169,6 +171,7 @@ def launch_remote(
         remote System Coupling instance.
     """
     rpc = SycGrpc()
+    version = str(version) if version is not None else None
     rpc.start_pim_and_connect(version)
     return Session(rpc)
 
