@@ -29,6 +29,7 @@ from ansys.systemcoupling.core.adaptor.impl.static_info import (
     make_named_object_level_map,
 )
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
+from ansys.systemcoupling.core.types import SystemCouplingMode
 from ansys.systemcoupling.core.util.state_keys import (
     adapt_client_named_object_keys,
     adapt_native_named_object_keys,
@@ -36,7 +37,7 @@ from ansys.systemcoupling.core.util.state_keys import (
 
 
 class SycProxy(SycProxyInterface):
-    def __init__(self, rpc, mode="cosim"):
+    def __init__(self, rpc, mode=SystemCouplingMode.COSIM):
         self.__rpc = rpc
         self.__injected_cmds = {}
         self.__version = None

@@ -162,10 +162,12 @@ def _start_system_coupling(
     exe_path: str, grpc_args: list[str], working_dir: str, **kwargs
 ) -> subprocess.Popen:  # pragma: no cover
 
-    # TODO: Need to clean this up - maybe introduce enum for consistency
-    startup_mode = kwargs.pop("startup_mode", "cosimgui")
-    if startup_mode == "cosim":
-        startup_mode = "cosimgui"
+    from ansys.systemcoupling.core.types import SystemCouplingMode
+
+    startup_mode: SystemCouplingMode = kwargs.pop(
+        "startup_mode", SystemCouplingMode.COSIM
+    )
+    startup_mode_arg = startup_mode.to_startup_argument()
 
     env = deepcopy(os.environ)
     env["PYTHONUNBUFFERED"] = "1"
@@ -173,7 +175,7 @@ def _start_system_coupling(
     args = [
         exe_path,
         "-m",
-        startup_mode,
+        startup_mode_arg,
     ] + grpc_args
 
     # Extract arguments that we currently recognize - scope to extend in future

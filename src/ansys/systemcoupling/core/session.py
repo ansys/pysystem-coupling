@@ -22,7 +22,7 @@
 
 import importlib
 import os
-from typing import Callable, Optional
+from typing import Callable
 
 from ansys.systemcoupling.core.adaptor.impl.injected_commands_cosim import (
     get_injected_cmd_map,
@@ -31,6 +31,7 @@ from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
+from ansys.systemcoupling.core.types import SystemCouplingMode
 
 if os.environ.get("PYSYC_DOC_BUILD_VERSION"):
     # It is useful to import explicit types while building doc as it
@@ -69,15 +70,15 @@ class Session:
     made here.
     """
 
-    def __init__(self, rpc, mode: str | None = None):
+    def __init__(self, rpc, mode: SystemCouplingMode = SystemCouplingMode.COSIM):
         """Initializes a ``Session`` instance.
 
         Parameters
         ----------
         rpc
             Provider of remote command and query services.
-        mode : str, optional
-            Mode for the session. The default is ``None`` (standard "cosim" mode).
+        mode : SystemCouplingMode, optional
+            Mode for the session. The default is ``SystemCouplingMode.COSIM``.
         """
         self.__case_root = None
         self.__setup_root = None
@@ -86,7 +87,7 @@ class Session:
         self.__native_api = None
         self.__syc_version = None
         self.__part_mgr = None
-        self.__mode = "cosim" if mode is None else mode
+        self.__mode = mode
 
     def exit(self) -> None:
         """Close the System Coupling server instance.
@@ -111,9 +112,7 @@ class Session:
             self.__solution_proxy.reset_rpc(self.__rpc)
             self.__solution_root = None
 
-    def start_output(
-        self, handle_output: Optional[Callable[[str], None]] = None
-    ) -> None:
+    def start_output(self, handle_output: Callable[[str], None] | None = None) -> None:
         """Start streaming the standard output written by the System Coupling server.
 
         The *stdout* and *stderr* streams of the server process are
@@ -198,7 +197,7 @@ class Session:
         return (root, sycproxy)
 
     def _set_injected_cmds(self, proxy, category):
-        if self.__mode != "cosim":
+        if self.__mode != SystemCouplingMode.COSIM:
             return
 
         version = self._get_version()
@@ -237,7 +236,7 @@ class Session:
     def upload_file(
         self,
         file_name: str,
-        remote_file_name: Optional[str] = None,
+        remote_file_name: str | None = None,
         overwrite: bool = False,
     ):
         """For internal use only: upload a file to the PIM-managed instance.
