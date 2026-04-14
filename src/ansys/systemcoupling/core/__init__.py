@@ -48,6 +48,7 @@ def launch(
     sycnprocs: int = None,
     version: str | int | None = None,
     start_output: bool = False,
+    startup_mode: str = None,
     extra_args: List[str] = [],
 ) -> Session:
     """Start a local instance of System Coupling and connect to it.
@@ -88,6 +89,10 @@ def launch(
         Boolean to specify if the user wants to stream system coupling output.
         The default is ``False``, in which case the output stream is kept hidden.
         If ``True``, the output information is printed to standard output.
+    startup_mode: str, optional
+        String specifying the startup mode to use when launching System Coupling.
+        For internal use only at this time. Most users should ignore this parameter
+        and leave it at the default value of ``None``.
     extra_args : List[str]
         List of any additional arguments to specify when the server
         process is launched. The default is ``[]``. If a list of additional
@@ -119,9 +124,10 @@ def launch(
             sycnprocs=sycnprocs,
             version=version,
             start_output=start_output,
+            startup_mode=startup_mode,
             extra_args=extra_args,
         )
-    return Session(rpc)
+    return Session(rpc, startup_mode)
 
 
 def launch_container(

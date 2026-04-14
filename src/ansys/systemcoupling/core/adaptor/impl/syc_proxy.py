@@ -36,13 +36,14 @@ from ansys.systemcoupling.core.util.state_keys import (
 
 
 class SycProxy(SycProxyInterface):
-    def __init__(self, rpc):
+    def __init__(self, rpc, mode="cosim"):
         self.__rpc = rpc
         self.__injected_cmds = {}
         self.__version = None
         self.__defunct = False
         self.__named_obj_level_map: Dict = {}
         self.__datamodel_metadata = None
+        self.__mode = mode
 
     def reset_rpc(self, rpc):
         """Reset the original ``rpc`` instance with a new one if the remote connection is lost.
@@ -71,13 +72,13 @@ class SycProxy(SycProxyInterface):
 
     def get_static_info(self, category):
         if category == "setup":
-            cmd_metadata = get_extended_cmd_metadata(self.__rpc)
+            cmd_metadata = get_extended_cmd_metadata(self.__rpc, self.__mode)
             root_type = "SystemCoupling"
             metadata = make_combined_metadata(
                 self._get_datamodel_metadata(root_type), cmd_metadata, category
             )
         elif category in ("case", "solution"):
-            cmd_metadata = get_extended_cmd_metadata(self.__rpc)
+            cmd_metadata = get_extended_cmd_metadata(self.__rpc, self.__mode)
             metadata, root_type = make_cmdonly_metadata(cmd_metadata, category)
         else:
             raise RuntimeError(f"Unrecognized 'static info' category: '{category}'.")

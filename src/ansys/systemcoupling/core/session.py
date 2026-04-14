@@ -24,7 +24,7 @@ import importlib
 import os
 from typing import Callable, Optional
 
-from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
+from ansys.systemcoupling.core.adaptor.impl.injected_commands_cosim import (
     get_injected_cmd_map,
 )
 from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
@@ -69,13 +69,15 @@ class Session:
     made here.
     """
 
-    def __init__(self, rpc):
+    def __init__(self, rpc, mode: str | None = None):
         """Initializes a ``Session`` instance.
 
         Parameters
         ----------
         rpc
             Provider of remote command and query services.
+        mode : str, optional
+            Mode for the session. The default is ``None`` (standard "cosim" mode).
         """
         self.__case_root = None
         self.__setup_root = None
@@ -84,6 +86,7 @@ class Session:
         self.__native_api = None
         self.__syc_version = None
         self.__part_mgr = None
+        self.__mode = "cosim" if mode is None else mode
 
     def exit(self) -> None:
         """Close the System Coupling server instance.
@@ -188,15 +191,22 @@ class Session:
     def _get_api_root(self, category):
         if isinstance(self.__rpc, _DefunctRpcImpl):
             self.__rpc.trigger_error
-        sycproxy = SycProxy(self.__rpc)
+        sycproxy = SycProxy(self.__rpc, self.__mode)
         version = self._get_version()
         root = get_root(sycproxy, category=category, version=version)
+        self._set_injected_cmds(sycproxy, category)
+        return (root, sycproxy)
+
+    def _set_injected_cmds(self, proxy, category):
+        if self.__mode != "cosim":
+            return
+
+        version = self._get_version()
         if self.__part_mgr is None:
             self.__part_mgr = ParticipantManager(self, version)
-        sycproxy.set_injected_commands(
+        proxy.set_injected_commands(
             get_injected_cmd_map(category, version, self, self.__part_mgr, self.__rpc)
         )
-        return (root, sycproxy)
 
     @property
     def _native_api(self) -> NativeApi:

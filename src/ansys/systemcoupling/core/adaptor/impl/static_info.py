@@ -24,7 +24,7 @@ from copy import deepcopy
 from typing import Dict, List, Tuple
 
 from ansys.systemcoupling.core.adaptor.impl.get_syc_version import get_syc_version
-from ansys.systemcoupling.core.adaptor.impl.injected_commands import (
+from ansys.systemcoupling.core.adaptor.impl.injected_commands_cosim import (
     get_injected_cmd_data,
 )
 from ansys.systemcoupling.core.util.name_util import to_python_name
@@ -295,7 +295,7 @@ def get_cmd_metadata(api) -> list:
     return cmd_metdata_out
 
 
-def get_extended_cmd_metadata(api) -> list:
+def get_extended_cmd_metadata(api, mode="cosim") -> list:
     """Get command metadata from System Coupling and adapt it to the
     form needed for the client implementation.
 
@@ -421,7 +421,9 @@ def get_extended_cmd_metadata(api) -> list:
                     tgt_item[k] = v
 
     cmd_metadata = get_cmd_metadata(api)
-    injected_data = get_injected_cmd_data()
+
+    # Generalise this properly to other modes as needed.
+    injected_data = get_injected_cmd_data() if mode == "cosim" else []
     merge_data(cmd_metadata, injected_data)
     cmd_metadata = fix_up_doc(cmd_metadata)
     return cmd_metadata
