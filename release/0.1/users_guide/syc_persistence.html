@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Analysis persistence &#8212; PySystemCoupling</title>
+    
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    
+        <link href="../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Solving an analysis" href="syc_solution.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+    <img src="../_static/pyansys-logo-black-cropped.png" class="logo__image only-light" alt="Logo image">
+    <img src="../_static/pyansys-logo-black-cropped.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../getting_started/index.html">
+  Getting started
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="index.html">
+  User guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../api/index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../contributing.html">
+  Contribute
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.1  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables users_guide/syc_persistence and {'json_url': 'https://systemcoupling.docs.pyansys.com/release/versions.json', 'version_match': '0.1'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "users_guide/syc_persistence.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://systemcoupling.docs.pyansys.com/release/versions.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "users_guide/syc_persistence.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.1.1 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.1") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/pyansys/pysystem-coupling" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+     
+<div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+
+    
+        <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://docs.pyansys.com">PyAnsys</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../index.html">PySystemCoupling</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User guide</a> » </li>
+        <li class="nav-item nav-item-this"><a href="">Analysis persistence</a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="system_coupling_concepts.html">
+   System Coupling concepts
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="syc_datamodel.html">
+   System Coupling data model
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="analysis_setup.html">
+   Analysis setup
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="syc_solution.html">
+   Solving an analysis
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Analysis persistence
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#saving-and-opening-a-case">
+   Saving and opening a case
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#case-snapshots">
+   Case snapshots
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#clearing-the-current-state">
+   Clearing the current state
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/pyansys/pysystem-coupling/edit/main/doc/source/users_guide/syc_persistence.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="analysis-persistence">
+<span id="ref-syc-persistence"></span><h1>Analysis persistence<a class="headerlink" href="#analysis-persistence" title="Permalink to this heading">#</a></h1>
+<p>Use the <code class="docutils literal notranslate"><span class="pre">case</span></code> attribute of <code class="docutils literal notranslate"><span class="pre">Session</span></code> to access commands relating to the persistence and overall state of an analysis case:</p>
+<ul class="simple">
+<li><p>Saving and opening a case</p></li>
+<li><p>Saving a case snapshot</p></li>
+<li><p>Clearing/resetting the entire state</p></li>
+</ul>
+<p>In the code snippets that follow, the <code class="docutils literal notranslate"><span class="pre">case</span></code> variable is assumed to have been assigned as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">case</span> <span class="o">=</span> <span class="n">syc_session</span><span class="o">.</span><span class="n">case</span>
+</pre></div>
+</div>
+<section id="saving-and-opening-a-case">
+<h2>Saving and opening a case<a class="headerlink" href="#saving-and-opening-a-case" title="Permalink to this heading">#</a></h2>
+<p>Files defining the state of an analysis case are always saved and loaded from a <code class="docutils literal notranslate"><span class="pre">SyC/</span></code> subdirectory which exists, by default, in the working directory.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open a case from sub-directory SyC of current working directory:</span>
+<span class="k">case</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>Opening a case restores the analysis settings at the time of saving, and
+loads results data if it exists.</p>
+<p>Similarly for saving the current state of a case:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save a case to sub-directory SyC of current working directory:</span>
+<span class="k">case</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
+<span class="o">...</span>
+</pre></div>
+</div>
+<p>When saving a case, the <cite>SyC</cite> directory is created if it does not already exist.
+Settings data is saved in a file called <cite>settings.h5</cite>.</p>
+<p>If the case has been successfully solved, <cite>restart</cite> files exist (these are files with names of the form
+<em>Restart_step&lt;n&gt;</em> or <em>Restart_iter&lt;n&gt;</em>), depending on whether the analysis
+is a transient or steady cases. The restart files allow the
+results to be loaded at any point partway through the analysis for which a restart
+file exists. For example, if results were saved at the end of step 2, then the <code class="docutils literal notranslate"><span class="pre">coupling_step</span></code>
+option may be provided to <code class="docutils literal notranslate"><span class="pre">open</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Open at step 2</span>
+<span class="k">case</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">coupling_step</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The frequency with which restart files are written during a solution is controlled by
+the setting <code class="docutils literal notranslate"><span class="pre">setup.output_control.option</span></code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Opening a case at a restart point that is not the final step/iteration causes
+<em>later</em> restart files to be deleted. Typically, the reason for opening at an
+earlier point is to re-run the analysis from that point. If it is important to
+save all of the results, the <a class="reference internal" href="#ref-snapshots"><span class="std std-ref">Case snapshots</span></a> facility may be used.</p>
+</div>
+<p>The results data itself is stored in the <cite>Results</cite> subdirectory of <cite>SyC</cite>.</p>
+</section>
+<section id="case-snapshots">
+<span id="ref-snapshots"></span><h2>Case snapshots<a class="headerlink" href="#case-snapshots" title="Permalink to this heading">#</a></h2>
+<p>Snapshot capabilities allow you to capture the current state of a coupled
+analysis as a whole and then later restore the analysis to that state.</p>
+<p>Snapshots give you the ability to save and return to a specific point in a coupled analysis.</p>
+<p>A snapshot captures the current state of the coupled analysis as a whole (rather than just of the data model).
+It includes all the files and directories contained in System Coupling’s working directory that are necessary
+to restore the coupled analysis to its current state — specifically, the <cite>SyC</cite> subdirectory and the coupling
+working directories of all loaded coupling participants.</p>
+<p>The snapshot facility relies on the <cite>SyC</cite> directory and the participants’ working directories being
+subdirectories of the System Coupling working directory.</p>
+<p>Snapshots are saved in a subdirectory <cite>SyCSnapshots</cite> that exists in the working directory alongside
+the <cite>SyC</cite> directory. Each snapshot is saved as a <cite>zip</cite> file. A snapshot named <cite>Initial.zip</cite> is
+created automatically when a solve is started (if it does not already exist); otherwise,
+snapshots are managed on demand using the API commands as discussed below.</p>
+<p>The basic operations supported are:</p>
+<ul class="simple">
+<li><p>Saving a snapshot</p></li>
+<li><p>Loading a snapshot</p></li>
+<li><p>Deleting a snapshot</p></li>
+<li><p>Querying available snapshots</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># solve the current case</span>
+<span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="o">...</span>
+
+<span class="c1"># Save the solution as a snapshot</span>
+<span class="k">case</span><span class="o">.</span><span class="n">save_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Solution1&#39;</span><span class="p">)</span>
+
+<span class="c1"># Restore the the Initial snapshot from before solve</span>
+<span class="k">case</span><span class="o">.</span><span class="n">open_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Initial&#39;</span><span class="p">)</span>
+<span class="c1"># Make some changes and solve again</span>
+<span class="o">...</span>
+<span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+<span class="c1"># Save this solution to a snapshot</span>
+<span class="k">case</span><span class="o">.</span><span class="n">save_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Solution2&#39;</span><span class="p">)</span>
+
+<span class="c1"># Query snapshots..</span>
+<span class="k">case</span><span class="o">.</span><span class="n">get_snapshots</span><span class="p">()</span>
+<span class="c1"># Returns a dict, snapshot name=&gt;file name</span>
+<span class="c1">#</span>
+<span class="c1"># { &#39;Initial&#39;: &#39;Initial.zip&#39;,</span>
+<span class="c1">#   &#39;Solution1&#39;: &#39;Solution1.zip&#39;,</span>
+<span class="c1">#   &#39;Solution2&#39;: &#39;Solution2.zip&#39; }</span>
+<span class="c1">#</span>
+
+<span class="c1"># Delete Solution1</span>
+<span class="k">case</span><span class="o">.</span><span class="n">delete_snapshot</span><span class="p">(</span><span class="n">snapshot_name</span><span class="o">=</span><span class="s1">&#39;Solution1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="clearing-the-current-state">
+<h2>Clearing the current state<a class="headerlink" href="#clearing-the-current-state" title="Permalink to this heading">#</a></h2>
+<p>Occasionally, it might be useful to be able to clear the entire state of the settings and
+results that are loaded in the current System Coupling session.</p>
+<p>To do this, call the <code class="docutils literal notranslate"><span class="pre">clear_state</span></code> command:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="o">.</span><span class="n">clear_state</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Another option for achieving the same result is to exit the current session and create a new one:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">syc_session</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="n">syc_session</span> <span class="o">=</span> <span class="n">pysystemcoupling</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright (c) 2023 ANSYS, Inc. All rights reserved.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>
