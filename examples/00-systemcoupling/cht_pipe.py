@@ -81,7 +81,7 @@ fluent_msh_file = examples.download_file(
 # ----------------------------------------
 
 # Launch MAPDL.
-mapdl = pymapdl.launch_mapdl(version=252)
+mapdl = pymapdl.launch_mapdl(version=261)
 mapdl.clear()
 mapdl.prep7()
 
@@ -171,7 +171,7 @@ mapdl.antype(0)
 # Set up the fluid analysis and read the pre-created mesh file
 # ------------------------------------------------------------
 
-fluent = pyfluent.launch_fluent(start_transcript=False, product_version=252)
+fluent = pyfluent.launch_fluent(start_transcript=False, product_version=261)
 fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
 
 # %%
@@ -246,13 +246,21 @@ hf_transfer = syc.setup.add_data_transfer(
 # Define constants and calculate Biot number
 # ------------------------------------------
 
-L_c = (d_out - d_in) / 2  # Characteristic length of the pipe (thickness)
-U = 0.1
-fluid_rho = 998.3  # Density of fluid
-mu_fluid = 0.001  # Dynamic viscosity of fluid
-cp_fluid = 4182  # Specific heat capacity of fluid
-k_fluid = 0.6  # Thermal conductivity of fluid
-k_solid = 237  # Thermal conductivity of solid
+U = 0.1  # inlet velocity
+L_c = (d_out - d_in) / 2  # pipe wall thickness as characteristic length
+k_solid = 237  # Thermal conductivity of solid (aluminum) [W/(m·K)]
+
+
+def get_fluid_properties_from_fluent(fluent, material_name="water-liquid"):
+    """Extract fluid material properties from Fluent session."""
+    materials = fluent.setup.materials.fluid[material_name]
+
+    fluid_rho = materials.density.value()
+    mu_fluid = materials.viscosity.value()
+    cp_fluid = materials.specific_heat.value()
+    k_fluid = materials.thermal_conductivity.value()
+
+    return fluid_rho, mu_fluid, cp_fluid, k_fluid
 
 
 def nusselt_number(Re, Pr, d_in, L):
@@ -286,12 +294,15 @@ def compute_thermo_numbers(rho, mu, cp, k_fluid, k_solid, velocity, d_in, L, L_c
     return Re, Pr, h, Bi, correlation
 
 
-Re, Nu, h, Bi, corr = compute_thermo_numbers(
+# Extract fluid material properties from Fluent
+fluid_rho, mu_fluid, cp_fluid, k_fluid = get_fluid_properties_from_fluent(fluent)
+
+Re, Pr, h, Bi, corr = compute_thermo_numbers(
     fluid_rho, mu_fluid, cp_fluid, k_fluid, k_solid, U, d_in, l, L_c
 )
 
 print(f"Reynolds number = {Re}")
-print(f"Nusselt number = {Nu}")
+print(f"Prandtl number = {Pr}")
 print(f"Heat transfer coefficient h = {h} W/(m^2·K)")
 print(f"Biot number = {Bi}")
 print(f"Nusselt correlation used = {corr}")
