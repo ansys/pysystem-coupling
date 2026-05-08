@@ -24,8 +24,8 @@ from copy import deepcopy
 from typing import Dict, List, Tuple
 
 from ansys.systemcoupling.core.adaptor.impl.get_syc_version import get_syc_version
-from ansys.systemcoupling.core.adaptor.impl.injected_commands_cosim import (
-    get_injected_cmd_data,
+from ansys.systemcoupling.core.adaptor.impl.injected_commands_provider import (
+    get_injected_cmd_metadata,
 )
 from ansys.systemcoupling.core.types import SystemCouplingMode
 from ansys.systemcoupling.core.util.name_util import to_python_name
@@ -296,7 +296,7 @@ def get_cmd_metadata(api) -> list:
     return cmd_metdata_out
 
 
-def get_extended_cmd_metadata(api, mode=SystemCouplingMode.COSIM) -> list:
+def get_extended_cmd_metadata(api, mode: SystemCouplingMode) -> list:
     """Get command metadata from System Coupling and adapt it to the
     form needed for the client implementation.
 
@@ -310,6 +310,14 @@ def get_extended_cmd_metadata(api, mode=SystemCouplingMode.COSIM) -> list:
     ----------
     api : NativeApi
         Object providing access to the System Coupling *native API*.
+    mode : SystemCouplingMode
+        The mode of the System Coupling instance.
+
+    Returns
+    -------
+    list
+        list of dictionary objects where each object contains
+        the details of a command to be exposed.
     """
 
     def fix_up_doc(cmd_metadata):
@@ -425,7 +433,7 @@ def get_extended_cmd_metadata(api, mode=SystemCouplingMode.COSIM) -> list:
 
     # Check for cosim mode for injected commands
 
-    injected_data = get_injected_cmd_data() if mode == SystemCouplingMode.COSIM else []
+    injected_data = get_injected_cmd_metadata(mode)
     merge_data(cmd_metadata, injected_data)
     cmd_metadata = fix_up_doc(cmd_metadata)
     return cmd_metadata

@@ -24,12 +24,12 @@ from copy import deepcopy
 import os
 import random
 import time
-from typing import Any, Callable, Dict, Optional, Protocol
+from typing import Any, Callable
 
 import ansys.platform.instancemanagement as pypim
 
+from ansys.systemcoupling.core.adaptor.impl.session_protocol import SessionProtocol
 from ansys.systemcoupling.core.charts.plot_functions import (
-    GrpcDataSourceProtocol,
     create_and_show_plot_csv,
     create_and_show_plot_grpc,
     solve_with_live_plot_csv,
@@ -40,7 +40,6 @@ from ansys.systemcoupling.core.charts.plotdefinition_manager import (
     InterfaceSpec,
     PlotSpec,
 )
-from ansys.systemcoupling.core.native_api import NativeApi
 from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.participant.mapdl import MapdlSystemCouplingInterface
 from ansys.systemcoupling.core.syc_version import compare_versions
@@ -50,29 +49,7 @@ from .get_status_messages import get_status_messages
 from .types import Container
 
 
-# We cannot import Session directly, so define a protocol for typing.
-# We mainly use it as a means of accessing the "API roots".
-class SessionProtocol(Protocol):
-    case: Container
-    setup: Container
-    solution: Container
-    _native_api: NativeApi
-
-    def download_file(
-        self, file_name: str, local_file_dir: str = ".", overwrite: bool = False
-    ) -> None: ...
-
-    def upload_file(
-        self,
-        file_name: str,
-        remote_file_name: Optional[str] = None,
-        overwrite: bool = False,
-    ) -> None: ...
-
-    def _grpc(self) -> GrpcDataSourceProtocol: ...
-
-
-class InjectedCommandMapCosim:
+class CosimInjectedCommandsProvider:
     def __init__(self, version: str, session: SessionProtocol, rpc):
         self.version = version
         self.session = session
@@ -82,7 +59,7 @@ class InjectedCommandMapCosim:
     def get_injected_cmd_map(
         self,
         category: str,
-    ) -> Dict[str, Callable]:
+    ) -> dict[str, Callable]:
         """Get a dictionary mapping names to functions that implement injected commands
         for the specified API category.
 
@@ -261,7 +238,7 @@ def _create_plot_spec(
 
 
 def _get_interface_and_transfer_names(
-    session: SessionProtocol, arg_dict: Dict[str, Any]
+    session: SessionProtocol, arg_dict: dict[str, Any]
 ) -> dict[str, list]:
 
     # If there is a single interface, and charts are needed on all transfers,
