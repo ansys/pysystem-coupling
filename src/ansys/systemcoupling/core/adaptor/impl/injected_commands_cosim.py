@@ -72,66 +72,76 @@ class SessionProtocol(Protocol):
     def _grpc(self) -> GrpcDataSourceProtocol: ...
 
 
-def get_injected_cmd_map(
-    category: str,
-    version: str,
-    session: SessionProtocol,
-    part_mgr: ParticipantManager,
-    rpc,
-) -> Dict[str, Callable]:
-    """Get a dictionary mapping names to functions that implement injected commands
-    for the specified API category.
+class InjectedCommandMapCosim:
+    def __init__(self, version: str, session: SessionProtocol, rpc):
+        self.version = version
+        self.session = session
+        self.rpc = rpc
+        self.participant_manager = ParticipantManager(session, version)
 
-    Whereas the set of commands that exists by default on the API represents a relatively
-    mechanical exposure of native System Coupling commands to PySystemCoupling, the
-    "injected commands" that are returned from here are either *additional* commands
-    that have no counterpart in System Coupling or *overrides* to existing commands
-    that provide modified or extended behavior.
-    """
-    ret = {}
+    def get_injected_cmd_map(
+        self,
+        category: str,
+    ) -> Dict[str, Callable]:
+        """Get a dictionary mapping names to functions that implement injected commands
+        for the specified API category.
 
-    if category == "setup":
-        # ``get_injected_cmd_map`` needs to be called during initialisation, where
-        # the session API roots are not necessarily available yet. We therefore
-        # defer their access via the lambda.
-        get_setup_root_object = lambda: session.setup
-        ret = {
-            "get_setup_summary": lambda **kwargs: rpc.GetSetupSummary(**kwargs),
-            "get_status_messages": lambda **kwargs: get_status_messages(
-                rpc, get_setup_root_object(), **kwargs
-            ),
-            "add_participant": lambda **kwargs: _wrap_add_participant(
-                session, part_mgr, **kwargs
-            ),
-        }
+        Whereas the set of commands that exists by default on the API represents a relatively
+        mechanical exposure of native System Coupling commands to PySystemCoupling, the
+        "injected commands" that are returned from here are either *additional* commands
+        that have no counterpart in System Coupling or *overrides* to existing commands
+        that provide modified or extended behavior.
+        """
+        ret = {}
 
-    if category == "solution":
-        get_solution_root_object = lambda: session.solution
-        get_setup_root_object = lambda: session.setup
-        ret = {
-            "solve": lambda **kwargs: _wrap_solve(
-                get_solution_root_object(), part_mgr, **kwargs
-            ),
-            "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
-                session,
-                version,
-                lambda: _wrap_solve(get_solution_root_object(), part_mgr),
-                **kwargs,
-            ),
-            "interrupt": lambda **kwargs: rpc.interrupt(**kwargs),
-            "abort": lambda **kwargs: rpc.abort(**kwargs),
-            "show_plot": lambda **kwargs: _show_plot(session, version, **kwargs),
-        }
+        if category == "setup":
+            # ``get_injected_cmd_map`` needs to be called during initialisation, where
+            # the session API roots are not necessarily available yet. We therefore
+            # defer their access via the lambda.
+            get_setup_root_object = lambda: self.session.setup
+            ret = {
+                "get_setup_summary": lambda **kwargs: self.rpc.GetSetupSummary(
+                    **kwargs
+                ),
+                "get_status_messages": lambda **kwargs: get_status_messages(
+                    self.rpc, get_setup_root_object(), **kwargs
+                ),
+                "add_participant": lambda **kwargs: _wrap_add_participant(
+                    self.session, self.participant_manager, **kwargs
+                ),
+            }
 
-    if category == "case":
-        get_case_root_object = lambda: session.case
-        ret = {
-            "clear_state": lambda **kwargs: _wrap_clear_state(
-                get_case_root_object(), part_mgr, **kwargs
-            )
-        }
+        if category == "solution":
+            get_solution_root_object = lambda: self.session.solution
+            get_setup_root_object = lambda: self.session.setup
+            ret = {
+                "solve": lambda **kwargs: _wrap_solve(
+                    get_solution_root_object(), self.participant_manager, **kwargs
+                ),
+                "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
+                    self.session,
+                    self.version,
+                    lambda: _wrap_solve(
+                        get_solution_root_object(), self.participant_manager
+                    ),
+                    **kwargs,
+                ),
+                "interrupt": lambda **kwargs: self.rpc.interrupt(**kwargs),
+                "abort": lambda **kwargs: self.rpc.abort(**kwargs),
+                "show_plot": lambda **kwargs: _show_plot(
+                    self.session, self.version, **kwargs
+                ),
+            }
 
-    return ret
+        if category == "case":
+            get_case_root_object = lambda: self.session.case
+            ret = {
+                "clear_state": lambda **kwargs: _wrap_clear_state(
+                    get_case_root_object(), self.participant_manager, **kwargs
+                )
+            }
+
+        return ret
 
 
 def _wrap_add_participant(

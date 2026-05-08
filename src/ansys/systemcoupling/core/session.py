@@ -25,12 +25,11 @@ import os
 from typing import Callable
 
 from ansys.systemcoupling.core.adaptor.impl.injected_commands_cosim import (
-    get_injected_cmd_map,
+    InjectedCommandMapCosim,
 )
 from ansys.systemcoupling.core.adaptor.impl.root_source import get_root
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy import SycProxy
 from ansys.systemcoupling.core.native_api import NativeApi
-from ansys.systemcoupling.core.participant.manager import ParticipantManager
 from ansys.systemcoupling.core.types import SystemCouplingMode
 
 if os.environ.get("PYSYC_DOC_BUILD_VERSION"):
@@ -86,7 +85,7 @@ class Session:
         self.__rpc = rpc
         self.__native_api = None
         self.__syc_version = None
-        self.__part_mgr = None
+        self.__injected_cmd_map = None
         self.__mode = mode
 
     def exit(self) -> None:
@@ -201,10 +200,10 @@ class Session:
             return
 
         version = self._get_version()
-        if self.__part_mgr is None:
-            self.__part_mgr = ParticipantManager(self, version)
+        if self.__injected_cmd_map is None:
+            self.__injected_cmd_map = InjectedCommandMapCosim(version, self, self.__rpc)
         proxy.set_injected_commands(
-            get_injected_cmd_map(category, version, self, self.__part_mgr, self.__rpc)
+            self.__injected_cmd_map.get_injected_cmd_map(category)
         )
 
     @property
