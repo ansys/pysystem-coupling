@@ -128,6 +128,11 @@ class SycProxy(SycProxyInterface):
             self.__rpc.trigger_error
         cmd_name = args[1]
         cmd = self.__injected_cmds.get(cmd_name, None)
+        if cmd is None:
+            # It is a bug if this happens as it should not be possible
+            # for the client to request execution of an injected command that
+            # has not been registered via the set_injected_commands method.
+            raise RuntimeError(f"Injected command '{cmd_name}' not found.")
         return cmd(**kwargs)
 
     def _get_datamodel_metadata(self, root_type):
