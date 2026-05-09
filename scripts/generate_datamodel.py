@@ -64,6 +64,7 @@ from ansys.systemcoupling.core.adaptor.impl.static_info import (
     make_cmdonly_metadata,
     make_combined_metadata,
 )
+from ansys.systemcoupling.core.types import SystemCouplingMode
 from ansys.systemcoupling.core.util.yaml_helper import yaml_dump_to_file
 
 # Only dump YAML if requested
@@ -651,7 +652,7 @@ def _generate_real_classes(dirname, generate_flat_classes):
     LOG.debug("Querying datamodel metadata...")
     dm_metadata = get_dm_metadata(api, "SystemCoupling")
     LOG.debug("Querying command metadata")
-    cmd_metadata_orig = get_extended_cmd_metadata(api)
+    cmd_metadata_orig = get_extended_cmd_metadata(api, mode=SystemCouplingMode.COSIM)
     _dump_yaml(cmd_metadata_orig, "command_metadata.yml", version)
     LOG.debug("Command metadata received. Processing...")
 

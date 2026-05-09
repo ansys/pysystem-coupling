@@ -29,6 +29,7 @@ from ansys.systemcoupling.core.adaptor.impl.static_info import (
     make_named_object_level_map,
 )
 from ansys.systemcoupling.core.adaptor.impl.syc_proxy_interface import SycProxyInterface
+from ansys.systemcoupling.core.types import SystemCouplingMode
 from ansys.systemcoupling.core.util.state_keys import (
     adapt_client_named_object_keys,
     adapt_native_named_object_keys,
@@ -36,13 +37,14 @@ from ansys.systemcoupling.core.util.state_keys import (
 
 
 class SycProxy(SycProxyInterface):
-    def __init__(self, rpc):
+    def __init__(self, rpc, mode=SystemCouplingMode.COSIM):
         self.__rpc = rpc
         self.__injected_cmds = {}
         self.__version = None
         self.__defunct = False
         self.__named_obj_level_map: Dict = {}
         self.__datamodel_metadata = None
+        self.__mode = mode
 
     def reset_rpc(self, rpc):
         """Reset the original ``rpc`` instance with a new one if the remote connection is lost.
@@ -71,13 +73,13 @@ class SycProxy(SycProxyInterface):
 
     def get_static_info(self, category):
         if category == "setup":
-            cmd_metadata = get_extended_cmd_metadata(self.__rpc)
+            cmd_metadata = get_extended_cmd_metadata(self.__rpc, self.__mode)
             root_type = "SystemCoupling"
             metadata = make_combined_metadata(
                 self._get_datamodel_metadata(root_type), cmd_metadata, category
             )
         elif category in ("case", "solution"):
-            cmd_metadata = get_extended_cmd_metadata(self.__rpc)
+            cmd_metadata = get_extended_cmd_metadata(self.__rpc, self.__mode)
             metadata, root_type = make_cmdonly_metadata(cmd_metadata, category)
         else:
             raise RuntimeError(f"Unrecognized 'static info' category: '{category}'.")
@@ -126,6 +128,11 @@ class SycProxy(SycProxyInterface):
             self.__rpc.trigger_error
         cmd_name = args[1]
         cmd = self.__injected_cmds.get(cmd_name, None)
+        if cmd is None:
+            # It is a bug if this happens as it should not be possible
+            # for the client to request execution of an injected command that
+            # has not been registered via the set_injected_commands method.
+            raise RuntimeError(f"Injected command '{cmd_name}' not found.")
         return cmd(**kwargs)
 
     def _get_datamodel_metadata(self, root_type):
