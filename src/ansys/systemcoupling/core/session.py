@@ -201,8 +201,8 @@ class Session:
 
         version = self._get_version()
         if self.__injected_cmd_map is None:
-            self.__injected_cmd_map = get_commands_for_mode(self.__mode)(
-                version, self, self.__rpc
+            self.__injected_cmd_map = get_commands_for_mode(
+                self.__mode, version, self, self.__rpc
             )
         proxy.set_injected_commands(
             self.__injected_cmd_map.get_injected_cmd_map(category)
