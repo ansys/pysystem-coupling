@@ -1,0 +1,23 @@
+:orphan:
+
+.. _get_status_messages:
+
+get_status_messages
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.get_status_messages
+
+.. autoclass:: get_status_messages
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

@@ -1,0 +1,50 @@
+.. _dm_Container:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Container
+======================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Container
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Container.__init__
+      ~Container.get_property_options
+      ~Container.get_property_state
+      ~Container.get_state
+      ~Container.print_state
+      ~Container.set_property_state
+      ~Container.set_state
+      ~Container.set_sycproxy
+      ~Container.to_python_keys
+      ~Container.to_python_name
+      ~Container.to_syc_keys
+      ~Container.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Container.child_names
+      ~Container.command_names
+      ~Container.obj_name
+      ~Container.path
+      ~Container.property_names_types
+      ~Container.syc_name
+      ~Container.syc_path
+      ~Container.sycproxy
+   
+   

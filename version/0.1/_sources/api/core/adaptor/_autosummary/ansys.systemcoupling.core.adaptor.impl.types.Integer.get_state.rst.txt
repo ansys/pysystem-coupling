@@ -1,0 +1,6 @@
+get\_state
+==========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: Integer.get_state

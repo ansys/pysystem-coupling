@@ -1,0 +1,6 @@
+UNIX\_DOMAIN\_SOCKETS
+=====================
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoattribute:: ConnectionType.UNIX_DOMAIN_SOCKETS

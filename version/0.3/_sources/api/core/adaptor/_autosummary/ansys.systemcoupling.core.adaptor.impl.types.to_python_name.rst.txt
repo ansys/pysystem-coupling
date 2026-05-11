@@ -1,0 +1,6 @@
+to\_python\_name
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autofunction:: to_python_name

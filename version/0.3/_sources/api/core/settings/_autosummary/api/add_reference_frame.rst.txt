@@ -1,0 +1,23 @@
+:orphan:
+
+.. _add_reference_frame:
+
+add_reference_frame
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.add_reference_frame
+
+.. autoclass:: add_reference_frame
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

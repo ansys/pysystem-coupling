@@ -1,0 +1,43 @@
+﻿Session
+=======
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. autoclass:: Session
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      
+      
+      Session.end_output
+      
+      
+      Session.exit
+      
+      
+      Session.ping
+      
+      
+      Session.start_output
+      
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+      :toctree:
+   
+      Session.case
+      Session.setup
+      Session.solution
+   
+   
