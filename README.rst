@@ -84,7 +84,7 @@ by examining the following environment variables in this order:
 * ``AWP_ROOT<NNN>`` - these are standard environment variables that are automatically
   set by Ansys installations, where ``<NNN>`` is a version number (such as 261 for
   Ansys 26 R1). As noted above, if multiple such variables are set, the one with the
-  highest version number is used.
+  highest recognized version number is used.
 
 If ``SYSC_ROOT`` or ``AWP_ROOT`` is set but does not refer to a valid installation, PySystemCoupling
 fails at that point, rather than attempting to use the next variable.
