@@ -320,28 +320,6 @@ def get_extended_cmd_metadata(api, mode: SystemCouplingMode) -> list:
         the details of a command to be exposed.
     """
 
-    def fix_up_doc(cmd_metadata):
-        version = get_syc_version(api)
-        if version not in ("24.2", "25.1"):
-            return cmd_metadata
-
-        command_to_fix = None
-        if version == "24.2":
-            command_to_fix = "add_participant"
-        elif version == "25.1":
-            command_to_fix = "update_participant"
-
-        # There are bugs in doc text queried from 24.2 and 25.1 SyC.
-        # The "*" need to be escaped to avoid issues in Sphinx. This
-        # can be a surgical fix because these versions are frozen now.
-        for cmd in cmd_metadata:
-            if cmd["pyname"] == command_to_fix:
-                add_part_cmd = cmd
-                for arg_name, arg_info in add_part_cmd["args"]:
-                    if arg_name == "InputFile":
-                        arg_info["doc"] = arg_info["doc"].replace("*", r"\*")
-        return cmd_metadata
-
     def find_item_by_name(items: List[Dict], name: str) -> dict:
         for item in items:
             if item["name"] == name:
@@ -435,7 +413,7 @@ def get_extended_cmd_metadata(api, mode: SystemCouplingMode) -> list:
 
     injected_data = get_injected_cmd_metadata(mode)
     merge_data(cmd_metadata, injected_data)
-    cmd_metadata = fix_up_doc(cmd_metadata)
+    cmd_metadata = _fix_up_doc(api, cmd_metadata)
     return cmd_metadata
 
 
@@ -451,3 +429,95 @@ def make_named_object_level_map(dm_metadata, root_type) -> dict[int, str]:
     visit_children(dm_metadata[root_type], 0)
 
     return level_map
+
+
+def _fix_up_doc(api, cmd_metadata):
+    """This fixes up any doc issues that are now frozen into released
+    server version and therefore cannot be fixed in the server.
+
+    The fixes can be relatively ad hoc and specific because we know what the
+    issues are and that they won't be changing.
+
+    """
+
+    version = get_syc_version(api)
+
+    def fix_242_251():
+        command_to_fix = None
+        if version == "24.2":
+            command_to_fix = "add_participant"
+        elif version == "25.1":
+            command_to_fix = "update_participant"
+
+        # Replaced unescaped asterisk with escaped asterisk to fix
+        # rendering issue in the doc generated from the generated
+        # API code. A bare asterisk is treated as an emphasis markdown
+        # in reStructuredText.
+        # We used to add a simple single backslash but this creates
+        # syntax warnings in newer version of Python so we need to
+        # double up the backslash.
+        for cmd in cmd_metadata:
+            if cmd["pyname"] == command_to_fix:
+                add_part_cmd = cmd
+                for arg_name, arg_info in add_part_cmd["args"]:
+                    if arg_name == "InputFile":
+                        arg_info["doc"] = arg_info["doc"].replace("*", r"\\*")
+
+    def fix_261():
+        # Fixes are needed in:
+        #
+        # - "get_machines" : need to indent the 'code block' in the docstring and
+        #                    double up the colon in the preceding line.
+        # - "add_interface" : fix the escaped quote in docstring for the
+        #                    side_two_participant argument.
+        # - "add_participant" : fix the escaped asterisk.
+        for cmd in cmd_metadata:
+            if cmd["pyname"] == "get_machines":
+                # The docstring for this command includes a code block-like
+                # section that does not render correctly and generates warnings
+                # that cause the build to fail. Need to indent the section and
+                # double up the colon at the end of the preceding line.
+
+                doc: str = cmd["doc"]
+                doc = doc.replace(
+                    "Returns information in the following format:",
+                    "Returns information in the following format::",
+                )
+
+                # Fix indentation
+                lines = doc.splitlines()
+                indenting = False
+                for iline, line in enumerate(lines):
+                    if not indenting and line.lstrip().startswith("["):
+                        indenting = True
+                    if indenting:
+                        lines[iline] = "    " + line
+                    if indenting and line.lstrip().startswith("]"):
+                        break
+                doc = "\n".join(lines)
+
+                cmd["doc"] = doc
+            elif cmd["pyname"] == "add_interface":
+                # The quotes in "Two" are meant to be escaped, but the second
+                # backslash is actually after the second quote.
+                for arg_name, arg_info in cmd["args"]:
+                    if arg_name == "SideTwoParticipant":
+                        arg_info["doc"] = arg_info["doc"].replace(
+                            '\\"Two"\\', r"\"Two\""
+                        )
+            elif cmd["pyname"] in ("add_participant", "update_participant"):
+                # The docstring for the "InputFile" argument of these commands
+                # includes an asterisk that is escaped. This is now generating
+                # a syntax warning in Python when the string is written to the
+                # generated API Python file. However, the escape is needed for
+                # Sphinx. Fix by doubling it.
+                for arg_name, arg_info in cmd["args"]:
+                    if arg_name == "InputFile":
+                        arg_info["doc"] = arg_info["doc"].replace(r"\*", r"\\*")
+
+    if version in ("24.2", "25.1"):
+        fix_242_251()
+    elif version == "26.1":
+        fix_261()
+
+    return cmd_metadata
