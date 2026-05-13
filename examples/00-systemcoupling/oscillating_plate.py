@@ -204,6 +204,7 @@ syc.setup.output_control.generate_csv_chart_output = True
 # %%
 # Solution
 # --------
+print(f"Setup summary:\n{syc.setup.get_setup_summary()}")
 syc.solution.solve()
 
 
