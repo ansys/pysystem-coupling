@@ -189,6 +189,22 @@ def _wrap_solve(
             active = False
             print("Server is not active.")
 
+        if active:
+            # Licensing issue?
+            print("Server is active. The exception might be due to a licensing issue.")
+            import glob
+
+            licfiles = glob.glob("ansyscl.*.log")
+            for licfile in licfiles:
+                print(f"Contents of license log file '{licfile}':")
+                with open(licfile, "r") as f:
+                    print(f.read())
+            licdebug = glob.glob("licdebug.*.out")
+            for licfile in licdebug:
+                print(f"Contents of license debug file '{licfile}':")
+                with open(licfile, "r") as f:
+                    print(f.read())
+
         if not active:
             print("Check for exception log...")
             if os.path.isfile("SyC_Exception.log"):
