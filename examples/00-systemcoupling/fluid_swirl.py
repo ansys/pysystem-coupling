@@ -111,7 +111,7 @@ syc = pysystemcoupling.launch()
 
 # %%
 # Read the pre-created case file.
-fluent.file.read(file_type="case", file_name=fluent_cas_file)
+fluent.settings.file.read(file_type="case", file_name=fluent_cas_file)
 
 # %%
 # Generate the SCDT file
@@ -206,21 +206,23 @@ syc.solution.solve()
 # Generate an image with fluid flow streamlines using PyFluent post-processing.
 # Note how the force values defined in the SCDT file induce the swirl in
 # the fluid flow.
-if fluent.results.graphics.picture.use_window_resolution.is_active():
-    fluent.results.graphics.picture.use_window_resolution = False
+if fluent.settings.results.graphics.picture.use_window_resolution.is_active():
+    fluent.settings.results.graphics.picture.use_window_resolution = False
 
-fluent.results.graphics.picture.x_resolution = 1920
-fluent.results.graphics.picture.y_resolution = 1440
+fluent.settings.results.graphics.picture.x_resolution = 1920
+fluent.settings.results.graphics.picture.y_resolution = 1440
 
-fluent.results.graphics.pathline["pathline"] = {}
-pathline = fluent.results.graphics.pathline["pathline"]
+fluent.settings.results.graphics.pathline["pathline"] = {}
+pathline = fluent.settings.results.graphics.pathline["pathline"]
 pathline.field = "velocity-magnitude"
 pathline.release_from_surfaces = ["in"]
 pathline.display()
 
-fluent.results.graphics.views.restore_view(view_name="isometric")
-fluent.results.graphics.views.auto_scale()
-fluent.results.graphics.picture.save_picture(file_name="fluid_swirl_pathline.png")
+fluent.settings.results.graphics.views.restore_view(view_name="isometric")
+fluent.settings.results.graphics.views.auto_scale()
+fluent.settings.results.graphics.picture.save_picture(
+    file_name="fluid_swirl_pathline.png"
+)
 
 ###############################################################################
 # .. image:: /_static/fluid_swirl_pathline.png
