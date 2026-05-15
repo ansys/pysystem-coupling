@@ -205,6 +205,13 @@ def _wrap_solve(
                 with open(licfile, "r") as f:
                     print(f.read())
 
+            if os.path.isfile("syc_journal.log"):
+                print("Contents of 'syc_journal.log':")
+                with open("syc_journal.log", "r") as f:
+                    print(f.read())
+            else:
+                print("No 'syc_journal.log' file found.")
+
         if not active:
             print("Check for exception log...")
             if os.path.isfile("SyC_Exception.log"):
