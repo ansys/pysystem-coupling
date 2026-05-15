@@ -93,6 +93,7 @@ fluent_cas_file = examples.download_file(
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False)
 syc = pysyc.launch(start_output=True)
+syc._native_api.StartJournalFile(FileName="syc_journal.log")
 
 # %%
 # Setup
