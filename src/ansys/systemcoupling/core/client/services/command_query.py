@@ -35,5 +35,7 @@ class CommandQueryService:
             response, call = self.__stub.InvokeCommand.with_call(request)
             return response, call.trailing_metadata()
         except grpc.RpcError as rpc_error:
-            msg = handle_rpc_error(rpc_error)
+            msg = handle_rpc_error(
+                rpc_error, operation=f"InvokeCommand({request.command})"
+            )
             raise RuntimeError(msg) from None

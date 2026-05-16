@@ -22,6 +22,7 @@
 
 from dataclasses import dataclass, fields
 from enum import Enum
+import json
 import os
 import pathlib
 import re
@@ -45,6 +46,20 @@ from ansys.systemcoupling.core.util.logging import LOG
 _IS_WINDOWS = os.name == "nt"
 
 _version_re = re.compile(r"\bv[0-9][0-9][0-9]\b")
+
+_GRPC_CHANNEL_OPTIONS_JSON_ENV = "PYSYC_GRPC_CHANNEL_OPTIONS_JSON"
+_GRPC_CHANNEL_OPTIONS_INT_ENV = {
+    "PYSYC_GRPC_KEEPALIVE_TIME_MS": "grpc.keepalive_time_ms",
+    "PYSYC_GRPC_KEEPALIVE_TIMEOUT_MS": "grpc.keepalive_timeout_ms",
+    "PYSYC_GRPC_HTTP2_MAX_PINGS_WITHOUT_DATA": "grpc.http2.max_pings_without_data",
+    "PYSYC_GRPC_HTTP2_MIN_TIME_BETWEEN_PINGS_MS": "grpc.http2.min_time_between_pings_ms",
+    "PYSYC_GRPC_HTTP2_MIN_PING_INTERVAL_WITHOUT_DATA_MS": (
+        "grpc.http2.min_ping_interval_without_data_ms",
+    ),
+}
+_GRPC_CHANNEL_OPTIONS_BOOL_ENV = {
+    "PYSYC_GRPC_KEEPALIVE_PERMIT_WITHOUT_CALLS": "grpc.keepalive_permit_without_calls",
+}
 
 
 class ConnectionType(Enum):
@@ -232,6 +247,9 @@ class StartupAndConnectionInfo:
             )
 
         LOG.info(f"Creating gRPC channel with transport mode: {opt.transport_mode}")
+        grpc_options = _grpc_channel_options_from_env()
+        if grpc_options:
+            LOG.info(f"Applying gRPC channel options from environment: {grpc_options}")
         return create_channel(
             opt.transport_mode.value,
             host=opt.host,
@@ -240,6 +258,7 @@ class StartupAndConnectionInfo:
             uds_dir=opt.uds_dir,
             uds_id=opt.uds_id,
             certs_dir=opt.certs_folder,
+            grpc_options=grpc_options,
         )
 
     def _make_options(
@@ -340,6 +359,63 @@ class StartupAndConnectionInfo:
         if self._options.port is None:
             self._options.port = _find_port()
         return self._options.port
+
+
+def _grpc_channel_options_from_env() -> list[tuple[str, object]] | None:
+    options: dict[str, object] = {}
+
+    raw_options = os.environ.get(_GRPC_CHANNEL_OPTIONS_JSON_ENV)
+    if raw_options:
+        try:
+            parsed = json.loads(raw_options)
+            if isinstance(parsed, dict):
+                for key, value in parsed.items():
+                    options[str(key)] = value
+            elif isinstance(parsed, list):
+                for item in parsed:
+                    if (
+                        isinstance(item, (list, tuple))
+                        and len(item) == 2
+                        and isinstance(item[0], str)
+                    ):
+                        options[item[0]] = item[1]
+                    else:
+                        raise ValueError(
+                            "Items must be [name, value] pairs when JSON is a list."
+                        )
+            else:
+                raise ValueError(
+                    "JSON content must be an object or list of [name, value] pairs."
+                )
+        except Exception as exc:
+            LOG.warning(
+                f"Ignoring invalid {_GRPC_CHANNEL_OPTIONS_JSON_ENV} value: {exc}"
+            )
+
+    for env_var, grpc_key in _GRPC_CHANNEL_OPTIONS_INT_ENV.items():
+        value = os.environ.get(env_var)
+        if value is None:
+            continue
+        try:
+            options[grpc_key] = int(value)
+        except ValueError:
+            LOG.warning(f"Ignoring invalid integer value for {env_var}: '{value}'")
+
+    for env_var, grpc_key in _GRPC_CHANNEL_OPTIONS_BOOL_ENV.items():
+        value = os.environ.get(env_var)
+        if value is None:
+            continue
+        lowered = value.strip().lower()
+        if lowered in ("1", "true", "yes", "on"):
+            options[grpc_key] = 1
+        elif lowered in ("0", "false", "no", "off"):
+            options[grpc_key] = 0
+        else:
+            LOG.warning(f"Ignoring invalid boolean value for {env_var}: '{value}'")
+
+    if not options:
+        return None
+    return list(options.items())
 
 
 def _grpc_argument_category(version: tuple[int, int]) -> StartupArgumentCategory:

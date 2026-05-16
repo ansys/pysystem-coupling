@@ -36,7 +36,7 @@ class SolutionService:
         try:
             self.__stub.Solve(request)
         except grpc.RpcError as rpc_error:
-            msg = handle_rpc_error(rpc_error)
+            msg = handle_rpc_error(rpc_error, operation="Solution.Solve")
             raise RuntimeError(msg) from None
 
     def interrupt(self, reason):
