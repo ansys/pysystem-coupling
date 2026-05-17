@@ -78,9 +78,6 @@ def handle_rpc_error(rpc_error: grpc.RpcError, operation: str | None = None):
     if msg is not None:
         if operation:
             msg = f"{operation} failed. {msg}"
-        context = _rpc_context_msg(rpc_error)
-        if context:
-            msg += f"\n\nRPC transport context:\n{context}"
         return msg
 
     status = from_call(rpc_error)
