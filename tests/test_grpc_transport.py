@@ -408,7 +408,10 @@ class TestStartupAndConnectionInfo:
         channel = info.get_server_channel()
 
         # Verify channel was created and logging occurred
-        mock_log.info.assert_called_once()
+        expected_info_calls = (
+            2 if os.environ.get("PYSYC_GRPC_CHANNEL_OPTIONS_JSON") else 1
+        )
+        assert mock_log.info.call_count == expected_info_calls
         self.mock_create_channel.assert_called_once()
         # The channel should be what create_channel returns
         assert channel == self.mock_create_channel.return_value
@@ -427,7 +430,10 @@ class TestStartupAndConnectionInfo:
 
         # Verify warnings and channel creation
         mock_log.warning.assert_called_once()
-        mock_log.info.assert_called_once()
+        expected_info_calls = (
+            2 if os.environ.get("PYSYC_GRPC_CHANNEL_OPTIONS_JSON") else 1
+        )
+        assert mock_log.info.call_count == expected_info_calls
         self.mock_create_channel.assert_called_once()
         assert channel is not None
 
