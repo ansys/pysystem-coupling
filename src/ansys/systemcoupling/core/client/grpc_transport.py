@@ -61,6 +61,19 @@ _GRPC_CHANNEL_OPTIONS_BOOL_ENV = {
     "PYSYC_GRPC_KEEPALIVE_PERMIT_WITHOUT_CALLS": "grpc.keepalive_permit_without_calls",
 }
 
+# Default gRPC channel options for keepalive on long-running operations.
+# These prevent connection drops during extended solve operations, particularly
+# in environments with resource constraints (e.g., GitHub Actions, shared networks).
+# Can be overridden via environment variables (see above).
+_GRPC_CHANNEL_OPTIONS_DEFAULTS = {
+    "grpc.keepalive_time_ms": 30000,  # Send keepalive ping every 30s
+    "grpc.keepalive_timeout_ms": 20000,  # Wait 20s for ping response
+    "grpc.keepalive_permit_without_calls": 1,  # Allow pings even without active calls
+    "grpc.http2.max_pings_without_data": 0,  # No limit on pings without data
+    "grpc.http2.min_time_between_pings_ms": 10000,  # Min 10s between pings
+    "grpc.http2.min_ping_interval_without_data_ms": 10000,  # Min 10s between pings without data
+}
+
 
 class ConnectionType(Enum):
     """Enum containing the various gRPC connection options that
@@ -248,8 +261,7 @@ class StartupAndConnectionInfo:
 
         LOG.info(f"Creating gRPC channel with transport mode: {opt.transport_mode}")
         grpc_options = _grpc_channel_options_from_env()
-        if grpc_options:
-            LOG.info(f"Applying gRPC channel options from environment: {grpc_options}")
+        LOG.info(f"Applying gRPC channel options: {grpc_options}")
         return create_channel(
             opt.transport_mode.value,
             host=opt.host,
@@ -362,7 +374,8 @@ class StartupAndConnectionInfo:
 
 
 def _grpc_channel_options_from_env() -> list[tuple[str, object]] | None:
-    options: dict[str, object] = {}
+    # Start with defaults (always applied)
+    options: dict[str, object] = _GRPC_CHANNEL_OPTIONS_DEFAULTS.copy()
 
     raw_options = os.environ.get(_GRPC_CHANNEL_OPTIONS_JSON_ENV)
     if raw_options:
@@ -413,8 +426,6 @@ def _grpc_channel_options_from_env() -> list[tuple[str, object]] | None:
         else:
             LOG.warning(f"Ignoring invalid boolean value for {env_var}: '{value}'")
 
-    if not options:
-        return None
     return list(options.items())
 
 
