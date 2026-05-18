@@ -93,20 +93,13 @@ class CosimInjectedCommandsProvider:
             get_setup_root_object = lambda: self.session.setup
             ret = {
                 "solve": lambda **kwargs: _wrap_solve(
-                    self.rpc,
-                    get_setup_root_object(),
-                    get_solution_root_object(),
-                    self.participant_manager,
-                    **kwargs,
+                    get_solution_root_object(), self.participant_manager, **kwargs
                 ),
                 "solve_with_plot": lambda **kwargs: _solve_with_live_plot(
                     self.session,
                     self.version,
                     lambda: _wrap_solve(
-                        self.rpc,
-                        get_setup_root_object(),
-                        get_solution_root_object(),
-                        self.participant_manager,
+                        get_solution_root_object(), self.participant_manager
                     ),
                     **kwargs,
                 ),
@@ -171,62 +164,11 @@ def _wrap_clear_state(case: Container, part_mgr: ParticipantManager, **kwargs) -
     case._clear_state(**kwargs)
 
 
-def _wrap_solve(
-    rpc, setup: Container, solution: Container, part_mgr: ParticipantManager
-) -> None:
-    try:
-        if part_mgr is not None:
-            part_mgr.solve()
-        else:
-            solution._solve()
-    except Exception as e:
-        print("Exception during solve:", e)
-        print("Check server still active...")
-        try:
-            active = rpc.ping()
-            print("Server still active.")
-        except Exception:
-            active = False
-            print("Server is not active.")
-
-        if active:
-            # Licensing issue?
-            print("Server is active. The exception might be due to a licensing issue.")
-            import glob
-
-            licfiles = glob.glob("ansyscl.*.log")
-            for licfile in licfiles:
-                print(f"Contents of license log file '{licfile}':")
-                with open(licfile, "r") as f:
-                    print(f.read())
-            licdebug = glob.glob("licdebug.*.out")
-            for licfile in licdebug:
-                print(f"Contents of license debug file '{licfile}':")
-                with open(licfile, "r") as f:
-                    print(f.read())
-
-            if os.path.isfile("syc_journal.log"):
-                print("Contents of 'syc_journal.log':")
-                with open("syc_journal.log", "r") as f:
-                    print(f.read())
-            else:
-                print("No 'syc_journal.log' file found.")
-
-        if not active:
-            print("Check for exception log...")
-            if os.path.isfile("SyC_Exception.log"):
-                with open("SyC_Exception.log", "r") as f:
-                    log_contents = f.read()
-                print(
-                    "An exception occurred during solve. "
-                    f"Contents of 'SyC_Exception.log':\n{log_contents}"
-                )
-            else:
-                print(
-                    "An exception occurred during solve, "
-                    "but 'SyC_Exception.log' was not found."
-                )
-        raise e
+def _wrap_solve(solution: Container, part_mgr: ParticipantManager) -> None:
+    if part_mgr is None:
+        solution._solve()
+    else:
+        part_mgr.solve()
 
 
 def _ensure_file_available(session: SessionProtocol, filepath: str) -> str:
