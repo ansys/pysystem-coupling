@@ -307,13 +307,22 @@ jobs:
 
       - name: Build HTML
         run: |
+          set -o pipefail
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
           make -C doc clean
-          make -C doc html SPHINXERRWARN="-W"
+          if ! make -C doc html SPHINXERRWARN="-W" 2>&1 | tee build-html.log; then
+            if grep -q 'grpc_details=ping timeout' build-html.log; then
+              echo "Detected gRPC ping timeout during docs build; retrying once..."
+              make -C doc clean
+              make -C doc html SPHINXERRWARN="-W"
+            else
+              exit 1
+            fi
+          fi
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: '{"grpc.keepalive_time_ms": 30000, "grpc.keepalive_timeout_ms": 60000, "grpc.keepalive_permit_without_calls": 1}'
+          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: '{"grpc.keepalive_time_ms": 30000, "grpc.keepalive_timeout_ms": 20000, "grpc.keepalive_permit_without_calls": 1, "grpc.http2.max_pings_without_data": 0, "grpc.http2.min_time_between_pings_ms": 10000, "grpc.http2.min_ping_interval_without_data_ms": 10000}'
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
