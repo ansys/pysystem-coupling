@@ -109,7 +109,6 @@ lift_data_file = examples.download_file(
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(processor_count=8)
 syc = pysyc.launch(start_output=True, nprocs=10, sycnprocs=2)
-syc._native_api.StartJournalFile(FileName="syc_journal.log")
 
 # %%
 # Setup Mechanical APDL, Fluent, and System Coupling analyses

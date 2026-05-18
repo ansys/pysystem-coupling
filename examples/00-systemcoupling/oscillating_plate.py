@@ -93,7 +93,6 @@ fluent_cas_file = examples.download_file(
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False)
 syc = pysyc.launch(start_output=True)
-syc._native_api.StartJournalFile(FileName="syc_journal.log")
 
 # %%
 # Setup
@@ -205,7 +204,6 @@ syc.setup.output_control.generate_csv_chart_output = True
 # %%
 # Solution
 # --------
-print(f"Setup summary:\n{syc.setup.get_setup_summary()}")
 syc.solution.solve()
 
 

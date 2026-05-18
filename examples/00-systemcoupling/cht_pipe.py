@@ -208,8 +208,6 @@ fluent.solution.run_calculation.iter_count = 20
 # and setting other coupled analysis settings.
 syc = pysyc.launch(start_output=True)
 
-syc._native_api.StartJournalFile(FileName="syc_journal.log")
-
 # %%
 # Add participants by passing session handles to System Coupling.
 fluid_name = syc.setup.add_participant(participant_session=fluent)
