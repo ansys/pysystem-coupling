@@ -83,9 +83,15 @@ def start_container(
 
     # Now use the image tag as definitive source of version info to
     # decide on transport args.
-    if not (use_new_transport_args := image_tag == "latest"):
+    is_latest = image_tag == "latest"
+    is_github_action = os.getenv("GITHUB_ACTIONS") == "true"
+    if not is_latest:
         major, minor, sp_suffix = _major_minor_sp_from_version(image_tag)
         use_new_transport_args = sp_suffix or (major, minor) > (25, 2)
+        bypass_docker_bridge_routing = is_github_action and (major, minor) >= (25, 2)
+    else:
+        use_new_transport_args = True
+        bypass_docker_bridge_routing = is_github_action
 
     if use_new_transport_args:
         args = [
@@ -132,6 +138,13 @@ def start_container(
         # Licensing can't log to default location if user is not the default 'root'
         run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
         run_args.insert(idx, "-e")
+
+    if bypass_docker_bridge_routing:
+        # replace -p <port>:<port> with --network=host to bypass Docker's network
+        # address translation
+        idx = run_args.index("-p")
+        del run_args[idx : idx + 2]
+        run_args.insert(idx, "--network=host")
 
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
