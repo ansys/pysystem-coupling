@@ -98,7 +98,7 @@ fluent_cas_file = examples.download_file(
 #    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 fluent = pyfluent.launch_fluent(start_transcript=True, processor_count=4)
 syc = pysystemcoupling.launch()
-LOG.setLevel("DEBUG")
+LOG.set_level("DEBUG")
 
 # %%
 # Setup

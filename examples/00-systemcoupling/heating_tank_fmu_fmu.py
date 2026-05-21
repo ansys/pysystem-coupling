@@ -108,7 +108,7 @@ fmu_file_tank = examples.download_file(
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
 syc = pysystemcoupling.launch(start_output=True)
-LOG.setLevel("DEBUG")
+LOG.set_level("DEBUG")
 # %%
 # Set up the coupled analysis
 # ---------------------------

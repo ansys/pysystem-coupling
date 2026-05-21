@@ -207,7 +207,7 @@ fluent.solution.run_calculation.iter_count = 20
 # participants, adding coupled interfaces and data transfers,
 # and setting other coupled analysis settings.
 syc = pysyc.launch(start_output=True)
-LOG.setLevel("DEBUG")
+LOG.set_level("DEBUG")
 # %%
 # Add participants by passing session handles to System Coupling.
 fluid_name = syc.setup.add_participant(participant_session=fluent)
