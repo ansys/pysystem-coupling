@@ -92,8 +92,8 @@ fluent_cas_file = examples.download_file(
 # these products via APIs exposed into the current Python environment.
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False)
-syc = pysyc.launch(start_output=True)
 LOG.set_level("DEBUG")
+syc = pysyc.launch(start_output=True)
 # %%
 # Setup
 # -----
