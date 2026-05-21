@@ -190,6 +190,8 @@ def start_container(
         run_args.insert(idx, network)
         run_args.insert(idx, "--network")
 
+    LOG.debug(f"Running container with command: {' '.join(run_args)}")
+
     # Exclude Bandit check. No untrusted input to arguments.
     subprocess.run(run_args)  # nosec B603
 

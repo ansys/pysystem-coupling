@@ -71,7 +71,7 @@ import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
 
 import ansys.systemcoupling.core as pysyc
-from ansys.systemcoupling.core import examples
+from ansys.systemcoupling.core import LOG, examples
 
 # %%
 #
@@ -93,7 +93,7 @@ fluent_cas_file = examples.download_file(
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False)
 syc = pysyc.launch(start_output=True)
-
+LOG.setLevel("DEBUG")
 # %%
 # Setup
 # -----

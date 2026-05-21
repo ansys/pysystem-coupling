@@ -83,7 +83,7 @@ One coupling interface between the FMUs with two data transfers :
 # sphinx_gallery_thumbnail_path = '_static/fmu_fmu.png'
 
 import ansys.systemcoupling.core as pysystemcoupling
-from ansys.systemcoupling.core import examples
+from ansys.systemcoupling.core import LOG, examples
 
 # %%
 #
@@ -108,7 +108,7 @@ fmu_file_tank = examples.download_file(
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
 syc = pysystemcoupling.launch(start_output=True)
-
+LOG.setLevel("DEBUG")
 # %%
 # Set up the coupled analysis
 # ---------------------------
