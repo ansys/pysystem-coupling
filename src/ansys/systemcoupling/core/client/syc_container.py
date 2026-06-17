@@ -186,9 +186,12 @@ def start_container(
         run_args.insert(idx, "-e")
 
     if network:
-        idx = run_args.index("-p")
-        run_args.insert(idx, network)
-        run_args.insert(idx, "--network")
+        if "--network=host" in run_args:
+            LOG.warning("Ignoring 'network' argument because --network=host is active.")
+        else:
+            idx = run_args.index("-p")
+            run_args.insert(idx, network)
+            run_args.insert(idx, "--network")
 
     LOG.debug(f"Running container with command: {' '.join(run_args)}")
 
