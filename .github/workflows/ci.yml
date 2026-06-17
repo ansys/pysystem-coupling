@@ -16,7 +16,7 @@ env:
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
   DOC_BUILD_SYC_VERSION: 26_1
-  GRPCIO_VERSION_261: "1.73.1"
+  GRPCIO_VERSION_261: "1.81.1"
   FLUENT_IMAGE_VERSION: "v25.2.0"
   SYC_IMAGE_VERSION: "v26.1.0"
   MAPDL_IMAGE_VERSION: "v25.2-ubuntu-cicd"
@@ -239,12 +239,14 @@ jobs:
 
       - name: Pin grpcio for v26.1 tests
         run: |
-          pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} > /dev/null
+          pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} grpcio-health-checking==${GRPCIO_VERSION_261} > /dev/null
           python - <<'PY'
           import grpc
           import grpc_status
+          import grpc_health
           print(f"grpcio version: {grpc.__version__}")
           print(f"grpcio-status module: {grpc_status.__name__}")
+          print(f"grpcio-health-checking module: {grpc_health.__name__}")
           PY
         env:
           GRPCIO_VERSION_261: ${{ env.GRPCIO_VERSION_261 }}
@@ -297,12 +299,14 @@ jobs:
 
       - name: Pin grpcio for docs build (v26.1)
         run: |
-          pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} > /dev/null
+          pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} grpcio-health-checking==${GRPCIO_VERSION_261} > /dev/null
           python - <<'PY'
           import grpc
           import grpc_status
+          import grpc_health
           print(f"grpcio version: {grpc.__version__}")
           print(f"grpcio-status module: {grpc_status.__name__}")
+          print(f"grpcio-health-checking module: {grpc_health.__name__}")
           PY
         env:
           GRPCIO_VERSION_261: ${{ env.GRPCIO_VERSION_261 }}
