@@ -73,7 +73,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import ansys.systemcoupling.core as pysyc
-from ansys.systemcoupling.core import LOG, examples
+from ansys.systemcoupling.core import examples
 
 # %%
 #
@@ -108,7 +108,6 @@ lift_data_file = examples.download_file(
 
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(processor_count=8)
-LOG.set_level("DEBUG")
 syc = pysyc.launch(start_output=True, nprocs=10, sycnprocs=2)
 
 # %%

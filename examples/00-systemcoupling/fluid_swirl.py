@@ -70,7 +70,7 @@ import math
 import ansys.fluent.core as pyfluent
 
 import ansys.systemcoupling.core as pysystemcoupling
-from ansys.systemcoupling.core import LOG, examples
+from ansys.systemcoupling.core import examples
 
 # %%
 #
@@ -97,7 +97,6 @@ fluent_cas_file = examples.download_file(
 #    use ``product_version`` argument to the ``launch_fluent``
 #    function, for example ``pyfluent.launch_fluent(product_version="24.2.0")``
 fluent = pyfluent.launch_fluent(start_transcript=True, processor_count=4)
-LOG.set_level("DEBUG")
 syc = pysystemcoupling.launch()
 
 # %%

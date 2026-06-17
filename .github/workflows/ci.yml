@@ -379,14 +379,17 @@ jobs:
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
 
           # On the first attempt do a full clean build.
-          # On retries, deliberately skip 'make clean': this preserves the
-          # sphinx-gallery .md5 files in doc/source/examples/ so that only
-          # examples that actually failed are re-run instead of the whole gallery.
+          # On retries, clean only build artefacts while preserving
+          # doc/source/examples so sphinx-gallery .md5 files remain available.
+          # This allows only failed examples to re-run while avoiding stale
+          # files in doc/_build causing static asset copy conflicts.
           for attempt in 1 2 3; do
             if [ "$attempt" -eq 1 ]; then
               make -C doc clean
             else
-              echo "Retrying docs build (attempt ${attempt}) without full clean so only failed examples re-run..."
+              echo "Retrying docs build (attempt ${attempt}) with partial clean to preserve gallery md5 files..."
+              rm -rf doc/_build/*
+              find doc -type d -name "_autosummary" -exec rm -rf {} +
               sleep 10
             fi
             if make -C doc html SPHINXERRWARN="-W" 2>&1 | tee build-html.log; then

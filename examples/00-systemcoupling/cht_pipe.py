@@ -68,7 +68,7 @@ import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
 
 import ansys.systemcoupling.core as pysyc
-from ansys.systemcoupling.core import LOG, examples
+from ansys.systemcoupling.core import examples
 
 # %%
 # Download the Fluent mesh file.
@@ -206,7 +206,6 @@ fluent.solution.run_calculation.iter_count = 20
 # System Coupling setup involves adding the structural and fluid
 # participants, adding coupled interfaces and data transfers,
 # and setting other coupled analysis settings.
-LOG.set_level("DEBUG")
 syc = pysyc.launch(start_output=True)
 # %%
 # Add participants by passing session handles to System Coupling.
