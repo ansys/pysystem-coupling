@@ -395,9 +395,9 @@ jobs:
             if make -C doc html SPHINXERRWARN="-W" 2>&1 | tee build-html.log; then
               break
             fi
-            if grep -q 'grpc_details=ping timeout' build-html.log; then
+            if grep -q 'problems encountered when running the examples' build-html.log; then
               if [ "$attempt" -eq 3 ]; then
-                echo "Docs build failed with gRPC ping timeout after ${attempt} attempts."
+                echo "Docs build failed with gallery example errors after ${attempt} attempts."
                 exit 1
               fi
             else
