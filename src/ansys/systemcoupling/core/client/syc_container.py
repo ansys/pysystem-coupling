@@ -83,9 +83,29 @@ def start_container(
 
     # Now use the image tag as definitive source of version info to
     # decide on transport args.
-    if not (use_new_transport_args := image_tag == "latest"):
+    is_latest = image_tag == "latest"
+    is_github_action = os.getenv("GITHUB_ACTIONS") == "true"
+    if not is_latest:
         major, minor, sp_suffix = _major_minor_sp_from_version(image_tag)
         use_new_transport_args = sp_suffix or (major, minor) > (25, 2)
+        bypass_docker_bridge_routing = is_github_action and (major, minor) >= (25, 2)
+    else:
+        use_new_transport_args = True
+        bypass_docker_bridge_routing = is_github_action
+
+    keepalive_server_settings = []
+    if bypass_docker_bridge_routing:
+        keepalive_server_settings = [
+            "-e",
+            # Server pings client only once every 2 hours
+            "GRPC_ARG_KEEPALIVE_TIME_MS=7200000",
+            "-e",
+            # Disables the 2-strike disconnect rule
+            "GRPC_ARG_HTTP2_MAX_PING_STRIKES=0",
+            "-e",
+            # Accepts client packets without limit
+            "GRPC_ARG_HTTP2_MIN_PING_INTERVAL_WITHOUT_DATA_MS=0",
+        ]
 
     if use_new_transport_args:
         args = [
@@ -105,23 +125,29 @@ def start_container(
 
     mounted_from = str(Path(mounted_from).absolute())
 
-    run_args = [
-        "docker",
-        "run",
-        "-d",
-        "--rm",
-        "-p",
-        f"{port}:{port}",
-        "-v",
-        f"{mounted_from}:{mounted_to}",
-        "-w",
-        mounted_to,
-        "-e",
-        f"{_MPI_VERSION_VAR}={_MPI_VERSION}",
-        "-e",
-        f"AWP_ROOT=/ansys_inc",
-        f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
-    ] + args
+    run_args = (
+        [
+            "docker",
+            "run",
+            "-d",
+            "--rm",
+            "-p",
+            f"{port}:{port}",
+            "-v",
+            f"{mounted_from}:{mounted_to}",
+            "-w",
+            mounted_to,
+            "-e",
+            f"{_MPI_VERSION_VAR}={_MPI_VERSION}",
+            "-e",
+            f"AWP_ROOT=/ansys_inc",
+        ]
+        + keepalive_server_settings
+        + [
+            f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
+        ]
+        + args
+    )
 
     # Additional environment
     container_user = os.getenv("SYC_CONTAINER_USER")
@@ -132,6 +158,13 @@ def start_container(
         # Licensing can't log to default location if user is not the default 'root'
         run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
         run_args.insert(idx, "-e")
+
+    if bypass_docker_bridge_routing:
+        # replace -p <port>:<port> with --network=host to bypass Docker's network
+        # address translation
+        idx = run_args.index("-p")
+        del run_args[idx : idx + 2]
+        run_args.insert(idx, "--network=host")
 
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
@@ -156,6 +189,8 @@ def start_container(
         idx = run_args.index("-p")
         run_args.insert(idx, network)
         run_args.insert(idx, "--network")
+
+    LOG.debug(f"Running container with command: {' '.join(run_args)}")
 
     # Exclude Bandit check. No untrusted input to arguments.
     subprocess.run(run_args)  # nosec B603

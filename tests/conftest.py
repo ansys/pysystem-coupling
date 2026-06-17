@@ -37,4 +37,4 @@ def image_tag_env(monkeypatch: pytest.MonkeyPatch) -> None:
     # Expect env var to be set to different values in GH pipelines
     # but this provides a convenient place to default for local runs
     if "SYC_IMAGE_TAG" not in os.environ:
-        monkeypatch.setenv("SYC_IMAGE_TAG", "v25.2.0-sp03")
+        monkeypatch.setenv("SYC_IMAGE_TAG", "v26.1.0")

@@ -45,7 +45,7 @@ resides within a fluid filled channel:
    :align: center
 
 The flow is laminar with a Reynolds number of :math:`Re = 100`. The inlet velocity
-has a parabolic profile with a maximum value of :math:`1.5 \cdot \\bar{U}`, where :math:`\\bar{U}`
+has a parabolic profile with a maximum value of :math:`1.5 \\cdot \\bar{U}`, where :math:`\\bar{U}`
 is the average inlet velocity. The cylinder sits at an offset of :math:`0.05~m` to the
 incoming flow, causing an imbalance of surface forces on the elastic beam.
 The beam and the surrounding fluid are simulated for a few time steps to
@@ -73,7 +73,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import ansys.systemcoupling.core as pysyc
-from ansys.systemcoupling.core import examples
+from ansys.systemcoupling.core import LOG, examples
 
 # %%
 #
@@ -108,6 +108,7 @@ lift_data_file = examples.download_file(
 
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(processor_count=8)
+LOG.set_level("DEBUG")
 syc = pysyc.launch(start_output=True, nprocs=10, sycnprocs=2)
 
 # %%
@@ -182,48 +183,50 @@ mapdl.outres("all", "all")
 
 # %%
 # Read the pre-created mesh file
-fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
+fluent.settings.file.read(file_type="mesh", file_name=fluent_msh_file)
 fluent.mesh.check()
 
 # %%
 # Define fluids general solver settings
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fluent.setup.general.solver.type = "pressure-based"
+fluent.settings.setup.general.solver.type = "pressure-based"
 fluent.solution.methods.high_order_term_relaxation.enable = True
 
 # %%
 # Define the fluid and update the material properties
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-fluent.setup.models.viscous.model = "laminar"
-fluent.setup.materials.fluid["fsi_fluid"] = {
+fluent.settings.setup.models.viscous.model = "laminar"
+fluent.settings.setup.materials.fluid["fsi_fluid"] = {
     "density": {"option": "constant", "value": FLUID_DENS},
     "viscosity": {"option": "constant", "value": viscosity},
 }
 
-fluent.setup.cell_zone_conditions.fluid["*fluid*"].general.material = "fsi_fluid"
-fluent.setup.materials.print_state()
+fluent.settings.setup.cell_zone_conditions.fluid["*fluid*"].general.material = (
+    "fsi_fluid"
+)
+fluent.settings.setup.materials.print_state()
 
 # %%
 # Create the parabolic inlet profile as a named expression
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fluent.setup.named_expressions["u_bar"] = {  # average velocity
+fluent.settings.setup.named_expressions["u_bar"] = {  # average velocity
     "definition": f"{U_BAR} [m/s]"
 }
-fluent.setup.named_expressions["t_bar"] = {"definition": "1.0 [s]"}
-fluent.setup.named_expressions["y_bar"] = {"definition": "1.0 [m]"}
+fluent.settings.setup.named_expressions["t_bar"] = {"definition": "1.0 [s]"}
+fluent.settings.setup.named_expressions["y_bar"] = {"definition": "1.0 [m]"}
 
-fluent.setup.named_expressions["u_y"] = {
+fluent.settings.setup.named_expressions["u_y"] = {
     "definition": "1.5*u_bar*(4*(y/y_bar)*(0.41 - y/y_bar)/(0.41^2))"
 }
 
 # %%
 # Update the inlet field
 # ~~~~~~~~~~~~~~~~~~~~~~
-inlet_fluid = fluent.setup.boundary_conditions.velocity_inlet["inlet"]
+inlet_fluid = fluent.settings.setup.boundary_conditions.velocity_inlet["inlet"]
 inlet_fluid.momentum.initial_gauge_pressure.value = 0
-inlet_fluid.momentum.velocity.value = "u_y"
-fluent.setup.named_expressions.print_state()
+inlet_fluid.momentum.velocity_magnitude.value = "u_y"
+fluent.settings.setup.named_expressions.print_state()
 
 # %%
 # Setup any relevant solution controls
@@ -244,7 +247,7 @@ fluent.solution.run_calculation.iterate(iter_count=500)
 # %%
 # Switch to transient mode and prepare for coupling
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-fluent.setup.general.solver.time = "unsteady-2nd-order"
+fluent.settings.setup.general.solver.time = "unsteady-2nd-order"
 
 # %%
 # Define dynamic meshing
@@ -304,11 +307,11 @@ for zone in ["cylinder", "outlet", "inlet", "channel"]:
 # system coupling.
 fluent.solution.run_calculation.transient_controls.max_iter_per_time_step = 50
 
-fluent.file.auto_save.save_data_file_every.frequency_type = "time-step"
-fluent.file.auto_save.data_frequency = 20
-fluent.file.auto_save.root_name = "turek_hron_fluid_resolved"
-fluent.setup.materials.print_state()
-fluent.setup.cell_zone_conditions.print_state()
+fluent.settings.file.auto_save.save_data_file_every.frequency_type = "time-step"
+fluent.settings.file.auto_save.data_frequency = 20
+fluent.settings.file.auto_save.root_name = "turek_hron_fluid_resolved"
+fluent.settings.setup.materials.print_state()
+fluent.settings.setup.cell_zone_conditions.print_state()
 
 # %%
 # Set up the coupled analysis
@@ -444,14 +447,14 @@ plt.close()  # close the plot to avoid showing it in the docs.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # use_window_resolution option not active inside containers or Ansys Lab environment
 
-if fluent.results.graphics.picture.use_window_resolution.is_active():
-    fluent.results.graphics.picture.use_window_resolution = False
+if fluent.settings.results.graphics.picture.use_window_resolution.is_active():
+    fluent.settings.results.graphics.picture.use_window_resolution = False
 
-fluent.results.graphics.picture.x_resolution = 1920
-fluent.results.graphics.picture.y_resolution = 1440
+fluent.settings.results.graphics.picture.x_resolution = 1920
+fluent.settings.results.graphics.picture.y_resolution = 1440
 
-fluent.results.graphics.contour["contour_static_pressure"] = {}
-contour = fluent.results.graphics.contour["contour_static_pressure"]
+fluent.settings.results.graphics.contour["contour_static_pressure"] = {}
+contour = fluent.settings.results.graphics.contour["contour_static_pressure"]
 
 contour.colorings.banded = True
 contour.field = "pressure"
@@ -460,9 +463,9 @@ contour.filled = True
 contour.surfaces_list = ["back"]
 contour.display()
 
-fluent.results.graphics.views.restore_view(view_name="front")
-fluent.results.graphics.views.auto_scale()
-fluent.results.graphics.picture.save_picture(
+fluent.settings.results.graphics.views.restore_view(view_name="front")
+fluent.settings.results.graphics.views.auto_scale()
+fluent.settings.results.graphics.picture.save_picture(
     file_name="turek_horn_fsi2_pressure_contour.png"
 )
 

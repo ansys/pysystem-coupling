@@ -71,7 +71,7 @@ import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
 
 import ansys.systemcoupling.core as pysyc
-from ansys.systemcoupling.core import examples
+from ansys.systemcoupling.core import LOG, examples
 
 # %%
 #
@@ -92,8 +92,8 @@ fluent_cas_file = examples.download_file(
 # these products via APIs exposed into the current Python environment.
 mapdl = pymapdl.launch_mapdl()
 fluent = pyfluent.launch_fluent(start_transcript=False)
+LOG.set_level("DEBUG")
 syc = pysyc.launch(start_output=True)
-
 # %%
 # Setup
 # -----
@@ -158,7 +158,7 @@ mapdl.timint("on")
 
 # %%
 # Read the pre-created case file
-fluent.file.read(file_type="case", file_name=fluent_cas_file)
+fluent.settings.file.read(file_type="case", file_name=fluent_cas_file)
 
 
 # %%
@@ -223,14 +223,14 @@ print(f"There are {len(node_ids)} nodes. Maximum x-displacement is {max_dx}")
 # Post-process the fluids results
 
 # use_window_resolution option not active inside containers or Ansys Lab environment
-if fluent.results.graphics.picture.use_window_resolution.is_active():
-    fluent.results.graphics.picture.use_window_resolution = False
+if fluent.settings.results.graphics.picture.use_window_resolution.is_active():
+    fluent.settings.results.graphics.picture.use_window_resolution = False
 
-fluent.results.graphics.picture.x_resolution = 1920
-fluent.results.graphics.picture.y_resolution = 1440
+fluent.settings.results.graphics.picture.x_resolution = 1920
+fluent.settings.results.graphics.picture.y_resolution = 1440
 
-fluent.results.graphics.contour["contour_static_pressure"] = {}
-contour = fluent.results.graphics.contour["contour_static_pressure"]
+fluent.settings.results.graphics.contour["contour_static_pressure"] = {}
+contour = fluent.settings.results.graphics.contour["contour_static_pressure"]
 
 contour.colorings.banded = True
 contour.field = "pressure"
@@ -239,9 +239,11 @@ contour.filled = True
 contour.surfaces_list = ["symmetry1", "wall_deforming"]
 contour.display()
 
-fluent.results.graphics.views.restore_view(view_name="front")
-fluent.results.graphics.views.auto_scale()
-fluent.results.graphics.picture.save_picture(file_name="oscplate_pressure_contour.png")
+fluent.settings.results.graphics.views.restore_view(view_name="front")
+fluent.settings.results.graphics.views.auto_scale()
+fluent.settings.results.graphics.picture.save_picture(
+    file_name="oscplate_pressure_contour.png"
+)
 
 ###############################################################################
 # .. image:: /_static/oscplate_pressure_contour.png
