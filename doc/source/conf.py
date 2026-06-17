@@ -272,7 +272,11 @@ sphinx_gallery_conf = {
     # "plot_gallery": False,
     # Suppress config comments like "sphinx_gallery_thumbnail_path" from being rendered
     "remove_config_comments": True,
-    "abort_on_example_error": True,
+    # Keep False so the full gallery attempts all examples even if one fails.
+    # This allows CI to retry only the failed examples on a subsequent run
+    # (sphinx-gallery skips examples whose .md5 file already matches).
+    # make clean is NOT run between retries so the .md5 files are preserved.
+    "abort_on_example_error": False,
 }
 
 # -- Options for warning control ---------------------------------------------
