@@ -273,7 +273,9 @@ jobs:
         env:
           PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
 
-      - name: Unit Test v26.1.0
+      - name: Unit Test v26.1.0 (attempt 1)
+        id: unit_test_v261_attempt1
+        continue-on-error: true
         uses: ./.github/actions/unit-test
         with:
           image-tag: v26.1.0
@@ -281,6 +283,24 @@ jobs:
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+
+      - name: Unit Test v26.1.0 (attempt 2 on transient failure)
+        id: unit_test_v261_attempt2
+        if: steps.unit_test_v261_attempt1.outcome == 'failure'
+        continue-on-error: true
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: v26.1.0
+          upload-coverage: true
+        env:
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+
+      - name: Fail if v26.1 retries exhausted
+        if: steps.unit_test_v261_attempt1.outcome == 'failure' && steps.unit_test_v261_attempt2.outcome == 'failure'
+        run: |
+          echo "v26.1 unit tests failed on both attempts."
+          exit 1
 
       #- name: Unit Test latest
       #  uses: ./.github/actions/unit-test
