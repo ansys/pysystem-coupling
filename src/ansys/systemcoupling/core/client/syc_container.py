@@ -87,25 +87,11 @@ def start_container(
     is_github_action = os.getenv("GITHUB_ACTIONS") == "true"
     if not is_latest:
         major, minor, sp_suffix = _major_minor_sp_from_version(image_tag)
-        use_new_transport_args = sp_suffix or (major, minor) > (25, 2)
+        use_new_transport_args = bool(sp_suffix) or (major, minor) > (25, 2)
         bypass_docker_bridge_routing = is_github_action and (major, minor) >= (25, 2)
     else:
         use_new_transport_args = True
         bypass_docker_bridge_routing = is_github_action
-
-    keepalive_server_settings = []
-    if bypass_docker_bridge_routing:
-        keepalive_server_settings = [
-            "-e",
-            # Server pings client only once every 2 hours
-            "GRPC_ARG_KEEPALIVE_TIME_MS=7200000",
-            "-e",
-            # Disables the 2-strike disconnect rule
-            "GRPC_ARG_HTTP2_MAX_PING_STRIKES=0",
-            "-e",
-            # Accepts client packets without limit
-            "GRPC_ARG_HTTP2_MIN_PING_INTERVAL_WITHOUT_DATA_MS=0",
-        ]
 
     if use_new_transport_args:
         args = [
@@ -125,29 +111,23 @@ def start_container(
 
     mounted_from = str(Path(mounted_from).absolute())
 
-    run_args = (
-        [
-            "docker",
-            "run",
-            "-d",
-            "--rm",
-            "-p",
-            f"{port}:{port}",
-            "-v",
-            f"{mounted_from}:{mounted_to}",
-            "-w",
-            mounted_to,
-            "-e",
-            f"{_MPI_VERSION_VAR}={_MPI_VERSION}",
-            "-e",
-            f"AWP_ROOT=/ansys_inc",
-        ]
-        + keepalive_server_settings
-        + [
-            f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
-        ]
-        + args
-    )
+    run_args = [
+        "docker",
+        "run",
+        "-d",
+        "--rm",
+        "-p",
+        f"{port}:{port}",
+        "-v",
+        f"{mounted_from}:{mounted_to}",
+        "-w",
+        mounted_to,
+        "-e",
+        f"{_MPI_VERSION_VAR}={_MPI_VERSION}",
+        "-e",
+        f"AWP_ROOT=/ansys_inc",
+        f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
+    ] + args
 
     # Additional environment
     container_user = os.getenv("SYC_CONTAINER_USER")
