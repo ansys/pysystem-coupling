@@ -21,14 +21,14 @@ env:
   # try to avoid ping timeout issues. This is mainly seen in the long-running
   # "solve" RPC. Review whether this remains necessary with future versions.
   GRPCIO_VERSION_261: "1.81.1"
-  # gRPC channel options for v26.1: Moderate keepalive strategy balancing client and
-  # server expectations. Reduces aggressive pinging during long-running solve() RPC while
-  # respecting server ping-strike timeouts. Key philosophy:
-  # 1. Client-initiated keepalive every 90 seconds (moderate, not aggressive 30s or extreme ~24 days)
-  # 2. Only ping when waiting on an active RPC or if connection becomes idle
-  # 3. Conservative 5-minute spacing between individual pings when they do occur
-  # 4. Patient with ping responses (no timeout), respects server's ping expectations
-  PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261: '{"grpc.keepalive_time_ms": 90000, "grpc.keepalive_timeout_ms": 2147483647, "grpc.keepalive_permit_without_calls": 0, "grpc.http2.max_pings_without_data": 0, "grpc.http2.min_time_between_pings_ms": 300000, "grpc.http2.min_ping_interval_without_data_ms": 300000}'
+  # gRPC channel options for v26.1: Balanced keepalive strategy for long-running solve() RPC.
+  # Keepalive is intentionally moderate (90s) and the min ping intervals are aligned to avoid
+  # internally throttling the intended cadence, while still avoiding aggressive pinging.
+  # 1. Keepalive every 90 seconds (middle ground between 30s and near-disabled keepalive)
+  # 2. Do not ping without calls (only when activity requires it)
+  # 3. Align min ping intervals to 90 seconds to avoid 5-minute throttling effects
+  # 4. Keep ping response timeout permissive to avoid false negatives on long solves
+  PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261: '{"grpc.keepalive_time_ms": 90000, "grpc.keepalive_timeout_ms": 2147483647, "grpc.keepalive_permit_without_calls": 0, "grpc.http2.max_pings_without_data": 0, "grpc.http2.min_time_between_pings_ms": 90000, "grpc.http2.min_ping_interval_without_data_ms": 90000}'
   FLUENT_IMAGE_VERSION: "v25.2.0"
   SYC_IMAGE_VERSION: "v26.1.0"
   MAPDL_IMAGE_VERSION: "v25.2-ubuntu-cicd"
