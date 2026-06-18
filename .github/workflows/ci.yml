@@ -383,7 +383,9 @@ jobs:
           # doc/source/examples so sphinx-gallery .md5 files remain available.
           # This allows only failed examples to re-run while avoiding stale
           # files in doc/_build causing static asset copy conflicts.
+          should_retry_regex='problems encountered when running the examples|EOFError|ev_epoll1_linux\.cc|grpc_details=|StatusCode\.UNAVAILABLE|Stream removed'
           for attempt in 1 2 3; do
+            attempt_log="build-html-attempt-${attempt}.log"
             if [ "$attempt" -eq 1 ]; then
               make -C doc clean
             else
@@ -392,12 +394,14 @@ jobs:
               find doc -type d -name "_autosummary" -exec rm -rf {} +
               sleep 10
             fi
-            if make -C doc html SPHINXERRWARN="-W" 2>&1 | tee build-html.log; then
+            if make -C doc html SPHINXOPTS="-j 1" SPHINXERRWARN="-W" 2>&1 | tee "${attempt_log}"; then
+              cp "${attempt_log}" build-html.log
               break
             fi
-            if grep -q 'problems encountered when running the examples' build-html.log; then
+            cp "${attempt_log}" build-html.log
+            if grep -Eq "${should_retry_regex}" "${attempt_log}"; then
               if [ "$attempt" -eq 3 ]; then
-                echo "Docs build failed with gallery example errors after ${attempt} attempts."
+                echo "Docs build failed after ${attempt} attempts with retry-eligible transient errors."
                 exit 1
               fi
             else
@@ -417,6 +421,36 @@ jobs:
           PYMAPDL_PORT: "50053"
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:${{ env.MAPDL_IMAGE_VERSION }}
           PYMAPDL_GRPC_TRANSPORT: "insecure"
+
+      - name: Collect docs failure diagnostics
+        if: failure()
+        run: |
+          mkdir -p ci-logs/docker
+
+          cp -f build-html.log ci-logs/ 2>/dev/null || true
+          cp -f build-html-attempt-*.log ci-logs/ 2>/dev/null || true
+
+          docker ps -a --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' > ci-logs/docker/containers.txt || true
+
+          docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | while read -r cid image name; do
+            if echo "${image} ${name}" | grep -Eiq 'pysystem-coupling|pyfluent|mapdl|fluent|systemcoupling'; then
+              safe_name=$(echo "${name}" | tr '/: ' '___')
+              docker logs "${cid}" > "ci-logs/docker/${safe_name}.log" 2>&1 || true
+              docker inspect "${cid}" > "ci-logs/docker/${safe_name}.inspect.json" 2>/dev/null || true
+            fi
+          done
+
+      - name: Upload docs diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: docs-diagnostics
+          path: |
+            build-html.log
+            build-html-attempt-*.log
+            ci-logs/**
+          retention-days: 7
+          if-no-files-found: warn
 
       #- name: Build PDF Documentation
       #  run: |
