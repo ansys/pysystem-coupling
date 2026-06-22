@@ -46,19 +46,64 @@ def _check_for_syc_exception(rpc_error):
     return None
 
 
-def handle_rpc_error(rpc_error: grpc.RpcError):
+def _rpc_context_msg(rpc_error: grpc.RpcError) -> str:
+    parts = []
+
+    # Bandit errors suppressed here. If we can't extract an element
+    # of the RPC error, we just skip it. We don't want to raise an exception while
+    # trying to report an exception.
+
+    try:
+        code = rpc_error.code()
+        if code is not None:
+            parts.append(f"grpc_code={code}")
+    except Exception:
+        pass  # nosec B110
+
+    try:
+        details = rpc_error.details()
+        if details:
+            parts.append(f"grpc_details={details}")
+    except Exception:
+        pass  # nosec B110
+
+    try:
+        debug = rpc_error.debug_error_string()
+        if debug:
+            parts.append(f"grpc_debug={debug}")
+    except Exception:
+        pass  # nosec B110
+
+    return "\n".join(parts)
+
+
+def handle_rpc_error(rpc_error: grpc.RpcError, operation: str | None = None):
     msg = _check_for_syc_exception(rpc_error)
     if msg is not None:
+        if operation:
+            msg = f"{operation} failed. {msg}"
         return msg
 
     status = from_call(rpc_error)
     if status is None:
-        return "Command or query execution failed. No details available."
+        msg = "Command or query execution failed. No details available."
+        if operation:
+            msg = f"{operation} failed. {msg}"
+        context = _rpc_context_msg(rpc_error)
+        if context:
+            msg += f"\n\nRPC transport context:\n{context}"
+        return msg
 
     msg = f"Command execution failed: {status.message} (code={status.code})"
+    if operation:
+        msg = f"{operation} failed. {msg}"
     for detail in status.details:
         if detail.Is(syc_error_pb2.ErrorDetails.DESCRIPTOR):
             error_details = syc_error_pb2.ErrorDetails()
             detail.Unpack(error_details)
             msg += _error_details_msg(error_details)
+
+    context = _rpc_context_msg(rpc_error)
+    if context:
+        msg += f"\n\nRPC transport context:\n{context}"
     return msg

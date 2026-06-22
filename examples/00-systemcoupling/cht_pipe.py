@@ -171,30 +171,32 @@ mapdl.antype(0)
 # Set up the fluid analysis and read the pre-created mesh file
 # ------------------------------------------------------------
 
-fluent = pyfluent.launch_fluent(start_transcript=False, product_version=252)
-fluent.file.read(file_type="mesh", file_name=fluent_msh_file)
+fluent = pyfluent.launch_fluent(start_transcript=False)
+fluent.settings.file.read(file_type="mesh", file_name=fluent_msh_file)
 
 # %%
 # Define the fluid solver settings.
-fluent.setup.models.energy.enabled = True
+fluent.settings.setup.models.energy.enabled = True
 
 # %%
 # Add the material.
-fluent.setup.materials.database.copy_by_name(type="fluid", name="water-liquid")
+fluent.settings.setup.materials.database.copy_by_name(type="fluid", name="water-liquid")
 
-fluent.setup.cell_zone_conditions.fluid["fff_fluiddomain"].material = "water-liquid"
+fluent.settings.setup.cell_zone_conditions.fluid["fff_fluiddomain"].general.material = (
+    "water-liquid"
+)
 
 # %%
 # Define boundary conditions.
-fluent.setup.boundary_conditions.velocity_inlet["inlet"].momentum.velocity = (
-    0.1  # units: m/s
-)
-fluent.setup.boundary_conditions.velocity_inlet["inlet"].thermal.temperature = (
-    300  # Units: Kelvin
-)
-fluent.setup.boundary_conditions.wall["inner_wall"].thermal.thermal_bc = (
-    "via System Coupling"
-)
+fluent.settings.setup.boundary_conditions.velocity_inlet[
+    "inlet"
+].momentum.velocity_magnitude = 0.1  # units: m/s
+fluent.settings.setup.boundary_conditions.velocity_inlet[
+    "inlet"
+].thermal.temperature = 300  # Units: Kelvin
+fluent.settings.setup.boundary_conditions.wall[
+    "inner_wall"
+].thermal.thermal_condition = "via System Coupling"
 
 fluent.solution.run_calculation.iter_count = 20
 
@@ -205,7 +207,6 @@ fluent.solution.run_calculation.iter_count = 20
 # participants, adding coupled interfaces and data transfers,
 # and setting other coupled analysis settings.
 syc = pysyc.launch(start_output=True)
-
 # %%
 # Add participants by passing session handles to System Coupling.
 fluid_name = syc.setup.add_participant(participant_session=fluent)

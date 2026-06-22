@@ -82,8 +82,8 @@ by examining the following environment variables in this order:
 * ``AWP_ROOT`` - this is assumed to point to a root Ansys folder, under which a
   ``SystemCoupling`` folder is present.
 * ``AWP_ROOT<NNN>`` - these are standard environment variables that are automatically
-  set by Ansys installations, where ``<NNN>`` is a version number, such as 252 for
-  Ansys 25 R2. As noted above, if multiple such variables are set, the one with the
+  set by Ansys installations, where ``<NNN>`` is a version number (such as 261 for
+  Ansys 26 R1). As noted above, if multiple such variables are set, the one with the
   highest recognized version number is used.
 
 If ``SYSC_ROOT`` or ``AWP_ROOT`` is set but does not refer to a valid installation, PySystemCoupling

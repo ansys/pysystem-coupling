@@ -83,9 +83,15 @@ def start_container(
 
     # Now use the image tag as definitive source of version info to
     # decide on transport args.
-    if not (use_new_transport_args := image_tag == "latest"):
+    is_latest = image_tag == "latest"
+    is_github_action = os.getenv("GITHUB_ACTIONS") == "true"
+    if not is_latest:
         major, minor, sp_suffix = _major_minor_sp_from_version(image_tag)
-        use_new_transport_args = sp_suffix or (major, minor) > (25, 2)
+        use_new_transport_args = bool(sp_suffix) or (major, minor) > (25, 2)
+        bypass_docker_bridge_routing = is_github_action and (major, minor) >= (25, 2)
+    else:
+        use_new_transport_args = True
+        bypass_docker_bridge_routing = is_github_action
 
     if use_new_transport_args:
         args = [
@@ -133,6 +139,13 @@ def start_container(
         run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
         run_args.insert(idx, "-e")
 
+    if bypass_docker_bridge_routing:
+        # replace -p <port>:<port> with --network=host to bypass Docker's network
+        # address translation
+        idx = run_args.index("-p")
+        del run_args[idx : idx + 2]
+        run_args.insert(idx, "--network=host")
+
     license_server = os.getenv("ANSYSLMD_LICENSE_FILE")
     if license_server:
         # This is especially necessary in the SYC_CONTAINER_USER case
@@ -153,9 +166,14 @@ def start_container(
         run_args.insert(idx, "-e")
 
     if network:
-        idx = run_args.index("-p")
-        run_args.insert(idx, network)
-        run_args.insert(idx, "--network")
+        if "--network=host" in run_args:
+            LOG.warning("Ignoring 'network' argument because --network=host is active.")
+        else:
+            idx = run_args.index("-p")
+            run_args.insert(idx, network)
+            run_args.insert(idx, "--network")
+
+    LOG.debug(f"Running container with command: {' '.join(run_args)}")
 
     # Exclude Bandit check. No untrusted input to arguments.
     subprocess.run(run_args)  # nosec B603

@@ -44,10 +44,11 @@ temperature of the fluid is available as an output, modelling a sensor
 in the tank. The FMU has six parameters that can be set:
 
     - Height and base radius of the cylindrical tank [m]
-    - Density [kg m\ :sup:`-3`\ ] and specific heat [W kg\ :sup:`-1`\ K\ :sup:`-1`\] of the fluid
+    - Density [kg m\\ :sup:`-3`\\ ] and specific heat
+      [W kg\\ :sup:`-1`\\ K\\ :sup:`-1`\\] of the fluid
       (by default, set to the properties of water)
     - Convection heat transfer coefficient between the fluid and its
-      surroundings [W m\ :sup:`-2`\ K\ :sup:`-1`\]
+      surroundings [W m\\ :sup:`-2`\\ K\\ :sup:`-1`\\]
     - Temperature of the tank's surroundings [K].
 
 The thermostat receives a temperature from the tank sensor and outputs
@@ -57,8 +58,8 @@ to determine the heat output and has five parameters that can be set:
     - Target temperature [K]
     - Maximum heat output [W]
     - Heat scale proportional factor [W/K]
-    - Heat scale integral factor [W K\ :sup:`-1`\ s\ :sup:`-1`\]
-    - Heat scale derivative factor [W s K\ :sup:`-1`\]
+    - Heat scale integral factor [W K\\ :sup:`-1`\\ s\\ :sup:`-1`\\]
+    - Heat scale derivative factor [W s K\\ :sup:`-1`\\]
 
 One coupling interface between the FMUs with two data transfers :
 
@@ -107,7 +108,6 @@ fmu_file_tank = examples.download_file(
 # (a ``Session`` object) that allows you to interact with System Coupling
 # via an API exposed into the current Python environment.
 syc = pysystemcoupling.launch(start_output=True)
-
 # %%
 # Set up the coupled analysis
 # ---------------------------
