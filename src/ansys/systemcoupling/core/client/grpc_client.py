@@ -26,6 +26,7 @@ import json
 import os
 import socket
 import threading
+import time
 from typing import Optional
 
 import ansys.api.systemcoupling.v0.command_pb2 as command_pb2
@@ -50,9 +51,32 @@ from ansys.systemcoupling.core.util.file_transfer import file_transfer_service
 from ansys.systemcoupling.core.util.logging import LOG
 
 _CHANNEL_READY_TIMEOUT_SEC = int(os.environ.get("PYSYC_GRPC_INITIAL_TIMEOUT_SEC", 5))
-_CHANNEL_READY_RETRIES = int(os.environ.get("PYSYC_GRPC_N_TIMEOUT_RETRY", 3))
+_CHANNEL_READY_RETRIES = int(os.environ.get("PYSYC_GRPC_N_TIMEOUT_RETRY", 5))
 _CHANNEL_READY_TIMEOUT_FACTOR = float(
     os.environ.get("PYSYC_GRPC_TIMEOUT_RETRY_FACTOR", 1.5)
+)
+_CHANNEL_READY_MAX_TIMEOUT_SEC = float(os.environ.get("PYSYC_GRPC_MAX_TIMEOUT_SEC", 12))
+
+
+def _default_channel_ready_total_timeout() -> float:
+    # Calculate total timeout based on the initial timeout, number of retries and
+    # timeout growth factor. This will only be used if it is greater than a
+    # provided or default total timeout.
+    timeout = _CHANNEL_READY_TIMEOUT_SEC
+    total = 0.0
+    for _ in range(_CHANNEL_READY_RETRIES):
+        total += timeout
+        timeout = min(
+            timeout * _CHANNEL_READY_TIMEOUT_FACTOR, _CHANNEL_READY_MAX_TIMEOUT_SEC
+        )
+    return total
+
+
+_CHANNEL_READY_TOTAL_TIMEOUT_SEC = float(
+    os.environ.get(
+        "PYSYC_GRPC_TOTAL_TIMEOUT_SEC",
+        max(_default_channel_ready_total_timeout(), 90),
+    )
 )
 
 _LOCALHOST_IP = "127.0.0.1"
@@ -165,12 +189,17 @@ class SycGrpc(object):
                     args = connection_info.command_line_arguments()
 
             LOG.debug("Starting process...")
+            process_start_t = time.monotonic()
             self.__process = SycProcess(
                 connection_info.executable_path(),
                 args,
                 fallback_args,
                 working_dir,
                 **kwargs,
+            )
+            LOG.debug(
+                "System Coupling process launch call returned after %.3f sec",
+                time.monotonic() - process_start_t,
             )
 
             def check_process_running():
@@ -304,16 +333,28 @@ class SycGrpc(object):
             )
 
         self.__process_service = None
+        connect_start_t = time.monotonic()
 
         LOG.debug("Connecting...")
         self._register_for_cleanup()
         if channel is None:
+            channel_create_t = time.monotonic()
             self.__channel = connection_info.get_server_channel()
-            self._wait_for_grpc(check_process=check_process)
+            LOG.debug(
+                "gRPC channel object created in %.3f sec (%.3f sec since connect start)",
+                time.monotonic() - channel_create_t,
+                time.monotonic() - connect_start_t,
+            )
+            self._wait_for_grpc(
+                connection_info=connection_info, check_process=check_process
+            )
         else:
             self.__channel = channel
 
-        LOG.debug("...connected")
+        LOG.debug(
+            "...connected (total connect time: %.3f sec)",
+            time.monotonic() - connect_start_t,
+        )
 
         self.__command_service = CommandQueryService(self.__channel)
         self.__ostream_service = OutputStreamService(self.__channel)
@@ -321,27 +362,82 @@ class SycGrpc(object):
         self.__solution_service = SolutionService(self.__channel)
         self.__chart_service = ChartService(self.__channel)
 
-    def _wait_for_grpc(self, check_process=None):
-        total_time = 0
+    def _wait_for_grpc(self, connection_info=None, check_process=None):
         timeout = _CHANNEL_READY_TIMEOUT_SEC
-        for attempt in range(_CHANNEL_READY_RETRIES):
+        wait_start_t = time.monotonic()
+        attempt = 0
+        LOG.debug(
+            "gRPC readiness policy: initial timeout=%.3f sec, timeout factor=%.3f, "
+            "max timeout per attempt=%.3f sec, total timeout=%.3f sec, "
+            "retry count (if applicable)=%d",
+            _CHANNEL_READY_TIMEOUT_SEC,
+            _CHANNEL_READY_TIMEOUT_FACTOR,
+            _CHANNEL_READY_MAX_TIMEOUT_SEC,
+            _CHANNEL_READY_TOTAL_TIMEOUT_SEC,
+            _CHANNEL_READY_RETRIES,
+        )
+        while True:
+            elapsed = time.monotonic() - wait_start_t
+            if elapsed >= _CHANNEL_READY_TOTAL_TIMEOUT_SEC:
+                break
+
+            attempt += 1
+            attempt_timeout = min(
+                timeout,
+                _CHANNEL_READY_TOTAL_TIMEOUT_SEC - elapsed,
+            )
+            attempt_t = time.monotonic()
             try:
-                grpc.channel_ready_future(self.__channel).result(timeout=timeout)
+                grpc.channel_ready_future(self.__channel).result(
+                    timeout=attempt_timeout
+                )
                 # OK
+                LOG.debug(
+                    "gRPC ready on attempt %d in %.3f sec (wait total %.3f sec)",
+                    attempt,
+                    time.monotonic() - attempt_t,
+                    time.monotonic() - wait_start_t,
+                )
                 return
             except grpc.FutureTimeoutError:
-                total_time += timeout
                 LOG.warning(
-                    f"Failed to connect to gRPC channel after {timeout} secs. "
-                    f"(Attempt number {attempt}.)"
+                    "Failed to connect to gRPC channel after %.3f secs. "
+                    "(Attempt number %d; elapsed %.3f/%.3f secs.)",
+                    attempt_timeout,
+                    attempt,
+                    time.monotonic() - wait_start_t,
+                    _CHANNEL_READY_TOTAL_TIMEOUT_SEC,
                 )
-                timeout *= _CHANNEL_READY_TIMEOUT_FACTOR
+                LOG.debug(
+                    "gRPC readiness attempt %d timed out after %.3f sec "
+                    "(wall-clock %.3f sec)",
+                    attempt,
+                    attempt_timeout,
+                    time.monotonic() - attempt_t,
+                )
+                timeout = min(
+                    timeout * _CHANNEL_READY_TIMEOUT_FACTOR,
+                    _CHANNEL_READY_MAX_TIMEOUT_SEC,
+                )
 
                 if check_process:
                     check_process()
 
+                # In newer grpcio versions (>=1.66), a channel that times out
+                # entering TRANSIENT_FAILURE will not self-recover on a
+                # subsequent channel_ready_future call on the same object.
+                # Closing and recreating the channel resets the state machine.
+                if connection_info is not None:
+                    try:
+                        self.__channel.close()
+                    except Exception as e:
+                        LOG.debug(f"Exception closing channel before retry: {e}")
+                    self.__channel = connection_info.get_server_channel()
+
         raise RuntimeError(
-            f"Stopping attempt to connect to gRPC channel after {total_time} seconds."
+            "Stopping attempt to connect to gRPC channel after "
+            f"{time.monotonic() - wait_start_t:.3f} seconds "
+            f"({attempt} attempts)."
         )
 
     @property
