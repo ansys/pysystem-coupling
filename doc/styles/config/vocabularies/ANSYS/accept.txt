@@ -37,6 +37,8 @@ Python
 scp
 SCP
 solution_control
+Synopsys
+synopsys
 THIRDPARTY
 Windows
 Windows Subsystem
