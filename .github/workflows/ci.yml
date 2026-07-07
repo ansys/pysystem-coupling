@@ -15,7 +15,7 @@ env:
   PACKAGE_NAME: "ansys-systemcoupling-core"
   PACKAGE_NAMESPACE: "ansys.systemcoupling.core"
   DOCUMENTATION_CNAME: "systemcoupling.docs.pyansys.com"
-  DOC_BUILD_SYC_VERSION: 26_1
+  DOC_BUILD_SYC_VERSION: 27_1
   # Intermittent gRPC ping timeout issues seen with the 26.1 container.
   # Pin the gRPC version for 261 doc and test and set channel options to
   # try to avoid ping timeout issues. This is mainly seen in the long-running
@@ -30,7 +30,7 @@ env:
   # 4. Keep ping response timeout permissive to avoid false negatives on long solves
   PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261: '{"grpc.keepalive_time_ms": 90000, "grpc.keepalive_timeout_ms": 2147483647, "grpc.keepalive_permit_without_calls": 0, "grpc.http2.max_pings_without_data": 0, "grpc.http2.min_time_between_pings_ms": 90000, "grpc.http2.min_ping_interval_without_data_ms": 90000}'
   FLUENT_IMAGE_VERSION: "v26.1.latest"
-  SYC_IMAGE_VERSION: "v26.1.0"
+  SYC_IMAGE_VERSION: "latest"
   MAPDL_IMAGE_VERSION: "v25.2-ubuntu-cicd"
 
 permissions: {} # Zero permissions can be granted at the workflow level if not all jobs require permissions.
@@ -169,10 +169,10 @@ jobs:
         with:
           image-tag: v26.1.0
 
-      #- name: Generate API for latest
-      #  uses: ./.github/actions/generate-api
-      #  with:
-      #    image-tag: latest
+      - name: Generate API for latest
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: latest
 
       - name: Clean out dist
         run: rm -rf dist
@@ -345,19 +345,19 @@ jobs:
           wheel_name=`echo dist/*.whl`
           pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
 
-      - name: Pin grpcio for docs build (v26.1)
-        run: |
-          pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} grpcio-health-checking==${GRPCIO_VERSION_261} > /dev/null
-          python - <<'PY'
-          import grpc
-          import grpc_status
-          import grpc_health
-          print(f"grpcio version: {grpc.__version__}")
-          print(f"grpcio-status module: {grpc_status.__name__}")
-          print(f"grpcio-health-checking module: {grpc_health.__name__}")
-          PY
-        env:
-          GRPCIO_VERSION_261: ${{ env.GRPCIO_VERSION_261 }}
+      # - name: Pin grpcio for docs build (v26.1)
+      #   run: |
+      #     pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} grpcio-health-checking==${GRPCIO_VERSION_261} > /dev/null
+      #     python - <<'PY'
+      #     import grpc
+      #     import grpc_status
+      #     import grpc_health
+      #     print(f"grpcio version: {grpc.__version__}")
+      #     print(f"grpcio-status module: {grpc_status.__name__}")
+      #     print(f"grpcio-health-checking module: {grpc_health.__name__}")
+      #     PY
+      #   env:
+      #     GRPCIO_VERSION_261: ${{ env.GRPCIO_VERSION_261 }}
 
       - name: Docker Login
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
