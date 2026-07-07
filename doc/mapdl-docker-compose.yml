@@ -11,6 +11,11 @@ services:
     ports:
       - '50053:50052'
       - '50055:50055'
+    # ***NOT FOR MERGE*** - for debugging only!!!
+    volumes:
+      - type: bind
+        source: ${MAPDL_HOST_DIR:-${PWD}}
+        target: /home/mapdl/jobs
     image: ${DOCKER_IMAGE}
     entrypoint: "/bin/bash ansys -grpc"
     network_mode: bridge

@@ -65,6 +65,8 @@ at an initial temperature of 300K while the outer wall of the pipe is at 350K.
 
 # sphinx_gallery_thumbnail_path = '_static/title_image.png'
 
+import os
+
 import ansys.fluent.core as pyfluent
 import ansys.mapdl.core as pymapdl
 
@@ -86,93 +88,107 @@ mapdl = pymapdl.launch_mapdl(version=252)
 mapdl.clear()
 mapdl.prep7()
 
-# %%
-# Set material properties of the pipe.
-mapdl.mp("EX", 1, 69e9)
-mapdl.mp("NUXY", 1, 0.33)
-mapdl.mp("DENS", 1, 2700)
-mapdl.mp("ALPX", 1, 23.6e-6)
-mapdl.mp("KXX", 1, 237)
-mapdl.mp("C", 1, 900)
+read_existing_mesh = False
 
-# %%
-# Set element type to SOLID279.
-mapdl.et(1, 279)
-mapdl.keyopt(1, 2, 1)
-print(mapdl)
+if not read_existing_mesh:
+    # %%
+    # Set material properties of the pipe.
+    mapdl.mp("EX", 1, 69e9)
+    mapdl.mp("NUXY", 1, 0.33)
+    mapdl.mp("DENS", 1, 2700)
+    mapdl.mp("ALPX", 1, 23.6e-6)
+    mapdl.mp("KXX", 1, 237)
+    mapdl.mp("C", 1, 900)
+
+    # %%
+    # Set element type to SOLID279.
+    mapdl.et(1, 279)
+    mapdl.keyopt(1, 2, 1)
+    print(mapdl)
+
+    # %%
+    # Set the pipe inner and outer diameter and length.
+    d_in = 0.025
+    d_out = 0.035
+    l = 0.2
+
+    # %%
+    # Create a simple hollow pipe
+    mapdl.cyl4(0, 0, rad1=d_in, rad2=d_out, depth=l)
+    mapdl.esize(0.002)
+    mapdl.vsweep(1)
+
+    ###############################################################################
+    # .. image:: /_static/pipe_elements.png
+    #   :width: 700pt
+    #   :align: center
+
+    # %%
+    # Creating the regions from the geometry for named selections
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    # Creating a named selection for Inner wall.
+    mapdl.asel("S", "AREA", "", 5, 6)
+    mapdl.nsla("S", 1)
+    mapdl.cm("FSIN_1", "NODE")
+    mapdl.allsel()
+
+    # Creating a named selection for Outer wall.
+    mapdl.asel("S", "AREA", "", 3, 4)
+    mapdl.cm("Outer_wall", "AREA")
+    mapdl.allsel()
+
+    # Creating a named selection for Outlet.
+    mapdl.asel("S", "AREA", "", 2)
+    mapdl.cm("Outlet", "AREA")
+    mapdl.allsel()
+
+    # Creating a named selection for Inlet.
+    mapdl.asel("S", "AREA", "", 1)
+    mapdl.cm("Inlet", "AREA")
+    mapdl.allsel()
+
+    # %%
+    # Set the boundary conditions for the structure. Temperature is in degrees Celsius.
+    mapdl.cmsel("S", "Outer_wall")
+    mapdl.d("Outer_wall", "TEMP", 77)
+    mapdl.allsel()
+
+    mapdl.cmsel("S", "Inlet")
+    mapdl.sf("ALL", "HFLUX", 0)
+    mapdl.allsel()
+
+    mapdl.cmsel("S", "Outlet")
+    mapdl.sf("ALL", "HFLUX", 0)
+    mapdl.allsel()
+
+    mapdl.cmsel("S", "FSIN_1")
+    mapdl.sf("FSIN_1", "FSIN", 1)
+    mapdl.allsel()
+
+    # %%
+    # Setup the rest of the analysis.
+    mapdl.run("/SOLU")
+    mapdl.antype(0)
+
+    print(mapdl.cdwrite(option="db", fname="mapdl.dat"))
+else:
+    print(mapdl.cdread(option="db", fname="mapdl.dat"))
+    _ = mapdl.mesh.enum_all  # refresh pymdl cache
+
+print(mapdl.stat())
+print(f"No. of elements in mesh: {mapdl.mesh.n_elem}")
 
 
-# %%
-# Set the pipe inner and outer diameter and length.
-d_in = 0.025
-d_out = 0.035
-l = 0.2
-
-# %%
-# Create a simple hollow pipe
-mapdl.cyl4(0, 0, rad1=d_in, rad2=d_out, depth=l)
-mapdl.esize(0.002)
-mapdl.vsweep(1)
-
-###############################################################################
-# .. image:: /_static/pipe_elements.png
-#   :width: 700pt
-#   :align: center
-
-# %%
-# Creating the regions from the geometry for named selections
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-# Creating a named selection for Inner wall.
-mapdl.asel("S", "AREA", "", 5, 6)
-mapdl.nsla("S", 1)
-mapdl.cm("FSIN_1", "NODE")
-mapdl.allsel()
-
-# Creating a named selection for Outer wall.
-mapdl.asel("S", "AREA", "", 3, 4)
-mapdl.cm("Outer_wall", "AREA")
-mapdl.allsel()
-
-# Creating a named selection for Outlet.
-mapdl.asel("S", "AREA", "", 2)
-mapdl.cm("Outlet", "AREA")
-mapdl.allsel()
-
-# Creating a named selection for Inlet.
-mapdl.asel("S", "AREA", "", 1)
-mapdl.cm("Inlet", "AREA")
-mapdl.allsel()
-
-# %%
-# Set the boundary conditions for the structure. Temperature is in degrees Celsius.
-mapdl.cmsel("S", "Outer_wall")
-mapdl.d("Outer_wall", "TEMP", 77)
-mapdl.allsel()
-
-mapdl.cmsel("S", "Inlet")
-mapdl.sf("ALL", "HFLUX", 0)
-mapdl.allsel()
-
-mapdl.cmsel("S", "Outlet")
-mapdl.sf("ALL", "HFLUX", 0)
-mapdl.allsel()
-
-mapdl.cmsel("S", "FSIN_1")
-mapdl.sf("FSIN_1", "FSIN", 1)
-mapdl.allsel()
-
-# %%
-# Setup the rest of the analysis.
-mapdl.run("/SOLU")
-mapdl.antype(0)
-
-
+input(
+    f"PID = {os.getpid()}. Mapdl has been set up. "
+    "Press Enter to continue with the coupled analysis..."
+)
 # %%
 # Set up the fluid analysis and read the pre-created mesh file
 # ------------------------------------------------------------
 
-fluent = pyfluent.launch_fluent(start_transcript=False)
+fluent = pyfluent.launch_fluent(start_transcript=False, ui_mode="no_gui")
 fluent.settings.file.read(file_type="mesh", file_name=fluent_msh_file)
 
 # %%
@@ -243,6 +259,9 @@ hf_transfer = syc.setup.add_data_transfer(
     source_variable="heatflow",
     target_variable="HFLW",
 )
+
+# TEMP: disable AnsRpcBridge
+# syc.setup.coupling_participant[solid_name].use_ans_rpc_bridge = False
 
 # %%
 # Define constants and calculate Biot number
