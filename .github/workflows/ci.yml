@@ -8,6 +8,7 @@ on:
       - "*"
     branches:
       - main
+      - ci-debug/**
   workflow_dispatch:
     inputs:
       run_mode:
@@ -54,7 +55,7 @@ jobs:
 
   actions-security:
     name: "Check actions security"
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     runs-on: ubuntu-latest
     steps:
       - uses: ansys/actions/check-actions-security@a5b0351dc277d68c2dc1beca2d2674c7dfa4fc55 # v10.3.3
@@ -80,7 +81,7 @@ jobs:
 
   doc-style:
     name: "Documentation style check"
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     runs-on: ubuntu-latest
     steps:
       - name: "PySystemCoupling documentation style checks"
@@ -91,7 +92,7 @@ jobs:
 
   style:
     name: Code style
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
@@ -101,7 +102,7 @@ jobs:
 
   smoke-tests:
     name: Build and smoke tests
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     needs: [style]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -121,7 +122,7 @@ jobs:
 
   check-vulnerabilities:
     name: "Check library vulnerabilities"
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     runs-on: ubuntu-latest
     steps:
       - uses: ansys/actions/check-vulnerabilities@a5b0351dc277d68c2dc1beca2d2674c7dfa4fc55 # v10.3.3
@@ -136,7 +137,7 @@ jobs:
 
   build:
     name: Build package, incl. API generation
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     needs: [smoke-tests]
     runs-on: ubuntu-latest
 
@@ -207,7 +208,7 @@ jobs:
 
   test:
     name: Testing
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     needs: [build]
     runs-on: ubuntu-latest
 
@@ -361,7 +362,7 @@ jobs:
 
   build-latest-only:
     name: Build package (latest only)
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only' }}
+    if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only') || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     runs-on: ubuntu-latest
 
     steps:
@@ -401,7 +402,7 @@ jobs:
 
   test-latest-only:
     name: Testing (latest only)
-    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only' }}
+    if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only') || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     needs: [build-latest-only]
     runs-on: ubuntu-latest
 
@@ -468,7 +469,7 @@ jobs:
 
   docs:
     name: Build Documentation
-    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
+    if: ${{ (github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full') && !(github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     needs: [doc-style, build]
     runs-on: public-ubuntu-latest-8-cores
     permissions:
