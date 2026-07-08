@@ -8,6 +8,16 @@ on:
       - "*"
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      run_mode:
+        description: "CI scope to run"
+        required: true
+        default: "full"
+        type: choice
+        options:
+          - full
+          - latest-only
 
 env:
   MAIN_PYTHON_VERSION: "3.14"
@@ -44,6 +54,7 @@ jobs:
 
   actions-security:
     name: "Check actions security"
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     runs-on: ubuntu-latest
     steps:
       - uses: ansys/actions/check-actions-security@a5b0351dc277d68c2dc1beca2d2674c7dfa4fc55 # v10.3.3
@@ -69,6 +80,7 @@ jobs:
 
   doc-style:
     name: "Documentation style check"
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     runs-on: ubuntu-latest
     steps:
       - name: "PySystemCoupling documentation style checks"
@@ -79,6 +91,7 @@ jobs:
 
   style:
     name: Code style
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     runs-on: ubuntu-latest
     steps:
       - name: PyAnsys code style checks
@@ -88,6 +101,7 @@ jobs:
 
   smoke-tests:
     name: Build and smoke tests
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     needs: [style]
     runs-on: ${{ matrix.os }}
     strategy:
@@ -107,6 +121,7 @@ jobs:
 
   check-vulnerabilities:
     name: "Check library vulnerabilities"
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     runs-on: ubuntu-latest
     steps:
       - uses: ansys/actions/check-vulnerabilities@a5b0351dc277d68c2dc1beca2d2674c7dfa4fc55 # v10.3.3
@@ -121,6 +136,7 @@ jobs:
 
   build:
     name: Build package, incl. API generation
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     needs: [smoke-tests]
     runs-on: ubuntu-latest
 
@@ -191,6 +207,7 @@ jobs:
 
   test:
     name: Testing
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     needs: [build]
     runs-on: ubuntu-latest
 
@@ -310,6 +327,7 @@ jobs:
           exit 1
 
       - name: Unit Test latest
+        id: unit_test_latest
         uses: ./.github/actions/unit-test
         with:
           image-tag: latest
@@ -317,8 +335,140 @@ jobs:
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
+      - name: Collect latest unit test licensing logs
+        if: always() && steps.unit_test_latest.outcome == 'failure'
+        run: |
+          mkdir -p ci-logs/licensing
+
+          find "${HOME}" -maxdepth 10 -type f \( -name 'licdebug*' -o -name 'anscl*' \) \
+            | tee ci-logs/licensing/found-files.txt || true
+
+          while IFS= read -r file; do
+            rel_path="${file#${HOME}/}"
+            dest="ci-logs/licensing/${rel_path}"
+            mkdir -p "$(dirname "${dest}")"
+            cp -f "${file}" "${dest}" || true
+          done < ci-logs/licensing/found-files.txt
+
+      - name: Upload latest unit test licensing logs
+        if: always() && steps.unit_test_latest.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: latest-unit-test-licensing-logs
+          path: ci-logs/licensing/**
+          retention-days: 7
+          if-no-files-found: warn
+
+  build-latest-only:
+    name: Build package (latest only)
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Create initial wheel and install
+        run: make build-install
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
+          password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+
+      - name: Generate API for latest
+        uses: ./.github/actions/generate-api
+        with:
+          image-tag: latest
+
+      - name: Clean out dist
+        run: rm -rf dist
+
+      - name: Build library source and wheel artifacts
+        uses: ./.github/actions/build-library
+        with:
+          checkout: false
+          library-name: ${{ env.PACKAGE_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  test-latest-only:
+    name: Testing (latest only)
+    if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only' }}
+    needs: [build-latest-only]
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6.3.0
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+      - name: Download package
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ env.PACKAGE_NAME }}-artifacts
+          path: dist
+
+      - name: Install pysystemcoupling with test dependencies
+        run: |
+          wheel_name=`echo dist/*.whl`
+          pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GH_USERNAME }}
+          password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
+
+      - name: Unit Test latest
+        id: unit_test_latest
+        uses: ./.github/actions/unit-test
+        with:
+          image-tag: latest
+          upload-coverage: false
+        env:
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+
+      - name: Collect latest unit test licensing logs
+        if: always() && steps.unit_test_latest.outcome == 'failure'
+        run: |
+          mkdir -p ci-logs/licensing
+
+          find "${HOME}" -maxdepth 10 -type f \( -name 'licdebug*' -o -name 'anscl*' \) \
+            | tee ci-logs/licensing/found-files.txt || true
+
+          while IFS= read -r file; do
+            rel_path="${file#${HOME}/}"
+            dest="ci-logs/licensing/${rel_path}"
+            mkdir -p "$(dirname "${dest}")"
+            cp -f "${file}" "${dest}" || true
+          done < ci-logs/licensing/found-files.txt
+
+      - name: Upload latest unit test licensing logs
+        if: always() && steps.unit_test_latest.outcome == 'failure'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: latest-unit-test-licensing-logs
+          path: ci-logs/licensing/**
+          retention-days: 7
+          if-no-files-found: warn
+
   docs:
     name: Build Documentation
+    if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.run_mode == 'full' }}
     needs: [doc-style, build]
     runs-on: public-ubuntu-latest-8-cores
     permissions:
