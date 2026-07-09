@@ -11,6 +11,11 @@ inputs:
     description: 'Whether to upload coverage data to Codecov'
     required: true
     type: boolean
+  pytest-target:
+    description: 'Optional pytest node id (file::class::test) to run a subset'
+    required: false
+    default: ''
+    type: string
 
 runs:
   using: "composite"
@@ -23,10 +28,14 @@ runs:
 
     - name: Unit testing
       run: |
-        pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc
+        if [ -n "${PYTEST_TARGET}" ]; then
+          echo "Running targeted pytest node: ${PYTEST_TARGET}"
+        fi
+        pytest -v --cov=ansys.systemcoupling --cov-report xml --cov-report html:cov_html --cov-report term:skip-covered --cov-config=.coveragerc ${PYTEST_TARGET}
       shell: bash
       env:
         SYC_IMAGE_TAG: ${{ inputs.image-tag }}
+        PYTEST_TARGET: ${{ inputs.pytest-target }}
 
     - name: Upload coverage to Codecov
       if: ${{ inputs.upload-coverage }}
