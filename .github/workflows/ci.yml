@@ -455,7 +455,7 @@ jobs:
         run: |
           mkdir -p ci-logs/licensing
 
-          find "${HOME}" -maxdepth 10 -type f \( -name 'licdebug*' -o -name 'anscl*' \) \
+          find "${HOME}" -maxdepth 10 -type f \( -name 'licdebug*' -o -name 'ansyscl*' \) \
             | tee ci-logs/licensing/found-files.txt || true
 
           while IFS= read -r file; do
