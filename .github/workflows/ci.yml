@@ -370,6 +370,8 @@ jobs:
     name: Build package (latest only)
     if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only') || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     runs-on: ubuntu-latest
+    env:
+      DEBUG_IMAGE_TAG: "latest"
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -391,10 +393,10 @@ jobs:
           username: ${{ secrets.PYANSYS_CI_BOT_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Generate API for latest
+      - name: Generate API for debug image
         uses: ./.github/actions/generate-api
         with:
-          image-tag: latest
+          image-tag: ${{ env.DEBUG_IMAGE_TAG }}
 
       - name: Clean out dist
         run: rm -rf dist
@@ -411,6 +413,8 @@ jobs:
     if: ${{ (github.event_name == 'workflow_dispatch' && github.event.inputs.run_mode == 'latest-only') || (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/ci-debug/')) }}
     needs: [build-latest-only]
     runs-on: ubuntu-latest
+    env:
+      DEBUG_IMAGE_TAG: "v26.1.0"
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -440,11 +444,11 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Unit Test latest
+      - name: Unit Test debug image
         id: unit_test_latest
         uses: ./.github/actions/unit-test
         with:
-          image-tag: latest
+          image-tag: ${{ env.DEBUG_IMAGE_TAG }}
           upload-coverage: false
           pytest-target: "tests/test_mocksolve_container.py::test_partlib_cosim_volume_simple"
         env:
