@@ -453,9 +453,10 @@ jobs:
           pytest-target: "tests/test_mocksolve_container.py::test_partlib_cosim_volume_simple"
         env:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+          PYTEST_ADDOPTS: "-s"
 
       - name: Collect latest unit test licensing logs
-        if: always() && steps.unit_test_latest.outcome == 'failure'
+        if: always()
         run: |
           mkdir -p ci-logs/licensing
 
@@ -470,7 +471,7 @@ jobs:
           done < ci-logs/licensing/found-files.txt
 
       - name: Upload latest unit test licensing logs
-        if: always() && steps.unit_test_latest.outcome == 'failure'
+        if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: latest-unit-test-licensing-logs

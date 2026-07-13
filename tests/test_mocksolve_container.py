@@ -116,7 +116,7 @@ def test_partlib_cosim_volume_simple(image_tag_env) -> None:
 
         _run_license_network_diagnostics()
 
-        assert False, "Force failure to capture output for debugging"
+        # assert False, "Force failure to capture output for debugging"
         solution = syc.solution
         try:
             solution.solve()
