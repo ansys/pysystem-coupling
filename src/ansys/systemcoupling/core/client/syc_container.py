@@ -140,7 +140,7 @@ def start_container(
         run_args.insert(idx, f"ANSYSLC_APPLOGDIR={mounted_to}")
         run_args.insert(idx, "-e")
 
-    if bypass_docker_bridge_routing:
+    if False and bypass_docker_bridge_routing:
         # replace -p <port>:<port> with --network=host to bypass Docker's network
         # address translation
         idx = run_args.index("-p")
