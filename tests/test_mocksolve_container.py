@@ -120,6 +120,11 @@ def test_partlib_cosim_volume_simple(image_tag_env) -> None:
         solution = syc.solution
         try:
             solution.solve()
+            print("\n\n**OUTPUT LINES** captured during the solution:")
+            time.sleep(3)  # Give time for any remaining output to be captured
+            for line in output_handler.lines:
+                print(line)
+            print("<< End of captured output >>")
         except Exception as e:
             print(f"An error occurred during solution: {e}")
             print("\n\n**OUTPUT LINES** captured during the solution:")
