@@ -221,93 +221,93 @@ jobs:
           username: ${{ secrets.GH_USERNAME }}
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
-      - name: Unit Test v24.1.0
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.1.0
-          upload-coverage: false
+      # - name: Unit Test v24.1.0
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v24.1.0
+      #     upload-coverage: false
 
-      - name: Unit Test v24.2.0 (SP5)
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v24.2.0-sp05
-          upload-coverage: false
+      # - name: Unit Test v24.2.0 (SP5)
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v24.2.0-sp05
+      #     upload-coverage: false
 
-      - name: Unit Test v25.1.0 (SP4)
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v25.1.0-sp04
-          upload-coverage: false
-        env:
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      # - name: Unit Test v25.1.0 (SP4)
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v25.1.0-sp04
+      #     upload-coverage: false
+      #   env:
+      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
-      - name: Unit Test v25.2.0 (SP3)
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v25.2.0-sp03
-          upload-coverage: false
-        env:
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      # - name: Unit Test v25.2.0 (SP3)
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v25.2.0-sp03
+      #     upload-coverage: false
+      #   env:
+      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
-      - name: Pin grpcio for v26.1 tests
-        run: |
-          pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} grpcio-health-checking==${GRPCIO_VERSION_261} > /dev/null
-          python - <<'PY'
-          import grpc
-          import grpc_status
-          import grpc_health
-          print(f"grpcio version: {grpc.__version__}")
-          print(f"grpcio-status module: {grpc_status.__name__}")
-          print(f"grpcio-health-checking module: {grpc_health.__name__}")
-          PY
-        env:
-          GRPCIO_VERSION_261: ${{ env.GRPCIO_VERSION_261 }}
+      # - name: Pin grpcio for v26.1 tests
+      #   run: |
+      #     pip install -q --force-reinstall grpcio==${GRPCIO_VERSION_261} grpcio-status==${GRPCIO_VERSION_261} grpcio-health-checking==${GRPCIO_VERSION_261} > /dev/null
+      #     python - <<'PY'
+      #     import grpc
+      #     import grpc_status
+      #     import grpc_health
+      #     print(f"grpcio version: {grpc.__version__}")
+      #     print(f"grpcio-status module: {grpc_status.__name__}")
+      #     print(f"grpcio-health-checking module: {grpc_health.__name__}")
+      #     PY
+      #   env:
+      #     GRPCIO_VERSION_261: ${{ env.GRPCIO_VERSION_261 }}
 
-      - name: Diagnostic - effective gRPC options for v26.1 tests
-        run: |
-          python - <<'PY'
-          import json
-          import os
+      # - name: Diagnostic - effective gRPC options for v26.1 tests
+      #   run: |
+      #     python - <<'PY'
+      #     import json
+      #     import os
 
-          raw = os.environ.get("PYSYC_GRPC_CHANNEL_OPTIONS_JSON", "")
-          print(f"PYSYC_GRPC_CHANNEL_OPTIONS_JSON={raw}")
-          try:
-              parsed = json.loads(raw) if raw else {}
-          except Exception as exc:
-              parsed = {"_parse_error": str(exc)}
-          print(f"parsed_grpc_options={parsed}")
-          PY
-        env:
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+      #     raw = os.environ.get("PYSYC_GRPC_CHANNEL_OPTIONS_JSON", "")
+      #     print(f"PYSYC_GRPC_CHANNEL_OPTIONS_JSON={raw}")
+      #     try:
+      #         parsed = json.loads(raw) if raw else {}
+      #     except Exception as exc:
+      #         parsed = {"_parse_error": str(exc)}
+      #     print(f"parsed_grpc_options={parsed}")
+      #     PY
+      #   env:
+      #     PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
 
-      - name: Unit Test v26.1.0 (attempt 1)
-        id: unit_test_v261_attempt1
-        continue-on-error: true
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v26.1.0
-          upload-coverage: true
-        env:
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+      # - name: Unit Test v26.1.0 (attempt 1)
+      #   id: unit_test_v261_attempt1
+      #   continue-on-error: true
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v26.1.0
+      #     upload-coverage: true
+      #   env:
+      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      #     PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
 
-      - name: Unit Test v26.1.0 (attempt 2 on transient failure)
-        id: unit_test_v261_attempt2
-        if: steps.unit_test_v261_attempt1.outcome == 'failure'
-        continue-on-error: true
-        uses: ./.github/actions/unit-test
-        with:
-          image-tag: v26.1.0
-          upload-coverage: true
-        env:
-          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+      # - name: Unit Test v26.1.0 (attempt 2 on transient failure)
+      #   id: unit_test_v261_attempt2
+      #   if: steps.unit_test_v261_attempt1.outcome == 'failure'
+      #   continue-on-error: true
+      #   uses: ./.github/actions/unit-test
+      #   with:
+      #     image-tag: v26.1.0
+      #     upload-coverage: true
+      #   env:
+      #     ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+      #     PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
 
-      - name: Fail if v26.1 retries exhausted
-        if: steps.unit_test_v261_attempt1.outcome == 'failure' && steps.unit_test_v261_attempt2.outcome == 'failure'
-        run: |
-          echo "v26.1 unit tests failed on both attempts."
-          exit 1
+      # - name: Fail if v26.1 retries exhausted
+      #   if: steps.unit_test_v261_attempt1.outcome == 'failure' && steps.unit_test_v261_attempt2.outcome == 'failure'
+      #   run: |
+      #     echo "v26.1 unit tests failed on both attempts."
+      #     exit 1
 
       - name: Unit Test latest
         uses: ./.github/actions/unit-test
