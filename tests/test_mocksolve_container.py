@@ -114,6 +114,7 @@ def test_partlib_cosim_volume_simple(image_tag_env) -> None:
         output_handler = _OutputHandler()
         syc.start_output(handle_output=output_handler.on_line)
 
+        # temp debugging
         _run_license_network_diagnostics()
         _run_licensing_check_diagnostics()
 
