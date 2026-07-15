@@ -400,6 +400,38 @@ jobs:
         env:
           PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
 
+      - name: Diagnostic - preflight container launch for docs build
+        run: |
+          set -o pipefail
+          export SYC_CONTAINER_USER=$(id -u):$(id -g)
+          mkdir -p ci-logs/preflight
+
+          if ! python - <<'PY'
+          import ansys.systemcoupling.core as pysystemcoupling
+
+          with pysystemcoupling.launch_container() as syc:
+              assert syc.ping()
+              print(f"preflight_connected_version={syc.version}")
+          PY
+          then
+            echo "Preflight launch failed. Capturing docker diagnostics..."
+            docker ps -a --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' > ci-logs/preflight/containers.txt || true
+
+            docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | while read -r cid image name; do
+              if echo "${image} ${name}" | grep -Eiq 'pysystem-coupling|systemcoupling'; then
+                safe_name=$(echo "${name}" | tr '/: ' '___')
+                docker logs "${cid}" > "ci-logs/preflight/${safe_name}.log" 2>&1 || true
+                docker inspect "${cid}" > "ci-logs/preflight/${safe_name}.inspect.json" 2>/dev/null || true
+              fi
+            done
+            exit 1
+          fi
+        env:
+          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+          ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
+          SYC_LAUNCH_CONTAINER: 1
+          SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
+
       - name: Build HTML
         run: |
           set -o pipefail
