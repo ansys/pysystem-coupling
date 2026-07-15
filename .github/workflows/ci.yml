@@ -405,8 +405,19 @@ jobs:
           set -o pipefail
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
           mkdir -p ci-logs/preflight
+          image_ref="ghcr.io/ansys/pysystem-coupling:${SYC_IMAGE_TAG}"
 
-          if ! python - <<'PY'
+          # Capture container lifecycle events because launch uses --rm and
+          # failing containers may disappear before docker logs can read them.
+          since_ts=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+          docker events --since "${since_ts}" --format '{{json .}}' > ci-logs/preflight/docker-events.jsonl 2>&1 &
+          events_pid=$!
+          cleanup() {
+            kill "${events_pid}" >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+
+          if ! python - <<'PY' 2>&1 | tee ci-logs/preflight/python-preflight.log
           import ansys.systemcoupling.core as pysystemcoupling
 
           with pysystemcoupling.launch_container() as syc:
@@ -415,7 +426,15 @@ jobs:
           PY
           then
             echo "Preflight launch failed. Capturing docker diagnostics..."
-            docker ps -a --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' > ci-logs/preflight/containers.txt || true
+            docker version > ci-logs/preflight/docker-version.txt 2>&1 || true
+            docker info > ci-logs/preflight/docker-info.txt 2>&1 || true
+            docker network ls > ci-logs/preflight/docker-network-ls.txt 2>&1 || true
+            docker inspect bridge > ci-logs/preflight/docker-network-bridge.inspect.json 2>&1 || true
+            docker image inspect "${image_ref}" > ci-logs/preflight/syc-image.inspect.json 2>&1 || true
+            docker ps -a --no-trunc --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' > ci-logs/preflight/containers.txt || true
+
+            # Basic image sanity check independent of pysystemcoupling launch path.
+            docker run --rm --entrypoint /bin/bash "${image_ref}" -lc 'id && ls -la /syc/SystemCoupling || true' > ci-logs/preflight/image-sanity.log 2>&1 || true
 
             docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | while read -r cid image name; do
               if echo "${image} ${name}" | grep -Eiq 'pysystem-coupling|systemcoupling'; then
