@@ -436,6 +436,9 @@ jobs:
             # Basic image sanity check independent of pysystemcoupling launch path.
             docker run --rm --entrypoint /bin/bash "${image_ref}" -lc 'id && ls -la /syc/SystemCoupling || true' > ci-logs/preflight/image-sanity.log 2>&1 || true
 
+            # Probe entrypoint execution under the same user mapping used in docs.
+            docker run --rm --user "$(id -u):$(id -g)" --entrypoint /bin/bash "${image_ref}" -lc 'id; ls -l /syc/SystemCoupling/bin/systemcoupling; /syc/SystemCoupling/bin/systemcoupling --help' > ci-logs/preflight/image-user-entrypoint-probe.log 2>&1 || true
+
             docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | while read -r cid image name; do
               if echo "${image} ${name}" | grep -Eiq 'pysystem-coupling|systemcoupling'; then
                 safe_name=$(echo "${name}" | tr '/: ' '___')
