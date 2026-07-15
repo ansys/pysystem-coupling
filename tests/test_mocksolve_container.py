@@ -115,6 +115,7 @@ def test_partlib_cosim_volume_simple(image_tag_env) -> None:
         syc.start_output(handle_output=output_handler.on_line)
 
         _run_license_network_diagnostics()
+        _run_licensing_check_diagnostics()
 
         # assert False, "Force failure to capture output for debugging"
         solution = syc.solution
@@ -227,6 +228,35 @@ def _run_license_network_diagnostics() -> None:
             str(port),
         ]
         _run_and_log_command(nc_cmd)
+
+
+def _run_licensing_check_diagnostics() -> None:
+    print("Running LicensingCheck diagnostics...")
+
+    container_id = _find_syc_container_id()
+    if not container_id:
+        print(
+            "Skipping LicensingCheck diagnostics: could not locate running "
+            "System Coupling container."
+        )
+        return
+
+    licensing_check_cmd = [
+        "docker",
+        "exec",
+        container_id,
+        "bash",
+        "-lc",
+        (
+            "export ANSYSCL271_DIR=/syc/Core_Dependencies/licensingclient/licensingclient && "
+            "cd /syc/SystemCoupling/Builds/linx64/Licensing && "
+            "export LD_LIBRARY_PATH=/syc/SystemCoupling/runTime/linx64/bin/thirdparty:"
+            "/syc/SystemCoupling/runTime/linx64/bin:"
+            "/syc/SystemCoupling/runTime/linx64/bin/compiler && "
+            "./LicensingCheck"
+        ),
+    ]
+    _run_and_log_command(licensing_check_cmd)
 
 
 def _find_syc_container_id() -> str | None:
