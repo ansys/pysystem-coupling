@@ -210,9 +210,21 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
 
 
 def _reset_example(gallery_conf, fname: str, when: str):
+    import logging
     import time
 
     example_name = fname.replace(".py", "")
+
+    # Enable DEBUG logging for all examples to capture instrumentation diagnostics.
+    # This must be set early before examples create sessions/threads.
+    if when == "before":
+        import ansys.systemcoupling.core as pysystemcoupling
+
+        try:
+            pysystemcoupling.core.util.logging.LOG.set_level(logging.DEBUG)
+            print("[_reset_example] DEBUG logging enabled for diagnostics")
+        except Exception as exc:
+            print(f"[_reset_example] Warning: Could not enable DEBUG logging: {exc}")
 
     # Add any examples that need MAPDL to this list
     using_mapdl_examples = ["oscillating_plate", "turek_hron_fsi2", "cht_pipe"]
