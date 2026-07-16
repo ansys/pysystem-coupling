@@ -242,8 +242,12 @@ class ParticipantManager:
             # We use `syc_session.solution._solve` here as it is
             # the lower level solve command. `sys_session.solution.solve`
             # would bring us recursively back into *this* function
-            LOG.debug("[_syc_solve] Calling syc_session.solution._solve()...")
+            rpc_start = time.time()
+            LOG.debug("[_syc_solve] About to call syc_session.solution._solve()...")
+            LOG.debug(f"[_syc_solve] RPC call start time: {rpc_start}")
             self.__syc_session.solution._solve()
+            rpc_elapsed = time.time() - rpc_start
+            LOG.debug(f"[_syc_solve] RPC call returned after {rpc_elapsed:.2f}s")
             LOG.debug(
                 f"[_syc_solve] SUCCESS at {time.time() - start_time:.2f}s elapsed"
             )
@@ -270,20 +274,25 @@ def _join_threads_or_abort(
     threads: List[threading.Thread],
     abort_check,
     poll_interval: float = 1.0,
+    max_wait_seconds: float = 600.0,
 ) -> None:
-    """Join threads, stopping early if ``abort_check()`` returns True.
+    """Join threads, stopping early if ``abort_check()`` returns True or timeout exceeded.
 
     Used to avoid deadlocking when the SyC solve thread has already failed:
     participant solve threads may be blocked indefinitely waiting for SyC
     coupling coordination data that will never arrive.  Once the SyC failure
     is detected we give up waiting so that the exception can propagate and
     example cleanup (container teardown) can proceed.
+
+    If max_wait_seconds is exceeded without all threads joining or SyC failure
+    detected, abort with a warning to prevent indefinite hangs.
     """
     import time
 
     start_time = time.time()
     LOG.debug(
-        f"[_join_threads_or_abort] ENTER: {len(threads)} threads, poll_interval={poll_interval}s"
+        f"[_join_threads_or_abort] ENTER: {len(threads)} threads, "
+        f"poll_interval={poll_interval}s, max_wait={max_wait_seconds}s"
     )
     poll_count = 0
     while any(t.is_alive() for t in threads):
@@ -300,6 +309,13 @@ def _join_threads_or_abort(
                 f"[_join_threads_or_abort] SyC solve thread failed; abandoning wait "
                 f"for {alive_count} participant solve threads to allow exception "
                 f"propagation and cleanup."
+            )
+            return
+        if elapsed >= max_wait_seconds:
+            LOG.error(
+                f"[_join_threads_or_abort] TIMEOUT after {elapsed:.1f}s with "
+                f"{alive_count}/{len(threads)} threads still alive. "
+                f"SyC thread likely hung in RPC call. Abandoning wait."
             )
             return
         for t in threads:
