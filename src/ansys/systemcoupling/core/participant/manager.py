@@ -158,6 +158,10 @@ class ParticipantManager:
             raise self.__solve_exception
 
     def _do_solve(self, syc_solve_thread):
+        import time
+
+        start_time = time.time()
+        LOG.info(f"[_do_solve] ENTER at {start_time}")
         connection_threads = [
             threading.Thread(
                 target=lambda host_port, name=name, part=participant: self._participant_connect(
@@ -168,28 +172,41 @@ class ParticipantManager:
             for name, participant in self.__participants.items()
         ]
 
-        LOG.info("Starting SyC solve thread...")
+        LOG.info("[_do_solve] Starting SyC solve thread...")
         syc_solve_thread.start()
-        LOG.info("Waiting for participants to connect.")
+        LOG.info("[_do_solve] Waiting for participants to connect.")
         _start_threads(connection_threads)
         _join_threads(connection_threads)
         connection_threads.clear()
-        if self._get_n_connected() < len(self.__participants):
+        n_connected = self._get_n_connected()
+        LOG.debug(
+            f"[_do_solve] After connection: {n_connected}/"
+            f"{len(self.__participants)} connected"
+        )
+        if n_connected < len(self.__participants):
             LOG.error("Some participants were unable to connect to System Coupling.")
             self.__syc_session.solution.abort()
         else:
             LOG.info("Participants connected.")
 
-            LOG.info("Starting participant solve threads.")
+            LOG.info("[_do_solve] Starting participant solve threads.")
             partsolve_threads = [
-                threading.Thread(target=participant.solve)
+                threading.Thread(target=participant.solve, daemon=True)
                 for participant in self.__participants.values()
             ]
             _start_threads(partsolve_threads)
 
-            LOG.info("Waiting for all solve threads to join.")
-            _join_threads(partsolve_threads)
-            LOG.info("All participant solve threads joined.")
+            LOG.info(
+                f"[_do_solve] Entering _join_threads_or_abort for "
+                f"{len(partsolve_threads)} threads..."
+            )
+            _join_threads_or_abort(
+                partsolve_threads, lambda: self.__solve_exception is not None
+            )
+            elapsed = time.time() - start_time
+            LOG.info(
+                f"[_do_solve] Returned from _join_threads_or_abort after {elapsed:.1f}s"
+            )
 
     def _clear_n_connected(self) -> None:
         with self.__connection_lock:
@@ -217,14 +234,26 @@ class ParticipantManager:
             LOG.error(f"Participant {name} failed to connect. Exception: {e}")
 
     def _syc_solve(self):
+        import time
+
+        start_time = time.time()
+        LOG.debug(f"[_syc_solve] ENTER at {start_time}")
         try:
             # We use `syc_session.solution._solve` here as it is
             # the lower level solve command. `sys_session.solution.solve`
             # would bring us recursively back into *this* function
+            LOG.debug("[_syc_solve] Calling syc_session.solution._solve()...")
             self.__syc_session.solution._solve()
+            LOG.debug(
+                f"[_syc_solve] SUCCESS at {time.time() - start_time:.2f}s elapsed"
+            )
         except Exception as e:
+            elapsed = time.time() - start_time
             self.__solve_exception = e
-            LOG.error(f"Solve terminated with exception: {e}.")
+            LOG.error(
+                f"[_syc_solve] EXCEPTION after {elapsed:.2f}s: {type(e).__name__}: {e}"
+            )
+            LOG.debug(f"[_syc_solve] Exception stored; thread exiting")
 
 
 def _start_threads(threads: List[threading.Thread]) -> None:
@@ -235,3 +264,46 @@ def _start_threads(threads: List[threading.Thread]) -> None:
 def _join_threads(threads: List[threading.Thread]) -> None:
     for thread in threads:
         thread.join()
+
+
+def _join_threads_or_abort(
+    threads: List[threading.Thread],
+    abort_check,
+    poll_interval: float = 1.0,
+) -> None:
+    """Join threads, stopping early if ``abort_check()`` returns True.
+
+    Used to avoid deadlocking when the SyC solve thread has already failed:
+    participant solve threads may be blocked indefinitely waiting for SyC
+    coupling coordination data that will never arrive.  Once the SyC failure
+    is detected we give up waiting so that the exception can propagate and
+    example cleanup (container teardown) can proceed.
+    """
+    import time
+
+    start_time = time.time()
+    LOG.debug(
+        f"[_join_threads_or_abort] ENTER: {len(threads)} threads, poll_interval={poll_interval}s"
+    )
+    poll_count = 0
+    while any(t.is_alive() for t in threads):
+        poll_count += 1
+        alive_count = sum(1 for t in threads if t.is_alive())
+        should_abort = abort_check()
+        elapsed = time.time() - start_time
+        LOG.debug(
+            f"[_join_threads_or_abort] poll {poll_count} at {elapsed:.1f}s: "
+            f"{alive_count}/{len(threads)} alive, abort_check={should_abort}"
+        )
+        if should_abort:
+            LOG.warning(
+                f"[_join_threads_or_abort] SyC solve thread failed; abandoning wait "
+                f"for {alive_count} participant solve threads to allow exception "
+                f"propagation and cleanup."
+            )
+            return
+        for t in threads:
+            t.join(timeout=poll_interval)
+    LOG.debug(
+        f"[_join_threads_or_abort] EXIT: all threads joined after {time.time() - start_time:.1f}s"
+    )
