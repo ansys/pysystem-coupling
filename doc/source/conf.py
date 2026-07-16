@@ -233,13 +233,27 @@ def _reset_example(gallery_conf, fname: str, when: str):
 
         if using_mapdl_container:
             subprocess.run(
-                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
+                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"],
+                timeout=120,
             )
             print("MAPDL container launched")
     else:
         if using_mapdl_container:
+            # Pass --timeout to docker compose to force-kill after 30s if graceful
+            # shutdown stalls (e.g. after an abrupt gRPC disconnect mid-solve).
+            # Also pass timeout to subprocess.run as a safety net in case docker
+            # compose itself hangs.
             subprocess.run(
-                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "down"]
+                [
+                    "docker",
+                    "compose",
+                    "-f",
+                    "mapdl-docker-compose.yml",
+                    "down",
+                    "--timeout",
+                    "30",
+                ],
+                timeout=60,
             )
             print("MAPDL container removed")
         # Add sleep after example to see if it helps with grpcs errors seen after everything
