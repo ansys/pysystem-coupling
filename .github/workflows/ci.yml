@@ -29,6 +29,10 @@ env:
   # 3. Align min ping intervals to 90 seconds to avoid 5-minute throttling effects
   # 4. Keep ping response timeout permissive to avoid false negatives on long solves
   PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261: '{"grpc.keepalive_time_ms": 90000, "grpc.keepalive_timeout_ms": 2147483647, "grpc.keepalive_permit_without_calls": 0, "grpc.http2.max_pings_without_data": 0, "grpc.http2.min_time_between_pings_ms": 90000, "grpc.http2.min_ping_interval_without_data_ms": 90000}'
+  # gRPC channel options for v27.1: More passive keepalive to avoid server "too_many_pings" errors.
+  # v27.1 has stricter ping-strike limits than v26.1. Even 90s keepalive is rejected.
+  # Try 300s (5 minutes) as a more conservative approach for long-running solve() RPC.
+  PYSYC_GRPC_CHANNEL_OPTIONS_JSON_271: '{"grpc.keepalive_time_ms": 300000, "grpc.keepalive_timeout_ms": 2147483647, "grpc.keepalive_permit_without_calls": 0, "grpc.http2.max_pings_without_data": 0, "grpc.http2.min_time_between_pings_ms": 300000, "grpc.http2.min_ping_interval_without_data_ms": 300000}'
   FLUENT_IMAGE_VERSION: "v26.1.latest"
   SYC_IMAGE_VERSION: "latest"
   MAPDL_IMAGE_VERSION: "v25.2-ubuntu-cicd"
@@ -398,7 +402,7 @@ jobs:
           print(f"parsed_grpc_options={parsed}")
           PY
         env:
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_271 }}
 
       - name: Diagnostic - preflight container launch for docs build
         run: |
@@ -449,7 +453,7 @@ jobs:
             exit 1
           fi
         env:
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_271 }}
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
@@ -527,7 +531,7 @@ jobs:
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
-          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_261 }}
+          PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_271 }}
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}

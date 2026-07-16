@@ -523,6 +523,7 @@ class SycGrpc(object):
         Standard output and error streams are combined in the output
         streamed to this client.
         """
+        LOG.debug("[start_output] ENTER: Starting output streaming")
 
         def default_handler(text):
             print(text)
@@ -532,26 +533,62 @@ class SycGrpc(object):
             target=self._read_stdstreams, args=(handle_output,)
         )
         self.__output_thread.daemon = True
+        LOG.debug("[start_output] Starting daemon thread for output reading")
         self.__output_thread.start()
+        LOG.debug("[start_output] Output thread started")
 
     def end_output(self):
         """Stop streaming standard streams."""
         self.__ostream_service.end_streaming()
 
     def _read_stdstreams(self, handle_output):
-        output_iter = self.__ostream_service.begin_streaming()
+        import time
+
+        LOG.debug("[_read_stdstreams] ENTER: Starting output streaming thread")
+        stream_start = time.time()
+        try:
+            LOG.debug("[_read_stdstreams] Calling begin_streaming()...")
+            output_iter = self.__ostream_service.begin_streaming()
+            LOG.debug(
+                "[_read_stdstreams] begin_streaming() returned, starting read loop"
+            )
+        except Exception as e:
+            LOG.error(
+                f"[_read_stdstreams] EXCEPTION calling begin_streaming: "
+                f"{type(e).__name__}: {e}"
+            )
+            return
+
         text = ""
+        chunk_count = 0
         while True:
             try:
                 response = next(output_iter)
+                chunk_count += 1
                 text += response.text
+                if chunk_count % 50 == 0:  # Log periodically
+                    elapsed = time.time() - stream_start
+                    LOG.debug(
+                        f"[_read_stdstreams] {chunk_count} chunks received after {elapsed:.1f}s"
+                    )
                 if text and text[-1] == "\n":
                     handle_output(text[0:-1])
                     text = ""
             except StopIteration:
+                elapsed = time.time() - stream_start
+                LOG.debug(
+                    f"[_read_stdstreams] Stream ended after {chunk_count} chunks, {elapsed:.1f}s"
+                )
                 # Flush any trailing text
                 if text:
                     handle_output(text)
+                break
+            except Exception as e:
+                elapsed = time.time() - stream_start
+                LOG.error(
+                    f"[_read_stdstreams] EXCEPTION after {chunk_count} chunks, {elapsed:.1f}s: "
+                    f"{type(e).__name__}: {e}"
+                )
                 break
 
     def __getattr__(self, name):
