@@ -237,13 +237,15 @@ class ParticipantManager:
         LOG.debug(f"[_participant_connect] {name}: ENTER at {connect_start}")
         try:
             LOG.debug(
-                f"[_participant_connect] {name}: Connecting to SyC at "
+                f"[_participant_connect] {name}: Calling connect() with SyC at "
                 f"{host_port[0]}:{host_port[1]}..."
             )
             participant.connect(*host_port, name)
             connect_elapsed = time.time() - connect_start
             LOG.info(
-                f"[_participant_connect] {name}: SUCCESS after {connect_elapsed:.1f}s"
+                f"[_participant_connect] {name}: connect() returned after "
+                f"{connect_elapsed:.1f}s (note: backend connection may occur later "
+                f"during solve)"
             )
             self._increment_n_connected()
         except Exception as e:

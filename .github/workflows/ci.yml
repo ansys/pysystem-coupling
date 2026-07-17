@@ -458,52 +458,35 @@ jobs:
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
 
-      - name: Start background diagnostics collection
-        run: |
-          mkdir -p ci-logs/diagnostics
-          # Background job to periodically collect diagnostics every 2 minutes
-          # This allows us to capture state even if the build hangs and job is killed.
-          (
-            counter=0
-            while true; do
-              counter=$((counter + 1))
-              timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
-              diag_dir="ci-logs/diagnostics/${counter}_${timestamp}"
-              mkdir -p "${diag_dir}"
-
-              echo "[${timestamp}] Collecting diagnostics snapshot ${counter}..."
-              docker ps -a --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' > "${diag_dir}/docker-ps.txt" 2>&1 || true
-
-              # Collect logs from System Coupling containers
-              docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | while read -r cid image name; do
-                if echo "${image} ${name}" | grep -Eiq 'pysystem-coupling|systemcoupling'; then
-                  safe_name=$(echo "${name}" | tr '/: ' '___')
-                  docker logs "${cid}" > "${diag_dir}/${safe_name}.log" 2>&1 || true
-                  docker inspect "${cid}" > "${diag_dir}/${safe_name}.inspect.json" 2>/dev/null || true
-
-                  # Collect server working directory contents (all files, not just logs)
-                  echo "[${timestamp}] Collecting working directory for ${safe_name}..."
-                  docker exec "${cid}" find /tmp -maxdepth 3 -type f 2>/dev/null | head -20 | while read -r filepath; do
-                    # Try to copy the file
-                    docker cp "${cid}:${filepath}" "${diag_dir}/" 2>/dev/null || true
-                  done
-
-                  # Also try to get directory listing of common solver dirs
-                  for workdir in /tmp /workspace /root/work /opt/work; do
-                    docker exec "${cid}" ls -lah "${workdir}" 2>/dev/null > "${diag_dir}/${safe_name}_ls_${workdir//\//_}.txt" 2>&1 || true
-                  done
-                fi
-              done
-
-              sleep 120  # Collect every 2 minutes
-            done
-          ) &
-          echo $! > ci-logs/diagnostics/monitor.pid
-
       - name: Build HTML
         run: |
           set -o pipefail
           export SYC_CONTAINER_USER=$(id -u):$(id -g)
+
+          # Background diagnostics monitor: runs inside this step so output is
+          # visible in the CI log even if the job is manually cancelled
+          # (separate step + upload approach doesn't work on cancellation).
+          _diag_counter=0
+          (
+            # Wait for containers to start before first snapshot
+            sleep 60
+            while true; do
+              _diag_counter=$((_diag_counter + 1))
+              _diag_ts=$(date '+%Y-%m-%d_%H-%M-%S')
+              echo "::group::[DIAGNOSTICS] Snapshot ${_diag_counter} at ${_diag_ts}"
+              echo "--- Running containers ---"
+              docker ps -a --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' || true
+              docker ps -a --format '{{.ID}} {{.Image}} {{.Names}}' | while read -r cid image name; do
+                if echo "${image} ${name}" | grep -Eiq 'pysystem-coupling|pyfluent|fluent|mapdl|systemcoupling'; then
+                  echo "--- docker logs (last 80 lines): ${name} ---"
+                  docker logs --tail 80 "${cid}" 2>&1 || true
+                fi
+              done
+              echo "::endgroup::"
+              sleep 120
+            done
+          ) &
+          _DIAG_PID=$!
 
           # On the first attempt do a full clean build.
           # On retries, clean only build artefacts while preserving
@@ -535,6 +518,8 @@ jobs:
               exit 1
             fi
           done
+
+          kill "${_DIAG_PID}" 2>/dev/null || true
         env:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
@@ -550,20 +535,6 @@ jobs:
           PYMAPDL_PORT: "50053"
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:${{ env.MAPDL_IMAGE_VERSION }}
           PYMAPDL_GRPC_TRANSPORT: "insecure"
-
-      - name: Stop background diagnostics collection
-        if: always()
-        run: |
-          if [ -f ci-logs/diagnostics/monitor.pid ]; then
-            monitor_pid=$(cat ci-logs/diagnostics/monitor.pid)
-            echo "Stopping background diagnostics monitor (PID: ${monitor_pid})..."
-            kill "${monitor_pid}" 2>/dev/null || true
-            sleep 2
-            kill -9 "${monitor_pid}" 2>/dev/null || true
-          fi
-          echo "Final diagnostic snapshot..."
-          timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
-          docker ps -a --format '{{.ID}} {{.Image}} {{.Names}} {{.Status}}' >> ci-logs/diagnostics/FINAL_docker-ps.txt 2>&1 || true
 
       - name: Collect docs failure diagnostics
         if: failure()
