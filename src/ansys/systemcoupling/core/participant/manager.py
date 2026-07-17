@@ -191,8 +191,12 @@ class ParticipantManager:
 
             LOG.info("[_do_solve] Starting participant solve threads.")
             partsolve_threads = [
-                threading.Thread(target=participant.solve, daemon=True)
-                for participant in self.__participants.values()
+                threading.Thread(
+                    target=self._participant_solve_wrapper,
+                    args=(name, participant),
+                    daemon=True,
+                )
+                for name, participant in self.__participants.items()
             ]
             _start_threads(partsolve_threads)
 
@@ -227,11 +231,48 @@ class ParticipantManager:
     def _participant_connect(
         self, name: str, host_port: Tuple[str, int], participant: ParticipantProtocol
     ) -> None:
+        import time
+
+        connect_start = time.time()
+        LOG.debug(f"[_participant_connect] {name}: ENTER at {connect_start}")
         try:
+            LOG.debug(
+                f"[_participant_connect] {name}: Connecting to SyC at "
+                f"{host_port[0]}:{host_port[1]}..."
+            )
             participant.connect(*host_port, name)
+            connect_elapsed = time.time() - connect_start
+            LOG.info(
+                f"[_participant_connect] {name}: SUCCESS after {connect_elapsed:.1f}s"
+            )
             self._increment_n_connected()
         except Exception as e:
-            LOG.error(f"Participant {name} failed to connect. Exception: {e}")
+            connect_elapsed = time.time() - connect_start
+            LOG.error(
+                f"[_participant_connect] {name}: EXCEPTION after {connect_elapsed:.1f}s: "
+                f"{type(e).__name__}: {e}"
+            )
+
+    def _participant_solve_wrapper(
+        self, name: str, participant: ParticipantProtocol
+    ) -> None:
+        """Wrapper around participant.solve() that logs timing and exceptions."""
+        import time
+
+        solve_start = time.time()
+        LOG.info(f"[_participant_solve] {name}: ENTER at {solve_start}")
+        try:
+            LOG.debug(f"[_participant_solve] {name}: Calling participant.solve()...")
+            participant.solve()
+            solve_elapsed = time.time() - solve_start
+            LOG.info(f"[_participant_solve] {name}: SUCCESS after {solve_elapsed:.1f}s")
+        except Exception as e:
+            solve_elapsed = time.time() - solve_start
+            LOG.error(
+                f"[_participant_solve] {name}: EXCEPTION after {solve_elapsed:.1f}s: "
+                f"{type(e).__name__}: {e}"
+            )
+            raise
 
     def _syc_solve(self):
         import time

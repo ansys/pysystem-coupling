@@ -526,7 +526,26 @@ class SycGrpc(object):
         LOG.debug("[start_output] ENTER: Starting output streaming")
 
         def default_handler(text):
+            import sys
+
+            # Log to ensure this is being called (first 5 times, then every 100)
+            if not hasattr(default_handler, "_call_count"):
+                default_handler._call_count = 0
+            default_handler._call_count += 1
+
+            if (
+                default_handler._call_count <= 5
+                or default_handler._call_count % 100 == 0
+            ):
+                text_repr = repr(text[:80]) if len(text) > 0 else "<empty>"
+                LOG.debug(
+                    f"[default_handler] PRINTING output call #{default_handler._call_count}: "
+                    f"{text_repr}"
+                )
+
             print(text)
+            # Ensure stdout is flushed to prevent buffering
+            sys.stdout.flush()
 
         handle_output = handle_output or default_handler
         self.__output_thread = threading.Thread(
@@ -539,6 +558,7 @@ class SycGrpc(object):
 
     def end_output(self):
         """Stop streaming standard streams."""
+        LOG.debug("[end_output] Called to stop output streaming")
         self.__ostream_service.end_streaming()
 
     def _read_stdstreams(self, handle_output):
@@ -562,63 +582,84 @@ class SycGrpc(object):
         text = ""
         chunk_count = 0
         lines_flushed = 0
-        while True:
-            try:
-                response = next(output_iter)
-                chunk_count += 1
+        try:
+            while True:
+                try:
+                    response = next(output_iter)
+                    chunk_count += 1
 
-                # Extract text from response and get details
-                chunk_text = (
-                    response.text if hasattr(response, "text") else str(response)
-                )
-                chunk_len = len(chunk_text)
-                text += chunk_text
+                    # Extract text from response and get details
+                    chunk_text = (
+                        response.text if hasattr(response, "text") else str(response)
+                    )
+                    chunk_len = len(chunk_text)
+                    has_newline = "\n" in chunk_text
+                    is_whitespace_only = chunk_text.isspace() if chunk_len > 0 else True
+                    text += chunk_text
 
-                # Log first 5 and every 100th chunk with detailed info
-                if chunk_count <= 5 or chunk_count % 100 == 0:
+                    # Log first 5 and every 100th chunk with detailed info
+                    if chunk_count <= 5 or chunk_count % 100 == 0:
+                        elapsed = time.time() - stream_start
+                        if chunk_len == 0:
+                            chunk_repr = "<empty>"
+                        elif is_whitespace_only:
+                            chunk_repr = f"<whitespace_only, {repr(chunk_text)}>"
+                        else:
+                            chunk_repr = repr(chunk_text[:60])
+                        LOG.debug(
+                            f"[_read_stdstreams] chunk {chunk_count} after {elapsed:.1f}s: "
+                            f"len={chunk_len}, newline={has_newline}, accum_len={len(text)}, "
+                            f"first60={chunk_repr}"
+                        )
+
+                    # Periodic progress log (every 50 chunks)
+                    if chunk_count % 50 == 0:
+                        elapsed = time.time() - stream_start
+                        LOG.debug(
+                            f"[_read_stdstreams] {chunk_count} chunks after {elapsed:.1f}s, "
+                            f"lines={lines_flushed}, accum={len(text)}"
+                        )
+
+                    # Split and flush complete lines
+                    while "\n" in text:
+                        line, text = text.split("\n", 1)
+                        lines_flushed += 1
+                        # Log first 5 flushed lines and every 100th line
+                        if lines_flushed <= 5 or lines_flushed % 100 == 0:
+                            line_repr = repr(line[:80]) if len(line) > 0 else "<empty>"
+                            LOG.debug(
+                                f"[_read_stdstreams] FLUSHED line {lines_flushed}: {line_repr}"
+                            )
+                        handle_output(line)
+
+                except StopIteration:
                     elapsed = time.time() - stream_start
-                    chunk_repr = repr(chunk_text[:50]) if chunk_len > 0 else "<empty>"
                     LOG.debug(
-                        f"[_read_stdstreams] chunk {chunk_count} after {elapsed:.1f}s: "
-                        f"len={chunk_len}, accum_len={len(text)}, first50={chunk_repr}"
+                        f"[_read_stdstreams] Stream ended after {chunk_count} chunks, "
+                        f"{elapsed:.1f}s, lines_flushed={lines_flushed}"
                     )
-
-                # Periodic progress log (every 50 chunks)
-                if chunk_count % 50 == 0:
+                    # Flush any trailing text
+                    if text:
+                        LOG.debug(
+                            f"[_read_stdstreams] Flushing trailing text: "
+                            f"len={len(text)}, content={repr(text[:100])}"
+                        )
+                        handle_output(text)
+                        lines_flushed += 1
+                    break
+                except Exception as e:
                     elapsed = time.time() - stream_start
-                    LOG.debug(
-                        f"[_read_stdstreams] {chunk_count} chunks received after {elapsed:.1f}s, "
-                        f"lines_flushed={lines_flushed}, accum_len={len(text)}"
+                    LOG.error(
+                        f"[_read_stdstreams] EXCEPTION after {chunk_count} chunks, {elapsed:.1f}s: "
+                        f"{type(e).__name__}: {e}"
                     )
-
-                # Split and flush complete lines
-                while "\n" in text:
-                    line, text = text.split("\n", 1)
-                    handle_output(line)
-                    lines_flushed += 1
-
-            except StopIteration:
-                elapsed = time.time() - stream_start
-                LOG.debug(
-                    f"[_read_stdstreams] Stream ended after {chunk_count} chunks, "
-                    f"{elapsed:.1f}s, lines_flushed={lines_flushed}"
-                )
-                # Flush any trailing text
-                if text:
-                    LOG.debug(
-                        f"[_read_stdstreams] Flushing trailing text: "
-                        f"len={len(text)}, content={repr(text[:100])}"
-                    )
-                    handle_output(text)
-                    lines_flushed += 1
-                break
-            except Exception as e:
-                elapsed = time.time() - stream_start
-                LOG.error(
-                    f"[_read_stdstreams] EXCEPTION after {chunk_count} chunks, {elapsed:.1f}s: "
-                    f"{type(e).__name__}: {e}"
-                )
-                break
+                    break
+        finally:
+            elapsed = time.time() - stream_start
+            LOG.debug(
+                f"[_read_stdstreams] EXIT: {chunk_count} chunks, {lines_flushed} lines, "
+                f"{elapsed:.1f}s total"
+            )
 
     def __getattr__(self, name):
         """Support command and query interfaces as method attributes, mainly to provide an
