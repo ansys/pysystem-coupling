@@ -561,27 +561,56 @@ class SycGrpc(object):
 
         text = ""
         chunk_count = 0
+        lines_flushed = 0
         while True:
             try:
                 response = next(output_iter)
                 chunk_count += 1
-                text += response.text
-                if chunk_count % 50 == 0:  # Log periodically
+
+                # Extract text from response and get details
+                chunk_text = (
+                    response.text if hasattr(response, "text") else str(response)
+                )
+                chunk_len = len(chunk_text)
+                text += chunk_text
+
+                # Log first 5 and every 100th chunk with detailed info
+                if chunk_count <= 5 or chunk_count % 100 == 0:
+                    elapsed = time.time() - stream_start
+                    chunk_repr = repr(chunk_text[:50]) if chunk_len > 0 else "<empty>"
+                    LOG.debug(
+                        f"[_read_stdstreams] chunk {chunk_count} after {elapsed:.1f}s: "
+                        f"len={chunk_len}, accum_len={len(text)}, first50={chunk_repr}"
+                    )
+
+                # Periodic progress log (every 50 chunks)
+                if chunk_count % 50 == 0:
                     elapsed = time.time() - stream_start
                     LOG.debug(
-                        f"[_read_stdstreams] {chunk_count} chunks received after {elapsed:.1f}s"
+                        f"[_read_stdstreams] {chunk_count} chunks received after {elapsed:.1f}s, "
+                        f"lines_flushed={lines_flushed}, accum_len={len(text)}"
                     )
-                if text and text[-1] == "\n":
-                    handle_output(text[0:-1])
-                    text = ""
+
+                # Split and flush complete lines
+                while "\n" in text:
+                    line, text = text.split("\n", 1)
+                    handle_output(line)
+                    lines_flushed += 1
+
             except StopIteration:
                 elapsed = time.time() - stream_start
                 LOG.debug(
-                    f"[_read_stdstreams] Stream ended after {chunk_count} chunks, {elapsed:.1f}s"
+                    f"[_read_stdstreams] Stream ended after {chunk_count} chunks, "
+                    f"{elapsed:.1f}s, lines_flushed={lines_flushed}"
                 )
                 # Flush any trailing text
                 if text:
+                    LOG.debug(
+                        f"[_read_stdstreams] Flushing trailing text: "
+                        f"len={len(text)}, content={repr(text[:100])}"
+                    )
                     handle_output(text)
+                    lines_flushed += 1
                 break
             except Exception as e:
                 elapsed = time.time() - stream_start

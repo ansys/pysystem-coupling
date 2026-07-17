@@ -481,9 +481,16 @@ jobs:
                   docker logs "${cid}" > "${diag_dir}/${safe_name}.log" 2>&1 || true
                   docker inspect "${cid}" > "${diag_dir}/${safe_name}.inspect.json" 2>/dev/null || true
 
-                  # Try to read server working directory from container
-                  docker exec "${cid}" find /tmp -type f -name '*.log' 2>/dev/null | head -10 | while read -r logfile; do
-                    docker cp "${cid}:${logfile}" "${diag_dir}/" 2>/dev/null || true
+                  # Collect server working directory contents (all files, not just logs)
+                  echo "[${timestamp}] Collecting working directory for ${safe_name}..."
+                  docker exec "${cid}" find /tmp -maxdepth 3 -type f 2>/dev/null | head -20 | while read -r filepath; do
+                    # Try to copy the file
+                    docker cp "${cid}:${filepath}" "${diag_dir}/" 2>/dev/null || true
+                  done
+
+                  # Also try to get directory listing of common solver dirs
+                  for workdir in /tmp /workspace /root/work /opt/work; do
+                    docker exec "${cid}" ls -lah "${workdir}" 2>/dev/null > "${diag_dir}/${safe_name}_ls_${workdir//\//_}.txt" 2>&1 || true
                   done
                 fi
               done
