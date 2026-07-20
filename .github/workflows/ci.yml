@@ -524,6 +524,7 @@ jobs:
           PYSYC_DOC_BUILD_VERSION: ${{ env.DOC_BUILD_SYC_VERSION }}
           PYSYC_BUILD_SPHINX_GALLERY: 1
           PYSYC_GRPC_CHANNEL_OPTIONS_JSON: ${{ env.PYSYC_GRPC_CHANNEL_OPTIONS_JSON_271 }}
+          PYSYC_SERVER_LOGGING_LEVEL: 5
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
           SYC_LAUNCH_CONTAINER: 1
           SYC_IMAGE_TAG: ${{ env.SYC_IMAGE_VERSION }}
@@ -535,6 +536,29 @@ jobs:
           PYMAPDL_PORT: "50053"
           DOCKER_IMAGE: ghcr.io/ansys/mapdl:${{ env.MAPDL_IMAGE_VERSION }}
           PYMAPDL_GRPC_TRANSPORT: "insecure"
+
+      - name: Collect System Coupling server logs
+        if: always()
+        run: |
+          mkdir -p ci-logs/syc-server-logs
+          # Find and collect all SyC_Log_* files from the host
+          find /tmp -name "SyC_Log_*.txt" -type f 2>/dev/null | while read f; do
+            cp "$f" ci-logs/syc-server-logs/ 2>/dev/null || true
+          done
+          find . -name "SyC_Log_*.txt" -type f 2>/dev/null | while read f; do
+            cp "$f" ci-logs/syc-server-logs/ 2>/dev/null || true
+          done
+          
+          # Extract SyC log files from running or stopped docker containers
+          # The logs are typically in /home/container/workdir or the container's working dir
+          docker ps -a --format '{{.ID}} {{.Names}}' | grep -E 'pysystem-coupling|pyfluent|mapdl' | while read cid name; do
+            # Try to copy from common working directories
+            for workdir in /home/container/workdir /root/workdir /workdir /tmp /syc_work; do
+              docker cp "$cid:$workdir/SyC_Log_*.txt" ci-logs/syc-server-logs/ 2>/dev/null || true
+            done
+          done
+          
+          ls -lah ci-logs/syc-server-logs/ || echo "No SyC log files found"
 
       - name: Collect docs failure diagnostics
         if: failure()
