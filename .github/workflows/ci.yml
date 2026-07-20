@@ -216,7 +216,8 @@ jobs:
       - name: Install pysystemcoupling with test dependencies
         run: |
           wheel_name=`echo dist/*.whl`
-          pip install -q --force-reinstall ${wheel_name}[tests] > /dev/null
+          pip install -q --force-reinstall ${wheel_name} > /dev/null
+          pip install -q --no-deps ".[tests]" > /dev/null
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@650006c6eb7dba73a995cc03b0b2d7f5ca915bee # v4.2.0
@@ -347,7 +348,8 @@ jobs:
       - name: Install pysystemcoupling with doc dependencies
         run: |
           wheel_name=`echo dist/*.whl`
-          pip install -q --force-reinstall ${wheel_name}[doc] > /dev/null
+          pip install -q --force-reinstall ${wheel_name} > /dev/null
+          pip install -q --no-deps ".[doc]" > /dev/null
 
       # - name: Pin grpcio for docs build (v26.1)
       #   run: |
