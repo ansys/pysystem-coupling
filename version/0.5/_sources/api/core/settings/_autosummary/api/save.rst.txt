@@ -1,0 +1,23 @@
+:orphan:
+
+.. _save:
+
+save
+====
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.save
+
+.. autoclass:: save
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+============================   =================
+
+Parent                                   Summary
+
+============================   =================
+:ref:`case_root <case_root>`       'root' object
+
+============================   =================
+

@@ -1,0 +1,1268 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fluid swirl &#8212; PySystemCoupling</title>
+  
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=0790524f97105ba85085" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=5ffe81b6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/ansys-sphinx-theme.css?v=5ffe81b6" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=0790524f97105ba85085"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085" />
+
+
+  <!-- Include desired assets -->
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  
+
+  
+    <link href="../../_static/css/breadcrumbs.css" rel="stylesheet" />
+  
+    <script src="../../_static/documentation_options.js?v=769e5e19"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="../../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/00-systemcoupling/fluid_swirl';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.18.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://systemcoupling.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            false;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FMU-FMU cosimulation of a heating tank &amp; heater" href="heating_tank_fmu_fmu.html" />
+    <link rel="prev" title="Conjugate Heat Transfer- Pipe Flow" href="cht_pipe.html" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.14.dev0" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  <meta property="og:site_name" content="PyAnsys" />
+  <meta name="physics" content="Fluids" />
+  <meta name="physics" content="Multiphysics" />
+  <meta name="physics" content="Structures" />
+  <link rel="canonical" href="https://systemcoupling.docs.pyansys.com/version/stable/examples/00-systemcoupling/fluid_swirl.html" />
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://docs.pyansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PySystemCoupling - Home"/>
+    <img src="../../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark pst-js-only" alt="PySystemCoupling - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="PySystemCoupling home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../users_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
+    0.13.0 - July 07, 2026
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav>
+</div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-wrench fa-lg" aria-hidden="true"></i><span class="visually-hidden">Contribute</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+  
+    
+<!--
+  Announcement Version Loader
+  Dynamically loads the announcement.html content into the announcement_msg div.
+-->
+<div id="announcement_msg" aria-live="polite"></div>
+<script>
+  // Fetch and inject the announcement HTML content
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status} Announcement.html file not found, Please ignore this, if you are in dev/stable documentation`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+      var msgDiv = document.getElementById("announcement_msg");
+      if (msgDiv) {
+        msgDiv.innerHTML = text;
+      }
+    })
+    .catch((error) => {
+      // Log only unexpected fetch errors
+      if (!(error.message && error.message.startsWith("HTTP error: 404"))) {
+        console.error(`Fetch problem: ${error.message} Announcement.html could not be loaded.`);
+      }
+    });
+</script>
+  
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html" title="PySystemCoupling home">Home</a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../users_guide/index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../contributing.html">
+    Contribute
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    0.13.0 - July 07, 2026
+  </a>
+</li>
+
+  </ul>
+</nav>
+</div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="search-bar pst-js-only" id="search-bar">
+  <form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <input type="search" class="form-control" name="q" placeholder="Search the docs ..."
+      aria-label="Search the docs ..." autocomplete="off" autocorrect="off"
+      autocapitalize="off" spellcheck="false" />
+    <span class="search-button__kbd-shortcut">
+      <kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd>
+    </span>
+  </form>
+  
+  <div id="static-search-results" class="static-search-results" style="display:none;" tabindex="0"></div>
+  
+</div></div>
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i><span class="visually-hidden">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-wrench fa-lg" aria-hidden="true"></i><span class="visually-hidden">Contribute</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Coupled analysis examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cht_pipe.html">Conjugate Heat Transfer- Pipe Flow</a></li>
+
+
+
+
+
+
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Fluid swirl</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="heating_tank_fmu_fmu.html">FMU-FMU cosimulation of a heating tank &amp; heater</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="oscillating_plate.html">Oscillating plate</a></li>
+
+
+
+
+
+<li class="toctree-l2"><a class="reference internal" href="turek_hron_fsi2.html">Turek-Hron FSI2 Benchmark Example</a></li>
+
+
+
+
+
+
+
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="../index.html" class="nav-link">Examples</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">Coupled analysis examples</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fluid swirl</span></li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-00-systemcoupling-fluid-swirl-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="fluid-swirl">
+<span id="ref-fluid-swirl-example"></span><span id="sphx-glr-examples-00-systemcoupling-fluid-swirl-py"></span><h1>Fluid swirl<a class="headerlink" href="#fluid-swirl" title="Link to this heading">#</a></h1>
+<p>This example illustrates a one-way data transfer from a SCDT file to
+Fluent, using System Coupling. Fluent solves a simple steady fluid
+flow problem, where the flow is affected by the momentum sources
+defined in the SCDT file.</p>
+<p><strong>Problem description</strong></p>
+<p>Fluid flow problem consists of the water flowing through the pipe.</p>
+<a class="reference internal image-reference" href="../../_images/fluid_swirl_setup.png"><img alt="../../_images/fluid_swirl_setup.png" class="align-center" src="../../_images/fluid_swirl_setup.png" style="width: 400pt;" />
+</a>
+<p>The SCDT file will be generated that consists of a cloud of points
+overlapping the fluid domain. At each point, the force density value
+is defined, with force acting along the flow cross-section, always in a
+counter-clockwise direction (if looking from the inlet to the outlet).</p>
+<p>System Coupling is used to map the data from the cloud of points defined
+in the SCDT file onto Fluent mesh. The force values are then transferred
+into Fluent and Fluent solves the resulting fluid flow problem, where
+the fluid is influenced by the provided forces. As a result, the
+swirl is induced in the fluid flow.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Tags: SCDT, Fluent, steady</span>
+</pre></div>
+</div>
+</section>
+<section id="import-modules-download-files-launch-products">
+<h1>Import modules, download files, launch products<a class="headerlink" href="#import-modules-download-files-launch-products" title="Link to this heading">#</a></h1>
+<p>Setting up this example consists of performing imports, downloading
+the input file, and launching the required products.</p>
+<section id="perform-required-imports">
+<h2>Perform required imports<a class="headerlink" href="#perform-required-imports" title="Link to this heading">#</a></h2>
+<p>Import the <code class="docutils literal notranslate"><span class="pre">ansys-systemcoupling-core</span></code> package and other required packages.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ansys.fluent.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pyfluent</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ansys.systemcoupling.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pysystemcoupling</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">ansys.systemcoupling.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">examples</span>
+</pre></div>
+</div>
+</section>
+<section id="download-input-files">
+<h2>Download input files<a class="headerlink" href="#download-input-files" title="Link to this heading">#</a></h2>
+<p>Download the case file for Fluent and the FMU file.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluent_cas_file</span></a> <span class="o">=</span> <span class="n">examples</span><span class="o">.</span><span class="n">download_file</span><span class="p">(</span>
+    <span class="s2">&quot;water_pipe_flow.cas.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;pysystem-coupling/fluid-swirl&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="launch-products">
+<h2>Launch products<a class="headerlink" href="#launch-products" title="Link to this heading">#</a></h2>
+<p>Launch a remote Fluent and System Coupling instances and
+return <em>client</em> objects that allows you to interact with
+these products via an API exposed into the current Python
+environment.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Fluent version greater than 24.1 is required.
+To specify Fluent version explicitly when launching Fluent,
+use <code class="docutils literal notranslate"><span class="pre">product_version</span></code> argument to the <code class="docutils literal notranslate"><span class="pre">launch_fluent</span></code>
+function, for example <code class="docutils literal notranslate"><span class="pre">pyfluent.launch_fluent(product_version=&quot;24.2.0&quot;)</span></code></p>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span> <span class="o">=</span> <span class="n">pyfluent</span><span class="o">.</span><span class="n">launch_fluent</span><span class="p">(</span><span class="n">start_transcript</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">processor_count</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">syc</span> <span class="o">=</span> <span class="n">pysystemcoupling</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/ansys/fluent/core/fluent_connection.py:340: InsecureGrpcWarning: The Fluent session will be connected in insecure gRPC mode. This mode is not recommended. For more details on the implications and usage of insecure mode, refer to the Fluent documentation.
+  warnings.warn(
+/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/ansys/tools/common/cyberchannel.py:201: UserWarning: Starting gRPC client without TLS on 127.0.0.1:41707. This is INSECURE. Consider using a secure connection.
+  warn(f&quot;Starting gRPC client without TLS on {target}. This is INSECURE. Consider using a secure connection.&quot;)
+/opt/hostedtoolcache/Python/3.13.14/x64/lib/python3.13/site-packages/ansys/tools/common/cyberchannel.py:201: UserWarning: Starting gRPC client without TLS on 127.0.0.1:35663. This is INSECURE. Consider using a secure connection.
+  warn(f&quot;Starting gRPC client without TLS on {target}. This is INSECURE. Consider using a secure connection.&quot;)
+</pre></div>
+</div>
+</section>
+</section>
+<section id="setup">
+<h1>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h1>
+<p>The setup consists of setting up the the fluids analysis,
+generating the SCDT file, and setting up the coupled analysis.</p>
+<section id="set-up-the-fluid-analysis">
+<h2>Set up the fluid analysis<a class="headerlink" href="#set-up-the-fluid-analysis" title="Link to this heading">#</a></h2>
+<p>Read the pre-created case file.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file_type</span><span class="o">=</span><span class="s2">&quot;case&quot;</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluent_cas_file</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Fast-loading &quot;/ansys_inc/v261/fluent/fluent26.1.0/addons/afd/lib/hdfio.bin&quot;
+Done.
+
+Reading from 9b1e4a90b426:&quot;/home/container/workdir/water_pipe_flow.cas.h5&quot; in NODE0 mode ...
+  Reading mesh ...
+       48575 cells,     1 cell zone  ...
+          48575 mixed cells,  zone id: 2
+      116126 faces,     4 face zones ...
+         109564 mixed interior faces,  zone id: 1
+           6278 triangular wall faces,  zone id: 5
+            142 mixed velocity-inlet faces,  zone id: 6
+            142 mixed pressure-outlet faces,  zone id: 7
+       20404 nodes,     1 node zone  ...
+  Done.
+
+
+Building...
+     mesh
+        distributing mesh
+                parts....,
+                faces....,
+                nodes....,
+                cells....,
+        bandwidth reduction using Reverse Cuthill-McKee: 5885/214 = 27.5
+     materials,
+     interface,
+     domains,
+        mixture
+     zones,
+        out
+        wall
+        interior-tube_solid
+        in
+        tube_solid
+     parallel,
+Done.
+</pre></div>
+</div>
+</section>
+<section id="generate-the-scdt-file">
+<h2>Generate the SCDT file<a class="headerlink" href="#generate-the-scdt-file" title="Link to this heading">#</a></h2>
+<p>The following script generates a simple comma-separated file
+with points defined along the fluid domain. Six columns of data
+will be written: x, y, z coordinate values, followed by
+x-, y-, and z-components of the force density field.
+The number of points can be adjusted by <cite>naxial</cite>, <cite>ncirc</cite>,
+and <cite>nrad</cite> parameter values.
+The magnitude of the force (defined in N/m^3) can be adjusted
+by <cite>force_mag</cite> parameter value.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">create_source_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">):</span>
+    <span class="n">force_mag</span> <span class="o">=</span> <span class="mf">5.0</span>
+    <span class="n">naxial</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="n">ncirc</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="n">nrad</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="n">radius</span> <span class="o">=</span> <span class="mf">0.025</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">xi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">naxial</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">0.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">xi</span> <span class="o">/</span> <span class="p">(</span><span class="n">naxial</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">ti</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncirc</span><span class="p">):</span>
+                <span class="n">theta</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">math</span><span class="o">.</span><span class="n">pi</span></a> <span class="o">*</span> <span class="n">ti</span> <span class="o">/</span> <span class="n">ncirc</span>
+                <span class="k">for</span> <span class="n">ri</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrad</span><span class="p">):</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">radius</span> <span class="o">*</span> <span class="p">(</span><span class="n">ri</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">nrad</span>
+                    <span class="n">z</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/math.html#math.cos" title="math.cos" class="sphx-glr-backref-module-math sphx-glr-backref-type-py-function"><span class="n">math</span><span class="o">.</span><span class="n">cos</span></a><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                    <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/math.html#math.sin" title="math.sin" class="sphx-glr-backref-module-math sphx-glr-backref-type-py-function"><span class="n">math</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+                    <span class="n">fx</span> <span class="o">=</span> <span class="mf">0.0</span>
+                    <span class="n">fy</span> <span class="o">=</span> <span class="n">force_mag</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/math.html#math.sin" title="math.sin" class="sphx-glr-backref-module-math sphx-glr-backref-type-py-function"><span class="n">math</span><span class="o">.</span><span class="n">sin</span></a><span class="p">(</span><span class="n">theta</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">math</span><span class="o">.</span><span class="n">pi</span></a><span class="p">)</span>
+                    <span class="n">fz</span> <span class="o">=</span> <span class="n">force_mag</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/math.html#math.cos" title="math.cos" class="sphx-glr-backref-module-math sphx-glr-backref-type-py-function"><span class="n">math</span><span class="o">.</span><span class="n">cos</span></a><span class="p">(</span><span class="n">theta</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">math</span><span class="o">.</span><span class="n">pi</span></a><span class="p">)</span>
+                    <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">y</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">z</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">fx</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">fy</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">fz</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_file_base_name</span></a> <span class="o">=</span> <span class="s2">&quot;source&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_file_name</span></a> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_file_base_name</span></a><span class="si">}</span><span class="s2">.scdt&quot;</span>
+<span class="n">create_source_file</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_file_name</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/fluid_swirl_point_cloud.png"><img alt="../../_images/fluid_swirl_point_cloud.png" class="align-center" src="../../_images/fluid_swirl_point_cloud.png" style="width: 500pt;" />
+</a>
+</section>
+<section id="set-up-the-coupled-analysis">
+<h2>Set up the coupled analysis<a class="headerlink" href="#set-up-the-coupled-analysis" title="Link to this heading">#</a></h2>
+<p>System Coupling setup involves adding the SCDT file and
+Fluent solver session as participants, adding coupled
+interfaces and data transfers, and setting other coupled
+analysis properties.</p>
+<p>Add participants</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_name</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span><span class="n">input_file</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_file_name</span></a><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_name</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span><span class="n">participant_session</span><span class="o">=</span><span class="n">fluent</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Feature already enabled.
+</pre></div>
+</div>
+</section>
+<section id="add-a-coupling-interface-and-data-transfers">
+<h2>Add a coupling interface and data transfers<a class="headerlink" href="#add-a-coupling-interface-and-data-transfers" title="Link to this heading">#</a></h2>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add a coupling interface for SCDT file -&gt; Fluent</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">interface_name</span></a> <span class="o">=</span> <span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_interface</span><span class="p">(</span>
+    <span class="n">side_one_participant</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">source_name</span></a><span class="p">,</span>
+    <span class="n">side_one_regions</span><span class="o">=</span><span class="p">[</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">src_file_base_name</span></a><span class="p">],</span>
+    <span class="n">side_two_participant</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fluid_name</span></a><span class="p">,</span>
+    <span class="n">side_two_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;tube_solid&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Add force data transfer.</span>
+<span class="c1"># Use System Coupling expression to combine force field</span>
+<span class="c1"># components in the SCDT file into a vector.</span>
+<span class="c1"># System Coupling will automatically convert force density</span>
+<span class="c1"># values on the source (defined in [N/m^3]) to force</span>
+<span class="c1"># values on the target (defined in [N]).</span>
+<span class="n">syc</span><span class="o">.</span><span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+    <span class="n">interface</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">interface_name</span></a><span class="p">,</span>
+    <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;Two&quot;</span><span class="p">,</span>
+    <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;lorentz-force&quot;</span><span class="p">,</span>
+    <span class="n">value</span><span class="o">=</span><span class="s2">&quot;vector(Variable1 * 1.0 [N], Variable2 * 1.0 [N], Variable3 * 1.0 [N])&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&#39;lorentz-force&#39;
+</pre></div>
+</div>
+</section>
+</section>
+<section id="solution">
+<h1>Solution<a class="headerlink" href="#solution" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">syc</span><span class="o">.</span><span class="n">solution</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Successfully connected to System Coupling
+
+Initialize using the hybrid initialization method.
+
+Checking case topology...
+-This case has both inlets &amp; outlets
+-Pressure information is not available at the boundaries.
+ Case will be initialized with constant pressure
+
+        iter            scalar-0
+
+        1               1.000000e+00
+        2               3.723864e-04
+        3               5.018576e-05
+        4               1.453430e-05
+        5               6.488364e-05
+        6               9.772111e-06
+        7               1.458092e-05
+        8               3.472076e-06
+        9               3.392149e-05
+        10              4.737182e-06
+
+Hybrid initialization is done.
+during Hybrid Initialization.
+
+NOTE: System Coupling analysis settings will override Fluent calculation settings
+
+Total loss on zone     2 is   0.00e+00 (watt)
+
+ Force Sumx on zone     2 is   0.00e+00 (newton)
+
+ Force Sumy on zone     2 is   0.00e+00 (newton)
+
+ Force Sumz on zone     2 is   0.00e+00 (newton)
+
+COUPLING STEP = 1        COUPLING ITERATION = 1
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+     1  1.0000e+00  1.3645e-03  4.1911e-03  4.2149e-03  9.4436e-17  4.5149e-01  9.9571e-01  0:00:25  199
+     2  3.6737e-01  1.4453e-03  2.2860e-03  2.2996e-03  1.4126e-16  1.0928e-01  1.0673e-01  0:00:26  198
+     3  1.8510e-01  1.3367e-03  1.1793e-03  1.1858e-03  1.5230e-16  7.9191e-02  6.5827e-02  0:00:26  197
+     4  1.8358e-01  1.1931e-03  6.0675e-04  6.1069e-04  1.5492e-16  6.0262e-02  3.2896e-02  0:00:25  196
+     5  1.5209e-01  1.0800e-03  3.1590e-04  3.1846e-04  1.5359e-16  5.1316e-02  9.7956e-03  0:00:25  195
+     6  1.2111e-01  9.7166e-04  1.6851e-04  1.7063e-04  1.5456e-16  4.5504e-02  7.6648e-03  0:00:25  194
+     7  9.5275e-02  8.6136e-04  1.0642e-04  1.0838e-04  1.5407e-16  3.9397e-02  1.1723e-02  0:00:25  193
+     8  7.5063e-02  7.5717e-04  7.5111e-05  7.6179e-05  1.5617e-16  3.3764e-02  1.2701e-02  0:00:24  192
+     9  5.9587e-02  6.5883e-04  4.7534e-05  4.8334e-05  1.5385e-16  2.9388e-02  1.2011e-02  0:00:25  191
+    10  4.7091e-02  5.5845e-04  3.1170e-05  3.1608e-05  1.5430e-16  2.6185e-02  1.0506e-02  0:00:26  190
+    11  3.5200e-02  4.4126e-04  2.5621e-05  2.5760e-05  1.5497e-16  2.2326e-02  8.9037e-03  0:00:27  189
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+    12  2.8222e-02  3.5379e-04  2.2316e-05  2.2352e-05  1.5547e-16  1.8904e-02  7.5121e-03  0:00:27  188
+    13  2.5706e-02  3.0061e-04  1.8675e-05  1.8805e-05  1.5639e-16  1.6224e-02  6.2069e-03  0:00:27  187
+    14  2.5158e-02  2.6042e-04  1.6240e-05  1.6389e-05  1.5467e-16  1.3982e-02  5.0959e-03  0:00:27  186
+    15  2.5023e-02  2.3093e-04  1.4013e-05  1.4159e-05  1.5372e-16  1.2115e-02  4.3281e-03  0:00:27  185
+    16  2.4790e-02  2.0903e-04  1.2409e-05  1.2526e-05  1.5286e-16  1.0533e-02  3.9334e-03  0:00:27  184
+    17  2.4197e-02  1.9411e-04  1.1053e-05  1.1127e-05  1.5222e-16  9.2059e-03  3.7498e-03  0:00:26  183
+    18  2.3439e-02  1.8267e-04  1.0198e-05  1.0308e-05  1.5278e-16  8.0870e-03  3.5424e-03  0:00:26  182
+    19  2.2352e-02  1.7397e-04  9.5692e-06  9.7209e-06  1.5180e-16  7.2005e-03  3.3093e-03  0:00:26  181
+    20  2.1140e-02  1.6667e-04  9.1387e-06  9.3248e-06  1.5305e-16  6.4824e-03  3.0593e-03  0:00:26  180
+    21  1.9839e-02  1.6016e-04  8.7062e-06  8.9227e-06  1.5379e-16  5.8671e-03  2.8072e-03  0:00:26  179
+    22  1.8526e-02  1.5408e-04  8.2893e-06  8.4928e-06  1.5485e-16  5.3264e-03  2.5594e-03  0:00:25  178
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+    23  1.7245e-02  1.4818e-04  7.8842e-06  8.0623e-06  1.5320e-16  4.8622e-03  2.3480e-03  0:00:25  177
+    24  1.6036e-02  1.4250e-04  7.4660e-06  7.6131e-06  1.5444e-16  4.4695e-03  2.1969e-03  0:00:25  176
+    25  1.4953e-02  1.3736e-04  6.9762e-06  7.0953e-06  1.5559e-16  4.1325e-03  2.0563e-03  0:00:41  175
+    26  1.3932e-02  1.3276e-04  6.5113e-06  6.5904e-06  1.5416e-16  3.8424e-03  1.9159e-03  0:00:37  174
+    27  1.2971e-02  1.2867e-04  6.0731e-06  6.1152e-06  1.5602e-16  3.5906e-03  1.7812e-03  0:00:35  173
+    28  1.2090e-02  1.2469e-04  5.6763e-06  5.6993e-06  1.5545e-16  3.3692e-03  1.6532e-03  0:00:33  172
+    29  1.1282e-02  1.2065e-04  5.3216e-06  5.3565e-06  1.5563e-16  3.1836e-03  1.5341e-03  0:00:31  171
+    30  1.0547e-02  1.1654e-04  5.0272e-06  5.0738e-06  1.5514e-16  3.0301e-03  1.4271e-03  0:00:29  170
+    31  9.8966e-03  1.1248e-04  4.7837e-06  4.8287e-06  1.5374e-16  2.8890e-03  1.3310e-03  0:00:28  169
+    32  9.3047e-03  1.0846e-04  4.5872e-06  4.6403e-06  1.5417e-16  2.7523e-03  1.2467e-03  0:00:27  168
+    33  8.7829e-03  1.0457e-04  4.4328e-06  4.4878e-06  1.5515e-16  2.6189e-03  1.1724e-03  0:00:26  167
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+    34  8.3189e-03  1.0073e-04  4.2989e-06  4.3399e-06  1.5464e-16  2.4892e-03  1.1050e-03  0:00:26  166
+    35  7.9072e-03  9.6887e-05  4.1791e-06  4.1934e-06  1.5503e-16  2.3634e-03  1.0425e-03  0:00:25  165
+    36  7.5430e-03  9.3013e-05  4.0619e-06  4.0711e-06  1.5410e-16  2.2415e-03  9.7059e-04  0:00:24  164
+    37  7.1149e-03  8.8730e-05  3.9650e-06  3.9646e-06  1.5239e-16  2.1226e-03  9.1052e-04  0:00:24  163
+    38  6.7641e-03  8.4527e-05  3.8578e-06  3.8594e-06  1.5198e-16  2.0059e-03  8.5443e-04  0:00:23  162
+    39  6.4503e-03  8.0378e-05  3.7466e-06  3.7572e-06  1.5492e-16  1.8925e-03  8.0058e-04  0:00:23  161
+    40  6.1552e-03  7.6303e-05  3.6328e-06  3.6549e-06  1.5278e-16  1.7822e-03  7.4841e-04  0:00:22  160
+    41  5.8732e-03  7.2333e-05  3.5267e-06  3.5534e-06  1.5453e-16  1.6750e-03  6.9731e-04  0:00:22  159
+    42  5.5968e-03  6.8422e-05  3.4376e-06  3.4520e-06  1.5528e-16  1.5711e-03  6.4755e-04  0:00:22  158
+    43  5.3282e-03  6.4579e-05  3.3344e-06  3.3559e-06  1.5360e-16  1.4705e-03  5.9978e-04  0:00:21  157
+    44  5.0585e-03  6.0847e-05  3.2264e-06  3.2549e-06  1.5223e-16  1.3731e-03  5.5461e-04  0:00:21  156
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+    45  4.7868e-03  5.7224e-05  3.1240e-06  3.1415e-06  1.5290e-16  1.2789e-03  5.1231e-04  0:00:21  155
+    46  4.5193e-03  5.3709e-05  3.0259e-06  3.0189e-06  1.5350e-16  1.1882e-03  4.7362e-04  0:00:21  154
+    47  4.2562e-03  5.0337e-05  2.9192e-06  2.8959e-06  1.5216e-16  1.1018e-03  4.3765e-04  0:00:20  153
+    48  3.9996e-03  4.7089e-05  2.8148e-06  2.7874e-06  1.5198e-16  1.0200e-03  4.0374e-04  0:00:20  152
+    49  3.7514e-03  4.3995e-05  2.6964e-06  2.6803e-06  1.5061e-16  9.4267e-04  3.7224e-04  0:00:20  151
+    50  3.5118e-03  4.1031e-05  2.5791e-06  2.5814e-06  1.4958e-16  8.6987e-04  3.4270e-04  0:00:20  150
+    51  3.2846e-03  3.8205e-05  2.4641e-06  2.4884e-06  1.5122e-16  8.0163e-04  3.1497e-04  0:00:20  149
+    52  3.0701e-03  3.5534e-05  2.3555e-06  2.3912e-06  1.5051e-16  7.3773e-04  2.8912e-04  0:00:20  148
+    53  2.8660e-03  3.3005e-05  2.2554e-06  2.2979e-06  1.4939e-16  6.7809e-04  2.6487e-04  0:00:19  147
+    54  2.6754e-03  3.0620e-05  2.1647e-06  2.2036e-06  1.5091e-16  6.2262e-04  2.4241e-04  0:00:19  146
+    55  2.4967e-03  2.8376e-05  2.0821e-06  2.1201e-06  1.5021e-16  5.7103e-04  2.2167e-04  0:00:19  145
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+    56  2.3312e-03  2.6294e-05  1.9978e-06  2.0359e-06  1.5157e-16  5.2303e-04  2.0278e-04  0:00:19  144
+    57  2.1769e-03  2.4370e-05  1.9083e-06  1.9484e-06  1.5070e-16  4.7848e-04  1.8572e-04  0:00:18  143
+    58  2.0337e-03  2.2592e-05  1.8225e-06  1.8626e-06  1.5266e-16  4.3732e-04  1.7022e-04  0:00:18  142
+    59  1.9009e-03  2.0947e-05  1.7392e-06  1.7738e-06  1.5194e-16  3.9928e-04  1.5611e-04  0:00:18  141
+    60  1.7763e-03  1.9416e-05  1.6567e-06  1.6879e-06  1.5441e-16  3.6414e-04  1.4323e-04  0:00:18  140
+    61  1.6604e-03  1.8008e-05  1.5768e-06  1.6053e-06  1.5345e-16  3.3203e-04  1.3145e-04  0:00:18  139
+    62  1.5534e-03  1.6708e-05  1.4949e-06  1.5283e-06  1.5191e-16  3.0280e-04  1.2069e-04  0:00:18  138
+    63  1.4532e-03  1.5511e-05  1.4184e-06  1.4546e-06  1.5193e-16  2.7623e-04  1.1080e-04  0:00:18  137
+    64  1.3583e-03  1.4411e-05  1.3450e-06  1.3854e-06  1.5074e-16  2.5208e-04  1.0173e-04  0:00:18  136
+    65  1.2682e-03  1.3389e-05  1.2813e-06  1.3225e-06  1.5002e-16  2.3012e-04  9.3399e-05  0:00:18  135
+    66  1.1841e-03  1.2442e-05  1.2182e-06  1.2573e-06  1.5037e-16  2.1013e-04  8.5769e-05  0:00:18  134
+
+  iter  continuity  x-velocity  y-velocity  z-velocity      energy           k       omega     time/iter
+    67  1.1064e-03  1.1566e-05  1.1582e-06  1.1924e-06  1.5175e-16  1.9196e-04  7.8772e-05  0:00:17  133
+    68  1.0339e-03  1.0756e-05  1.0983e-06  1.1267e-06  1.5016e-16  1.7544e-04  7.2343e-05  0:00:17  132
+    69  9.6633e-04  1.0007e-05  1.0390e-06  1.0647e-06  1.5081e-16  1.6035e-04  6.6431e-05  0:00:17  131
+!   69 solution is converged
+
+Writing to 9b1e4a90b426:&quot;/home/container/workdir/.//water_pipe_flow-0.cas.h5&quot; in NODE0 mode and compression level 1 ...
+Grouping cells for Laplace smoothing ...
+       48575 cells,     1 zone  ...
+      116126 faces,     4 zones ...
+       20404 nodes,     1 zone  ...
+  Done.
+Done.
+
+Additional data file quantities are not supported when writing in the default CFF format (.dat.h5 files).
+
+
+Writing to 9b1e4a90b426:&quot;/home/container/workdir/.//water_pipe_flow-0-00069.dat.h5&quot; in NODE0 mode and compression level 1 ...
+  Writing results.
+Done.
+
+Writing to 9b1e4a90b426:&quot;/home/container/workdir/.//water_pipe_flow-0.cas.h5&quot; in NODE0 mode and compression level 1 ...
+Grouping cells for Laplace smoothing ...
+       48575 cells,     1 zone  ...
+      116126 faces,     4 zones ...
+       20404 nodes,     1 zone  ...
+  Done.
+Done.
+
+Additional data file quantities are not supported when writing in the default CFF format (.dat.h5 files).
+
+
+Writing to 9b1e4a90b426:&quot;/home/container/workdir/.//water_pipe_flow-0-00069.dat.h5&quot; in NODE0 mode and compression level 1 ...
+  Writing results.
+Done.
+</pre></div>
+</div>
+</section>
+<section id="post-processing">
+<h1>Post-processing<a class="headerlink" href="#post-processing" title="Link to this heading">#</a></h1>
+<p>Generate an image with fluid flow streamlines using PyFluent post-processing.
+Note how the force values defined in the SCDT file induce the swirl in
+the fluid flow.</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">use_window_resolution</span><span class="o">.</span><span class="n">is_active</span><span class="p">():</span>
+    <span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">use_window_resolution</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">x_resolution</span> <span class="o">=</span> <span class="mi">1920</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">y_resolution</span> <span class="o">=</span> <span class="mi">1440</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">pathline</span><span class="p">[</span><span class="s2">&quot;pathline&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">pathline</span> <span class="o">=</span> <span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">pathline</span><span class="p">[</span><span class="s2">&quot;pathline&quot;</span><span class="p">]</span>
+<span class="n">pathline</span><span class="o">.</span><span class="n">field</span> <span class="o">=</span> <span class="s2">&quot;velocity-magnitude&quot;</span>
+<span class="n">pathline</span><span class="o">.</span><span class="n">release_from_surfaces</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;in&quot;</span><span class="p">]</span>
+<span class="n">pathline</span><span class="o">.</span><span class="n">display</span><span class="p">()</span>
+
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">restore_view</span><span class="p">(</span><span class="n">view_name</span><span class="o">=</span><span class="s2">&quot;isometric&quot;</span><span class="p">)</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">views</span><span class="o">.</span><span class="n">auto_scale</span><span class="p">()</span>
+<span class="n">fluent</span><span class="o">.</span><span class="n">settings</span><span class="o">.</span><span class="n">results</span><span class="o">.</span><span class="n">graphics</span><span class="o">.</span><span class="n">picture</span><span class="o">.</span><span class="n">save_picture</span><span class="p">(</span>
+    <span class="n">file_name</span><span class="o">=</span><span class="s2">&quot;fluid_swirl_pathline.png&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>number tracked = 142, escaped = 71, incomplete = 71
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="../../_images/fluid_swirl_pathline.png"><img alt="../../_images/fluid_swirl_pathline.png" class="align-center" src="../../_images/fluid_swirl_pathline.png" style="width: 500pt;" />
+</a>
+</section>
+<section id="exit">
+<h1>Exit<a class="headerlink" href="#exit" title="Link to this heading">#</a></h1>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+<span class="n">syc</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (1 minutes 46.664 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-00-systemcoupling-fluid-swirl-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/78c8a1a479f0056246daf1abd94b3f96/fluid_swirl.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">fluid_swirl.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/822a75498270827d82ca7ba357aff787/fluid_swirl.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">fluid_swirl.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fdec7d82f30ffc1124eadde4cc46a5e5/fluid_swirl.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">fluid_swirl.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fluid swirl</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#import-modules-download-files-launch-products">Import modules, download files, launch products</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-required-imports">Perform required imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#download-input-files">Download input files</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#launch-products">Launch products</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-fluid-analysis">Set up the fluid analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#generate-the-scdt-file">Generate the SCDT file</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-coupled-analysis">Set up the coupled analysis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-a-coupling-interface-and-data-transfers">Add a coupling interface and data transfers</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#solution">Solution</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#post-processing">Post-processing</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#exit">Exit</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+
+  
+  <nav class="tocsection editthispage" aria-label="Edit this page">
+    <a href="https://github.com/pyansys/pysystem-coupling/edit/main/doc/source/examples/00-systemcoupling/fluid_swirl.rst" rel="noopener noreferrer">
+      <i class="fa-solid fa-pencil" aria-hidden="true"></i>
+      
+      
+        
+          Edit on GitHub
+        
+      
+    </a>
+  </nav>
+</div>
+
+  <div class="sidebar-secondary-item">
+  <div role="note" aria-label="source link">
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/examples/00-systemcoupling/fluid_swirl.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=0790524f97105ba85085"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=0790524f97105ba85085"></script>
+
+
+  <!-- Include desired assets -->
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.7/require.min.js"></script>
+
+<script>
+// Passing the search options to the search.js file
+const SEARCH_OPTIONS = JSON.parse('{"keys": ["title", "text", "objectID"], "limit": 10, "threshold": 0.2}');
+const SEARCH_FILE = "../../_static/search.json";
+const ADVANCE_SEARCH_PATH = "../../search.html";
+const EXTRA_SOURCES = JSON.parse('""');
+</script>
+
+
+<script src="../../_static/js/search.js"></script>
+
+  
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026 Synopsys, Inc. and ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<!--
+  Theme Version Footer
+  Displays the Sphinx theme version and the last updated date.
+  Accessibility and semantic improvements included.
+-->
+<footer class="theme-version" aria-label="Theme version and last update">
+  <span>
+    
+      Built with the
+      <a href="https://sphinxdocs.ansys.com/version/stable/index.html" target="_blank" rel="noopener noreferrer">
+        Ansys Sphinx Theme
+      </a>
+      1.9.0.
+    
+  </span>
+  <br />
+  <span>Last updated on <time id="ast_build_date"></time></span>
+</footer>
+<script>
+  // Set the last updated date in a readable format
+  (function() {
+    var options = { day: "numeric", month: "long", year: "numeric" };
+    var ast_lastModifiedDate = new Date(document.lastModified);
+    var ast_build_date = ast_lastModifiedDate.toLocaleDateString("en-US", options);
+    var dateElem = document.getElementById("ast_build_date");
+    if (dateElem) {
+      dateElem.textContent = ast_build_date;
+    }
+  })();
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

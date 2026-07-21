@@ -1,0 +1,46 @@
+:orphan:
+
+.. _region_child:
+
+region_child
+============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.region_child
+
+.. autoclass:: region_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+topology : `str`
+    Region topology type.
+    
+    Allowed values:
+    
+    - "Undefined" (FMU participants only)
+    - "Surface"
+    - "Volume" (3D participants only)
+
+input_variables : :ref:`StringListType<string_list_type>`
+    Input variables for the region.
+
+output_variables : :ref:`StringListType<string_list_type>`
+    Output variables for the region.
+
+display_name : `str`
+    Display name of the region.
+
+region_discretization_type : `str`
+    Region discretization type ("Mesh Region" or "Point Cloud Region").
+
+.. rubric:: Included in:
+
+======================   ====================================================
+
+Parent                                                                Summary
+
+======================   ====================================================
+:ref:`region <region>`       Configure a region for the coupling participant.
+
+======================   ====================================================
+

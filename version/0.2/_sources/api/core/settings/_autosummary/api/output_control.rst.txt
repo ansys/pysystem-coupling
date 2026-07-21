@@ -1,0 +1,84 @@
+:orphan:
+
+.. _output_control:
+
+output_control
+==============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.output_control
+
+.. autoclass:: output_control
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Specifies when restart points are generated.
+    
+    Allowed values (step-based analyses only):
+    
+    - "LastStep" - Generates a restart point only for the last
+      coupling step completed.
+    - "EveryStep" -
+      Generate a restart point at the end of every coupling step.
+    - "StepInterval" - Generates a restart point at the end of
+      coupling steps at the interval specified by the output
+      frequency setting.
+    
+    Allowed values (iteration-based analyses only):
+    
+    - "LastIteration" - Generates a restart point only for the
+      last coupling iteration completed.
+    - "EveryIteration" - Generate a restart point at the end
+      of every coupling iteration.
+    - "IterationInterval" - Generates a restart point at the
+      end of coupling iterations at the interval specified by
+      the output frequency setting.
+
+generate_csv_chart_output : `bool`
+    Write chart data in CSV format during solve.
+
+write_initial_snapshot : `bool`
+    Write initial snapshot.
+
+transcript_precision : `int`
+    Number of digits after decimal point in transcript.
+
+write_diagnostics : `bool`
+    Write transfer diagnostics dictionary to file.
+
+write_weights_matrix : `bool`
+    Write mapping weights to file after calculation.
+
+write_residuals : `bool`
+    Write residuals to results files.
+
+output_frequency : `int`
+    Specify output frequency.
+
+.. rubric:: Children
+
+==============================================   =====================================================
+
+Child                                                                                          Summary
+
+==============================================   =====================================================
+:ref:`results <results>`                             Configures output of postprocessing results data.
+
+:ref:`ascii_output <ascii_output>`                                     Output interface data as ASCII.
+
+:ref:`live_visualization <live_visualization>`          Configures live visualization via EnSight DVS.
+
+==============================================   =====================================================
+
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

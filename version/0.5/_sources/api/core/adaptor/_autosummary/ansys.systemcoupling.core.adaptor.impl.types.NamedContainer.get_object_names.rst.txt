@@ -1,0 +1,6 @@
+get\_object\_names
+==================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: NamedContainer.get_object_names

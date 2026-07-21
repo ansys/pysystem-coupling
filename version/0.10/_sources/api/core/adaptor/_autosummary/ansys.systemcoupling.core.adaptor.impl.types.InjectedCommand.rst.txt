@@ -1,0 +1,38 @@
+.. _dm_InjectedCommand:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.InjectedCommand
+============================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: InjectedCommand
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~InjectedCommand.__init__
+      ~InjectedCommand.set_sycproxy
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~InjectedCommand.cmd_name
+      ~InjectedCommand.obj_name
+      ~InjectedCommand.path
+      ~InjectedCommand.syc_name
+      ~InjectedCommand.syc_path
+      ~InjectedCommand.sycproxy
+   
+   

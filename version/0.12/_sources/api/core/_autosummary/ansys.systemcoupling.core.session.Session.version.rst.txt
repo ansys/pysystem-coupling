@@ -1,0 +1,6 @@
+version
+=======
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. autoproperty:: Session.version

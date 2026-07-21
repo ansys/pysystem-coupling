@@ -1,0 +1,37 @@
+.. _dm_PathCommand:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.PathCommand
+========================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: PathCommand
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~PathCommand.__init__
+      ~PathCommand.set_sycproxy
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PathCommand.obj_name
+      ~PathCommand.path
+      ~PathCommand.syc_name
+      ~PathCommand.syc_path
+      ~PathCommand.sycproxy
+   
+   

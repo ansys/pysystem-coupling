@@ -1,0 +1,23 @@
+:orphan:
+
+.. _shutdown:
+
+shutdown
+========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.shutdown
+
+.. autoclass:: shutdown
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+====================================   =================
+
+Parent                                           Summary
+
+====================================   =================
+:ref:`solution_root <solution_root>`       'root' object
+
+====================================   =================
+
