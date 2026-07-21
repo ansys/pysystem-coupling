@@ -40,6 +40,16 @@ SYC_VERSION_DOT = f"{SYC_MAJOR_VERSION}.{SYC_MINOR_VERSION}"
 SYC_VERSION_UNDERSCORE = f"{SYC_MAJOR_VERSION}_{SYC_MINOR_VERSION}"
 
 
+def is_a_latest_version(version: str) -> bool:
+    """Determine if the version corresponds to a "latest"-like image tag.
+
+    This will usually simply be "latest" but it can also be a tag starting with
+    "latest_". This is to allow variants that might be useful during debugging
+    investigations for example.
+    """
+    return version == "latest" or version.startswith("latest_")
+
+
 def normalize_version(version: str) -> Tuple[int, int]:
     """Utility to convert a version string provided in a number of
     possible formats into pair of ints representing the major and minor version

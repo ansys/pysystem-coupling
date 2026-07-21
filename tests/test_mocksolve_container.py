@@ -258,6 +258,19 @@ def _run_licensing_check_diagnostics() -> None:
     ]
     _run_and_log_command(licensing_check_cmd)
 
+    licensing_client_cmd = [
+        "docker",
+        "exec",
+        container_id,
+        "bash",
+        "-lc",
+        (
+            "/syc/Core_Dependencies/licensingclient/licensingclient/"
+            "linx64/ansysli_util -checkout ansys"
+        ),
+    ]
+    _run_and_log_command(licensing_client_cmd)
+
 
 def _find_syc_container_id() -> str | None:
     image_tag = os.getenv("SYC_IMAGE_TAG", "latest")
