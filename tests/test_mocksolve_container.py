@@ -21,6 +21,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import os
+import subprocess  # nosec B404
 import time
 
 import ansys.systemcoupling.core as pysystemcoupling
@@ -112,8 +114,26 @@ def test_partlib_cosim_volume_simple(image_tag_env) -> None:
         output_handler = _OutputHandler()
         syc.start_output(handle_output=output_handler.on_line)
 
+        _run_license_network_diagnostics()
+        _run_licensing_check_diagnostics()
+
+        # assert False, "Force failure to capture output for debugging"
         solution = syc.solution
-        solution.solve()
+        try:
+            solution.solve()
+            print("\n\n**OUTPUT LINES** captured during the solution:")
+            time.sleep(3)  # Give time for any remaining output to be captured
+            for line in output_handler.lines:
+                print(line)
+            print("<< End of captured output >>")
+        except Exception as e:
+            print(f"An error occurred during solution: {e}")
+            print("\n\n**OUTPUT LINES** captured during the solution:")
+            time.sleep(3)  # Give time for any remaining output to be captured
+            for line in output_handler.lines:
+                print(line)
+            print("<< End of captured output >>")
+            raise
         plotter: Plotter = solution.show_plot()
         time.sleep(5)
         plotter.close()
@@ -154,3 +174,133 @@ class _OutputHandler:
 
     def on_line(self, line):
         self.lines.append(line)
+
+
+def _run_license_network_diagnostics() -> None:
+    print("Running pre-solve license network diagnostics...")
+
+    license_spec = os.getenv("ANSYSLMD_LICENSE_FILE", "")
+    if "@" not in license_spec:
+        print(
+            "Skipping diagnostics: ANSYSLMD_LICENSE_FILE is missing or "
+            "not in '<port>@<server>' format."
+        )
+        return
+
+    license_server = license_spec.split("@", 1)[1].split(",", 1)[0].strip()
+    if not license_server:
+        print("Skipping diagnostics: extracted license server name is empty.")
+        return
+
+    container_id = _find_syc_container_id()
+    if not container_id:
+        print(
+            "Skipping diagnostics: could not locate running System Coupling container."
+        )
+        return
+
+    print(f"Using System Coupling container: {container_id}")
+    print(f"Using license server: {license_server}")
+
+    install_nc_cmd = ["docker", "exec", container_id, "yum", "install", "-y", "nc"]
+    install_nc_result = _run_and_log_command(install_nc_cmd)
+    if install_nc_result.returncode != 0:
+        print("Initial nc installation failed. Trying nmap-ncat package...")
+        install_nmap_ncat_cmd = [
+            "docker",
+            "exec",
+            container_id,
+            "yum",
+            "install",
+            "-y",
+            "nmap-ncat",
+        ]
+        _run_and_log_command(install_nmap_ncat_cmd)
+
+    for port in (34583, 1055):
+        nc_cmd = [
+            "docker",
+            "exec",
+            container_id,
+            "nc",
+            "-zv",
+            license_server,
+            str(port),
+        ]
+        _run_and_log_command(nc_cmd)
+
+
+def _run_licensing_check_diagnostics() -> None:
+    print("Running LicensingCheck diagnostics...")
+
+    container_id = _find_syc_container_id()
+    if not container_id:
+        print(
+            "Skipping LicensingCheck diagnostics: could not locate running "
+            "System Coupling container."
+        )
+        return
+
+    licensing_check_cmd = [
+        "docker",
+        "exec",
+        container_id,
+        "bash",
+        "-lc",
+        (
+            "export ANSYSCL271_DIR=/syc/Core_Dependencies/licensingclient/licensingclient && "
+            "cd /syc/SystemCoupling/Builds/linx64/Licensing && "
+            "export LD_LIBRARY_PATH=/syc/SystemCoupling/runTime/linx64/bin/thirdparty:"
+            "/syc/SystemCoupling/runTime/linx64/bin:"
+            "/syc/SystemCoupling/runTime/linx64/bin/compiler && "
+            "./LicensingCheck"
+        ),
+    ]
+    _run_and_log_command(licensing_check_cmd)
+
+    licensing_client_cmd = [
+        "docker",
+        "exec",
+        container_id,
+        "bash",
+        "-lc",
+        (
+            "/syc/Core_Dependencies/licensingclient/licensingclient/"
+            "linx64/ansysli_util -checkout ansys"
+        ),
+    ]
+    _run_and_log_command(licensing_client_cmd)
+
+
+def _find_syc_container_id() -> str | None:
+    image_tag = os.getenv("SYC_IMAGE_TAG", "latest")
+    image_name = f"ghcr.io/ansys/pysystem-coupling:{image_tag}"
+    cmd = [
+        "docker",
+        "ps",
+        "--filter",
+        f"ancestor={image_name}",
+        "--format",
+        "{{.ID}}",
+    ]
+    result = _run_and_log_command(cmd)
+    if result.returncode != 0:
+        return None
+
+    ids = [line.strip() for line in result.stdout.splitlines() if line.strip()]
+    if not ids:
+        return None
+    if len(ids) > 1:
+        print(f"Multiple matching containers found. Using first: {ids[0]}")
+    return ids[0]
+
+
+def _run_and_log_command(cmd: list[str]) -> subprocess.CompletedProcess[str]:
+    print(f"$ {' '.join(cmd)}")
+    result = subprocess.run(cmd, capture_output=True, text=True)  # nosec B603
+    if result.stdout:
+        print(result.stdout.rstrip())
+    if result.stderr:
+        print(result.stderr.rstrip())
+    print(f"[returncode={result.returncode}]")
+    return result

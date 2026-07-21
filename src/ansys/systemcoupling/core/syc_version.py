@@ -29,9 +29,25 @@ from typing import Tuple
 SYC_MAJOR_VERSION = 26
 SYC_MINOR_VERSION = 1
 
+# Version for "latest" tag in container images.
+SYC_MAJOR_LATEST_VERSION = 27
+SYC_MINOR_LATEST_VERSION = 1
+
+
 SYC_VERSION_CONCAT = f"{SYC_MAJOR_VERSION}{SYC_MINOR_VERSION}"
+SYC_LATEST_VERSION_CONCAT = f"{SYC_MAJOR_LATEST_VERSION}{SYC_MINOR_LATEST_VERSION}"
 SYC_VERSION_DOT = f"{SYC_MAJOR_VERSION}.{SYC_MINOR_VERSION}"
 SYC_VERSION_UNDERSCORE = f"{SYC_MAJOR_VERSION}_{SYC_MINOR_VERSION}"
+
+
+def is_a_latest_version(version: str) -> bool:
+    """Determine if the version corresponds to a "latest"-like image tag.
+
+    This will usually simply be "latest" but it can also be a tag starting with
+    "latest_". This is to allow variants that might be useful during debugging
+    investigations for example.
+    """
+    return version == "latest" or (version and version.startswith("latest_"))
 
 
 def normalize_version(version: str) -> Tuple[int, int]:

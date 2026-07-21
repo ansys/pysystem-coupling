@@ -25,7 +25,7 @@ import os
 import time
 
 import ansys.systemcoupling.core as pysystemcoupling
-from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT
+from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT, is_a_latest_version
 
 # NB: if running locally (not in GH workflow), it might be necessary to set
 #     SYC_IMAGE_TAG env var to "latest" for these tests if the
@@ -40,7 +40,7 @@ def test_start_and_connect(image_tag_env) -> None:
 def test_start_and_connect_explicit_version(image_tag_env) -> None:
     # Expect SYC_IMAGE_TAG to be set in GH workflow; otherwise default to current
     image_tag = os.getenv("SYC_IMAGE_TAG", f"v{SYC_VERSION_DOT}.0")
-    if image_tag != "latest":
+    if not is_a_latest_version(image_tag):
         assert image_tag.startswith("v") and (
             image_tag.endswith(".0") or "-sp" in image_tag
         )

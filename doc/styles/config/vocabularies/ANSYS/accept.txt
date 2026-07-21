@@ -39,6 +39,7 @@ SCP
 solution_control
 Synopsys
 synopsys
+thirdparty
 THIRDPARTY
 Windows
 Windows Subsystem

@@ -25,7 +25,11 @@ import os
 from pathlib import Path
 import subprocess  # nosec B404
 
-from ansys.systemcoupling.core.syc_version import SYC_VERSION_DOT, normalize_version
+from ansys.systemcoupling.core.syc_version import (
+    SYC_VERSION_DOT,
+    is_a_latest_version,
+    normalize_version,
+)
 from ansys.systemcoupling.core.util.logging import LOG
 
 _MPI_VERSION_VAR = "FLUENT_INTEL_MPI_VERSION"
@@ -44,7 +48,7 @@ def _major_minor_sp_from_version(version: str) -> tuple[int, int, str]:
 
 
 def _image_tag(version: str) -> str:
-    if version == "latest":
+    if is_a_latest_version(version):
         return version
     major, minor, sp_suffix = _major_minor_sp_from_version(version)
 
@@ -84,7 +88,7 @@ def start_container(
 
     # Now use the image tag as definitive source of version info to
     # decide on transport args.
-    is_latest = image_tag == "latest"
+    is_latest = is_a_latest_version(image_tag)
     is_github_action = os.getenv("GITHUB_ACTIONS") == "true"
     if not is_latest:
         major, minor, sp_suffix = _major_minor_sp_from_version(image_tag)
