@@ -47,7 +47,7 @@ def is_a_latest_version(version: str) -> bool:
     "latest_". This is to allow variants that might be useful during debugging
     investigations for example.
     """
-    return version == "latest" or version.startswith("latest_")
+    return version == "latest" or (version and version.startswith("latest_"))
 
 
 def normalize_version(version: str) -> Tuple[int, int]:
