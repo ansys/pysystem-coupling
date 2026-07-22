@@ -164,6 +164,8 @@ def start_container(
         # timeout settings fix some license errors we were seeing
         run_args.insert(idx, "ANSYSCL_TIMEOUT_RESPONSE=300")
         run_args.insert(idx, "-e")
+        run_args.insert(idx, "ANSYSCL_TIMEOUT_CONNECT=60")
+        run_args.insert(idx, "-e")
         run_args.insert(idx, "ANSYSLI_TIMEOUT_FLEXLM=60")
         run_args.insert(idx, "-e")
 
