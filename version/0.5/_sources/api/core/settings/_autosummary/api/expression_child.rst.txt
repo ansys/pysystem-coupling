@@ -1,0 +1,31 @@
+:orphan:
+
+.. _expression_child:
+
+expression_child
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.expression_child
+
+.. autoclass:: expression_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+expression_name : `str`
+    Name used to reference this expression from another expression
+
+expression_string : `str`
+    String defining the expression.
+
+.. rubric:: Included in:
+
+==============================   ==========================================================================
+
+Parent                                                                                              Summary
+
+==============================   ==========================================================================
+:ref:`expression <expression>`       Define a named expression that can be referenced in other expressions.
+
+==============================   ==========================================================================
+

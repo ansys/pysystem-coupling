@@ -1,0 +1,39 @@
+:orphan:
+
+.. _update_control:
+
+update_control
+==============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.update_control
+
+.. autoclass:: update_control
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Specifies how often the participant will perform updates.
+    
+    Possible values:
+    
+    - "ProgramControlled"
+    - "EveryIteration"
+    - "StepInterval"
+    - "Suspended"
+    - "FirstCouplingIteration" 
+
+update_frequency : `int`
+    Specify update frequency.
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

@@ -1,0 +1,107 @@
+:orphan:
+
+.. _mapping_control:
+
+mapping_control
+===============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.mapping_control
+
+.. autoclass:: mapping_control
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+stop_if_poor_intersection : `bool`
+    Controls whether to stop if the intersection is poor
+
+poor_intersection_threshold : :ref:`RealType<real_type>`
+    System Coupling terminates with an error if the intersected fractions are below this threshold (in both directions)
+
+face_alignment : `str`
+    Controls how face alignment is used during mapping.
+    
+    Allowed values:
+    
+    - "ProgramControlled" (default)
+    - "OppositeOrientation"
+    - "SameOrientation"
+    - "AnyOrientation" 
+
+absolute_gap_tolerance : :ref:`RealType<real_type>`
+    Absolute gap tolerance value.
+
+relative_gap_tolerance : :ref:`RealType<real_type>`
+    Maximum gap size relative to face size.
+
+small_weight_tolerance : :ref:`RealType<real_type>`
+    Relative tolerance used to control when weights are dropped.
+
+corner_tolerance : :ref:`RealType<real_type>`
+    Angle [degrees] between adjacent source mesh faces above which the
+    mapping algorithm will stop searching for mapping candidates.
+
+halo_tolerance : :ref:`RealType<real_type>`
+    If a face intersects but a target node lies outside of the source face, then
+    map the node if the projected distance to the face / sqrt(srcArea) is less
+    than this tolerance, otherwise leave as unmapped.
+
+conservative_reciprocity_factor : :ref:`RealType<real_type>`
+    Reciprocity blend factor for conservative mapping.
+
+profile_preserving_reciprocity_factor : :ref:`RealType<real_type>`
+    Reciprocity blend factor for profile-preserving mapping.
+
+conservative_intensive : `str`
+    Determines when the Intensive option is used for conservative mapping.
+    
+    Allowed values:
+    
+    - "ProgramControlled" (default)
+    - "Off"
+    - "On" 
+
+preserve_normal : `str`
+    Determines if the normal component of a vector is preserved.
+    
+    Allowed values:
+    
+    - "ProgramControlled" (default)
+    - "Off"
+    - "On" 
+
+conservation_fix_tolerance_volume : :ref:`RealType<real_type>`
+    Source element overlap fraction to trigger volume mapping conservation fix.
+    
+    0.0 is default. 1.0 effectively disables it.
+
+rbf_option : `str`
+    Controls radial basis function formulation.
+    
+    Allowed values:
+    
+    - "Gaussian" (default)
+    - "ThinPlateSpline" 
+
+rbf_shape_parameter : :ref:`RealType<real_type>`
+    Sets the shape parameter beta when using Gaussian radial basis functions.
+
+rbf_linear_correction : `bool`
+    Controls whether linear polynomial augmentation is added to the RBF stencil for
+    low order regular element types (tet, hex, pyramid, wedge).
+
+rbf_clipping_scale : :ref:`RealType<real_type>`
+    Length scale factor used to determine if source nodes are removed from RBF
+    stencil when too close.
+
+.. rubric:: Included in:
+
+==========================================================   ===================================
+
+Parent                                                                                   Summary
+
+==========================================================   ===================================
+:ref:`coupling_interface_child <coupling_interface_child>`       Configure a coupling interface.
+
+==========================================================   ===================================
+

@@ -1,0 +1,6 @@
+upload\_file
+============
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. automethod:: Session.upload_file

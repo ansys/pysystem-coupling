@@ -1,0 +1,6 @@
+ping
+====
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. automethod:: Session.ping

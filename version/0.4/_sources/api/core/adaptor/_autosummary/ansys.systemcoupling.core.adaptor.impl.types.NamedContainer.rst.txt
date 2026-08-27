@@ -1,0 +1,52 @@
+.. _dm_NamedContainer:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.NamedContainer
+===========================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: NamedContainer
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~NamedContainer.__init__
+      ~NamedContainer.create
+      ~NamedContainer.get_object_names
+      ~NamedContainer.get_property_state
+      ~NamedContainer.get_state
+      ~NamedContainer.items
+      ~NamedContainer.keys
+      ~NamedContainer.print_state
+      ~NamedContainer.set_property_state
+      ~NamedContainer.set_state
+      ~NamedContainer.set_sycproxy
+      ~NamedContainer.to_python_keys
+      ~NamedContainer.to_python_name
+      ~NamedContainer.to_syc_keys
+      ~NamedContainer.to_syc_name
+      ~NamedContainer.values
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~NamedContainer.command_names
+      ~NamedContainer.obj_name
+      ~NamedContainer.path
+      ~NamedContainer.syc_name
+      ~NamedContainer.syc_path
+      ~NamedContainer.sycproxy
+   
+   

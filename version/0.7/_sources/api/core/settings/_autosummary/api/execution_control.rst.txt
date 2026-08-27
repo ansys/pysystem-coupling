@@ -1,0 +1,107 @@
+:orphan:
+
+.. _execution_control:
+
+execution_control
+=================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.execution_control
+
+.. autoclass:: execution_control
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Method used to find the solver executable file to be used to start
+    the participant.
+    
+    - "ProgramControlled" - (Default) Find the executable based on the
+      participant type. Available whenever the participant type is not
+      set to "DEFAULT" or "EXTERNALDATA".
+    - "UserDefined" - User supplied settings are used to find the executable.
+    - "ExternallyManaged" - Typically used for workflows managed by
+      `WorkBench`.
+
+working_directory : `str`
+    Participant working directory.
+
+use_wrapper_script : `bool`
+    Specify whether to use System Coupling-provided wrapper script to set up the environment.
+
+python_script : `str`
+    Path to the Python script.
+
+executable : `str`
+    Path to participant executable.
+
+auto_distribution_settings : `bool`
+    Specify whether to use automatic distribution settings.
+
+use_ls_dyna_custom_executable : `bool`
+    Specify whether to use custom executable for LS-DYNA.
+
+ls_dyna_custom_executable : `str`
+    Path to LS-DYNA executable.
+
+ls_dyna_parallel_option : `str`
+    LS-DYNA Parallel Option.
+
+include_hpc_distribution_types : :ref:`StringListType<string_list_type>`
+    Include HPC distribution types for the distributed AEDT runs.
+
+number_of_cores_per_task : `int`
+    Specify number of parallel cores per task for parallel AEDT analysis.
+
+batch_options : `str`
+    Specify batch options for AEDT participant.
+
+additional_arguments : `str`
+    Additional command line arguments.
+
+parallel_fraction : :ref:`RealType<real_type>`
+    Fraction of available cores to use for this participant
+
+initial_input : `str`
+    Initial input.
+
+additional_restart_input_file : `str`
+    File containing MAPDL command snippets to modify the restarted run.
+
+gui_mode : `bool`
+    Run participant in graphical mode.
+
+base_output_file_name : `str`
+    Base output file name for the CFD Server or SCDT Server.
+
+overwrite_existing_files : `bool`
+    Flag indicating whether CFD Server should overwrite existing files.
+
+mass_normalized : `bool`
+    Controls whether mode shapes are mass normalized
+
+write_output : `bool`
+    Controls whether export scdt files for the SCDT Server
+
+.. rubric:: Children
+
+==================================   =================
+
+Child                                          Summary
+
+==================================   =================
+:ref:`fluent_input <fluent_input>`       Fluent input.
+
+==================================   =================
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

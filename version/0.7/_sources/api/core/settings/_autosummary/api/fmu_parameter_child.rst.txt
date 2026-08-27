@@ -1,0 +1,67 @@
+:orphan:
+
+.. _fmu_parameter_child:
+
+fmu_parameter_child
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.fmu_parameter_child
+
+.. autoclass:: fmu_parameter_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+data_type : `str`
+    UNDOCUMENTED
+
+participant_display_name : `str`
+    Parameter's display name as defined by the participant solver.
+
+display_name : `str`
+    Parameter's display name as defined in System Coupling.
+
+real_value : :ref:`RealType<real_type>`
+    Real data start value.
+
+real_min : :ref:`RealType<real_type>`
+    Real data minimum value.
+
+real_max : :ref:`RealType<real_type>`
+    Real data maximum value.
+
+integer_value : `int`
+    Integer data start value.
+
+integer_min : `int`
+    Integer data minimum value.
+
+integer_max : `int`
+    Integer data maximum value.
+
+logical_value : `bool`
+    Logical data start value.
+
+string_value : `str`
+    String data start value.
+
+enumeration_value : `int`
+    Enumeration data start value.
+
+enumeration_min : `int`
+    Enumeration data minimum value.
+
+enumeration_max : `int`
+    Enumeration data maximum value.
+
+.. rubric:: Included in:
+
+====================================   ==========================================================
+
+Parent                                                                                    Summary
+
+====================================   ==========================================================
+:ref:`fmu_parameter <fmu_parameter>`       Configure a parameter for an FMU coupling participant.
+
+====================================   ==========================================================
+

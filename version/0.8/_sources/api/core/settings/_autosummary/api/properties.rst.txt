@@ -1,0 +1,31 @@
+:orphan:
+
+.. _properties:
+
+properties
+==========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.properties
+
+.. autoclass:: properties
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+accepts_new_inputs : `bool`
+    Controls whether participant accept new input variables or parameters.
+
+time_integration : `str`
+    Coupling participant time integration method ("Implicit" or "Explicit")
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

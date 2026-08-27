@@ -1,0 +1,43 @@
+:orphan:
+
+.. _coupling_interface_child:
+
+coupling_interface_child
+========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.coupling_interface_child
+
+.. autoclass:: coupling_interface_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+display_name : `str`
+    Set the display name of an object.
+
+.. rubric:: Children
+
+========================================   ======================================================
+
+Child                                                                                     Summary
+
+========================================   ======================================================
+:ref:`side <side>`                                    Configure one side of a coupling interface.
+
+:ref:`data_transfer <data_transfer>`           Configure data transfers for a coupling interface.
+
+:ref:`mapping_control <mapping_control>`                          Configure controls for mapping.
+
+========================================   ======================================================
+
+.. rubric:: Included in:
+
+==============================================   ===================================
+
+Parent                                                                       Summary
+
+==============================================   ===================================
+:ref:`coupling_interface <coupling_interface>`       Configure a coupling interface.
+
+==============================================   ===================================
+

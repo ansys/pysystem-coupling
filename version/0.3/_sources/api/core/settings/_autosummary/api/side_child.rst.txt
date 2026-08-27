@@ -1,0 +1,37 @@
+:orphan:
+
+.. _side_child:
+
+side_child
+==========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.side_child
+
+.. autoclass:: side_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+coupling_participant : `str`
+    Name of the participant on this interface side.
+
+region_list : :ref:`StringListType<string_list_type>`
+    List of participant regions involved in this interface side.
+
+reference_frame : `str`
+    Reference frame of this side.
+
+instancing : `str`
+    Instancing name for this side (leave unset if not required).
+
+.. rubric:: Included in:
+
+==================   ===============================================
+
+Parent                                                       Summary
+
+==================   ===============================================
+:ref:`side <side>`       Configure one side of a coupling interface.
+
+==================   ===============================================
+

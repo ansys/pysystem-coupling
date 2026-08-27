@@ -1,0 +1,23 @@
+:orphan:
+
+.. _write_csv_chart_files:
+
+write_csv_chart_files
+=====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.write_csv_chart_files
+
+.. autoclass:: write_csv_chart_files
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+====================================   =================
+
+Parent                                           Summary
+
+====================================   =================
+:ref:`solution_root <solution_root>`       'root' object
+
+====================================   =================
+

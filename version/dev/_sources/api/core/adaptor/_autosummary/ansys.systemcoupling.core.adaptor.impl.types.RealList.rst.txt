@@ -1,0 +1,46 @@
+.. _dm_RealList:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.RealList
+=====================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: RealList
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~RealList.__init__
+      ~RealList.get_property_state
+      ~RealList.get_state
+      ~RealList.print_state
+      ~RealList.set_property_state
+      ~RealList.set_state
+      ~RealList.set_sycproxy
+      ~RealList.to_python_keys
+      ~RealList.to_python_name
+      ~RealList.to_syc_keys
+      ~RealList.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RealList.obj_name
+      ~RealList.path
+      ~RealList.syc_name
+      ~RealList.syc_path
+      ~RealList.sycproxy
+   
+   

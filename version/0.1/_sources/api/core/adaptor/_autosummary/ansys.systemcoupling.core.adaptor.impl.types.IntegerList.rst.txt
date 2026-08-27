@@ -1,0 +1,46 @@
+.. _dm_IntegerList:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.IntegerList
+========================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: IntegerList
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~IntegerList.__init__
+      ~IntegerList.get_property_state
+      ~IntegerList.get_state
+      ~IntegerList.print_state
+      ~IntegerList.set_property_state
+      ~IntegerList.set_state
+      ~IntegerList.set_sycproxy
+      ~IntegerList.to_python_keys
+      ~IntegerList.to_python_name
+      ~IntegerList.to_syc_keys
+      ~IntegerList.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~IntegerList.obj_name
+      ~IntegerList.path
+      ~IntegerList.syc_name
+      ~IntegerList.syc_path
+      ~IntegerList.sycproxy
+   
+   

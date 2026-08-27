@@ -1,0 +1,23 @@
+:orphan:
+
+.. _generate_input_file:
+
+generate_input_file
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.generate_input_file
+
+.. autoclass:: generate_input_file
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

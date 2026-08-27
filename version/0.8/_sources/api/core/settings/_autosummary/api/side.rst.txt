@@ -1,0 +1,28 @@
+:orphan:
+
+.. _side:
+
+side
+====
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.side
+
+.. autoclass:: side
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`side_child <side_child>`
+
+
+.. rubric:: Included in:
+
+==========================================================   ===================================
+
+Parent                                                                                   Summary
+
+==========================================================   ===================================
+:ref:`coupling_interface_child <coupling_interface_child>`       Configure a coupling interface.
+
+==========================================================   ===================================
+

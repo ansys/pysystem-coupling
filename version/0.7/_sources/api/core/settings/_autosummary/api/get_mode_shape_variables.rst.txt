@@ -1,0 +1,23 @@
+:orphan:
+
+.. _get_mode_shape_variables:
+
+get_mode_shape_variables
+========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.get_mode_shape_variables
+
+.. autoclass:: get_mode_shape_variables
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

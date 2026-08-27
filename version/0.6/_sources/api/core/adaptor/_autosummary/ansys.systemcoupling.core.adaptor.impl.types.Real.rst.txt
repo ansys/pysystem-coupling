@@ -1,0 +1,46 @@
+.. _dm_Real:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Real
+=================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Real
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Real.__init__
+      ~Real.get_property_state
+      ~Real.get_state
+      ~Real.print_state
+      ~Real.set_property_state
+      ~Real.set_state
+      ~Real.set_sycproxy
+      ~Real.to_python_keys
+      ~Real.to_python_name
+      ~Real.to_syc_keys
+      ~Real.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Real.obj_name
+      ~Real.path
+      ~Real.syc_name
+      ~Real.syc_path
+      ~Real.sycproxy
+   
+   

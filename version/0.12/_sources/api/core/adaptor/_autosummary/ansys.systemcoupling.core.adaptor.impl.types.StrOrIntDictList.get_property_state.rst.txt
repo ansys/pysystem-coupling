@@ -1,0 +1,6 @@
+get\_property\_state
+====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: StrOrIntDictList.get_property_state

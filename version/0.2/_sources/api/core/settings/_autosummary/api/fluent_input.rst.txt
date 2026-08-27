@@ -1,0 +1,48 @@
+:orphan:
+
+.. _fluent_input:
+
+fluent_input
+============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.fluent_input
+
+.. autoclass:: fluent_input
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Type of solver input file(s) to be used for the Fluent run.
+    
+    Allowed values:
+    
+    - "InitialCaseFile" - (Default) A case file will be defined as a
+      solver input for the coupled analysis run.
+    
+    - "InitialCaseAndDataFile" - A Fluent case file and data file
+      will be defined as solver inputs for the coupled analysis run.
+    
+    - "JournalFile" - A journal file will be defined as the solver
+      input for the coupled analysis run.
+
+case_file : `str`
+    Set Fluent initial case file.
+
+data_file : `str`
+    Set Fluent initial data file.
+
+journal_file : `str`
+    Set Fluent journal file.
+
+.. rubric:: Included in:
+
+============================================   ===========================================================
+
+Parent                                                                                             Summary
+
+============================================   ===========================================================
+:ref:`execution_control <execution_control>`       Configure execution control for a coupling participant.
+
+============================================   ===========================================================
+

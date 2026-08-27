@@ -1,0 +1,6 @@
+SECURE\_LOCAL
+=============
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoattribute:: ConnectionType.SECURE_LOCAL

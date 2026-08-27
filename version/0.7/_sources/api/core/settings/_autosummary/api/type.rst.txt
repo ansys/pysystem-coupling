@@ -1,0 +1,33 @@
+:orphan:
+
+.. _type:
+
+type
+====
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.type
+
+.. autoclass:: type
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Allowed values:
+    
+    - "EnsightGold" (beta only)
+
+binary_format : `bool`
+    Output in Binary or ASCII format.
+
+.. rubric:: Included in:
+
+========================   =====================================================
+
+Parent                                                                   Summary
+
+========================   =====================================================
+:ref:`results <results>`       Configures output of postprocessing results data.
+
+========================   =====================================================
+

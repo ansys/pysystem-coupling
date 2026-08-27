@@ -1,0 +1,47 @@
+:orphan:
+
+.. _instancing_child:
+
+instancing_child
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.instancing_child
+
+.. autoclass:: instancing_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+reference_frame : `str`
+    Reference frame that defines the orientation of the instancing.
+    
+    Rotation will be around the z-axis of the reference frame,
+    following the right-hand rule.
+
+instances_in_full_circle : `int`
+    Total number of instances (including the first instance) in
+    a full 360 degree rotation of the participant mesh. This value
+    includes the reference instance (with the participant mesh).
+    All instances defined for the instancing object have identical
+    angles.
+
+instances_for_mapping : `int`
+    Number of instances to be included in the mapping when instancing
+    is applied.
+    
+    Required when the number of instances to be used for mapping does
+    not match the number of instances in a full circle. Default
+    assumes a 360 degree rotation of the participant mesh. This value
+    includes the reference instance (with the participant mesh).
+
+.. rubric:: Included in:
+
+==============================   ============================================
+
+Parent                                                                Summary
+
+==============================   ============================================
+:ref:`instancing <instancing>`       Define instancing for an interface side.
+
+==============================   ============================================
+

@@ -1,0 +1,23 @@
+:orphan:
+
+.. _get_add_data_transfer_group_commands:
+
+get_add_data_transfer_group_commands
+====================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.get_add_data_transfer_group_commands
+
+.. autoclass:: get_add_data_transfer_group_commands
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

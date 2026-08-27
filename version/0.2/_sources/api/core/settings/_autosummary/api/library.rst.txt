@@ -1,0 +1,40 @@
+:orphan:
+
+.. _library:
+
+library
+=======
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.library
+
+.. autoclass:: library
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Children
+
+================================================   ==========================================================================
+
+Child                                                                                                                 Summary
+
+================================================   ==========================================================================
+:ref:`expression <expression>`                         Define a named expression that can be referenced in other expressions.
+
+:ref:`expression_function <expression_function>`               Makes an external Python function accessible from expressions.
+
+:ref:`reference_frame <reference_frame>`                         Provide a transformation relative to a ParentReferenceFrame.
+
+:ref:`instancing <instancing>`                                                       Define instancing for an interface side.
+
+================================================   ==========================================================================
+
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

@@ -1,0 +1,699 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Commands and settings API &#8212; PySystemCoupling</title>
+    
+<script>
+  document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+  document.documentElement.dataset.theme = localStorage.getItem("theme") || "light"
+</script>
+
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=92025949c220c2e29695" rel="stylesheet">
+
+
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-rendered-html.css" />
+
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695">
+
+    
+        <link href="../../../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <link rel="shortcut icon" href="../../../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Case persistence commands" href="case.html" />
+    <link rel="prev" title="solution" href="../_autosummary/ansys.systemcoupling.core.session.Session.solution.html" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+    <div class="bd-header-announcement container-fluid" id="banner">
+      
+
+    </div>
+
+    
+    
+    <nav class="bd-header navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="bd-header__inner container-xl">
+
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+    <img src="../../../_static/pyansys-logo-black-cropped.png" class="logo__image only-light" alt="Logo image">
+    <img src="../../../_static/pyansys-logo-black-cropped.png" class="logo__image only-dark" alt="Logo image">
+  
+  
+</a>
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="fas fa-bars"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../getting_started/index.html">
+  Getting started
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../users_guide/index.html">
+  User guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../examples/index.html">
+  Examples
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../../index.html">
+  API reference
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../../contributing.html">
+  Contribute
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <div class="dropdown" id="version_switcher">
+    <button type="button" class="btn btn-sm navbar-btn dropdown-toggle" id="version_switcher_button" data-toggle="dropdown">
+        0.1  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div id="version_switcher_menu" class="dropdown-menu list-group-flush py-0" aria-labelledby="version_switcher_button">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+
+<!-- NOTE: this JS must live here (not in our global JS file) because it relies
+     on being processed by Jinja before it is run (specifically for replacing
+     variables api/core/adaptor/api and {'json_url': 'https://systemcoupling.docs.pyansys.com/release/versions.json', 'version_match': '0.1'}.
+-->
+
+<script type="text/javascript">
+// Check if corresponding page path exists in other version of docs
+// and, if so, go there instead of the homepage of the other docs version
+function checkPageExistsAndRedirect(event) {
+    const currentFilePath = "api/core/adaptor/api.html",
+          tryUrl = event.target.getAttribute("href");
+    let otherDocsHomepage = tryUrl.replace(currentFilePath, "");
+    $.ajax({
+        type: 'HEAD',
+        url: tryUrl,
+        // if the page exists, go there
+        success: function() {
+            location.href = tryUrl;
+        }
+    }).fail(function() {
+        location.href = otherDocsHomepage;
+    });
+    // this prevents the browser from following the href of the clicked node
+    // (which is fine because this function takes care of redirecting)
+    return false;
+}
+
+// Populate the version switcher from the JSON config file
+(function () {
+    $.getJSON("https://systemcoupling.docs.pyansys.com/release/versions.json", function(data, textStatus, jqXHR) {
+        const currentFilePath = "api/core/adaptor/api.html";
+        let btn = document.getElementById("version_switcher_button");
+        // Set empty strings by default so that these attributes exist and can be used in CSS selectors
+        btn.dataset["activeVersionName"] = "";
+        btn.dataset["activeVersion"] = "";
+        // create links to the corresponding page in the other docs versions
+        $.each(data, function(index, entry) {
+            // if no custom name specified (e.g., "latest"), use version string
+            if (!("name" in entry)) {
+                entry.name = entry.version;
+            }
+            // create the node
+            const node = document.createElement("a");
+            node.setAttribute("class", "list-group-item list-group-item-action py-1");
+            node.textContent = `${entry.name}`;
+            node.setAttribute("href", `${entry.url}${currentFilePath}`);
+            // on click, AJAX calls will check if the linked page exists before
+            // trying to redirect, and if not, will redirect to the homepage
+            // for that version of the docs.
+            node.onclick = checkPageExistsAndRedirect;
+            // Add dataset values for the version and name in case people want
+            // to apply CSS styling based on this information.
+            node.dataset["versionName"] = entry.name;
+            node.dataset["version"] = entry.version;
+
+            $("#version_switcher_menu").append(node);
+            // replace dropdown button text with the preferred display name of
+            // this version, rather than using sphinx's 0.1.1 variable.
+            // also highlight the dropdown entry for the currently-viewed
+            // version's entry
+            if (entry.version == "0.1") {
+                node.classList.add("active");
+                btn.innerText = btn.dataset["activeVersionName"] = entry.name;
+                btn.dataset["activeVersion"] = entry.version;
+            }
+        });
+    });
+})();
+</script>
+      </div>
+      
+      <div class="navbar-end-item">
+        <span id="theme-switch" class="btn btn-sm btn-outline-primary navbar-btn rounded-circle">
+    <a class="theme-switch" data-mode="light"><i class="fas fa-sun"></i></a>
+    <a class="theme-switch" data-mode="dark"><i class="far fa-moon"></i></a>
+    <a class="theme-switch" data-mode="auto"><i class="fas fa-adjust"></i></a>
+</span>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/pyansys/pysystem-coupling" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+     
+<div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+
+    
+        <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://docs.pyansys.com">PyAnsys</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../../../index.html">PySystemCoupling</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">API reference</a> » </li>
+        <li class="nav-item nav-item-this"><a href="">Commands and settings API</a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+    <div class="bd-container container-xl">
+      <div class="bd-container__inner row">
+          
+
+<!-- Only show if we have sidebars configured, else just a small margin  -->
+<div class="bd-sidebar-primary col-12 col-md-3 bd-sidebar">
+  <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../launching.html">
+   Launch and connect functions
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.launch.html">
+     launch
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.connect.html">
+     connect
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../session.html">
+   Session
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2 has-children">
+    <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.html">
+     ansys.systemcoupling.core.session.Session
+    </a>
+    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+    <label for="toctree-checkbox-3">
+     <i class="fas fa-chevron-down">
+     </i>
+    </label>
+    <ul>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.end_output.html">
+       end_output
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.exit.html">
+       exit
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.ping.html">
+       ping
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.start_output.html">
+       start_output
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.case.html">
+       case
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.setup.html">
+       setup
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.solution.html">
+       solution
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   Commands and settings API
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="case.html">
+     Case persistence commands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="setup.html">
+     Analysis setup commands
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="solution.html">
+     Solution commands
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+  </div>
+  <div class="sidebar-end-items">
+  </div>
+</div>
+
+
+          
+
+
+<div class="bd-sidebar-secondary d-none d-xl-block col-xl-2 bd-toc">
+  
+    
+    <div class="toc-item">
+      
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#relationship-with-the-native-system-coupling-api">
+   Relationship with the “native” System Coupling API
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#direct-access-to-the-native-system-coupling-api">
+     Direct access to the native System Coupling API
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#top-level-objects">
+   Top-level objects
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#container-object-types">
+   Container object types
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#container-states">
+   Container states
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#commands">
+   Commands
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#settings-api-content">
+   Settings API content
+  </a>
+ </li>
+</ul>
+
+</nav>
+    </div>
+    
+    <div class="toc-item">
+      
+
+<div class="tocsection editthispage">
+    <a href="https://github.com/pyansys/pysystem-coupling/edit/main/doc/source/api/core/adaptor/api.rst">
+        <i class="fas fa-pencil-alt"></i> Edit this page
+    </a>
+</div>
+
+    </div>
+    
+  
+</div>
+
+
+          
+          
+          <div class="bd-content col-12 col-md-9 col-xl-7">
+              
+              <article class="bd-article" role="main">
+                
+  <section id="commands-and-settings-api">
+<span id="ref-api"></span><h1>Commands and settings API<a class="headerlink" href="#commands-and-settings-api" title="Permalink to this heading">#</a></h1>
+<p>A System Coupling analysis is defined in terms of a hierarchical data model of settings.
+An API is exposed that provides direct access to the data model and commands that assist
+in setting up and solving an analysis.</p>
+<p>Although it is possible to set up an analysis by directly assigning the relevant
+data model objects and settings, the expected and more convenient approach is to
+use the commands provided to set up the main objects. You then use direct
+data model assignment to fine tune the setup.</p>
+<p>The API implementation is built on a number of generic objects. Subsequent
+sections provide brief descriptions of these objects.</p>
+<section id="relationship-with-the-native-system-coupling-api">
+<h2>Relationship with the “native” System Coupling API<a class="headerlink" href="#relationship-with-the-native-system-coupling-api" title="Permalink to this heading">#</a></h2>
+<p>The API exposed in PySystemCoupling is mainly an <em>adaptation</em> of the API that exists
+natively in Ansys System Coupling.</p>
+<p>If you are already familiar with System Coupling, or you want to consult the System
+Coupling documentation for more in-depth advice on some aspect of the system,
+you should find it easy to translate to the API that is exposed in PySystemCoupling.</p>
+<p>The key differences are as follows:</p>
+<ul>
+<li><p>While names of commands and data model elements follow <em>camel case</em> conventions
+in System Coupling, the names of commands and data models in PySystemCoupling follow
+<em>snake case</em> convention, which is the preferred Pythonic naming convention.
+Thus, the <code class="docutils literal notranslate"><span class="pre">AddParticipant</span></code> command in System Coupling becomes the <code class="docutils literal notranslate"><span class="pre">add_participant</span></code>
+command in PySystemCoupling. Similarly, the <code class="docutils literal notranslate"><span class="pre">CouplingInterface</span></code> data model object
+in System Coupling becomes the <code class="docutils literal notranslate"><span class="pre">coupling_interface</span></code> data model object in
+PySystemCoupling.</p></li>
+<li><p>Commands and queries in System Coupling are all exposed in its Python environment as top-level
+global names. Commands in PySystemCoupling are exposed as callable objects that are accessible
+as attributes of one of the <em>root</em> attributes of the <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.html#ansys.systemcoupling.core.session.Session" title="ansys.systemcoupling.core.session.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> class:
+<a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.case.html#ansys.systemcoupling.core.session.Session.case" title="ansys.systemcoupling.core.session.Session.case"><code class="xref py py-meth docutils literal notranslate"><span class="pre">case</span></code></a>, <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.setup.html#ansys.systemcoupling.core.session.Session.setup" title="ansys.systemcoupling.core.session.Session.setup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">case</span></code></a>, and <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.solution.html#ansys.systemcoupling.core.session.Session.solution" title="ansys.systemcoupling.core.session.Session.solution"><code class="xref py py-meth docutils literal notranslate"><span class="pre">case</span></code></a>.</p></li>
+<li><p>In System Coupling, you manipulate and query the setup data model in one of these ways:</p>
+<ul>
+<li><p>Use high level commands to create and initialize the main objects in the data model.
+For example, use the <code class="docutils literal notranslate"><span class="pre">AddParticipant</span></code> command to add a new coupling participant and
+the <code class="docutils literal notranslate"><span class="pre">AddDataTransfer</span></code> command to add a new data transfer object.</p></li>
+<li><p>Access individual settings using a <em>path-like</em> syntax, starting at a <em>root</em>
+object returned by the <code class="docutils literal notranslate"><span class="pre">DatamodelRoot</span></code> command. For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the root object</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">DatamodelRoot</span><span class="p">()</span>
+
+<span class="c1"># Path-like attribute access to navigate to a setting and assign a value to it</span>
+<span class="n">root</span><span class="o">.</span><span class="n">CouplingInterface</span><span class="p">[</span>
+  <span class="s2">&quot;interface-1&quot;</span>
+<span class="p">]</span><span class="o">.</span><span class="n">DataTransfer</span><span class="p">[</span><span class="s2">&quot;Force&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">Value</span> <span class="o">=</span> <span class="s2">&quot;force*scaleFactor&quot;</span>
+
+<span class="c1"># Similarly, path-like attribute access to query setting value</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">ExecutionControl</span><span class="o">.</span><span class="n">Option</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+<li><p>In PySystemCoupling, you manipulate and query the setup data model in essentially
+the same way. Setup commands are exposed from the <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.setup.html#ansys.systemcoupling.core.session.Session.setup" title="ansys.systemcoupling.core.session.Session.setup"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setup</span></code></a> attribute
+of the <a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.html#ansys.systemcoupling.core.session.Session" title="ansys.systemcoupling.core.session.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> object. This attribute also plays the role of <code class="docutils literal notranslate"><span class="pre">DatamodelRoot()</span></code>
+in the preceding code. It serves as an entry point to accessing individual settings
+via a similar path-like syntax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Given a Session object, get the setup root</span>
+<span class="n">setup</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">setup</span>
+
+<span class="c1"># Assign a setting using &quot;path&quot; syntax</span>
+<span class="n">setup</span><span class="o">.</span><span class="n">coupling_interface</span><span class="p">[</span>
+  <span class="s2">&quot;interface-1&quot;</span>
+<span class="p">]</span><span class="o">.</span><span class="n">data_transfer</span><span class="p">[</span><span class="s2">&quot;Force&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;force*scaleFactor&quot;</span>
+
+<span class="c1"># Query a setting</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">root</span><span class="o">.</span><span class="n">execution_control</span><span class="o">.</span><span class="n">option</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<section id="direct-access-to-the-native-system-coupling-api">
+<h3>Direct access to the native System Coupling API<a class="headerlink" href="#direct-access-to-the-native-system-coupling-api" title="Permalink to this heading">#</a></h3>
+<p>If you want to try to quickly translate an existing System Coupling script
+to the PySystemCoupling environment, or you need to access a feature
+not currently exposed in PySystemCoupling, you can use the
+<a class="reference internal" href="native_api_property.html#ref-native-api-property"><span class="std std-ref">_native_api</span></a> attribute of the
+<a class="reference internal" href="../_autosummary/ansys.systemcoupling.core.session.Session.html#ansys.systemcoupling.core.session.Session" title="ansys.systemcoupling.core.session.Session"><code class="xref py py-class docutils literal notranslate"><span class="pre">Session</span></code></a> class offers as a <em>back door</em> for directly accessing
+the native System Coupling API. However, you must still make some adjustments
+to the existing System Coupling script because calls must be via the
+<code class="docutils literal notranslate"><span class="pre">_native_api</span></code> attribute rather than via global commands.</p>
+<p>For example, here is a command in a System Coupling script:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">AddParticipant</span><span class="p">(</span><span class="n">InputFile</span><span class="o">=</span><span class="s2">&quot;FLUENT/fluent.scp&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When using the <cite>native API</cite> in PySystemCoupling, the equivalent would be:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Given a Session object, get the native api</span>
+<span class="n">api</span> <span class="o">=</span> <span class="n">session</span><span class="o">.</span><span class="n">_native_api</span>
+
+<span class="n">api</span><span class="o">.</span><span class="n">AddParticipant</span><span class="p">(</span><span class="n">InputFile</span><span class="o">=</span><span class="s2">&quot;FLUENT/fluent.scp&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You should not use the <code class="docutils literal notranslate"><span class="pre">_native_api</span></code> attribute generally, but you
+might find using it necessary in specific and limited circumstances.</p>
+</section>
+</section>
+<section id="top-level-objects">
+<h2>Top-level objects<a class="headerlink" href="#top-level-objects" title="Permalink to this heading">#</a></h2>
+<p>The commands and settings API is accessible via the top-level attributes of
+the <code class="docutils literal notranslate"><span class="pre">Session</span></code> class: <code class="docutils literal notranslate"><span class="pre">case</span></code>, <code class="docutils literal notranslate"><span class="pre">setup</span></code>, and <code class="docutils literal notranslate"><span class="pre">solution</span></code>. These top-level
+attributes are all instances of the <code class="docutils literal notranslate"><span class="pre">Container</span></code> type. For links to commands
+for these root attributes, see <a class="reference internal" href="#ref-api-details"><span class="std std-ref">Settings API content</span></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ansys.systemcoupling.core</span> <span class="k">as</span> <span class="nn">pysystemcoupling</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">analysis</span> <span class="o">=</span> <span class="n">pysystemcoupling</span><span class="o">.</span><span class="n">launch</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">setup</span> <span class="o">=</span> <span class="n">analysis</span><span class="o">.</span><span class="n">setup</span>
+</pre></div>
+</div>
+</section>
+<section id="container-object-types">
+<h2>Container object types<a class="headerlink" href="#container-object-types" title="Permalink to this heading">#</a></h2>
+<p>In essence, the data model settings that define a System Coupling analysis consist
+of a collection of primitive property values, such as <code class="docutils literal notranslate"><span class="pre">Integer</span></code>, <code class="docutils literal notranslate"><span class="pre">Real</span></code>,
+<code class="docutils literal notranslate"><span class="pre">String</span></code>, and <code class="docutils literal notranslate"><span class="pre">Boolean</span></code>. To provide a structure to the settings,
+they are organized as groups of properties in <em>container</em> objects.</p>
+<p>There are two types of container objects: <code class="docutils literal notranslate"><span class="pre">Container</span></code> and <code class="docutils literal notranslate"><span class="pre">NamedContainer</span></code>.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">Container</span></code> object represents a grouping of primitive settings, accessible as
+property attributes. A <code class="docutils literal notranslate"><span class="pre">Container</span></code> object can also contain statically defined
+<em>child objects</em>, which are accessible as attributes. For example, <code class="docutils literal notranslate"><span class="pre">setup.output_control.results</span></code>
+refers to the <code class="docutils literal notranslate"><span class="pre">results</span></code> child of the <code class="docutils literal notranslate"><span class="pre">output_control</span></code> child of the <code class="docutils literal notranslate"><span class="pre">setup</span></code> object.
+The names of child objects can be accessed with the <code class="docutils literal notranslate"><span class="pre">child_names</span></code>
+attribute of the <code class="docutils literal notranslate"><span class="pre">Container</span></code> object. For example, the <code class="docutils literal notranslate"><span class="pre">option</span></code> setting of the
+<code class="docutils literal notranslate"><span class="pre">output_control</span></code> object is accessed as <code class="docutils literal notranslate"><span class="pre">setup.output_control.option</span></code>. This particular setting
+is a string value.</p>
+<p>A <code class="docutils literal notranslate"><span class="pre">NamedContainer</span></code> object is a container holding dynamically created named objects of
+its specified child type, which is accessible via <code class="docutils literal notranslate"><span class="pre">child_object_type</span></code> attribute.
+Because a specific named object can be accessed using the <code class="docutils literal notranslate"><span class="pre">[]</span></code> index operator, a
+<code class="docutils literal notranslate"><span class="pre">NamedContaier</span></code> object behaves somewhat like a Python dictionary. For example,
+<code class="docutils literal notranslate"><span class="pre">setup.coupling_interface['intf-1']</span></code> refers to the
+<code class="docutils literal notranslate"><span class="pre">coupling_interface</span></code> object with name <code class="docutils literal notranslate"><span class="pre">intf-1</span></code>. You can use the <code class="docutils literal notranslate"><span class="pre">get_object_names()</span></code>
+method in the container class. In practice, the named object instances are <code class="docutils literal notranslate"><span class="pre">Container</span></code>
+objects. Thus, in the example just given, <code class="docutils literal notranslate"><span class="pre">setup.coupling_interface['intf-1']</span></code>
+is a <code class="docutils literal notranslate"><span class="pre">Container</span></code> object.</p>
+</section>
+<section id="container-states">
+<h2>Container states<a class="headerlink" href="#container-states" title="Permalink to this heading">#</a></h2>
+<p>You access the state of any container object by calling it. The call returns
+the state of its properties and any children as a nested dictionary.</p>
+<p>You modify the state of a container by assigning the corresponding attribute
+in its parent object. This assignment can be done at any level. The assigned
+state value should be a dictionary.</p>
+<p>You query and assign individual settings as properties on their container objects.</p>
+<p>You use the <code class="docutils literal notranslate"><span class="pre">get_state</span></code> method to get the state of a container and the <code class="docutils literal notranslate"><span class="pre">set_state</span></code>
+method to modify the state of the container.</p>
+<p>You use the <code class="docutils literal notranslate"><span class="pre">print_state</span></code> method to print the current state of the container in
+a simple text format.</p>
+</section>
+<section id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this heading">#</a></h2>
+<p>Commands are methods of settings objects that you use to modify the state of
+the app. The <code class="docutils literal notranslate"><span class="pre">command_names</span></code> attribute of a settings object
+provides the names of its commands.</p>
+<p>You can pass commands as keyword arguments if needed. You use the <code class="docutils literal notranslate"><span class="pre">arguments</span></code>
+attribute to access the list of valid arguments. If an argument is
+not specified and is optional, its default value is used. Arguments are also settings objects
+and can be either a primitive type or container type.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The implementation of the <code class="docutils literal notranslate"><span class="pre">settings</span></code> classes is sufficiently flexible to
+allow commands to be exposed at any level of the container hierarchy. This is
+not exploited in the current API, but there is scope to do so in future extensions of
+the API. For example, where a command currently takes a reference to a data model object as
+an argument, allowing the command to be called on the relevant object could avoid
+the explicit argument.</p>
+</div>
+</section>
+<section id="settings-api-content">
+<span id="ref-api-details"></span><h2>Settings API content<a class="headerlink" href="#settings-api-content" title="Permalink to this heading">#</a></h2>
+<p>For information on commands related to settings, see:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../settings/_autosummary/api/case_root.html#case-root"><span class="std std-ref">Case and persistence commands</span></a></p></li>
+<li><p><a class="reference internal" href="../settings/_autosummary/api/setup_root.html#setup-root"><span class="std std-ref">Analysis setup commands and data model</span></a></p></li>
+<li><p><a class="reference internal" href="../settings/_autosummary/api/solution_root.html#solution-root"><span class="std std-ref">Solution commands</span></a></p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+              </article>
+              
+
+              
+          </div>
+          
+      </div>
+    </div>
+
+  
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=92025949c220c2e29695"></script>
+
+<footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    <p class="copyright">
+    &copy; Copyright (c) 2023 ANSYS, Inc. All rights reserved.<br>
+</p>
+  </div>
+  
+  <div class="footer-item">
+    <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+  </div>
+  
+</div>
+</footer>
+  </body>
+</html>

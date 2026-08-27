@@ -1,0 +1,28 @@
+:orphan:
+
+.. _coupling_participant:
+
+coupling_participant
+====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.coupling_participant
+
+.. autoclass:: coupling_participant
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`coupling_participant_child <coupling_participant_child>`
+
+
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

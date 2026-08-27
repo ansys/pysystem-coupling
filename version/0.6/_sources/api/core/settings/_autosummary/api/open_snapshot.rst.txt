@@ -1,0 +1,23 @@
+:orphan:
+
+.. _open_snapshot:
+
+open_snapshot
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.open_snapshot
+
+.. autoclass:: open_snapshot
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+============================   =================
+
+Parent                                   Summary
+
+============================   =================
+:ref:`case_root <case_root>`       'root' object
+
+============================   =================
+

@@ -1,0 +1,6 @@
+keys
+====
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: NamedContainer.keys
