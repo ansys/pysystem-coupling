@@ -39,6 +39,7 @@ import grpc
 
 from ansys.systemcoupling.core.client.syc_launch_script import path_to_system_coupling
 from ansys.systemcoupling.core.syc_version import (
+    SYC_LATEST_VERSION_CONCAT,
     SYC_VERSION_CONCAT,
     normalize_version,
 )
@@ -153,6 +154,9 @@ class StartupAndConnectionInfo:
                 version_str = SYC_VERSION_CONCAT
 
         else:
+            # Might be connecting to a container in which case "latest" is a valid version string.
+            # We assume that this corresponds to a particular version of System Coupling.
+            version = SYC_LATEST_VERSION_CONCAT if version == "latest" else version
             version_str = version if version else SYC_VERSION_CONCAT
 
         # Store normalised version info

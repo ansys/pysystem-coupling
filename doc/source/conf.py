@@ -210,7 +210,21 @@ def _clean_up_example_folder(gallery_folder_name: str, example_name: str):
 
 
 def _reset_example(gallery_conf, fname: str, when: str):
+    import logging
+    import time
+
     example_name = fname.replace(".py", "")
+
+    # Enable DEBUG logging for all examples to capture instrumentation diagnostics.
+    # This must be set early before examples create sessions/threads.
+    if when == "before":
+        from ansys.systemcoupling.core.util.logging import LOG
+
+        try:
+            LOG.set_level(logging.DEBUG)
+            print("[_reset_example] DEBUG logging enabled for diagnostics")
+        except Exception as exc:
+            print(f"[_reset_example] Warning: Could not enable DEBUG logging: {exc}")
 
     # Add any examples that need MAPDL to this list
     using_mapdl_examples = ["oscillating_plate", "turek_hron_fsi2", "cht_pipe"]
@@ -232,19 +246,82 @@ def _reset_example(gallery_conf, fname: str, when: str):
         _clean_up_example_folder("00-systemcoupling", example_name)
 
         if using_mapdl_container:
-            subprocess.run(
-                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"]
+            print(
+                f"[_reset_example] BEFORE example '{example_name}': "
+                f"launching MAPDL container..."
             )
-            print("MAPDL container launched")
+            start_time = time.time()
+            try:
+                subprocess.run(
+                    ["docker", "compose", "-f", "mapdl-docker-compose.yml", "up", "-d"],
+                    timeout=120,
+                )
+                elapsed = time.time() - start_time
+                print(
+                    f"[_reset_example] MAPDL container launched successfully "
+                    f"({elapsed:.1f}s)"
+                )
+            except subprocess.TimeoutExpired:
+                print(
+                    f"[_reset_example] TIMEOUT after 120s while launching MAPDL "
+                    f"container"
+                )
+                raise
+            except Exception as exc:
+                print(
+                    f"[_reset_example] Exception launching MAPDL container: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                raise
     else:
         if using_mapdl_container:
-            subprocess.run(
-                ["docker", "compose", "-f", "mapdl-docker-compose.yml", "down"]
+            print(
+                f"[_reset_example] AFTER example '{example_name}': "
+                f"stopping MAPDL container..."
             )
-            print("MAPDL container removed")
-        # Add sleep after example to see if it helps with grpcs errors seen after everything
-        # should have finished.
+            # Pass --timeout to docker compose to force-kill after 30s if graceful
+            # shutdown stalls (e.g. after an abrupt gRPC disconnect mid-solve).
+            # Also pass timeout to subprocess.run as a safety net in case docker
+            # compose itself hangs.
+            start_time = time.time()
+            try:
+                subprocess.run(
+                    [
+                        "docker",
+                        "compose",
+                        "-f",
+                        "mapdl-docker-compose.yml",
+                        "down",
+                        "--timeout",
+                        "30",
+                    ],
+                    timeout=60,
+                )
+                elapsed = time.time() - start_time
+                print(
+                    f"[_reset_example] MAPDL container stopped successfully "
+                    f"({elapsed:.1f}s)"
+                )
+            except subprocess.TimeoutExpired:
+                print(
+                    f"[_reset_example] TIMEOUT after 60s while stopping MAPDL "
+                    f"container"
+                )
+                raise
+            except Exception as exc:
+                print(
+                    f"[_reset_example] Exception stopping MAPDL container: "
+                    f"{type(exc).__name__}: {exc}"
+                )
+                raise
+        # Add sleep after example to see if it helps with grpcs errors seen after
+        # everything should have finished.
+        print(
+            f"[_reset_example] AFTER example '{example_name}': sleeping 10s "
+            f"before cleanup..."
+        )
         time.sleep(10)
+        print(f"[_reset_example] AFTER example '{example_name}': cleanup complete")
 
 
 rst_epilog = make_replacements_for_versioned_class_refs(("CASE", "SETUP", "SOLUTION"))

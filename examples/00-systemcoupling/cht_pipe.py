@@ -244,6 +244,9 @@ hf_transfer = syc.setup.add_data_transfer(
     target_variable="HFLW",
 )
 
+# TEMP: disable AnsRpcBridge
+syc.setup.coupling_participant[solid_name].use_ans_rpc_bridge = False
+
 # %%
 # Define constants and calculate Biot number
 # ------------------------------------------
