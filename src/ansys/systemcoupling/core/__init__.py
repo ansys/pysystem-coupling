@@ -102,6 +102,13 @@ def launch(
         an argument has an associated value, the argument name and its
         value should be specified as two consecutive items of the list.
 
+    Notes
+    -----
+    Environment variables:
+    - ``PYSYC_SERVER_LOGGING_LEVEL``: Enable System Coupling server-side logging
+      by specifying a logging level (e.g., ``5`` for verbose output). Log files
+      will be written to the working directory as ``SyC_Log_*.txt``.
+
     Returns
     -------
     ansys.systemcoupling.core.session.Session
@@ -110,6 +117,14 @@ def launch(
     """
     rpc = SycGrpc()
     version = str(version) if version is not None else None
+
+    # Check for server-side logging level via environment variable
+    # e.g., PYSYC_SERVER_LOGGING_LEVEL=5 will add "-l 5" to launch args
+    server_logging_level = os.environ.get("PYSYC_SERVER_LOGGING_LEVEL")
+    if server_logging_level:
+        extra_args = list(extra_args) + ["-l", str(server_logging_level)]
+        LOG.info(f"System Coupling server logging level: {server_logging_level}")
+
     if pypim.is_configured():
         LOG.info(
             "Starting System Coupling remotely. Any launch arguments other "

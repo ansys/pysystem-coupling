@@ -108,6 +108,17 @@ def start_container(
     else:
         args = ["-m", "cosimgui", f"--grpcport=0.0.0.0:{port}", "--ptrace"]
 
+    # Apply server-side logging level if requested.
+    # PYSYC_SERVER_LOGGING_LEVEL is already handled in launch() for the process
+    # launch path, but in container mode the extra_args are not forwarded, so
+    # we check the env var here directly.
+    server_logging_level = os.getenv("PYSYC_SERVER_LOGGING_LEVEL")
+    if server_logging_level:
+        args = args + ["-l", server_logging_level]
+        LOG.info(
+            f"System Coupling container server logging level: {server_logging_level}"
+        )
+
     LOG.debug("Starting System Coupling docker container...")
 
     mounted_from = str(Path(mounted_from).absolute())
@@ -116,7 +127,6 @@ def start_container(
         "docker",
         "run",
         "-d",
-        "--rm",
         "-p",
         f"{port}:{port}",
         "-v",
@@ -129,6 +139,16 @@ def start_container(
         f"AWP_ROOT=/ansys_inc",
         f"ghcr.io/ansys/pysystem-coupling:{image_tag}",
     ] + args
+
+    # Optionally preserve container after exit for debugging (e.g., log extraction)
+    # By default, use --rm to clean up. Set PYSYC_PRESERVE_CONTAINER=1 to keep it.
+    preserve_container = os.getenv("PYSYC_PRESERVE_CONTAINER", "").lower() in (
+        "1",
+        "true",
+        "yes",
+    )
+    if not preserve_container:
+        run_args.insert(3, "--rm")
 
     # Additional environment
     container_user = os.getenv("SYC_CONTAINER_USER")
