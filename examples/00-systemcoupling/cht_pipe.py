@@ -311,6 +311,8 @@ syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
 syc.setup.output_control.option = "EveryStep"
 syc.setup.output_control.generate_csv_chart_output = True
 
+syc.setup.print_state()  ### !!!TEMPORARY!!! ###
+
 # %%
 # Solution
 # --------
