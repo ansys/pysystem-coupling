@@ -244,6 +244,9 @@ hf_transfer = syc.setup.add_data_transfer(
     target_variable="HFLW",
 )
 
+# TEMP: disable AnsRpcBridge
+syc.setup.coupling_participant[solid_name].use_ans_rpc_bridge = False
+
 # %%
 # Define constants and calculate Biot number
 # ------------------------------------------
@@ -307,6 +310,14 @@ syc.setup.solution_control.end_time = 10  # end time is 10.0 [s]
 
 syc.setup.output_control.option = "EveryStep"
 syc.setup.output_control.generate_csv_chart_output = True
+
+from ansys.systemcoupling.core import LOG
+
+LOG.info(
+    "Printing system coupling setup state...\n>>>\n"
+    f"{syc.setup.coupling_participant[solid_name].print_state()}"
+    "\n<<<\n"
+)  ### !!!TEMPORARY!!! ###
 
 # %%
 # Solution
