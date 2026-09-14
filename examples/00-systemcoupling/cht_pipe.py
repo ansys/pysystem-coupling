@@ -314,7 +314,9 @@ syc.setup.output_control.generate_csv_chart_output = True
 from ansys.systemcoupling.core import LOG
 
 LOG.info(
-    f"Printing system coupling setup state...\n>>>\n{syc.setup.print_state()}\n<<<\n"
+    "Printing system coupling setup state...\n>>>\n"
+    f"{syc.setup.coupling_participant[solid_name].print_state()}"
+    "\n<<<\n"
 )  ### !!!TEMPORARY!!! ###
 
 # %%
