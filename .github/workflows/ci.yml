@@ -46,7 +46,7 @@ jobs:
     name: "Check actions security"
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/check-actions-security@a5b0351dc277d68c2dc1beca2d2674c7dfa4fc55 # v10.3.3
+      - uses: ansys/actions/check-actions-security@7e89e00c5619374a1da8c2e876309d8b15ff0559 # v11.0.3
         with:
           generate-summary: true
           token: ${{ secrets.GITHUB_TOKEN }}
