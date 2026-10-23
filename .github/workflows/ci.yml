@@ -515,7 +515,7 @@ jobs:
       contents: write # Required for package upload
     steps:
       - name: Deploy the latest documentation
-        uses: ansys/actions/doc-deploy-dev@7419880d64bb0bba83f968ca803611df0b76faf0 # v10.3.4
+        uses: ansys/actions/doc-deploy-dev@7410037bfb276c79ae91eb3617b9f5d2876f0c94 # v11.0.8
         with:
           cname: ${{ env.DOCUMENTATION_CNAME }}
           token: ${{ secrets.GITHUB_TOKEN }}
