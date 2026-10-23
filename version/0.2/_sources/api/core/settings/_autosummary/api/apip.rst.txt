@@ -1,0 +1,31 @@
+:orphan:
+
+.. _apip:
+
+apip
+====
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.apip
+
+.. autoclass:: apip
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+debug : `bool`
+    Debug apip data (sends to debug server, saves data locally).
+
+disable : `bool`
+    Disable apip collection (regardless of user settings).
+
+.. rubric:: Included in:
+
+==========================================   ================================
+
+Parent                                                                Summary
+
+==========================================   ================================
+:ref:`analysis_control <analysis_control>`       Configure coupling controls.
+
+==========================================   ================================
+

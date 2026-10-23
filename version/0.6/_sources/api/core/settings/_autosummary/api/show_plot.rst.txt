@@ -1,0 +1,23 @@
+:orphan:
+
+.. _show_plot:
+
+show_plot
+=========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.show_plot
+
+.. autoclass:: show_plot
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+====================================   =================
+
+Parent                                           Summary
+
+====================================   =================
+:ref:`solution_root <solution_root>`       'root' object
+
+====================================   =================
+

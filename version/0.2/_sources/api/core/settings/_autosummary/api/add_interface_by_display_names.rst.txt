@@ -1,0 +1,23 @@
+:orphan:
+
+.. _add_interface_by_display_names:
+
+add_interface_by_display_names
+==============================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.add_interface_by_display_names
+
+.. autoclass:: add_interface_by_display_names
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

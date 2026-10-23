@@ -1,0 +1,6 @@
+get\_property\_options
+======================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: Container.get_property_options

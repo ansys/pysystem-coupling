@@ -1,0 +1,974 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Analysis setup &#8212; PySystemCoupling</title>
+
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/ansys_sphinx_theme.css?v=d2ac875c" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://www.nerdfonts.com/assets/css/webfont.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+ 
+<link href="../_static/css/breadcrumbs.css" rel="stylesheet" />
+
+    <script src="../_static/documentation_options.js?v=cce5339e"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=49e1bf35"></script>
+    <script src="../_static/js/table.js?v=b64f5182"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'users_guide/analysis_setup';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.15.4';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://systemcoupling.docs.pyansys.com/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.8';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/ansys-favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Solving an analysis" href="syc_solution.html" />
+    <link rel="prev" title="System Coupling data model" href="syc_datamodel.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <link rel="canonical" href="https://systemcoupling.docs.pyansys.com/version/stable/users_guide/analysis_setup.html" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container"><!-- Debugging: html_theme_options =  -->
+
+  <!-- If there is no MeiliSearch enabled, use the PyData search -->
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+   
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="https://docs.pyansys.com/">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/pyansys_logo_transparent_black.png" class="logo__image only-light" alt="PySystemCoupling - Home"/>
+    <script>document.write(`<img src="../_static/pyansys_logo_transparent_white.png" class="logo__image only-dark" alt="PySystemCoupling - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-wrench fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Contribute</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(
+      (text) => (document.getElementById("announcement_msg").innerHTML = text),
+    )
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting_started/index.html">
+    Getting started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../api/index.html">
+    API reference
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../contributing.html">
+    Contribute
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ansys/pysystem-coupling/issues" title="Support" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-comment fa-fw fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Support</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://systemcoupling.docs.pyansys.com/version/dev/contributing.html" title="Contribute" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa fa-wrench fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Contribute</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="system_coupling_concepts.html">System Coupling concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syc_datamodel.html">System Coupling data model</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Analysis setup</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syc_solution.html">Solving an analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="syc_persistence.html">Analysis persistence</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+         
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.pyansys.com" class="nav-link">PyAnsys</a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a
+        href="../index.html"
+        class="nav-link"
+        aria-label="Home"
+      >
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+     
+    <li class="breadcrumb-item">
+      <a href="index.html" class="nav-link">User guide</a>
+    </li>
+      
+    <li class="breadcrumb-item active" aria-current="page">Analysis setup</li>
+    
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="analysis-setup">
+<span id="ref-syc-analysis-setup"></span><h1>Analysis setup<a class="headerlink" href="#analysis-setup" title="Link to this heading">#</a></h1>
+<p>This page describes the basic workflow for setting up a coupled analysis from scratch.
+It assumes that a PySystemCoupling <code class="docutils literal notranslate"><span class="pre">Session</span></code> object (<code class="docutils literal notranslate"><span class="pre">syc_session</span></code>) has been created.</p>
+<p>The focus here is on the <code class="docutils literal notranslate"><span class="pre">setup</span></code> attribute (<code class="docutils literal notranslate"><span class="pre">syc_session.setup</span></code>) for the <code class="docutils literal notranslate"><span class="pre">Session</span></code> object.
+This attribute defines the analysis in terms of the <a class="reference internal" href="syc_datamodel.html#ref-syc-datamodel"><span class="std std-ref">data model</span></a>.</p>
+<p>For descriptions of the <code class="docutils literal notranslate"><span class="pre">Session</span></code> object’s <code class="docutils literal notranslate"><span class="pre">solution</span></code> and <code class="docutils literal notranslate"><span class="pre">case</span></code> attributes, see these pages:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="syc_solution.html#ref-syc-solution"><span class="std std-ref">Solving an analysis</span></a>: Operations related to solving an analysis and examining the solution</p></li>
+<li><p><a class="reference internal" href="syc_persistence.html#ref-syc-persistence"><span class="std std-ref">Analysis persistence</span></a>: Operations for saving and resuming cases</p></li>
+</ul>
+<section id="set-up-participant-cases">
+<h2>Set up participant cases<a class="headerlink" href="#set-up-participant-cases" title="Link to this heading">#</a></h2>
+<p>Any participant that is involved in a coupled analysis must set up its case to solve its part of
+the coupled physics analysis. Typically, this is very similar to setting up a standalone case
+for this solver. Each participant has its own way of specifying data transfers to and from
+System Coupling. For example, Fluent uses fluid boundary conditions.</p>
+<p>While information on setting up participant cases is beyond the scope of this guide, you
+can see the System Coupling documentation for examples.</p>
+</section>
+<section id="add-participants">
+<h2>Add participants<a class="headerlink" href="#add-participants" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">add_participant</span></code> command is used to define information about the participants involved
+in the analysis.</p>
+<p>In its most common usage, this command accepts a file containing essential data about a participant,
+such as the variables it exposes and the regions on which they are available.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; setup.add_participant(input_file=&quot;fluent.scp&quot;)
+&#39;FLUENT-1&#39;
+&gt;&gt;&gt; setup.add_participant(input_file=&quot;mapdl.scp&quot;)
+&#39;MAPDL-2&#39;
+</pre></div>
+</div>
+<p>The name of the created <code class="docutils literal notranslate"><span class="pre">coupling_participant</span></code> object is returned in each case.</p>
+<p>This code shows how you can capture the name in a variable to assist with subsequent access
+to the object:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">fluent_part</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">add_participant</span><span class="p">(</span><span class="n">input_file</span><span class="o">=</span><span class="s2">&quot;fluent.scp&quot;</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">setup</span><span class="o">.</span><span class="n">coupling_participant</span><span class="p">[</span><span class="n">fluent_part</span><span class="p">]</span><span class="o">.</span><span class="n">participant_type</span> <span class="o">==</span> <span class="s2">&quot;FLUENT&quot;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">add_participant</span></code> command not only creates a participant object but also helps
+to initialize other aspects of the data model state. After the preceding code
+adds Fluent and MAPDL participants, the <code class="docutils literal notranslate"><span class="pre">analysis_control</span></code>, <code class="docutils literal notranslate"><span class="pre">solution_control</span></code>, and
+<code class="docutils literal notranslate"><span class="pre">output_control</span></code> objects are created with default values. For more information,
+see the following output from the <code class="docutils literal notranslate"><span class="pre">print_state</span></code> command. Ellipses (<code class="docutils literal notranslate"><span class="pre">...</span></code>) appear where
+details are omitted from the output.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; setup.print_state()
+
+coupling_participant :
+    MAPDL-2 :
+        participant_type : MAPDL
+        participant_display_name : MAPDL Transient
+        display_name : MAPDL Transient
+        dimension : 3D
+        participant_analysis_type : Transient
+        restarts_supported : True
+        variable :
+            FORC :
+                quantity_type : Force
+                ...
+            INCD :
+                quantity_type : Incremental Displacement
+                ...
+         region :
+            FSIN_1 :
+                topology : Surface
+                input_variables :
+                    0 : FORC
+                output_variables :
+                    0 : INCD
+                display_name : FSIN_1_Fluid Solid Interface
+        update_control :
+            option : ProgramControlled
+        execution_control :
+            option : ProgramControlled
+            ...
+    FLUENT-1 :
+        participant_type : FLUENT
+        participant_display_name : Fluid Flow (Fluent)
+        display_name : Fluid Flow (Fluent)
+        dimension : 3D
+        participant_analysis_type : Transient
+        restarts_supported : True
+        variable :
+        force :
+            quantity_type : Force
+            ...
+        displacement :
+            quantity_type : Incremental Displacement
+            ...
+        region :
+            ...
+            wall_deforming :
+                topology : Surface
+                input_variables :
+                    0 : displacement
+                output_variables :
+                    0 : force
+                display_name : wall_deforming
+            ...
+        update_control :
+            option : ProgramControlled
+        execution_control :
+            option : ProgramControlled
+            ...
+analysis_control :
+    analysis_type : Transient
+    ...
+    global_stabilization :
+        option : None
+solution_control :
+    duration_option : EndTime
+    end_time : &lt;None&gt;
+    time_step_size : &lt;None&gt;
+output_control :
+    option : LastStep
+    ...
+</pre></div>
+</div>
+</section>
+<section id="set-unset-values">
+<h2>Set <em>unset</em> values<a class="headerlink" href="#set-unset-values" title="Link to this heading">#</a></h2>
+<p>In the preceding <code class="docutils literal notranslate"><span class="pre">print_state</span></code> output, most settings are assigned default values.
+A value of <code class="docutils literal notranslate"><span class="pre">&lt;None&gt;</span></code> indicates an <em>unset</em> (missing) value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For some settings in the data model, the string <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code> is a legitimate value.
+For example, the default for the <code class="docutils literal notranslate"><span class="pre">analysis_control.global_stabilization.option</span></code>
+setting is <code class="docutils literal notranslate"><span class="pre">&quot;None&quot;</span></code>. To avoid ambiguity, the <code class="docutils literal notranslate"><span class="pre">print_state</span></code> output
+displays <code class="docutils literal notranslate"><span class="pre">&lt;None&gt;</span></code> for unset values.</p>
+<p>If queried in Python, an unset value holds the Python <code class="docutils literal notranslate"><span class="pre">None</span></code> object or an empty list
+(<code class="docutils literal notranslate"><span class="pre">[]</span></code>) for a setting whose value is a list.</p>
+</div>
+<p>In the preceding setup, the important unset values are those for <code class="docutils literal notranslate"><span class="pre">solution_control</span></code> settings.
+These unset values are addressed later because they are considered to be errors in the setup.
+Unless values are provided, the solution is blocked.</p>
+<p>While some settings in the above <code class="docutils literal notranslate"><span class="pre">coupling_participant</span></code> objects have <code class="docutils literal notranslate"><span class="pre">&lt;None&gt;</span></code> values, these
+unset values are not considered to be missing values nor indicate any kind of error in the
+setup. They are rather more specialized optional settings that have not been provided in
+the relevant input files.</p>
+<p>Generally, the <code class="docutils literal notranslate"><span class="pre">coupling_participant</span></code> state can be considered to be read-only once it has
+been created. Further edits should not be necessary.</p>
+</section>
+<section id="create-interfaces">
+<h2>Create interfaces<a class="headerlink" href="#create-interfaces" title="Link to this heading">#</a></h2>
+<p>Each coupled analysis must have at least one coupling interface. Coupling interfaces must be
+added to the analysis individually. When adding a coupling interface, you must specify the
+participant name and the regions to be associated with each side of the coupling interface.</p>
+<p>Interface names must be unique within the coupled analysis. When coupling interfaces are added,
+they are assigned default names according to the convention <code class="docutils literal notranslate"><span class="pre">CouplingInterface#</span></code>, where <code class="docutils literal notranslate"><span class="pre">#</span></code>
+indicates the order in which the interfaces were created. For example, if three interfaces are
+created, they are named <code class="docutils literal notranslate"><span class="pre">CouplingInterface1</span></code>, <code class="docutils literal notranslate"><span class="pre">CouplingInterface2</span></code>, and <code class="docutils literal notranslate"><span class="pre">CouplingInterface3</span></code>.</p>
+<p>This code shows how you use the <code class="docutils literal notranslate"><span class="pre">add_interface</span></code> command to add an interface to the analysis:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">interface_name</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">add_interface</span><span class="p">(</span>
+    <span class="n">side_one_participant</span><span class="o">=</span><span class="s2">&quot;MAPDL-2&quot;</span><span class="p">,</span>
+    <span class="n">side_one_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;FSIN_1&quot;</span><span class="p">],</span>
+    <span class="n">side_two_participant</span><span class="o">=</span><span class="s2">&quot;FLUENT-1&quot;</span><span class="p">,</span>
+    <span class="n">side_two_regions</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;wall_deforming&quot;</span><span class="p">],</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">add_interface</span></code> command returns the name of the interface created. This name
+is saved in a variable for later use.</p>
+</section>
+<section id="add-data-transfers">
+<h2>Add data transfers<a class="headerlink" href="#add-data-transfers" title="Link to this heading">#</a></h2>
+<p>Each interface must contain at least one data transfer specification in the form of a
+named <code class="docutils literal notranslate"><span class="pre">data_transfer</span></code> object. When adding a data transfer, you must specify the
+interface on which the transfer is to be added, the target side for the transfer,
+and the variables to be associated with each side of the interface.</p>
+<p>The following code shows how you use the <code class="docutils literal notranslate"><span class="pre">add_data_transfer</span></code> command to add a data transfer
+to an interface. The interface name is the value that is returned by the <code class="docutils literal notranslate"><span class="pre">add_interface</span></code>
+command.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">force_transfer_name</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+    <span class="n">interface</span><span class="o">=</span><span class="n">interface_name</span><span class="p">,</span>
+    <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;One&quot;</span><span class="p">,</span>
+    <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;FORC&quot;</span><span class="p">,</span>
+    <span class="n">source_variable</span><span class="o">=</span><span class="s2">&quot;force&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">displacement_transfer_name</span> <span class="o">=</span> <span class="n">setup</span><span class="o">.</span><span class="n">add_data_transfer</span><span class="p">(</span>
+    <span class="n">interface</span><span class="o">=</span><span class="n">interface_name</span><span class="p">,</span>
+    <span class="n">target_side</span><span class="o">=</span><span class="s2">&quot;Two&quot;</span><span class="p">,</span>
+    <span class="n">source_variable</span><span class="o">=</span><span class="s2">&quot;INCD&quot;</span><span class="p">,</span>
+    <span class="n">target_variable</span><span class="o">=</span><span class="s2">&quot;displacement&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>This code shows how you can examine the state of the resulting interface:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; setup.coupling_interface[interface_name].print_state()
+
+display_name : Interface-1
+side :
+    Two :
+        coupling_participant : FLUENT-1
+        region_list :
+            0 : wall_deforming
+        reference_frame : GlobalReferenceFrame
+        instancing : None
+    One :
+        coupling_participant : MAPDL-2
+        region_list :
+            0 : FSIN_1
+        reference_frame : GlobalReferenceFrame
+        instancing : None
+data_transfer :
+    FORC :
+        display_name : Force
+        suppress : False
+        target_side : One
+        option : UsingVariable
+        source_variable : force
+        target_variable : FORC
+        ramping_option : None
+        relaxation_factor : 1.0
+        convergence_target : 0.01
+        mapping_type : Conservative
+    displacement :
+        display_name : displacement
+        suppress : False
+        target_side : Two
+        option : UsingVariable
+        source_variable : INCD
+        target_variable : displacement
+        ramping_option : None
+        relaxation_factor : 1.0
+        convergence_target : 0.01
+        mapping_type : ProfilePreserving
+        unmapped_value_option : Nearest Value
+mapping_control :
+    stop_if_poor_intersection : True
+    poor_intersection_threshold : 0.5
+    face_alignment : ProgramControlled
+    absolute_gap_tolerance : 0.0 [m]
+    relative_gap_tolerance : 1.0
+</pre></div>
+</div>
+</section>
+<section id="check-for-errors-and-finalize-settings">
+<h2>Check for errors and finalize settings<a class="headerlink" href="#check-for-errors-and-finalize-settings" title="Link to this heading">#</a></h2>
+<p>The setup is essentially complete at this point. However, as mentioned earlier,
+some unset settings remain. If you were to try to solve the analysis at this
+point, it would fail immediately with a raised exception because of the unset values.</p>
+<p>To query for any errors in the setup, call the <code class="docutils literal notranslate"><span class="pre">get_status_messages</span></code> command. This
+command also returns any current warnings, informational messages, and any active settings
+that are at <em>Alpha</em> or <em>Beta</em> level.</p>
+<p>As shown in the following code, the return value of the <code class="docutils literal notranslate"><span class="pre">get_status_messages</span></code> command
+is a list of dictionaries, where each dictionary provides the details of a message. You
+can use the <code class="docutils literal notranslate"><span class="pre">level</span></code> field in a message dictionary to filter the message list:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>&gt;&gt;&gt; from pprint import pprint
+&gt;&gt;&gt; pprint([msg for msg in setup.get_status_messages() if msg[&quot;level&quot;] == &quot;Error&quot;])
+[{&#39;level&#39;: &#39;Error&#39;,
+&#39;message&#39;: &#39;TimeStepSize not defined for Transient analysis&#39;,
+&#39;path&#39;: &#39;solution_control&#39;},
+{&#39;level&#39;: &#39;Error&#39;,
+&#39;message&#39;: &#39;EndTime not defined for Transient analysis&#39;,
+&#39;path&#39;: &#39;solution_control&#39;}]
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">'path'</span></code> field in a message dictionary indicates the location in the data model
+to which the message pertains. In the preceding output, this points to the <code class="docutils literal notranslate"><span class="pre">solution_control</span></code>
+object, but the specific settings causing the error are indicated in the message itself.
+However, the setting names referenced in the message (such as <code class="docutils literal notranslate"><span class="pre">'TimeStepSize'</span></code> and
+<code class="docutils literal notranslate"><span class="pre">'EndTime'</span></code>) are in the form that is used in System Coupling’s native API. This reflects the
+way that <code class="docutils literal notranslate"><span class="pre">get_status_messages</span></code> is exposed into PySystemCoupling, which does not currently
+allow for reliable automatic translation to PySystemCoupling naming. You should
+be able to infer the PySystemCoupling names relatively easily by assuming a conversion
+from <em>camel case</em> to <em>snake case</em>.</p>
+</div>
+<p>The following code addresses the <code class="docutils literal notranslate"><span class="pre">'TimeStepSize'</span></code> and <code class="docutils literal notranslate"><span class="pre">'EndTime'</span></code> errors by assigning values to
+<code class="docutils literal notranslate"><span class="pre">end_time</span></code> and <code class="docutils literal notranslate"><span class="pre">time_step_size</span></code> in the <code class="docutils literal notranslate"><span class="pre">solution_control</span></code> object. These settings define,
+respectively, the duration of the transient coupled analysis and the time interval between
+each coupling step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">setup</span><span class="o">.</span><span class="n">solution_control</span><span class="o">.</span><span class="n">time_step_size</span> <span class="o">=</span> <span class="s2">&quot;0.1 [s]&quot;</span>
+<span class="n">setup</span><span class="o">.</span><span class="n">solution_control</span><span class="o">.</span><span class="n">end_time</span> <span class="o">=</span> <span class="s2">&quot;1.0 [s]&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="perform-additional-steps">
+<h2>Perform additional steps<a class="headerlink" href="#perform-additional-steps" title="Link to this heading">#</a></h2>
+<p>By performing the preceding steps, you have created a minimal workflow for a basic analysis
+setup. With this setup, you can attempt to solve the case. For more information, see
+<a class="reference internal" href="syc_solution.html#ref-syc-solution"><span class="std std-ref">Solving an analysis</span></a>.</p>
+<p>At this time, you might want to save the case or take a snapshot. For more information,
+see <a class="reference internal" href="syc_persistence.html#ref-syc-persistence"><span class="std std-ref">Analysis persistence</span></a>.</p>
+<p>Although a complete setup has been defined, you could apply many optional settings.
+For example, you might want to control the frequency with which solution data is saved or
+apply advanced settings to control the solution algorithm.</p>
+<p>In addition, you can create other data model object types to introduce more advanced
+features, such as expressions and reference frames, to the analysis. While advanced
+features are beyond the scope of this guide, the data model and its contents are fully
+documented in <a class="reference internal" href="../api/index.html#ref-index-api"><span class="std std-ref">API reference</span></a>. Additional guidance is available in the
+System Coupling documentation.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-participant-cases">Set up participant cases</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-participants">Add participants</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-unset-values">Set <em>unset</em> values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-interfaces">Create interfaces</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#add-data-transfers">Add data transfers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#check-for-errors-and-finalize-settings">Check for errors and finalize settings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#perform-additional-steps">Perform additional steps</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item"> 
+<div class="tocsection editthispage">
+  <a href="https://github.com/pyansys/pysystem-coupling/edit/main/doc/source/users_guide/analysis_setup.rst">
+    <i class="fa-solid fa-pencil"></i>
+       Edit
+    on GitHub  
+  </a>
+</div>
+
+</div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/users_guide/analysis_setup.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright (c) 2024 ANSYS, Inc. All rights reserved.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.0.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the
+  <a href="https://sphinxdocs.ansys.com/version/stable/index.html"
+    >Ansys Sphinx Theme</a
+  >
+  1.0.11. <br />Last updated on
+  <span id="date"></span>
+</p>
+<script>
+  var options = { day: "numeric", month: "long", year: "numeric" };
+  var lastModifiedDate = new Date(document.lastModified);
+  var date = lastModifiedDate.toLocaleDateString("en-US", options);
+  document.getElementById("date").innerHTML = date;
+</script></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,23 @@
+:orphan:
+
+.. _add_fsi_data_transfers:
+
+add_fsi_data_transfers
+======================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.add_fsi_data_transfers
+
+.. autoclass:: add_fsi_data_transfers
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

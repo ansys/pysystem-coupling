@@ -1,0 +1,6 @@
+to\_python\_name
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: IntegerList.to_python_name

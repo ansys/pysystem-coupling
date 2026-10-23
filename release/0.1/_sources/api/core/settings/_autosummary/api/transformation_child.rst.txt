@@ -1,0 +1,42 @@
+:orphan:
+
+.. _transformation_child:
+
+transformation_child
+====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.transformation_child
+
+.. autoclass:: transformation_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Specifies the type of transformation, ``Rotation`` or ``Translation``.
+
+angle : :ref:`RealType<real_type>`
+    The angle of rotation for a rotation transformation.
+
+axis : `str`
+    The axis of rotation to be used for a rotation transformation.
+    
+    - "XAxis" - Rotation is about the x-axis.
+    - "YAxis" - Rotation is about the y-axis.
+    - "ZAxis" - Rotation is about the z-axis.
+    - "UserDefined" - Rotation is about a user defined vector.
+
+vector : :ref:`RealVectorType<real_vector_type>`
+    Define an axis of rotation vector in the ``UserDefined`` case.
+
+.. rubric:: Included in:
+
+======================================   =======================================================================
+
+Parent                                                                                                   Summary
+
+======================================   =======================================================================
+:ref:`transformation <transformation>`       Use to apply transformations to coupling interface sides to control
+
+======================================   =======================================================================
+

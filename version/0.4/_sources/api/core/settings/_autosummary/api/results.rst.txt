@@ -1,0 +1,80 @@
+:orphan:
+
+.. _results:
+
+results
+=======
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.results
+
+.. autoclass:: results
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Specifies whether and when results files are generated.
+    
+    Allowed values:
+    
+    - "ProgramControlled" - Generate postprocessing results at the same
+      frequency as restart points, as defined by the output control option
+      setting. If no restart frequency is defined, then results are
+      generated at the end of the last coupling step.
+    
+    -  "Off" - Generation of postprocessing results is disabled.
+    
+    Allowed values for step-based analyses:
+    
+    - "LastStep" - Generate results only for the last coupling step completed.
+    
+    - "EveryStep" - Generate results at the end of every coupling step.
+    
+    - "StepInterval" - Generate results at the end of coupling steps at
+      the interval specified by the output frequency setting.
+    
+    Allowed values for iteration-based analyses:
+    
+    - "LastIteration" - Generate results only for the last coupling
+      iteration completed.
+    
+    - "EveryIteration" - Generate results at the end of every coupling
+      iteration.
+    
+    - "IterationInterval" - Generate results at the end of coupling
+      iterations at the interval specified by the output frequency setting.
+
+include_instances : `str`
+    Control whether instances are output.
+    
+    Allowed values:
+    
+    - "ProgramControlled"
+    - "ReferenceOnly"
+    - "All" 
+
+output_frequency : `int`
+    Specify output frequency.
+
+.. rubric:: Children
+
+==================   ================================
+
+Child                                         Summary
+
+==================   ================================
+:ref:`type <type>`       File type for result output.
+
+==================   ================================
+
+.. rubric:: Included in:
+
+======================================   ==============================
+
+Parent                                                          Summary
+
+======================================   ==============================
+:ref:`output_control <output_control>`       Configure output controls.
+
+======================================   ==============================
+

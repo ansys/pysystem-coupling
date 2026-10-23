@@ -1,0 +1,49 @@
+:orphan:
+
+.. _solution_root:
+
+solution_root
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.solution_root
+
+.. autoclass:: solution_root
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Commands
+
+========================================================   ===============================================================================
+
+Command                                                                                                                            Summary
+
+========================================================   ===============================================================================
+:ref:`abort <abort>`                                                                                           Aborts a solve in progress.
+
+:ref:`create_restart_point <create_restart_point>`                      Interactive command that creates a restart point at the end of the
+
+:ref:`get_machines <get_machines>`                                                                       Get currently available machines.
+
+:ref:`get_transformation <get_transformation>`                       Given an interface and side, returns the resultant transformation, in
+
+:ref:`initialize <initialize>`                                                    Interactive command that initializes a coupled analysis.
+
+:ref:`interrupt <interrupt>`                                                                               Interrupts a solve in progress.
+
+:ref:`open_results_in_ensight <open_results_in_ensight>`                Allows for System Coupling results to be postprocessed in EnSight.
+
+:ref:`partition_participants <partition_participants>`         Provide a utility for setting the parallel algorithm, parallel partitioning
+
+:ref:`shutdown <shutdown>`                                                         Interactive command that shuts down a coupled analysis.
+
+:ref:`solve <solve>`                                            Starts the participants (if necessary) and solves the coupled analysis. By
+
+:ref:`start_participants <start_participants>`                          Important: This command is deprecated. Consider adopting workflows
+
+:ref:`step <step>`                                                    Interactive command that initializes the analysis (if necessary) and
+
+:ref:`write_csv_chart_files <write_csv_chart_files>`                 For each coupling interface, exports a CSV file containing chart data
+
+:ref:`write_ensight <write_ensight>`                               Write a file with mesh and results which can be loaded into Ensight for
+
+========================================================   ===============================================================================
+

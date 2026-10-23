@@ -1,0 +1,23 @@
+:orphan:
+
+.. _delete_transformation:
+
+delete_transformation
+=====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.delete_transformation
+
+.. autoclass:: delete_transformation
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

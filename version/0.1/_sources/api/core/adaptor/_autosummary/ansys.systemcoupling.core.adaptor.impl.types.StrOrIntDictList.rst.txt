@@ -1,0 +1,46 @@
+.. _dm_StrOrIntDictList:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.StrOrIntDictList
+=============================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: StrOrIntDictList
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~StrOrIntDictList.__init__
+      ~StrOrIntDictList.get_property_state
+      ~StrOrIntDictList.get_state
+      ~StrOrIntDictList.print_state
+      ~StrOrIntDictList.set_property_state
+      ~StrOrIntDictList.set_state
+      ~StrOrIntDictList.set_sycproxy
+      ~StrOrIntDictList.to_python_keys
+      ~StrOrIntDictList.to_python_name
+      ~StrOrIntDictList.to_syc_keys
+      ~StrOrIntDictList.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StrOrIntDictList.obj_name
+      ~StrOrIntDictList.path
+      ~StrOrIntDictList.syc_name
+      ~StrOrIntDictList.syc_path
+      ~StrOrIntDictList.sycproxy
+   
+   

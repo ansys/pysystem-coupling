@@ -1,0 +1,46 @@
+.. _dm_Filename:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Filename
+=====================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Filename
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Filename.__init__
+      ~Filename.get_property_state
+      ~Filename.get_state
+      ~Filename.print_state
+      ~Filename.set_property_state
+      ~Filename.set_state
+      ~Filename.set_sycproxy
+      ~Filename.to_python_keys
+      ~Filename.to_python_name
+      ~Filename.to_syc_keys
+      ~Filename.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Filename.obj_name
+      ~Filename.path
+      ~Filename.syc_name
+      ~Filename.syc_path
+      ~Filename.sycproxy
+   
+   
