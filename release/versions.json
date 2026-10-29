@@ -1,0 +1,10 @@
+[
+    {
+        "version": "dev",
+        "url": "https://systemcoupling.docs.pyansys.com/dev/"
+    },
+    {
+        "version": "0.1 (stable)",
+        "url": "https://systemcoupling.docs.pyansys.com/release/0.1/"
+    }
+]

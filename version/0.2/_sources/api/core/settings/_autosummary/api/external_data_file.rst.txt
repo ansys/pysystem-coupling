@@ -1,0 +1,28 @@
+:orphan:
+
+.. _external_data_file:
+
+external_data_file
+==================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.external_data_file
+
+.. autoclass:: external_data_file
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+file_path : `str`
+    Path to file for communication with a coupling participant.
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

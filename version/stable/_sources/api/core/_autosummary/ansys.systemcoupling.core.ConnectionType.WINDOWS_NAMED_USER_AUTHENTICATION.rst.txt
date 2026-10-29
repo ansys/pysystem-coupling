@@ -1,0 +1,6 @@
+WINDOWS\_NAMED\_USER\_AUTHENTICATION
+====================================
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoattribute:: ConnectionType.WINDOWS_NAMED_USER_AUTHENTICATION

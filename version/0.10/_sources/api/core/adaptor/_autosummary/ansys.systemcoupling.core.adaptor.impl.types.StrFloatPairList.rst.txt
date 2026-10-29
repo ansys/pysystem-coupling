@@ -1,0 +1,46 @@
+.. _dm_StrFloatPairList:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.StrFloatPairList
+=============================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: StrFloatPairList
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~StrFloatPairList.__init__
+      ~StrFloatPairList.get_property_state
+      ~StrFloatPairList.get_state
+      ~StrFloatPairList.print_state
+      ~StrFloatPairList.set_property_state
+      ~StrFloatPairList.set_state
+      ~StrFloatPairList.set_sycproxy
+      ~StrFloatPairList.to_python_keys
+      ~StrFloatPairList.to_python_name
+      ~StrFloatPairList.to_syc_keys
+      ~StrFloatPairList.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~StrFloatPairList.obj_name
+      ~StrFloatPairList.path
+      ~StrFloatPairList.syc_name
+      ~StrFloatPairList.syc_path
+      ~StrFloatPairList.sycproxy
+   
+   

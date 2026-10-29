@@ -1,0 +1,23 @@
+:orphan:
+
+.. _add_ordered_data_transfers:
+
+add_ordered_data_transfers
+==========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.add_ordered_data_transfers
+
+.. autoclass:: add_ordered_data_transfers
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

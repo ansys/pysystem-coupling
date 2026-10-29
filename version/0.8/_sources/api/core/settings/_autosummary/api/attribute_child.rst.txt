@@ -1,0 +1,45 @@
+:orphan:
+
+.. _attribute_child:
+
+attribute_child
+===============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.attribute_child
+
+.. autoclass:: attribute_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+attribute_type : `str`
+    The type of the attribute ("Real" or "Integer").
+
+real_value : :ref:`RealType<real_type>`
+    Real attribute value.
+
+integer_value : `int`
+    Integer attribute value.
+
+.. rubric:: Children
+
+======================================   =======================================
+
+Child                                                                    Summary
+
+======================================   =======================================
+:ref:`dimensionality <dimensionality>`       Configure attribute dimensionality.
+
+======================================   =======================================
+
+.. rubric:: Included in:
+
+============================   ======================================
+
+Parent                                                        Summary
+
+============================   ======================================
+:ref:`attribute <attribute>`       Configure a variable's attributes.
+
+============================   ======================================
+

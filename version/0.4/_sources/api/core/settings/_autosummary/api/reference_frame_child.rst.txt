@@ -1,0 +1,55 @@
+:orphan:
+
+.. _reference_frame_child:
+
+reference_frame_child
+=====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.reference_frame_child
+
+.. autoclass:: reference_frame_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Method used to define the transformation from the parent reference frame.
+    
+    - "ByTransformation" - Define the reference frame by one or more
+      transformation operations.
+    - "Automatic" - Align source and target automatically.
+    - "ByMatrix" - Only available if Alpha features are activated.
+
+parent_reference_frame : `str`
+    Set the parent reference frame.
+
+transformation_order : :ref:`StringListType<string_list_type>`
+    List names of transformations in the order in which they apply.
+    
+    Available for the ``ByTransformation`` option.
+
+transformation_matrix : :ref:`RealListType<real_list_type>`
+    Define the transformation matrix when ``ByTransformation`` option is active.
+
+.. rubric:: Children
+
+======================================   =======================================================================
+
+Child                                                                                                    Summary
+
+======================================   =======================================================================
+:ref:`transformation <transformation>`       Use to apply transformations to coupling interface sides to control
+
+======================================   =======================================================================
+
+.. rubric:: Included in:
+
+========================================   ================================================================
+
+Parent                                                                                              Summary
+
+========================================   ================================================================
+:ref:`reference_frame <reference_frame>`       Provide a transformation relative to a ParentReferenceFrame.
+
+========================================   ================================================================
+

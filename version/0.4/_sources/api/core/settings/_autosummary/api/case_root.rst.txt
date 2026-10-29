@@ -1,0 +1,33 @@
+:orphan:
+
+.. _case_root:
+
+case_root
+=========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.case_root
+
+.. autoclass:: case_root
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Commands
+
+========================================   ============================================================================
+
+Command                                                                                                         Summary
+
+========================================   ============================================================================
+:ref:`clear_state <clear_state>`                   Clears the state of the entire System Coupling service, removing all
+
+:ref:`delete_snapshot <delete_snapshot>`                                               Deletes a snapshot if it exists.
+
+:ref:`open <open>`                             Reads the state of a coupled analysis. The state consists of settings to
+
+:ref:`open_snapshot <open_snapshot>`            Opens a snapshot containing a previously saved state of the simulation.
+
+:ref:`save <save>`                                                  Saves the state of the coupled analysis data model.
+
+:ref:`save_snapshot <save_snapshot>`             Saves a snapshot of the current state of the simulation. Snapshot will
+
+========================================   ============================================================================
+
