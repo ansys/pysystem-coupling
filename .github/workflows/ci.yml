@@ -233,19 +233,19 @@ jobs:
           password: ${{ secrets.PYANSYS_CI_BOT_TOKEN }}
 
       - name: Unit Test v24.1.0
-        uses: ./.github/actions/unit-test
+        uses: $/.github/actions/unit-test
         with:
           image-tag: v24.1.0
           upload-coverage: false
 
       - name: Unit Test v24.2.0 (SP5)
-        uses: ./.github/actions/unit-test
+        uses: $/.github/actions/unit-test
         with:
           image-tag: v24.2.0-sp05
           upload-coverage: false
 
       - name: Unit Test v25.1.0 (SP4)
-        uses: ./.github/actions/unit-test
+        uses: $/.github/actions/unit-test
         with:
           image-tag: v25.1.0-sp04
           upload-coverage: false
@@ -253,7 +253,7 @@ jobs:
           ANSYSLMD_LICENSE_FILE: "1055@${{ secrets.LICENSE_SERVER }}"
 
       - name: Unit Test v25.2.0 (SP3)
-        uses: ./.github/actions/unit-test
+        uses: $/.github/actions/unit-test
         with:
           image-tag: v25.2.0-sp03
           upload-coverage: false
@@ -294,7 +294,7 @@ jobs:
       - name: Unit Test v26.1.0 (attempt 1)
         id: unit_test_v261_attempt1
         continue-on-error: true
-        uses: ./.github/actions/unit-test
+        uses: $/.github/actions/unit-test
         with:
           image-tag: v26.1.0
           upload-coverage: true
@@ -306,7 +306,7 @@ jobs:
         id: unit_test_v261_attempt2
         if: steps.unit_test_v261_attempt1.outcome == 'failure'
         continue-on-error: true
-        uses: ./.github/actions/unit-test
+        uses: $/.github/actions/unit-test
         with:
           image-tag: v26.1.0
           upload-coverage: true
@@ -321,7 +321,7 @@ jobs:
           exit 1
 
       #- name: Unit Test latest
-      #  uses: ./.github/actions/unit-test
+      #  uses: $/.github/actions/unit-test
       #  with:
       #    image-tag: latest
       #    upload-coverage: false
