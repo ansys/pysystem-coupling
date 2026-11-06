@@ -1,0 +1,46 @@
+.. _dm_SettingsBase:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.SettingsBase
+=========================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: SettingsBase
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~SettingsBase.__init__
+      ~SettingsBase.get_property_state
+      ~SettingsBase.get_state
+      ~SettingsBase.print_state
+      ~SettingsBase.set_property_state
+      ~SettingsBase.set_state
+      ~SettingsBase.set_sycproxy
+      ~SettingsBase.to_python_keys
+      ~SettingsBase.to_python_name
+      ~SettingsBase.to_syc_keys
+      ~SettingsBase.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SettingsBase.obj_name
+      ~SettingsBase.path
+      ~SettingsBase.syc_name
+      ~SettingsBase.syc_path
+      ~SettingsBase.sycproxy
+   
+   

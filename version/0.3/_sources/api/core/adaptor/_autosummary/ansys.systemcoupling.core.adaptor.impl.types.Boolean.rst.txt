@@ -1,0 +1,46 @@
+.. _dm_Boolean:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Boolean
+====================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Boolean
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Boolean.__init__
+      ~Boolean.get_property_state
+      ~Boolean.get_state
+      ~Boolean.print_state
+      ~Boolean.set_property_state
+      ~Boolean.set_state
+      ~Boolean.set_sycproxy
+      ~Boolean.to_python_keys
+      ~Boolean.to_python_name
+      ~Boolean.to_syc_keys
+      ~Boolean.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Boolean.obj_name
+      ~Boolean.path
+      ~Boolean.syc_name
+      ~Boolean.syc_path
+      ~Boolean.sycproxy
+   
+   

@@ -1,0 +1,28 @@
+:orphan:
+
+.. _reference_frame:
+
+reference_frame
+===============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.reference_frame
+
+.. autoclass:: reference_frame
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`reference_frame_child <reference_frame_child>`
+
+
+.. rubric:: Included in:
+
+========================   =============================================================================
+
+Parent                                                                                           Summary
+
+========================   =============================================================================
+:ref:`library <library>`       Contains objects that can be referenced from elsewhere in the data model.
+
+========================   =============================================================================
+

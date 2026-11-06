@@ -1,0 +1,28 @@
+:orphan:
+
+.. _region:
+
+region
+======
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.region
+
+.. autoclass:: region
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`region_child <region_child>`
+
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

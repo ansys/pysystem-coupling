@@ -1,0 +1,6 @@
+to\_syc\_name
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: RealList.to_syc_name

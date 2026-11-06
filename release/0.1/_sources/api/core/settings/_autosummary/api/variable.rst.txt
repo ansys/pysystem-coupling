@@ -1,0 +1,28 @@
+:orphan:
+
+.. _variable:
+
+variable
+========
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.variable
+
+.. autoclass:: variable
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`variable_child <variable_child>`
+
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

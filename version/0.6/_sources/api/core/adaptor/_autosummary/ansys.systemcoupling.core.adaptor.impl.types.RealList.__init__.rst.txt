@@ -1,0 +1,6 @@
+\_\_init\_\_
+============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: RealList.__init__

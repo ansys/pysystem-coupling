@@ -1,0 +1,31 @@
+:orphan:
+
+.. _avoid_data_reconstruction:
+
+avoid_data_reconstruction
+=========================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.avoid_data_reconstruction
+
+.. autoclass:: avoid_data_reconstruction
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+volume_mapping : `bool`
+    UNDOCUMENTED
+
+surface_mapping : `bool`
+    UNDOCUMENTED
+
+.. rubric:: Included in:
+
+==========================================   ================================
+
+Parent                                                                Summary
+
+==========================================   ================================
+:ref:`analysis_control <analysis_control>`       Configure coupling controls.
+
+==========================================   ================================
+

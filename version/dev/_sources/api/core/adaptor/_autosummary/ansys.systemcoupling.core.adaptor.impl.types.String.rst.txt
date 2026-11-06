@@ -1,0 +1,46 @@
+.. _dm_String:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.String
+===================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: String
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~String.__init__
+      ~String.get_property_state
+      ~String.get_state
+      ~String.print_state
+      ~String.set_property_state
+      ~String.set_state
+      ~String.set_sycproxy
+      ~String.to_python_keys
+      ~String.to_python_name
+      ~String.to_syc_keys
+      ~String.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~String.obj_name
+      ~String.path
+      ~String.syc_name
+      ~String.syc_path
+      ~String.sycproxy
+   
+   

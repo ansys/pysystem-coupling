@@ -1,0 +1,6 @@
+case
+====
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. autoproperty:: Session.case

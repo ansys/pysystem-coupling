@@ -1,0 +1,6 @@
+MTLS\_LOCAL
+===========
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoattribute:: ConnectionType.MTLS_LOCAL
