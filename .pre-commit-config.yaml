@@ -4,28 +4,28 @@ exclude: ^(doc/source/examples)
 # initially copied from pymapdl
 repos:
 - repo: https://github.com/psf/black
-  rev: 26.5.1  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY -  ALSO: check pyproject.toml
+  rev: 26.10.1  # IF VERSION CHANGES --> MODIFY "blacken-docs" MANUALLY -  ALSO: check pyproject.toml
   hooks:
   - id: black
 
 - repo: https://github.com/adamchainz/blacken-docs
-  rev: 1.16.0
+  rev: 1.20.0
   hooks:
   -   id: blacken-docs
-      additional_dependencies: [black==26.5.1] # Ensure synced with black version above
+      additional_dependencies: [black==26.10.1] # Ensure synced with black version above
 
 - repo: https://github.com/pycqa/isort
-  rev: 8.0.1 # Should be in sync with version in pyproject.toml
+  rev: 9.0.2 # Should be in sync with version in pyproject.toml
   hooks:
   - id: isort
 
 - repo: https://github.com/PyCQA/flake8
-  rev: 7.3.0 # ensure in sync with pyproject.toml
+  rev: 7.5.0 # ensure in sync with pyproject.toml
   hooks:
   - id: flake8
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.4.2 # ensure in sync with pyproject.toml
+  rev: v2.4.3 # ensure in sync with pyproject.toml
   hooks:
   - id: codespell
     args: ["--ignore-words", "doc/styles/config/vocabularies/ANSYS/accept.txt"]
@@ -40,12 +40,12 @@ repos:
 
 # validate GitHub workflow files
 - repo: https://github.com/python-jsonschema/check-jsonschema
-  rev: 0.27.3
+  rev: 0.39.0
   hooks:
     - id: check-github-workflows
 
 - repo: https://github.com/ansys/pre-commit-hooks
-  rev: v0.7.2
+  rev: v0.8.0
   hooks:
   - id: add-license-headers
     args:
