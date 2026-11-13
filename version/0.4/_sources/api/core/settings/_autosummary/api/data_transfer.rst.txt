@@ -1,0 +1,28 @@
+:orphan:
+
+.. _data_transfer:
+
+data_transfer
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.data_transfer
+
+.. autoclass:: data_transfer
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`data_transfer_child <data_transfer_child>`
+
+
+.. rubric:: Included in:
+
+==========================================================   ===================================
+
+Parent                                                                                   Summary
+
+==========================================================   ===================================
+:ref:`coupling_interface_child <coupling_interface_child>`       Configure a coupling interface.
+
+==========================================================   ===================================
+

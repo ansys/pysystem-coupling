@@ -1,0 +1,46 @@
+.. _dm_RealVector:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.RealVector
+=======================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: RealVector
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~RealVector.__init__
+      ~RealVector.get_property_state
+      ~RealVector.get_state
+      ~RealVector.print_state
+      ~RealVector.set_property_state
+      ~RealVector.set_state
+      ~RealVector.set_sycproxy
+      ~RealVector.to_python_keys
+      ~RealVector.to_python_name
+      ~RealVector.to_syc_keys
+      ~RealVector.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RealVector.obj_name
+      ~RealVector.path
+      ~RealVector.syc_name
+      ~RealVector.syc_path
+      ~RealVector.sycproxy
+   
+   

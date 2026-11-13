@@ -1,0 +1,60 @@
+﻿.. vale off
+
+types
+=====
+
+.. automodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      to_python_name
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: datamodel-class-template.rst
+   
+      Base
+      Boolean
+      BooleanList
+      Command
+      Container
+      Filename
+      InjectedCommand
+      Integer
+      IntegerList
+      NamedContainer
+      ParticipantSession
+      PathCommand
+      Real
+      RealList
+      RealVector
+      SettingsBase
+      StrFloatPairList
+      StrOrIntDictList
+      StrOrIntDictListDict
+      String
+      StringList
+   
+   
+
+   
+   
+   
+
+
+

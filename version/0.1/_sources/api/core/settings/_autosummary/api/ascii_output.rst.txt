@@ -1,0 +1,42 @@
+:orphan:
+
+.. _ascii_output:
+
+ascii_output
+============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.ascii_output
+
+.. autoclass:: ascii_output
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Control ASCII interface data output.
+    
+    Allowed values:
+    
+    - "Off"
+    - "EveryStep" (for step-based analyses)
+    - "EveryIteration" (for iteration-based analyses)
+
+format : `str`
+    ASCII output format type.
+    
+    Allowed values:
+    
+    - "Axdt"
+    - "Csv" 
+
+.. rubric:: Included in:
+
+======================================   ==============================
+
+Parent                                                          Summary
+
+======================================   ==============================
+:ref:`output_control <output_control>`       Configure output controls.
+
+======================================   ==============================
+

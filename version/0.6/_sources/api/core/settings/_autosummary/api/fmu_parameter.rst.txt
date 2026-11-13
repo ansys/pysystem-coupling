@@ -1,0 +1,28 @@
+:orphan:
+
+.. _fmu_parameter:
+
+fmu_parameter
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.fmu_parameter
+
+.. autoclass:: fmu_parameter
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`fmu_parameter_child <fmu_parameter_child>`
+
+
+.. rubric:: Included in:
+
+==============================================================   =====================================
+
+Parent                                                                                         Summary
+
+==============================================================   =====================================
+:ref:`coupling_participant_child <coupling_participant_child>`       Configure a coupling participant.
+
+==============================================================   =====================================
+

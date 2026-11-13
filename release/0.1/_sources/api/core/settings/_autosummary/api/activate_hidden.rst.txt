@@ -1,0 +1,34 @@
+:orphan:
+
+.. _activate_hidden:
+
+activate_hidden
+===============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.activate_hidden
+
+.. autoclass:: activate_hidden
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+beta_features : `bool`
+    Turn on exposure of Beta features.
+
+alpha_features : `bool`
+    Turn on exposure of Alpha features. (Beta features must be turned on first)
+
+lenient_validation : `bool`
+    Allow a case with zero participants and zero coupling interfaces to be set up.
+
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

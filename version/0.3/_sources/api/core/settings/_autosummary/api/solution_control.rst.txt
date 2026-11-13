@@ -1,0 +1,61 @@
+:orphan:
+
+.. _solution_control:
+
+solution_control
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.solution_control
+
+.. autoclass:: solution_control
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+duration_option : `str`
+    Determine how the analysis duration is specified.
+    
+    Allowed values:
+    
+    - "EndTime" - Available for transient analyses. Execute coupling
+      steps until the analysis reaches the specified end time.
+    - "NumberOfSteps" - Perform coupling steps until the specified
+      number of steps is reached.
+
+end_time : :ref:`RealType<real_type>`
+    Set co-simulation end time.
+
+number_of_steps : `int`
+    Set number of coupling steps.
+
+time_step_size : :ref:`RealType<real_type>`
+    Set coupling time step size.
+
+minimum_iterations : `int`
+    Set minimum iterations within coupling step.
+
+maximum_iterations : `int`
+    Set maximum iterations within coupling step.
+
+.. rubric:: Children
+
+========================================   ==============================================
+
+Child                                                                             Summary
+
+========================================   ==============================================
+:ref:`available_ports <available_ports>`       Specify ports available for co-simulation.
+
+========================================   ==============================================
+
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

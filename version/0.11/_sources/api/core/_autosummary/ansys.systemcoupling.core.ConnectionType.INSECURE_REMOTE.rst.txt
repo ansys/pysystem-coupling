@@ -1,0 +1,6 @@
+INSECURE\_REMOTE
+================
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoattribute:: ConnectionType.INSECURE_REMOTE

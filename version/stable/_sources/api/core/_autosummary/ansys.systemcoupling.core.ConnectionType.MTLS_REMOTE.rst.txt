@@ -1,0 +1,6 @@
+MTLS\_REMOTE
+============
+
+.. currentmodule:: ansys.systemcoupling.core
+
+.. autoattribute:: ConnectionType.MTLS_REMOTE
