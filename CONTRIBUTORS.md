@@ -8,6 +8,7 @@
 
 * [Abhishek Chitwar](https://github.com/abhishekchitwar)
 * [German](https://github.com/germa89)
+* [james-thunes](https://github.com/james-thunes)
 * [JennaPaikowsky](https://github.com/JennaPaikowsky)
 * [jhirji-g](https://github.com/jhirji-g)
 * [Jorge Martínez](https://github.com/jorgepiloto)
