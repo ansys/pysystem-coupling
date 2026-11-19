@@ -1,0 +1,23 @@
+:orphan:
+
+.. _add_named_expression:
+
+add_named_expression
+====================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.add_named_expression
+
+.. autoclass:: add_named_expression
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

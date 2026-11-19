@@ -1,0 +1,62 @@
+:orphan:
+
+.. _instancing_child:
+
+instancing_child
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_25_1.instancing_child
+
+.. autoclass:: instancing_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+rotation_axis : `str`
+    UNDOCUMENTED
+
+instances_in_full_circle : `int`
+    Total number of instances (including the first instance) in
+    a full 360 degree rotation of the participant mesh. This value
+    includes the reference instance (with the participant mesh).
+    All instances defined for the instancing object have identical
+    angles.
+
+instances_for_mapping : `int`
+    Number of instances to be included in the mapping when instancing
+    is applied.
+    
+    Required when the number of instances to be used for mapping does
+    not match the number of instances in a full circle. Default
+    assumes a 360 degree rotation of the participant mesh. This value
+    includes the reference instance (with the participant mesh).
+
+reference_frame : `str`
+    Reference frame that defines the orientation of the instancing.
+    
+    Rotation will be around the z-axis of the reference frame,
+    following the right-hand rule.
+
+axis : `str`
+    Principal axis of rotation for instancing
+
+axis_from : :ref:`RealVectorType<real_vector_type>`
+    Define the starting point of a user-defined axis.
+
+axis_to : :ref:`RealVectorType<real_vector_type>`
+    Define the end point of a user-defined axis.
+
+rotational_offset : :ref:`RealType<real_type>`
+    Offset (in radians) about the rotation axis for the first instance
+
+.. rubric:: Included in:
+
+==============================   ============================================
+
+Parent                                                                Summary
+
+==============================   ============================================
+:ref:`instancing <instancing>`       Define instancing for an interface side.
+
+==============================   ============================================
+

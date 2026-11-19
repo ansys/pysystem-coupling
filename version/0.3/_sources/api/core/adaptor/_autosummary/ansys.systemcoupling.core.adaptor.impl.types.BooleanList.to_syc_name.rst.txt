@@ -1,0 +1,6 @@
+to\_syc\_name
+=============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: BooleanList.to_syc_name

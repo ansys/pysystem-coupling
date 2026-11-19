@@ -1,0 +1,28 @@
+:orphan:
+
+.. _execution_control_1:
+
+execution_control
+=================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.execution_control_1
+
+.. autoclass:: execution_control
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+option : `str`
+    Set behavior of this object.
+
+.. rubric:: Included in:
+
+==========================================================   ==================================================
+
+Parent                                                                                                  Summary
+
+==========================================================   ==================================================
+:ref:`live_visualization_child <live_visualization_child>`       Configures live visualization via EnSight DVS.
+
+==========================================================   ==================================================
+

@@ -1,0 +1,37 @@
+:orphan:
+
+.. _parameter_child:
+
+parameter_child
+===============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.parameter_child
+
+.. autoclass:: parameter_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+participant_display_name : `str`
+    Parameter's display name as defined by the participant solver.
+
+display_name : `str`
+    Parameter's display name as defined in System Coupling.
+
+data_type : `str`
+    UNDOCUMENTED
+
+tensor_type : `str`
+    Indicates the parameter tensor type ("Scalar" only).
+
+.. rubric:: Included in:
+
+============================   =======================================================
+
+Parent                                                                         Summary
+
+============================   =======================================================
+:ref:`parameter <parameter>`       Configure a parameter for the coupling participant.
+
+============================   =======================================================
+

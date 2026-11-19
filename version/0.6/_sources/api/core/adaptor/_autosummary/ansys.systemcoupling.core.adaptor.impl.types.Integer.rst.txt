@@ -1,0 +1,46 @@
+.. _dm_Integer:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Integer
+====================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Integer
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Integer.__init__
+      ~Integer.get_property_state
+      ~Integer.get_state
+      ~Integer.print_state
+      ~Integer.set_property_state
+      ~Integer.set_state
+      ~Integer.set_sycproxy
+      ~Integer.to_python_keys
+      ~Integer.to_python_name
+      ~Integer.to_syc_keys
+      ~Integer.to_syc_name
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Integer.obj_name
+      ~Integer.path
+      ~Integer.syc_name
+      ~Integer.syc_path
+      ~Integer.sycproxy
+   
+   

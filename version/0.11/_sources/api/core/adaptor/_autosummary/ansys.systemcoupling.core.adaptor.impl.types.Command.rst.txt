@@ -1,0 +1,37 @@
+.. _dm_Command:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Command
+====================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Command
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Command.__init__
+      ~Command.set_sycproxy
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Command.obj_name
+      ~Command.path
+      ~Command.syc_name
+      ~Command.syc_path
+      ~Command.sycproxy
+   
+   

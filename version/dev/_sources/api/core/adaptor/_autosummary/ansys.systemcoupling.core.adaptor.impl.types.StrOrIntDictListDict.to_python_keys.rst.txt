@@ -1,0 +1,6 @@
+to\_python\_keys
+================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. automethod:: StrOrIntDictListDict.to_python_keys

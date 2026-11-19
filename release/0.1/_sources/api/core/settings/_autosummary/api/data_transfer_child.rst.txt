@@ -1,0 +1,108 @@
+:orphan:
+
+.. _data_transfer_child:
+
+data_transfer_child
+===================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_1.data_transfer_child
+
+.. autoclass:: data_transfer_child
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Properties
+
+display_name : `str`
+    Display name of the data transfer.
+
+suppress : `bool`
+    Controls whether this data transfer is suppressed
+
+target_side : `str`
+    Target side ("One" or "Two") of this data transfer.
+
+option : `str`
+    How the transfer data is specified.
+    
+    Allowed values:
+    
+    - "UsingVariable" - The data being transferred is defined as a
+      single source-side variable.
+    
+    - "UsingExpression" - The data being transferred is defined as
+      an expression in terms of source-side variables.
+
+source_variable : `str`
+    Variable associated with the source side of the interface.
+    
+    Specified only for variable-based transfers (and not expression-based).
+
+target_variable : `str`
+    Variable associated with the target side of the interface.
+
+value : :ref:`RealType<real_type>`
+    Expression string (or constant real value) defining the data being
+    transferred from the source.
+    
+    Specified only for expression-based transfers.
+    
+    Any variable referenced must be a source side variable.
+
+ramping_option : `str`
+    Specify whether to apply ramping to the data transfer.
+    
+    Ramping is used to slow the application of the source-side value on the
+    target side of the interface.
+    
+    Allowed values:
+    
+    - "None" - No ramping to be applied.
+    
+    - "Linear" - Apply linear ramping.
+
+relaxation_factor : :ref:`RealType<real_type>`
+    Factor multiplying the current data transfer values for specified quantity when
+    under-relaxing them against the previous values.
+
+convergence_target : :ref:`RealType<real_type>`
+    RMS-based target value used when evaluating convergence of the specified
+    quantity within a coupling iteration.
+
+mapping_type : `str`
+    Type of mapping used for the data transfer. (**Read only**.)
+    
+    Possible values:
+    
+    - "Conservative" - A conservative mapping algorithm is used
+      for transfers of `extensive` quantities.
+    - "ProfilePreserving" - A profile-preserving mapping algorithm
+      is used for transfers of `intensive` quantities.
+
+unmapped_value_option : `str`
+    Option to fill target values not mapped by the regular mapping algorithm
+
+time_step_initialization_option : `str`
+    Method to initialize first transfer in new coupling step.
+
+.. rubric:: Children
+
+====================================   ==========================================
+
+Child                                                                     Summary
+
+====================================   ==========================================
+:ref:`stabilization <stabilization>`       Stabilization and Acceleration method.
+
+====================================   ==========================================
+
+.. rubric:: Included in:
+
+====================================   ======================================================
+
+Parent                                                                                Summary
+
+====================================   ======================================================
+:ref:`data_transfer <data_transfer>`       Configure data transfers for a coupling interface.
+
+====================================   ======================================================
+

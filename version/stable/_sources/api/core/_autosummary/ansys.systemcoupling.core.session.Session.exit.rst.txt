@@ -1,0 +1,6 @@
+exit
+====
+
+.. currentmodule:: ansys.systemcoupling.core.session
+
+.. automethod:: Session.exit

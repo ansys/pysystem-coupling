@@ -1,0 +1,37 @@
+.. _dm_Base:
+
+.. vale off
+
+ansys.systemcoupling.core.adaptor.impl.types.Base
+=================================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.impl.types
+
+.. autoclass:: Base
+
+   
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+      :toctree:
+   
+      ~Base.__init__
+      ~Base.set_sycproxy
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Base.obj_name
+      ~Base.path
+      ~Base.syc_name
+      ~Base.syc_path
+      ~Base.sycproxy
+   
+   

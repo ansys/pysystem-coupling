@@ -1,0 +1,28 @@
+:orphan:
+
+.. _transformation:
+
+transformation
+==============
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_1.transformation
+
+.. autoclass:: transformation
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Named object type
+
+:ref:`transformation_child <transformation_child>`
+
+
+.. rubric:: Included in:
+
+====================================================   ================================================================
+
+Parent                                                                                                          Summary
+
+====================================================   ================================================================
+:ref:`reference_frame_child <reference_frame_child>`       Provide a transformation relative to a ParentReferenceFrame.
+
+====================================================   ================================================================
+

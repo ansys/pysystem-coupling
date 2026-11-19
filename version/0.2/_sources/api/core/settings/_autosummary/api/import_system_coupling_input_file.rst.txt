@@ -1,0 +1,23 @@
+:orphan:
+
+.. _import_system_coupling_input_file:
+
+import_system_coupling_input_file
+=================================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_23_2.import_system_coupling_input_file
+
+.. autoclass:: import_system_coupling_input_file
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

@@ -1,0 +1,23 @@
+:orphan:
+
+.. _get_supported_participant_types:
+
+get_supported_participant_types
+===============================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.get_supported_participant_types
+
+.. autoclass:: get_supported_participant_types
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+

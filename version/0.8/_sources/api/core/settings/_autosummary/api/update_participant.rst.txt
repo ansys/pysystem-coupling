@@ -1,0 +1,23 @@
+:orphan:
+
+.. _update_participant:
+
+update_participant
+==================
+
+.. currentmodule:: ansys.systemcoupling.core.adaptor.api_24_2.update_participant
+
+.. autoclass:: update_participant
+    :show-inheritance:
+    :undoc-members:
+.. rubric:: Included in:
+
+==============================   =================
+
+Parent                                     Summary
+
+==============================   =================
+:ref:`setup_root <setup_root>`       'root' object
+
+==============================   =================
+
