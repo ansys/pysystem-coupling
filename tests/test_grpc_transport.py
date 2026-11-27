@@ -309,6 +309,7 @@ class TestStartupAndConnectionInfo:
             assert directory is not None
             assert directory.path == private_path
             assert args[2] == f"--uds-dir={directory.path}"
+            assert len(args[3].removeprefix("--uds-id=")) == 16
             assert self.mock_create_channel.call_args.kwargs["uds_dir"] == str(
                 directory.path
             )

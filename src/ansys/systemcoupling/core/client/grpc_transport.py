@@ -46,7 +46,8 @@ from ansys.systemcoupling.core.syc_version import (
 from ansys.systemcoupling.core.util.logging import LOG
 
 _IS_WINDOWS = os.name == "nt"
-_MAX_POSIX_UDS_PATH_BYTES = 100
+# Linux sun_path includes a trailing NUL in its 108-byte field.
+_MAX_POSIX_UDS_PATH_BYTES = 107
 _PRIVATE_UDS_PROTECTED_OPTIONS = {
     "--allow-remote-host",
     "--certs-folder",
@@ -343,7 +344,12 @@ class StartupAndConnectionInfo:
 
         if options.transport_mode == _TransportMode.UDS:
             if not options.uds_id:
-                options.uds_id = uuid4().hex
+                generated_id = uuid4().hex
+                options.uds_id = (
+                    generated_id[:16]
+                    if self._launching and not _IS_WINDOWS
+                    else generated_id
+                )
 
         return options
 
