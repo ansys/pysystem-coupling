@@ -53,9 +53,9 @@ class SycProcess:  # pragma: no cover
     def is_running(self) -> bool:
         return self.__starter.get_running_process() is not None
 
-    def end(self):
+    def end(self) -> bool:
         if not self.__starter:
-            return
+            return True
         process = self.__starter.get_running_process()
         if process and process.poll() is None:
             pid = process.pid
@@ -69,7 +69,16 @@ class SycProcess:  # pragma: no cover
                     "process and children will be attempted."
                 )
                 _kill_process_tree(pid, timeout=0.5)
+                try:
+                    process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    LOG.error(
+                        "System Coupling process %s did not exit after termination.",
+                        pid,
+                    )
+                    return False
         self.__starter = None
+        return True
 
 
 class _ProcessStarter:

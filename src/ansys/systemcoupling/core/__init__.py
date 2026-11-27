@@ -101,6 +101,10 @@ def launch(
         arguments already being passed when the process is started. If
         an argument has an associated value, the argument name and its
         value should be specified as two consecutive items of the list.
+        When a POSIX local launch uses UDS, transport-selection and endpoint
+        arguments cannot override the private endpoint configured by the
+        selected ``connection_type``; use ``connection_type`` to select a
+        supported transport.
 
     Returns
     -------

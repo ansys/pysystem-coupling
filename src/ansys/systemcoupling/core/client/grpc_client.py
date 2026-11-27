@@ -137,6 +137,7 @@ class SycGrpc(object):
         self.__pim_instance = None
         self.__skip_exit = False
         self.__container = None
+        self.__uds_directory = None
 
     @classmethod
     def _cleanup(cls):
@@ -164,6 +165,8 @@ class SycGrpc(object):
             self.start_container_and_connect(
                 mounted_from, mounted_to, port=port, version=version
             )
+            if start_output:
+                self.start_output()
         else:  # pragma: no cover
             if working_dir is None:
                 working_dir = "."
@@ -177,64 +180,75 @@ class SycGrpc(object):
                 **kwargs,
             )
 
-            args = []
-            fallback_args = []
-            match connection_info.startup_argument_category:
-                case StartupArgumentCategory.OLD_ARGUMENTS:
-                    args = connection_info.old_command_line_arguments()
-                case StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS:
-                    args = connection_info.command_line_arguments()
-                    if connection_info.is_insecure_connection_requested:
-                        fallback_args = connection_info.old_command_line_arguments()
-                case StartupArgumentCategory.NEW_ARGUMENTS:
-                    args = connection_info.command_line_arguments()
+            try:
+                self.__uds_directory = connection_info.prepare_private_uds_directory()
+                connection_info.validate_extra_args(kwargs.get("extra_args"))
+                args = []
+                fallback_args = []
+                match connection_info.startup_argument_category:
+                    case StartupArgumentCategory.OLD_ARGUMENTS:
+                        args = connection_info.old_command_line_arguments()
+                    case StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS:
+                        args = connection_info.command_line_arguments()
+                        if connection_info.is_insecure_connection_requested:
+                            fallback_args = connection_info.old_command_line_arguments()
+                    case StartupArgumentCategory.NEW_ARGUMENTS:
+                        args = connection_info.command_line_arguments()
 
-            LOG.debug("Starting process...")
-            process_start_t = time.monotonic()
-            self.__process = SycProcess(
-                connection_info.executable_path(),
-                args,
-                fallback_args,
-                working_dir,
-                **kwargs,
-            )
-            LOG.debug(
-                "System Coupling process launch call returned after %.3f sec",
-                time.monotonic() - process_start_t,
-            )
+                LOG.debug("Starting process...")
+                process_start_t = time.monotonic()
+                self.__process = SycProcess(
+                    connection_info.executable_path(),
+                    args,
+                    fallback_args,
+                    working_dir,
+                    **kwargs,
+                )
+                LOG.debug(
+                    "System Coupling process launch call returned after %.3f sec",
+                    time.monotonic() - process_start_t,
+                )
 
-            def check_process_running():
-                if self.__process.is_running():
-                    return
+                def check_process_running():
+                    if self.__process.is_running():
+                        return
 
-                if (
-                    connection_info.startup_argument_category
-                    == StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS
-                    and not connection_info.is_insecure_connection_requested
-                ):
-                    raise RuntimeError(
-                        "Connection failed because the System Coupling process "
-                        "has unexpectedly exited. If you are using an Ansys "
-                        "release 24.2, 25.1 or 25.2 with service pack version "
-                        "less than 5, 4 or 3 respectively, you must specify an "
-                        "insecure 'connection_type' argument to the launch() "
-                        "function."
+                    if (
+                        connection_info.startup_argument_category
+                        == StartupArgumentCategory.NEW_OR_OLD_ARGUMENTS
+                        and not connection_info.is_insecure_connection_requested
+                    ):
+                        raise RuntimeError(
+                            "Connection failed because the System Coupling process "
+                            "has unexpectedly exited. If you are using an Ansys "
+                            "release 24.2, 25.1 or 25.2 with service pack version "
+                            "less than 5, 4 or 3 respectively, you must specify an "
+                            "insecure 'connection_type' argument to the launch() "
+                            "function."
+                        )
+
+                    else:
+                        raise RuntimeError(
+                            "Connection failed because the System Coupling "
+                            "process has unexpectedly exited."
+                        )
+
+                LOG.debug("...started")
+                self._connect(
+                    connection_info=connection_info,
+                    check_process=check_process_running,
+                )
+                if start_output:
+                    self.start_output()
+            except BaseException:
+                try:
+                    self.exit()
+                except Exception as cleanup_error:
+                    LOG.warning(
+                        "Failed to clean up after gRPC startup failure: %s",
+                        cleanup_error,
                     )
-
-                else:
-                    raise RuntimeError(
-                        "Connection failed because the System Coupling "
-                        "process has unexpectedly exited."
-                    )
-
-            LOG.debug("...started")
-            self._connect(
-                connection_info=connection_info,
-                check_process=check_process_running,
-            )
-
-        if start_output:
-            self.start_output()
+                raise
 
     def start_container_and_connect(
         self,
@@ -490,21 +504,28 @@ class SycGrpc(object):
         Reset this object so it is ready to start and connect to a new
         server if needed.
         """
-        if self.__id in SycGrpc._instances:
-            # Remove from atexit cleanup list
-            del SycGrpc._instances[self.__id]
-
+        uds_directory = self.__uds_directory
+        server_stopped = self.__process is None
         if self.__channel is not None and not self.__skip_exit:
             try:
                 self.__ostream_service.end_streaming()
             except Exception as e:
                 LOG.debug(f"Exception on OutputStreamService.end_straming(): {e}")
             if self.__process_service:
-                self.__process_service.quit()
+                try:
+                    self.__process_service.quit()
+                except Exception as e:
+                    LOG.warning("Could not request gRPC server shutdown: %s", e)
             self.__channel = None
-        if self.__process:
-            self.__process.end()
+
+        if self.__process is not None:
+            if self.__process.end() is False:
+                raise RuntimeError(
+                    "System Coupling did not stop; preserving its private UDS directory."
+                )
             self.__process = None
+            server_stopped = True
+
         if self.__container:
             try:
                 self.__container.stop()
@@ -514,7 +535,21 @@ class SycGrpc(object):
         if self.__pim_instance is not None:
             self.__pim_instance.delete()
             self.__pim_instance = None
-        self._reset()
+
+        if server_stopped:
+            if uds_directory is not None:
+                try:
+                    uds_directory.close()
+                except OSError as cleanup_error:
+                    LOG.warning(
+                        "Could not remove empty private UDS session directory %s: %s",
+                        uds_directory.path,
+                        cleanup_error,
+                    )
+            if self.__id in SycGrpc._instances:
+                # Remove from atexit cleanup list only after server shutdown.
+                del SycGrpc._instances[self.__id]
+            self._reset()
 
     def start_output(self, handle_output=None):
         """Start streaming of standard streams from System Coupling

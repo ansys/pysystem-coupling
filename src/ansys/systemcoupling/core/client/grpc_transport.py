@@ -37,6 +37,7 @@ from ansys.tools.common.cyberchannel import (
 )
 import grpc
 
+from ansys.systemcoupling.core.client.private_uds_directory import PrivateUdsDirectory
 from ansys.systemcoupling.core.client.syc_launch_script import path_to_system_coupling
 from ansys.systemcoupling.core.syc_version import (
     SYC_VERSION_CONCAT,
@@ -45,6 +46,18 @@ from ansys.systemcoupling.core.syc_version import (
 from ansys.systemcoupling.core.util.logging import LOG
 
 _IS_WINDOWS = os.name == "nt"
+# Linux sun_path includes a trailing NUL in its 108-byte field.
+_MAX_POSIX_UDS_PATH_BYTES = 107
+_PRIVATE_UDS_PROTECTED_OPTIONS = {
+    "--allow-remote-host",
+    "--certs-folder",
+    "--grpcport",
+    "--host",
+    "--port",
+    "--transport-mode",
+    "--uds-dir",
+    "--uds-id",
+}
 
 _version_re = re.compile(r"\bv[0-9][0-9][0-9]\b")
 
@@ -136,6 +149,8 @@ class StartupAndConnectionInfo:
     connection type."""
 
     def __init__(self, launching: bool, connection_type: ConnectionType, **kwargs):
+        self._launching = launching
+        self._private_uds_directory = None
 
         version = kwargs.pop("version", "")
 
@@ -329,7 +344,12 @@ class StartupAndConnectionInfo:
 
         if options.transport_mode == _TransportMode.UDS:
             if not options.uds_id:
-                options.uds_id = uuid4().hex
+                generated_id = uuid4().hex
+                options.uds_id = (
+                    generated_id[:16]
+                    if self._launching and not _IS_WINDOWS
+                    else generated_id
+                )
 
         return options
 
@@ -347,6 +367,51 @@ class StartupAndConnectionInfo:
 
     def _get_uds_folder(self) -> pathlib.Path:
         return determine_uds_folder(self._options.uds_dir)
+
+    def prepare_private_uds_directory(self) -> PrivateUdsDirectory | None:
+        """Provision a private POSIX endpoint directory before launching a server."""
+        if (
+            not self._launching
+            or _IS_WINDOWS
+            or self._options.transport_mode != _TransportMode.UDS
+            or self._private_uds_directory is not None
+        ):
+            return self._private_uds_directory
+
+        directory = PrivateUdsDirectory(self._get_uds_folder())
+        socket_filename = (
+            f"{self._options.uds_service}-{self._options.uds_id}.sock"
+            if self._options.uds_id
+            else f"{self._options.uds_service}.sock"
+        )
+        socket_path = directory.path / socket_filename
+        if len(os.fsencode(socket_path)) > _MAX_POSIX_UDS_PATH_BYTES:
+            directory.close()
+            raise ValueError(
+                "The private UDS socket path exceeds the supported local path length. "
+                "Specify a shorter uds_dir or working home directory."
+            )
+
+        self._options.uds_dir = str(directory.path)
+        self._private_uds_directory = directory
+        return directory
+
+    def validate_extra_args(self, extra_args: list[str] | None) -> None:
+        """Reject server transport overrides that would desynchronize private UDS."""
+        if self._private_uds_directory is None or not extra_args:
+            return
+
+        for argument in extra_args:
+            option = argument.split("=", maxsplit=1)[0]
+            if any(
+                protected_option.startswith(option)
+                for protected_option in _PRIVATE_UDS_PROTECTED_OPTIONS
+            ):
+                raise ValueError(
+                    f"extra_args cannot override '{option}' when using a private "
+                    "local UDS connection. Select the connection type through "
+                    "connection_type instead."
+                )
 
     def _get_certs_folder(self, specified_folder: str | None) -> str:
         # Explicit setting overrides other options
