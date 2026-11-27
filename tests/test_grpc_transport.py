@@ -278,6 +278,128 @@ class TestStartupAndConnectionInfo:
         assert args[2].startswith("--uds-dir=")
         assert args[3].startswith("--uds-id=")
 
+    def test_launched_posix_uds_uses_private_directory_for_server_and_channel(
+        self, tmp_path
+    ):
+        private_path = tmp_path / "private-uds"
+        private_path.mkdir()
+        private_directory = Mock(path=private_path)
+        with (
+            patch("ansys.systemcoupling.core.client.grpc_transport._IS_WINDOWS", False),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport._MAX_POSIX_UDS_PATH_BYTES",
+                4096,
+            ),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport.PrivateUdsDirectory",
+                return_value=private_directory,
+            ),
+        ):
+            self.mock_determine_uds_folder.return_value = tmp_path / "uds"
+            self.mock_determine_uds_folder.side_effect = lambda uds_dir=None: (
+                Path(uds_dir) if uds_dir else tmp_path / "uds"
+            )
+            info = StartupAndConnectionInfo(
+                launching=True, connection_type=ConnectionType.SECURE_LOCAL
+            )
+            directory = info.prepare_private_uds_directory()
+            args = info.command_line_arguments()
+            info.get_server_channel()
+
+            assert directory is not None
+            assert directory.path == private_path
+            assert args[2] == f"--uds-dir={directory.path}"
+            assert self.mock_create_channel.call_args.kwargs["uds_dir"] == str(
+                directory.path
+            )
+            directory.close()
+            private_directory.close.assert_called_once()
+
+    def test_attach_does_not_create_private_uds_directory(self):
+        info = StartupAndConnectionInfo(
+            launching=False, connection_type=ConnectionType.SECURE_LOCAL
+        )
+        assert info.prepare_private_uds_directory() is None
+        self.mock_determine_uds_folder.assert_not_called()
+
+    def test_private_uds_path_length_failure_cleans_directory(self, tmp_path):
+        private_path = tmp_path / "private-uds"
+        private_directory = Mock(path=private_path)
+        with (
+            patch("ansys.systemcoupling.core.client.grpc_transport._IS_WINDOWS", False),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport._MAX_POSIX_UDS_PATH_BYTES",
+                1,
+            ),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport.PrivateUdsDirectory",
+                return_value=private_directory,
+            ),
+        ):
+            self.mock_determine_uds_folder.return_value = tmp_path / "uds"
+            info = StartupAndConnectionInfo(
+                launching=True, connection_type=ConnectionType.SECURE_LOCAL
+            )
+            with pytest.raises(ValueError, match="socket path exceeds"):
+                info.prepare_private_uds_directory()
+            private_directory.close.assert_called_once()
+
+    @pytest.mark.parametrize(
+        "argument",
+        [
+            "--transport-mode=insecure",
+            "--uds-dir=/tmp/other",
+            "--uds-id=other",
+            "--port=50051",
+            "--grpcport=127.0.0.1:50051",
+            "--allow-remote-host",
+        ],
+    )
+    def test_private_uds_rejects_transport_overrides(self, tmp_path, argument):
+        directory = Mock(path=tmp_path / "private-uds")
+        with (
+            patch("ansys.systemcoupling.core.client.grpc_transport._IS_WINDOWS", False),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport._MAX_POSIX_UDS_PATH_BYTES",
+                4096,
+            ),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport.PrivateUdsDirectory",
+                return_value=directory,
+            ),
+        ):
+            self.mock_determine_uds_folder.side_effect = lambda uds_dir=None: (
+                Path(uds_dir) if uds_dir else tmp_path / "uds"
+            )
+            info = StartupAndConnectionInfo(
+                launching=True, connection_type=ConnectionType.SECURE_LOCAL
+            )
+            info.prepare_private_uds_directory()
+            with pytest.raises(ValueError, match="cannot override"):
+                info.validate_extra_args([argument])
+
+    def test_private_uds_allows_non_transport_extra_args(self, tmp_path):
+        directory = Mock(path=tmp_path / "private-uds")
+        with (
+            patch("ansys.systemcoupling.core.client.grpc_transport._IS_WINDOWS", False),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport._MAX_POSIX_UDS_PATH_BYTES",
+                4096,
+            ),
+            patch(
+                "ansys.systemcoupling.core.client.grpc_transport.PrivateUdsDirectory",
+                return_value=directory,
+            ),
+        ):
+            self.mock_determine_uds_folder.side_effect = lambda uds_dir=None: (
+                Path(uds_dir) if uds_dir else tmp_path / "uds"
+            )
+            info = StartupAndConnectionInfo(
+                launching=True, connection_type=ConnectionType.SECURE_LOCAL
+            )
+            info.prepare_private_uds_directory()
+            info.validate_extra_args(["--nprocs", "4", "--sycnprocs=2"])
+
     @patch("ansys.systemcoupling.core.client.grpc_transport._find_port")
     def test_command_line_arguments_wnua(self, mock_find_port):
         """Test command line arguments generation for WNUA transport."""
