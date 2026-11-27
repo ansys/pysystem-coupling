@@ -349,7 +349,9 @@ class TestStartupAndConnectionInfo:
         "argument",
         [
             "--transport-mode=insecure",
+            "--transport=insecure",
             "--uds-dir=/tmp/other",
+            "--uds-d=/tmp/other",
             "--uds-id=other",
             "--port=50051",
             "--grpcport=127.0.0.1:50051",

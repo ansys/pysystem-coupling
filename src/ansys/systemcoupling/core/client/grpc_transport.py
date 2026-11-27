@@ -403,7 +403,10 @@ class StartupAndConnectionInfo:
 
         for argument in extra_args:
             option = argument.split("=", maxsplit=1)[0]
-            if option in _PRIVATE_UDS_PROTECTED_OPTIONS:
+            if any(
+                protected_option.startswith(option)
+                for protected_option in _PRIVATE_UDS_PROTECTED_OPTIONS
+            ):
                 raise ValueError(
                     f"extra_args cannot override '{option}' when using a private "
                     "local UDS connection. Select the connection type through "
